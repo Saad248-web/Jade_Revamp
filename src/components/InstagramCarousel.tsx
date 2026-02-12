@@ -1,0 +1,200 @@
+"use client";
+
+import { useRef } from "react";
+import Image from "next/image";
+import { Heart, MessageCircle, Instagram } from "lucide-react";
+
+const INSTAGRAM_POSTS = [
+  {
+    id: 1,
+    username: "@jadehospitainment",
+    userLabel: "Instagram",
+    userAvatar: "https://i.pravatar.cc/150?img=1",
+    image: "/assets/Bathing_Girls.png",
+    likes: "2.4k",
+    comments: "89",
+    caption: "Paradise found @jade 🌺🌸",
+  },
+  {
+    id: 2,
+    username: "@jadehospitainment",
+    userLabel: "Instagram",
+    userAvatar: "https://i.pravatar.cc/150?img=1",
+    image: "/assets/Wedding_for_Both.png",
+    likes: "3.2k",
+    comments: "124",
+    caption: "Amazing celebrations ✨",
+  },
+  {
+    id: 3,
+    username: "@jadehospitainment",
+    userLabel: "Instagram",
+    userAvatar: "https://i.pravatar.cc/150?img=2",
+    image: "/assets/Jade_735_for_Desktop.png",
+    likes: "2.8k",
+    comments: "95",
+    caption: "Weekend vibes 🌴",
+  },
+  {
+    id: 4,
+    username: "@jadehospitainment",
+    userLabel: "Instagram",
+    userAvatar: "https://i.pravatar.cc/150?img=3",
+    image: "/assets/Bathing_Girls.png",
+    likes: "4.1k",
+    comments: "156",
+    caption: "Perfect venue for unforgettable moments 💫",
+  },
+  {
+    id: 5,
+    username: "@jadehospitainment",
+    userLabel: "Instagram",
+    userAvatar: "https://i.pravatar.cc/150?img=4",
+    image: "/assets/Wedding_for_Both.png",
+    likes: "5.3k",
+    comments: "203",
+    caption: "Dream weddings come alive @jade 💍✨",
+  },
+  {
+    id: 6,
+    username: "@jadehospitainment",
+    userLabel: "Instagram",
+    userAvatar: "https://i.pravatar.cc/150?img=5",
+    image: "/assets/Jade_735_for_Desktop.png",
+    likes: "3.7k",
+    comments: "142",
+    caption: "Summer pool parties done right 🏊‍♀️☀️",
+  },
+  {
+    id: 7,
+    username: "@jadehospitainment",
+    userLabel: "Instagram",
+    userAvatar: "https://i.pravatar.cc/150?img=1",
+    image: "/assets/Bathing_Girls.png",
+    likes: "4.5k",
+    comments: "178",
+    caption: "Escape to luxury and tranquility 🌅",
+  },
+];
+
+export default function InstagramCarousel() {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <section className="relative bg-jade-charcoal py-16 md:py-24 overflow-hidden">
+      <div className="max-w-[1920px] mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12 md:mb-16 px-6 md:px-12">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Instagram className="w-5 h-5 text-jade-gold" />
+            <span className="font-manrope text-xs md:text-sm tracking-[0.3em] uppercase text-jade-gold">
+              Featured on Instagram
+            </span>
+          </div>
+          <h2 className="font-philosopher text-4xl md:text-5xl lg:text-6xl text-white mb-2">
+            Moments as they unfold
+          </h2>
+        </div>
+
+        {/* Horizontal Scroll Container */}
+        <div
+          ref={scrollContainerRef}
+          className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide px-6 md:px-12 pb-8 snap-x snap-mandatory scroll-smooth"
+          style={{
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+          }}
+        >
+          {INSTAGRAM_POSTS.map((post, index) => (
+            <div
+              key={post.id}
+              className="flex-shrink-0 w-[320px] md:w-[380px] snap-center"
+            >
+              {/* Instagram Post Card */}
+              <div className="w-full bg-[#2a2a2a] rounded-2xl overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-300">
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 bg-[#2a2a2a]">
+                  <div className="flex items-center gap-3">
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-jade-gold">
+                      <Image
+                        src={post.userAvatar}
+                        alt="Profile"
+                        fill
+                        className="object-cover"
+                        sizes="40px"
+                      />
+                    </div>
+                    <div>
+                      <p className="font-manrope text-sm font-semibold text-white">
+                        {post.username}
+                      </p>
+                      <p className="font-manrope text-xs text-white/60">
+                        {post.userLabel}
+                      </p>
+                    </div>
+                  </div>
+                  <Instagram className="w-5 h-5 text-white/60" />
+                </div>
+
+                {/* Image */}
+                <div className="relative w-full aspect-square bg-black">
+                  <Image
+                    src={post.image}
+                    alt="Post"
+                    fill
+                    className="object-cover"
+                    sizes="380px"
+                  />
+                </div>
+
+                {/* Footer */}
+                <div className="p-4 bg-[#2a2a2a]">
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="flex items-center gap-1 text-white/90">
+                      <Heart className="w-5 h-5" />
+                      <span className="font-manrope text-sm">{post.likes}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-white/90">
+                      <MessageCircle className="w-5 h-5" />
+                      <span className="font-manrope text-sm">
+                        {post.comments}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="font-manrope text-sm text-white/80 line-clamp-2">
+                    {post.caption}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA Button */}
+        <div className="flex justify-center mt-12 px-6">
+          <a
+            href="https://www.instagram.com/jadehospitainment"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 bg-jade-gold text-jade-charcoal px-8 py-4 uppercase tracking-widest text-sm font-bold hover:bg-white transition-all duration-300 group"
+          >
+            Visit Jade on Instagram
+            <div className="flex items-center gap-2">
+              <span className="text-xl group-hover:translate-x-1 transition-transform">
+                →
+              </span>
+              <Instagram className="w-5 h-5" />
+            </div>
+          </a>
+        </div>
+      </div>
+
+      {/* Custom CSS to hide scrollbar */}
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+    </section>
+  );
+}

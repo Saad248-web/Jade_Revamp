@@ -40,19 +40,19 @@ const PANELS = [
     items: [
       {
         title: "Corporate Retreats",
-        img: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1200&auto=format&fit=crop",
+        img: "/assets/corporate_retreat.png",
       },
       {
         title: "Wellness Retreats",
-        img: "https://images.unsplash.com/photo-1544367563-12123d896589?q=80&w=1200&auto=format&fit=crop",
+        img: "/assets/wellness_retreat.png",
       },
       {
         title: "Caravan Journeys",
-        img: "https://images.unsplash.com/photo-1510312305653-8ed496efae75?q=80&w=1200&auto=format&fit=crop",
+        img: "/assets/caravan_journey.png",
       },
       {
         title: "Casual Stays",
-        img: "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=1200&auto=format&fit=crop",
+        img: "/assets/casual_stays.png",
       },
     ],
     cta: "SEE ALL EXPERIENCES",
@@ -91,7 +91,6 @@ export default function HorizontalScrollSection() {
 }
 
 function Panel({ data, index }: { data: any; index: number }) {
-  // Reveal animations setup
   const isGrid = data.type === "grid";
 
   // Text Animation Variants
@@ -115,45 +114,59 @@ function Panel({ data, index }: { data: any; index: number }) {
   };
 
   return (
-    <div className="w-[100vw] h-full relative flex items-center justify-center overflow-hidden border-r border-white/5 last:border-r-0">
-      {/* BACKGROUND IMAGE (Parallax) */}
+    <div className="w-[100vw] h-screen relative flex flex-col justify-end overflow-hidden border-r border-white/5 last:border-r-0">
+      {/* 0. Top Label & Counter (Sticky Visual) */}
+      <div className="absolute top-20 md:top-24 left-0 w-full z-20 flex flex-col items-center pointer-events-none">
+        {/* Background overlay for better readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-transparent backdrop-blur-sm" />
+
+        <div className="relative">
+          <span className="font-manrope text-sm md:text-base lg:text-lg tracking-[0.3em] uppercase mb-4 md:mb-6 font-semibold text-white drop-shadow-lg">
+            WAYS JADE IS EXPERIENCED
+          </span>
+        </div>
+
+        <div className="relative flex items-center gap-6 md:gap-8 font-philosopher text-xl md:text-2xl lg:text-3xl">
+          <span className="text-white drop-shadow-lg">{index + 1}</span>
+          <div className="w-12 md:w-16 h-[1px] bg-white/70 drop-shadow-lg" />
+          <span className="text-white/70 drop-shadow-lg">7</span>
+        </div>
+      </div>
+
+      {/* 1. BACKGROUND IMAGE (Parallax) */}
       {!isGrid && (
         <div className="absolute inset-0 z-0">
-          {/* Subtle Parallax Scale/Move could be added here if needed, 
-               but horizontal movement handles most of the 'parallax' feel naturally 
-               as elements slide in. We'll stick to full cover. */}
           <Image
             src={data.image}
             alt={data.title}
             fill
             className="object-cover transition-transform duration-[2s] hover:scale-105"
             priority={index === 0}
+            sizes="100vw"
           />
-          <div className="absolute inset-0 bg-black/40" />
-          {/* Gradient Vignette */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+          {/* Gradient Overlay for Text Readability - Bottom Heavy */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/10" />
         </div>
       )}
 
       {/* GRID LAYOUT BACKGROUND */}
       {isGrid && (
         <div className="absolute inset-0 z-0 bg-jade-charcoal">
-          {/* Abstract Grid BG */}
-          <div className="absolute inset-0 bg-[url('/assets/noise.png')] opacity-[0.05]" />
+          {/* Solid background - no noise texture */}
         </div>
       )}
 
-      {/* TEXT CONTENT */}
+      {/* 2. TEXT CONTENT (Bottom Aligned) */}
       <motion.div
-        className={`relative z-10 max-w-4xl px-8 text-center flex flex-col items-center ${isGrid ? "w-full max-w-7xl" : ""}`}
+        className={`relative z-10 w-full px-6 pb-12 md:pb-20 text-center flex flex-col items-center ${isGrid ? "h-full justify-center" : "justify-end"}`}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.5 }} // Sync animation with visibility
+        viewport={{ once: false, amount: 0.5 }}
         variants={containerVars}
       >
         {!isGrid ? (
           <>
-            <motion.h2 className="font-philosopher text-4xl md:text-6xl text-white mb-6">
+            <motion.h2 className="font-philosopher text-4xl md:text-6xl text-white mb-6 drop-shadow-lg">
               <div className="overflow-hidden">
                 <motion.span className="block" variants={lineVars}>
                   {data.title}
@@ -163,15 +176,15 @@ function Panel({ data, index }: { data: any; index: number }) {
 
             <motion.p
               variants={lineVars}
-              className="font-manrope text-lg md:text-xl text-white/90 font-light max-w-2xl mb-10 leading-relaxed drop-shadow-md"
+              className="font-manrope text-base md:text-lg text-white/90 font-light max-w-xl mb-12 leading-relaxed drop-shadow-md"
             >
               {data.subtext}
             </motion.p>
 
-            <motion.div variants={lineVars}>
+            <motion.div variants={lineVars} className="w-full max-w-md">
               <Link
                 href="#"
-                className="bg-jade-gold text-jade-charcoal px-8 py-4 rounded-none uppercase tracking-widest text-sm font-bold hover:bg-white transition-colors duration-300 inline-flex items-center gap-2"
+                className="w-full block bg-jade-gold text-jade-charcoal py-4 px-6 uppercase tracking-widest text-xs md:text-sm font-bold hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center gap-3"
               >
                 {data.cta}
                 <ArrowRight className="w-4 h-4" />
@@ -180,22 +193,24 @@ function Panel({ data, index }: { data: any; index: number }) {
           </>
         ) : (
           /* GRID PANEL CONTENT */
-          <div className="w-full h-full flex flex-col items-center justify-center py-24">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full h-[60vh]">
+          <div className="w-full h-full flex flex-col items-center justify-center px-6 md:px-8 pt-32 md:pt-40">
+            {/* Grid Container */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 w-full max-w-7xl mb-8 md:mb-12">
               {data.items.map((item: any, idx: number) => (
                 <div
                   key={idx}
-                  className="relative group overflow-hidden border border-white/10 cursor-pointer"
+                  className="relative group overflow-hidden border border-white/10 cursor-pointer aspect-[3/4] md:aspect-[3/4]"
                 >
                   <Image
                     src={item.img}
                     alt={item.title}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
+                    sizes="(max-width: 768px) 50vw, 25vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
-                  <div className="absolute bottom-8 left-0 w-full text-center">
-                    <h3 className="font-philosopher text-2xl text-white tracking-wide">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                  <div className="absolute bottom-4 md:bottom-6 left-0 w-full text-center px-3 md:px-4">
+                    <h3 className="font-philosopher text-lg md:text-xl lg:text-2xl text-white tracking-wide leading-tight">
                       {item.title}
                     </h3>
                   </div>
@@ -203,10 +218,14 @@ function Panel({ data, index }: { data: any; index: number }) {
               ))}
             </div>
 
-            <motion.div variants={lineVars} className="mt-12">
+            {/* CTA Button */}
+            <motion.div
+              variants={lineVars}
+              className="w-full max-w-md px-4 md:px-0"
+            >
               <Link
                 href="#"
-                className="bg-jade-gold text-jade-charcoal px-12 py-4 rounded-none uppercase tracking-widest text-sm font-bold hover:bg-white transition-colors duration-300 inline-flex items-center gap-2"
+                className="w-full block bg-jade-gold text-jade-charcoal py-3 md:py-4 px-6 uppercase tracking-widest text-xs md:text-sm font-bold hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center gap-3"
               >
                 {data.cta}
                 <ArrowRight className="w-4 h-4" />

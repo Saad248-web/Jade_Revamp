@@ -5,10 +5,14 @@ import Image from "next/image";
 import { useAnimation } from "@/context/AnimationContext";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Navbar from "./Navbar";
-import HospitainmentDefinition from "./HospitainmentDefinition";
-import VillaRetreats from "./VillaRetreats";
-import ExperiencesSection from "./ExperiencesSection";
+import UnifiedScrollSection from "./UnifiedScrollSection";
 import HorizontalScrollSection from "./HorizontalScrollSection";
+import InstagramCarousel from "./InstagramCarousel";
+import ValuePropositionSection from "./ValuePropositionSection";
+import FeaturedVillas from "./FeaturedVillas";
+import JadeAmenitiesSection from "./JadeAmenitiesSection";
+import BlogSection from "./BlogSection";
+import Footer from "./Footer";
 
 export default function LandingPage() {
   const { isSplashComplete } = useAnimation();
@@ -73,6 +77,7 @@ export default function LandingPage() {
             className="object-cover"
             style={{ objectPosition: "center" }}
             priority
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-black/30" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
@@ -133,58 +138,14 @@ export default function LandingPage() {
         </motion.div>
       </div>
 
-      <HospitainmentDefinition />
-      <VillaRetreats />
-      <ExperiencesSection />
+      <UnifiedScrollSection />
       <HorizontalScrollSection />
-
-      {/* 3. Content Placeholders (Scroll Testing) */}
-      <section className="relative z-20 bg-jade-charcoal py-32 px-6 md:px-12">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-          <div className="space-y-8">
-            <h2 className="text-4xl md:text-6xl font-philosopher text-jade-gold">
-              The Experience
-            </h2>
-            <p className="text-lg text-white/70 font-light leading-relaxed">
-              Every detail is meticulously crafted to ensure your stay is
-              efficient, seamless, and unforgettable.
-            </p>
-          </div>
-          <div className="h-[600px] w-full bg-white/5 rounded-lg border border-white/10 relative overflow-hidden group">
-            <Image
-              src="/assets/splash-bg.png"
-              alt="Experience"
-              fill
-              className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="relative z-20 bg-jade-charcoal py-32 border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h3 className="text-2xl text-white/40 uppercase tracking-widest font-manrope mb-12">
-            Our Collections
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="aspect-[3/4] bg-white/5 relative border border-white/10 hover:border-jade-gold/50 transition-colors duration-500 cursor-pointer"
-              >
-                <div className="absolute bottom-8 left-8">
-                  <span className="text-xs text-jade-gold uppercase tracking-widest block mb-2">
-                    Collection 0{i}
-                  </span>
-                  <span className="text-2xl font-philosopher text-white">
-                    Villa Serenity
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <InstagramCarousel />
+      <ValuePropositionSection />
+      <FeaturedVillas />
+      <JadeAmenitiesSection />
+      <BlogSection />
+      <Footer />
     </motion.div>
   );
 }
