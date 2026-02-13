@@ -17,8 +17,10 @@ const SLIDES = [
     label: "WHAT COMES WITH STAYING AT JADE",
     heading: ["BBQ & Bonfire", "Evenings"],
     subtext: "BBQ setups and bonfire gatherings create easy, social moments.",
-    bgImage: "/assets/amenities/bbq.png",
-    cardImage: "/assets/amenities/bbq.png", // Using same image as placeholder for now
+    bgImage:
+      "https://i.pinimg.com/1200x/25/71/46/257146678a9f6e9866924e0e31458d97.jpg", // BBQ/Bonfire
+    cardImage:
+      "https://i.pinimg.com/1200x/25/71/46/257146678a9f6e9866924e0e31458d97.jpg",
   },
   {
     id: 2,
@@ -26,8 +28,10 @@ const SLIDES = [
     heading: ["Candle-Lit", "Dinners"],
     subtext:
       "Private candle-lit dinners are curated within the villa or outdoors.",
-    bgImage: "/assets/amenities/dining.png",
-    cardImage: "/assets/amenities/dining.png",
+    bgImage:
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2874&auto=format&fit=crop", // Candle light dinner
+    cardImage:
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2874&auto=format&fit=crop",
   },
   {
     id: 3,
@@ -35,8 +39,10 @@ const SLIDES = [
     heading: ["Pet-Friendly", "Stays"],
     subtext:
       "Select Jade villas are pet-friendly, allowing you to travel and celebrate without leaving anyone behind.",
-    bgImage: "/assets/amenities/pets.png",
-    cardImage: "/assets/amenities/pets.png",
+    bgImage:
+      "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2940&auto=format&fit=crop", // Pet Friendly
+    cardImage:
+      "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2940&auto=format&fit=crop",
   },
   {
     id: 4,
@@ -44,8 +50,10 @@ const SLIDES = [
     heading: ["Wellness &", "Rejuvenation"],
     subtext:
       "Spa therapies, yoga sessions, and nature-led wellness experiences offer balance without rigid schedules.",
-    bgImage: "/assets/amenities/wellness.png",
-    cardImage: "/assets/amenities/wellness.png",
+    bgImage:
+      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=2940&auto=format&fit=crop", // Wellness/Spa
+    cardImage:
+      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=2940&auto=format&fit=crop",
   },
   {
     id: 5,
@@ -53,8 +61,10 @@ const SLIDES = [
     heading: ["Movies Under", "the Stars"],
     subtext:
       "Outdoor movie screenings turn villa lawns and terraces into private cinemas, perfect for families and friends.",
-    bgImage: "/assets/amenities/movies.png",
-    cardImage: "/assets/amenities/movies.png",
+    bgImage:
+      "https://images.unsplash.com/photo-1595769816263-9b910be24d5f?q=80&w=2958&auto=format&fit=crop", // Movie night
+    cardImage:
+      "https://images.unsplash.com/photo-1595769816263-9b910be24d5f?q=80&w=2958&auto=format&fit=crop",
   },
   {
     id: 6,
@@ -62,8 +72,10 @@ const SLIDES = [
     heading: ["Activities, Indoors", "and Out"],
     subtext:
       "Indoor games, outdoor activities, and open grounds allow each day to unfold at your own pace.",
-    bgImage: "/assets/amenities/activities.png",
-    cardImage: "/assets/amenities/activities.png",
+    bgImage:
+      "https://images.unsplash.com/photo-1532444458054-01a7dd3e9fca?q=80&w=2940&auto=format&fit=crop", // Outdoor games
+    cardImage:
+      "https://images.unsplash.com/photo-1532444458054-01a7dd3e9fca?q=80&w=2940&auto=format&fit=crop",
   },
 ];
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { useAnimation } from "@/context/AnimationContext";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -17,6 +17,20 @@ import Footer from "./Footer";
 export default function LandingPage() {
   const { isSplashComplete } = useAnimation();
   const containerRef = useRef(null);
+
+  useEffect(() => {
+    // Force scroll to top on refresh
+    if (history.scrollRestoration) {
+      history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+
+    return () => {
+      if (history.scrollRestoration) {
+        history.scrollRestoration = "auto";
+      }
+    };
+  }, []);
 
   const { scrollY } = useScroll();
   const yBackground = useTransform(scrollY, [0, 1000], ["0%", "40%"]); // Background moves slower (Parallax)
@@ -74,10 +88,10 @@ export default function LandingPage() {
             src="/assets/desktop-bg.jpg"
             alt="Hero Background"
             fill
-            className="object-cover"
-            style={{ objectPosition: "center" }}
             priority
+            className="object-cover object-center"
             sizes="100vw"
+            quality={90}
           />
           <div className="absolute inset-0 bg-black/30" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />

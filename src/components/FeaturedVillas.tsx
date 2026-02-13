@@ -19,8 +19,8 @@ const VILLAS = [
     title: "Dome Villa",
     description:
       "A hobbit-home inspired retreat set amidst rolling hills, defined by its iconic dome architecture, private pool and immersive connection to nature. Ideal for intimate getaways and quiet celebrations.",
-    bgImage: "/assets/Dome_Villa.png",
-    cardImage: "/assets/Dome_Villa.png", // Using same as placeholder
+    desktopImage: "/assets/Dome_Villa.png",
+    mobileImage: "/assets/Dome_Villa.png",
     link: "/villas/dome-villa",
   },
   {
@@ -29,8 +29,8 @@ const VILLAS = [
     title: "Lemon Tree",
     description:
       "A farmhouse retreat nestled within a lemon grove, featuring a rooftop pool and a flexible indoor hall—well suited for relaxed getaways, intimate celebrations, and countryside offsites.",
-    bgImage: "/assets/Lemon_Tree.png",
-    cardImage: "/assets/Lemon_Tree.png",
+    desktopImage: "/assets/Lemon_Tree_for_Desktop.png",
+    mobileImage: "/assets/Lemon_Tree_for_Mobile.png",
     link: "/villas/lemon-tree",
   },
   {
@@ -39,8 +39,8 @@ const VILLAS = [
     title: "Retreat on the Ridge",
     description:
       "A hill-facing private villa known for panoramic views, sunset backdrops, and a serene pool setting—designed for group getaways, nature-led retreats, and slow weekends away from the city.",
-    bgImage: "/assets/Retreat_on_Ridge.png",
-    cardImage: "/assets/Retreat_on_Ridge.png",
+    desktopImage: "/assets/ROR_for_Desktop.png",
+    mobileImage: "/assets/ROR_for_Mobile.png",
     link: "/villas/retreat-on-ridge",
   },
   {
@@ -49,8 +49,8 @@ const VILLAS = [
     title: "Magnolia",
     description:
       "A modern glass-walled estate with expansive lawns, a private pool, and an in-house theatre—crafted for vibrant celebrations, social gatherings, and large-format experiences with complete privacy.",
-    bgImage: "/assets/Magnolia.png",
-    cardImage: "/assets/Magnolia.png",
+    desktopImage: "/assets/Magnolia_for_Desktop.png",
+    mobileImage: "/assets/Magnolia_for_Mobile.png",
     link: "/villas/magnolia",
   },
 ];
@@ -103,10 +103,12 @@ export default function FeaturedVillas() {
               className="absolute inset-0 w-full h-full"
             >
               <div className="w-full h-full relative">
-                {/* Placeholder BG/Image */}
-                <div className="absolute inset-0 bg-[#1a1d21] flex items-center justify-center text-white/10 font-philosopher text-2xl p-4 text-center">
-                  {currentSlide.title} Image
-                </div>
+                <Image
+                  src={currentSlide.mobileImage}
+                  alt={currentSlide.title}
+                  fill
+                  className="object-cover"
+                />
 
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -197,8 +199,14 @@ export default function FeaturedVillas() {
                 className="absolute inset-0 w-full h-full"
               >
                 <div className="relative w-full h-full bg-[#0D4032]">
+                  <Image
+                    src={currentSlide.desktopImage}
+                    alt="Background"
+                    fill
+                    className="object-cover opacity-30 mix-blend-overlay"
+                  />
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#0D4032] via-[#0D4032]/80 to-[#1a1d21]/90" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#0D4032] via-[#0D4032]/90 to-[#1a1d21]/90" />
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -218,10 +226,12 @@ export default function FeaturedVillas() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                {/* Image Placeholder */}
-                <div className="absolute inset-0 flex items-center justify-center text-white/20 font-philosopher text-3xl">
-                  {currentSlide.title} Image
-                </div>
+                <Image
+                  src={currentSlide.desktopImage}
+                  alt={currentSlide.title}
+                  fill
+                  className="object-cover"
+                />
               </motion.div>
             </div>
 
