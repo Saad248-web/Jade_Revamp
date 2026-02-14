@@ -6,6 +6,7 @@ import { useAnimation } from "@/context/AnimationContext";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Navbar from "./Navbar";
 import UnifiedScrollSection from "./UnifiedScrollSection";
+import MobileBottomNav from "./MobileBottomNav";
 import HorizontalScrollSection from "./HorizontalScrollSection";
 import InstagramCarousel from "./InstagramCarousel";
 import ValuePropositionSection from "./ValuePropositionSection";
@@ -99,60 +100,66 @@ export default function LandingPage() {
 
         {/* Text Content Layer */}
         <motion.div
-          style={{ y: yText }}
-          className="relative z-10 h-full flex flex-col justify-center items-center text-center px-6 md:px-12 max-w-[1920px] mx-auto pt-32" // Added pt-32 to push it slightly "below mid" visually if needed, or just center.
+          // Parallax: Text should move slightly slower than scroll to "remain" longer
+          // Previous was 20%, increasing to 30% to be slightly more sticky without exiting bottom
+          style={{ y: useTransform(scrollY, [0, 500], ["0%", "30%"]) }}
+          className="relative z-10 h-full flex flex-col justify-center items-center text-center px-6 md:px-12 max-w-[1920px] mx-auto pt-20"
         >
           <div className="max-w-5xl flex flex-col items-center">
-            {/* Label */}
+            {/* Label - Bolder (font-extra-bold potentially if font-bold isn't enough? 'font-bold' is standard 700. 'font-extrabold' is 800. Trying ext-bold if available or keeping bold.) */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 1, delay: 0.8 }}
-              className="text-xs md:text-sm tracking-[0.3em] text-jade-gold uppercase mb-6 font-manrope"
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              className="text-xs md:text-sm tracking-[0.3em] text-jade-gold uppercase mb-6 font-manrope font-bold"
             >
-              Jade Hospitainment
+              JADE HOSPITAINMENT
             </motion.p>
 
-            {/* Cinematic Heading (Line Mask Reveal) */}
+            {/* Title - Smaller Size, Forced 2 Lines */}
             <motion.h1
-              className="font-philosopher text-5xl md:text-7xl lg:text-9xl leading-[0.9] text-white space-y-2 mb-8"
-              variants={revealContainer}
-              initial="hidden"
-              animate={isSplashComplete ? "visible" : "hidden"}
+              className="font-philosopher text-4xl md:text-6xl lg:text-7xl leading-[1.1] text-white space-y-2 mb-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             >
-              <div className="overflow-hidden">
-                <motion.div variants={revealLine}>Where Hospitality</motion.div>
-              </div>
-              <div className="overflow-hidden">
-                <motion.div variants={revealLine}>
-                  Meets Entertainment
-                </motion.div>
-              </div>
+              <div className="block">Where Hospitality</div>
+              <div className="block">Meets Entertainment</div>
             </motion.h1>
 
-            {/* Subtext */}
+            {/* Subtext - Color #FAFAFA, Font Light */}
             <motion.p
-              variants={fadeIn}
-              initial="hidden"
-              animate={isSplashComplete ? "visible" : "hidden"}
-              className="text-base md:text-xl font-light text-white/80 max-w-2xl font-manrope leading-relaxed"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+              className="text-sm md:text-lg font-light text-[#FAFAFA] max-w-xl font-manrope leading-loose mb-12"
             >
               Private themed farmhouse villas in serene locations of Bangalore,
               curated for gatherings and getaways.
             </motion.p>
 
-            {/* Vertical Line */}
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={isSplashComplete ? { height: 80, opacity: 1 } : {}} // Height 80px
-              transition={{ duration: 1, delay: 1.5, ease: "easeInOut" }}
-              className="w-[1px] bg-gradient-to-b from-white/50 to-transparent mt-12"
-            />
+            {/* "SCROLL TO EXPERIENCE" - Interactive */}
+            <motion.button
+              onClick={() =>
+                window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
+              }
+              initial={{ opacity: 0, y: 20 }}
+              animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
+              className="flex flex-col items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity"
+            >
+              <span className="text-[10px] tracking-[0.2em] font-manrope text-white/60 uppercase">
+                Scroll to Experience
+              </span>
+              {/* Vertical Line */}
+              <div className="h-16 w-[1px] bg-gradient-to-b from-white/50 to-transparent" />
+            </motion.button>
           </div>
         </motion.div>
       </div>
 
       <UnifiedScrollSection />
+      <MobileBottomNav />
       <HorizontalScrollSection />
       <InstagramCarousel />
       <ValuePropositionSection />

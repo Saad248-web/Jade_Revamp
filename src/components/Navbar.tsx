@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useSpring,
+  AnimatePresence,
+  useMotionValueEvent,
+} from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { useAnimation } from "@/context/AnimationContext";
@@ -9,14 +15,29 @@ import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const { isSplashComplete } = useAnimation();
+  const { isMenuOpen, setMenuOpen } = useAnimation();
+  const { scrollY } = useScroll();
+  const [isHidden, setIsHidden] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  // Smart Scroll Logic
+  useMotionValueEvent(scrollY, "change", (latest: number) => {
+    const previous = lastScrollY;
+    if (latest > previous && latest > 150) {
+      setIsHidden(true); // Scroll Down -> Hide
+    } else {
+      setIsHidden(false); // Scroll Up -> Show
+    }
+    setLastScrollY(latest);
+  });
+
+  // Scroll Progress (Filler Line)
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001,
   });
-
-  const [isOpen, setIsOpen] = useState(false);
 
   if (!isSplashComplete) return null;
 
@@ -28,87 +49,116 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.nav
-        className="fixed top-0 left-0 w-full z-50 px-4 py-4 md:px-8 md:py-6 flex items-center justify-between border-b border-white/10 bg-gradient-to-b from-black/50 to-transparent backdrop-blur-[2px]"
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.5, ease: [0.76, 0, 0.24, 1] }}
-      >
-        {/* Scroll Progress Line */}
-        <div className="absolute top-0 left-0 right-0 h-[2px] w-full bg-white/5">
-          <motion.div
-            className="h-full bg-jade-gold origin-left"
-            style={{ scaleX }}
-          />
-        </div>
+      {/* Scroll Progress Line ("Filler Line") - LOCKED TO TOP */}
+      <div className="fixed top-0 left-0 right-0 h-[2px] w-full z-[60] bg-white/5">
+        <motion.div
+          className="h-full bg-jade-gold origin-left"
+          style={{ scaleX }}
+        />
+      </div>
 
-        {/* LEFT SECTION: Menu & Links */}
-        <div className="flex items-center">
-          {/* Hamburger Icon */}
+      <motion.nav
+        className="fixed top-0 left-0 w-full z-50 px-6 py-4 flex items-center justify-between bg-gradient-to-b from-black/80 to-transparent backdrop-blur-[2px] mt-[2px]"
+        variants={{
+          visible: { y: 0 },
+          hidden: { y: "-100%" },
+        }}
+        initial="visible"
+        animate={isHidden ? "hidden" : "visible"}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+      >
+        {/* ====================
+            DESKTOP LEFT SECTION 
+            [Menu Icon] | [Divider] | [Links]
+           ==================== */}
+        <div className="hidden md:flex items-center gap-8 z-10">
+          {/* Menu Icon */}
           <button
-            onClick={() => setIsOpen(true)}
-            className="text-white hover:text-jade-gold transition-colors"
+            onClick={() => setMenuOpen(true)}
+            className="flex items-center text-white hover:text-jade-gold transition-colors"
           >
-            <Menu className="w-5 h-5 md:w-6 md:h-6 stroke-[1.5]" />
+            <Menu className="w-6 h-6 stroke-[1.5]" />
           </button>
 
-          {/* Vertical Divider */}
-          <div className="h-4 w-[1px] bg-white/20 mx-8 hidden md:block" />
+          {/* Divider */}
+          <div className="h-5 w-[1px] bg-white/20" />
 
-          {/* Nav Links (Text Only) */}
-          <ul className="hidden md:flex items-center space-x-8">
+          {/* Navigation Links */}
+          <div className="flex items-center gap-6">
             {navItems.map((item) => (
-              <li key={item.name}>
-                <Link
-                  href={item.href}
-                  className="text-xs font-manrope font-medium tracking-widest text-white/80 hover:text-white transition-colors uppercase"
-                >
-                  {item.name}
-                </Link>
-              </li>
+              <Link
+                key={item.name}
+                href={item.href}
+                className="text-xs font-manrope font-medium tracking-widest text-white/80 hover:text-white uppercase transition-colors"
+              >
+                {item.name}
+              </Link>
             ))}
-          </ul>
+          </div>
         </div>
 
-        {/* CENTER SECTION: Logo */}
-        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        {/* ====================
+             MOBILE LEFT SECTION 
+             [Logo]
+           ==================== */}
+        <div className="md:hidden relative z-10 flex items-center gap-6">
           <Link href="/">
-            <div className="relative w-16 h-16 md:w-32 md:h-24 flex items-center justify-center">
-              {/* Using the White Logo */}
+            <div className="relative w-12 h-12 flex items-center justify-center">
               <Image
                 src="/assets/White_Logo.png"
                 alt="Jade Logo"
-                width={100}
-                height={100}
+                width={48}
+                height={48}
                 className="object-contain"
               />
             </div>
           </Link>
         </div>
 
-        {/* RIGHT SECTION: CTA Button */}
-        <div>
-          <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white text-[10px] md:text-xs font-manrope tracking-widest uppercase px-4 py-2 md:px-6 md:py-3 rounded-full border border-white/10 transition-all duration-300">
+        {/* ====================
+            DESKTOP CENTER SECTION 
+            [Logo] (Absolute Centered)
+           ==================== */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block z-10">
+          <Link href="/">
+            <div className="relative w-20 h-10 flex items-center justify-center">
+              <Image
+                src="/assets/White_Logo.png"
+                alt="Jade Logo"
+                width={80}
+                height={40}
+                className="object-contain"
+              />
+            </div>
+          </Link>
+        </div>
+
+        {/* ====================
+            RIGHT SECTION 
+            [Contact Button]
+           ==================== */}
+        <div className="relative z-10">
+          <button className="bg-white/5 hover:bg-white/10 backdrop-blur-md text-white text-[10px] md:text-xs font-manrope tracking-widest uppercase px-4 py-3 md:px-6 md:py-3 rounded-none border border-white/10 transition-all duration-300">
             <span className="md:hidden">CONTACT</span>
             <span className="hidden md:inline">CONTACT US</span>
           </button>
         </div>
       </motion.nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* Full Screen Menu Overlay */}
       <AnimatePresence>
-        {isOpen && (
+        {isMenuOpen && (
           <motion.div
             initial={{ opacity: 0, x: "-100%" }}
             animate={{ opacity: 1, x: "0%" }}
             exit={{ opacity: 0, x: "-100%" }}
             transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 z-[60] bg-[#1a1a1a] flex flex-col items-center justify-center"
+            className="fixed inset-0 z-[70] bg-[#1a1a1a] flex flex-col items-center justify-center"
           >
             {/* Close Button */}
             <button
-              onClick={() => setIsOpen(false)}
-              className="absolute top-6 left-4 text-white hover:text-jade-gold transition-colors"
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-6 left-6 text-white hover:text-jade-gold transition-colors"
             >
               <X className="w-8 h-8 stroke-[1.5]" />
             </button>
@@ -124,7 +174,7 @@ export default function Navbar() {
                 >
                   <Link
                     href={item.href}
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => setMenuOpen(false)}
                     className="text-3xl font-philosopher text-white hover:text-jade-gold transition-colors"
                   >
                     {item.name}
@@ -138,7 +188,7 @@ export default function Navbar() {
               >
                 <Link
                   href="#contact"
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => setMenuOpen(false)}
                   className="text-3xl font-philosopher text-white hover:text-jade-gold transition-colors"
                 >
                   Contact

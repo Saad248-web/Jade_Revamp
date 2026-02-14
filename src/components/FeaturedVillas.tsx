@@ -108,6 +108,7 @@ export default function FeaturedVillas() {
                   alt={currentSlide.title}
                   fill
                   className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
 
                 {/* Gradient Overlay */}
@@ -120,7 +121,7 @@ export default function FeaturedVillas() {
           <div className="absolute bottom-0 left-0">
             <button
               onClick={handlePrev}
-              className="p-4 bg-[#1a1d21]/60 backdrop-blur-md text-white hover:bg-[#EFCD62] hover:text-[#1a1d21] transition-colors rounded-tr-xl border-t border-r border-white/10"
+              className="p-4 bg-[#1a1d21]/60 backdrop-blur-md text-white hover:bg-[#EFCD62] hover:text-[#1a1d21] transition-colors rounded-none border-t border-r border-white/10"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
@@ -128,7 +129,7 @@ export default function FeaturedVillas() {
           <div className="absolute bottom-0 right-0">
             <button
               onClick={handleNext}
-              className="p-4 bg-[#1a1d21]/60 backdrop-blur-md text-white hover:bg-[#EFCD62] hover:text-[#1a1d21] transition-colors rounded-tl-xl border-t border-l border-white/10"
+              className="p-4 bg-[#1a1d21]/60 backdrop-blur-md text-white hover:bg-[#EFCD62] hover:text-[#1a1d21] transition-colors rounded-none border-t border-l border-white/10"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
@@ -175,7 +176,7 @@ export default function FeaturedVillas() {
         <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 z-40 w-max pointer-events-auto">
           <Link
             href="/villas"
-            className="flex items-center gap-3 px-6 py-4 bg-[#EFCD62] text-[#1a1d21] rounded-sm shadow-xl font-manrope font-bold text-xs tracking-[0.2em] uppercase hover:bg-white transition-colors"
+            className="flex items-center gap-3 px-6 py-4 bg-[#EFCD62] text-[#1a1d21] rounded-none shadow-xl font-manrope font-bold text-xs tracking-[0.2em] uppercase hover:bg-white transition-colors"
           >
             EXPLORE ALL JADE VILLAS <ArrowRight className="w-4 h-4" />
           </Link>
@@ -204,6 +205,7 @@ export default function FeaturedVillas() {
                     alt="Background"
                     fill
                     className="object-cover opacity-30 mix-blend-overlay"
+                    sizes="100vw"
                   />
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0D4032] via-[#0D4032]/90 to-[#1a1d21]/90" />
@@ -231,6 +233,7 @@ export default function FeaturedVillas() {
                   alt={currentSlide.title}
                   fill
                   className="object-cover"
+                  sizes="50vw"
                 />
               </motion.div>
             </div>
@@ -274,7 +277,7 @@ export default function FeaturedVillas() {
           <div className="max-w-[1920px] mx-auto flex items-center justify-between">
             <button
               onClick={handlePrev}
-              className="group p-4 rounded-lg hover:bg-white/10 transition-all"
+              className="group p-4 rounded-none hover:bg-white/10 transition-all"
             >
               <ChevronLeft className="w-8 h-8 text-[#EFCD62]" />
             </button>
@@ -283,7 +286,7 @@ export default function FeaturedVillas() {
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all ${
+                  className={`w-2 h-2 rounded-none transition-all ${
                     index === currentIndex ? "bg-[#EFCD62]" : "bg-[#AC8831]/50"
                   }`}
                 />
@@ -291,7 +294,7 @@ export default function FeaturedVillas() {
             </div>
             <button
               onClick={handleNext}
-              className="group p-4 rounded-lg hover:bg-white/10 transition-all"
+              className="group p-4 rounded-none hover:bg-white/10 transition-all"
             >
               <ChevronRight className="w-8 h-8 text-[#EFCD62]" />
             </button>
@@ -302,7 +305,7 @@ export default function FeaturedVillas() {
         <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 z-40 w-max pointer-events-auto">
           <Link
             href="/villas"
-            className="flex items-center gap-3 px-8 py-5 bg-[#EFCD62] text-[#1a1d21] rounded-sm shadow-xl font-manrope font-bold text-sm tracking-[0.2em] uppercase hover:bg-white transition-colors"
+            className="flex items-center gap-3 px-8 py-5 bg-[#EFCD62] text-[#1a1d21] rounded-none shadow-xl font-manrope font-bold text-sm tracking-[0.2em] uppercase hover:bg-white transition-colors"
           >
             EXPLORE ALL JADE VILLAS <ArrowRight className="w-5 h-5" />
           </Link>

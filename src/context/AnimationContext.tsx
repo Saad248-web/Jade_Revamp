@@ -5,6 +5,8 @@ import React, { createContext, useContext, useState } from "react";
 interface AnimationContextType {
   isSplashComplete: boolean;
   setSplashComplete: (value: boolean) => void;
+  isMenuOpen: boolean;
+  setMenuOpen: (value: boolean) => void;
 }
 
 const AnimationContext = createContext<AnimationContextType | undefined>(
@@ -17,9 +19,12 @@ export const AnimationProvider = ({
   children: React.ReactNode;
 }) => {
   const [isSplashComplete, setSplashComplete] = useState(false);
+  const [isMenuOpen, setMenuOpen] = useState(false);
 
   return (
-    <AnimationContext.Provider value={{ isSplashComplete, setSplashComplete }}>
+    <AnimationContext.Provider
+      value={{ isSplashComplete, setSplashComplete, isMenuOpen, setMenuOpen }}
+    >
       {children}
     </AnimationContext.Provider>
   );

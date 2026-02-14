@@ -163,7 +163,7 @@ export default function ValuePropositionSection() {
             {/* Prev Arrow */}
             <button
               onClick={handlePrev}
-              className="p-3 rounded-lg bg-white/10 backdrop-blur-sm z-30"
+              className="p-3 rounded-none bg-white/10 backdrop-blur-sm z-30"
             >
               <ChevronLeft className="w-6 h-6 text-white" />
             </button>
@@ -188,7 +188,7 @@ export default function ValuePropositionSection() {
             {/* Next Arrow */}
             <button
               onClick={handleNext}
-              className="p-3 rounded-lg bg-white/10 backdrop-blur-sm z-30"
+              className="p-3 rounded-none bg-white/10 backdrop-blur-sm z-30"
             >
               <ChevronRight className="w-6 h-6 text-white" />
             </button>
@@ -199,7 +199,7 @@ export default function ValuePropositionSection() {
             {SLIDES.map((_, index) => (
               <div
                 key={index}
-                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                className={`w-1.5 h-1.5 rounded-none transition-colors ${
                   index === currentIndex ? "bg-[#EFCD62]" : "bg-white/30"
                 }`}
               />
@@ -304,7 +304,7 @@ export default function ValuePropositionSection() {
           <div className="max-w-[1920px] mx-auto flex items-center justify-between">
             <button
               onClick={handlePrev}
-              className="group p-4 rounded-lg hover:bg-white/10 transition-all"
+              className="group p-4 rounded-none hover:bg-white/10 transition-all"
             >
               <ChevronLeft className="w-8 h-8 text-[#EFCD62]" />
             </button>
@@ -313,7 +313,7 @@ export default function ValuePropositionSection() {
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all ${
+                  className={`w-2 h-2 rounded-none transition-all ${
                     index === currentIndex ? "bg-[#EFCD62]" : "bg-[#AC8831]/50"
                   }`}
                 />
@@ -321,7 +321,7 @@ export default function ValuePropositionSection() {
             </div>
             <button
               onClick={handleNext}
-              className="group p-4 rounded-lg hover:bg-white/10 transition-all"
+              className="group p-4 rounded-none hover:bg-white/10 transition-all"
             >
               <ChevronRight className="w-8 h-8 text-[#EFCD62]" />
             </button>

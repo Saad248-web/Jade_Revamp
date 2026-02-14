@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -72,115 +72,323 @@ export default function HorizontalScrollSection() {
     restDelta: 0.001,
   });
 
-  // Map vertical scroll (0-1) to horizontal transform (0% to -300vw for 4 panels)
-  // Actually we need to move 3 full widths to show the 4th panel at the end.
-  // Translating -300vw moves the container so the 4th panel (at 300vw) aligns with viewport (0).
-  const x = useTransform(smoothProgress, [0, 1], ["0%", "-75%"]); // 75% of 400vw = 300vw
+  // Calculate current slide index (0-3) for Counter
+  const totalPanels = PANELS.length;
+  const currentIndex = useTransform(
+    smoothProgress,
+    // Map scroll ranges to index: 0-0.2 -> 0, 0.3-0.5 -> 1, etc.
+    [
+      0,
+      (1 / (totalPanels - 1)) * 0.8,
+      1 / (totalPanels - 1),
+      2 / (totalPanels - 1),
+    ],
+    [0, 0, 1, 2], // Simplified tracking, actual index logic logic below
+  );
+
+  // Actually, let's just use a simpler mapped value for the visual counter if needed,
+  // or rely on the derived logic in the child.
 
   return (
-    <section ref={targetRef} className="relative h-[400vh] bg-jade-charcoal">
+    <section ref={targetRef} className="relative h-[500vh] bg-jade-charcoal">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <motion.div style={{ x }} className="flex h-full w-[400vw]">
+        <div className="relative w-full h-full">
+          {/* Top Label & Counter - Global (Fixed on top of everything) */}
+          <div className="absolute top-0 left-0 w-full z-50 flex flex-col items-center pointer-events-none">
+            <div className="absolute top-0 left-0 w-full h-[16.6vh] bg-gradient-to-b from-black/90 to-transparent" />
+            <div className="relative mt-20 md:mt-24">
+              <span className="font-manrope text-sm md:text-base lg:text-lg tracking-[0.3em] uppercase mb-4 md:mb-6 font-semibold text-jade-gold drop-shadow-lg">
+                WAYS JADE IS EXPERIENCED
+              </span>
+            </div>
+            {/* 
+                Visual Counter Implementation: 
+                Since we are stacking, we can either have a global counter here 
+                OR proper per-panel counters if we want them to slide.
+                Design usually implies a static counter overlay. 
+                Let's make it global and drive the number.
+             */}
+            <GlobalCounter progress={smoothProgress} total={PANELS.length} />
+          </div>
+
           {PANELS.map((panel, i) => (
-            <Panel key={panel.id} data={panel} index={i} />
+            <StackedPanel
+              key={panel.id}
+              data={panel}
+              index={i}
+              globalProgress={smoothProgress}
+              totalPanels={PANELS.length}
+            />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 }
 
-function Panel({ data, index }: { data: any; index: number }) {
+// Global Counter Component
+function GlobalCounter({ progress, total }: { progress: any; total: number }) {
+  // Map progress to distinct steps: 0->0.33 (1), 0.33->0.66 (2), etc.
+  // We use a transform but we need to render integer.
+  // Framer Motion 'useTransform' returns a generic MotionValue.
+  // To render text from it, we can use a small component that listens to change.
+  const [current, setCurrent] = useState(1);
+
+  useEffect(() => {
+    return progress.on("change", (v: number) => {
+      // v goes 0 to 1.
+      // Segments:
+      // 0 - 0.33 : 1
+      // 0.33 - 0.66 : 2
+      // 0.66 - 1.0 : 3
+      // Wait, we have 4 panels?
+      // 0 -> Panel 0 active.
+      // 0.33 -> Panel 1 enters.
+      // 0.66 -> Panel 2 enters.
+      // 1.0 -> Panel 3 enters.
+      const segment = 1 / (total - 1);
+      const rawIdx = v / segment;
+      // Round to nearest index based on transition point?
+      // Actually, "Active" is the one entering or fully entered.
+      // Let's say index is floor(rawIdx) + 1?
+      // If v=0, idx=0 -> 1.
+      // If v=0.33, idx=1 -> 2.
+      let idx = Math.round(v * (total - 1)) + 1;
+      if (idx > total) idx = total;
+      if (idx < 1) idx = 1;
+      setCurrent(idx);
+    });
+  }, [progress, total]);
+
+  return (
+    <div className="relative flex items-center gap-12 md:gap-16 font-philosopher text-xl md:text-2xl lg:text-3xl mt-2">
+      <span className="text-white drop-shadow-lg transition-all duration-300">
+        {current}
+      </span>
+      <div className="w-24 md:w-32 h-[1px] bg-white/70 drop-shadow-lg" />
+      <span className="text-white/70 drop-shadow-lg">{total}</span>
+    </div>
+  );
+}
+
+function StackedPanel({
+  data,
+  index,
+  globalProgress,
+  totalPanels,
+}: {
+  data: any;
+  index: number;
+  globalProgress: any;
+  totalPanels: number;
+}) {
   const isGrid = data.type === "grid";
 
-  // Text Animation Variants
+  // ===== ANIMATION LOGIC =====
+  // 4 Panels (0, 1, 2, 3)
+  // Step size = 1 / 3 = 0.333
+  const step = 1 / (totalPanels - 1);
+
+  // Transition In (Entry):
+  // Occurs when scroll is between (index - 1) * step and index * step.
+  // Panel 0: Starts at 0, no entry phase.
+  // Panel 1: Enters 0 -> 0.33
+  // Panel 2: Enters 0.33 -> 0.66
+
+  const enterStart = (index - 1) * step;
+  const enterEnd = index * step;
+
+  // Transition Out (Exit/Recede):
+  // Occurs when scroll is between index * step and (index + 1) * step.
+  // Panel 0: Recedes 0 -> 0.33
+  // Panel 1: Recedes 0.33 -> 0.66
+
+  const exitStart = index * step;
+  const exitEnd = (index + 1) * step;
+
+  // ENTRY TRANSFORM (Slide from Right)
+  // Clamp range: Panel 0 shouldn't slide.
+  const xInput = [enterStart, enterEnd];
+  const xOutput = ["100%", "0%"];
+  const scaleInput = [enterStart, enterEnd];
+  const scaleOutput = [1.05, 1]; // Gentle scale down on entry
+
+  const x = useTransform(globalProgress, xInput, xOutput, { clamp: false });
+  const entryScale = useTransform(globalProgress, scaleInput, scaleOutput, {
+    clamp: false,
+  });
+
+  // EXIT TRANSFORM (Recede to Background)
+  const exitScale = useTransform(
+    globalProgress,
+    [exitStart, exitEnd],
+    [1, 0.8],
+  );
+  const exitOpacity = useTransform(
+    globalProgress,
+    [exitStart, exitEnd],
+    [1, 0.5],
+  );
+  const exitFilter = useTransform(
+    globalProgress,
+    [exitStart, exitEnd],
+    ["brightness(1)", "brightness(0.5)"],
+  );
+
+  // Combined Styles
+  // If index is 0, it doesn't enter. It just exists and exits.
+  // If index is last, it doesn't exit.
+
+  let style: any = { zIndex: index };
+
+  if (index === 0) {
+    // Panel 0: Only Exit Logic
+    style.scale = exitScale;
+    style.opacity = exitOpacity;
+    style.filter = exitFilter;
+    style.x = 0; // Fixed
+  } else if (index === totalPanels - 1) {
+    // Last Panel: Only Entry Logic
+    // But wait, useTransform needs valid ranges.
+    // If we are "past" the entry phase, useTransform clamps to end value by default if we don't set clamp false.
+    // We want standard clamping.
+
+    const safeX = useTransform(
+      globalProgress,
+      [enterStart, enterEnd],
+      ["100%", "0%"],
+    );
+    const safeScale = useTransform(
+      globalProgress,
+      [enterStart, enterEnd],
+      [1.05, 1],
+    );
+    style.x = safeX;
+    style.scale = safeScale;
+  } else {
+    // Middle Panels: Enter then Exit
+    // We need to combine them.
+    // Problem: simple useTransform range [enterStart, enterEnd, exitEnd] -> [values] works?
+    // Entry: x 100->0, scale 1.05->1.
+    // Exit: x 0, scale 1->0.8.
+
+    const xCombined = useTransform(
+      globalProgress,
+      [enterStart, enterEnd, exitEnd],
+      ["100%", "0%", "0%"],
+    );
+    // Scale: 1.05 -> 1 -> 0.8
+    const scaleCombined = useTransform(
+      globalProgress,
+      [enterStart, enterEnd, exitEnd],
+      [1.05, 1, 0.8],
+    );
+    const opacityCombined = useTransform(
+      globalProgress,
+      [enterStart, enterEnd, exitEnd],
+      [1, 1, 0.5],
+    );
+    const filterCombined = useTransform(
+      globalProgress,
+      [enterStart, enterEnd, exitEnd],
+      ["brightness(1)", "brightness(1)", "brightness(0.5)"],
+    );
+
+    style.x = xCombined;
+    style.scale = scaleCombined;
+    style.opacity = opacityCombined;
+    style.filter = filterCombined;
+  }
+
+  // KEN BURNS (Internal Image)
+  // Moves slowly while visible.
+  const kenBurnsScale = useTransform(
+    globalProgress,
+    [Math.max(0, enterStart), Math.min(1, exitEnd)],
+    [1, 1.15],
+  );
+
+  // Text Animation (Trigger when "active")
+  // Active means globalProgress approx index * step.
+  // We can use `whileInView` effectively if we construct a ref?
+  // Or better, drive opacity by scroll too to ensure it plays at the right time.
+  // Let's stick to simple InView or just map it.
+  // If we map it, we get scrubbing. User wants "Transition" feel.
+  // Let's use `whileInView` on an inner element that enters the viewport?
+  // But the panel is "technically" in viewport even when hidden by siblings or offscreen.
+  // Actually, absolute positioned offscreen elements are "in viewport"? No, if x=100%.
+  // So standard whileInView works for Entry.
+
   const containerVars = {
     hidden: {},
     visible: {
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.3,
+        delayChildren: 0.2,
       },
     },
   };
-
   const lineVars = {
-    hidden: { y: 40, opacity: 0 },
+    hidden: { y: 60, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] },
     },
   };
 
   return (
-    <div className="w-[100vw] h-screen relative flex flex-col justify-end overflow-hidden border-r border-white/5 last:border-r-0">
-      {/* 0. Top Label & Counter (Sticky Visual) */}
-      <div className="absolute top-20 md:top-24 left-0 w-full z-20 flex flex-col items-center pointer-events-none">
-        {/* Background overlay for better readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-transparent backdrop-blur-sm" />
-
-        <div className="relative">
-          <span className="font-manrope text-sm md:text-base lg:text-lg tracking-[0.3em] uppercase mb-4 md:mb-6 font-semibold text-white drop-shadow-lg">
-            WAYS JADE IS EXPERIENCED
-          </span>
-        </div>
-
-        <div className="relative flex items-center gap-6 md:gap-8 font-philosopher text-xl md:text-2xl lg:text-3xl">
-          <span className="text-white drop-shadow-lg">{index + 1}</span>
-          <div className="w-12 md:w-16 h-[1px] bg-white/70 drop-shadow-lg" />
-          <span className="text-white/70 drop-shadow-lg">7</span>
-        </div>
-      </div>
-
-      {/* 1. BACKGROUND IMAGE (Parallax) */}
+    <motion.div
+      style={style}
+      className="absolute inset-0 w-full h-full bg-jade-charcoal overflow-hidden shadow-2xl"
+    >
+      {/* BACKGROUND */}
       {!isGrid && (
         <div className="absolute inset-0 z-0">
-          <Image
-            src={data.image}
-            alt={data.title}
-            fill
-            className="object-cover transition-transform duration-[2s] hover:scale-105"
-            priority={index === 0}
-            sizes="100vw"
-          />
-          {/* Gradient Overlay for Text Readability - Bottom Heavy */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/10" />
+          <motion.div
+            className="w-full h-full relative"
+            style={{ scale: kenBurnsScale }}
+          >
+            <Image
+              src={data.image}
+              alt={data.title}
+              fill
+              className="object-cover"
+              priority={index === 0}
+              sizes="100vw"
+            />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/10 z-10" />
         </div>
       )}
 
-      {/* GRID LAYOUT BACKGROUND */}
-      {isGrid && (
-        <div className="absolute inset-0 z-0 bg-jade-charcoal">
-          {/* Solid background - no noise texture */}
-        </div>
-      )}
+      {isGrid && <div className="absolute inset-0 z-0 bg-jade-charcoal" />}
 
-      {/* 2. TEXT CONTENT (Bottom Aligned) */}
+      {/* CONTENT */}
       <motion.div
-        className={`relative z-10 w-full px-6 pb-12 md:pb-20 text-center flex flex-col items-center ${isGrid ? "h-full justify-center" : "justify-end"}`}
+        className={`relative z-20 w-full h-full px-6 pb-36 md:pb-20 text-center flex flex-col items-center ${isGrid ? "justify-center" : "justify-end"}`}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.5 }}
+        // Ensure trigger happens when panel actually slides in.
+        // With X transform, intersection observer should fire when it crosses viewport.
+        viewport={{ amount: 0.3, once: true }}
         variants={containerVars}
       >
         {!isGrid ? (
           <>
-            <motion.h2 className="font-philosopher text-4xl md:text-6xl text-white mb-6 drop-shadow-lg">
+            <motion.h2 className="font-philosopher text-4xl md:text-6xl text-white mb-4 drop-shadow-lg">
               <div className="overflow-hidden">
                 <motion.span className="block" variants={lineVars}>
                   {data.title}
                 </motion.span>
               </div>
             </motion.h2>
-
             <motion.p
               variants={lineVars}
-              className="font-manrope text-base md:text-lg text-white/90 font-light max-w-xl mb-12 leading-relaxed drop-shadow-md"
+              className="font-manrope text-base md:text-lg text-white/90 font-light max-w-xl mb-8 leading-relaxed drop-shadow-md"
             >
               {data.subtext}
             </motion.p>
-
             <motion.div variants={lineVars} className="w-full max-w-md">
               <Link
                 href="#"
@@ -192,48 +400,39 @@ function Panel({ data, index }: { data: any; index: number }) {
             </motion.div>
           </>
         ) : (
-          /* GRID PANEL CONTENT */
-          <div className="w-full h-full flex flex-col items-center justify-center px-6 md:px-8 pt-32 md:pt-40">
-            {/* Grid Container */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 w-full max-w-7xl mb-8 md:mb-12">
+          /* Grid Content - Simply reusing structure */
+          <div className="w-full flex flex-col items-center">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 w-full max-w-7xl mb-8 md:mb-12 pt-20">
               {data.items.map((item: any, idx: number) => (
                 <div
                   key={idx}
-                  className="relative group overflow-hidden border border-white/10 cursor-pointer aspect-[3/4] md:aspect-[3/4]"
+                  className="relative aspect-[3/4] border border-white/10 group overflow-hidden"
                 >
                   <Image
                     src={item.img}
                     alt={item.title}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
-                    sizes="(max-width: 768px) 50vw, 25vw"
+                    className="object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-                  <div className="absolute bottom-4 md:bottom-6 left-0 w-full text-center px-3 md:px-4">
-                    <h3 className="font-philosopher text-lg md:text-xl lg:text-2xl text-white tracking-wide leading-tight">
+                  <div className="absolute bottom-4 left-0 w-full text-center">
+                    <h3 className="font-philosopher text-white text-lg">
                       {item.title}
                     </h3>
                   </div>
                 </div>
               ))}
             </div>
-
-            {/* CTA Button */}
-            <motion.div
-              variants={lineVars}
-              className="w-full max-w-md px-4 md:px-0"
-            >
+            <motion.div variants={lineVars} className="w-full max-w-md">
               <Link
                 href="#"
-                className="w-full block bg-jade-gold text-jade-charcoal py-3 md:py-4 px-6 uppercase tracking-widest text-xs md:text-sm font-bold hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center gap-3"
+                className="w-full block bg-jade-gold text-jade-charcoal py-3 px-6 uppercase tracking-widest text-xs md:text-sm font-bold flex items-center justify-center gap-3"
               >
-                {data.cta}
-                <ArrowRight className="w-4 h-4" />
+                {data.cta} <ArrowRight className="w-4 h-4" />
               </Link>
             </motion.div>
           </div>
         )}
       </motion.div>
-    </div>
+    </motion.div>
   );
 }

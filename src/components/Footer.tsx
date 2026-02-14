@@ -71,7 +71,7 @@ export default function Footer() {
             {/* Desktop Contact Details (Moved up for better balance) */}
             <div className="hidden lg:flex flex-col gap-6 mt-12">
               <div className="flex items-center gap-4 group">
-                <div className="p-3 border border-white/10 rounded-full group-hover:bg-[#EFCD62] transition-colors">
+                <div className="p-3 border border-white/10 rounded-none group-hover:bg-[#EFCD62] transition-colors">
                   <MapPin className="w-5 h-5 text-[#EFCD62] group-hover:text-[#15171a]" />
                 </div>
                 <span className="text-white/80 font-manrope text-sm">
@@ -79,7 +79,7 @@ export default function Footer() {
                 </span>
               </div>
               <div className="flex items-center gap-4 group">
-                <div className="p-3 border border-white/10 rounded-full group-hover:bg-[#EFCD62] transition-colors">
+                <div className="p-3 border border-white/10 rounded-none group-hover:bg-[#EFCD62] transition-colors">
                   <Phone className="w-5 h-5 text-[#EFCD62] group-hover:text-[#15171a]" />
                 </div>
                 <span className="text-white/80 font-manrope text-sm">
@@ -87,7 +87,7 @@ export default function Footer() {
                 </span>
               </div>
               <div className="flex items-center gap-4 group">
-                <div className="p-3 border border-white/10 rounded-full group-hover:bg-[#EFCD62] transition-colors">
+                <div className="p-3 border border-white/10 rounded-none group-hover:bg-[#EFCD62] transition-colors">
                   <Mail className="w-5 h-5 text-[#EFCD62] group-hover:text-[#15171a]" />
                 </div>
                 <span className="text-white/80 font-manrope text-sm">
@@ -212,7 +212,7 @@ export default function Footer() {
               {[Facebook, Instagram, Youtube].map((Icon, i) => (
                 <div
                   key={i}
-                  className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-[#15171a] text-white/60 transition-all cursor-pointer rounded-full"
+                  className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-[#15171a] text-white/60 transition-all cursor-pointer rounded-none"
                 >
                   <Icon className="w-4 h-4" />
                 </div>
