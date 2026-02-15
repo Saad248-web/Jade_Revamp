@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Heart, MessageCircle, Instagram } from "lucide-react";
 
@@ -78,10 +78,28 @@ const INSTAGRAM_POSTS = [
 ];
 
 export default function InstagramCarousel() {
+  const [scrollProgress, setScrollProgress] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } =
+        scrollContainerRef.current;
+      const progress = (scrollLeft / (scrollWidth - clientWidth)) * 100;
+      setScrollProgress(progress);
+    }
+  };
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+      return () => container.removeEventListener("scroll", handleScroll);
+    }
+  }, []);
+
   return (
-    <section className="relative bg-jade-charcoal py-16 md:py-24 overflow-hidden">
+    <section className="relative bg-jade-charcoal pt-16 md:pt-24 pb-0 overflow-hidden">
       <div className="max-w-[1920px] mx-auto">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16 px-6 md:px-12">
@@ -99,23 +117,20 @@ export default function InstagramCarousel() {
         {/* Horizontal Scroll Container */}
         <div
           ref={scrollContainerRef}
-          className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide px-6 md:px-12 pb-8 snap-x snap-mandatory scroll-smooth"
+          className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide px-6 md:px-12 snap-x snap-mandatory scroll-smooth"
           style={{
             scrollbarWidth: "none",
             msOverflowStyle: "none",
           }}
         >
           {INSTAGRAM_POSTS.map((post, index) => (
-            <div
-              key={post.id}
-              className="flex-shrink-0 w-[320px] md:w-[380px] snap-center"
-            >
+            <div key={post.id} className="flex-shrink-0 w-[280px] snap-center">
               {/* Instagram Post Card */}
-              <div className="w-full bg-[#2a2a2a] rounded-2xl overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-300">
+              <div className="w-full bg-[#FAFAFA]/[0.04] backdrop-blur-xl rounded-[16px] overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-300 border border-[#FAFAFA]/[0.12] group">
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 bg-[#2a2a2a]">
+                <div className="flex items-center justify-between p-[14px] bg-transparent">
                   <div className="flex items-center gap-3">
-                    <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-jade-gold">
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden border-[1px] border-white/20">
                       <Image
                         src={post.userAvatar}
                         alt="Profile"
@@ -125,19 +140,19 @@ export default function InstagramCarousel() {
                       />
                     </div>
                     <div>
-                      <p className="font-manrope text-sm font-semibold text-white">
+                      <p className="font-manrope text-sm font-semibold text-[#FAFAFA]">
                         {post.username}
                       </p>
-                      <p className="font-manrope text-xs text-white/60">
+                      <p className="font-manrope text-xs text-[#FAFAFA]/60">
                         {post.userLabel}
                       </p>
                     </div>
                   </div>
-                  <Instagram className="w-5 h-5 text-white/60" />
+                  <Instagram className="w-5 h-5 text-[#FAFAFA]/60" />
                 </div>
 
                 {/* Image */}
-                <div className="relative w-full aspect-square bg-black">
+                <div className="relative w-full aspect-[4/5] bg-black">
                   <Image
                     src={post.image}
                     alt="Post"
@@ -148,9 +163,9 @@ export default function InstagramCarousel() {
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 bg-[#2a2a2a]">
+                <div className="p-[14px] bg-transparent">
                   <div className="flex items-center gap-4 mb-3">
-                    <div className="flex items-center gap-1 text-white/90">
+                    <div className="flex items-center gap-1 text-[#FAFAFA]/90">
                       <Heart className="w-5 h-5" />
                       <span className="font-manrope text-sm">{post.likes}</span>
                     </div>
@@ -161,7 +176,7 @@ export default function InstagramCarousel() {
                       </span>
                     </div>
                   </div>
-                  <p className="font-manrope text-sm text-white/80 line-clamp-2">
+                  <p className="font-manrope text-sm text-[#FAFAFA]/60 line-clamp-2">
                     {post.caption}
                   </p>
                 </div>
@@ -170,8 +185,23 @@ export default function InstagramCarousel() {
           ))}
         </div>
 
+        {/* Unified Scroll Indicator */}
+        <div className="flex justify-center gap-2 mt-[8px]">
+          {[...Array(5)].map((_, i) => {
+            const isActive = Math.round((scrollProgress / 100) * 4) === i;
+            return (
+              <div
+                key={i}
+                className={`h-[6px] transition-all duration-300 ${
+                  isActive ? "bg-jade-gold w-6" : "bg-white/20 w-[6px]"
+                }`}
+              />
+            );
+          })}
+        </div>
+
         {/* CTA Button */}
-        <div className="flex justify-center mt-12 px-6">
+        <div className="flex justify-center mt-8 mb-8 px-6">
           <a
             href="https://www.instagram.com/jadehospitainment"
             target="_blank"

@@ -91,7 +91,7 @@ export default function ValuePropositionSection() {
         - Card overlaps bottom green section
         - Arrows flank the card
       */}
-      <div className="lg:hidden relative min-h-[85vh] flex flex-col">
+      <div className="lg:hidden relative min-h-[92vh] flex flex-col">
         {/* Background Layer */}
         <div className="absolute inset-0 h-full w-full z-0">
           <AnimatePresence mode="wait">
@@ -122,7 +122,7 @@ export default function ValuePropositionSection() {
             key={`label-${currentIndex}`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-manrope text-xs tracking-[0.2em] uppercase text-[#EFCD62] mb-4"
+            className="font-manrope text-xs font-bold tracking-[0.2em] uppercase text-[#EFCD62] mb-4"
           >
             {currentSlide.label}
           </motion.p>
@@ -174,7 +174,7 @@ export default function ValuePropositionSection() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="relative w-[220px] aspect-[4/3] rounded-lg overflow-hidden shadow-2xl z-30 border-2 border-white/10"
+              className="relative w-[220px] aspect-[4/3] rounded-none overflow-hidden shadow-2xl z-30 border-2 border-white/10"
             >
               <Image
                 src={currentSlide.cardImage}

@@ -366,7 +366,7 @@ function StackedPanel({
 
       {/* CONTENT */}
       <motion.div
-        className={`relative z-20 w-full h-full px-6 pb-36 md:pb-20 text-center flex flex-col items-center ${isGrid ? "justify-center" : "justify-end"}`}
+        className={`relative z-20 w-full h-full px-6 pb-24 md:pb-16 text-center flex flex-col items-center justify-end`}
         initial="hidden"
         whileInView="visible"
         // Ensure trigger happens when panel actually slides in.
@@ -402,7 +402,7 @@ function StackedPanel({
         ) : (
           /* Grid Content - Simply reusing structure */
           <div className="w-full flex flex-col items-center">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 w-full max-w-7xl mb-8 md:mb-12 pt-20">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 w-full max-w-7xl mb-8 md:mb-12 pt-36 md:pt-44">
               {data.items.map((item: any, idx: number) => (
                 <div
                   key={idx}
