@@ -68,13 +68,6 @@ export default function FeaturedVillas() {
   return (
     <section ref={targetRef} className="relative h-[650vh] bg-[#0D4032]">
       <div className="sticky top-0 h-screen overflow-hidden">
-        {/* Global Label */}
-        <div className="absolute top-8 left-0 w-full z-40 flex justify-center pointer-events-none">
-          <span className="font-manrope text-xs md:text-sm tracking-[0.2em] uppercase font-bold text-[#EFCD62] drop-shadow-md">
-            FEATURED VILLA'S
-          </span>
-        </div>
-
         {/* Sections */}
         <div className="relative w-full h-full">
           {/* Panel 0: Intro */}
@@ -111,16 +104,16 @@ function IntroPanel({
 }) {
   const step = 1 / totalSteps;
 
-  // Transition: Exit to left
-  const exitStart = step * 0.8;
+  // Transition: Exit to left after vertical parallax is mostly complete
+  const exitStart = step * 0.85;
   const exitEnd = step;
 
   const x = useTransform(globalProgress, [exitStart, exitEnd], ["0%", "-100%"]);
 
   // Parallax - Text and Image overlap initially (at center) and then separate
-  // Image moves down, Text moves up
-  const textY = useTransform(globalProgress, [0, step], [0, -200]);
-  const imageY = useTransform(globalProgress, [0, step], [0, 200]);
+  // Vertical animation finishes before horizontal slide starts
+  const textY = useTransform(globalProgress, [0, step * 0.8], [0, -600]);
+  const imageY = useTransform(globalProgress, [0, step * 0.8], [0, 600]);
   const opacity = useTransform(globalProgress, [exitStart, exitEnd], [1, 0]);
 
   return (
