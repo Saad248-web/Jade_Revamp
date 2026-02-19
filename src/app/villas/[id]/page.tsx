@@ -110,6 +110,8 @@ export default function VillaDetailsPage() {
             fill
             className="object-cover"
             priority
+            sizes="100vw"
+            quality={75}
           />
           <div className="absolute inset-0 bg-black/20" />
         </div>
@@ -119,19 +121,19 @@ export default function VillaDetailsPage() {
           {/* Back Button as "Logo" area or actual Back button */}
           <Link
             href="/villas"
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md text-white hover:bg-white hover:text-black transition-all"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-sm text-white hover:bg-white hover:text-black transition-all"
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
 
-          <button className="bg-black/20 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-6 py-3 hover:bg-white hover:text-black transition-colors">
+          <button className="bg-black/20 backdrop-blur-sm border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-6 py-3 hover:bg-white hover:text-black transition-colors">
             Contact Us
           </button>
         </div>
 
         {/* Carousel Controls (Simulated) */}
         <div className="absolute bottom-8 left-0 w-full px-4 md:px-8 flex justify-between items-center z-20">
-          <button className="w-10 h-10 flex items-center justify-center bg-black/20 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all">
+          <button className="w-10 h-10 flex items-center justify-center bg-black/20 backdrop-blur-sm border border-white/10 text-white hover:bg-white hover:text-black transition-all">
             <ArrowLeft className="w-4 h-4" />
           </button>
 
@@ -141,7 +143,7 @@ export default function VillaDetailsPage() {
             <span className="text-white/50">37</span>
           </div>
 
-          <button className="w-10 h-10 flex items-center justify-center bg-black/20 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all">
+          <button className="w-10 h-10 flex items-center justify-center bg-black/20 backdrop-blur-sm border border-white/10 text-white hover:bg-white hover:text-black transition-all">
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -319,6 +321,8 @@ export default function VillaDetailsPage() {
                     alt={villa.spaces?.[0]?.name || "Space"}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 66vw"
+                    quality={60}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90" />
 
@@ -424,14 +428,17 @@ export default function VillaDetailsPage() {
                     </button>
                   </div>
                 </div>
-                <div
-                  className="relative aspect-[4/5] md:aspect-[3/4] w-full bg-cover bg-center group"
-                  style={{
-                    backgroundImage: `url('/assets/experience_wellness.png')`,
-                  }}
-                >
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
-                  <div className="absolute bottom-0 left-0 w-full p-8 text-center bg-gradient-to-t from-black/80 to-transparent">
+                <div className="relative aspect-[4/5] md:aspect-[3/4] w-full bg-gray-900 group overflow-hidden">
+                  <Image
+                    src="/assets/experience_wellness.png"
+                    alt="Experiences"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    quality={60}
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10" />
+                  <div className="absolute bottom-0 left-0 w-full p-8 text-center bg-gradient-to-t from-black/80 to-transparent z-20">
                     <h4 className="text-2xl md:text-3xl font-philosopher text-white mb-4">
                       Weekend Getaways
                     </h4>
@@ -599,6 +606,8 @@ export default function VillaDetailsPage() {
                         alt="Map Location"
                         fill
                         className="object-cover opacity-80"
+                        sizes="(max-width: 768px) 100vw, 66vw"
+                        quality={60}
                       />
                     </div>
 
@@ -664,6 +673,8 @@ export default function VillaDetailsPage() {
                           alt={activity.title}
                           fill
                           className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          sizes="(max-width: 768px) 50vw, 33vw"
+                          quality={60}
                         />
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
                         <div className="absolute inset-0 flex items-center justify-center">
@@ -688,6 +699,8 @@ export default function VillaDetailsPage() {
                     alt="Video Walkthrough"
                     fill
                     className="object-cover opacity-60 group-hover:opacity-40 transition-opacity"
+                    sizes="(max-width: 768px) 100vw, 66vw"
+                    quality={60}
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-white flex items-center justify-center backdrop-blur-sm bg-white/10 group-hover:scale-110 transition-transform">
