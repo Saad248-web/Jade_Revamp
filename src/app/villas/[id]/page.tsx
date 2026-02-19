@@ -121,19 +121,19 @@ export default function VillaDetailsPage() {
           {/* Back Button as "Logo" area or actual Back button */}
           <Link
             href="/villas"
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-sm text-white hover:bg-white hover:text-black transition-all"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 text-white hover:bg-white hover:text-black transition-all"
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
 
-          <button className="bg-black/20 backdrop-blur-sm border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-6 py-3 hover:bg-white hover:text-black transition-colors">
+          <button className="bg-black/40 border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-6 py-3 hover:bg-white hover:text-black transition-colors">
             Contact Us
           </button>
         </div>
 
         {/* Carousel Controls (Simulated) */}
         <div className="absolute bottom-8 left-0 w-full px-4 md:px-8 flex justify-between items-center z-20">
-          <button className="w-10 h-10 flex items-center justify-center bg-black/20 backdrop-blur-sm border border-white/10 text-white hover:bg-white hover:text-black transition-all">
+          <button className="w-10 h-10 flex items-center justify-center bg-black/40 border border-white/10 text-white hover:bg-white hover:text-black transition-all">
             <ArrowLeft className="w-4 h-4" />
           </button>
 
@@ -143,7 +143,7 @@ export default function VillaDetailsPage() {
             <span className="text-white/50">37</span>
           </div>
 
-          <button className="w-10 h-10 flex items-center justify-center bg-black/20 backdrop-blur-sm border border-white/10 text-white hover:bg-white hover:text-black transition-all">
+          <button className="w-10 h-10 flex items-center justify-center bg-black/40 border border-white/10 text-white hover:bg-white hover:text-black transition-all">
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

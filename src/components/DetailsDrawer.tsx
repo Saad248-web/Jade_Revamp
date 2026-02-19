@@ -88,8 +88,9 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
       {/* Backdrop */}
+      {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/80 transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "opacity-0"
         }`}
         onClick={onClose}
@@ -97,7 +98,7 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
 
       {/* Modal */}
       <div
-        className={`relative w-full max-w-lg md:max-w-2xl max-h-[85vh] bg-[#0D4032] text-white shadow-2xl transform transition-all duration-300 ease-out flex flex-col ${
+        className={`relative w-full max-w-lg md:max-w-2xl max-h-[85vh] bg-[#0D4032] text-white shadow-lg transform transition-all duration-300 ease-out flex flex-col ${
           isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
         } rounded-[32px] overflow-hidden border border-white/10`}
       >
