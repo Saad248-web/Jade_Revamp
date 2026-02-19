@@ -28,13 +28,13 @@ export default function MobileBottomNav() {
     {
       label: "Experiences",
       icon: Waves, // Pool icon replacement
-      href: "#experiences",
+      href: "/experiences",
       action: null,
     },
     {
       label: "Villas",
       icon: Warehouse, // Villa icon replacement (House -> Warehouse)
-      href: "#villas",
+      href: "/villas",
       action: null,
     },
     {

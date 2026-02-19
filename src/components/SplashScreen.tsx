@@ -135,8 +135,8 @@ export default function SplashScreen() {
       <AnimatePresence mode="wait">
         {(stage === 1 || stage === 2) && (
           <motion.div
-            className="absolute z-20 flex flex-col items-center justify-center space-y-6 md:space-y-8"
-            style={{ top: "50%", left: "50%", x: "-50%", y: "-50%" }}
+            className="absolute z-20 flex flex-col items-center justify-center space-y-6 md:space-y-8 top-[42%] md:top-1/2 left-1/2"
+            style={{ x: "-50%", y: "-50%" }}
             variants={textContainerVars}
             initial="initial"
             animate={stage === 1 ? "enter" : "exit"}

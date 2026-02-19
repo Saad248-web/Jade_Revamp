@@ -115,7 +115,7 @@ export default function JadeAmenitiesSection() {
       {/* 
         MOBILE LAYOUT (< 1024px) 
       */}
-      <div className="lg:hidden relative min-h-[85vh] flex flex-col">
+      <div className="lg:hidden relative min-h-[92vh] flex flex-col">
         {/* Background Layer */}
         <div className="absolute inset-0 h-full w-full z-0">
           <AnimatePresence mode="wait">
@@ -146,7 +146,7 @@ export default function JadeAmenitiesSection() {
             key={`label-${currentIndex}`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-manrope text-xs tracking-[0.2em] uppercase text-[#EFCD62] mb-4"
+            className="font-manrope text-xs font-bold tracking-[0.2em] uppercase text-[#EFCD62] mb-4"
           >
             {currentSlide.label}
           </motion.p>
@@ -198,7 +198,7 @@ export default function JadeAmenitiesSection() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="relative w-[220px] aspect-[4/3] rounded-lg overflow-hidden shadow-2xl z-30 border-2 border-white/10"
+              className="relative w-[220px] aspect-[4/3] rounded-none overflow-hidden shadow-2xl z-30 border-2 border-white/10"
             >
               <Image
                 src={currentSlide.cardImage}
@@ -270,7 +270,7 @@ export default function JadeAmenitiesSection() {
             {/* Text Card */}
             <motion.div
               key={`text-desk-${currentIndex}`}
-              className="relative p-12 rounded-lg bg-[#25282C]"
+              className="relative p-12 rounded-none bg-[#25282C]"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
@@ -300,7 +300,7 @@ export default function JadeAmenitiesSection() {
             <div className="relative">
               <motion.div
                 key={`img-desk-${currentIndex}`}
-                className="relative w-full aspect-[4/5] rounded-lg overflow-hidden shadow-2xl"
+                className="relative w-full aspect-[4/5] rounded-none overflow-hidden shadow-2xl"
                 style={{ y: imageY }}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}

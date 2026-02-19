@@ -8,12 +8,14 @@ import {
   AnimatePresence,
   useMotionValueEvent,
 } from "framer-motion";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAnimation } from "@/context/AnimationContext";
 import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const { isSplashComplete } = useAnimation();
   const { isMenuOpen, setMenuOpen } = useAnimation();
   const { scrollY } = useScroll();
@@ -39,12 +41,13 @@ export default function Navbar() {
     restDelta: 0.001,
   });
 
-  if (!isSplashComplete) return null;
+  // Only hide navbar on home page if splash isn't complete
+  if (pathname === "/" && !isSplashComplete) return null;
 
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "Experiences", href: "#experiences" },
-    { name: "Villas", href: "#villas" },
+    { name: "Experiences", href: "/experiences" },
+    { name: "Villas", href: "/villas" },
   ];
 
   return (
@@ -105,7 +108,7 @@ export default function Navbar() {
           <Link href="/">
             <div className="relative w-12 h-12 flex items-center justify-center">
               <Image
-                src="/assets/White_Logo.png"
+                src="/assets/Golden_Logo.png"
                 alt="Jade Logo"
                 width={48}
                 height={48}
@@ -123,7 +126,7 @@ export default function Navbar() {
           <Link href="/">
             <div className="relative w-20 h-10 flex items-center justify-center">
               <Image
-                src="/assets/White_Logo.png"
+                src="/assets/Golden_Logo.png"
                 alt="Jade Logo"
                 width={80}
                 height={40}
@@ -137,9 +140,9 @@ export default function Navbar() {
             RIGHT SECTION 
             [Contact Button]
            ==================== */}
-        <div className="relative z-10">
+        <div className="relative z-10 flex items-center gap-4">
           <button className="bg-white/5 hover:bg-white/10 backdrop-blur-md text-white text-[10px] md:text-xs font-manrope tracking-widest uppercase px-4 py-3 md:px-6 md:py-3 rounded-none border border-white/10 transition-all duration-300">
-            <span className="md:hidden">CONTACT</span>
+            <span className="md:hidden">CONTACT US</span>
             <span className="hidden md:inline">CONTACT US</span>
           </button>
         </div>

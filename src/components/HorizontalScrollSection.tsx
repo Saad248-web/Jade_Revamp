@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import LiveBackground from "./LiveBackground";
 
 const PANELS = [
   {
@@ -93,6 +94,7 @@ export default function HorizontalScrollSection() {
     <section ref={targetRef} className="relative h-[500vh] bg-jade-charcoal">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative w-full h-full">
+          <LiveBackground />
           {/* Top Label & Counter - Global (Fixed on top of everything) */}
           <div className="absolute top-0 left-0 w-full z-50 flex flex-col items-center pointer-events-none">
             <div className="absolute top-0 left-0 w-full h-[16.6vh] bg-gradient-to-b from-black/90 to-transparent" />
