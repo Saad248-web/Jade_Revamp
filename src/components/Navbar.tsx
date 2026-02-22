@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAnimation } from "@/context/AnimationContext";
-import { Menu, X } from "lucide-react";
+import { X } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -63,8 +63,11 @@ export default function Navbar() {
         />
       </div>
 
+      {/* ═══════════════════════════════════════════
+           NAVBAR
+      ══════════════════════════════════════════ */}
       <motion.nav
-        className="fixed top-0 left-0 w-full z-50 px-6 py-4 flex items-center justify-between bg-gradient-to-b from-black/80 to-transparent backdrop-blur-[2px] mt-[2px]"
+        className="fixed top-0 left-0 w-full z-50 mt-[2px]"
         variants={{
           visible: { y: 0 },
           hidden: { y: "-100%" },
@@ -73,67 +76,86 @@ export default function Navbar() {
         animate={isHidden ? "hidden" : "visible"}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
-        {/* ====================
-            DESKTOP LEFT SECTION 
-            [Logo] | [Divider] | [Menu Icon]
-           ==================== */}
-        <div className="hidden lg:flex items-center gap-8 z-10">
-          <Link href="/">
-            <div className="relative w-16 h-8 flex items-center justify-center">
-              <Image
-                src="/assets/Golden_Logo.png"
-                alt="Jade Logo"
-                width={64}
-                height={32}
-                className="object-contain"
-              />
-            </div>
-          </Link>
+        {/* Glass bar */}
+        <div className="mx-auto px-8 py-5 flex items-center justify-between bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm relative">
+          {/* ── LEFT: Menu toggle + inline nav links (desktop only) ── */}
+          <div className="hidden lg:flex items-center gap-8 flex-1">
+            <button
+              onClick={() => setMenuOpen(true)}
+              className="flex items-center gap-2.5 text-white/60 hover:text-jade-gold transition-colors group"
+            >
+              <span className="flex flex-col gap-[5px] w-5">
+                <span className="block h-[1px] w-5 bg-current transition-all" />
+                <span className="block h-[1px] w-3 bg-current transition-all group-hover:w-5" />
+              </span>
+              <span className="text-[10px] font-manrope tracking-[0.25em] uppercase">
+                Menu
+              </span>
+            </button>
 
-          {/* Divider */}
-          <div className="h-5 w-[1px] bg-white/20" />
+            {/* Thin divider */}
+            <span className="h-4 w-px bg-white/15" />
 
-          {/* Menu Icon */}
-          <button
-            onClick={() => setMenuOpen(true)}
-            className="flex items-center text-white hover:text-jade-gold transition-colors"
-          >
-            <Menu className="w-6 h-6 stroke-[1.5]" />
-            <span className="ml-3 text-[10px] tracking-[0.2em] font-manrope uppercase opacity-60">
-              MENU
-            </span>
-          </button>
-        </div>
+            {/* Inline nav links */}
+            <nav className="flex items-center gap-7">
+              {[
+                { name: "Experiences", href: "/experiences" },
+                { name: "Villas", href: "/villas" },
+                { name: "About", href: "/about" },
+                { name: "Careers", href: "/careers" },
+              ].map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`text-[11px] font-manrope tracking-[0.18em] uppercase transition-colors ${
+                    pathname === item.href
+                      ? "text-jade-gold"
+                      : "text-white/55 hover:text-white"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
 
-        {/* ====================
-             MOBILE LEFT SECTION 
-             [Logo]
-           ==================== */}
-        <div className="lg:hidden relative z-10 flex items-center gap-6">
-          <Link href="/">
-            <div className="relative w-10 h-10 flex items-center justify-center">
-              <Image
-                src="/assets/Golden_Logo.png"
-                alt="Jade Logo"
-                width={40}
-                height={40}
-                className="object-contain"
-              />
-            </div>
-          </Link>
-        </div>
+          {/* ── MOBILE LEFT: Logo ── */}
+          <div className="lg:hidden flex items-center">
+            <Link href="/">
+              <div className="relative w-9 h-9">
+                <Image
+                  src="/assets/Golden_Logo.png"
+                  alt="Jade Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </Link>
+          </div>
 
-        {/* ====================
-            RIGHT SECTION 
-            [Contact Button]
-           ==================== */}
-        <div className="relative z-10 flex items-center gap-4">
-          <Link
-            href="/contact"
-            className="bg-white/5 hover:bg-white/10 backdrop-blur-md text-white text-[10px] md:text-xs font-manrope tracking-widest uppercase px-6 py-3 rounded-none border border-white/20 transition-all duration-300"
-          >
-            CONTACT US
-          </Link>
+          {/* ── CENTER: Logo — absolute center on desktop ── */}
+          <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center">
+            <Link href="/">
+              <div className="relative w-14 h-14 hover:opacity-80 transition-opacity">
+                <Image
+                  src="/assets/Golden_Logo.png"
+                  alt="Jade Hospitainment"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </Link>
+          </div>
+
+          {/* ── RIGHT: Contact CTA ── */}
+          <div className="flex items-center justify-end flex-1 gap-4">
+            <Link
+              href="/contact"
+              className="bg-white/8 hover:bg-jade-gold hover:text-black text-white text-[10px] font-manrope font-semibold tracking-[0.2em] uppercase px-5 py-2.5 rounded-none border border-white/20 transition-all duration-300"
+            >
+              Contact Us
+            </Link>
+          </div>
         </div>
       </motion.nav>
 
