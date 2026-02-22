@@ -9,9 +9,25 @@
   }
 }
 
+html {
+  /* overflow-x must NOT be set here — it transfers the scroll root away from
+     the window object, causing Lenis to lose scroll control entirely.
+     overflow-x: hidden on body (below) is sufficient to prevent horizontal bleed. */
+  /* scroll-behavior: smooth must NOT be set here — Lenis owns scroll animation.
+     Native smooth scroll fights Lenis and causes judder/lock. */
+  scrollbar-width: none;       /* Firefox — hide scrollbar gap */
+  -ms-overflow-style: none;    /* IE / Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none;               /* Chrome / Safari / Opera — hide scrollbar gap */
+}
+
 body {
-  color: theme('colors.jade.text');
-  background: theme('colors.jade.charcoal');
+  overflow-x: hidden;
+  max-width: 100%;
+  color: theme("colors.jade.text");
+  background: theme("colors.jade.charcoal");
 }
 
 /* Custom Utilities for Animation */

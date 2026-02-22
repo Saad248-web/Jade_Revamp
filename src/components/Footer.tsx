@@ -28,6 +28,7 @@ export default function Footer() {
     { label: "VILLAS", href: "/villas" },
     { label: "EXPERIENCES", href: "/experiences" },
     { label: "ABOUT", href: "/about" },
+    { label: "CAREERS", href: "/careers" },
   ];
 
   const LINKS_COLUMN_2 = [

@@ -47,7 +47,7 @@ export default function MobileBottomNav() {
 
   return (
     // Glassmorphism: bg-black/30 backdrop-blur-xl border-white/10
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-xl border-t border-white/10 pb-safe shadow-2xl safe-area-bottom">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-xl border-t border-white/10 pb-safe shadow-2xl safe-area-bottom">
       <div className="flex items-center justify-around py-4 pb-safe-offset">
         {navItems.map((item) => {
           const isActive =

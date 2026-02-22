@@ -6,11 +6,11 @@ export default function LiveBackground() {
   return (
     <div className="absolute inset-0 bg-transparent overflow-hidden">
       <div className="absolute inset-0">
-        {/* Multi-colored gemstone glow effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_25%,rgba(239,205,98,0.12)_0%,transparent_35%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_30%,rgba(100,180,220,0.08)_0%,transparent_35%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_70%,rgba(180,120,200,0.06)_0%,transparent_35%)]" />
-        <div className="absolute inset-0 bg-gradient-to-br from-[rgba(239,205,98,0.08)] via-transparent to-[rgba(100,180,220,0.04)]" />
+        {/* Multi-colored gemstone glow effects - Increased opacity */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_25%,rgba(239,205,98,0.2)_0%,transparent_45%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_30%,rgba(100,180,220,0.15)_0%,transparent_45%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_70%,rgba(180,120,200,0.12)_0%,transparent_45%)]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[rgba(239,205,98,0.15)] via-transparent to-[rgba(100,180,220,0.1)]" />
 
         {/* Floating animated gems (ROUND SHAPES) */}
         <div className="absolute inset-0 overflow-hidden">
@@ -179,15 +179,15 @@ export default function LiveBackground() {
           {[...Array(25)].map((_, i) => (
             <motion.div
               key={`sparkle-${i}`}
-              className="absolute w-[3px] h-[3px] rounded-full bg-white"
+              className="absolute w-[3px] h-[3px] rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"
               style={{
                 // Deterministic positions
                 left: `${(i * 13) % 100}%`,
                 top: `${(i * 29) % 100}%`,
               }}
               animate={{
-                opacity: [0, 0.7, 0],
-                scale: [0.5, 1.2, 0.5],
+                opacity: [0, 1, 0],
+                scale: [0.5, 1.5, 0.5],
               }}
               transition={{
                 duration: 2 + (i % 3), // Faster twinkle
@@ -202,7 +202,7 @@ export default function LiveBackground() {
           {[...Array(40)].map((_, i) => (
             <motion.div
               key={`gold-${i}`}
-              className="absolute w-[2px] h-[2px] rounded-full bg-[#EFCD62]"
+              className="absolute w-[2px] h-[2px] rounded-full bg-[#EFCD62] shadow-[0_0_5px_rgba(239,205,98,0.6)]"
               style={{
                 // Deterministic random-like positions based on index
                 left: `${(i * 17) % 100}%`,
@@ -210,8 +210,8 @@ export default function LiveBackground() {
               }}
               animate={{
                 y: [0, -40, 0], // Slightly more movement
-                opacity: [0, 0.5, 0],
-                scale: [0, 1.5, 0],
+                opacity: [0, 0.8, 0],
+                scale: [0, 2, 0],
               }}
               transition={{
                 duration: 3 + (i % 5), // Varied duration

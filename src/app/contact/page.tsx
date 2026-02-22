@@ -1,0 +1,496 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  ArrowRight,
+  X,
+  Facebook,
+  Instagram,
+  Youtube,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import LiveBackground from "@/components/LiveBackground";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import MobileBottomNav from "@/components/MobileBottomNav";
+
+/* ─────────────────────────────────────────────────────────────────────
+   Glassmorphic Contact Card
+───────────────────────────────────────────────────────────────────── */
+function ContactCard({
+  icon: Icon,
+  title,
+  subtitle,
+  href,
+  wrap = false,
+}: {
+  icon: React.ElementType;
+  title: string;
+  subtitle: string;
+  href?: string;
+  wrap?: boolean;
+}) {
+  const inner = (
+    <div className="flex flex-col items-center text-center gap-3 py-10 px-8">
+      <div className="w-10 h-10 flex items-center justify-center mb-1">
+        <Icon className="w-5 h-5 text-white/50" strokeWidth={1.5} />
+      </div>
+      <p
+        className={`text-white font-manrope font-semibold text-sm md:text-base tracking-wide ${wrap ? "" : "whitespace-nowrap"}`}
+      >
+        {title}
+      </p>
+      <p
+        className={`text-white/50 font-manrope text-xs ${wrap ? "" : "whitespace-nowrap"}`}
+      >
+        {subtitle}
+      </p>
+    </div>
+  );
+
+  const cardCls =
+    "w-full rounded-none border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/[0.08] transition-colors duration-300";
+
+  if (href) {
+    return (
+      <a href={href} className={cardCls}>
+        {inner}
+      </a>
+    );
+  }
+  return <div className={cardCls}>{inner}</div>;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Glassmorphic Coin (reused from Careers)
+───────────────────────────────────────────────────────────────────── */
+function JadeCoin() {
+  return (
+    <motion.div
+      initial={{ scale: 0.7, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="relative w-48 h-48 flex items-center justify-center mx-auto mb-10"
+    >
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background: "rgba(255, 255, 255, 0.10)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          border: "1px solid rgba(255, 255, 255, 0.18)",
+          boxShadow:
+            "inset 0 1px 1px rgba(255,255,255,0.25), 0 4px 24px rgba(0,0,0,0.15)",
+        }}
+      />
+      <div
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          inset: 6,
+          border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: "50%",
+        }}
+      />
+      <Image
+        src="/assets/JAde Correction.png"
+        alt="Jade"
+        width={128}
+        height={128}
+        className="relative z-10 w-32 h-32 object-contain drop-shadow-2xl"
+      />
+    </motion.div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Main Page
+───────────────────────────────────────────────────────────────────── */
+export default function ContactPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [canClose, setCanClose] = useState(false);
+
+  /* Prevent accidental instant-dismiss */
+  useEffect(() => {
+    if (isModalOpen) {
+      setCanClose(false);
+      const t = setTimeout(() => setCanClose(true), 500);
+      return () => clearTimeout(t);
+    }
+  }, [isModalOpen]);
+
+  /* Body scroll lock while modal open */
+  useEffect(() => {
+    document.body.style.overflow = isModalOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isModalOpen]);
+
+  function openModal() {
+    setIsSuccess(false);
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+    setIsSuccess(false);
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setIsSuccess(true);
+  }
+
+  return (
+    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
+      {/* ── Navigation ── */}
+      <Navbar />
+      <MobileBottomNav />
+
+      {/* ═══════════════════════════════════════════════════════════════
+          1. HERO — Live Background, heading, contact cards
+      ════════════════════════════════════════════════════════════════ */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 pb-16 pt-28 md:pt-32">
+        {/* Live Background — matches UnifiedScrollSection: no heavy overlay */}
+        <div className="absolute inset-0 z-0">
+          <LiveBackground />
+          {/* Subtle vignette only — keeps text readable without killing the background */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40" />
+        </div>
+
+        {/* ── Hero Copy — constrained center ── */}
+        <div className="relative z-10 text-center w-full flex flex-col items-center">
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-[#EFCD62] text-xs md:text-sm font-bold tracking-[0.3em] uppercase mb-6"
+          >
+            CONTACT US
+          </motion.p>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-6xl lg:text-7xl font-philosopher leading-tight mb-8 max-w-3xl"
+          >
+            Planning a stay, <span className="block">celebration or</span>
+            <span className="block">partnership?</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-white/70 font-manrope text-sm md:text-base max-w-xl mx-auto leading-relaxed mb-14"
+          >
+            We&apos;re available{" "}
+            <strong className="text-white font-semibold">
+              10:00 AM – 7:00 PM
+            </strong>
+            ,{" "}
+            <strong className="text-white font-semibold">
+              Monday to Saturday.
+            </strong>{" "}
+            You can expect a response within one business day.
+          </motion.p>
+
+          {/* ── Contact Cards — wider container, independent of heading max-w ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full max-w-5xl"
+          >
+            <ContactCard
+              icon={Phone}
+              title="0897 066 3366"
+              subtitle="Available from 10:00 AM – 7:00 PM"
+              href="tel:+918970663366"
+            />
+            <ContactCard
+              icon={Mail}
+              title="Info@jadehospitainment.com"
+              subtitle="Responses within one business day"
+              href="mailto:Info@jadehospitainment.com"
+            />
+            <ContactCard
+              icon={MapPin}
+              title="76, phase II, Royal Enclave, Srirampura, Bengaluru - 64"
+              subtitle="Visits by prior appointment"
+              wrap
+            />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          2. ENQUIRY FORM SECTION
+      ════════════════════════════════════════════════════════════════ */}
+      <section className="py-24 bg-[#0D4032] relative overflow-hidden">
+        {/* Subtle dot pattern */}
+        <div
+          className="absolute inset-0 opacity-10 pointer-events-none"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+
+        <div className="max-w-2xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-14">
+            <p className="text-[#EFCD62] text-xs font-bold tracking-[0.3em] uppercase mb-4">
+              GET IN TOUCH
+            </p>
+            <h2 className="text-3xl md:text-5xl font-philosopher text-white">
+              Send Us a Message
+            </h2>
+            <p className="text-white/50 font-manrope text-sm mt-4">
+              Fill in your details and we&apos;ll reach out shortly.
+            </p>
+          </div>
+
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            {/* Full Name */}
+            <div className="relative">
+              <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-[10px] text-[#EFCD62] uppercase tracking-widest font-bold z-10">
+                Full Name
+              </label>
+              <input
+                type="text"
+                required
+                className="w-full bg-transparent border border-white/20 px-5 py-4 text-white text-sm focus:border-[#EFCD62] outline-none transition-colors"
+              />
+            </div>
+
+            {/* Email + Phone (side by side on md+) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <input
+                type="email"
+                required
+                placeholder="Email Address"
+                className="w-full bg-transparent border border-white/20 px-5 py-4 text-white text-sm focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
+              />
+              <input
+                type="tel"
+                required
+                placeholder="Phone Number"
+                className="w-full bg-transparent border border-white/20 px-5 py-4 text-white text-sm focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
+              />
+            </div>
+
+            {/* Enquiry Type */}
+            <div className="relative">
+              <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-[10px] text-[#EFCD62] uppercase tracking-widest font-bold z-10">
+                Enquiry Type
+              </label>
+              <select
+                required
+                className="w-full bg-[#0D4032] border border-white/20 px-5 py-4 text-white/80 text-sm focus:border-[#EFCD62] outline-none transition-colors appearance-none cursor-pointer"
+              >
+                <option value="" disabled selected>
+                  Select an option
+                </option>
+                <option value="stay">Villa Stay</option>
+                <option value="celebration">Celebration / Event</option>
+                <option value="corporate">Corporate Retreat</option>
+                <option value="partnership">Partnership</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            {/* Message */}
+            <div className="relative">
+              <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-[10px] text-[#EFCD62] uppercase tracking-widest font-bold z-10">
+                Message
+              </label>
+              <textarea
+                rows={5}
+                required
+                className="w-full bg-transparent border border-white/20 px-5 py-4 text-white text-sm focus:border-[#EFCD62] outline-none transition-colors resize-none placeholder:text-white/30"
+                placeholder="Tell us about your requirement..."
+              />
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              className="w-full bg-[#EFCD62] text-[#0D4032] font-bold uppercase tracking-[0.2em] text-sm py-5 hover:bg-white transition-all flex items-center justify-center gap-3 rounded-none shadow-lg group mt-2"
+            >
+              SEND ENQUIRY
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <Footer />
+
+      {/* ═══════════════════════════════════════════════════════════════
+          SUCCESS MODAL
+      ════════════════════════════════════════════════════════════════ */}
+      <AnimatePresence>
+        {isSuccess && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeModal}
+              className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm"
+            />
+
+            {/* ── Mobile bottom-sheet ── */}
+            <div className="md:hidden">
+              <motion.div
+                key="success-mobile"
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "100%" }}
+                transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                className="fixed inset-x-0 bottom-0 top-16 z-[101] bg-[#0D4032] rounded-t-[28px] flex flex-col overflow-hidden"
+              >
+                <div className="flex-1 overflow-y-auto px-6 pt-8 pb-10 text-center">
+                  {/* X */}
+                  <div className="flex justify-end mb-4">
+                    <button
+                      onClick={closeModal}
+                      className="text-white/40 hover:text-white transition-colors"
+                    >
+                      <X className="w-6 h-6" />
+                    </button>
+                  </div>
+
+                  <JadeCoin />
+
+                  <motion.h3
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-3xl font-philosopher text-white mb-4"
+                  >
+                    We&apos;ve got it from here
+                  </motion.h3>
+                  <motion.p
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-white/70 text-sm leading-relaxed mb-10 max-w-xs mx-auto"
+                  >
+                    Thanks for sharing your details!
+                    <br />
+                    Our team will take a look and reach out shortly to
+                    understand things better.
+                  </motion.p>
+
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="space-y-5 mb-10"
+                  >
+                    <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase">
+                      MEANWHILE CHECK US OUT HERE
+                    </p>
+                    <div className="flex justify-center gap-4">
+                      {[Facebook, Instagram, Youtube].map((Icon, i) => (
+                        <a
+                          key={i}
+                          href="#"
+                          className="w-12 h-12 bg-white/5 border border-white/20 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
+                        >
+                          <Icon className="w-5 h-5" />
+                        </a>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-white/30 italic">
+                      Thoughtfully operated. Always.
+                    </p>
+                  </motion.div>
+
+                  <button
+                    onClick={closeModal}
+                    className="w-full bg-[#EFCD62] text-[#0D4032] font-bold uppercase tracking-widest text-sm py-5 hover:bg-white transition-all rounded-none"
+                  >
+                    OKAY
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* ── Desktop centered modal ── */}
+            <div className="hidden md:flex fixed inset-0 z-[101] items-center justify-center pointer-events-none">
+              <motion.div
+                key="success-desktop"
+                initial={{ y: 40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 40, opacity: 0 }}
+                transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                className="relative w-full max-w-lg bg-[#0D4032] p-12 text-center rounded-3xl shadow-2xl pointer-events-auto overflow-y-auto max-h-[90vh]"
+              >
+                <button
+                  onClick={closeModal}
+                  className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+
+                <JadeCoin />
+
+                <h3 className="text-3xl font-philosopher text-white mb-4">
+                  We&apos;ve got it from here
+                </h3>
+                <p className="text-white/70 text-sm leading-relaxed mb-10 max-w-xs mx-auto">
+                  Thanks for sharing your details! Our team will take a look and
+                  reach out shortly to understand things better.
+                </p>
+
+                <div className="space-y-6 mb-10">
+                  <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase">
+                    MEANWHILE CHECK US OUT HERE
+                  </p>
+                  <div className="flex justify-center gap-6">
+                    {[Facebook, Instagram, Youtube].map((Icon, i) => (
+                      <a
+                        key={i}
+                        href="#"
+                        className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
+                      >
+                        <Icon className="w-5 h-5" />
+                      </a>
+                    ))}
+                  </div>
+                  <p className="text-[10px] text-white/30 italic">
+                    Thoughtfully operated. Always.
+                  </p>
+                </div>
+
+                <button
+                  onClick={closeModal}
+                  className="w-full bg-[#EFCD62] text-[#0D4032] font-bold uppercase tracking-widest text-sm py-5 hover:bg-white transition-all rounded-none"
+                >
+                  OKAY
+                </button>
+              </motion.div>
+            </div>
+          </>
+        )}
+      </AnimatePresence>
+    </main>
+  );
+}

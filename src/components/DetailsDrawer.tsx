@@ -77,8 +77,8 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
       setIsVisible(true);
       document.body.style.overflow = "hidden"; // Prevent background scrolling
     } else {
+      document.body.style.overflow = ""; // Remove inline style — restores Lenis scroll control
       const timer = setTimeout(() => setIsVisible(false), 300); // Wait for animation
-      document.body.style.overflow = "unset";
       return () => clearTimeout(timer);
     }
   }, [isOpen]);

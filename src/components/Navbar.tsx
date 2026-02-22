@@ -48,6 +48,9 @@ export default function Navbar() {
     { name: "Home", href: "/" },
     { name: "Experiences", href: "/experiences" },
     { name: "Villas", href: "/villas" },
+    { name: "About Us", href: "/about" },
+    { name: "Careers", href: "/careers" },
+    { name: "Contact", href: "/contact" },
   ];
 
   return (
@@ -72,63 +75,47 @@ export default function Navbar() {
       >
         {/* ====================
             DESKTOP LEFT SECTION 
-            [Menu Icon] | [Divider] | [Links]
+            [Logo] | [Divider] | [Menu Icon]
            ==================== */}
-        <div className="hidden md:flex items-center gap-8 z-10">
+        <div className="hidden lg:flex items-center gap-8 z-10">
+          <Link href="/">
+            <div className="relative w-16 h-8 flex items-center justify-center">
+              <Image
+                src="/assets/Golden_Logo.png"
+                alt="Jade Logo"
+                width={64}
+                height={32}
+                className="object-contain"
+              />
+            </div>
+          </Link>
+
+          {/* Divider */}
+          <div className="h-5 w-[1px] bg-white/20" />
+
           {/* Menu Icon */}
           <button
             onClick={() => setMenuOpen(true)}
             className="flex items-center text-white hover:text-jade-gold transition-colors"
           >
             <Menu className="w-6 h-6 stroke-[1.5]" />
+            <span className="ml-3 text-[10px] tracking-[0.2em] font-manrope uppercase opacity-60">
+              MENU
+            </span>
           </button>
-
-          {/* Divider */}
-          <div className="h-5 w-[1px] bg-white/20" />
-
-          {/* Navigation Links */}
-          <div className="flex items-center gap-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-xs font-manrope font-medium tracking-widest text-white/80 hover:text-white uppercase transition-colors"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
         </div>
 
         {/* ====================
              MOBILE LEFT SECTION 
              [Logo]
            ==================== */}
-        <div className="md:hidden relative z-10 flex items-center gap-6">
+        <div className="lg:hidden relative z-10 flex items-center gap-6">
           <Link href="/">
-            <div className="relative w-12 h-12 flex items-center justify-center">
+            <div className="relative w-10 h-10 flex items-center justify-center">
               <Image
                 src="/assets/Golden_Logo.png"
                 alt="Jade Logo"
-                width={48}
-                height={48}
-                className="object-contain"
-              />
-            </div>
-          </Link>
-        </div>
-
-        {/* ====================
-            DESKTOP CENTER SECTION 
-            [Logo] (Absolute Centered)
-           ==================== */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block z-10">
-          <Link href="/">
-            <div className="relative w-20 h-10 flex items-center justify-center">
-              <Image
-                src="/assets/Golden_Logo.png"
-                alt="Jade Logo"
-                width={80}
+                width={40}
                 height={40}
                 className="object-contain"
               />
@@ -141,10 +128,12 @@ export default function Navbar() {
             [Contact Button]
            ==================== */}
         <div className="relative z-10 flex items-center gap-4">
-          <button className="bg-white/5 hover:bg-white/10 backdrop-blur-md text-white text-[10px] md:text-xs font-manrope tracking-widest uppercase px-4 py-3 md:px-6 md:py-3 rounded-none border border-white/10 transition-all duration-300">
-            <span className="md:hidden">CONTACT US</span>
-            <span className="hidden md:inline">CONTACT US</span>
-          </button>
+          <Link
+            href="/contact"
+            className="bg-white/5 hover:bg-white/10 backdrop-blur-md text-white text-[10px] md:text-xs font-manrope tracking-widest uppercase px-6 py-3 rounded-none border border-white/20 transition-all duration-300"
+          >
+            CONTACT US
+          </Link>
         </div>
       </motion.nav>
 
@@ -184,19 +173,6 @@ export default function Navbar() {
                   </Link>
                 </motion.li>
               ))}
-              <motion.li
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-              >
-                <Link
-                  href="#contact"
-                  onClick={() => setMenuOpen(false)}
-                  className="text-3xl font-philosopher text-white hover:text-jade-gold transition-colors"
-                >
-                  Contact
-                </Link>
-              </motion.li>
             </ul>
           </motion.div>
         )}

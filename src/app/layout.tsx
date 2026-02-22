@@ -31,7 +31,7 @@ export default function RootLayout({
         className={clsx(
           philosopher.variable,
           manrope.variable,
-          "font-manrope antialiased",
+          "font-manrope antialiased overflow-x-hidden",
         )}
       >
         <Providers>{children}</Providers>
