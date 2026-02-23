@@ -1,16 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight, Bed, Users, Home, MapPin } from "lucide-react";
 import Link from "next/link";
 import { VILLAS, CATEGORIES } from "@/data/villas";
 
+// Navbar height to offset the sticky filter bar
+const NAVBAR_HEIGHT = 72; // px — matches the fixed navbar (2px progress + ~70px bar)
+
 export default function VillasCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [activeCategory, setActiveCategory] = useState("All");
+  const [navbarVisible, setNavbarVisible] = useState(true);
+
+  // Mirror the same hide/show logic used in Navbar.tsx
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const current = window.scrollY;
+      if (current > lastY && current > 150) {
+        setNavbarVisible(false); // scrolling down → navbar hides
+      } else {
+        setNavbarVisible(true); // scrolling up → navbar shows
+      }
+      lastY = current;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const filteredVillas = VILLAS.filter(
     (villa) =>
@@ -42,26 +62,34 @@ export default function VillasCarousel() {
   return (
     <section
       id="villas-carousel"
-      className="relative bg-[#1A1C1E] py-20 min-h-screen flex flex-col justify-center"
+      className="relative bg-[#1A1C1E] pb-20 min-h-screen"
     >
-      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full">
-        {/* FILTERS */}
-        <div className="flex overflow-x-auto items-center gap-2 md:gap-4 mb-12 pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
-          {CATEGORIES.map((category) => (
-            <button
-              key={category}
-              onClick={() => handleCategoryChange(category)}
-              className={`whitespace-nowrap flex-shrink-0 px-4 py-2 text-xs md:text-sm font-manrope font-medium transition-all duration-300 ${
-                activeCategory === category
-                  ? "bg-[#EFCD62] text-[#1A1C1E] border border-[#EFCD62]"
-                  : "bg-transparent text-white/60 border border-white/20 hover:border-white/50 hover:text-white"
-              }`}
-            >
-              {category}
-            </button>
-          ))}
+      {/* STICKY FILTERS BAR — slides with the navbar */}
+      <div
+        className="sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/8 transition-all duration-300 ease-in-out"
+        style={{ top: navbarVisible ? `${NAVBAR_HEIGHT}px` : "0px" }}
+      >
+        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16">
+          <div className="flex overflow-x-auto items-center gap-2 md:gap-4 py-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+            {CATEGORIES.map((category) => (
+              <button
+                key={category}
+                onClick={() => handleCategoryChange(category)}
+                className={`whitespace-nowrap flex-shrink-0 px-4 py-2 text-xs md:text-sm font-manrope font-medium transition-all duration-300 ${
+                  activeCategory === category
+                    ? "bg-[#EFCD62] text-[#1A1C1E] border border-[#EFCD62]"
+                    : "bg-transparent text-white/60 border border-white/20 hover:border-white/50 hover:text-white"
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
         </div>
+      </div>
 
+      {/* MAIN CONTENT */}
+      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full mt-12">
         {currentVilla ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
             {/* IMAGE SECTION */}
