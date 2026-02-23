@@ -26,6 +26,7 @@ export default function Footer() {
   const LINKS_COLUMN_1 = [
     { label: "VILLAS", href: "/villas" },
     { label: "EXPERIENCES", href: "/experiences" },
+    { label: "WEDDINGS", href: "/weddings" },
     { label: "ABOUT", href: "/about" },
     { label: "CAREERS", href: "/careers" },
   ];

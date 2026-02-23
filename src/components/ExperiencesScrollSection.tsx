@@ -274,6 +274,7 @@ function StackedPanel({
             fill
             className="object-cover"
             priority={index === 0}
+            sizes="100vw"
           />
         </motion.div>
         {/* Gradient Overlay */}

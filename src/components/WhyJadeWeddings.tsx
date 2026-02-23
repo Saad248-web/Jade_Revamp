@@ -1,0 +1,93 @@
+"use client";
+
+import { motion } from "framer-motion";
+import Image from "next/image";
+
+const BENEFITS = [
+  {
+    title: "FULLY PRIVATE VENUES",
+    description:
+      "No shared spaces, no parallel events, complete control over the setting.",
+  },
+  {
+    title: "OUTDOOR-FIRST LAYOUTS",
+    description:
+      "Lawns, gardens, and open-air spaces designed for ceremonies, receptions, and celebrations.",
+  },
+  {
+    title: "FLEXIBLE PLANNING",
+    description:
+      "Freedom to work with your own decorators, caterers, photographers, and planners.",
+  },
+  {
+    title: "BUILT FOR SCALE",
+    description:
+      "Venues that support intimate gatherings as well as large, multi-event weddings.",
+  },
+];
+
+export default function WhyJadeWeddings() {
+  return (
+    <section className="bg-[#0D4032] py-24 sm:py-32">
+      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
+          {/* IMAGE SECTION */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative w-full aspect-[16/10] md:aspect-video rounded-sm overflow-hidden shadow-2xl"
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2940&auto=format&fit=crop"
+              alt="Why Jade Wedding Venues"
+              fill
+              className="object-cover"
+            />
+          </motion.div>
+
+          {/* CONTENT SECTION */}
+          <div className="flex flex-col">
+            <motion.h2
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="font-philosopher text-5xl md:text-6xl text-white mb-16"
+            >
+              Why Jade Wedding Venues
+            </motion.h2>
+
+            <div className="space-y-12">
+              {BENEFITS.map((benefit, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="flex gap-6 group"
+                >
+                  {/* Diamond Icon */}
+                  <div className="mt-1.5 flex-shrink-0">
+                    <div className="w-4 h-4 bg-[#EFCD62] rotate-45 transform transition-transform group-hover:rotate-[225deg] duration-700" />
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <h3 className="font-manrope font-bold text-white text-lg tracking-[0.1em] uppercase">
+                      {benefit.title}
+                    </h3>
+                    <p className="font-manrope text-white/60 leading-relaxed max-w-lg">
+                      {benefit.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

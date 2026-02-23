@@ -1,11 +1,18 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useRef } from "react";
 import LiveBackground from "./LiveBackground";
+import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
 export default function VillasHero() {
+  const sectionRef = useRef<HTMLElement>(null);
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-[#050505] flex flex-col justify-center items-center text-center px-6">
+    <section
+      ref={sectionRef}
+      className="relative h-screen w-full overflow-hidden bg-[#050505] flex flex-col justify-center items-center text-center px-6"
+    >
+      <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       {/* Live Background */}
       <div className="absolute inset-0 z-0">
         <LiveBackground />

@@ -10,6 +10,7 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
 const SLIDES = [
   {
@@ -84,6 +85,7 @@ export default function ValuePropositionSection() {
       className="relative flex flex-col"
       style={{ backgroundColor: "#25282C" }}
     >
+      <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
       {/* 
         MOBILE LAYOUT (< 1024px) 
         - Tall background area

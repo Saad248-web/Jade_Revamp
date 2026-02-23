@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import LiveBackground from "./LiveBackground";
+import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
 export default function UnifiedScrollSection() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -23,41 +24,46 @@ export default function UnifiedScrollSection() {
   // 6. "space."
 
   const s1Start = 0;
-  const s1FadeOut = 0.28;
-  const s1End = 0.33;
+  const s1FadeOut = 0.25; // Extended hold before exit
+  const s1End = 0.3;
 
   const line1Opacity = useTransform(
     scrollYProgress,
-    [s1Start, s1Start + 0.05, s1FadeOut, s1End],
+    [s1Start, s1Start + 0.02, s1FadeOut, s1End],
     [0, 1, 1, 0],
   );
   const line2Opacity = useTransform(
     scrollYProgress,
-    [s1Start + 0.04, s1Start + 0.09, s1FadeOut, s1End],
+    [s1Start + 0.015, s1Start + 0.035, s1FadeOut, s1End],
     [0, 1, 1, 0],
   );
   const line3Opacity = useTransform(
     scrollYProgress,
-    [s1Start + 0.08, s1Start + 0.13, s1FadeOut, s1End],
+    [s1Start + 0.03, s1Start + 0.05, s1FadeOut, s1End],
     [0, 1, 1, 0],
   );
   const line4Opacity = useTransform(
     scrollYProgress,
-    [s1Start + 0.12, s1Start + 0.17, s1FadeOut, s1End],
+    [s1Start + 0.045, s1Start + 0.065, s1FadeOut, s1End],
     [0, 1, 1, 0],
   );
   const line5Opacity = useTransform(
     scrollYProgress,
-    [s1Start + 0.16, s1Start + 0.21, s1FadeOut, s1End],
+    [s1Start + 0.06, s1Start + 0.08, s1FadeOut, s1End],
     [0, 1, 1, 0],
   );
   const line6Opacity = useTransform(
     scrollYProgress,
-    [s1Start + 0.2, s1Start + 0.25, s1FadeOut, s1End],
+    [s1Start + 0.075, s1Start + 0.095, s1FadeOut, s1End],
     [0, 1, 1, 0],
   );
 
-  const section1Y = useTransform(scrollYProgress, [0, 0.33], [0, -20]);
+  // Locking Logic: Stay at 0 until fade out starts
+  const section1Y = useTransform(
+    scrollYProgress,
+    [s1Start, s1FadeOut, s1End],
+    [0, 0, -50],
+  );
 
   // ===== SECTION 2: VillaRetreats (0.33 → 0.66) =====
   // 1. "Private villas transform into"
@@ -66,47 +72,52 @@ export default function UnifiedScrollSection() {
   // 4. "bespoke gatherings," (Break)
   // 5. "adapting to the moment"
   // 6. "they are meant to host."
-  const s2Start = 0.33;
-  const s2End = 0.66;
+  const s2Start = 0.35; // Buffer from S1 (ends at 0.30)
+  const s2End = 0.65;
   const s2FadeOut = 0.6;
 
   const s2Line1 = useTransform(
     scrollYProgress,
-    [s2Start, s2Start + 0.05, s2FadeOut, s2End],
+    [s2Start, s2Start + 0.02, s2FadeOut, s2End],
     [0, 1, 1, 0],
   );
   const s2Line2 = useTransform(
     scrollYProgress,
-    [s2Start + 0.03, s2Start + 0.08, s2FadeOut, s2End],
+    [s2Start + 0.015, s2Start + 0.035, s2FadeOut, s2End],
     [0, 1, 1, 0],
   );
   const s2Line3 = useTransform(
     scrollYProgress,
-    [s2Start + 0.06, s2Start + 0.11, s2FadeOut, s2End],
+    [s2Start + 0.03, s2Start + 0.05, s2FadeOut, s2End],
     [0, 1, 1, 0],
   );
   const s2Line4 = useTransform(
     scrollYProgress,
-    [s2Start + 0.09, s2Start + 0.14, s2FadeOut, s2End],
+    [s2Start + 0.045, s2Start + 0.065, s2FadeOut, s2End],
     [0, 1, 1, 0],
   );
   const s2Line5 = useTransform(
     scrollYProgress,
-    [s2Start + 0.12, s2Start + 0.17, s2FadeOut, s2End],
+    [s2Start + 0.06, s2Start + 0.08, s2FadeOut, s2End],
     [0, 1, 1, 0],
   );
   const s2Line6 = useTransform(
     scrollYProgress,
-    [s2Start + 0.15, s2Start + 0.2, s2FadeOut, s2End],
+    [s2Start + 0.075, s2Start + 0.095, s2FadeOut, s2End],
     [0, 1, 1, 0],
   );
   const s2Btn = useTransform(
     scrollYProgress,
-    [s2Start + 0.18, s2Start + 0.23, s2FadeOut, s2End],
+    [s2Start + 0.09, s2Start + 0.11, s2FadeOut, s2End],
     [0, 1, 1, 0],
   );
 
-  const section2Y = useTransform(scrollYProgress, [s2Start, s2End], [20, -20]);
+  // Locking Logic: Start lower, move to center, lock, move away
+  const section2Y = useTransform(
+    scrollYProgress,
+    [0.3, s2Start, s2FadeOut, s2End],
+    [100, 0, 0, -80],
+  );
 
   // ===== SECTION 3: ExperiencesSection (0.66 → 1) =====
   // 1. "From high-energy parties and"
@@ -116,52 +127,55 @@ export default function UnifiedScrollSection() {
   // 5. "Jade's spaces are designed"
   // 6. "to evolve with every occasion."
 
-  const s3Start = 0.66;
+  const s3Start = 0.7; // Buffer from S2 (ends at 0.65)
   const s3End = 1.0;
-  // Delayed fade out to 0.98 to give a longer "locked" reading time (after text appears)
-  const s3FadeOut = 0.98;
+  const s3FadeOut = 0.95;
 
   const s3Line1 = useTransform(
     scrollYProgress,
-    [s3Start, s3Start + 0.05, s3FadeOut, s3End],
+    [s3Start, s3Start + 0.02, s3FadeOut, s3End],
     [0, 1, 1, 0],
   );
   const s3Line2 = useTransform(
     scrollYProgress,
-    [s3Start + 0.03, s3Start + 0.08, s3FadeOut, s3End],
+    [s3Start + 0.015, s3Start + 0.035, s3FadeOut, s3End],
     [0, 1, 1, 0],
   );
   const s3Line3 = useTransform(
     scrollYProgress,
-    [s3Start + 0.06, s3Start + 0.11, s3FadeOut, s3End],
+    [s3Start + 0.03, s3Start + 0.05, s3FadeOut, s3End],
     [0, 1, 1, 0],
   );
   const s3Line4 = useTransform(
     scrollYProgress,
-    [s3Start + 0.09, s3Start + 0.14, s3FadeOut, s3End],
+    [s3Start + 0.045, s3Start + 0.065, s3FadeOut, s3End],
     [0, 1, 1, 0],
   );
   const s3Line5 = useTransform(
     scrollYProgress,
-    [s3Start + 0.12, s3Start + 0.17, s3FadeOut, s3End],
+    [s3Start + 0.06, s3Start + 0.08, s3FadeOut, s3End],
     [0, 1, 1, 0],
   );
   const s3Line6 = useTransform(
     scrollYProgress,
-    [s3Start + 0.15, s3Start + 0.2, s3FadeOut, s3End],
+    [s3Start + 0.075, s3Start + 0.095, s3FadeOut, s3End],
     [0, 1, 1, 0],
   );
-  // Line 7 removed (merged)
   const s3Btn = useTransform(
     scrollYProgress,
-    [s3Start + 0.18, s3Start + 0.23, s3FadeOut, s3End],
+    [s3Start + 0.09, s3Start + 0.11, s3FadeOut, s3End],
     [0, 1, 1, 0],
   );
 
-  const section3Y = useTransform(scrollYProgress, [s3Start, s3End], [20, -20]);
+  const section3Y = useTransform(
+    scrollYProgress,
+    [0.65, s3Start, s3FadeOut, s3End],
+    [100, 0, 0, -80],
+  );
 
   return (
     <div ref={containerRef} className="relative h-[600vh]">
+      <NavbarThemeTrigger theme="golden" sectionRef={containerRef} />
       {/* ===== STICKY BACKGROUND (100vh, stays for full 300vh) ===== */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         <LiveBackground />

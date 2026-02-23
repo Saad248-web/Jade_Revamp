@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight, ChevronRight, MoveRight } from "lucide-react";
 import Link from "next/link";
+import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
 const BLOG_POSTS = [
   {
@@ -74,6 +75,7 @@ const BlogCard = ({ post }: { post: any }) => {
 };
 
 export default function BlogSection() {
+  const sectionRef = useRef<HTMLElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollRight = () => {
@@ -84,9 +86,11 @@ export default function BlogSection() {
 
   return (
     <section
+      ref={sectionRef}
       className="relative py-24 md:py-32 overflow-hidden"
       style={{ backgroundColor: "#25282C" }}
     >
+      <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">

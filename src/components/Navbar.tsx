@@ -16,8 +16,8 @@ import { X } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { isSplashComplete } = useAnimation();
-  const { isMenuOpen, setMenuOpen } = useAnimation();
+  const { isSplashComplete, isMenuOpen, setMenuOpen, navbarTheme } =
+    useAnimation();
   const { scrollY } = useScroll();
   const [isHidden, setIsHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -124,10 +124,15 @@ export default function Navbar() {
             <Link href="/">
               <div className="relative w-9 h-9">
                 <Image
-                  src="/assets/Golden_Logo.png"
+                  src={
+                    navbarTheme === "white"
+                      ? "/assets/White_Logo.png"
+                      : "/assets/Golden_Logo.png"
+                  }
                   alt="Jade Logo"
                   fill
                   className="object-contain"
+                  sizes="36px"
                 />
               </div>
             </Link>
@@ -138,10 +143,15 @@ export default function Navbar() {
             <Link href="/">
               <div className="relative w-14 h-14 hover:opacity-80 transition-opacity">
                 <Image
-                  src="/assets/Golden_Logo.png"
+                  src={
+                    navbarTheme === "white"
+                      ? "/assets/White_Logo.png"
+                      : "/assets/Golden_Logo.png"
+                  }
                   alt="Jade Hospitainment"
                   fill
                   className="object-contain"
+                  sizes="56px"
                 />
               </div>
             </Link>

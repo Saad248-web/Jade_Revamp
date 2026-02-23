@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import LiveBackground from "./LiveBackground";
+import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
 const PANELS = [
   {
@@ -184,6 +185,7 @@ function StackedPanel({
   globalProgress: any;
   totalPanels: number;
 }) {
+  const panelRef = useRef<HTMLDivElement>(null);
   const isGrid = data.type === "grid";
 
   // ===== ANIMATION LOGIC =====
@@ -341,9 +343,14 @@ function StackedPanel({
 
   return (
     <motion.div
+      ref={panelRef}
       style={style}
       className="absolute inset-0 w-full h-full bg-jade-charcoal overflow-hidden shadow-2xl"
     >
+      <NavbarThemeTrigger
+        theme={isGrid ? "golden" : "white"}
+        sectionRef={panelRef}
+      />
       {/* BACKGROUND */}
       {!isGrid && (
         <div className="absolute inset-0 z-0">

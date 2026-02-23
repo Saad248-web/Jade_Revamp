@@ -8,6 +8,7 @@ import Navbar from "./Navbar";
 import UnifiedScrollSection from "./UnifiedScrollSection";
 import MobileBottomNav from "./MobileBottomNav";
 import HorizontalScrollSection from "./HorizontalScrollSection";
+import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import InstagramCarousel from "./InstagramCarousel";
 import ValuePropositionSection from "./ValuePropositionSection";
 import FeaturedVillas from "./FeaturedVillas";
@@ -18,6 +19,7 @@ import Footer from "./Footer";
 export default function LandingPage() {
   const { isSplashComplete } = useAnimation();
   const containerRef = useRef(null);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Force scroll to top on refresh
@@ -79,7 +81,8 @@ export default function LandingPage() {
       {/* Fixed Header Elements (Logo & Contact) */}
 
       {/* 2. Hero Section (Parallax) */}
-      <div className="relative h-screen w-full overflow-hidden">
+      <div ref={heroRef} className="relative h-screen w-full overflow-hidden">
+        <NavbarThemeTrigger theme="white" sectionRef={heroRef} />
         {/* Background Layer */}
         <motion.div
           style={{ y: yBackground }}

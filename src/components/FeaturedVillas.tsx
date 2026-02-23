@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, ArrowRight } from "lucide-react";
+import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
 const VILLAS = [
   {
@@ -67,6 +68,7 @@ export default function FeaturedVillas() {
 
   return (
     <section ref={targetRef} className="relative h-[650vh] bg-[#0D4032]">
+      <NavbarThemeTrigger theme="white" sectionRef={targetRef} />
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Sections */}
         <div className="relative w-full h-full">
@@ -204,6 +206,7 @@ function VillaSlide({
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
+                unoptimized={data.title === "Retreat on the Ridge"}
               />
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent lg:hidden" />

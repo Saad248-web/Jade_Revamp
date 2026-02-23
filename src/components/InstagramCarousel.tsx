@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Heart, MessageCircle, Instagram } from "lucide-react";
+import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
 const INSTAGRAM_POSTS = [
   {
@@ -78,6 +79,7 @@ const INSTAGRAM_POSTS = [
 ];
 
 export default function InstagramCarousel() {
+  const sectionRef = useRef<HTMLElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -99,7 +101,11 @@ export default function InstagramCarousel() {
   }, []);
 
   return (
-    <section className="relative bg-jade-charcoal pt-16 md:pt-24 pb-0 overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative bg-jade-charcoal pt-16 md:pt-24 pb-0 overflow-hidden"
+    >
+      <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       <div className="max-w-[1920px] mx-auto">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16 px-6 md:px-12">

@@ -5,87 +5,64 @@ import {
   motion,
   useScroll,
   useTransform,
-  useInView,
   AnimatePresence,
 } from "framer-motion";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import { ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
-const SLIDES = [
+const SERVICES_SLIDES = [
   {
     id: 1,
-    label: "WHAT COMES WITH STAYING AT JADE",
-    heading: ["BBQ & Bonfire", "Evenings"],
-    subtext: "BBQ setups and bonfire gatherings create easy, social moments.",
+    label: "ADDITIONAL WEDDING SERVICES",
+    heading: ["Décor &", "Styling"],
+    subtext:
+      "Custom mandaps, stages, floral concepts, lighting, and themed décor designed to adapt to each venue's unique character.",
     bgImage:
-      "https://i.pinimg.com/1200x/25/71/46/257146678a9f6e9866924e0e31458d97.jpg", // BBQ/Bonfire
+      "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2940&auto=format&fit=crop", // Elegant ceremony
     cardImage:
-      "https://i.pinimg.com/1200x/25/71/46/257146678a9f6e9866924e0e31458d97.jpg",
+      "https://images.unsplash.com/photo-1516062423079-7ca13cdc7f5a?q=80&w=2966&auto=format&fit=crop", // Floral
   },
   {
     id: 2,
-    label: "WHAT COMES WITH STAYING AT JADE",
-    heading: ["Candle-Lit", "Dinners"],
+    label: "ADDITIONAL WEDDING SERVICES",
+    heading: ["Catering", "Flexibility"],
     subtext:
-      "Private candle-lit dinners are curated within the villa or outdoors.",
+      "Diverse catering formats including traditional, regional, and customized menus tailored to your specific taste and heritage.",
     bgImage:
-      "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2874&auto=format&fit=crop", // Candle light dinner
+      "https://images.unsplash.com/photo-1467003909585-2f8a72700288?q=80&w=2787&auto=format&fit=crop", // Gourmet catering
     cardImage:
-      "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2874&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1551218808-94e220e0b442?q=80&w=2787&auto=format&fit=crop", // Plated dish
   },
   {
     id: 3,
-    label: "WHAT COMES WITH STAYING AT JADE",
-    heading: ["Pet-Friendly", "Stays"],
+    label: "ADDITIONAL WEDDING SERVICES",
+    heading: ["Photography &", "Videography"],
     subtext:
-      "Select Jade villas are pet-friendly, allowing you to travel and celebrate without leaving anyone behind.",
+      "Outdoor and indoor settings, including pre-wedding shoots and full wedding coverage to capture every precious moment.",
     bgImage:
-      "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2940&auto=format&fit=crop", // Pet Friendly
+      "https://images.unsplash.com/photo-1537633552985-df0486dec661?q=80&w=2940&auto=format&fit=crop", // Wedding photographer in action
     cardImage:
-      "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2940&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1511285560929-1910243285fe?q=80&w=2940&auto=format&fit=crop", // Couple shot
   },
   {
     id: 4,
-    label: "WHAT COMES WITH STAYING AT JADE",
-    heading: ["Wellness &", "Rejuvenation"],
+    label: "ADDITIONAL WEDDING SERVICES",
+    heading: ["Music &", "Entertainment"],
     subtext:
-      "Spa therapies, yoga sessions, and nature-led wellness experiences offer balance without rigid schedules.",
+      "DJs, live bands, traditional performances, sound systems, and stage configurations to bring your celebration to life.",
     bgImage:
-      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=2940&auto=format&fit=crop", // Wellness/Spa
+      "https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?q=80&w=2787&auto=format&fit=crop", // Live performance
     cardImage:
-      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=2940&auto=format&fit=crop",
-  },
-  {
-    id: 5,
-    label: "WHAT COMES WITH STAYING AT JADE",
-    heading: ["Movies Under", "the Stars"],
-    subtext:
-      "Outdoor movie screenings turn villa lawns and terraces into private cinemas, perfect for families and friends.",
-    bgImage:
-      "https://images.unsplash.com/photo-1595769816263-9b910be24d5f?q=80&w=2958&auto=format&fit=crop", // Movie night
-    cardImage:
-      "https://images.unsplash.com/photo-1595769816263-9b910be24d5f?q=80&w=2958&auto=format&fit=crop",
-  },
-  {
-    id: 6,
-    label: "WHAT COMES WITH STAYING AT JADE",
-    heading: ["Activities, Indoors", "and Out"],
-    subtext:
-      "Indoor games, outdoor activities, and open grounds allow each day to unfold at your own pace.",
-    bgImage:
-      "https://images.unsplash.com/photo-1532444458054-01a7dd3e9fca?q=80&w=2940&auto=format&fit=crop", // Outdoor games
-    cardImage:
-      "https://images.unsplash.com/photo-1532444458054-01a7dd3e9fca?q=80&w=2940&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=2940&auto=format&fit=crop", // Music/Entertainment
   },
 ];
 
-export default function JadeAmenitiesSection() {
+export default function WeddingServicesSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
 
-  const currentSlide = SLIDES[currentIndex];
+  const currentSlide = SERVICES_SLIDES[currentIndex];
 
   // Scroll-based parallax
   const { scrollYProgress } = useScroll({
@@ -100,11 +77,15 @@ export default function JadeAmenitiesSection() {
   const imageY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? SLIDES.length - 1 : prev - 1));
+    setCurrentIndex((prev) =>
+      prev === 0 ? SERVICES_SLIDES.length - 1 : prev - 1,
+    );
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev === SLIDES.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) =>
+      prev === SERVICES_SLIDES.length - 1 ? 0 : prev + 1,
+    );
   };
 
   return (
@@ -113,7 +94,6 @@ export default function JadeAmenitiesSection() {
       className="relative flex flex-col"
       style={{ backgroundColor: "#25282C" }}
     >
-      <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
       {/* 
         MOBILE LAYOUT (< 1024px) 
       */}
@@ -143,12 +123,12 @@ export default function JadeAmenitiesSection() {
         </div>
 
         {/* Text Content (Top Half) */}
-        <div className="relative z-10 pt-24 px-6 text-center">
+        <div className="relative z-10 pt-28 px-6 text-center">
           <motion.p
             key={`label-${currentIndex}`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-manrope text-xs font-bold tracking-[0.2em] uppercase text-[#EFCD62] mb-4"
+            className="font-manrope text-[10px] font-bold tracking-[0.3em] uppercase text-[#EFCD62] mb-4"
           >
             {currentSlide.label}
           </motion.p>
@@ -189,7 +169,7 @@ export default function JadeAmenitiesSection() {
             {/* Prev Arrow */}
             <button
               onClick={handlePrev}
-              className="p-3 rounded-none bg-white/10 backdrop-blur-sm z-30"
+              className="p-3 rounded-none bg-white/10 backdrop-blur-sm z-30 hover:bg-[#EFCD62] hover:text-black transition-all"
             >
               <ChevronLeft className="w-6 h-6 text-white" />
             </button>
@@ -214,7 +194,7 @@ export default function JadeAmenitiesSection() {
             {/* Next Arrow */}
             <button
               onClick={handleNext}
-              className="p-3 rounded-none bg-white/10 backdrop-blur-sm z-30"
+              className="p-3 rounded-none bg-white/10 backdrop-blur-sm z-30 hover:bg-[#EFCD62] hover:text-black transition-all"
             >
               <ChevronRight className="w-6 h-6 text-white" />
             </button>
@@ -222,7 +202,7 @@ export default function JadeAmenitiesSection() {
 
           {/* Dots - Elevated for Mobile Bottom Nav */}
           <div className="absolute bottom-24 left-0 right-0 flex justify-center gap-2 z-30">
-            {SLIDES.map((_, index) => (
+            {SERVICES_SLIDES.map((_, index) => (
               <div
                 key={index}
                 className={`w-1.5 h-1.5 rounded-none transition-colors ${
@@ -272,28 +252,28 @@ export default function JadeAmenitiesSection() {
             {/* Text Card */}
             <motion.div
               key={`text-desk-${currentIndex}`}
-              className="relative p-12 rounded-none bg-[#25282C]"
-              initial={{ opacity: 0, x: -20 }}
+              className="relative p-12 rounded-none bg-[#25282C]/90 backdrop-blur-md"
+              initial={{ opacity: 0, x: -40 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.8 }}
             >
               <p
-                className="font-manrope text-sm tracking-[0.3em] uppercase mb-6"
+                className="font-manrope text-xs tracking-[0.4em] uppercase mb-8"
                 style={{ color: "#EFCD62" }}
               >
                 {currentSlide.label}
               </p>
-              <div className="mb-6">
+              <div className="mb-8">
                 {currentSlide.heading.map((line, index) => (
                   <h2
                     key={index}
-                    className="font-philosopher text-6xl text-white leading-tight mb-2"
+                    className="font-philosopher text-7xl text-white leading-tight mb-2"
                   >
                     {line}
                   </h2>
                 ))}
               </div>
-              <p className="font-manrope text-lg text-white/70 leading-relaxed">
+              <p className="font-manrope text-lg text-white/70 leading-relaxed max-w-lg">
                 {currentSlide.subtext}
               </p>
             </motion.div>
@@ -302,10 +282,10 @@ export default function JadeAmenitiesSection() {
             <div className="relative">
               <motion.div
                 key={`img-desk-${currentIndex}`}
-                className="relative w-full aspect-[4/5] rounded-none overflow-hidden shadow-2xl"
+                className="relative w-full aspect-[4/5] rounded-none overflow-hidden shadow-2xl border border-white/10"
                 style={{ y: imageY }}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.95, x: 20 }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
               >
                 <Image
@@ -313,7 +293,7 @@ export default function JadeAmenitiesSection() {
                   alt="Feature"
                   fill
                   className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  sizes="50vw"
                   priority
                 />
               </motion.div>
@@ -323,7 +303,7 @@ export default function JadeAmenitiesSection() {
 
         {/* Desktop Navigation */}
         <div
-          className="relative z-20 py-6 px-24"
+          className="relative z-20 py-8 px-24"
           style={{ backgroundColor: "#0D4032" }}
         >
           <div className="max-w-[1920px] mx-auto flex items-center justify-between">
@@ -333,12 +313,12 @@ export default function JadeAmenitiesSection() {
             >
               <ChevronLeft className="w-8 h-8 text-[#EFCD62]" />
             </button>
-            <div className="flex gap-3">
-              {SLIDES.map((_, index) => (
+            <div className="flex gap-4">
+              {SERVICES_SLIDES.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-none transition-all ${
+                  className={`w-2.5 h-2.5 rounded-none transition-all ${
                     index === currentIndex ? "bg-[#EFCD62]" : "bg-[#AC8831]/50"
                   }`}
                 />
