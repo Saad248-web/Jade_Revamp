@@ -174,7 +174,7 @@ export default function WeddingVenuesCarousel() {
                   href={`/villas/${currentVilla.id}`}
                   className="inline-flex items-center gap-3 text-[#EFCD62] font-manrope text-sm md:text-base tracking-[0.2em] font-bold uppercase hover:text-white transition-all group"
                 >
-                  SEE MORE
+                  KNOW MORE
                   <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>

@@ -41,9 +41,9 @@ export default function WeddingVillasCarousel() {
   return (
     <section className="relative bg-[#0F1113] py-24 sm:py-32">
       <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           {/* LEFT: IMAGE SECTION WITH FLOATING NAVIGATION */}
-          <div className="relative w-full aspect-[4/5] md:aspect-[4/5] lg:aspect-[4/5] overflow-hidden rounded-none bg-white/5">
+          <div className="relative w-full aspect-[4/5] md:aspect-[4/5] lg:aspect-square lg:max-h-[80vh] overflow-hidden rounded-none bg-white/5">
             <AnimatePresence initial={false} custom={direction}>
               <motion.div
                 key={currentVilla.id}
@@ -200,7 +200,7 @@ export default function WeddingVillasCarousel() {
                 href={`/villas/${currentVilla.id}`}
                 className="inline-flex items-center gap-2 text-[#EFCD62] font-manrope text-sm md:text-base tracking-[0.2em] font-bold uppercase transition-all group lg:translate-y-0.5"
               >
-                SEE MORE
+                KNOW MORE
                 <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>

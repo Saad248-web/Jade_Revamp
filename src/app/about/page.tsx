@@ -9,8 +9,11 @@ import LiveBackground from "@/components/LiveBackground";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import { useAnimation } from "@/context/AnimationContext";
 
 export default function AboutPage() {
+  const { setPartnerOverlayOpen } = useAnimation();
+
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
       {/* ── Navigation ── */}
@@ -256,7 +259,10 @@ export default function AboutPage() {
               <br />
               under one standard of hospitality.
             </p>
-            <button className="bg-[#EFCD62] text-black font-bold uppercase tracking-widest text-sm px-8 py-4 w-full md:w-auto min-w-[300px] hover:bg-white transition-colors flex items-center justify-center gap-2 rounded-none">
+            <button
+              onClick={() => setPartnerOverlayOpen(true)}
+              className="bg-[#EFCD62] text-black font-bold uppercase tracking-widest text-sm px-8 py-4 w-full md:w-auto min-w-[300px] hover:bg-white transition-colors flex items-center justify-center gap-2 rounded-none"
+            >
               PARTNER WITH JADE <ArrowRight className="w-4 h-4" />
             </button>
           </div>

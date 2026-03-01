@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Phone,
   Mail,
@@ -299,9 +300,10 @@ export default function ContactPage() {
               </label>
               <select
                 required
+                defaultValue=""
                 className="w-full bg-[#0D4032] border border-white/20 px-5 py-4 text-white/80 text-sm focus:border-[#EFCD62] outline-none transition-colors appearance-none cursor-pointer"
               >
-                <option value="" disabled selected>
+                <option value="" disabled>
                   Select an option
                 </option>
                 <option value="stay">Villa Stay</option>
@@ -347,147 +349,134 @@ export default function ContactPage() {
           <>
             {/* Backdrop */}
             <motion.div
-              key="backdrop"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={closeModal}
-              className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm"
+              className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm"
             />
 
-            {/* ── Mobile bottom-sheet ── */}
-            <div className="md:hidden">
-              <motion.div
-                key="success-mobile"
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                exit={{ y: "100%" }}
-                transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="fixed inset-x-0 bottom-0 top-16 z-[101] bg-[#0D4032] rounded-t-[28px] flex flex-col overflow-hidden"
-              >
-                <div className="flex-1 overflow-y-auto px-6 pt-8 pb-10 text-center">
-                  {/* X */}
-                  <div className="flex justify-end mb-4">
-                    <button
-                      onClick={closeModal}
-                      className="text-white/40 hover:text-white transition-colors"
-                    >
-                      <X className="w-6 h-6" />
-                    </button>
+            {/* Modal */}
+            <motion.div
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "100%", opacity: 0 }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed inset-x-0 bottom-0 top-24 md:top-auto md:h-auto md:max-h-[90vh] md:w-[600px] md:bottom-auto md:left-1/2 md:-translate-x-1/2 md:translate-y-[10vh] z-[101] bg-[#0D4032] rounded-t-[28px] md:rounded-3xl flex flex-col shadow-2xl border border-white/10"
+            >
+              {/* The Close button centered at top */}
+              <div className="absolute -top-[72px] left-1/2 -translate-x-1/2 flex items-center z-10">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="w-12 h-12 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl"
+                >
+                  <X className="w-6 h-6 stroke-[1.5]" />
+                </button>
+              </div>
+
+              <div className="flex flex-col items-center justify-center h-full px-6 text-center pt-8 md:pt-12 pb-12 overflow-y-auto">
+                {/* Glassy circular wrapper for the checkmark */}
+                <motion.div
+                  initial={{ scale: 0.7, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="w-[160px] h-[160px] shrink-0 relative mb-8 rounded-full flex items-center justify-center"
+                >
+                  <div
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background:
+                        "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
+                    }}
+                  />
+                  <div
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background: "rgba(255, 255, 255, 0.10)",
+                      backdropFilter: "blur(12px)",
+                      WebkitBackdropFilter: "blur(12px)",
+                      border: "1px solid rgba(255, 255, 255, 0.18)",
+                      boxShadow:
+                        "inset 0 1px 1px rgba(255,255,255,0.25), 0 4px 24px rgba(0,0,0,0.15)",
+                    }}
+                  />
+                  <div
+                    className="absolute rounded-full pointer-events-none"
+                    style={{
+                      inset: 6,
+                      border: "1px solid rgba(255,255,255,0.08)",
+                    }}
+                  />
+                  <div className="w-[84px] h-[84px] shrink-0 relative drop-shadow-2xl">
+                    <Image
+                      src="/assets/JAde Correction.png"
+                      alt="Success Check"
+                      fill
+                      sizes="96px"
+                      quality={100}
+                      className="object-contain"
+                    />
+                  </div>
+                </motion.div>
+
+                <motion.h2
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-white text-3xl font-philosopher mb-4"
+                >
+                  We've got it from here
+                </motion.h2>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-white/80 text-sm leading-relaxed mb-10 max-w-sm mx-auto font-manrope"
+                >
+                  Thanks for sharing your details!
+                  <br />
+                  Our team will take a look and reach out shortly to understand
+                  things better.
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="flex flex-col w-full max-w-[280px] mx-auto mt-auto gap-5"
+                >
+                  <p className="text-white/50 text-[10px] font-bold tracking-[0.2em] uppercase text-center">
+                    MEANWHILE CHECK US OUT HERE
+                  </p>
+
+                  <div className="flex justify-center gap-4">
+                    {[Facebook, Instagram, Youtube].map((Icon, i) => (
+                      <Link
+                        key={i}
+                        href="#"
+                        className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/20 hover:bg-[#EFCD62] hover:border-[#EFCD62] transition-colors group"
+                      >
+                        <Icon className="w-5 h-5 text-white/50 group-hover:text-black transition-colors" />
+                      </Link>
+                    ))}
                   </div>
 
-                  <JadeCoin />
-
-                  <motion.h3
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="text-3xl font-philosopher text-white mb-4"
-                  >
-                    We&apos;ve got it from here
-                  </motion.h3>
-                  <motion.p
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="text-white/70 text-sm leading-relaxed mb-10 max-w-xs mx-auto"
-                  >
-                    Thanks for sharing your details!
-                    <br />
-                    Our team will take a look and reach out shortly to
-                    understand things better.
-                  </motion.p>
-
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="space-y-5 mb-10"
-                  >
-                    <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase">
-                      MEANWHILE CHECK US OUT HERE
-                    </p>
-                    <div className="flex justify-center gap-4">
-                      {[Facebook, Instagram, Youtube].map((Icon, i) => (
-                        <a
-                          key={i}
-                          href="#"
-                          className="w-12 h-12 bg-white/5 border border-white/20 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                        >
-                          <Icon className="w-5 h-5" />
-                        </a>
-                      ))}
-                    </div>
-                    <p className="text-[10px] text-white/30 italic">
-                      Thoughtfully operated. Always.
-                    </p>
-                  </motion.div>
+                  <p className="text-white/30 text-[10px] italic text-center mb-6">
+                    Thoughtfully operated. Always.
+                  </p>
 
                   <button
+                    type="button"
                     onClick={closeModal}
-                    className="w-full bg-[#EFCD62] text-[#0D4032] font-bold uppercase tracking-widest text-sm py-5 hover:bg-white transition-all rounded-none"
+                    className="w-full bg-[#EFCD62] text-[#0E3A2F] py-5 text-xs font-bold tracking-widest uppercase hover:bg-white transition-colors rounded-none"
                   >
                     OKAY
                   </button>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* ── Desktop centered modal ── */}
-            <div className="hidden md:flex fixed inset-0 z-[101] items-center justify-center pointer-events-none">
-              <motion.div
-                key="success-desktop"
-                initial={{ y: 40, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 40, opacity: 0 }}
-                transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="relative w-full max-w-lg bg-[#0D4032] p-12 text-center rounded-3xl shadow-2xl pointer-events-auto overflow-y-auto max-h-[90vh]"
-              >
-                <button
-                  onClick={closeModal}
-                  className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-
-                <JadeCoin />
-
-                <h3 className="text-3xl font-philosopher text-white mb-4">
-                  We&apos;ve got it from here
-                </h3>
-                <p className="text-white/70 text-sm leading-relaxed mb-10 max-w-xs mx-auto">
-                  Thanks for sharing your details! Our team will take a look and
-                  reach out shortly to understand things better.
-                </p>
-
-                <div className="space-y-6 mb-10">
-                  <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase">
-                    MEANWHILE CHECK US OUT HERE
-                  </p>
-                  <div className="flex justify-center gap-6">
-                    {[Facebook, Instagram, Youtube].map((Icon, i) => (
-                      <a
-                        key={i}
-                        href="#"
-                        className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                      >
-                        <Icon className="w-5 h-5" />
-                      </a>
-                    ))}
-                  </div>
-                  <p className="text-[10px] text-white/30 italic">
-                    Thoughtfully operated. Always.
-                  </p>
-                </div>
-
-                <button
-                  onClick={closeModal}
-                  className="w-full bg-[#EFCD62] text-[#0D4032] font-bold uppercase tracking-widest text-sm py-5 hover:bg-white transition-all rounded-none"
-                >
-                  OKAY
-                </button>
-              </motion.div>
-            </div>
+                </motion.div>
+              </div>
+            </motion.div>
           </>
         )}
       </AnimatePresence>

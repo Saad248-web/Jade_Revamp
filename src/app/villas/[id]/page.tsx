@@ -1,8 +1,9 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -40,6 +41,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DetailsDrawer from "@/components/DetailsDrawer";
+import MobileBottomNav from "@/components/MobileBottomNav";
 import { useState } from "react";
 import { VILLAS } from "@/data/villas";
 
@@ -70,6 +72,7 @@ const getIcon = (iconName: string) => {
 
 export default function VillaDetailsPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const { id } = params;
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -77,6 +80,63 @@ export default function VillaDetailsPage() {
     title: "",
     items: [] as any[],
   });
+
+  const scrollFrameRef = useRef<number>();
+  const isAutoScrolling = useRef(false);
+
+  useEffect(() => {
+    // Only start auto-scroll if the URL parameter is present
+    const shouldAutoScroll = searchParams.get("autoScroll") === "true";
+
+    if (shouldAutoScroll) {
+      isAutoScrolling.current = true;
+      let lastTime = performance.now();
+      const scrollSpeed = 0.5; // pixels per millisecond (adjust for speed)
+
+      const autoScroll = (currentTime: number) => {
+        if (!isAutoScrolling.current) return;
+
+        const deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+
+        // Scroll down slightly
+        window.scrollBy({ top: scrollSpeed, left: 0, behavior: "auto" });
+
+        // Continue the animation frame
+        scrollFrameRef.current = requestAnimationFrame(autoScroll);
+      };
+
+      // Start the animation immediately (optionally add a small delay if needed)
+      setTimeout(() => {
+        lastTime = performance.now();
+        scrollFrameRef.current = requestAnimationFrame(autoScroll);
+      }, 500); // 500ms delay to let the page load visually first
+    }
+
+    // Stop scrolling on any user interaction
+    const stopScroll = () => {
+      if (isAutoScrolling.current) {
+        isAutoScrolling.current = false;
+        if (scrollFrameRef.current) {
+          cancelAnimationFrame(scrollFrameRef.current);
+        }
+      }
+    };
+
+    // Attach interaction listeners
+    window.addEventListener("wheel", stopScroll);
+    window.addEventListener("touchstart", stopScroll);
+    window.addEventListener("mousedown", stopScroll);
+    window.addEventListener("keydown", stopScroll);
+
+    return () => {
+      stopScroll();
+      window.removeEventListener("wheel", stopScroll);
+      window.removeEventListener("touchstart", stopScroll);
+      window.removeEventListener("mousedown", stopScroll);
+      window.removeEventListener("keydown", stopScroll);
+    };
+  }, [searchParams]);
 
   const villa = VILLAS.find((v) => v.id === id);
 
@@ -98,8 +158,7 @@ export default function VillaDetailsPage() {
 
   return (
     <main className="bg-[#1A1C1E] min-h-screen relative">
-      {/* Remove Standard Navbar to match the specific "Landing Page" style of the reference */}
-      {/* <Navbar /> */}
+      <Navbar />
       {/* HERO / CAROUSEL SECTION */}
       <section className="relative h-[60vh] md:h-[80vh] w-full bg-[#1A1C1E]">
         {/* Image (Simulated Carousel for now with single image) */}
@@ -114,21 +173,6 @@ export default function VillaDetailsPage() {
             quality={75}
           />
           <div className="absolute inset-0 bg-black/20" />
-        </div>
-
-        {/* Top Header Overlay (Replacing Navbar for this page) */}
-        <div className="fixed top-0 left-0 w-full p-6 flex justify-between items-start z-50">
-          {/* Back Button as "Logo" area or actual Back button */}
-          <Link
-            href="/villas"
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 text-white hover:bg-white hover:text-black transition-all"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-
-          <button className="bg-black/40 border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-6 py-3 hover:bg-white hover:text-black transition-colors">
-            Contact Us
-          </button>
         </div>
 
         {/* Carousel Controls (Simulated) */}
@@ -781,156 +825,10 @@ export default function VillaDetailsPage() {
           </div>
         </div>
       </section>
-      {/* FOOTER & CONTACT SECTION - Full Width */}
-      <div className="w-full bg-[#222426] border-t border-white/5 py-16 md:py-24 px-6 md:px-20 lg:px-32">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Left Column - Form */}
-          <div>
-            <h2 className="text-4xl md:text-5xl font-philosopher text-white mb-12">
-              We'd love to hear from you
-            </h2>
-            <form className="flex flex-col gap-6">
-              <div className="flex flex-col gap-2">
-                <label className="text-white/60 text-xs uppercase tracking-wider">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  className="bg-transparent border-b border-white/20 py-2 text-white outline-none focus:border-[#EFCD62] transition-colors"
-                  placeholder="|"
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="text-white/60 text-xs uppercase tracking-wider">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  className="bg-transparent border border-white/10 rounded p-3 text-white outline-none focus:border-[#EFCD62] transition-colors bg-[#1A1C1E]"
-                  placeholder="Phone Number"
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <input
-                  type="text"
-                  className="bg-transparent border border-white/10 rounded p-4 text-white outline-none focus:border-[#EFCD62] transition-colors bg-[#1A1C1E] placeholder-white/80"
-                  placeholder="Check-In & Out Date"
-                />
-              </div>
-
-              <div className="flex items-start gap-4 mt-2">
-                <div className="w-5 h-5 border border-white/40 rounded flex-shrink-0 mt-0.5 cursor-pointer hover:border-[#EFCD62] transition-colors" />
-                <p className="text-white/60 text-xs leading-relaxed">
-                  Welcome to Jade Hospitainment, where hospitality meets
-                  entertainment in unique and unforgettable ways. With over two
-                  decades of experience.
-                </p>
-              </div>
-
-              <button className="w-full bg-[#3A3C3E]/50 text-white/80 font-bold uppercase tracking-[0.2em] py-4 rounded mt-4 hover:bg-[#EFCD62] hover:text-black transition-colors text-xs border border-white/5">
-                SUBMIT
-              </button>
-            </form>
-          </div>
-
-          {/* Right Column - Navigation & Info */}
-          <div className="flex flex-col justify-between">
-            <div className="grid grid-cols-2 gap-8 mb-12 lg:mb-0">
-              <div className="flex flex-col gap-4">
-                <a
-                  href="#"
-                  className="text-[#EFCD62] text-xs font-bold uppercase tracking-widest"
-                >
-                  Villas
-                </a>
-                <a
-                  href="#"
-                  className="text-[#EFCD62] text-xs font-bold uppercase tracking-widest"
-                >
-                  Experiences
-                </a>
-                <a
-                  href="#"
-                  className="text-[#EFCD62] text-xs font-bold uppercase tracking-widest"
-                >
-                  About
-                </a>
-              </div>
-              <div className="flex flex-col gap-4">
-                <a
-                  href="#"
-                  className="text-[#EFCD62] text-xs font-bold uppercase tracking-widest"
-                >
-                  Privacy Policy
-                </a>
-                <a
-                  href="#"
-                  className="text-[#EFCD62] text-xs font-bold uppercase tracking-widest"
-                >
-                  Terms & Conditions
-                </a>
-                <a
-                  href="#"
-                  className="text-[#EFCD62] text-xs font-bold uppercase tracking-widest"
-                >
-                  Refund Policy
-                </a>
-              </div>
-            </div>
-
-            <div>
-              {/* Logo Placeholder */}
-              <div className="mb-6 relative w-16 h-16 md:w-20 md:h-20">
-                <Image
-                  src="/assets/Golden_Logo.png"
-                  alt="Jade Hospitainment"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-
-              <div className="flex flex-col gap-4 text-white/60 text-sm font-manrope">
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-4 h-4 text-white/40" />
-                  <span>
-                    76, Phase II, Royal Enclave, Srirampura, Bengaluru - 64
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="w-4 h-4 text-white/40" />
-                  <span>0897 066 3366</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-4 h-4 text-white/40 flex items-center justify-center">
-                    @
-                  </div>
-                  <span>Info@jadehospitainment.com</span>
-                </div>
-              </div>
-
-              <div className="flex gap-4 mt-8">
-                <div className="w-10 h-10 border border-white/20 flex items-center justify-center text-white hover:border-[#EFCD62] hover:text-[#EFCD62] transition-colors cursor-pointer group">
-                  <Facebook className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                </div>
-                <div className="w-10 h-10 border border-white/20 flex items-center justify-center text-white hover:border-[#EFCD62] hover:text-[#EFCD62] transition-colors cursor-pointer group">
-                  <Instagram className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                </div>
-                <div className="w-10 h-10 border border-white/20 flex items-center justify-center text-white hover:border-[#EFCD62] hover:text-[#EFCD62] transition-colors cursor-pointer group">
-                  <Youtube className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="border-t border-white/5 mt-16 pt-8 text-center">
-          <p className="text-white/20 text-xs">
-            © Copyright 2026 Jade Hospitainment – All Rights Reserved
-          </p>
-        </div>
-      </div>
+      {/* FOOTER */}
+      <Footer />
       {/* FLOATING BOOKING BAR */}
-      <div className="fixed bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 p-3 md:p-4 md:px-8 z-50">
+      <div className="fixed bottom-[72px] lg:bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 p-3 md:p-4 md:px-8 z-40 transition-all">
         <div className="max-w-7xl mx-auto flex justify-between items-center gap-2">
           <div>
             <p className="text-white/60 text-[10px] md:text-xs mb-0.5 font-manrope">
@@ -950,7 +848,9 @@ export default function VillaDetailsPage() {
           </div>
         </div>
       </div>
-      <div className="h-20" /> {/* Spacer for floating bar */}
+      <div className="h-36 lg:h-20" />{" "}
+      {/* Spacer for floating bar and mobile nav */}
+      <MobileBottomNav />
       <DetailsDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}

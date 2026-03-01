@@ -3,18 +3,41 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { ArrowLeft, ArrowRight, Bed, Users, Home, MapPin } from "lucide-react";
-import Link from "next/link";
+import { Search } from "lucide-react";
 import { VILLAS, CATEGORIES } from "@/data/villas";
+import ReservationOverlay from "./ReservationOverlay";
+import VillaCard from "./VillaCard";
 
 // Navbar height to offset the sticky filter bar
 const NAVBAR_HEIGHT = 72; // px — matches the fixed navbar (2px progress + ~70px bar)
 
 export default function VillasCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
   const [activeCategory, setActiveCategory] = useState("All");
   const [navbarVisible, setNavbarVisible] = useState(true);
+
+  // Overlay states
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [overlayView, setOverlayView] = useState<"dates" | "guests">("dates");
+
+  // Dynamic Search State
+  const [guests, setGuests] = useState({ adults: 2, children: 0, pets: 0 });
+  const [dates, setDates] = useState<number[]>([]);
+
+  // Format strings for inputs
+  const formatDates = () => {
+    if (dates.length === 0) return "";
+    if (dates.length === 1) return `${dates[0]} Jan`;
+    return `${dates[0]} Jan - ${dates[dates.length - 1]} Jan`;
+  };
+
+  const formatGuests = () => {
+    const total = guests.adults + guests.children;
+    if (total === 0) return "";
+    let str = `${total} Guest${total > 1 ? "s" : ""}`;
+    if (guests.pets > 0)
+      str += `, ${guests.pets} Pet${guests.pets > 1 ? "s" : ""}`;
+    return str;
+  };
 
   // Mirror the same hide/show logic used in Navbar.tsx
   useEffect(() => {
@@ -37,27 +60,9 @@ export default function VillasCarousel() {
       activeCategory === "All" || villa.categories.includes(activeCategory),
   );
 
-  const nextSlide = () => {
-    setDirection(1);
-    setCurrentIndex((prev) => (prev + 1) % filteredVillas.length);
-  };
-
-  const prevSlide = () => {
-    setDirection(-1);
-    setCurrentIndex(
-      (prev) => (prev - 1 + filteredVillas.length) % filteredVillas.length,
-    );
-  };
-
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
-    setCurrentIndex(0);
-    setDirection(0);
   };
-
-  // Guard against empty filtering (shouldn't happen with these categories but good practice)
-  const currentVilla =
-    filteredVillas.length > 0 ? filteredVillas[currentIndex] : null;
 
   return (
     <section
@@ -69,155 +74,84 @@ export default function VillasCarousel() {
         className="sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/8 transition-all duration-300 ease-in-out"
         style={{ top: navbarVisible ? `${NAVBAR_HEIGHT}px` : "0px" }}
       >
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16">
-          <div className="flex overflow-x-auto items-center gap-2 md:gap-4 py-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
-            {CATEGORIES.map((category) => (
-              <button
-                key={category}
-                onClick={() => handleCategoryChange(category)}
-                className={`whitespace-nowrap flex-shrink-0 px-4 py-2 text-xs md:text-sm font-manrope font-medium transition-all duration-300 ${
-                  activeCategory === category
-                    ? "bg-[#EFCD62] text-[#1A1C1E] border border-[#EFCD62]"
-                    : "bg-transparent text-white/60 border border-white/20 hover:border-white/50 hover:text-white"
-                }`}
+        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 pb-4">
+          <div className="flex flex-col gap-4 mt-6">
+            <span className="text-white/40 font-manrope text-[10px] font-bold tracking-wider">
+              {activeCategory === "All" ? "All Villas" : activeCategory}{" "}
+              {filteredVillas.length}
+            </span>
+
+            {/* SEARCH BAR */}
+            <div className="flex items-center bg-[#222428] border border-white/10 w-full lg:max-w-4xl">
+              <div
+                onClick={() => {
+                  setOverlayView("dates");
+                  setIsOverlayOpen(true);
+                }}
+                className="flex-1 px-4 py-3 md:px-6 cursor-pointer hover:bg-white/5 transition-colors"
               >
-                {category}
+                <span className="block text-white/50 text-[9px] md:text-[10px] font-manrope uppercase tracking-widest mb-1 pointer-events-none">
+                  Check In - Check Out
+                </span>
+                <input
+                  type="text"
+                  placeholder="28 Mar - 2 Apr"
+                  value={formatDates()}
+                  readOnly
+                  className="bg-transparent text-white font-manrope text-sm md:text-base outline-none w-full placeholder:text-white cursor-pointer"
+                />
+              </div>
+              <div className="w-px h-10 md:h-12 bg-white/10" />
+              <div
+                onClick={() => {
+                  setOverlayView("guests");
+                  setIsOverlayOpen(true);
+                }}
+                className="flex-1 px-4 py-3 md:px-6 cursor-pointer hover:bg-white/5 transition-colors"
+              >
+                <span className="block text-white/50 text-[9px] md:text-[10px] font-manrope uppercase tracking-widest mb-1 pointer-events-none">
+                  Guests
+                </span>
+                <input
+                  type="text"
+                  placeholder="2 Guests"
+                  value={formatGuests()}
+                  readOnly
+                  className="bg-transparent text-white font-manrope text-sm md:text-base outline-none w-full placeholder:text-white cursor-pointer"
+                />
+              </div>
+              <button className="px-4 md:px-6 text-white/50 hover:text-white transition-colors flex items-center justify-center self-stretch border-l border-transparent">
+                <Search className="w-5 h-5 md:w-6 md:h-6" />
               </button>
-            ))}
+            </div>
+
+            {/* CATEGORIES */}
+            <div className="flex overflow-x-auto items-center gap-2 md:gap-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+              {CATEGORIES.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => handleCategoryChange(category)}
+                  className={`whitespace-nowrap flex-shrink-0 px-4 py-2 text-xs md:text-sm font-manrope font-medium transition-all duration-300 ${
+                    activeCategory === category
+                      ? "bg-[#EFCD62] text-[#1A1C1E] border border-[#EFCD62]"
+                      : "bg-transparent text-white/60 border border-white/20 hover:border-white/50 hover:text-white"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       {/* MAIN CONTENT */}
-      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full mt-12">
-        {currentVilla ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-            {/* IMAGE SECTION */}
-            <div className="relative w-full aspect-[4/5] md:aspect-square lg:aspect-[4/5] overflow-hidden rounded-sm group bg-white/5">
-              <AnimatePresence initial={false} custom={direction}>
-                <motion.div
-                  key={`${currentVilla.id}-${currentIndex}`} // Unique key for animation
-                  custom={direction}
-                  initial={{ x: direction > 0 ? "100%" : "-100%", opacity: 1 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: direction > 0 ? "-100%" : "100%", opacity: 1 }} // Slide out to opposite side
-                  transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }} // Smooth ease-out
-                  className="absolute inset-0 w-full h-full"
-                >
-                  <Image
-                    src={currentVilla.image}
-                    alt={currentVilla.name}
-                    fill
-                    className="object-cover"
-                  />
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Navigation Arrows (Static - Outside Animation) */}
-              <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end z-20">
-                <button
-                  onClick={prevSlide}
-                  className="w-12 h-12 flex items-center justify-center border border-white/20 bg-black/20 backdrop-blur-sm text-white hover:bg-white hover:text-black transition-all"
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                </button>
-
-                <div className="flex items-center gap-3 md:gap-6 pb-2">
-                  <span className="text-white font-manrope text-4xl md:text-5xl lg:text-6xl font-light leading-none">
-                    {currentIndex + 1}
-                  </span>
-                  <div className="w-8 md:w-16 h-[1px] bg-white/40" />
-                  <span className="text-white/60 font-manrope text-lg md:text-xl font-light leading-none">
-                    {filteredVillas.length}
-                  </span>
-                </div>
-
-                <button
-                  onClick={nextSlide}
-                  className="w-12 h-12 flex items-center justify-center border border-white/20 bg-black/20 backdrop-blur-sm text-white hover:bg-white hover:text-black transition-all"
-                >
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* CONTENT SECTION */}
-            <motion.div
-              key={`content-${currentVilla.id}-${currentIndex}`}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex flex-col text-left"
-            >
-              <span className="text-[#EFCD62] text-xs font-manrope font-bold tracking-[0.2em] uppercase mb-4">
-                {currentVilla.type}
-              </span>
-              <h2 className="font-philosopher text-5xl md:text-6xl text-white mb-2">
-                {currentVilla.name}
-              </h2>
-              <div className="flex items-center gap-2 text-white/60 mb-10">
-                <MapPin className="w-4 h-4" />
-                <span className="font-manrope text-sm">
-                  {currentVilla.location}
-                </span>
-              </div>
-
-              {/* Stats Grid */}
-              <div className="grid grid-cols-3 gap-4 border-y border-white/10 py-6 mb-8">
-                <div className="flex flex-col items-center gap-3 text-center border-r border-white/10 last:border-0">
-                  <Bed className="w-5 h-5 text-white/80" />
-                  <span className="text-white font-philosopher text-lg">
-                    {currentVilla.stats.stay}
-                  </span>
-                  <span className="text-white/40 text-[10px] uppercase tracking-wider font-manrope">
-                    Stay
-                  </span>
-                </div>
-                <div className="flex flex-col items-center gap-3 text-center border-r border-white/10 last:border-0">
-                  <Users className="w-5 h-5 text-white/80" />
-                  <span className="text-white font-philosopher text-lg">
-                    {currentVilla.stats.events}
-                  </span>
-                  <span className="text-white/40 text-[10px] uppercase tracking-wider font-manrope">
-                    Events
-                  </span>
-                </div>
-                <div className="flex flex-col items-center gap-3 text-center">
-                  <Home className="w-5 h-5 text-white/80" />
-                  <span className="text-white font-philosopher text-lg">
-                    {currentVilla.stats.bhk}
-                  </span>
-                  <span className="text-white/40 text-[10px] uppercase tracking-wider font-manrope">
-                    Configuration
-                  </span>
-                </div>
-              </div>
-
-              <p className="font-manrope text-white/70 leading-relaxed mb-8 text-sm md:text-base">
-                {currentVilla.description}
-              </p>
-
-              <div className="flex flex-wrap gap-2 mb-10">
-                <span className="text-white/40 text-xs font-manrope font-bold uppercase tracking-wider mr-2 self-center">
-                  Perfect for:
-                </span>
-                {currentVilla.perfectFor.map((tag) => (
-                  <span
-                    key={tag}
-                    className="bg-white/5 text-white/80 text-xs px-3 py-1.5 rounded-sm font-manrope"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <Link
-                href={`/villas/${currentVilla.id}`}
-                className="w-full bg-[#EFCD62] text-black py-4 font-manrope font-bold text-xs tracking-[0.2em] uppercase text-center hover:bg-white transition-colors flex items-center justify-center gap-2"
-              >
-                View {currentVilla.name} <ArrowRight className="w-4 h-4" />
-              </Link>
-            </motion.div>
+      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full mt-12 pb-32">
+        {filteredVillas.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-16">
+            {filteredVillas.map((villa) => (
+              <VillaCard key={villa.id} villa={villa} />
+            ))}
           </div>
         ) : (
           // No results fallback
@@ -234,6 +168,23 @@ export default function VillasCarousel() {
           </div>
         )}
       </div>
+
+      <ReservationOverlay
+        isOpen={isOverlayOpen}
+        onClose={() => setIsOverlayOpen(false)}
+        initialView={overlayView}
+        guests={guests}
+        setGuests={setGuests}
+        dates={dates}
+        setDates={setDates}
+        onApply={() =>
+          console.log("Search applying:", {
+            dates,
+            guests,
+            category: activeCategory,
+          })
+        }
+      />
     </section>
   );
 }

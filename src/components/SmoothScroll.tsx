@@ -14,6 +14,9 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
       touchMultiplier: 1.5,
     });
 
+    // Expose globally so overlays can call stop() / start()
+    (window as unknown as Record<string, unknown>).__lenis = lenis;
+
     let rafId: number;
 
     function raf(time: number) {
@@ -26,6 +29,7 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     return () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
+      (window as unknown as Record<string, unknown>).__lenis = null;
     };
   }, []);
 

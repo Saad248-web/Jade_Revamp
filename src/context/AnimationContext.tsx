@@ -7,6 +7,12 @@ interface AnimationContextType {
   setSplashComplete: (value: boolean) => void;
   isMenuOpen: boolean;
   setMenuOpen: (value: boolean) => void;
+  isPartnerOverlayOpen: boolean;
+  setPartnerOverlayOpen: (value: boolean) => void;
+  isGlobalBookingOpen: boolean;
+  setGlobalBookingOpen: (value: boolean) => void;
+  villaBookingId: string | null;
+  openVillaBooking: (id: string) => void;
   navbarTheme: "white" | "golden";
   setNavbarTheme: (theme: "white" | "golden") => void;
 }
@@ -22,7 +28,15 @@ export const AnimationProvider = ({
 }) => {
   const [isSplashComplete, setSplashComplete] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [isPartnerOverlayOpen, setPartnerOverlayOpen] = useState(false);
+  const [isGlobalBookingOpen, setGlobalBookingOpen] = useState(false);
+  const [villaBookingId, setVillaBookingId] = useState<string | null>(null);
   const [navbarTheme, setNavbarTheme] = useState<"white" | "golden">("golden");
+
+  const openVillaBooking = (id: string) => {
+    setVillaBookingId(id);
+    setGlobalBookingOpen(true);
+  };
 
   return (
     <AnimationContext.Provider
@@ -31,6 +45,12 @@ export const AnimationProvider = ({
         setSplashComplete,
         isMenuOpen,
         setMenuOpen,
+        isPartnerOverlayOpen,
+        setPartnerOverlayOpen,
+        isGlobalBookingOpen,
+        setGlobalBookingOpen,
+        villaBookingId,
+        openVillaBooking,
         navbarTheme,
         setNavbarTheme,
       }}

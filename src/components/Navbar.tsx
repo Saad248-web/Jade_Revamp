@@ -16,8 +16,14 @@ import { X } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { isSplashComplete, isMenuOpen, setMenuOpen, navbarTheme } =
-    useAnimation();
+  const {
+    isSplashComplete,
+    isMenuOpen,
+    setMenuOpen,
+    setPartnerOverlayOpen,
+    setGlobalBookingOpen,
+    navbarTheme,
+  } = useAnimation();
   const { scrollY } = useScroll();
   const [isHidden, setIsHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -43,6 +49,9 @@ export default function Navbar() {
 
   // Only hide navbar on home page if splash isn't complete
   if (pathname === "/" && !isSplashComplete) return null;
+
+  // Check if it's a detail page for villas or weddings (resorts)
+  const isDetailPage = /^\/(?:villas|weddings)\/[^/]+$/.test(pathname);
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -77,7 +86,7 @@ export default function Navbar() {
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         {/* Glass bar */}
-        <div className="mx-auto px-8 py-5 flex items-center justify-between bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm relative">
+        <div className="mx-auto px-4 md:px-8 py-4 md:py-5 flex items-center justify-between bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm relative">
           {/* ── LEFT: Menu toggle + inline nav links (desktop only) ── */}
           <div className="hidden lg:flex items-center gap-8 flex-1">
             <button
@@ -159,12 +168,56 @@ export default function Navbar() {
 
           {/* ── RIGHT: Contact CTA ── */}
           <div className="flex items-center justify-end flex-1 gap-4">
-            <Link
-              href="/contact"
-              className="bg-white/8 hover:bg-jade-gold hover:text-black text-white text-[10px] font-manrope font-semibold tracking-[0.2em] uppercase px-5 py-2.5 rounded-none border border-white/20 transition-all duration-300"
-            >
-              Contact Us
-            </Link>
+            {isDetailPage ? (
+              <Link
+                href="/contact"
+                className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-[10px] font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px]"
+              >
+                CONTACT US
+              </Link>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/contact"
+                  className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center w-[35px] h-[35px] md:w-[38px] md:h-[38px] rounded-none border border-white/20 transition-all duration-300 group shrink-0"
+                  aria-label="Contact Us"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.25"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-colors drop-shadow-sm"
+                  >
+                    <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3V11z" />
+                    <path d="M21 11h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3v-7z" />
+                    <path d="M3 11V9a9 9 0 0 1 18 0v2" />
+                    <path d="M21 16v2a4 4 0 0 1-4 4h-5" />
+                    <path d="M9 10h6v4H9z" />
+                    <path d="M10 12h.01M12 12h.01M14 12h.01" />
+                  </svg>
+                </Link>
+                {pathname?.startsWith("/experiences") ? (
+                  <button
+                    onClick={() => setPartnerOverlayOpen(true)}
+                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-[10px] font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px] whitespace-nowrap"
+                  >
+                    ENQUIRE NOW
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setGlobalBookingOpen(true)}
+                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-[10px] font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px] whitespace-nowrap"
+                  >
+                    BOOK NOW
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </motion.nav>

@@ -389,24 +389,28 @@ export default function CareersPage() {
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
                 transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="fixed inset-x-0 bottom-0 top-16 z-[48] bg-[#0D4032] rounded-t-[28px] flex flex-col overflow-hidden"
+                className="fixed inset-x-0 bottom-0 top-24 z-[48] bg-[#0D4032] rounded-t-[28px] flex flex-col"
               >
+                {/* The Close button centered at top, outside the modal */}
+                <div className="absolute -top-[72px] left-1/2 -translate-x-1/2 flex items-center z-10">
+                  <button
+                    onClick={() => setIsApplyModalOpen(false)}
+                    className="w-12 h-12 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl"
+                  >
+                    <X className="w-6 h-6 stroke-[1.5]" />
+                  </button>
+                </div>
+
                 {/* ── Scrollable Content (no custom header — real Navbar is above) ── */}
-                <div className="flex-1 w-full overflow-y-auto overflow-x-hidden">
+                <div className="flex-1 w-full overflow-y-auto overflow-x-hidden rounded-t-[28px]">
                   {!isSuccess ? (
                     /* FORM VIEW */
                     <div className="px-5 pt-8 pb-10 w-full box-border">
-                      {/* Title row with X */}
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-3xl font-philosopher text-white">
-                          Partner with us
+                      {/* Title row */}
+                      <div className="flex items-start justify-between mb-4">
+                        <h3 className="text-3xl font-philosopher text-white mt-2">
+                          Apply Now
                         </h3>
-                        <button
-                          onClick={() => setIsApplyModalOpen(false)}
-                          className="text-white/40 hover:text-white transition-colors ml-4 mt-1 shrink-0"
-                        >
-                          <X className="w-6 h-6" />
-                        </button>
                       </div>
                       <p className="text-white/60 text-sm mb-8 leading-relaxed">
                         Share a few details. Our team will get back to you
@@ -491,21 +495,7 @@ export default function CareersPage() {
                     </div>
                   ) : (
                     /* SUCCESS VIEW */
-                    <div className="flex flex-col items-center text-center px-6 pt-8 pb-10 w-full box-border">
-                      {/* X close */}
-                      <div className="w-full flex justify-end mb-4">
-                        <button
-                          onClick={() => {
-                            setIsApplyModalOpen(false);
-                            setIsSuccess(false);
-                            setSelectedFileName(null);
-                          }}
-                          className="text-white/40 hover:text-white transition-colors"
-                        >
-                          <X className="w-6 h-6" />
-                        </button>
-                      </div>
-
+                    <div className="flex flex-col items-center text-center px-6 pt-12 pb-10 w-full box-border">
                       {/* Jade Coin — Glassmorphic Circle */}
                       <motion.div
                         initial={{ scale: 0.7, opacity: 0 }}
@@ -635,188 +625,193 @@ export default function CareersPage() {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 40, opacity: 0 }}
                 transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="relative w-full max-w-lg bg-[#0D4032] p-12 overflow-y-auto max-h-[85vh] rounded-3xl shadow-2xl pointer-events-auto"
+                className="relative w-full max-w-lg bg-[#0D4032] overflow-visible max-h-[85vh] rounded-3xl shadow-2xl pointer-events-auto flex flex-col"
               >
-                <button
-                  onClick={() => {
-                    setIsApplyModalOpen(false);
-                    setIsSuccess(false);
-                    setSelectedFileName(null);
-                  }}
-                  className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors"
-                >
-                  <X className="w-6 h-6" />
-                </button>
+                {/* The Close button centered at top, outside the modal */}
+                <div className="absolute -top-[72px] left-1/2 -translate-x-1/2 flex items-center z-10">
+                  <button
+                    onClick={() => {
+                      setIsApplyModalOpen(false);
+                      setIsSuccess(false);
+                      setSelectedFileName(null);
+                    }}
+                    className="w-12 h-12 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl"
+                  >
+                    <X className="w-6 h-6 stroke-[1.5]" />
+                  </button>
+                </div>
 
-                {!isSuccess ? (
-                  <>
-                    <h3 className="text-4xl font-philosopher text-white mb-4">
-                      Partner with us
-                    </h3>
-                    <p className="text-white/60 text-sm mb-10">
-                      Share a few details. Our team will get back to you shortly
-                    </p>
+                <div className="p-12 overflow-y-auto overflow-x-hidden rounded-3xl">
+                  {!isSuccess ? (
+                    <>
+                      <h3 className="text-4xl font-philosopher text-white mb-4 pr-16">
+                        Apply Now
+                      </h3>
+                      <p className="text-white/60 text-sm mb-10">
+                        Share a few details. Our team will get back to you
+                        shortly
+                      </p>
 
-                    <form className="space-y-6" onSubmit={handleApply}>
-                      <div className="relative">
-                        <label className="absolute -top-3 left-4 bg-[#0D4032] px-2 text-[10px] text-[#EFCD62] uppercase tracking-widest font-bold">
-                          Full Name
-                        </label>
+                      <form className="space-y-6" onSubmit={handleApply}>
+                        <div className="relative">
+                          <label className="absolute -top-3 left-4 bg-[#0D4032] px-2 text-[10px] text-[#EFCD62] uppercase tracking-widest font-bold">
+                            Full Name
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors"
+                          />
+                        </div>
+                        <input
+                          type="email"
+                          required
+                          placeholder="Email"
+                          className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
+                        />
+                        <input
+                          type="tel"
+                          required
+                          placeholder="Phone Number"
+                          className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
+                        />
                         <input
                           type="text"
-                          required
-                          className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors"
+                          placeholder="Company/Organization"
+                          className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
                         />
-                      </div>
-                      <input
-                        type="email"
-                        required
-                        placeholder="Email"
-                        className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
-                      />
-                      <input
-                        type="tel"
-                        required
-                        placeholder="Phone Number"
-                        className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Company/Organization"
-                        className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
-                      />
 
-                      <div className="flex flex-col items-center gap-4 py-4">
-                        <label className="cursor-pointer flex items-center gap-2 text-[#EFCD62] hover:text-white transition-colors">
-                          <span className="uppercase tracking-[0.2em] text-[10px] font-bold">
-                            UPLOAD CV
-                          </span>
-                          <Upload className="w-4 h-4" />
-                          <input
-                            type="file"
-                            className="hidden"
-                            onChange={handleFileChange}
-                          />
-                        </label>
-                        {selectedFileName && (
-                          <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 text-[11px] text-white/60">
-                            {selectedFileName}
-                            <button
-                              type="button"
-                              onClick={() => setSelectedFileName(null)}
-                            >
-                              <X className="w-3 h-3 hover:text-white" />
-                            </button>
-                          </div>
-                        )}
+                        <div className="flex flex-col items-center gap-4 py-4">
+                          <label className="cursor-pointer flex items-center gap-2 text-[#EFCD62] hover:text-white transition-colors">
+                            <span className="uppercase tracking-[0.2em] text-[10px] font-bold">
+                              UPLOAD CV
+                            </span>
+                            <Upload className="w-4 h-4" />
+                            <input
+                              type="file"
+                              className="hidden"
+                              onChange={handleFileChange}
+                            />
+                          </label>
+                          {selectedFileName && (
+                            <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 text-[11px] text-white/60">
+                              {selectedFileName}
+                              <button
+                                type="button"
+                                onClick={() => setSelectedFileName(null)}
+                              >
+                                <X className="w-3 h-3 hover:text-white" />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="w-full bg-[#EFCD62] text-black font-bold uppercase tracking-[0.2em] text-sm py-5 hover:bg-white transition-all flex items-center justify-center gap-3 rounded-none mt-4 shadow-lg group"
+                        >
+                          SUBMIT APPLICATION{" "}
+                          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                        </button>
+                      </form>
+                    </>
+                  ) : (
+                    <div className="text-center pb-12">
+                      {/* Jade Coin — Glassmorphic Circle */}
+                      <motion.div
+                        initial={{ scale: 0.7, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className="relative w-48 h-48 flex items-center justify-center mx-auto mb-10"
+                      >
+                        {/* Outer soft glow */}
+                        <div
+                          className="absolute inset-0 rounded-full"
+                          style={{
+                            background:
+                              "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
+                          }}
+                        />
+                        {/* Glassmorphic disc */}
+                        <div
+                          className="absolute inset-0 rounded-full"
+                          style={{
+                            background: "rgba(255, 255, 255, 0.10)",
+                            backdropFilter: "blur(12px)",
+                            WebkitBackdropFilter: "blur(12px)",
+                            border: "1px solid rgba(255, 255, 255, 0.18)",
+                            boxShadow:
+                              "inset 0 1px 1px rgba(255,255,255,0.25), 0 4px 24px rgba(0,0,0,0.15)",
+                          }}
+                        />
+                        {/* Inner highlight ring */}
+                        <div
+                          className="absolute rounded-full pointer-events-none"
+                          style={{
+                            inset: 6,
+                            border: "1px solid rgba(255,255,255,0.08)",
+                            borderRadius: "50%",
+                          }}
+                        />
+                        {/* Coin image */}
+                        <Image
+                          src="/assets/JAde Correction.png"
+                          alt="Jade Coin"
+                          width={128}
+                          height={128}
+                          className="relative z-10 w-32 h-32 object-contain drop-shadow-2xl"
+                        />
+                      </motion.div>
+
+                      <h3 className="text-3xl font-philosopher text-white mb-6">
+                        We&apos;ve got it from here
+                      </h3>
+                      <p className="text-white/70 text-sm leading-relaxed mb-10 max-w-xs mx-auto text-center">
+                        Thanks for sharing your details! Our team will take a
+                        look and reach out shortly to understand things better.
+                      </p>
+
+                      <div className="space-y-8">
+                        <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase">
+                          MEANWHILE CHECK US OUT HERE
+                        </p>
+                        <div className="flex justify-center gap-6">
+                          <a
+                            href="#"
+                            className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
+                          >
+                            <Facebook className="w-5 h-5" />
+                          </a>
+                          <a
+                            href="#"
+                            className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
+                          >
+                            <Instagram className="w-5 h-5" />
+                          </a>
+                          <a
+                            href="#"
+                            className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
+                          >
+                            <Youtube className="w-5 h-5" />
+                          </a>
+                        </div>
+                        <p className="text-[10px] text-white/30 italic">
+                          Thoughtfully operated. Always.
+                        </p>
                       </div>
 
                       <button
-                        type="submit"
-                        className="w-full bg-[#EFCD62] text-black font-bold uppercase tracking-[0.2em] text-sm py-5 hover:bg-white transition-all flex items-center justify-center gap-3 rounded-none mt-4 shadow-lg group"
+                        onClick={() => {
+                          setIsApplyModalOpen(false);
+                          setIsSuccess(false);
+                          setSelectedFileName(null);
+                        }}
                       >
-                        SUBMIT APPLICATION{" "}
-                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                        OKAY
                       </button>
-                    </form>
-                  </>
-                ) : (
-                  <div className="text-center py-12">
-                    {/* Jade Coin — Glassmorphic Circle */}
-                    <motion.div
-                      initial={{ scale: 0.7, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ duration: 0.5, ease: "easeOut" }}
-                      className="relative w-48 h-48 flex items-center justify-center mx-auto mb-10"
-                    >
-                      {/* Outer soft glow */}
-                      <div
-                        className="absolute inset-0 rounded-full"
-                        style={{
-                          background:
-                            "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
-                        }}
-                      />
-                      {/* Glassmorphic disc */}
-                      <div
-                        className="absolute inset-0 rounded-full"
-                        style={{
-                          background: "rgba(255, 255, 255, 0.10)",
-                          backdropFilter: "blur(12px)",
-                          WebkitBackdropFilter: "blur(12px)",
-                          border: "1px solid rgba(255, 255, 255, 0.18)",
-                          boxShadow:
-                            "inset 0 1px 1px rgba(255,255,255,0.25), 0 4px 24px rgba(0,0,0,0.15)",
-                        }}
-                      />
-                      {/* Inner highlight ring */}
-                      <div
-                        className="absolute rounded-full pointer-events-none"
-                        style={{
-                          inset: 6,
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          borderRadius: "50%",
-                        }}
-                      />
-                      {/* Coin image */}
-                      <Image
-                        src="/assets/JAde Correction.png"
-                        alt="Jade Coin"
-                        width={128}
-                        height={128}
-                        className="relative z-10 w-32 h-32 object-contain drop-shadow-2xl"
-                      />
-                    </motion.div>
-
-                    <h3 className="text-3xl font-philosopher text-white mb-6">
-                      We&apos;ve got it from here
-                    </h3>
-                    <p className="text-white/70 text-sm leading-relaxed mb-10 max-w-xs mx-auto text-center">
-                      Thanks for sharing your details! Our team will take a look
-                      and reach out shortly to understand things better.
-                    </p>
-
-                    <div className="space-y-8">
-                      <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase">
-                        MEANWHILE CHECK US OUT HERE
-                      </p>
-                      <div className="flex justify-center gap-6">
-                        <a
-                          href="#"
-                          className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                        >
-                          <Facebook className="w-5 h-5" />
-                        </a>
-                        <a
-                          href="#"
-                          className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                        >
-                          <Instagram className="w-5 h-5" />
-                        </a>
-                        <a
-                          href="#"
-                          className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                        >
-                          <Youtube className="w-5 h-5" />
-                        </a>
-                      </div>
-                      <p className="text-[10px] text-white/30 italic">
-                        Thoughtfully operated. Always.
-                      </p>
                     </div>
-
-                    <button
-                      onClick={() => {
-                        setIsApplyModalOpen(false);
-                        setIsSuccess(false);
-                        setSelectedFileName(null);
-                      }}
-                      className="w-full bg-[#EFCD62] text-black font-bold uppercase tracking-widest text-sm py-5 mt-12 hover:bg-white transition-all rounded-none"
-                    >
-                      OKAY
-                    </button>
-                  </div>
-                )}
+                  )}
+                </div>
               </motion.div>
             </div>
           </>

@@ -14,11 +14,8 @@ export const VILLAS = [
       homeTheater: "12 Seater",
       villaArea: "7,000 sqft",
     },
-    description: `A contemporary white multi-story villa with expansive glass windows, emphasizing a luxury stay experience. Features a large, lit swimming pool that serves as a central focal point for evening gatherings.
-
-The massive outdoor space including a 25,000 sq. ft. landscaped lawn is capable of hosting traditional Indian ceremonies and receptions. With professional photography spots, bridal prep areas, and curated catering services, it is the perfect destination for your dream wedding.
-
-Located roughly 45 minutes from the airport and 10-15 minutes from the nearest railway station, Magnolia offers a rare balance of accessibility and complete privacy.`,
+    description:
+      "A contemporary white multi-story villa with expansive glass windows and a large, lit swimming pool. The massive 25,000 sq ft landscaped lawn and professional catering services make it the perfect destination for your dream wedding or private gathering.",
     perfectFor: [
       "Wedding",
       "Staycation",
