@@ -21,7 +21,6 @@ export default function Navbar() {
     isMenuOpen,
     setMenuOpen,
     setPartnerOverlayOpen,
-    setGlobalBookingOpen,
     navbarTheme,
   } = useAnimation();
   const { scrollY } = useScroll();
@@ -209,12 +208,12 @@ export default function Navbar() {
                     ENQUIRE NOW
                   </button>
                 ) : (
-                  <button
-                    onClick={() => setGlobalBookingOpen(true)}
+                  <Link
+                    href="/book"
                     className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-[10px] font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px] whitespace-nowrap"
                   >
                     BOOK NOW
-                  </button>
+                  </Link>
                 )}
               </div>
             )}

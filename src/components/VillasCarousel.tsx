@@ -74,15 +74,11 @@ export default function VillasCarousel() {
         className="sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/8 transition-all duration-300 ease-in-out"
         style={{ top: navbarVisible ? `${NAVBAR_HEIGHT}px` : "0px" }}
       >
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 pb-4">
-          <div className="flex flex-col gap-4 mt-6">
-            <span className="text-white/40 font-manrope text-[10px] font-bold tracking-wider">
-              {activeCategory === "All" ? "All Villas" : activeCategory}{" "}
-              {filteredVillas.length}
-            </span>
-
+        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 pt-4 md:pt-6 pb-4">
+          <div className="flex flex-col gap-3 md:gap-4">
             {/* SEARCH BAR */}
-            <div className="flex items-center bg-[#222428] border border-white/10 w-full lg:max-w-4xl">
+            <div className="flex flex-row items-stretch bg-[#222428] border border-white/10 w-full lg:max-w-4xl">
+              {/* Dates field */}
               <div
                 onClick={() => {
                   setOverlayView("dates");
@@ -98,10 +94,12 @@ export default function VillasCarousel() {
                   placeholder="28 Mar - 2 Apr"
                   value={formatDates()}
                   readOnly
-                  className="bg-transparent text-white font-manrope text-sm md:text-base outline-none w-full placeholder:text-white cursor-pointer"
+                  className="bg-transparent text-white font-manrope text-sm md:text-base outline-none w-full placeholder:text-white/50 cursor-pointer"
                 />
               </div>
-              <div className="w-px h-10 md:h-12 bg-white/10" />
+              {/* Vertical divider */}
+              <div className="w-px self-stretch bg-white/10" />
+              {/* Guests field */}
               <div
                 onClick={() => {
                   setOverlayView("guests");
@@ -117,16 +115,17 @@ export default function VillasCarousel() {
                   placeholder="2 Guests"
                   value={formatGuests()}
                   readOnly
-                  className="bg-transparent text-white font-manrope text-sm md:text-base outline-none w-full placeholder:text-white cursor-pointer"
+                  className="bg-transparent text-white font-manrope text-sm md:text-base outline-none w-full placeholder:text-white/50 cursor-pointer"
                 />
               </div>
-              <button className="px-4 md:px-6 text-white/50 hover:text-white transition-colors flex items-center justify-center self-stretch border-l border-transparent">
+              {/* Search button */}
+              <button className="px-4 md:px-6 text-white/50 hover:text-white transition-colors flex items-center justify-center self-stretch border-l border-white/10">
                 <Search className="w-5 h-5 md:w-6 md:h-6" />
               </button>
             </div>
 
             {/* CATEGORIES */}
-            <div className="flex overflow-x-auto items-center gap-2 md:gap-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+            <div className="flex overflow-x-auto items-center gap-2 md:gap-3 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
               {CATEGORIES.map((category) => (
                 <button
                   key={category}
@@ -148,9 +147,14 @@ export default function VillasCarousel() {
       {/* MAIN CONTENT */}
       <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full mt-12 pb-32">
         {filteredVillas.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-16">
-            {filteredVillas.map((villa) => (
-              <VillaCard key={villa.id} villa={villa} />
+          <div className="flex flex-col">
+            {filteredVillas.map((villa, index) => (
+              <div key={villa.id}>
+                <VillaCard villa={villa} />
+                {index < filteredVillas.length - 1 && (
+                  <hr className="border-0 border-t border-white/10 my-12" />
+                )}
+              </div>
             ))}
           </div>
         ) : (

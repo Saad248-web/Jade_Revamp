@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Bed, Users, Home, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { VILLAS } from "@/data/villas";
-import { useAnimation } from "@/context/AnimationContext";
 
 interface VillaCardProps {
   villa: (typeof VILLAS)[0];
@@ -15,7 +15,7 @@ interface VillaCardProps {
 export default function VillaCard({ villa }: VillaCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
-  const { openVillaBooking } = useAnimation();
+  const router = useRouter();
 
   // If a villa doesn't have multiple spaces defined yet, we'll create a fallback array
   // of just its main image so the UI doesn't break.
@@ -46,9 +46,9 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const startingPrice = getStartingPrice();
 
   return (
-    <div className="flex flex-col gap-6 h-full border border-white/10 bg-white/[0.02] p-4 md:p-6 rounded-lg pointer-events-auto">
+    <div className="flex flex-col md:flex-row gap-6 h-full pointer-events-auto">
       {/* IMAGE CONTAINER */}
-      <div className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[4/3] overflow-hidden rounded-md group bg-white/5">
+      <div className="relative w-full md:w-[45%] md:flex-shrink-0 aspect-[4/3] md:aspect-auto md:max-h-[480px] overflow-hidden rounded-md group bg-white/5">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={`${villa.id}-${currentImageIndex}`}
@@ -107,7 +107,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
       </div>
 
       {/* DETAILS CONTAINER */}
-      <div className="flex flex-col text-left flex-1">
+      <div className="flex flex-col text-left flex-1 md:py-2">
         <span className="text-[#EFCD62] text-[10px] md:text-[11px] font-manrope font-bold tracking-[0.2em] uppercase mb-2">
           {villa.type}
         </span>
@@ -167,9 +167,9 @@ export default function VillaCard({ villa }: VillaCardProps) {
         </div>
 
         {/* Action Row */}
-        <div className="flex flex-col 2xl:flex-row items-start 2xl:items-center justify-between pt-5 border-t border-white/10 gap-5 mt-auto">
+        <div className="flex flex-row items-center justify-between gap-4 mt-auto">
           {/* Price */}
-          <div className="flex flex-col">
+          <div className="flex flex-col shrink-0">
             <span className="text-white/40 text-[9px] font-manrope uppercase tracking-widest mb-0.5">
               Starting from
             </span>
@@ -179,16 +179,16 @@ export default function VillaCard({ villa }: VillaCardProps) {
           </div>
 
           {/* Buttons */}
-          <div className="flex items-center gap-3 w-full 2xl:w-auto">
+          <div className="flex items-center gap-3">
             <Link
               href={`/villas/${villa.id}?autoScroll=true`}
-              className="flex-1 2xl:flex-none border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-4 py-2.5 font-manrope font-bold text-[10px] tracking-widest uppercase text-center rounded-sm"
+              className="border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-5 py-2.5 font-manrope font-bold text-[10px] tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
             >
               VIEW VILLA
             </Link>
             <button
-              onClick={() => openVillaBooking(villa.id)}
-              className="flex-1 2xl:flex-none bg-[#EFCD62] text-black border border-[#EFCD62] hover:bg-white hover:border-white transition-colors px-4 py-2.5 font-manrope font-bold text-[10px] tracking-widest uppercase text-center rounded-sm"
+              onClick={() => router.push(`/book?villa=${villa.id}`)}
+              className="bg-[#EFCD62] text-black border border-[#EFCD62] hover:bg-white hover:border-white transition-colors px-5 py-2.5 font-manrope font-bold text-[10px] tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
             >
               BOOK VILLA
             </button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -11,8 +11,49 @@ import {
   Instagram,
   Youtube,
   X,
+  ChevronLeft,
+  ChevronRight,
+  CalendarDays,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+
+// ── Calendar helpers ────────────────────────────────────────────────────────
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
+function startOfDay(d: Date) {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+function sameDay(a: Date | null, b: Date | null) {
+  if (!a || !b) return false;
+  return startOfDay(a).getTime() === startOfDay(b).getTime();
+}
+function isBetween(d: Date, start: Date | null, end: Date | null) {
+  if (!start || !end) return false;
+  const t = startOfDay(d).getTime();
+  return t > startOfDay(start).getTime() && t < startOfDay(end).getTime();
+}
+function formatDate(d: Date | null) {
+  if (!d) return "";
+  return d.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -20,13 +61,66 @@ export default function Footer() {
   const [formData, setFormData] = useState({
     fullName: "",
     phoneNumber: "",
-    date: "",
+    subject: "",
+    queries: "",
   });
+
+  // ── Calendar state ─────────────────────────────────────────────────────────
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [checkIn, setCheckIn] = useState<Date | null>(null);
+  const [checkOut, setCheckOut] = useState<Date | null>(null);
+  const [hoverDate, setHoverDate] = useState<Date | null>(null);
+  const today = startOfDay(new Date());
+  const [calMonth, setCalMonth] = useState(
+    new Date(today.getFullYear(), today.getMonth(), 1),
+  );
+  const calendarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showCalendar) return;
+    const handler = (e: MouseEvent) => {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(e.target as Node)
+      )
+        setShowCalendar(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showCalendar]);
+
+  const handleDayClick = (day: Date) => {
+    if (!checkIn || (checkIn && checkOut)) {
+      setCheckIn(day);
+      setCheckOut(null);
+    } else {
+      if (day < checkIn) {
+        setCheckOut(checkIn);
+        setCheckIn(day);
+      } else {
+        setCheckOut(day);
+        if (!sameDay(day, checkIn)) setShowCalendar(false);
+      }
+    }
+  };
+
+  const getDaysInMonth = (year: number, month: number) =>
+    new Date(year, month + 1, 0).getDate();
+  const getFirstDay = (year: number, month: number) =>
+    new Date(year, month, 1).getDay();
+
+  const dateLabel = checkIn
+    ? checkOut
+      ? `${formatDate(checkIn)} – ${formatDate(checkOut)}`
+      : `${formatDate(checkIn)} – Select checkout`
+    : "";
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSuccess(true);
-    setFormData({ fullName: "", phoneNumber: "", date: "" }); // Optional clear
+    setFormData({ fullName: "", phoneNumber: "", subject: "", queries: "" });
+    setCheckIn(null);
+    setCheckOut(null);
   };
 
   const isFormValid =
@@ -199,45 +293,226 @@ export default function Footer() {
                   </label>
                 </div>
 
-                {/* Date */}
+                {/* Subject */}
                 <div className="group relative">
                   <input
                     type="text"
-                    id="date"
-                    value={formData.date}
+                    id="subject"
+                    value={formData.subject}
                     onChange={(e) =>
-                      setFormData({ ...formData, date: e.target.value })
+                      setFormData({ ...formData, subject: e.target.value })
                     }
                     placeholder=" "
                     className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62] focus:outline-none transition-colors rounded-none h-14 placeholder-transparent"
                   />
                   <label
-                    htmlFor="date"
-                    className="absolute left-4 top-4 text-xs text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-[#EFCD62] peer-[:not(:placeholder-shown)]:-top-2.5"
+                    htmlFor="subject"
+                    className="absolute left-4 -top-2.5 text-xs text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
                   >
-                    Check-In &amp; Out Date
+                    Subject
                   </label>
                 </div>
 
-                {/* Checkbox */}
-                <div className="flex items-start gap-3 pt-2">
-                  <input
-                    type="checkbox"
-                    id="terms"
-                    className="appearance-none w-4 h-4 border border-white/25 bg-transparent checked:bg-[#EFCD62] checked:border-[#EFCD62] focus:ring-0 transition-colors cursor-pointer mt-0.5 shrink-0"
+                {/* Date – calendar trigger */}
+                <div className="relative" ref={calendarRef}>
+                  {/* Trigger button */}
+                  <button
+                    type="button"
+                    onClick={() => setShowCalendar((v) => !v)}
+                    className={`w-full h-14 bg-white/[0.04] border px-4 text-left transition-colors rounded-none flex items-center justify-between ${
+                      showCalendar ? "border-[#EFCD62]" : "border-white/15"
+                    }`}
+                  >
+                    <span
+                      className={`font-manrope text-sm ${
+                        dateLabel ? "text-white" : "text-white/40"
+                      }`}
+                    >
+                      {dateLabel || "Check-In & Out Date"}
+                    </span>
+                    <CalendarDays
+                      className={`w-4 h-4 shrink-0 transition-colors ${
+                        showCalendar ? "text-[#EFCD62]" : "text-white/30"
+                      }`}
+                    />
+                  </button>
+
+                  {/* Floating label when date selected */}
+                  {dateLabel && (
+                    <span className="absolute left-4 -top-2.5 text-xs text-[#EFCD62] bg-[#2E3034] px-2 pointer-events-none">
+                      Check-In &amp; Out Date
+                    </span>
+                  )}
+
+                  {/* Calendar overlay */}
+                  <AnimatePresence>
+                    {showCalendar && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8, scale: 0.97 }}
+                        transition={{ duration: 0.18 }}
+                        className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 bg-[#1C1F22] border border-white/10 shadow-2xl p-5"
+                      >
+                        {/* Month nav */}
+                        <div className="flex items-center justify-between mb-4">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setCalMonth(
+                                new Date(
+                                  calMonth.getFullYear(),
+                                  calMonth.getMonth() - 1,
+                                  1,
+                                ),
+                              )
+                            }
+                            className="w-8 h-8 flex items-center justify-center text-white/50 hover:text-[#EFCD62] transition-colors"
+                          >
+                            <ChevronLeft className="w-4 h-4" />
+                          </button>
+                          <p className="font-manrope text-sm font-semibold text-white tracking-widest uppercase">
+                            {MONTHS[calMonth.getMonth()]}{" "}
+                            {calMonth.getFullYear()}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setCalMonth(
+                                new Date(
+                                  calMonth.getFullYear(),
+                                  calMonth.getMonth() + 1,
+                                  1,
+                                ),
+                              )
+                            }
+                            className="w-8 h-8 flex items-center justify-center text-white/50 hover:text-[#EFCD62] transition-colors"
+                          >
+                            <ChevronRight className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        {/* Day headers */}
+                        <div className="grid grid-cols-7 mb-2">
+                          {DAYS.map((d) => (
+                            <div
+                              key={d}
+                              className="text-center font-manrope text-[10px] text-white/30 tracking-widest py-1"
+                            >
+                              {d}
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Day cells */}
+                        <div className="grid grid-cols-7">
+                          {/* offset */}
+                          {Array.from({
+                            length: getFirstDay(
+                              calMonth.getFullYear(),
+                              calMonth.getMonth(),
+                            ),
+                          }).map((_, i) => (
+                            <div key={`e-${i}`} />
+                          ))}
+
+                          {Array.from({
+                            length: getDaysInMonth(
+                              calMonth.getFullYear(),
+                              calMonth.getMonth(),
+                            ),
+                          }).map((_, i) => {
+                            const day = new Date(
+                              calMonth.getFullYear(),
+                              calMonth.getMonth(),
+                              i + 1,
+                            );
+                            const isStart = sameDay(day, checkIn);
+                            const isEnd = sameDay(day, checkOut);
+                            const isToday = sameDay(day, today);
+                            const isPast = day < today;
+                            const effectiveEnd = checkOut ?? hoverDate;
+                            const inRange =
+                              checkIn && !checkOut
+                                ? isBetween(day, checkIn, effectiveEnd)
+                                : isBetween(day, checkIn, checkOut);
+
+                            return (
+                              <button
+                                key={i}
+                                type="button"
+                                disabled={isPast}
+                                onClick={() => !isPast && handleDayClick(day)}
+                                onMouseEnter={() => setHoverDate(day)}
+                                onMouseLeave={() => setHoverDate(null)}
+                                className={`relative h-9 w-full font-manrope text-xs transition-all duration-150 ${
+                                  isPast
+                                    ? "text-white/15 cursor-not-allowed"
+                                    : isStart || isEnd
+                                      ? "bg-[#EFCD62] text-[#1C1F22] font-bold z-10"
+                                      : inRange
+                                        ? "bg-[#EFCD62]/15 text-white"
+                                        : isToday
+                                          ? "text-[#EFCD62] font-semibold hover:bg-white/10"
+                                          : "text-white/70 hover:bg-white/10"
+                                }`}
+                              >
+                                {i + 1}
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        {/* Footer hint */}
+                        <div className="mt-4 pt-4 border-t border-white/8 flex items-center justify-between">
+                          <p className="font-manrope text-[10px] text-white/30">
+                            {!checkIn
+                              ? "Select check-in date"
+                              : !checkOut
+                                ? "Select check-out date"
+                                : `${formatDate(checkIn)} → ${formatDate(checkOut)}`}
+                          </p>
+                          {(checkIn || checkOut) && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setCheckIn(null);
+                                setCheckOut(null);
+                              }}
+                              className="font-manrope text-[10px] text-white/30 hover:text-[#EFCD62] transition-colors tracking-widest uppercase"
+                            >
+                              Clear
+                            </button>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Queries */}
+                <div className="group relative">
+                  <textarea
+                    id="queries"
+                    rows={4}
+                    value={formData.queries}
+                    onChange={(e) =>
+                      setFormData({ ...formData, queries: e.target.value })
+                    }
+                    placeholder=" "
+                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62] focus:outline-none transition-colors rounded-none resize-none placeholder-transparent"
                   />
                   <label
-                    htmlFor="terms"
-                    className="font-manrope text-xs text-white/40 leading-loose cursor-pointer select-none"
+                    htmlFor="queries"
+                    className="absolute left-4 -top-2.5 text-xs text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
                   >
-                    Welcome to Jade Hospitainment, where hospitality meets
-                    entertainment in unique and unforgettable ways. With over
-                    two decades of experience.
+                    Queries
                   </label>
                 </div>
 
                 {/* Submit */}
                 <button
+                  type="submit"
                   disabled={!isFormValid}
                   className={`w-full py-4 mt-6 font-manrope tracking-[0.25em] text-xs transition-all duration-300 uppercase border ${
                     isFormValid
@@ -354,127 +629,133 @@ export default function Footer() {
               className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm"
             />
 
-            {/* Modal */}
-            <motion.div
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: "100%", opacity: 0 }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed inset-x-0 bottom-0 top-24 md:top-auto md:h-auto md:max-h-[90vh] md:w-[600px] md:bottom-auto md:left-1/2 md:-translate-x-1/2 md:translate-y-[10vh] z-[101] bg-[#0D4032] rounded-t-[28px] md:rounded-3xl flex flex-col shadow-2xl border border-white/10"
-            >
-              {/* The Close button centered at top, floating outside for md, inside for mobile */}
-              <div className="absolute -top-[72px] left-1/2 -translate-x-1/2 flex items-center z-10">
-                <button
-                  type="button"
-                  onClick={() => setIsSuccess(false)}
-                  className="w-12 h-12 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl"
-                >
-                  <X className="w-6 h-6 stroke-[1.5]" />
-                </button>
-              </div>
-
-              <div className="flex flex-col items-center justify-center h-full px-6 text-center pt-8 md:pt-12 pb-12 overflow-y-auto">
-                {/* Glassy circular wrapper for the checkmark */}
-                <motion.div
-                  initial={{ scale: 0.7, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="w-[160px] h-[160px] shrink-0 relative mb-8 rounded-full flex items-center justify-center"
-                >
-                  <div
-                    className="absolute inset-0 rounded-full"
-                    style={{
-                      background:
-                        "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
-                    }}
-                  />
-                  <div
-                    className="absolute inset-0 rounded-full"
-                    style={{
-                      background: "rgba(255, 255, 255, 0.10)",
-                      backdropFilter: "blur(12px)",
-                      WebkitBackdropFilter: "blur(12px)",
-                      border: "1px solid rgba(255, 255, 255, 0.18)",
-                      boxShadow:
-                        "inset 0 1px 1px rgba(255,255,255,0.25), 0 4px 24px rgba(0,0,0,0.15)",
-                    }}
-                  />
-                  <div
-                    className="absolute rounded-full pointer-events-none"
-                    style={{
-                      inset: 6,
-                      border: "1px solid rgba(255,255,255,0.08)",
-                    }}
-                  />
-                  <div className="w-[84px] h-[84px] shrink-0 relative drop-shadow-2xl">
-                    <Image
-                      src="/assets/JAde Correction.png"
-                      alt="Success Check"
-                      fill
-                      sizes="96px"
-                      quality={100}
-                      className="object-contain"
-                    />
-                  </div>
-                </motion.div>
-
-                <motion.h2
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="text-white text-3xl font-philosopher mb-4"
-                >
-                  We've got it from here
-                </motion.h2>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="text-white/80 text-sm leading-relaxed mb-10 max-w-sm mx-auto font-manrope"
-                >
-                  Thanks for sharing your details!
-                  <br />
-                  Our team will take a look and reach out shortly to understand
-                  things better.
-                </motion.p>
-
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  className="flex flex-col w-full max-w-[280px] mx-auto mt-auto gap-5"
-                >
-                  <p className="text-white/50 text-[10px] font-bold tracking-[0.2em] uppercase text-center">
-                    MEANWHILE CHECK US OUT HERE
-                  </p>
-
-                  <div className="flex justify-center gap-4">
-                    {[Facebook, Instagram, Youtube].map((Icon, i) => (
-                      <Link
-                        key={i}
-                        href="#"
-                        className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/20 hover:bg-[#EFCD62] hover:border-[#EFCD62] transition-colors group"
-                      >
-                        <Icon className="w-5 h-5 text-white/50 group-hover:text-black transition-colors" />
-                      </Link>
-                    ))}
-                  </div>
-
-                  <p className="text-white/30 text-[10px] italic text-center mb-6">
-                    Thoughtfully operated. Always.
-                  </p>
-
+            {/* Centering wrapper */}
+            <div className="fixed inset-0 z-[101] flex items-center justify-center pointer-events-none px-4">
+              {/* Relative wrapper so close button can float above */}
+              <div className="relative pointer-events-auto w-full max-w-[520px]">
+                {/* Close button — floats centered above the card */}
+                <div className="absolute -top-14 left-1/2 -translate-x-1/2 z-10">
                   <button
                     type="button"
                     onClick={() => setIsSuccess(false)}
-                    className="w-full bg-[#EFCD62] text-[#0E3A2F] py-5 text-xs font-bold tracking-widest uppercase hover:bg-white transition-colors rounded-none"
+                    className="w-12 h-12 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl"
                   >
-                    OKAY
+                    <X className="w-6 h-6 stroke-[1.5]" />
                   </button>
+                </div>
+
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-full max-h-[85vh] bg-[#0D4032] rounded-3xl flex flex-col shadow-2xl border border-white/10 overflow-hidden"
+                >
+                  <div className="flex flex-col items-center justify-center px-8 text-center pt-8 pb-10 overflow-y-auto">
+                    {/* Glassy circular wrapper for the checkmark */}
+                    <motion.div
+                      initial={{ scale: 0.7, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                      className="w-[160px] h-[160px] shrink-0 relative mb-8 rounded-full flex items-center justify-center"
+                    >
+                      <div
+                        className="absolute inset-0 rounded-full"
+                        style={{
+                          background:
+                            "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
+                        }}
+                      />
+                      <div
+                        className="absolute inset-0 rounded-full"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.10)",
+                          backdropFilter: "blur(12px)",
+                          WebkitBackdropFilter: "blur(12px)",
+                          border: "1px solid rgba(255, 255, 255, 0.18)",
+                          boxShadow:
+                            "inset 0 1px 1px rgba(255,255,255,0.25), 0 4px 24px rgba(0,0,0,0.15)",
+                        }}
+                      />
+                      <div
+                        className="absolute rounded-full pointer-events-none"
+                        style={{
+                          inset: 6,
+                          border: "1px solid rgba(255,255,255,0.08)",
+                        }}
+                      />
+                      <div className="w-[84px] h-[84px] shrink-0 relative drop-shadow-2xl">
+                        <Image
+                          src="/assets/JAde Correction.png"
+                          alt="Success Check"
+                          fill
+                          sizes="96px"
+                          quality={100}
+                          className="object-contain"
+                        />
+                      </div>
+                    </motion.div>
+
+                    <motion.h2
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="text-white text-3xl font-philosopher mb-4"
+                    >
+                      We've got it from here
+                    </motion.h2>
+
+                    <motion.p
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="text-white/80 text-sm leading-relaxed mb-10 max-w-sm mx-auto font-manrope"
+                    >
+                      Thanks for sharing your details!
+                      <br />
+                      Our team will take a look and reach out shortly to
+                      understand things better.
+                    </motion.p>
+
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.4 }}
+                      className="flex flex-col w-full max-w-[280px] mx-auto gap-5"
+                    >
+                      <p className="text-white/50 text-[10px] font-bold tracking-[0.2em] uppercase text-center">
+                        MEANWHILE CHECK US OUT HERE
+                      </p>
+
+                      <div className="flex justify-center gap-4">
+                        {[Facebook, Instagram, Youtube].map((Icon, i) => (
+                          <Link
+                            key={i}
+                            href="#"
+                            className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/20 hover:bg-[#EFCD62] hover:border-[#EFCD62] transition-colors group"
+                          >
+                            <Icon className="w-5 h-5 text-white/50 group-hover:text-black transition-colors" />
+                          </Link>
+                        ))}
+                      </div>
+
+                      <p className="text-white/30 text-[10px] italic text-center">
+                        Thoughtfully operated. Always.
+                      </p>
+
+                      <button
+                        type="button"
+                        onClick={() => setIsSuccess(false)}
+                        className="w-full bg-[#EFCD62] text-[#0E3A2F] py-5 text-xs font-bold tracking-widest uppercase hover:bg-white transition-colors rounded-none"
+                      >
+                        OKAY
+                      </button>
+                    </motion.div>
+                  </div>
                 </motion.div>
               </div>
-            </motion.div>
+            </div>
           </>
         )}
       </AnimatePresence>
