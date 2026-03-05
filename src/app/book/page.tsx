@@ -21,18 +21,7 @@ import { VILLAS } from "@/data/villas";
 /* ─────────────────────────────────────────────────────────────────────
    Types
 ───────────────────────────────────────────────────────────────────── */
-type Step = "dates" | "guests" | "villas" | "details" | "review";
-
-interface DateRange {
-  checkIn: { month: number; day: number } | null;
-  checkOut: { month: number; day: number } | null;
-}
-
-interface Guests {
-  adults: number;
-  children: number;
-  pets: number;
-}
+type Step = "dates" | "guests" | "details" | "review";
 
 interface UserDetails {
   fullName: string;
@@ -96,10 +85,8 @@ function formatRupees(n: number) {
   return `₹${n.toLocaleString("en-IN")}`;
 }
 
-function StepDots({ step, total = 5 }: { step: Step; total?: number }) {
-  const steps5: Step[] = ["dates", "guests", "villas", "details", "review"];
-  const steps4: Step[] = ["dates", "guests", "details", "review"];
-  const steps = total === 4 ? steps4 : steps5;
+function StepDots({ step }: { step: Step }) {
+  const steps: Step[] = ["dates", "guests", "details", "review"];
   const currentIdx = steps.indexOf(step);
   return (
     <div className="flex w-full gap-1">
@@ -328,144 +315,6 @@ function StepGuests({
 }
 
 /* ─────────────────────────────────────────────────────────────────────
-   Step 3: Select Villa
-───────────────────────────────────────────────────────────────────── */
-function StepVillas({
-  selectedVillaId,
-  setSelectedVillaId,
-  guests,
-  dateRange,
-  onNext,
-  onBack,
-}: {
-  selectedVillaId: string | null;
-  setSelectedVillaId: (id: string) => void;
-  guests: Guests;
-  dateRange: DateRange;
-  onNext: () => void;
-  onBack: () => void;
-}) {
-  const [activeFilter, setActiveFilter] = useState("All");
-  const filtered = useMemo(
-    () =>
-      activeFilter === "All"
-        ? VILLAS
-        : VILLAS.filter((v) => v.categories?.includes(activeFilter)),
-    [activeFilter],
-  );
-
-  return (
-    <div className="flex flex-col h-full">
-      <div className="px-5 pt-4 pb-1 shrink-0">
-        <h2 className="text-white text-xl font-philosopher">Select a Villa</h2>
-        <p className="text-white/40 text-xs font-manrope mt-0.5">
-          {formatDate(dateRange.checkIn)} → {formatDate(dateRange.checkOut)} ·{" "}
-          {guests.adults} Guests
-        </p>
-      </div>
-      <div className="flex gap-2 px-5 py-3 overflow-x-auto scrollbar-hide shrink-0">
-        {FILTERS.map((f) => (
-          <button
-            key={f}
-            onClick={() => setActiveFilter(f)}
-            className={`shrink-0 px-4 py-1.5 text-[11px] font-manrope font-semibold tracking-wide rounded-full transition-all ${activeFilter === f ? "bg-[#EFCD62] text-[#0D4032]" : "bg-white/10 text-white/60 hover:bg-white/20"}`}
-          >
-            {f}
-          </button>
-        ))}
-      </div>
-      <div className="flex-1 overflow-y-auto px-5 pb-28 space-y-5">
-        {filtered.map((villa) => (
-          <div
-            key={villa.id}
-            onClick={() => setSelectedVillaId(villa.id)}
-            className={`rounded-lg overflow-hidden cursor-pointer transition-all border-2 ${selectedVillaId === villa.id ? "border-[#EFCD62]" : "border-transparent"}`}
-          >
-            <div className="relative w-full h-44">
-              <Image
-                src={villa.image}
-                alt={villa.name}
-                fill
-                className="object-cover"
-              />
-              {selectedVillaId === villa.id && (
-                <div className="absolute top-3 right-3 w-7 h-7 bg-[#EFCD62] rounded-full flex items-center justify-center">
-                  <Check className="w-4 h-4 text-[#0D4032]" strokeWidth={3} />
-                </div>
-              )}
-              <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm px-2 py-1 text-white text-[10px] font-manrope font-semibold tracking-widest uppercase">
-                {villa.type}
-              </div>
-            </div>
-            <div className="bg-[#0a3527] p-4">
-              <h3 className="text-white font-philosopher text-lg mb-1">
-                {villa.name}
-              </h3>
-              <div className="flex items-center gap-1 text-white/50 text-xs font-manrope mb-2">
-                <MapPin className="w-3 h-3 shrink-0" />
-                {villa.location}
-              </div>
-              <p className="text-white/60 text-xs font-manrope line-clamp-2 mb-3">
-                {villa.description}
-              </p>
-              <div className="flex flex-wrap gap-3 text-white/50 text-xs font-manrope">
-                {villa.stats.stay && (
-                  <span className="flex items-center gap-1">
-                    <Users className="w-3 h-3" /> {villa.stats.stay} Stay
-                  </span>
-                )}
-                {villa.stats.events && (
-                  <span className="flex items-center gap-1">
-                    <Users className="w-3 h-3" /> {villa.stats.events} Events
-                  </span>
-                )}
-                {villa.stats.bhk && (
-                  <span className="flex items-center gap-1">
-                    <Bed className="w-3 h-3" /> {villa.stats.bhk}
-                  </span>
-                )}
-              </div>
-              <div className="mt-3 flex items-center justify-between">
-                <div>
-                  <p className="text-white/40 text-[10px] font-manrope">
-                    Starting from
-                  </p>
-                  <p className="text-[#EFCD62] font-philosopher text-base">
-                    {formatRupees(
-                      villa.pricing?.stay?.packages?.[0]?.price?.replace(
-                        /[^0-9]/g,
-                        "",
-                      )
-                        ? parseInt(
-                            villa.pricing.stay.packages[0].price.replace(
-                              /[^0-9]/g,
-                              "",
-                            ),
-                          )
-                        : BASE_PRICE,
-                    )}
-                  </p>
-                </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedVillaId(villa.id);
-                    onNext();
-                  }}
-                  className="bg-[#EFCD62] text-[#0D4032] px-5 py-2 text-xs font-bold tracking-widest uppercase hover:bg-white transition-colors font-manrope"
-                >
-                  BOOK VILLA
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────────────────
    Step 4: Your Details
 ───────────────────────────────────────────────────────────────────── */
 function StepDetails({
@@ -542,14 +391,17 @@ function StepReview({
   details,
   selectedVilla,
   goToStep,
+  selectedAddOns,
+  setSelectedAddOns,
 }: {
   dateRange: DateRange;
   guests: Guests;
   details: UserDetails;
   selectedVilla: (typeof VILLAS)[0] | undefined;
   goToStep: (s: Step) => void;
+  selectedAddOns: string[];
+  setSelectedAddOns: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
-  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
   const toggleAddOn = (id: string) =>
     setSelectedAddOns((prev) =>
       prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id],
@@ -557,24 +409,25 @@ function StepReview({
 
   const basePrice = selectedVilla
     ? parseInt(
-        (selectedVilla.pricing?.stay?.packages?.[0]?.price ?? "").replace(
+        (selectedVilla.pricing?.stay?.packages?.[0]?.price ?? "99000").replace(
           /[^0-9]/g,
           "",
-        ) || String(BASE_PRICE),
-      )
-    : BASE_PRICE;
+        ),
+      ) || 99000
+    : 99000;
+
   const addOnTotal = selectedAddOns.reduce(
     (sum, id) => sum + (ADD_ONS.find((a) => a.id === id)?.price ?? 0),
     0,
   );
-  const total = basePrice + addOnTotal + NIGHT_TAX;
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+    <div className="flex flex-col h-full bg-transparent">
+      <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6 pb-40">
+        {/* VILLA CARD */}
         {selectedVilla && (
-          <div className="flex gap-4 bg-white/5 rounded-lg p-3">
-            <div className="relative w-20 h-20 rounded-md overflow-hidden shrink-0">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="relative w-full sm:w-32 h-48 sm:h-32 shrink-0 border border-white/20">
               <Image
                 src={selectedVilla.image}
                 alt={selectedVilla.name}
@@ -582,26 +435,34 @@ function StepReview({
                 className="object-cover"
               />
             </div>
-            <div>
-              <p className="text-[#EFCD62] text-[10px] font-manrope font-bold tracking-widest uppercase mb-1">
+            <div className="flex flex-col justify-center">
+              <p className="text-[#EFCD62] text-[10px] font-bold tracking-[0.15em] uppercase mb-1 mt-2 sm:mt-0">
                 {selectedVilla.type}
               </p>
-              <h3 className="text-white font-philosopher text-base mb-2">
+              <h3 className="text-white font-philosopher text-xl sm:text-2xl mb-3 leading-none">
                 {selectedVilla.name}
               </h3>
-              <div className="flex flex-col gap-1 text-white/50 text-xs font-manrope">
-                <span className="flex items-center gap-1">
-                  <MapPin className="w-3 h-3" /> {selectedVilla.location}
+              <div className="flex flex-col gap-1.5 text-white/80 text-[10px] sm:text-xs font-manrope">
+                <span className="flex items-center gap-2">
+                  <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#EFCD62]" />{" "}
+                  {selectedVilla.location}
                 </span>
                 {selectedVilla.stats.stay && (
-                  <span className="flex items-center gap-1">
-                    <Users className="w-3 h-3" /> {selectedVilla.stats.stay}{" "}
-                    Stay
+                  <span className="flex items-center gap-2">
+                    <Bed className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#EFCD62]" />{" "}
+                    {selectedVilla.stats.stay} Stay
+                  </span>
+                )}
+                {selectedVilla.stats.events && (
+                  <span className="flex items-center gap-2">
+                    <Users className="w-3.5 h-3.5 text-[#EFCD62]" />{" "}
+                    {selectedVilla.stats.events} Stay
                   </span>
                 )}
                 {selectedVilla.stats.bhk && (
-                  <span className="flex items-center gap-1">
-                    <Home className="w-3 h-3" /> {selectedVilla.stats.bhk}
+                  <span className="flex items-center gap-2">
+                    <Home className="w-3.5 h-3.5 text-[#EFCD62]" />{" "}
+                    {selectedVilla.stats.bhk}
                   </span>
                 )}
               </div>
@@ -609,99 +470,103 @@ function StepReview({
           </div>
         )}
 
-        <div className="bg-white/5 rounded-lg p-4 flex items-center justify-between">
-          <div>
-            <p className="text-white/40 text-[10px] font-manrope font-bold tracking-widest uppercase mb-1">
-              Dates
-            </p>
-            <p className="text-white font-manrope text-sm">
-              {formatDate(dateRange.checkIn)} - {formatDate(dateRange.checkOut)}
-            </p>
+        {/* SUMMARY BLOCKS */}
+        <div className="space-y-4">
+          <div className="bg-white/5 p-4 flex items-start justify-between border border-transparent">
+            <div className="flex flex-col gap-1">
+              <p className="text-white font-manrope font-bold text-base mb-1">
+                Dates
+              </p>
+              <p className="text-white/80 font-manrope text-sm">
+                {formatDate(dateRange.checkIn)} -{" "}
+                {formatDate(dateRange.checkOut)}
+              </p>
+            </div>
+            <button
+              onClick={() => goToStep("dates")}
+              className="bg-[#1E4336] border border-white/20 px-4 py-2 text-xs font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope"
+            >
+              EDIT
+            </button>
           </div>
-          <button
-            onClick={() => goToStep("dates")}
-            className="text-[10px] font-bold tracking-widest text-white/50 hover:text-[#EFCD62] uppercase border border-white/20 px-3 py-1.5 transition-colors font-manrope"
-          >
-            EDIT
-          </button>
+
+          <div className="bg-white/5 p-4 flex items-start justify-between">
+            <div className="flex flex-col gap-1">
+              <p className="text-white font-manrope font-bold text-base mb-1">
+                Total Guests
+              </p>
+              <p className="text-white/80 font-manrope text-sm">
+                {guests.adults + guests.children} Guests
+                {guests.children > 0 ? `, ${guests.children} Children` : ""}
+                {guests.pets > 0
+                  ? `, ${guests.pets} Pet${guests.pets > 1 ? "s" : ""}`
+                  : ""}
+              </p>
+            </div>
+            <button
+              onClick={() => goToStep("guests")}
+              className="bg-[#1E4336] border border-white/20 px-4 py-2 text-xs font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope"
+            >
+              EDIT
+            </button>
+          </div>
+
+          <div className="bg-white/5 p-4 flex items-start justify-between">
+            <div className="flex flex-col gap-1">
+              <p className="text-white font-manrope font-bold text-base mb-1">
+                Your Details
+              </p>
+              <ul className="text-white/80 text-sm font-manrope space-y-0.5 list-disc list-inside">
+                <li>Name: {details.fullName || "---"}</li>
+                <li>Number: {details.phone || "---"}</li>
+                <li>Email: {details.email || "---"}</li>
+                {details.notes && (
+                  <li>
+                    Note: {details.notes.slice(0, 30)}
+                    {details.notes.length > 30 ? "...See full note" : ""}
+                  </li>
+                )}
+              </ul>
+            </div>
+            <button
+              onClick={() => goToStep("details")}
+              className="bg-[#1E4336] border border-white/20 px-4 py-2 text-xs font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope shrink-0 ml-4"
+            >
+              EDIT
+            </button>
+          </div>
         </div>
 
-        <div className="bg-white/5 rounded-lg p-4 flex items-center justify-between">
-          <div>
-            <p className="text-white/40 text-[10px] font-manrope font-bold tracking-widest uppercase mb-1">
-              Total Guests
-            </p>
-            <p className="text-white font-manrope text-sm">
-              {guests.adults} Guests
-              {guests.children > 0 ? `, ${guests.children} Children` : ""}
-              {guests.pets > 0
-                ? `, ${guests.pets} Pet${guests.pets > 1 ? "s" : ""}`
-                : ""}
-            </p>
-          </div>
-          <button
-            onClick={() => goToStep("guests")}
-            className="text-[10px] font-bold tracking-widest text-white/50 hover:text-[#EFCD62] uppercase border border-white/20 px-3 py-1.5 transition-colors font-manrope"
-          >
-            EDIT
-          </button>
-        </div>
-
-        <div className="bg-white/5 rounded-lg p-4 flex items-start justify-between">
-          <div>
-            <p className="text-white/40 text-[10px] font-manrope font-bold tracking-widest uppercase mb-1">
-              Your Details
-            </p>
-            <ul className="text-white/70 text-xs font-manrope space-y-0.5">
-              <li>• Name: {details.fullName}</li>
-              <li>• Number: {details.phone}</li>
-              <li>• Email: {details.email}</li>
-              {details.notes && (
-                <li>
-                  • Note: {details.notes.slice(0, 40)}
-                  {details.notes.length > 40 ? "..." : ""}
-                </li>
-              )}
-            </ul>
-          </div>
-          <button
-            onClick={() => goToStep("details")}
-            className="text-[10px] font-bold tracking-widest text-white/50 hover:text-[#EFCD62] uppercase border border-white/20 px-3 py-1.5 transition-colors font-manrope shrink-0 ml-2"
-          >
-            EDIT
-          </button>
-        </div>
-
-        <div>
-          <h4 className="text-white font-philosopher text-base mb-2">
+        {/* ADD ON EXPERIENCES */}
+        <div className="mt-8">
+          <h4 className="text-white font-manrope font-bold text-lg mb-1">
             Add On Experiences
           </h4>
-          <p className="text-white/40 text-xs font-manrope mb-3">
+          <p className="text-white/70 text-sm font-manrope mb-4">
             Optional experiences available at an additional cost.
+            <br />
+            Pricing is subject to confirmation based on group size.
           </p>
-          <div className="space-y-2">
+          <div className="space-y-3">
             {ADD_ONS.map((addon) => (
               <label
                 key={addon.id}
-                className="flex items-center justify-between gap-3 py-2 cursor-pointer group"
+                className="flex items-center justify-between py-1 cursor-pointer group"
                 onClick={() => toggleAddOn(addon.id)}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   <div
-                    className={`w-4 h-4 border flex items-center justify-center shrink-0 transition-colors ${selectedAddOns.includes(addon.id) ? "bg-[#EFCD62] border-[#EFCD62]" : "border-white/30 group-hover:border-white/60"}`}
+                    className={`w-4 h-4 border flex items-center justify-center shrink-0 transition-colors ${selectedAddOns.includes(addon.id) ? "border-white bg-transparent" : "border-white/50 group-hover:border-white"}`}
                   >
                     {selectedAddOns.includes(addon.id) && (
-                      <Check
-                        className="w-3 h-3 text-[#0D4032]"
-                        strokeWidth={3}
-                      />
+                      <div className="w-2 h-2 bg-white" />
                     )}
                   </div>
-                  <span className="text-white/80 text-sm font-manrope">
+                  <span className="text-white text-sm font-manrope">
                     {addon.label}
                   </span>
                 </div>
-                <span className="text-white/60 text-sm font-manrope shrink-0">
+                <span className="text-white text-sm font-manrope font-bold">
                   {addon.price > 0
                     ? formatRupees(addon.price)
                     : "Price on request"}
@@ -711,31 +576,43 @@ function StepReview({
           </div>
         </div>
 
-        <div className="border border-white/10 rounded-lg p-4 space-y-2 mb-28">
-          <h4 className="text-white font-philosopher text-base mb-3">
-            Price Details
+        {/* PRICE DETAILS */}
+        <div className="mt-8 border-t border-white/10 pt-6">
+          <h4 className="text-white font-manrope font-bold text-base sm:text-lg mb-4">
+            Price details
           </h4>
-          <div className="flex items-center justify-between text-sm font-manrope">
-            <span className="text-white/60">
-              1 Night × {formatRupees(basePrice)}
-            </span>
-            <span className="text-white">{formatRupees(basePrice)}</span>
-          </div>
-          {addOnTotal > 0 && (
-            <div className="flex items-center justify-between text-sm font-manrope">
-              <span className="text-white/60">Add On Experiences</span>
-              <span className="text-white">{formatRupees(addOnTotal)}</span>
+          <div className="space-y-2 text-xs sm:text-sm font-manrope">
+            <div className="flex items-center justify-between text-white/90">
+              <span className="text-white/80">
+                1 Night x {formatRupees(basePrice)}
+              </span>
+              <span className="font-bold text-white">
+                {formatRupees(basePrice)}
+              </span>
             </div>
-          )}
-          <div className="flex items-center justify-between text-sm font-manrope">
-            <span className="text-white/60">Taxes</span>
-            <span className="text-white">{formatRupees(NIGHT_TAX)}</span>
+            <div className="flex items-center justify-between text-white/90">
+              <span className="flex items-center gap-2 text-white/80">
+                Add On Experiences{" "}
+                <span className="text-[10px] text-white/50 lowercase">
+                  View Price Breakdown
+                </span>
+              </span>
+              <span className="font-bold text-white">
+                {formatRupees(addOnTotal)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-white/90">
+              <span className="text-white/80">Taxes</span>
+              <span className="font-bold text-white">
+                {formatRupees(NIGHT_TAX)}
+              </span>
+            </div>
           </div>
-          <div className="flex items-center gap-3 text-white/30 text-[10px] font-manrope mt-1 border-t border-white/10 pt-3">
-            <span className="underline cursor-pointer hover:text-white/60 transition-colors">
+          <div className="flex items-center gap-4 text-white/50 text-[10px] font-manrope mt-5">
+            <span className="cursor-pointer hover:text-white transition-colors">
               Cancel within 24 hours for refund
             </span>
-            <span className="underline cursor-pointer hover:text-white/60 transition-colors">
+            <span className="cursor-pointer hover:text-white transition-colors">
               Full Policy
             </span>
           </div>
@@ -748,6 +625,8 @@ function StepReview({
 /* ─────────────────────────────────────────────────────────────────────
    Main Book Page Content (reads searchParams)
 ───────────────────────────────────────────────────────────────────── */
+import { useBooking, DateRange, Guests } from "@/context/BookingContext";
+
 function BookPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -755,16 +634,16 @@ function BookPageContent() {
 
   const isVillaPreSelected = !!villaParam;
 
-  const [step, setStep] = useState<Step>("dates");
-  const [dateRange, setDateRange] = useState<DateRange>({
-    checkIn: null,
-    checkOut: null,
-  });
-  const [guests, setGuests] = useState<Guests>({
-    adults: 0,
-    children: 0,
-    pets: 0,
-  });
+  const { dateRange, setDateRange, guests, setGuests, resetBooking } =
+    useBooking();
+
+  const stepParam = searchParams.get("step") as Step | null;
+  const initialStep: Step =
+    stepParam && ["dates", "guests", "details", "review"].includes(stepParam)
+      ? stepParam
+      : "dates";
+
+  const [step, setStep] = useState<Step>(initialStep);
   const [selectedVillaId, setSelectedVillaId] = useState<string | null>(
     villaParam,
   );
@@ -774,9 +653,13 @@ function BookPageContent() {
     email: "",
     notes: "",
   });
+  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
 
   useEffect(() => {
-    if (villaParam) setSelectedVillaId(villaParam);
+    if (villaParam) {
+      setSelectedVillaId(villaParam);
+      // Removed the auto-jump to "details" so the flow starts at "dates"
+    }
   }, [villaParam]);
 
   const selectedVilla = VILLAS.find((v) => v.id === selectedVillaId);
@@ -785,18 +668,21 @@ function BookPageContent() {
 
   const handleReset = () => {
     setStep("dates");
-    setDateRange({ checkIn: null, checkOut: null });
-    setGuests({ adults: 0, children: 0, pets: 0 });
+    resetBooking();
     if (!villaParam) setSelectedVillaId(null);
     setDetails({ fullName: "", phone: "", email: "", notes: "" });
   };
 
   const goNextFromDates = () => setStep("guests");
-  const goNextFromGuests = () =>
-    isVillaPreSelected ? setStep("details") : setStep("villas");
+  const goNextFromGuests = () => {
+    if (isVillaPreSelected) {
+      setStep("details");
+    } else {
+      router.push("/villas");
+    }
+  };
   const goBackFromDetails = () =>
-    isVillaPreSelected ? setStep("guests") : setStep("villas");
-  const stepTotal = isVillaPreSelected ? 4 : 5;
+    isVillaPreSelected ? setStep("guests") : router.push("/villas");
 
   const renderBottomBar = () => {
     if (step === "dates") {
@@ -845,25 +731,6 @@ function BookPageContent() {
         </div>
       );
     }
-    if (step === "villas") {
-      return (
-        <div className="flex items-center justify-between">
-          <button
-            onClick={() => setStep("guests")}
-            className="text-sm font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
-          >
-            BACK
-          </button>
-          <button
-            disabled={!selectedVillaId}
-            onClick={() => setStep("details")}
-            className={`px-8 py-2.5 text-xs font-bold tracking-widest uppercase transition-all font-manrope ${selectedVillaId ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
-          >
-            NEXT
-          </button>
-        </div>
-      );
-    }
     if (step === "details") {
       const basePrice = selectedVilla
         ? parseInt(
@@ -899,24 +766,37 @@ function BookPageContent() {
       );
     }
     if (step === "review") {
+      const basePrice = selectedVilla
+        ? parseInt(
+            (
+              selectedVilla.pricing?.stay?.packages?.[0]?.price ?? "99000"
+            ).replace(/[^0-9]/g, ""),
+          ) || 99000
+        : 99000;
+      const addOnTotal = selectedAddOns.reduce(
+        (sum, id) => sum + (ADD_ONS.find((a) => a.id === id)?.price ?? 0),
+        0,
+      );
+      const total = basePrice + addOnTotal + NIGHT_TAX;
+
       return (
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-white/40 text-[10px] font-manrope uppercase tracking-widest">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-3 sm:gap-0">
+          <div className="flex items-center gap-2">
+            <span className="text-white/80 font-manrope text-xs sm:text-sm font-bold tracking-wider">
               Total Price:
-            </p>
-            <p className="text-white font-philosopher text-lg">
-              See summary above
-            </p>
+            </span>
+            <span className="text-[#EFCD62] sm:text-white font-manrope text-lg sm:text-xl font-bold">
+              {formatRupees(total)}
+            </span>
           </div>
-          <div className="flex gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
             <button
               onClick={() => setStep("details")}
-              className="px-5 py-2.5 text-xs font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
+              className="px-4 sm:px-6 py-2 sm:py-2.5 text-[10px] sm:text-xs font-bold tracking-widest text-[#EFCD62] uppercase transition-colors font-manrope border border-[#EFCD62]/30 sm:border-transparent rounded-sm sm:rounded-none"
             >
               BACK
             </button>
-            <button className="bg-[#EFCD62] text-[#0D4032] px-8 py-2.5 text-xs font-bold tracking-widest uppercase hover:bg-white transition-colors font-manrope">
+            <button className="bg-[#EFCD62] text-[#0D4032] flex-1 sm:flex-none text-center px-4 sm:px-8 py-2 sm:py-3 text-[10px] sm:text-xs font-bold tracking-widest uppercase hover:bg-white transition-colors font-manrope shrink-0 rounded-sm sm:rounded-none">
               PAY NOW
             </button>
           </div>
@@ -990,25 +870,6 @@ function BookPageContent() {
               <StepGuests guests={guests} setGuests={setGuests} />
             </motion.div>
           )}
-          {step === "villas" && (
-            <motion.div
-              key="villas"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
-              className="flex-1 overflow-hidden flex flex-col min-h-0"
-            >
-              <StepVillas
-                selectedVillaId={selectedVillaId}
-                setSelectedVillaId={setSelectedVillaId}
-                guests={guests}
-                dateRange={dateRange}
-                onNext={() => setStep("details")}
-                onBack={() => setStep("guests")}
-              />
-            </motion.div>
-          )}
           {step === "details" && (
             <motion.div
               key="details"
@@ -1040,6 +901,8 @@ function BookPageContent() {
                 details={details}
                 selectedVilla={selectedVilla}
                 goToStep={setStep}
+                selectedAddOns={selectedAddOns}
+                setSelectedAddOns={setSelectedAddOns}
               />
             </motion.div>
           )}
@@ -1050,10 +913,10 @@ function BookPageContent() {
       <div className="fixed bottom-0 left-0 right-0 bg-[#0D4032] border-t border-white/10 z-50">
         <div className="absolute top-0 left-0 right-0 -translate-y-[1px]">
           <div className="w-full">
-            <StepDots step={step} total={stepTotal} />
+            <StepDots step={step} />
           </div>
         </div>
-        <div className="w-full max-w-[720px] mx-auto px-5 py-5">
+        <div className="w-full max-w-[720px] mx-auto px-4 sm:px-5 py-3 sm:py-5">
           {renderBottomBar()}
         </div>
       </div>

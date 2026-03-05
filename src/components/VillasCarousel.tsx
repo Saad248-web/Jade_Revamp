@@ -7,6 +7,8 @@ import { Search } from "lucide-react";
 import { VILLAS, CATEGORIES } from "@/data/villas";
 import ReservationOverlay from "./ReservationOverlay";
 import VillaCard from "./VillaCard";
+import BookingBanner from "./BookingBanner";
+import { useBooking } from "@/context/BookingContext";
 
 // Navbar height to offset the sticky filter bar
 const NAVBAR_HEIGHT = 72; // px — matches the fixed navbar (2px progress + ~70px bar)
@@ -60,8 +62,22 @@ export default function VillasCarousel() {
       activeCategory === "All" || villa.categories.includes(activeCategory),
   );
 
+  const { dateRange, guests: contextGuests } = useBooking();
+
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
+  };
+
+  const handleSearch = () => {
+    // Scroll to villas or trigger a search refresh based on dateRange
+    const el = document.getElementById("villas-carousel");
+    if (el) {
+      const y =
+        el.getBoundingClientRect().top + window.scrollY - NAVBAR_HEIGHT - 20;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+    // Could also add filtering logic here if needed
+    console.log("Searching available villas for", dateRange, contextGuests);
   };
 
   return (
@@ -77,52 +93,7 @@ export default function VillasCarousel() {
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 pt-4 md:pt-6 pb-4">
           <div className="flex flex-col gap-3 md:gap-4">
             {/* SEARCH BAR */}
-            <div className="flex flex-row items-stretch bg-[#222428] border border-white/10 w-full lg:max-w-4xl">
-              {/* Dates field */}
-              <div
-                onClick={() => {
-                  setOverlayView("dates");
-                  setIsOverlayOpen(true);
-                }}
-                className="flex-1 px-4 py-3 md:px-6 cursor-pointer hover:bg-white/5 transition-colors"
-              >
-                <span className="block text-white/50 text-[9px] md:text-[10px] font-manrope uppercase tracking-widest mb-1 pointer-events-none">
-                  Check In - Check Out
-                </span>
-                <input
-                  type="text"
-                  placeholder="28 Mar - 2 Apr"
-                  value={formatDates()}
-                  readOnly
-                  className="bg-transparent text-white font-manrope text-sm md:text-base outline-none w-full placeholder:text-white/50 cursor-pointer"
-                />
-              </div>
-              {/* Vertical divider */}
-              <div className="w-px self-stretch bg-white/10" />
-              {/* Guests field */}
-              <div
-                onClick={() => {
-                  setOverlayView("guests");
-                  setIsOverlayOpen(true);
-                }}
-                className="flex-1 px-4 py-3 md:px-6 cursor-pointer hover:bg-white/5 transition-colors"
-              >
-                <span className="block text-white/50 text-[9px] md:text-[10px] font-manrope uppercase tracking-widest mb-1 pointer-events-none">
-                  Guests
-                </span>
-                <input
-                  type="text"
-                  placeholder="2 Guests"
-                  value={formatGuests()}
-                  readOnly
-                  className="bg-transparent text-white font-manrope text-sm md:text-base outline-none w-full placeholder:text-white/50 cursor-pointer"
-                />
-              </div>
-              {/* Search button */}
-              <button className="px-4 md:px-6 text-white/50 hover:text-white transition-colors flex items-center justify-center self-stretch border-l border-white/10">
-                <Search className="w-5 h-5 md:w-6 md:h-6" />
-              </button>
-            </div>
+            <BookingBanner onSearch={handleSearch} />
 
             {/* CATEGORIES */}
             <div className="flex overflow-x-auto items-center gap-2 md:gap-3 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">

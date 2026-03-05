@@ -842,9 +842,12 @@ export default function VillaDetailsPage() {
             <button className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase px-2 py-2 md:px-4 md:py-3 hover:text-white transition-colors">
               ENQUIRE
             </button>
-            <button className="bg-[#EFCD62] text-[#1A1C1E] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase px-4 py-2 md:px-8 md:py-3 rounded-sm hover:bg-white transition-colors">
+            <Link
+              href={`/book?villa=${villa.id}`}
+              className="bg-[#EFCD62] text-[#1A1C1E] inline-flex items-center justify-center text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase px-4 py-2 md:px-8 md:py-3 rounded-sm hover:bg-white transition-colors"
+            >
               BOOK VILLA
-            </button>
+            </Link>
           </div>
         </div>
       </div>
