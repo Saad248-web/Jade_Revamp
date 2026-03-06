@@ -11,6 +11,10 @@ interface AnimationContextType {
   setPartnerOverlayOpen: (value: boolean) => void;
   navbarTheme: "white" | "golden";
   setNavbarTheme: (theme: "white" | "golden") => void;
+  isGlobalBookingOpen: boolean;
+  setGlobalBookingOpen: (value: boolean) => void;
+  villaBookingId: string | null;
+  setVillaBookingId: (id: string | null) => void;
 }
 
 const AnimationContext = createContext<AnimationContextType | undefined>(
@@ -26,6 +30,8 @@ export const AnimationProvider = ({
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isPartnerOverlayOpen, setPartnerOverlayOpen] = useState(false);
   const [navbarTheme, setNavbarTheme] = useState<"white" | "golden">("golden");
+  const [isGlobalBookingOpen, setGlobalBookingOpen] = useState(false);
+  const [villaBookingId, setVillaBookingId] = useState<string | null>(null);
 
   return (
     <AnimationContext.Provider
@@ -38,6 +44,10 @@ export const AnimationProvider = ({
         setPartnerOverlayOpen,
         navbarTheme,
         setNavbarTheme,
+        isGlobalBookingOpen,
+        setGlobalBookingOpen,
+        villaBookingId,
+        setVillaBookingId,
       }}
     >
       {children}
