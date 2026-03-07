@@ -451,25 +451,31 @@ export default function PartnerOverlay() {
                         MEANWHILE CHECK US OUT HERE
                       </p>
 
-                      <div className="flex justify-center gap-4 mb-8">
-                        <Link
-                          href="#"
-                          className="w-10 h-10 rounded-sm bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 hover:text-[#EFCD62] transition-colors"
-                        >
-                          <Facebook className="w-4 h-4" />
-                        </Link>
-                        <Link
-                          href="#"
-                          className="w-10 h-10 rounded-sm bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 hover:text-[#EFCD62] transition-colors"
-                        >
-                          <Instagram className="w-4 h-4" />
-                        </Link>
-                        <Link
-                          href="#"
-                          className="w-10 h-10 rounded-sm bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 hover:text-[#EFCD62] transition-colors"
-                        >
-                          <Youtube className="w-4 h-4" />
-                        </Link>
+                      <div className="flex justify-center gap-4">
+                        {[
+                          {
+                            Icon: Facebook,
+                            href: "https://www.facebook.com/jadehospitainment/",
+                          },
+                          {
+                            Icon: Instagram,
+                            href: "https://www.instagram.com/jadehospitainment/?hl=en",
+                          },
+                          {
+                            Icon: Youtube,
+                            href: "https://www.youtube.com/@jade_hospitainment",
+                          },
+                        ].map(({ Icon, href }, i) => (
+                          <a
+                            key={i}
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-12 h-12 bg-white/5 border border-white/20 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
+                          >
+                            <Icon className="w-5 h-5" />
+                          </a>
+                        ))}
                       </div>
 
                       <p className="text-white/60 text-xs mb-8">

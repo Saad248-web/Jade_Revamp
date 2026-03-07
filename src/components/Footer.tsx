@@ -226,24 +226,42 @@ export default function Footer() {
                         76, phase II, Royal Enclave, Srirampura, Bengaluru - 64
                       </span>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <a
+                      href="tel:08970663366"
+                      className="flex items-center gap-3 hover:text-white transition-colors"
+                    >
                       <Phone className="w-4 h-4 text-[#EFCD62] shrink-0" />
                       <span>0897 066 3366</span>
-                    </div>
+                    </a>
                     <div className="flex items-center gap-3">
                       <Mail className="w-4 h-4 text-[#EFCD62] shrink-0" />
                       <span>Info@jadehospitainment.com</span>
                     </div>
                   </div>
-                  {/* Social Icons */}
                   <div className="flex gap-3">
-                    {[Facebook, Instagram, Youtube].map((Icon, i) => (
-                      <div
+                    {[
+                      {
+                        Icon: Facebook,
+                        href: "https://www.facebook.com/jadehospitainment/",
+                      },
+                      {
+                        Icon: Instagram,
+                        href: "https://www.instagram.com/jadehospitainment/?hl=en",
+                      },
+                      {
+                        Icon: Youtube,
+                        href: "https://www.youtube.com/@jade_hospitainment",
+                      },
+                    ].map(({ Icon, href }, i) => (
+                      <a
                         key={i}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="w-9 h-9 border border-white/15 flex items-center justify-center hover:bg-[#EFCD62] hover:border-[#EFCD62] group transition-all duration-300 cursor-pointer"
                       >
                         <Icon className="w-4 h-4 text-white/70 group-hover:text-black transition-colors" />
-                      </div>
+                      </a>
                     ))}
                   </div>
                 </div>
@@ -580,25 +598,43 @@ export default function Footer() {
                     76, phase II, Royal Enclave, Srirampura, Bengaluru - 64
                   </span>
                 </div>
-                <div className="flex items-center gap-2.5">
+                <a
+                  href="tel:08970663366"
+                  className="flex items-center gap-2.5 hover:text-white transition-colors"
+                >
                   <Phone className="w-3.5 h-3.5 text-[#EFCD62] shrink-0" />
                   <span>0897 066 3366</span>
-                </div>
+                </a>
                 <div className="flex items-center gap-2.5">
                   <Mail className="w-3.5 h-3.5 text-[#EFCD62] shrink-0" />
                   <span>Info@jadehospitainment.com</span>
                 </div>
               </div>
 
-              {/* Social Icons */}
               <div className="flex gap-3">
-                {[Facebook, Instagram, Youtube].map((Icon, i) => (
-                  <div
+                {[
+                  {
+                    Icon: Facebook,
+                    href: "https://www.facebook.com/jadehospitainment/",
+                  },
+                  {
+                    Icon: Instagram,
+                    href: "https://www.instagram.com/jadehospitainment/?hl=en",
+                  },
+                  {
+                    Icon: Youtube,
+                    href: "https://www.youtube.com/@jade_hospitainment",
+                  },
+                ].map(({ Icon, href }, i) => (
+                  <a
                     key={i}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-9 h-9 border border-white/15 flex items-center justify-center hover:bg-[#EFCD62] hover:border-[#EFCD62] group transition-all duration-300 cursor-pointer"
                   >
                     <Icon className="w-4 h-4 text-white/70 group-hover:text-black transition-colors" />
-                  </div>
+                  </a>
                 ))}
               </div>
             </div>
@@ -729,14 +765,29 @@ export default function Footer() {
                       </p>
 
                       <div className="flex justify-center gap-4">
-                        {[Facebook, Instagram, Youtube].map((Icon, i) => (
-                          <Link
+                        {[
+                          {
+                            Icon: Facebook,
+                            href: "https://www.facebook.com/jadehospitainment/",
+                          },
+                          {
+                            Icon: Instagram,
+                            href: "https://www.instagram.com/jadehospitainment/?hl=en",
+                          },
+                          {
+                            Icon: Youtube,
+                            href: "https://www.youtube.com/@jade_hospitainment",
+                          },
+                        ].map(({ Icon, href }, i) => (
+                          <a
                             key={i}
-                            href="#"
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/20 hover:bg-[#EFCD62] hover:border-[#EFCD62] transition-colors group"
                           >
                             <Icon className="w-5 h-5 text-white/50 group-hover:text-black transition-colors" />
-                          </Link>
+                          </a>
                         ))}
                       </div>
 

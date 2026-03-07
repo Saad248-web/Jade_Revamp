@@ -21,6 +21,8 @@ import {
   Youtube,
   Phone,
   Headset,
+  Waves,
+  Warehouse,
 } from "lucide-react"; // Import new icons
 import { VILLAS, CATEGORIES } from "@/data/villas"; // For Villas/Experiences data
 
@@ -215,6 +217,7 @@ export default function Navbar() {
                   fill
                   className="object-contain"
                   sizes="36px"
+                  priority
                 />
               </div>
             </Link>
@@ -234,6 +237,7 @@ export default function Navbar() {
                   fill
                   className="object-contain"
                   sizes="56px"
+                  priority
                 />
               </div>
             </Link>
@@ -303,41 +307,10 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[40] bg-[#1E2023] flex pt-[80px] lg:pt-[100px]" // Static header overlap
+            className="fixed inset-0 z-[40] bg-[#1E2023] flex pt-[60px] md:pt-[80px]" // Static header overlap
           >
             {/* Main content wrapper with padding matching the screens */}
             <div className="w-full h-full flex flex-col lg:flex-row relative overflow-hidden bg-[#1E2023]">
-              {/* Common Top Nav within menu (Mobile Only) */}
-              <div className="lg:hidden flex items-center justify-between p-4 md:p-8 shrink-0">
-                <Link href="/" onClick={() => setMenuOpen(false)}>
-                  <div className="relative w-10 h-10">
-                    <Image
-                      src="/assets/Golden_Logo.png"
-                      alt="Jade Logo"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                </Link>
-
-                <div className="flex items-center gap-2">
-                  <Link
-                    href="/contact"
-                    onClick={() => setMenuOpen(false)}
-                    className="bg-transparent text-white/70 hover:text-white flex items-center justify-center w-[35px] h-[35px] rounded-none border border-white/10 transition-colors shrink-0"
-                  >
-                    <Headset className="w-4 h-4" />
-                  </Link>
-                  <Link
-                    href="/book"
-                    onClick={() => setMenuOpen(false)}
-                    className="bg-transparent hover:bg-white/5 text-white/90 text-[10px] font-manrope font-semibold tracking-[0.2em] uppercase px-4 h-[35px] rounded-none border border-white/10 transition-colors flex items-center justify-center"
-                  >
-                    BOOK NOW
-                  </Link>
-                </div>
-              </div>
-
               {/* Views container with AnimatePresence for smooth transitions */}
               {/* LEFT COLUMN: Main Menu */}
               <div className="flex-1 lg:flex-none lg:w-1/3 relative overflow-hidden h-full z-10 border-r border-transparent lg:border-white/10">
@@ -351,6 +324,7 @@ export default function Navbar() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}
+                      data-lenis-prevent
                       className={`absolute inset-0 flex flex-col px-6 md:px-12 py-4 pb-32 overflow-y-auto ${menuView !== "primary" ? "hidden lg:flex" : "flex"}`}
                     >
                       <span className="text-white/40 text-[10px] font-manrope font-bold tracking-[0.2em] uppercase mb-6">
@@ -498,20 +472,33 @@ export default function Navbar() {
                         </li>
                       </ul>
 
-                      {/* Social Icons mapped to bottom */}
                       <div className="flex gap-4 mt-auto pt-10">
-                        {[Facebook, Instagram, Youtube].map((Icon, idx) => (
+                        {[
+                          {
+                            Icon: Facebook,
+                            href: "https://www.facebook.com/jadehospitainment/",
+                          },
+                          {
+                            Icon: Instagram,
+                            href: "https://www.instagram.com/jadehospitainment/?hl=en",
+                          },
+                          {
+                            Icon: Youtube,
+                            href: "https://www.youtube.com/@jade_hospitainment",
+                          },
+                        ].map(({ Icon, href }, idx) => (
                           <a
                             key={idx}
-                            href="#"
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="w-10 h-10 border border-white/10 flex items-center justify-center text-white hover:bg-white/5 transition-colors"
                           >
                             <Icon className="w-4 h-4" />
                           </a>
                         ))}
-                        {/* WhatsApp specific placeholder, assuming Phone icon or custom svg usually */}
                         <a
-                          href="#"
+                          href="tel:08970663366"
                           className="w-10 h-10 border border-white/10 flex items-center justify-center text-white hover:bg-white/5 transition-colors"
                         >
                           <Phone className="w-4 h-4" />
@@ -528,6 +515,7 @@ export default function Navbar() {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 20 }}
+                      data-lenis-prevent
                       className="absolute inset-0 flex lg:hidden flex-col px-6 md:px-12 py-4 pb-32 overflow-y-auto bg-[#1E2023]"
                     >
                       <button
@@ -546,7 +534,7 @@ export default function Navbar() {
                             className="flex flex-col cursor-pointer group"
                             onClick={() => {
                               setMenuOpen(false);
-                              window.location.href = `/villas?villa=${villa.id}`;
+                              window.location.href = `/villas/${villa.id}`;
                             }}
                           >
                             <p className="text-white/40 text-[9px] font-manrope font-bold tracking-[0.2em] uppercase mb-1">
@@ -565,6 +553,7 @@ export default function Navbar() {
                                   alt={villa.name}
                                   fill
                                   className="object-cover"
+                                  sizes="(max-width: 1024px) 50vw, 33vw"
                                 />
                               </div>
                               {villa.spaces?.[1]?.image && (
@@ -590,6 +579,7 @@ export default function Navbar() {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 20 }}
+                      data-lenis-prevent
                       className="absolute inset-0 flex lg:hidden flex-col px-6 md:px-12 py-4 pb-32 overflow-y-auto bg-[#1E2023]"
                     >
                       <button
@@ -648,6 +638,7 @@ export default function Navbar() {
                                   alt={exp.title}
                                   fill
                                   className="object-cover"
+                                  sizes="(max-width: 1024px) 50vw, 33vw"
                                 />
                               </div>
                               <div className="relative h-28 flex-1 aspect-[4/3]">
@@ -656,6 +647,7 @@ export default function Navbar() {
                                   alt={`${exp.title} 2`}
                                   fill
                                   className="object-cover"
+                                  sizes="(max-width: 1024px) 50vw, 33vw"
                                 />
                               </div>
                             </div>
@@ -671,6 +663,7 @@ export default function Navbar() {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 20 }}
+                      data-lenis-prevent
                       className="absolute inset-0 flex lg:hidden flex-col px-6 md:px-12 py-4 pb-32 overflow-y-auto bg-[#1E2023]"
                     >
                       <button
@@ -738,6 +731,8 @@ export default function Navbar() {
                           alt="Jade"
                           fill
                           className="object-contain"
+                          sizes="500px"
+                          priority
                         />
                       </div>
                     </motion.div>
@@ -752,6 +747,7 @@ export default function Navbar() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.4 }}
+                      data-lenis-prevent
                       className="absolute inset-0 flex flex-col px-12 pt-6 pb-16 pointer-events-auto overflow-y-auto hide-scrollbar"
                     >
                       <div className="w-full space-y-16">
@@ -768,7 +764,7 @@ export default function Navbar() {
                                 className="flex flex-col cursor-pointer"
                                 onClick={() => {
                                   setMenuOpen(false);
-                                  window.location.href = `/villas?villa=${villa.id}`;
+                                  window.location.href = `/villas/${villa.id}`;
                                 }}
                               >
                                 <p className="text-white/40 text-[9px] lg:text-[10px] uppercase font-manrope font-bold tracking-[0.2em] mb-1.5">
@@ -796,7 +792,7 @@ export default function Navbar() {
                                 className="relative h-[280px] flex-1 aspect-[4/3] cursor-grab active:cursor-grabbing overflow-hidden group/img"
                                 onClick={() => {
                                   setMenuOpen(false);
-                                  window.location.href = `/villas?villa=${villa.id}`;
+                                  window.location.href = `/villas/${villa.id}`;
                                 }}
                               >
                                 <Image
@@ -804,6 +800,7 @@ export default function Navbar() {
                                   alt={villa.name}
                                   fill
                                   className="object-cover group-hover/img:scale-105 transition-transform duration-700"
+                                  sizes="30vw"
                                 />
                               </div>
                               <div
@@ -818,6 +815,7 @@ export default function Navbar() {
                                   alt="space"
                                   fill
                                   className="object-cover group-hover/img:scale-105 transition-transform duration-700"
+                                  sizes="30vw"
                                 />
                               </div>
                             </div>
@@ -836,6 +834,7 @@ export default function Navbar() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.4 }}
+                      data-lenis-prevent
                       className="absolute inset-0 flex flex-col px-12 pt-6 pb-16 pointer-events-auto overflow-y-auto hide-scrollbar"
                     >
                       <div className="w-full space-y-16">
@@ -919,6 +918,7 @@ export default function Navbar() {
                                   alt={exp.title}
                                   fill
                                   className="object-cover group-hover/img:scale-105 transition-transform duration-700"
+                                  sizes="30vw"
                                 />
                               </div>
                               <div className="relative h-[280px] flex-1 aspect-[4/3] cursor-grab active:cursor-grabbing overflow-hidden group/img">
@@ -927,6 +927,7 @@ export default function Navbar() {
                                   alt="experience"
                                   fill
                                   className="object-cover group-hover/img:scale-105 transition-transform duration-700"
+                                  sizes="30vw"
                                 />
                               </div>
                             </div>
@@ -975,6 +976,7 @@ export default function Navbar() {
                             alt="Jade Banner"
                             fill
                             className="object-cover opacity-60 group-hover/banner:scale-105 group-hover/banner:opacity-100 transition-all duration-1000 grayscale group-hover/banner:grayscale-0"
+                            sizes="40vw"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                           <div className="absolute inset-0 flex items-center justify-center">
@@ -1011,27 +1013,16 @@ export default function Navbar() {
                 <span className="text-[9px] font-manrope text-white">Home</span>
               </div>
               <div className="flex-1 py-4 flex flex-col items-center gap-1.5 opacity-50 cursor-pointer">
-                <div className="relative w-5 h-5">
-                  <Image
-                    src="/assets/pool_icon.svg"
-                    alt="Experiences"
-                    fill
-                    className="object-contain"
-                  />{" "}
-                  {/* Safe fallback rendering for dummy */}{" "}
+                <div className="relative w-5 h-5 flex items-center justify-center">
+                  <Waves className="w-5 h-5 text-white" strokeWidth={1.5} />
                 </div>
                 <span className="text-[9px] font-manrope text-white">
                   Experiences
                 </span>
               </div>
               <div className="flex-1 py-4 flex flex-col items-center gap-1.5 opacity-50 cursor-pointer">
-                <div className="relative w-5 h-5">
-                  <Image
-                    src="/assets/house_icon.svg"
-                    alt="Villas"
-                    fill
-                    className="object-contain"
-                  />
+                <div className="relative w-5 h-5 flex items-center justify-center">
+                  <Warehouse className="w-5 h-5 text-white" strokeWidth={1.5} />
                 </div>
                 <span className="text-[9px] font-manrope text-white">
                   Villa Retreats

@@ -576,24 +576,30 @@ export default function CareersPage() {
                           MEANWHILE CHECK US OUT HERE
                         </p>
                         <div className="flex justify-center gap-4">
-                          <a
-                            href="#"
-                            className="w-12 h-12 bg-white/5 border border-white/20 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                          >
-                            <Facebook className="w-5 h-5" />
-                          </a>
-                          <a
-                            href="#"
-                            className="w-12 h-12 bg-white/5 border border-white/20 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                          >
-                            <Instagram className="w-5 h-5" />
-                          </a>
-                          <a
-                            href="#"
-                            className="w-12 h-12 bg-white/5 border border-white/20 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                          >
-                            <Youtube className="w-5 h-5" />
-                          </a>
+                          {[
+                            {
+                              Icon: Facebook,
+                              href: "https://www.facebook.com/jadehospitainment/",
+                            },
+                            {
+                              Icon: Instagram,
+                              href: "https://www.instagram.com/jadehospitainment/?hl=en",
+                            },
+                            {
+                              Icon: Youtube,
+                              href: "https://www.youtube.com/@jade_hospitainment",
+                            },
+                          ].map(({ Icon, href }, i) => (
+                            <a
+                              key={i}
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-12 h-12 bg-white/5 border border-white/20 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
+                            >
+                              <Icon className="w-5 h-5" />
+                            </a>
+                          ))}
                         </div>
                         <p className="text-[10px] text-white/30 italic">
                           Thoughtfully operated. Always.
@@ -776,24 +782,30 @@ export default function CareersPage() {
                           MEANWHILE CHECK US OUT HERE
                         </p>
                         <div className="flex justify-center gap-6">
-                          <a
-                            href="#"
-                            className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                          >
-                            <Facebook className="w-5 h-5" />
-                          </a>
-                          <a
-                            href="#"
-                            className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                          >
-                            <Instagram className="w-5 h-5" />
-                          </a>
-                          <a
-                            href="#"
-                            className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                          >
-                            <Youtube className="w-5 h-5" />
-                          </a>
+                          {[
+                            {
+                              Icon: Facebook,
+                              href: "https://www.facebook.com/jadehospitainment/",
+                            },
+                            {
+                              Icon: Instagram,
+                              href: "https://www.instagram.com/jadehospitainment/?hl=en",
+                            },
+                            {
+                              Icon: Youtube,
+                              href: "https://www.youtube.com/@jade_hospitainment",
+                            },
+                          ].map(({ Icon, href }, i) => (
+                            <a
+                              key={i}
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
+                            >
+                              <Icon className="w-5 h-5" />
+                            </a>
+                          ))}
                         </div>
                         <p className="text-[10px] text-white/30 italic">
                           Thoughtfully operated. Always.

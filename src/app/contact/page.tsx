@@ -194,9 +194,9 @@ export default function ContactPage() {
           >
             <ContactCard
               icon={Phone}
-              title="0897 066 3366"
-              subtitle="Available from 10:00 AM – 7:00 PM"
-              href="tel:+918970663366"
+              title="Phone Number"
+              subtitle="0897 066 3366"
+              href="tel:08970663366"
             />
             <ContactCard
               icon={Mail}
@@ -332,14 +332,29 @@ export default function ContactPage() {
                       </p>
 
                       <div className="flex justify-center gap-4">
-                        {[Facebook, Instagram, Youtube].map((Icon, i) => (
-                          <Link
+                        {[
+                          {
+                            Icon: Facebook,
+                            href: "https://www.facebook.com/jadehospitainment/",
+                          },
+                          {
+                            Icon: Instagram,
+                            href: "https://www.instagram.com/jadehospitainment/?hl=en",
+                          },
+                          {
+                            Icon: Youtube,
+                            href: "https://www.youtube.com/@jade_hospitainment",
+                          },
+                        ].map(({ Icon, href }, i) => (
+                          <a
                             key={i}
-                            href="#"
-                            className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/20 hover:bg-[#EFCD62] hover:border-[#EFCD62] transition-colors group"
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-12 h-12 bg-white/5 border border-white/20 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
                           >
-                            <Icon className="w-5 h-5 text-white/50 group-hover:text-black transition-colors" />
-                          </Link>
+                            <Icon className="w-5 h-5" />
+                          </a>
                         ))}
                       </div>
 

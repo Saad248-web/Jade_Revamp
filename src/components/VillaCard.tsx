@@ -121,7 +121,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
           </span>
         </div>
 
-        <p className="font-manrope text-white/70 leading-relaxed text-sm mb-6">
+        <p className="font-manrope text-white/70 leading-relaxed text-sm mb-6 line-clamp-2 lg:line-clamp-none">
           {villa.description}
         </p>
 

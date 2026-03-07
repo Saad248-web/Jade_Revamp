@@ -116,7 +116,7 @@ export default function VillasCarousel() {
       </div>
 
       {/* MAIN CONTENT */}
-      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full mt-12 pb-32">
+      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full mt-12 pb-12">
         {filteredVillas.length > 0 ? (
           <div className="flex flex-col">
             {filteredVillas.map((villa, index) => (

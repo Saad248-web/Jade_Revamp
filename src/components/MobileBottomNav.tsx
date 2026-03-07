@@ -1,7 +1,7 @@
 "use client";
 
 import { useAnimation } from "@/context/AnimationContext";
-import { Waves, Warehouse, Menu, LucideIcon } from "lucide-react"; // Replaced House with Warehouse
+import { Waves, Warehouse, Menu, X, LucideIcon } from "lucide-react"; // Replaced House with Warehouse, added X
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -38,10 +38,10 @@ export default function MobileBottomNav() {
       action: null,
     },
     {
-      label: "Menu",
-      icon: Menu,
+      label: isMenuOpen ? "Close" : "Menu",
+      icon: isMenuOpen ? X : Menu,
       href: null,
-      action: () => setMenuOpen(true),
+      action: () => setMenuOpen(!isMenuOpen),
     },
   ];
 
@@ -62,8 +62,10 @@ export default function MobileBottomNav() {
               <button
                 key={item.label}
                 onClick={item.action}
-                className={`flex flex-col items-center gap-1.5 w-16 ${
-                  isMenuOpen ? "text-jade-gold" : "text-[#9CA3AF]"
+                className={`flex flex-col items-center gap-1.5 w-16 transition-colors ${
+                  isMenuOpen && item.label === "Close"
+                    ? "text-jade-gold"
+                    : "text-[#9CA3AF]"
                 }`}
               >
                 <Icon className="w-5 h-5" strokeWidth={1.5} />
