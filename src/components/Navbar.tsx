@@ -1007,6 +1007,7 @@ export default function Navbar() {
                     src="/assets/White_Logo.png"
                     alt="Home"
                     fill
+                    sizes="24px"
                     className="object-contain"
                   />
                 </div>

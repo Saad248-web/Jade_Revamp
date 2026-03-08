@@ -102,6 +102,7 @@ export default function SplashScreen() {
           src="/assets/desktop-bg.jpg"
           alt="Hero Background"
           fill
+          sizes="100vw"
           className="object-cover"
           priority
         />
@@ -181,6 +182,7 @@ export default function SplashScreen() {
                   src="/assets/Golden_Logo.png"
                   alt="Jade Logo"
                   fill
+                  sizes="(max-width: 768px) 48px, 80px"
                   className="object-contain"
                   priority
                 />

@@ -91,6 +91,7 @@ export default function MobileBottomNav() {
                     src="/assets/Golden_Logo.png"
                     alt="Home"
                     fill
+                    sizes="32px"
                     className="object-contain"
                   />
                 </div>

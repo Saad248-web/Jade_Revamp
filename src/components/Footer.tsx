@@ -130,6 +130,8 @@ export default function Footer() {
     { label: "VILLAS", href: "/villas" },
     { label: "EXPERIENCES", href: "/experiences" },
     { label: "WEDDINGS", href: "/weddings" },
+    { label: "CORPORATE RETREATS", href: "/corporate-retreats" },
+    { label: "WEEKEND GETAWAYS", href: "/weekend-getaways" },
     { label: "ABOUT", href: "/about" },
     { label: "CAREERS", href: "/careers" },
   ];
@@ -155,6 +157,7 @@ export default function Footer() {
             src="/assets/Golden_Logo.png"
             alt="Watermark"
             fill
+            sizes="700px"
             className="object-contain"
           />
         </div>
@@ -216,6 +219,7 @@ export default function Footer() {
                       src="/assets/Golden_Logo.png"
                       alt="Jade Logo"
                       fill
+                      sizes="56px"
                       className="object-contain"
                     />
                   </div>
@@ -587,6 +591,7 @@ export default function Footer() {
                   src="/assets/Golden_Logo.png"
                   alt="Jade Logo"
                   fill
+                  sizes="40px"
                   className="object-contain"
                 />
               </div>
