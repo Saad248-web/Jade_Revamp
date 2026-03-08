@@ -81,7 +81,10 @@ export default function LandingPage() {
       {/* Fixed Header Elements (Logo & Contact) */}
 
       {/* 2. Hero Section (Parallax) */}
-      <div ref={heroRef} className="relative h-screen w-full overflow-hidden">
+      <div
+        ref={heroRef}
+        className="relative min-h-screen w-full overflow-hidden"
+      >
         <NavbarThemeTrigger theme="white" sectionRef={heroRef} />
         {/* Background Layer */}
         <motion.div
@@ -105,8 +108,8 @@ export default function LandingPage() {
         <motion.div
           // Parallax: Text should move slightly slower than scroll to "remain" longer
           // Previous was 20%, increasing to 30% to be slightly more sticky without exiting bottom
-          style={{ y: useTransform(scrollY, [0, 500], ["0%", "30%"]) }}
-          className="relative z-10 h-full flex flex-col justify-center items-center text-center px-6 md:px-12 max-w-[1920px] mx-auto pt-20"
+          style={{ y: useTransform(scrollY, [0, 500], ["0%", "15%"]) }}
+          className="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6 md:px-12 max-w-[1920px] mx-auto pt-20 pb-32 md:pb-20"
         >
           <div className="max-w-5xl flex flex-col items-center">
             {/* Label - Bolder (font-extra-bold potentially if font-bold isn't enough? 'font-bold' is standard 700. 'font-extrabold' is 800. Trying ext-bold if available or keeping bold.) */}

@@ -28,7 +28,7 @@ export default function WeekendGetawaysPage() {
       <MobileBottomNav />
 
       {/* SECTION 1: HERO SECTION */}
-      <section className="relative h-screen w-full flex flex-col items-center overflow-hidden">
+      <section className="relative min-h-screen w-full flex flex-col items-center">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -43,7 +43,7 @@ export default function WeekendGetawaysPage() {
         </div>
 
         {/* Content - Vertical Distribution */}
-        <div className="relative z-10 flex flex-col items-center justify-between text-center px-8 w-full max-w-4xl mx-auto h-full pt-32 pb-16 lg:pb-24">
+        <div className="relative z-10 flex flex-col items-center justify-between text-center px-8 w-full max-w-4xl mx-auto h-full pt-32 pb-32 lg:pb-24">
           {/* TOP: Logo */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -78,7 +78,7 @@ export default function WeekendGetawaysPage() {
           </div>
 
           {/* BOTTOM: Actions - Positioned close to Bottom Nav */}
-          <div className="flex flex-row gap-4 w-full max-w-lg mb-12 lg:mb-8">
+          <div className="flex flex-row gap-4 w-full max-w-lg mb-4 lg:mb-8">
             <button className="flex-1 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors py-4 px-4 md:px-8 uppercase tracking-widest text-[10px] md:text-xs font-bold flex items-center justify-center gap-2">
               <Home className="w-4 h-4" /> VENUES
             </button>

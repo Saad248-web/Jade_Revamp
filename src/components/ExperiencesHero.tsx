@@ -64,7 +64,7 @@ export default function ExperiencesHero() {
             behavior: "smooth",
           });
         }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-20 cursor-pointer hover:opacity-80 transition-opacity"
+        className="absolute bottom-24 md:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-20 cursor-pointer hover:opacity-80 transition-opacity"
       >
         <div className="w-[1px] h-12 bg-white/20" />
         <span className="text-[10px] text-white/40 font-manrope tracking-[0.2em] uppercase">
