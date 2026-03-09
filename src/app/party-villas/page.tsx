@@ -15,14 +15,24 @@ import {
   Calendar,
   ArrowRight,
   ArrowLeft,
+  Download,
+  CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Download,
+  Star,
+  MapPin,
+  Users,
+  Wifi,
+  Coffee,
+  Heart,
+  Music,
+  PartyPopper,
+  Sparkles,
 } from "lucide-react";
 import LiveBackground from "@/components/LiveBackground";
 import Footer from "@/components/Footer";
 
-export default function WeekendGetawaysPage() {
+export default function PartyVillasPage() {
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
       <CorporateHeader />
@@ -33,8 +43,8 @@ export default function WeekendGetawaysPage() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/assets/weekend_getaway_hero.png"
-            alt="Weekend Getaways"
+            src="/assets/celebrations_friends.png"
+            alt="Party Villas"
             fill
             sizes="100vw"
             className="object-cover"
@@ -47,7 +57,7 @@ export default function WeekendGetawaysPage() {
         <div className="relative z-10 flex flex-col items-center justify-end text-center px-6 w-full max-w-4xl mx-auto h-full pb-24 lg:pb-36">
           {/* Content Group - Tight Spacing */}
           <div className="flex flex-col items-center w-full">
-            {/* Logo Group */}
+            {/* Logo */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -69,14 +79,15 @@ export default function WeekendGetawaysPage() {
             {/* Headline & Description */}
             <div className="flex flex-col items-center max-w-2xl mb-8">
               <h1 className="text-3xl md:text-5xl lg:text-6xl font-philosopher text-white mb-4 leading-tight text-center">
-                Weekend Getaways
+                Celebrate in Style with
                 <br />
-                In Bangalore
+                Jade Party Villas
               </h1>
 
               <p className="text-white/90 font-manrope text-sm md:text-base leading-relaxed text-center px-4">
-                Private villas designed for relaxed escapes, small celebrations,
-                and memorable weekends with friends and family.
+                Host birthdays, pool parties, reunions or milestone celebrations
+                in exclusive Jade villas with private pools, curated setups &
+                personalized experiences.
               </p>
             </div>
 
@@ -94,82 +105,23 @@ export default function WeekendGetawaysPage() {
       </section>
 
       {/* SECTION 2: ANIMATED TEXT SECTION */}
-      <WeekendAnimatedText />
+      <PartyAnimatedText />
 
-      {/* SECTION 3: CAROUSEL SECTION */}
-      <WeekendCarouselSection />
+      {/* SECTION 3: PARTY TYPES CAROUSEL */}
+      <PartyTypesSection />
 
       {/* SECTION 4: CURATED EXPERIENCES */}
-      <EnhanceYourStaySection />
+      <CuratedExperiencesSection />
 
-      {/* SECTION 5: WHY CHOOSE JADE */}
-      <WhyChooseJadeSection />
-
-      {/* SECTION 6: THEMED VILLAS */}
-      <ThemedVillasSection />
+      {/* SECTION 5: SPACES MADE FOR CELEBRATIONS */}
+      <SpacesForCelebrationsSection />
 
       <Footer />
     </main>
   );
 }
 
-function EnhanceYourStaySection() {
-  const experiences = [
-    { title: "Bonfire Nights", image: "/assets/bonfire_exp.png" },
-    { title: "BBQ Evenings", image: "/assets/bbq_exp.png" },
-    { title: "Movie Under the Stars", image: "/assets/movie_exp.png" },
-    { title: "Candlelight Dinner", image: "/assets/dinner_exp.png" },
-    { title: "Outdoor Games", image: "/assets/games_exp.png" },
-    { title: "Live Music / DJ", image: "/assets/music_exp.png" },
-    { title: "Private Chef Experience", image: "/assets/chef_exp.png" },
-    { title: "Poolside Celebrations", image: "/assets/poolside_exp.png" },
-  ];
-
-  return (
-    <section className="py-24 bg-[#141517]">
-      <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase mb-6">
-            CURATED EXPERIENCES
-          </p>
-          <h2 className="text-4xl md:text-6xl font-philosopher text-white">
-            Enhance Your Stay
-          </h2>
-        </div>
-
-        {/* Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {experiences.map((exp, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              viewport={{ once: true }}
-              className="relative aspect-square md:aspect-[4/5] overflow-hidden group border border-white/5"
-            >
-              <Image
-                src={exp.image}
-                alt={exp.title}
-                fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center p-4 text-center">
-                <h3 className="text-white text-lg md:text-2xl font-philosopher leading-tight">
-                  {exp.title}
-                </h3>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function WeekendAnimatedText() {
+function PartyAnimatedText() {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -177,13 +129,13 @@ function WeekendAnimatedText() {
   });
 
   const lines = [
-    "Jade’s private villas offer space,",
-    "privacy, and comfort just outside the",
-    "city. Whether you’re planning a",
-    "relaxed stay with friends, a family",
-    "getaway, or a small celebration, each",
-    "retreat is designed to let you slow",
-    "down and enjoy the moment.",
+    "Jade's private villas offer the perfect",
+    "setting for unforgettable celebrations.",
+    "Whether it's a birthday, anniversary,",
+    "pool party, or reunion with friends,",
+    "each space is designed for private",
+    "gatherings with curated setups, great",
+    "music, and moments worth celebrating.",
   ];
 
   const fadeOutStart = 0.8;
@@ -203,7 +155,7 @@ function WeekendAnimatedText() {
           className="relative z-10 w-full max-w-5xl mx-auto px-6 text-center pt-16 md:pt-24"
         >
           <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-12 text-center">
-            A DIFFERENT KIND OF WEEKEND ESCAPE
+            CELEBRATIONS, REIMAGINED
           </p>
 
           <h2 className="font-manrope font-light text-base md:text-3xl lg:text-5xl leading-[1.8] md:leading-[1.6] text-white/90 flex flex-col items-center">
@@ -241,48 +193,28 @@ function WeekendAnimatedText() {
   );
 }
 
-function WeekendCarouselSection() {
+function PartyTypesSection() {
   const [activeSlide, setActiveSlide] = React.useState(0);
   const slides = [
     {
-      title: "Poolside Mornings",
-      desc: "Slow mornings by the pool with coffee, sunlight, and nowhere else to be.",
-      image: "/assets/Bathing_Girls.png",
+      title: "Pool Parties",
+      desc: "Celebrate poolside with loungers, BBQ setups, cocktail stations, and vibrant lighting.",
+      image: "/assets/poolside_exp.png",
     },
     {
-      title: "Evenings Under the Stars",
-      desc: "Bonfires, music, and long conversations that stretch late into the night.",
-      image: "/assets/evening_under_stars.png",
+      title: "Bachelor/Bachelorette Parties",
+      desc: "Private villas designed for pre-wedding celebrations with music, entertainment, and curated dining.",
+      image: "/assets/caravan_journey.png", // Using relevant existing assets
     },
     {
-      title: "Outdoor Dining",
-      desc: "Freshly grilled meals, laughter around the table, and food shared with friends.",
+      title: "Reunions & Graduation Parties",
+      desc: "Spacious villas perfect for reconnecting, celebrating milestones, and hosting memorable gatherings.",
       image: "/assets/outdoor_dining.png",
     },
     {
-      title: "Nature & Nearby Escapes",
-      desc: "Morning treks, quiet lakes, and scenic walks just minutes from your villa.",
-      image: "/assets/nature_escapes.png",
-    },
-    {
-      title: "Celebrations With Friends",
-      desc: "Birthdays, reunions, or simply an excuse to gather everyone together.",
+      title: "Birthdays & Anniversaries",
+      desc: "Host memorable celebrations in beautifully curated villas with décor, dining, music, and private pools.",
       image: "/assets/celebrations_friends.png",
-    },
-    {
-      title: "Movie Nights Under The Stars",
-      desc: "Projector nights, cozy spaces, and the perfect way to wind down the day.",
-      image: "/assets/movie_nights.png",
-    },
-    {
-      title: "Private Dinners",
-      desc: "Experience curated dining in the privacy of your villa under the starlit sky.",
-      image: "/assets/corporate_retreat.png",
-    },
-    {
-      title: "Golden Evenings",
-      desc: "Watching the sun dip below the horizon with those who matter most.",
-      image: "/assets/wellness_retreat.png",
     },
   ];
 
@@ -297,11 +229,11 @@ function WeekendCarouselSection() {
           {/* Header Area */}
           <div className="relative z-10 mb-10">
             <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase font-manrope mb-6">
-              WHAT WEEKENDS AT JADE LOOK LIKE
+              WHAT WE OFFER
             </p>
             <div className="flex items-center justify-between gap-4">
               <h2 className="text-4xl md:text-6xl font-philosopher text-white leading-tight">
-                Jade Weekends
+                Party Types
               </h2>
               <div className="flex gap-3 shrink-0">
                 <button
@@ -353,7 +285,7 @@ function WeekendCarouselSection() {
           {/* Action Button */}
           <div className="relative z-10 pt-4">
             <button className="w-full bg-[#EFCB62] border-[1.5px] border-[#634F1B] text-[#634F1B] font-manrope font-bold py-6 md:py-8 flex items-center justify-center gap-4 hover:bg-[#E5C158] transition-all uppercase tracking-[0.3em] text-[12px] md:text-sm group">
-              BOOK JADE WEEKEND
+              BOOK A PARTY VILLA
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 stroke-[1.5]" />
             </button>
           </div>
@@ -363,27 +295,76 @@ function WeekendCarouselSection() {
   );
 }
 
-function WhyChooseJadeSection() {
+function CuratedExperiencesSection() {
+  const experiences = [
+    { title: "DJ & Music Setup", image: "/assets/music_exp.png" },
+    { title: "BBQ & Live Grills", image: "/assets/bbq_exp.png" },
+    { title: "Cocktail Bar Setup", image: "/assets/poolside_exp.png" },
+    { title: "Bonfire Nights", image: "/assets/bonfire_exp.png" },
+    { title: "Movie Under the Stars", image: "/assets/movie_exp.png" },
+    { title: "Themed Decor & Styling", image: "/assets/dinner_exp.png" },
+  ];
+
+  return (
+    <section className="py-24 bg-[#141517]">
+      <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase mb-6">
+            PERSONALIZE YOUR CELEBRATION
+          </p>
+          <h2 className="text-4xl md:text-6xl font-philosopher text-white">
+            Curated Experiences
+          </h2>
+        </div>
+
+        {/* Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          {experiences.map((exp, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              viewport={{ once: true }}
+              className="relative aspect-square md:aspect-[4/5] overflow-hidden group border border-white/5"
+            >
+              <Image
+                src={exp.image}
+                alt={exp.title}
+                fill
+                sizes="(max-width: 768px) 50vw, 33vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center p-4 text-center">
+                <h3 className="text-white text-lg md:text-2xl font-philosopher leading-tight">
+                  {exp.title}
+                </h3>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SpacesForCelebrationsSection() {
   const cards = [
     {
-      label: "provide",
-      title: "PRIVATE VILLAS",
-      desc: "Stay in fully private villas designed for relaxed getaways, with no shared spaces and complete freedom to enjoy your time.",
-    },
-    {
-      label: "create",
-      title: "ROOM TO UNWIND",
-      desc: "Spacious lawns, private pools, and open settings that make it easy to slow down and enjoy the weekend.",
+      label: "enjoy",
+      title: "PRIVATE PARTY VILLAS",
+      desc: "Exclusive villas with private pools and spacious outdoor areas designed for unforgettable celebrations.",
     },
     {
       label: "customise",
-      title: "YOUR EXPERIENCE",
-      desc: "Add bonfires, BBQ nights, movie screenings, or curated dining experiences to make your getaway truly memorable.",
+      title: "YOUR CELEBRATION",
+      desc: "Tailor décor, dining, and music to match your theme and make your occasion truly yours.",
     },
     {
-      label: "host",
-      title: "SEAMLESS STAYS",
-      desc: "From check-in to curated experiences, our team ensures your weekend getaway is effortless and well taken care of.",
+      label: "experience",
+      title: "EXPERT HOSTING",
+      desc: "From planning to execution, our team ensures every detail is taken care of for a seamless event.",
     },
   ];
 
@@ -393,14 +374,14 @@ function WhyChooseJadeSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase mb-6">
-            WHY CHOOSE JADE
+            WHY CELEBRATE AT JADE
           </p>
           <h2 className="text-4xl md:text-6xl font-philosopher text-white max-w-3xl mx-auto leading-tight">
-            Designed for Private Weekend Escapes
+            Spaces Made for Celebrations
           </h2>
         </div>
 
-        {/* Cards - Horizontally Stacked and Scrollable */}
+        {/* Cards */}
         <div className="relative mb-8 md:mb-12 -mx-6 md:-mx-12 lg:-mx-24 px-6 md:px-12 lg:px-24">
           <div className="flex overflow-x-auto hide-scrollbar gap-6 snap-x snap-mandatory pb-8 lg:justify-center">
             {cards.map((card, idx) => (
@@ -437,101 +418,10 @@ function WhyChooseJadeSection() {
         <div className="max-w-2xl mx-auto text-center space-y-6">
           <p className="text-white/60 font-philosopher text-sm md:text-base leading-relaxed italic px-4">
             Private villas and curated experiences designed to make every
-            weekend feel like an escape.
+            celebration a masterpiece.
           </p>
           <button className="w-full bg-[#EFCB62] border-[1.5px] border-[#634F1B] text-[#634F1B] font-manrope font-bold py-5 md:py-7 flex items-center justify-center gap-4 hover:bg-[#E5C158] transition-all uppercase tracking-[0.2em] text-[12px] md:text-sm group">
-            PLAN YOUR WEEKEND ESCAPE
-            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 stroke-[1.5]" />
-          </button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ThemedVillasSection() {
-  const villas = [
-    {
-      name: "Dome Villa",
-      tag: "HOBBIT-INSPIRED PRIVATE RETREAT",
-      image: "/assets/Dome_Villa.png",
-    },
-    {
-      name: "Magnolia",
-      tag: "CONTEMPORARY LUXURY VILLA",
-      image: "/assets/Magnolia_for_Desktop.png",
-    },
-    {
-      name: "Diamond Pavilion",
-      tag: "MODERN ARCHITECTURAL MARVEL",
-      image: "/assets/Jade_735_for_Desktop.png",
-    },
-    {
-      name: "Retreat on the Ridge",
-      tag: "SCENIC HILLTOP ESCAPE",
-      image: "/assets/ROR_for_Desktop.png",
-    },
-    {
-      name: "The Haven",
-      tag: "PRIVATE SERENE SANCTUARY",
-      image: "/assets/Lemon_Tree_for_Desktop.png",
-    },
-  ];
-
-  return (
-    <section className="py-24 bg-[#141517] border-t border-white/5">
-      <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase mb-6">
-            OUR VILLAS
-          </p>
-          <h2 className="text-4xl md:text-6xl font-philosopher text-white leading-tight">
-            Themed Villas
-            <br />
-            By Jade
-          </h2>
-        </div>
-
-        {/* Scrollable List */}
-        <div className="relative mb-8 md:mb-12 -mx-6 md:-mx-12 lg:-mx-24 px-6 md:px-12 lg:px-24">
-          <div className="flex overflow-x-auto hide-scrollbar gap-8 snap-x snap-mandatory pb-8 lg:justify-center">
-            {villas.map((villa, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-                viewport={{ once: true }}
-                className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[400px] snap-center group cursor-pointer"
-              >
-                <div className="relative aspect-[3/4] overflow-hidden mb-6 border border-white/5 group-hover:border-[#EFCD62]/30 transition-colors">
-                  <Image
-                    src={villa.image}
-                    alt={villa.name}
-                    fill
-                    sizes="(max-width: 768px) 85vw, (max-width: 1024px) 45vw, 400px"
-                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-                </div>
-                <div>
-                  <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-2 text-left">
-                    {villa.tag}
-                  </p>
-                  <h3 className="text-3xl md:text-4xl font-philosopher text-white group-hover:text-[#EFCD62] transition-colors text-left leading-tight">
-                    {villa.name}
-                  </h3>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Action Button */}
-        <div className="max-w-md mx-auto">
-          <button className="w-full bg-[#EFCB62] border-[1.5px] border-[#634F1B] text-[#634F1B] font-manrope font-bold py-5 md:py-6 flex items-center justify-center gap-4 hover:bg-[#E5C158] transition-all uppercase tracking-[0.2em] text-[12px] md:text-sm group">
-            VIEW ALL VILLA RETREATS
+            PLAN YOUR CELEBRATION
             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 stroke-[1.5]" />
           </button>
         </div>
