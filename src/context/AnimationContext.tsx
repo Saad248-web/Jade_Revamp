@@ -5,8 +5,6 @@ import React, { createContext, useContext, useState } from "react";
 interface AnimationContextType {
   isSplashComplete: boolean;
   setSplashComplete: (value: boolean) => void;
-  isMenuOpen: boolean;
-  setMenuOpen: (value: boolean) => void;
   isPartnerOverlayOpen: boolean;
   setPartnerOverlayOpen: (value: boolean) => void;
   navbarTheme: "white" | "golden";
@@ -27,7 +25,6 @@ export const AnimationProvider = ({
   children: React.ReactNode;
 }) => {
   const [isSplashComplete, setSplashComplete] = useState(false);
-  const [isMenuOpen, setMenuOpen] = useState(false);
   const [isPartnerOverlayOpen, setPartnerOverlayOpen] = useState(false);
   const [navbarTheme, setNavbarTheme] = useState<"white" | "golden">("golden");
   const [isGlobalBookingOpen, setGlobalBookingOpen] = useState(false);
@@ -38,8 +35,6 @@ export const AnimationProvider = ({
       value={{
         isSplashComplete,
         setSplashComplete,
-        isMenuOpen,
-        setMenuOpen,
         isPartnerOverlayOpen,
         setPartnerOverlayOpen,
         navbarTheme,

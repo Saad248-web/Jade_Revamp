@@ -5,24 +5,17 @@ import {
   motion,
   useScroll,
   useSpring,
-  AnimatePresence,
   useMotionValueEvent,
 } from "framer-motion";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAnimation } from "@/context/AnimationContext";
-import { X } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const {
-    isSplashComplete,
-    isMenuOpen,
-    setMenuOpen,
-    setPartnerOverlayOpen,
-    navbarTheme,
-  } = useAnimation();
+  const { isSplashComplete, setPartnerOverlayOpen, navbarTheme } =
+    useAnimation();
   const { scrollY } = useScroll();
   const [isHidden, setIsHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -77,41 +70,22 @@ export default function Navbar() {
       >
         {/* Glass bar */}
         <div className="mx-auto px-4 md:px-8 py-4 md:py-5 flex items-center justify-between bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm relative">
-          {/* ── LEFT: Menu toggle + inline nav links (desktop only) ── */}
+          {/* ── LEFT: Menu link + inline nav links (desktop only) ── */}
           <div className="hidden lg:flex items-center gap-8 flex-1">
-            <button
-              onClick={() => setMenuOpen(!isMenuOpen)}
+            <Link
+              href="/menu"
               className="flex items-center gap-2.5 text-white/60 hover:text-jade-gold transition-colors group"
             >
               <div className="relative w-5 h-5 flex items-center justify-center">
-                <AnimatePresence mode="wait">
-                  {!isMenuOpen ? (
-                    <motion.span
-                      key="menu-icon"
-                      initial={{ opacity: 0, rotate: -90 }}
-                      animate={{ opacity: 1, rotate: 0 }}
-                      exit={{ opacity: 0, rotate: 90 }}
-                      className="flex flex-col gap-[5px] w-5"
-                    >
-                      <span className="block h-[1px] w-5 bg-current transition-all" />
-                      <span className="block h-[1px] w-3 bg-current transition-all group-hover:w-5" />
-                    </motion.span>
-                  ) : (
-                    <motion.div
-                      key="close-icon"
-                      initial={{ opacity: 0, scale: 0.5, rotate: 90 }}
-                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                      exit={{ opacity: 0, scale: 0.5, rotate: -90 }}
-                    >
-                      <X className="w-5 h-5 text-[#EFCD62]" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <span className="flex flex-col gap-[5px] w-5">
+                  <span className="block h-[1px] w-5 bg-current transition-all" />
+                  <span className="block h-[1px] w-3 bg-current transition-all group-hover:w-5" />
+                </span>
               </div>
               <span className="text-[10px] font-manrope tracking-[0.25em] uppercase">
-                {isMenuOpen ? "Close" : "Menu"}
+                Menu
               </span>
-            </button>
+            </Link>
 
             {/* Thin divider */}
             <span className="h-4 w-px bg-white/15" />
