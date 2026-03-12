@@ -13,7 +13,7 @@
     --fs-scroll: 24px;
     --fs-body: 14px;
     --fs-desc: 12px;
-    --fs-label: 12px;
+    --fs-label: 10px;
   }
 
   @media (min-width: 768px) {

@@ -1,7 +1,8 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Headset, Minus, Plus } from "lucide-react";
+import { X, Headset, Minus, Plus, ChevronLeft } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface ReservationOverlayProps {
@@ -86,11 +87,33 @@ export default function ReservationOverlay({
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed bottom-0 left-0 right-0 md:left-auto md:right-8 md:top-28 w-full md:w-[600px] h-[85vh] md:h-[650px] bg-[#0D4032] z-[101] flex flex-col font-manrope rounded-t-2xl md:rounded-lg overflow-hidden shadow-2xl border border-white/10"
           >
-            {/* HEADER */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
-              <h2 className="text-white text-gh-h2 font-philosopher">
-                {view === "dates" ? "Select Dates" : "Total Guests"}
-              </h2>
+            {/* NEW GLOBAL HEADER (Matches Mockup 2 - Two Tone Green) */}
+            <div className="flex bg-[#0A3527] items-center justify-between px-5 md:px-6 py-4 border-b border-white/5 shrink-0 relative">
+              {/* Left: Exit/Back */}
+              <button
+                onClick={onClose}
+                className="flex items-center gap-1.5 text-white/70 hover:text-white transition-colors"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                <span className="font-manrope text-[15px] pt-[1px]">Exit</span>
+              </button>
+
+              {/* Center: Logo & Title (Absolute centering for perfect alignment) */}
+              <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
+                <div className="relative w-6 h-6">
+                  <Image
+                    src="/assets/Golden_Logo.png"
+                    alt="Jade"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <span className="text-white font-philosopher text-[18px] md:text-[22px]">
+                  Book a Stay
+                </span>
+              </div>
+
+              {/* Right: Actions */}
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => {
@@ -100,42 +123,46 @@ export default function ReservationOverlay({
                       setDates([]);
                     }
                   }}
-                  className="text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
+                  className="text-[#EFCD62] text-[12px] md:text-[14px] font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors pt-[2px]"
                 >
                   RESET
                 </button>
-                <button className="text-white hover:text-[#EFCD62] transition-colors">
-                  <Headset className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={onClose}
-                  className="text-white hover:text-[#EFCD62] transition-colors"
+                <a
+                  href="tel:08970663366"
+                  className="text-white hover:text-[#EFCD62] transition-colors relative"
                 >
-                  <X className="w-5 h-5" />
-                </button>
+                  <Headset
+                    className="w-5 h-5 md:w-6 md:h-6"
+                    strokeWidth={1.5}
+                  />
+                </a>
               </div>
             </div>
 
             {/* CONTENT AREA */}
-            <div className="flex-1 overflow-y-auto px-6 py-6 scrollbar-hide">
+            <div className="flex-1 bg-[#0D4032] overflow-y-auto px-5 md:px-6 py-6 overflow-x-hidden scrollbar-hide">
               {view === "dates" && (
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-5">
+                  <h2 className="text-white text-[28px] md:text-[32px] font-philosopher leading-none mb-1">
+                    Select Dates
+                  </h2>
+
                   {/* Legend */}
-                  <div className="flex items-center justify-between text-gh-label text-white/50 uppercase tracking-widest mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-sm bg-white/5 border border-white/10" />
-                      <span>Available</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-sm bg-[#1A342B] border border-white/10 relative overflow-hidden">
-                        <div className="absolute inset-0 border-t border-white/20 -rotate-45 transform origin-center scale-150" />
-                      </div>
-                      <span>Unavailable</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-sm bg-[#EFCD62]" />
+                  <div className="flex justify-start items-center gap-5 md:gap-8 text-[13px] md:text-[15px] text-[#A6C0B5] font-manrope font-medium mb-2">
+                    <span className="flex items-center gap-2">
+                      <span className="w-4 h-4 md:w-5 md:h-5 bg-[#165040] rounded-[2px]" />
+                      Available
+                    </span>
+                    <span className="flex items-center gap-2 relative">
+                      <span className="w-4 h-4 md:w-5 md:h-5 bg-[#165040] rounded-[2px] overflow-hidden relative border border-[#165040]">
+                        <span className="block w-[150%] h-[1px] md:h-[1.5px] bg-[#A6C0B5]/40 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-45" />
+                      </span>
+                      Unavailable
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <span className="w-4 h-4 md:w-5 md:h-5 bg-[#EFCD62] rounded-[2px]" />
                       <span className="text-[#EFCD62]">Selected</span>
-                    </div>
+                    </span>
                   </div>
 
                   {/* Days Header */}

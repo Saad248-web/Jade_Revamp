@@ -14,6 +14,7 @@ import {
   Bed,
   Home,
   Check,
+  Headset,
 } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
 import { VILLAS } from "@/data/villas";
@@ -194,41 +195,51 @@ function StepDates({
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
-        <h2 className="text-white text-gh-h2 font-philosopher">Select Dates</h2>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={onReset}
-            className="text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
-          >
-            RESET
-          </button>
-          <button
-            onClick={onClose}
-            className="text-white/50 hover:text-white transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+      {/* Header Area (Title & Actions) */}
+      <div className="bg-[#0D4032] shrink-0">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
+          <h2 className="text-white text-[32px] md:text-[40px] font-philosopher leading-none">
+            Select Dates
+          </h2>
+          <div className="flex items-center gap-5 md:gap-6">
+            <button
+              onClick={onReset}
+              className="text-[#EFCD62] text-[14px] md:text-[16px] font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors"
+            >
+              RESET
+            </button>
+            <a
+              href="tel:08970663366"
+              className="text-white hover:text-[#EFCD62] transition-colors"
+            >
+              <Headset className="w-6 h-6 md:w-7 md:h-7" strokeWidth={1.5} />
+            </a>
+            <button
+              onClick={onClose}
+              className="text-white hover:text-[#EFCD62] transition-colors"
+            >
+              <X className="w-7 h-7 md:w-8 md:h-8" strokeWidth={1.5} />
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* Legend */}
-      <div className="flex items-center gap-5 px-5 py-3 text-gh-label text-white/50 font-manrope shrink-0">
-        <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-white/10 border border-white/20" />
-          Available
-        </span>
-        <span className="flex items-center gap-1.5 relative">
-          <span className="w-3 h-3 rounded-sm bg-white/5 border border-white/10 overflow-hidden">
-            <span className="block w-full h-[1px] bg-white/20 absolute top-1/2 -rotate-45 origin-center scale-150" />
+        {/* Legend */}
+        <div className="flex justify-center md:justify-start items-center gap-6 md:gap-10 px-6 py-5 text-[15px] md:text-[17px] text-[#A6C0B5] font-manrope font-medium">
+          <span className="flex items-center gap-3">
+            <span className="w-6 h-6 bg-[#165040] rounded-[2px]" />
+            Available
           </span>
-          Unavailable
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-[#EFCD62]" />
-          Selected
-        </span>
+          <span className="flex items-center gap-3 relative">
+            <span className="w-6 h-6 bg-[#165040] rounded-[2px] overflow-hidden relative border border-[#165040]">
+              <span className="block w-[150%] h-[1.5px] bg-[#A6C0B5]/40 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-45" />
+            </span>
+            Unavailable
+          </span>
+          <span className="flex items-center gap-3">
+            <span className="w-6 h-6 bg-[#EFCD62] rounded-[2px]" />
+            Selected
+          </span>
+        </div>
       </div>
 
       {/* Day headers */}

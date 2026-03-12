@@ -41,9 +41,9 @@ export default function MenuPage() {
       <MobileBottomNav />
 
       {/* Main content wrapper with top padding for navbar */}
-      <div className="w-full min-h-screen flex flex-col lg:flex-row relative pt-[60px] md:pt-[80px]">
+      <div className="w-full h-[100svh] flex flex-col lg:flex-row relative pt-[60px] md:pt-[80px] overflow-hidden">
         {/* LEFT COLUMN: Main Menu */}
-        <div className="flex-1 lg:flex-none lg:w-1/3 relative overflow-hidden min-h-[calc(100svh-60px)] md:min-h-[calc(100svh-80px)] z-10 border-r border-transparent lg:border-white/10">
+        <div className="flex-1 lg:flex-none lg:w-1/3 relative overflow-hidden h-full z-10 border-r border-transparent lg:border-white/10">
           <AnimatePresence mode="wait">
             {/* Primary Menu: Always visible on desktop, or if menuView is primary on mobile */}
             {(menuView === "primary" ||
@@ -53,9 +53,9 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className={`absolute inset-0 flex flex-col px-6 md:px-12 py-4 pb-32 overflow-y-auto ${menuView !== "primary" ? "hidden lg:flex" : "flex"}`}
+                className={`absolute inset-0 flex flex-col px-6 md:px-12 py-4 pb-20 overflow-y-auto ${menuView !== "primary" ? "hidden lg:flex" : "flex"}`}
               >
-                <span className="text-white/40 text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-6">
+                <span className="text-white/40 text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-6 flex-shrink-0">
                   MENU
                 </span>
 
@@ -73,7 +73,7 @@ export default function MenuPage() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
+                        className={`text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
                           desktopSelectedView === "villas"
                             ? "bg-left text-[#EFCD62]"
                             : "bg-right"
@@ -103,7 +103,7 @@ export default function MenuPage() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
+                        className={`text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
                           desktopSelectedView === "experiences"
                             ? "bg-left text-[#EFCD62]"
                             : "bg-right"
@@ -122,21 +122,21 @@ export default function MenuPage() {
                   </li>
                   <li>
                     <Link href="/about">
-                      <span className="block text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         About us
                       </span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/careers">
-                      <span className="block text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         Careers
                       </span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/blogs">
-                      <span className="block text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         Blogs
                       </span>
                     </Link>
@@ -148,7 +148,7 @@ export default function MenuPage() {
                       }}
                       className="text-left"
                     >
-                      <span className="block text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         Partner with us
                       </span>
                     </button>
@@ -166,7 +166,7 @@ export default function MenuPage() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
+                        className={`text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
                           desktopSelectedView === "more"
                             ? "bg-left text-[#EFCD62]"
                             : "bg-right"
@@ -239,7 +239,7 @@ export default function MenuPage() {
                   Villas
                 </h2>
                 <div className="space-y-8">
-                  {VILLAS.slice(0, 3).map((villa) => (
+                  {VILLAS.map((villa) => (
                     <Link
                       key={villa.id}
                       href={`/villas/${villa.id}`}
@@ -410,7 +410,7 @@ export default function MenuPage() {
         </div>
 
         {/* RIGHT COLUMN: Desktop Hover Previews */}
-        <div className="hidden lg:flex flex-1 relative h-full min-h-[calc(100svh-80px)] items-center justify-center p-12 overflow-hidden pointer-events-none group-hover:pointer-events-auto">
+        <div className="hidden lg:flex flex-1 relative h-full items-center justify-center p-12 overflow-hidden pointer-events-auto">
           <AnimatePresence mode="wait">
             {(desktopHoverView === "default"
               ? desktopSelectedView

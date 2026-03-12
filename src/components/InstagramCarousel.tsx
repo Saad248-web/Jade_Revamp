@@ -130,9 +130,12 @@ export default function InstagramCarousel() {
           }}
         >
           {INSTAGRAM_POSTS.map((post, index) => (
-            <div key={post.id} className="flex-shrink-0 w-[280px] snap-center">
+            <div
+              key={post.id}
+              className="flex-shrink-0 w-[280px] snap-center h-full"
+            >
               {/* Instagram Post Card */}
-              <div className="w-full bg-[#FAFAFA]/[0.04] backdrop-blur-xl rounded-[16px] overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-300 border border-[#FAFAFA]/[0.12] group">
+              <div className="w-full h-full flex flex-col bg-[#FAFAFA]/[0.04] backdrop-blur-xl rounded-[16px] overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-300 border border-[#FAFAFA]/[0.12] group">
                 {/* Header */}
                 <div className="flex items-center justify-between p-[14px] bg-transparent">
                   <div className="flex items-center gap-3">
@@ -169,7 +172,7 @@ export default function InstagramCarousel() {
                 </div>
 
                 {/* Footer */}
-                <div className="p-[14px] bg-transparent">
+                <div className="p-[14px] bg-transparent flex-grow flex flex-col justify-end">
                   <div className="flex items-center gap-4 mb-3">
                     <div className="flex items-center gap-1 text-[#FAFAFA]/90">
                       <Heart className="w-5 h-5" />
@@ -184,7 +187,7 @@ export default function InstagramCarousel() {
                       </span>
                     </div>
                   </div>
-                  <p className="font-manrope text-gh-body text-[#FAFAFA]/60 line-clamp-2">
+                  <p className="font-manrope text-gh-body text-[#FAFAFA]/60 truncate">
                     {post.caption}
                   </p>
                 </div>

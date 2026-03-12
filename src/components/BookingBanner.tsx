@@ -57,10 +57,10 @@ export default function BookingBanner({ onSearch }: { onSearch?: () => void }) {
     <div className="w-full md:max-w-[70%] bg-[#252729] border border-white/10 p-2 sm:p-2.5 rounded flex items-center justify-between">
       <Link href="/book?step=dates" className="flex-1 flex min-w-0">
         <div className="flex-1 px-3 sm:px-4 cursor-pointer hover:bg-white/5 transition-colors rounded py-1 sm:py-2 min-w-0">
-          <p className="text-gh-label text-white/50 font-manrope font-bold tracking-widest uppercase mb-0.5 sm:mb-1">
+          <p className="text-[8px] text-white/50 font-manrope font-bold tracking-widest uppercase mb-0.5 sm:mb-1">
             CHECK IN - CHECK OUT
           </p>
-          <p className="text-white text-gh-body font-manrope whitespace-nowrap overflow-hidden text-ellipsis">
+          <p className="text-[12px] text-white font-manrope whitespace-nowrap overflow-hidden text-ellipsis">
             {formatDateRange()}
           </p>
         </div>
@@ -70,10 +70,10 @@ export default function BookingBanner({ onSearch }: { onSearch?: () => void }) {
 
       <Link href="/book?step=guests" className="flex-1 flex min-w-0">
         <div className="flex-1 px-3 sm:px-4 cursor-pointer hover:bg-white/5 transition-colors rounded py-1 sm:py-2 min-w-0">
-          <p className="text-gh-label text-white/50 font-manrope font-bold tracking-widest uppercase mb-0.5 sm:mb-1">
+          <p className="text-[8px] text-white/50 font-manrope font-bold tracking-widest uppercase mb-0.5 sm:mb-1">
             GUESTS
           </p>
-          <p className="text-white text-gh-body font-manrope whitespace-nowrap overflow-hidden text-ellipsis">
+          <p className="text-[12px] text-white font-manrope whitespace-nowrap overflow-hidden text-ellipsis">
             {formatGuests()}
           </p>
         </div>

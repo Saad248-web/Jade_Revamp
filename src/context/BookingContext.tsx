@@ -27,7 +27,7 @@ const defaultDateRange: DateRange = {
 };
 
 const defaultGuests: Guests = {
-  adults: 0,
+  adults: 2,
   children: 0,
   pets: 0,
 };

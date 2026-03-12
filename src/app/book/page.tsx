@@ -146,53 +146,33 @@ function StepDates({
 
   return (
     <div className="flex flex-col h-full">
-      {/* Step title */}
-      <div className="px-5 py-4 shrink-0">
-        <h2 className="text-white text-gh-h2 font-philosopher">Select Dates</h2>
-      </div>
-
-      {/* Legend */}
-      <div className="flex items-center gap-5 px-5 pb-3 text-gh-label text-white/50 font-manrope shrink-0">
-        <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-white/10 border border-white/20" />
-          Available
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-white/5 border border-white/10 overflow-hidden relative">
-            <span className="absolute inset-0 flex items-center justify-center">
-              <span className="block w-[150%] h-[1px] bg-white/30 -rotate-45" />
+      {/* Day headers with separator */}
+      <div className="shrink-0 border-b border-white/10 py-3 px-5">
+        <div className="grid grid-cols-7 text-center">
+          {DAY_LABELS.map((d) => (
+            <span
+              key={d}
+              className="text-white/50 text-[11px] font-manrope tracking-widest uppercase"
+            >
+              {d}
             </span>
-          </span>
-          Unavailable
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-[#EFCD62]" />
-          Selected
-        </span>
+          ))}
+        </div>
       </div>
 
-      {/* Day headers */}
-      <div className="grid grid-cols-7 text-center px-5 mb-1 shrink-0">
-        {DAY_LABELS.map((d) => (
-          <span
-            key={d}
-            className="text-white/40 text-gh-label font-manrope tracking-wider"
-          >
-            {d}
-          </span>
-        ))}
-      </div>
-
-      {/* Calendars — scrollable, leaves room for the floating bottom bar */}
-      <div className="flex-1 overflow-y-auto px-5 pb-28">
+      {/* Calendars — scrollable */}
+      <div
+        className="flex-1 overflow-y-auto px-5 pb-24 pt-4"
+        data-lenis-prevent
+      >
         {MONTHS.map((month, mIdx) => (
-          <div key={month.name} className="mb-6">
-            <h3 className="text-white font-manrope font-semibold text-gh-body mb-3">
+          <div key={month.name} className="mb-8">
+            <h3 className="text-white font-manrope font-bold text-[20px] mb-4">
               {month.name}
             </h3>
-            <div className="grid grid-cols-7 gap-y-1.5 text-center">
+            <div className="grid grid-cols-7 gap-[12px] text-center">
               {Array.from({ length: month.startDay }, (_, i) => (
-                <div key={`empty-${i}`} />
+                <div key={`empty-${i}`} className="w-[35px] h-[35px]" />
               ))}
               {Array.from({ length: month.days }, (_, i) => i + 1).map(
                 (day) => {
@@ -204,15 +184,15 @@ function StepDates({
                       key={day}
                       disabled={unavail}
                       onClick={() => !unavail && handleDayClick(mIdx, day)}
-                      className={`w-9 h-9 mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-sm relative overflow-hidden
+                      className={`w-[35px] h-[35px] mx-auto flex items-center justify-center text-[16px] font-manrope transition-colors rounded-[3px] relative overflow-hidden
                       ${sel ? "bg-[#EFCD62] text-[#0D4032] font-bold" : ""}
                       ${inRange ? "bg-[#EFCD62]/20 text-white" : ""}
-                      ${!sel && !inRange && !unavail ? "text-white hover:bg-white/10" : ""}
-                      ${unavail ? "text-white/25 cursor-not-allowed" : ""}`}
+                      ${!sel && !inRange && !unavail ? "bg-[#165040] text-white hover:bg-[#1e6050]" : ""}
+                      ${unavail ? "bg-[#165040]/60 text-white/30 cursor-not-allowed" : ""}`}
                     >
                       {unavail && (
                         <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                          <span className="block w-[130%] h-[1px] bg-white/25 -rotate-45" />
+                          <span className="block w-[140%] h-[1px] bg-white/20 -rotate-45" />
                         </span>
                       )}
                       {day}
@@ -254,28 +234,30 @@ function StepGuests({
     onMinus: () => void;
     onPlus: () => void;
   }) => (
-    <div className="flex items-center justify-between py-5 border-b border-white/8">
+    <div className="flex items-center justify-between py-5 border-b border-white/10">
       <div>
-        <p className="text-white font-philosopher text-gh-body">{label}</p>
+        <p className="text-white font-philosopher text-[16px] md:text-[18px]">
+          {label}
+        </p>
         {subtitle && (
-          <p className="text-white/40 text-gh-desc font-manrope mt-0.5">
+          <p className="text-white/40 text-[12px] md:text-[13px] font-manrope mt-0.5">
             {subtitle}
           </p>
         )}
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 shrink-0">
         <button
           onClick={onMinus}
-          className="w-9 h-9 border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors"
+          className="w-9 h-9 border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors shrink-0"
         >
           <Minus className="w-4 h-4" />
         </button>
-        <span className="text-white font-philosopher text-gh-h2 w-8 text-center">
+        <span className="text-white font-philosopher text-[28px] md:text-[36px] w-12 text-center leading-none">
           {String(value).padStart(2, "0")}
         </span>
         <button
           onClick={onPlus}
-          className="w-9 h-9 border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors bg-white/5"
+          className="w-9 h-9 border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors bg-white/5 shrink-0"
         >
           <Plus className="w-4 h-4" />
         </button>
@@ -285,10 +267,10 @@ function StepGuests({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="px-5 py-4 shrink-0">
-        <h2 className="text-white text-gh-h2 font-philosopher">Total Guests</h2>
-      </div>
-      <div className="flex-1 overflow-y-auto px-5 pb-28">
+      <div
+        className="flex-1 overflow-y-auto px-5 md:px-8 pb-28"
+        data-lenis-prevent
+      >
         <Counter
           label="Adults"
           subtitle="Age 13 years and more"
@@ -339,10 +321,10 @@ function StepDetails({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="px-5 py-4 shrink-0">
-        <h2 className="text-white text-gh-h2 font-philosopher">Your Details</h2>
-      </div>
-      <div className="flex-1 overflow-y-auto px-5 py-2 pb-28 space-y-4">
+      <div
+        className="flex-1 overflow-y-auto px-5 md:px-8 py-4 pb-28 space-y-4"
+        data-lenis-prevent
+      >
         <div className="relative border border-white/20 focus-within:border-[#EFCD62] transition-colors">
           <label className="absolute -top-2.5 left-3 bg-[#0D4032] px-1 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
             Full Name
@@ -807,40 +789,57 @@ function BookPageContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D4032] flex flex-col">
-      {/* Top bar */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
-        <button
-          onClick={handleClose}
-          className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          <span className="text-sm font-manrope">Exit</span>
-        </button>
-        <div className="flex items-center gap-1.5">
-          <div className="w-6 h-6 relative">
-            <Image
-              src="/assets/Golden_Logo.png"
-              alt="Jade"
-              fill
-              className="object-contain"
-            />
+    <div className="h-[100svh] bg-[#0D4032] flex flex-col overflow-hidden">
+      {/* Header — step title left, actions right */}
+      <div className="bg-[#0D4032] shrink-0">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
+          <h2 className="text-white text-[24px] md:text-[36px] font-philosopher leading-none">
+            {step === "dates" && "Select Dates"}
+            {step === "guests" && "Total Guests"}
+            {step === "details" && "Your Details"}
+            {step === "review" && "Review & Pay"}
+          </h2>
+          <div className="flex items-center gap-5">
+            <button
+              onClick={handleReset}
+              className="text-[#EFCD62] text-[12px] font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors"
+            >
+              RESET
+            </button>
+            <a
+              href="tel:08970663366"
+              className="text-white hover:text-[#EFCD62] transition-colors"
+            >
+              <Headset className="w-5 h-5" strokeWidth={1.5} />
+            </a>
+            <button
+              onClick={handleClose}
+              className="text-white hover:text-[#EFCD62] transition-colors"
+            >
+              <X className="w-5 h-5" strokeWidth={1.5} />
+            </button>
           </div>
-          <span className="text-white/80 text-sm font-philosopher tracking-wide">
-            Book a Stay
-          </span>
         </div>
-        <div className="flex items-center gap-4">
-          <button
-            onClick={handleReset}
-            className="text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors font-manrope"
-          >
-            RESET
-          </button>
-          <button className="text-white/60 hover:text-white transition-colors">
-            <Headset className="w-5 h-5" />
-          </button>
-        </div>
+
+        {/* Legend — only on dates step */}
+        {step === "dates" && (
+          <div className="flex justify-start items-center gap-2 md:gap-4 px-5 md:px-6 py-3 md:py-4 text-[12px] text-[#A6C0B5] font-manrope font-medium border-b border-white/10">
+            <span className="flex items-center gap-2">
+              <span className="w-4 h-4 bg-[#165040] rounded-[2px] shrink-0" />
+              Available
+            </span>
+            <span className="flex items-center gap-2 relative">
+              <span className="w-4 h-4 bg-[#165040] rounded-[2px] overflow-hidden relative border border-[#165040] shrink-0">
+                <span className="block w-[150%] h-[1px] bg-[#A6C0B5]/40 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-45" />
+              </span>
+              Unavailable
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-4 h-4 bg-[#EFCD62] rounded-[2px] shrink-0" />
+              Selected
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Content area — pb accounts for the floating bottom bar height */}
@@ -853,7 +852,7 @@ function BookPageContent() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.2 }}
-              className="flex-1 overflow-hidden flex flex-col min-h-0"
+              className="flex-1 flex flex-col min-h-0 overflow-hidden"
             >
               <StepDates dateRange={dateRange} setDateRange={setDateRange} />
             </motion.div>
