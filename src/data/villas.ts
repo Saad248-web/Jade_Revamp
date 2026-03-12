@@ -797,14 +797,14 @@ export const VILLAS = [
     ],
   },
   {
-    id: "vanani",
-    name: "Vanani",
-    type: "PRIVATE FARMHOUSE WITH POOL & JACUZZI",
-    location: "Mysore Road, · Near Wonderla",
-    stats: { stay: "20 Guests", events: "80 Guests", bhk: "6+1 BHK + Cottage" },
+    id: "vannani",
+    name: "Vannani - Retreat by Nature",
+    type: "NATURE RETREAT FOR INTIMATE CELEBRATIONS",
+    location: "Bangalore",
+    stats: { stay: "20 Guests", events: "25 Guests", bhk: "2" },
     description:
-      "Vanani is a secluded, nature-rich private villa retreat made up of distinct stay units - a rustic stone villa, cozy cottage, and a standalone tiny home. Set amid lush lawns and fruit trees, it blends earthy architecture with modern comforts, including pool with a cascading waterfall and jacuzzi.",
-    perfectFor: ["Staycations", "Family Getaways"],
+      "A villa retreat set amidst lush orchards, featuring two separate units. With a lap pool, outdoor spaces & nature experiences, Vannani is ideal for brunch & relaxed group getaways.",
+    perfectFor: ["Staycations", "Family Getaways", "Celebrations"],
     categories: ["Pet friendly", "Corporate Retreats"],
     image: "/assets/wellness_retreat.png",
     amenities: [
