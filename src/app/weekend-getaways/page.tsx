@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import LiveBackground from "@/components/LiveBackground";
 import Footer from "@/components/Footer";
+import ExperienceHero from "@/components/ExperienceHero";
 
 export default function WeekendGetawaysPage() {
   return (
@@ -29,69 +30,34 @@ export default function WeekendGetawaysPage() {
       <MobileBottomNav />
 
       {/* SECTION 1: HERO SECTION */}
-      <section className="relative h-screen w-full flex flex-col items-center">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/assets/weekend_getaway_hero.png"
-            alt="Weekend Getaways"
-            fill
-            sizes="100vw"
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/40" />
-        </div>
-
-        {/* Content - Grouped at the Bottom */}
-        <div className="relative z-10 flex flex-col items-center justify-end text-center px-6 w-full max-w-4xl mx-auto h-full pb-24 lg:pb-36">
-          {/* Content Group - Tight Spacing */}
-          <div className="flex flex-col items-center w-full">
-            {/* Logo Group */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="relative w-12 md:w-16 mb-4"
-            >
-              <div className="relative aspect-square w-full">
-                <Image
-                  src="/assets/White_Logo.png"
-                  alt="Jade Logo"
-                  fill
-                  sizes="(max-width: 768px) 48px, 64px"
-                  className="object-contain"
-                  priority
-                />
-              </div>
-            </motion.div>
-
-            {/* Headline & Description */}
-            <div className="flex flex-col items-center max-w-2xl mb-8">
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-philosopher text-white mb-4 leading-tight text-center">
-                Weekend Getaways
-                <br />
-                In Bangalore
-              </h1>
-
-              <p className="text-white/90 font-manrope text-sm md:text-base leading-relaxed text-center px-4">
-                Private villas designed for relaxed escapes, small celebrations,
-                and memorable weekends with friends and family.
-              </p>
-            </div>
-
-            {/* Actions */}
-            <div className="flex flex-row gap-3 w-full max-w-md">
-              <button className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-colors py-4 px-4 uppercase tracking-[0.2em] text-[10px] md:text-xs font-bold flex items-center justify-center gap-2">
-                <Calendar className="w-4 h-4" /> VENUES
-              </button>
-              <button className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-colors py-4 px-4 uppercase tracking-[0.2em] text-[10px] md:text-xs font-bold flex items-center justify-center gap-2">
-                <Download className="w-4 h-4" strokeWidth={2.5} /> BROCHURE
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ExperienceHero
+        backgroundImage="/assets/weekend_getaway_hero.png"
+        backgroundAlt="Weekend Getaways"
+        heading={
+          <>
+            Weekend Getaways
+            <br />
+            In Bangalore
+          </>
+        }
+        description="Private villas designed for relaxed escapes, small celebrations, and memorable weekends with friends and family."
+        buttons={[
+          {
+            icon: <Calendar className="w-4 h-4" />,
+            label: "VENUES",
+            onClick: () => {
+              const venuesSection = document.getElementById("themed-villas");
+              if (venuesSection)
+                venuesSection.scrollIntoView({ behavior: "smooth" });
+            },
+          },
+          {
+            icon: <Download className="w-4 h-4" />,
+            label: "BROCHURE",
+            onClick: () => window.open("/brochure.pdf", "_blank"),
+          },
+        ]}
+      />
 
       {/* SECTION 2: ANIMATED TEXT SECTION */}
       <WeekendAnimatedText />
@@ -130,10 +96,10 @@ function EnhanceYourStaySection() {
       <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase mb-6">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-6">
             CURATED EXPERIENCES
           </p>
-          <h2 className="text-4xl md:text-6xl font-philosopher text-white">
+          <h2 className="text-gh-h1 font-philosopher text-white">
             Enhance Your Stay
           </h2>
         </div>
@@ -157,7 +123,7 @@ function EnhanceYourStaySection() {
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center p-4 text-center">
-                <h3 className="text-white text-lg md:text-2xl font-philosopher leading-tight">
+                <h3 className="text-white text-gh-h3 font-philosopher leading-tight">
                   {exp.title}
                 </h3>
               </div>
@@ -202,11 +168,11 @@ function WeekendAnimatedText() {
           style={{ y: sectionY }}
           className="relative z-10 w-full max-w-5xl mx-auto px-6 text-center pt-16 md:pt-24"
         >
-          <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-12 text-center">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-12 text-center">
             A DIFFERENT KIND OF WEEKEND ESCAPE
           </p>
 
-          <h2 className="font-manrope font-light text-base md:text-3xl lg:text-5xl leading-[1.8] md:leading-[1.6] text-white/90 flex flex-col items-center">
+          <h2 className="font-manrope font-light text-gh-h1 leading-[1.8] md:leading-[1.6] text-white/90 flex flex-col items-center">
             {lines.map((line, idx) => {
               const start = idx * 0.08;
               const end = start + 0.12;
@@ -296,11 +262,11 @@ function WeekendCarouselSection() {
         <div className="relative">
           {/* Header Area */}
           <div className="relative z-10 mb-10">
-            <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase font-manrope mb-6">
+            <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope mb-6">
               WHAT WEEKENDS AT JADE LOOK LIKE
             </p>
             <div className="flex items-center justify-between gap-4">
-              <h2 className="text-4xl md:text-6xl font-philosopher text-white leading-tight">
+              <h2 className="text-gh-h1 font-philosopher text-white leading-tight">
                 Jade Weekends
               </h2>
               <div className="flex gap-3 shrink-0">
@@ -339,10 +305,10 @@ function WeekendCarouselSection() {
                   className="object-cover opacity-75"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent flex flex-col items-center justify-end pb-12 md:pb-20 px-8 text-center">
-                  <h3 className="text-3xl md:text-6xl font-philosopher text-white mb-4">
+                  <h3 className="text-gh-h1 font-philosopher text-white mb-4">
                     {slides[activeSlide].title}
                   </h3>
-                  <p className="text-white/60 font-manrope text-xs md:text-base max-w-xl mx-auto leading-relaxed">
+                  <p className="text-white/60 font-manrope text-gh-body max-w-xl mx-auto leading-relaxed">
                     {slides[activeSlide].desc}
                   </p>
                 </div>
@@ -352,7 +318,7 @@ function WeekendCarouselSection() {
 
           {/* Action Button */}
           <div className="relative z-10 pt-4">
-            <button className="w-full bg-[#EFCB62] border-[1.5px] border-[#634F1B] text-[#634F1B] font-manrope font-bold py-6 md:py-8 flex items-center justify-center gap-4 hover:bg-[#E5C158] transition-all uppercase tracking-[0.3em] text-[12px] md:text-sm group">
+            <button className="w-full bg-[#EFCB62] border-[1.5px] border-[#634F1B] text-[#634F1B] font-manrope font-bold py-6 md:py-8 flex items-center justify-center gap-4 hover:bg-[#E5C158] transition-all uppercase tracking-[0.3em] text-gh-label group">
               BOOK JADE WEEKEND
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 stroke-[1.5]" />
             </button>
@@ -392,10 +358,10 @@ function WhyChooseJadeSection() {
       <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase mb-6">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-6">
             WHY CHOOSE JADE
           </p>
-          <h2 className="text-4xl md:text-6xl font-philosopher text-white max-w-3xl mx-auto leading-tight">
+          <h2 className="text-gh-h1 font-philosopher text-white max-w-3xl mx-auto leading-tight">
             Designed for Private Weekend Escapes
           </h2>
         </div>
@@ -413,10 +379,10 @@ function WhyChooseJadeSection() {
                 className="relative p-8 md:p-10 w-[280px] md:w-[320px] lg:w-[350px] aspect-[3/4] flex flex-col justify-between bg-gradient-to-b from-[#2C2E31] to-[#1A1C1E] border border-white/5 group hover:border-[#EFCD62]/30 transition-colors flex-shrink-0 snap-center first:ml-0"
               >
                 <div>
-                  <p className="text-[#EFCD62] font-philosopher italic text-lg mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
+                  <p className="text-[#EFCD62] font-philosopher italic text-gh-h3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
                     {card.label}
                   </p>
-                  <h3 className="text-3xl md:text-4xl font-bold font-manrope text-white leading-tight tracking-tight uppercase">
+                  <h3 className="text-gh-h1 font-bold font-manrope text-white leading-tight tracking-tight uppercase">
                     {card.title.split(" ").map((word, i) => (
                       <React.Fragment key={i}>
                         {word}
@@ -425,7 +391,7 @@ function WhyChooseJadeSection() {
                     ))}
                   </h3>
                 </div>
-                <p className="text-white/50 font-manrope text-sm leading-relaxed group-hover:text-white/70 transition-colors">
+                <p className="text-white/50 font-manrope text-gh-body leading-relaxed group-hover:text-white/70 transition-colors">
                   {card.desc}
                 </p>
               </motion.div>
@@ -435,11 +401,11 @@ function WhyChooseJadeSection() {
 
         {/* Footer Text & Button */}
         <div className="max-w-2xl mx-auto text-center space-y-6">
-          <p className="text-white/60 font-philosopher text-sm md:text-base leading-relaxed italic px-4">
+          <p className="text-white/60 font-philosopher text-gh-body leading-relaxed italic px-4">
             Private villas and curated experiences designed to make every
             weekend feel like an escape.
           </p>
-          <button className="w-full bg-[#EFCB62] border-[1.5px] border-[#634F1B] text-[#634F1B] font-manrope font-bold py-5 md:py-7 flex items-center justify-center gap-4 hover:bg-[#E5C158] transition-all uppercase tracking-[0.2em] text-[12px] md:text-sm group">
+          <button className="w-full bg-[#EFCB62] border-[1.5px] border-[#634F1B] text-[#634F1B] font-manrope font-bold py-5 md:py-7 flex items-center justify-center gap-4 hover:bg-[#E5C158] transition-all uppercase tracking-[0.2em] text-gh-label group">
             PLAN YOUR WEEKEND ESCAPE
             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 stroke-[1.5]" />
           </button>
@@ -483,10 +449,10 @@ function ThemedVillasSection() {
       <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase mb-6">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-6">
             OUR VILLAS
           </p>
-          <h2 className="text-4xl md:text-6xl font-philosopher text-white leading-tight">
+          <h2 className="text-gh-h1 font-philosopher text-white leading-tight">
             Themed Villas
             <br />
             By Jade
@@ -516,10 +482,10 @@ function ThemedVillasSection() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
                 </div>
                 <div>
-                  <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-2 text-left">
+                  <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-2 text-left">
                     {villa.tag}
                   </p>
-                  <h3 className="text-3xl md:text-4xl font-philosopher text-white group-hover:text-[#EFCD62] transition-colors text-left leading-tight">
+                  <h3 className="text-gh-h2 font-philosopher text-white group-hover:text-[#EFCD62] transition-colors text-left leading-tight">
                     {villa.name}
                   </h3>
                 </div>
@@ -530,7 +496,7 @@ function ThemedVillasSection() {
 
         {/* Action Button */}
         <div className="max-w-md mx-auto">
-          <button className="w-full bg-[#EFCB62] border-[1.5px] border-[#634F1B] text-[#634F1B] font-manrope font-bold py-5 md:py-6 flex items-center justify-center gap-4 hover:bg-[#E5C158] transition-all uppercase tracking-[0.2em] text-[12px] md:text-sm group">
+          <button className="w-full bg-[#EFCB62] border-[1.5px] border-[#634F1B] text-[#634F1B] font-manrope font-bold py-5 md:py-6 flex items-center justify-center gap-4 hover:bg-[#E5C158] transition-all uppercase tracking-[0.2em] text-gh-label group">
             VIEW ALL VILLA RETREATS
             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 stroke-[1.5]" />
           </button>

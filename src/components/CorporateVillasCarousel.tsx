@@ -2,25 +2,24 @@
 
 import { useState } from "react";
 import { VILLAS } from "@/data/villas";
-import WeddingVillaCard from "./WeddingVillaCard";
-import VenueOverlay from "./VenueOverlay";
+import CorporateVillaCard from "./CorporateVillaCard";
+import CorporateVenueOverlay from "./CorporateVenueOverlay";
 import { AnimatePresence } from "framer-motion";
 
-// Filter villas to specifically show all 6 Wedding related venues
-const WEDDING_VILLA_IDS = [
+// Filter villas to specifically show corporate related venues
+const CORPORATE_VILLA_IDS = [
   "dome-villas",
-  "the-haven",
-  "retreat-on-the-ridge",
-  "tranquil-woods",
   "magnolia",
   "diamond",
+  "retreat-on-the-ridge",
+  "the-haven",
 ];
 
-const WEDDING_VILLAS = VILLAS.filter((villa) =>
-  WEDDING_VILLA_IDS.includes(villa.id),
+const CORPORATE_VILLAS = VILLAS.filter((villa) =>
+  CORPORATE_VILLA_IDS.includes(villa.id),
 );
 
-export default function WeddingVillasCarousel() {
+export default function CorporateVillasCarousel() {
   const [selectedVilla, setSelectedVilla] = useState<any>(null);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
@@ -30,11 +29,11 @@ export default function WeddingVillasCarousel() {
   };
 
   return (
-    <section className="relative bg-[#25282C] py-10">
+    <section id="featured-venues" className="relative bg-[#1A1C1E] py-10">
       <div className="max-w-[1920px] mx-auto px-0 md:px-8 lg:px-16 w-full overflow-hidden">
         <div className="flex flex-col gap-10">
-          {WEDDING_VILLAS.map((villa) => (
-            <WeddingVillaCard
+          {CORPORATE_VILLAS.map((villa) => (
+            <CorporateVillaCard
               key={villa.id}
               villa={villa}
               onKnowMore={() => handleKnowMore(villa)}
@@ -45,7 +44,7 @@ export default function WeddingVillasCarousel() {
 
       <AnimatePresence>
         {isOverlayOpen && (
-          <VenueOverlay
+          <CorporateVenueOverlay
             isOpen={isOverlayOpen}
             onClose={() => setIsOverlayOpen(false)}
             villa={selectedVilla}

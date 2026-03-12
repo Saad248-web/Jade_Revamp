@@ -117,14 +117,14 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="text-xs md:text-sm tracking-[0.3em] text-jade-gold uppercase mb-6 font-manrope font-bold"
+              className="text-gh-label tracking-[0.3em] text-jade-gold uppercase mb-6 font-manrope font-bold"
             >
               JADE HOSPITAINMENT
             </motion.p>
 
             {/* Title - Smaller Size, Forced 2 Lines */}
             <motion.h1
-              className="font-philosopher text-4xl md:text-6xl lg:text-7xl leading-[1.1] text-white space-y-2 mb-6"
+              className="font-philosopher text-gh-h1 leading-[1.1] text-white space-y-2 mb-6"
               initial={{ opacity: 0, y: 30 }}
               animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
@@ -138,7 +138,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-              className="text-sm md:text-lg font-light text-[#FAFAFA] max-w-xl font-manrope leading-loose mb-12"
+              className="text-gh-body font-light text-[#FAFAFA] max-w-xl font-manrope leading-loose mb-12"
             >
               Private themed farmhouse villas in serene locations of Bangalore,
               curated for gatherings and getaways.
@@ -154,7 +154,7 @@ export default function LandingPage() {
               transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
               className="flex flex-col items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity"
             >
-              <span className="text-[10px] tracking-[0.2em] font-manrope text-white/60 uppercase">
+              <span className="text-gh-label tracking-[0.2em] font-manrope text-white/60 uppercase">
                 Scroll to Experience
               </span>
               {/* Vertical Line */}

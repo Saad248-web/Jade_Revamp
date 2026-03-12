@@ -82,7 +82,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
 
             {/* Pagination Info */}
             <div className="flex flex-col flex-1 items-center px-4">
-              <span className="text-white text-[10px] md:text-xs font-manrope font-bold tracking-widest uppercase mb-1">
+              <span className="text-white text-gh-label font-manrope font-bold tracking-widest uppercase mb-1">
                 {currentSpace.name || "VIEW"}
               </span>
               <div className="flex items-center gap-2">
@@ -108,25 +108,23 @@ export default function VillaCard({ villa }: VillaCardProps) {
 
       {/* DETAILS CONTAINER */}
       <div className="flex flex-col text-left flex-1 md:py-2">
-        <span className="text-[#EFCD62] text-[10px] md:text-[11px] font-manrope font-bold tracking-[0.2em] uppercase mb-2">
+        <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-4">
           {villa.type}
         </span>
-        <h2 className="font-philosopher text-3xl lg:text-4xl text-white mb-2">
+        <h2 className="font-philosopher text-gh-h2 text-white mb-2">
           {villa.name}
         </h2>
-        <div className="flex items-center gap-2 text-white/60 mb-6">
+        <div className="flex items-center gap-2 text-white/60 mb-4">
           <MapPin className="w-4 h-4" />
-          <span className="font-manrope text-xs md:text-sm">
-            {villa.location}
-          </span>
+          <span className="font-manrope text-gh-body">{villa.location}</span>
         </div>
 
-        <p className="font-manrope text-white/70 leading-relaxed text-sm mb-6 line-clamp-2 lg:line-clamp-none">
+        <p className="font-manrope text-white/70 leading-relaxed text-gh-desc mb-4 line-clamp-2 lg:line-clamp-none">
           {villa.description}
         </p>
 
         {/* Stats Row */}
-        <div className="flex flex-nowrap overflow-x-auto items-center gap-x-4 mb-6 text-white/80 font-manrope text-xs md:text-sm [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+        <div className="flex flex-nowrap overflow-x-auto items-center gap-x-4 mb-4 text-white/80 font-manrope text-xs md:text-sm [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
           <div className="flex shrink-0 items-center gap-2">
             <Bed className="w-4 h-4 text-[#EFCD62]" />
             <span className="whitespace-nowrap">{villa.stats.stay}</span>
@@ -153,13 +151,13 @@ export default function VillaCard({ villa }: VillaCardProps) {
 
         {/* Perfect For Tags */}
         <div className="flex flex-nowrap overflow-x-auto items-center gap-2 mb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
-          <span className="shrink-0 text-white/40 text-[10px] font-manrope font-bold uppercase tracking-wider mr-1">
+          <span className="shrink-0 text-white/40 text-gh-label font-manrope font-bold uppercase tracking-wider mr-1">
             Perfect for:
           </span>
           {villa.perfectFor.map((tag) => (
             <span
               key={tag}
-              className="shrink-0 whitespace-nowrap bg-white/5 border border-white/10 text-white/80 text-[10px] px-2.5 py-1 rounded-sm font-manrope"
+              className="shrink-0 whitespace-nowrap bg-white/5 border border-white/10 text-white/80 text-gh-label px-2.5 py-1 rounded-sm font-manrope"
             >
               {tag}
             </span>
@@ -169,26 +167,21 @@ export default function VillaCard({ villa }: VillaCardProps) {
         {/* Action Row */}
         <div className="flex flex-row items-center justify-between gap-4 mt-auto">
           {/* Price */}
-          <div className="flex flex-col shrink-0">
-            <span className="text-white/40 text-[9px] font-manrope uppercase tracking-widest mb-0.5">
-              Starting from
-            </span>
-            <span className="text-white font-manrope text-lg tracking-wide font-medium">
-              {startingPrice || "Upon Request"}
-            </span>
-          </div>
+          <span className="text-white font-manrope font-bold text-gh-label tracking-wide">
+            {startingPrice || "Upon Request"} onwards
+          </span>
 
           {/* Buttons */}
           <div className="flex items-center gap-3">
             <Link
               href={`/villas/${villa.id}?autoScroll=true`}
-              className="border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-5 py-2.5 font-manrope font-bold text-[10px] tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
+              className="border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-5 py-2.5 font-manrope font-bold text-gh-desc tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
             >
               VIEW VILLA
             </Link>
             <button
               onClick={() => router.push(`/book?villa=${villa.id}`)}
-              className="bg-[#EFCD62] text-black border border-[#EFCD62] hover:bg-white hover:border-white transition-colors px-5 py-2.5 font-manrope font-bold text-[10px] tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
+              className="bg-[#EFCD62] text-black border border-[#EFCD62] hover:bg-white hover:border-white transition-colors px-5 py-2.5 font-manrope font-bold text-gh-desc tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
             >
               BOOK VILLA
             </button>

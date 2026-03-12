@@ -40,12 +40,12 @@ function ContactCard({
         <Icon className="w-5 h-5 text-white/50" strokeWidth={1.5} />
       </div>
       <p
-        className={`text-white font-manrope font-semibold text-sm md:text-base tracking-wide ${wrap ? "" : "whitespace-nowrap"}`}
+        className={`text-white font-manrope font-semibold text-gh-body tracking-wide ${wrap ? "" : "whitespace-nowrap"}`}
       >
         {title}
       </p>
       <p
-        className={`text-white/50 font-manrope text-xs ${wrap ? "" : "whitespace-nowrap"}`}
+        className={`text-white/50 font-manrope text-gh-desc ${wrap ? "" : "whitespace-nowrap"}`}
       >
         {subtitle}
       </p>
@@ -153,7 +153,7 @@ export default function ContactPage() {
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-[#EFCD62] text-xs md:text-sm font-bold tracking-[0.3em] uppercase mb-6"
+            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-6"
           >
             CONTACT US
           </motion.p>
@@ -162,7 +162,7 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-philosopher leading-tight mb-8 max-w-3xl"
+            className="text-gh-h1 font-philosopher leading-tight mb-8 max-w-3xl"
           >
             Planning a stay, <span className="block">celebration or</span>
             <span className="block">partnership?</span>
@@ -172,7 +172,7 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-white/70 font-manrope text-sm md:text-base max-w-xl mx-auto leading-relaxed mb-14"
+            className="text-white/70 font-manrope text-gh-body max-w-xl mx-auto leading-relaxed mb-14"
           >
             We&apos;re available{" "}
             <strong className="text-white font-semibold">
@@ -304,7 +304,7 @@ export default function ContactPage() {
                       initial={{ opacity: 0, y: 16 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
-                      className="text-white text-3xl font-philosopher mb-4"
+                      className="text-white text-gh-h2 font-philosopher mb-4"
                     >
                       We've got it from here
                     </motion.h2>
@@ -313,7 +313,7 @@ export default function ContactPage() {
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
-                      className="text-white/80 text-sm leading-relaxed mb-10 max-w-sm mx-auto font-manrope"
+                      className="text-white/80 text-gh-body leading-relaxed mb-10 max-w-sm mx-auto font-manrope"
                     >
                       Thanks for sharing your details!
                       <br />
@@ -327,7 +327,7 @@ export default function ContactPage() {
                       transition={{ delay: 0.4 }}
                       className="flex flex-col w-full max-w-[280px] mx-auto gap-5"
                     >
-                      <p className="text-white/50 text-[10px] font-bold tracking-[0.2em] uppercase text-center">
+                      <p className="text-white/50 text-gh-label font-bold tracking-[0.2em] uppercase text-center">
                         MEANWHILE CHECK US OUT HERE
                       </p>
 
@@ -358,14 +358,14 @@ export default function ContactPage() {
                         ))}
                       </div>
 
-                      <p className="text-white/30 text-[10px] italic text-center">
+                      <p className="text-white/30 text-gh-label italic text-center">
                         Thoughtfully operated. Always.
                       </p>
 
                       <button
                         type="button"
                         onClick={closeModal}
-                        className="w-full bg-[#EFCD62] text-[#0E3A2F] py-5 text-xs font-bold tracking-widest uppercase hover:bg-white transition-colors rounded-none"
+                        className="w-full bg-[#EFCD62] text-[#0E3A2F] py-5 text-gh-label font-bold tracking-widest uppercase hover:bg-white transition-colors rounded-none"
                       >
                         OKAY
                       </button>

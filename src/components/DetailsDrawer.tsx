@@ -104,7 +104,7 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 md:p-8 border-b border-white/10">
-          <h2 className="text-3xl font-philosopher">{title}</h2>
+          <h2 className="text-gh-h2 font-philosopher">{title}</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-white/10 rounded-full transition-colors"
@@ -133,16 +133,16 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
 
                   {/* Content Container - Adjust padding if no icon */}
                   <div className={!Icon ? "pl-2" : ""}>
-                    <h3 className="text-lg font-bold font-manrope mb-2 text-white">
+                    <h3 className="text-gh-body font-bold font-manrope mb-2 text-white">
                       {title}
                     </h3>
                     {description && (
-                      <p className="text-white/70 text-sm leading-relaxed font-manrope text-justify">
+                      <p className="text-white/70 text-gh-body leading-relaxed font-manrope text-justify">
                         {description}
                       </p>
                     )}
                     {item.footer && (
-                      <p className="text-white/40 text-[10px] mt-2 uppercase tracking-wider font-manrope">
+                      <p className="text-white/40 text-gh-label mt-2 uppercase tracking-wider font-manrope">
                         {item.footer}
                       </p>
                     )}

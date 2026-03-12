@@ -163,7 +163,7 @@ export default function CareersPage() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-[#EFCD62] text-xs md:text-sm font-bold tracking-[0.3em] uppercase mb-6"
+            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-6"
           >
             CAREERS
           </motion.p>
@@ -171,7 +171,7 @@ export default function CareersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-7xl font-philosopher leading-tight mb-8"
+            className="text-gh-h1 font-philosopher leading-tight mb-8"
           >
             Work Where <br /> Standards Matter
           </motion.h1>
@@ -179,7 +179,7 @@ export default function CareersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-white/70 text-sm md:text-lg max-w-2xl mx-auto mb-12 font-manrope leading-relaxed"
+            className="text-white/70 text-gh-body max-w-2xl mx-auto mb-12 font-manrope leading-relaxed"
           >
             Join us in building Hospitainment, bringing together hospitality,
             events and operations with clarity and care.
@@ -193,7 +193,7 @@ export default function CareersPage() {
                 .getElementById("jobs")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold uppercase tracking-widest text-sm px-12 py-5 rounded-none transition-all"
+            className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold uppercase tracking-widest text-gh-label px-12 py-5 rounded-none transition-all"
           >
             VIEW OPEN ROLES
           </motion.button>
@@ -218,10 +218,10 @@ export default function CareersPage() {
 
         <div className="max-w-4xl mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
-            <p className="text-[#EFCD62] text-xs font-bold tracking-[0.2em] uppercase mb-4">
+            <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
               JOBS
             </p>
-            <h2 className="text-3xl md:text-5xl font-philosopher text-white">
+            <h2 className="text-gh-h2 font-philosopher text-white">
               Current Opportunities
             </h2>
           </div>
@@ -233,7 +233,7 @@ export default function CareersPage() {
                   onClick={() => toggleJob(job.id)}
                   className="w-full py-8 flex items-center justify-between text-left group hover:opacity-80 transition-opacity"
                 >
-                  <span className="text-sm md:text-base font-bold tracking-widest uppercase">
+                  <span className="text-gh-label font-bold tracking-widest uppercase">
                     {job.title}
                   </span>
                   {expandedJob === job.id ? (
@@ -253,10 +253,10 @@ export default function CareersPage() {
                     >
                       <div className="pb-12 text-white/80 font-manrope space-y-8">
                         <div>
-                          <p className="leading-relaxed text-sm md:text-base mb-6 text-justify">
+                          <p className="leading-relaxed text-gh-body mb-6 text-justify">
                             {job.purpose}
                           </p>
-                          <p className="leading-relaxed text-sm md:text-base italic text-justify">
+                          <p className="leading-relaxed text-gh-body italic text-justify">
                             If you&apos;re someone who&apos;s constantly on
                             Social Media, knows what&apos;s trending, and enjoys
                             making videos, reels, or content that gets attention
@@ -267,7 +267,7 @@ export default function CareersPage() {
 
                         {job.purposeToTeam && (
                           <div>
-                            <h4 className="font-bold text-white mb-4 uppercase tracking-wider text-xs">
+                            <h4 className="font-bold text-white mb-4 uppercase tracking-wider text-gh-label">
                               Your Purpose to the Team:
                             </h4>
                             <ul className="list-disc pl-5 space-y-2 text-sm">
@@ -279,7 +279,7 @@ export default function CareersPage() {
                         )}
 
                         <div>
-                          <h4 className="font-bold text-white mb-4 uppercase tracking-wider text-xs">
+                          <h4 className="font-bold text-white mb-4 uppercase tracking-wider text-gh-label">
                             What We&apos;re Looking For:
                           </h4>
                           <ul className="list-disc pl-5 space-y-2 text-sm">
@@ -295,7 +295,7 @@ export default function CareersPage() {
                             e.preventDefault();
                             setIsApplyModalOpen(true);
                           }}
-                          className="w-full bg-[#EFCD62] text-black font-bold uppercase tracking-widest text-sm py-5 mt-4 hover:bg-white transition-colors flex items-center justify-center gap-2 rounded-none"
+                          className="w-full bg-[#EFCD62] text-black font-bold uppercase tracking-widest text-gh-label py-5 mt-4 hover:bg-white transition-colors flex items-center justify-center gap-2 rounded-none"
                         >
                           APPLY NOW <ArrowRight className="w-4 h-4" />
                         </button>
@@ -312,14 +312,14 @@ export default function CareersPage() {
       {/* 3. CULTURE SECTION */}
       <section className="py-24 bg-[#1A1C1E] border-t border-white/5">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-[#EFCD62] text-xs font-bold tracking-[0.2em] uppercase mb-4">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
             CULTURE
           </p>
-          <h2 className="text-4xl md:text-6xl font-philosopher text-white mb-8">
+          <h2 className="text-gh-h1 font-philosopher text-white mb-8">
             Work Hard. <br /> Celebrate Well.
           </h2>
 
-          <div className="text-white/70 max-w-2xl mx-auto space-y-6 font-manrope leading-relaxed mb-12">
+          <div className="text-white/70 max-w-2xl mx-auto space-y-6 font-manrope leading-relaxed mb-12 text-gh-body">
             <p className="text-justify">
               Our culture is built on accountability, teamwork, and consistent
               execution. We take our work seriously, knowing that experience is
@@ -420,7 +420,7 @@ export default function CareersPage() {
                       <form className="space-y-4 w-full" onSubmit={handleApply}>
                         {/* Full Name */}
                         <div className="relative w-full">
-                          <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-[10px] text-[#EFCD62] uppercase tracking-widest font-bold z-10">
+                          <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold z-10">
                             Full Name
                           </label>
                           <input
@@ -456,7 +456,7 @@ export default function CareersPage() {
                         {/* Upload CV */}
                         <div className="flex flex-col items-center gap-3 py-3">
                           <label className="cursor-pointer flex items-center gap-2 text-[#EFCD62]">
-                            <span className="uppercase tracking-[0.2em] text-[10px] font-bold">
+                            <span className="uppercase tracking-[0.2em] text-gh-label font-bold">
                               UPLOAD CV
                             </span>
                             <Upload className="w-4 h-4" />
@@ -468,7 +468,7 @@ export default function CareersPage() {
                           </label>
 
                           {selectedFileName && (
-                            <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 text-[11px] text-white/60 max-w-full overflow-hidden">
+                            <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 text-gh-label text-white/60 max-w-full overflow-hidden">
                               <span className="truncate">
                                 {selectedFileName}
                               </span>
@@ -572,7 +572,7 @@ export default function CareersPage() {
                         transition={{ delay: 0.4, duration: 0.4 }}
                         className="space-y-5 mb-10 w-full"
                       >
-                        <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase">
+                        <p className="text-gh-label tracking-[0.3em] text-white/40 uppercase">
                           MEANWHILE CHECK US OUT HERE
                         </p>
                         <div className="flex justify-center gap-4">
@@ -601,7 +601,7 @@ export default function CareersPage() {
                             </a>
                           ))}
                         </div>
-                        <p className="text-[10px] text-white/30 italic">
+                        <p className="text-gh-label text-white/30 italic">
                           Thoughtfully operated. Always.
                         </p>
                       </motion.div>
@@ -660,7 +660,7 @@ export default function CareersPage() {
 
                       <form className="space-y-6" onSubmit={handleApply}>
                         <div className="relative">
-                          <label className="absolute -top-3 left-4 bg-[#0D4032] px-2 text-[10px] text-[#EFCD62] uppercase tracking-widest font-bold">
+                          <label className="absolute -top-3 left-4 bg-[#0D4032] px-2 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
                             Full Name
                           </label>
                           <input
@@ -689,7 +689,7 @@ export default function CareersPage() {
 
                         <div className="flex flex-col items-center gap-4 py-4">
                           <label className="cursor-pointer flex items-center gap-2 text-[#EFCD62] hover:text-white transition-colors">
-                            <span className="uppercase tracking-[0.2em] text-[10px] font-bold">
+                            <span className="uppercase tracking-[0.2em] text-gh-label font-bold">
                               UPLOAD CV
                             </span>
                             <Upload className="w-4 h-4" />
@@ -700,7 +700,7 @@ export default function CareersPage() {
                             />
                           </label>
                           {selectedFileName && (
-                            <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 text-[11px] text-white/60">
+                            <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 text-gh-label text-white/60">
                               {selectedFileName}
                               <button
                                 type="button"
@@ -778,7 +778,7 @@ export default function CareersPage() {
                       </p>
 
                       <div className="space-y-8">
-                        <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase">
+                        <p className="text-gh-label tracking-[0.3em] text-white/40 uppercase">
                           MEANWHILE CHECK US OUT HERE
                         </p>
                         <div className="flex justify-center gap-6">
@@ -807,7 +807,7 @@ export default function CareersPage() {
                             </a>
                           ))}
                         </div>
-                        <p className="text-[10px] text-white/30 italic">
+                        <p className="text-gh-label text-white/30 italic">
                           Thoughtfully operated. Always.
                         </p>
                       </div>

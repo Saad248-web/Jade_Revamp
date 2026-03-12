@@ -148,11 +148,11 @@ function StepDates({
     <div className="flex flex-col h-full">
       {/* Step title */}
       <div className="px-5 py-4 shrink-0">
-        <h2 className="text-white text-xl font-philosopher">Select Dates</h2>
+        <h2 className="text-white text-gh-h2 font-philosopher">Select Dates</h2>
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-5 px-5 pb-3 text-[10px] text-white/50 font-manrope shrink-0">
+      <div className="flex items-center gap-5 px-5 pb-3 text-gh-label text-white/50 font-manrope shrink-0">
         <span className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-white/10 border border-white/20" />
           Available
@@ -176,7 +176,7 @@ function StepDates({
         {DAY_LABELS.map((d) => (
           <span
             key={d}
-            className="text-white/40 text-[9px] font-manrope tracking-wider"
+            className="text-white/40 text-gh-label font-manrope tracking-wider"
           >
             {d}
           </span>
@@ -187,7 +187,7 @@ function StepDates({
       <div className="flex-1 overflow-y-auto px-5 pb-28">
         {MONTHS.map((month, mIdx) => (
           <div key={month.name} className="mb-6">
-            <h3 className="text-white font-manrope font-semibold text-sm mb-3">
+            <h3 className="text-white font-manrope font-semibold text-gh-body mb-3">
               {month.name}
             </h3>
             <div className="grid grid-cols-7 gap-y-1.5 text-center">
@@ -204,7 +204,7 @@ function StepDates({
                       key={day}
                       disabled={unavail}
                       onClick={() => !unavail && handleDayClick(mIdx, day)}
-                      className={`w-9 h-9 mx-auto flex items-center justify-center text-xs font-manrope transition-colors rounded-sm relative overflow-hidden
+                      className={`w-9 h-9 mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-sm relative overflow-hidden
                       ${sel ? "bg-[#EFCD62] text-[#0D4032] font-bold" : ""}
                       ${inRange ? "bg-[#EFCD62]/20 text-white" : ""}
                       ${!sel && !inRange && !unavail ? "text-white hover:bg-white/10" : ""}
@@ -256,9 +256,9 @@ function StepGuests({
   }) => (
     <div className="flex items-center justify-between py-5 border-b border-white/8">
       <div>
-        <p className="text-white font-philosopher text-base">{label}</p>
+        <p className="text-white font-philosopher text-gh-body">{label}</p>
         {subtitle && (
-          <p className="text-white/40 text-xs font-manrope mt-0.5">
+          <p className="text-white/40 text-gh-desc font-manrope mt-0.5">
             {subtitle}
           </p>
         )}
@@ -270,7 +270,7 @@ function StepGuests({
         >
           <Minus className="w-4 h-4" />
         </button>
-        <span className="text-white font-philosopher text-xl w-8 text-center">
+        <span className="text-white font-philosopher text-gh-h2 w-8 text-center">
           {String(value).padStart(2, "0")}
         </span>
         <button
@@ -286,7 +286,7 @@ function StepGuests({
   return (
     <div className="flex flex-col h-full">
       <div className="px-5 py-4 shrink-0">
-        <h2 className="text-white text-xl font-philosopher">Total Guests</h2>
+        <h2 className="text-white text-gh-h2 font-philosopher">Total Guests</h2>
       </div>
       <div className="flex-1 overflow-y-auto px-5 pb-28">
         <Counter
@@ -340,11 +340,11 @@ function StepDetails({
   return (
     <div className="flex flex-col h-full">
       <div className="px-5 py-4 shrink-0">
-        <h2 className="text-white text-xl font-philosopher">Your Details</h2>
+        <h2 className="text-white text-gh-h2 font-philosopher">Your Details</h2>
       </div>
       <div className="flex-1 overflow-y-auto px-5 py-2 pb-28 space-y-4">
         <div className="relative border border-white/20 focus-within:border-[#EFCD62] transition-colors">
-          <label className="absolute -top-2.5 left-3 bg-[#0D4032] px-1 text-[10px] text-[#EFCD62] uppercase tracking-widest font-bold">
+          <label className="absolute -top-2.5 left-3 bg-[#0D4032] px-1 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
             Full Name
           </label>
           <input
@@ -353,7 +353,7 @@ function StepDetails({
             onChange={(e) =>
               setDetails({ ...details, fullName: e.target.value })
             }
-            className="w-full bg-transparent px-4 py-3.5 text-white text-sm placeholder:text-white/30 focus:outline-none font-manrope"
+            className="w-full bg-transparent px-4 py-3.5 text-white text-gh-body placeholder:text-white/30 focus:outline-none font-manrope"
           />
         </div>
         <input
@@ -361,21 +361,21 @@ function StepDetails({
           placeholder="Phone Number*"
           value={details.phone}
           onChange={(e) => setDetails({ ...details, phone: e.target.value })}
-          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-sm placeholder:text-white/40 focus:outline-none transition-colors font-manrope"
+          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors font-manrope"
         />
         <input
           type="email"
           placeholder="Email*"
           value={details.email}
           onChange={(e) => setDetails({ ...details, email: e.target.value })}
-          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-sm placeholder:text-white/40 focus:outline-none transition-colors font-manrope"
+          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors font-manrope"
         />
         <textarea
           rows={4}
           placeholder="Additional requests or note to the host"
           value={details.notes}
           onChange={(e) => setDetails({ ...details, notes: e.target.value })}
-          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-sm placeholder:text-white/40 focus:outline-none transition-colors resize-none font-manrope"
+          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors resize-none font-manrope"
         />
       </div>
     </div>
@@ -436,13 +436,13 @@ function StepReview({
               />
             </div>
             <div className="flex flex-col justify-center">
-              <p className="text-[#EFCD62] text-[10px] font-bold tracking-[0.15em] uppercase mb-1 mt-2 sm:mt-0">
+              <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.15em] uppercase mb-1 mt-2 sm:mt-0">
                 {selectedVilla.type}
               </p>
-              <h3 className="text-white font-philosopher text-xl sm:text-2xl mb-3 leading-none">
+              <h3 className="text-white font-philosopher text-gh-h2 mb-3 leading-none">
                 {selectedVilla.name}
               </h3>
-              <div className="flex flex-col gap-1.5 text-white/80 text-[10px] sm:text-xs font-manrope">
+              <div className="flex flex-col gap-1.5 text-white/80 text-gh-desc font-manrope">
                 <span className="flex items-center gap-2">
                   <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#EFCD62]" />{" "}
                   {selectedVilla.location}
@@ -474,17 +474,17 @@ function StepReview({
         <div className="space-y-4">
           <div className="bg-white/5 p-4 flex items-start justify-between border border-transparent">
             <div className="flex flex-col gap-1">
-              <p className="text-white font-manrope font-bold text-base mb-1">
+              <p className="text-white font-manrope font-bold text-gh-body mb-1">
                 Dates
               </p>
-              <p className="text-white/80 font-manrope text-sm">
+              <p className="text-white/80 font-manrope text-gh-desc">
                 {formatDate(dateRange.checkIn)} -{" "}
                 {formatDate(dateRange.checkOut)}
               </p>
             </div>
             <button
               onClick={() => goToStep("dates")}
-              className="bg-[#1E4336] border border-white/20 px-4 py-2 text-xs font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope"
+              className="bg-[#1E4336] border border-white/20 px-4 py-2 text-gh-label font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope"
             >
               EDIT
             </button>
@@ -492,10 +492,10 @@ function StepReview({
 
           <div className="bg-white/5 p-4 flex items-start justify-between">
             <div className="flex flex-col gap-1">
-              <p className="text-white font-manrope font-bold text-base mb-1">
+              <p className="text-white font-manrope font-bold text-gh-body mb-1">
                 Total Guests
               </p>
-              <p className="text-white/80 font-manrope text-sm">
+              <p className="text-white/80 font-manrope text-gh-desc">
                 {guests.adults + guests.children} Guests
                 {guests.children > 0 ? `, ${guests.children} Children` : ""}
                 {guests.pets > 0
@@ -505,7 +505,7 @@ function StepReview({
             </div>
             <button
               onClick={() => goToStep("guests")}
-              className="bg-[#1E4336] border border-white/20 px-4 py-2 text-xs font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope"
+              className="bg-[#1E4336] border border-white/20 px-4 py-2 text-gh-label font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope"
             >
               EDIT
             </button>
@@ -513,10 +513,10 @@ function StepReview({
 
           <div className="bg-white/5 p-4 flex items-start justify-between">
             <div className="flex flex-col gap-1">
-              <p className="text-white font-manrope font-bold text-base mb-1">
+              <p className="text-white font-manrope font-bold text-gh-body mb-1">
                 Your Details
               </p>
-              <ul className="text-white/80 text-sm font-manrope space-y-0.5 list-disc list-inside">
+              <ul className="text-white/80 text-gh-desc font-manrope space-y-0.5 list-disc list-inside">
                 <li>Name: {details.fullName || "---"}</li>
                 <li>Number: {details.phone || "---"}</li>
                 <li>Email: {details.email || "---"}</li>
@@ -530,7 +530,7 @@ function StepReview({
             </div>
             <button
               onClick={() => goToStep("details")}
-              className="bg-[#1E4336] border border-white/20 px-4 py-2 text-xs font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope shrink-0 ml-4"
+              className="bg-[#1E4336] border border-white/20 px-4 py-2 text-gh-label font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope shrink-0 ml-4"
             >
               EDIT
             </button>
@@ -539,10 +539,10 @@ function StepReview({
 
         {/* ADD ON EXPERIENCES */}
         <div className="mt-8">
-          <h4 className="text-white font-manrope font-bold text-lg mb-1">
+          <h4 className="text-white font-manrope font-bold text-gh-body mb-1">
             Add On Experiences
           </h4>
-          <p className="text-white/70 text-sm font-manrope mb-4">
+          <p className="text-white/70 text-gh-desc font-manrope mb-4">
             Optional experiences available at an additional cost.
             <br />
             Pricing is subject to confirmation based on group size.
@@ -562,11 +562,11 @@ function StepReview({
                       <div className="w-2 h-2 bg-white" />
                     )}
                   </div>
-                  <span className="text-white text-sm font-manrope">
+                  <span className="text-white text-gh-desc font-manrope">
                     {addon.label}
                   </span>
                 </div>
-                <span className="text-white text-sm font-manrope font-bold">
+                <span className="text-white text-gh-desc font-manrope font-bold">
                   {addon.price > 0
                     ? formatRupees(addon.price)
                     : "Price on request"}
@@ -578,10 +578,10 @@ function StepReview({
 
         {/* PRICE DETAILS */}
         <div className="mt-8 border-t border-white/10 pt-6">
-          <h4 className="text-white font-manrope font-bold text-base sm:text-lg mb-4">
+          <h4 className="text-white font-manrope font-bold text-gh-body mb-4">
             Price details
           </h4>
-          <div className="space-y-2 text-xs sm:text-sm font-manrope">
+          <div className="space-y-2 text-gh-desc font-manrope">
             <div className="flex items-center justify-between text-white/90">
               <span className="text-white/80">
                 1 Night x {formatRupees(basePrice)}
@@ -593,7 +593,7 @@ function StepReview({
             <div className="flex items-center justify-between text-white/90">
               <span className="flex items-center gap-2 text-white/80">
                 Add On Experiences{" "}
-                <span className="text-[10px] text-white/50 lowercase">
+                <span className="text-gh-label text-white/50 lowercase">
                   View Price Breakdown
                 </span>
               </span>
@@ -608,7 +608,7 @@ function StepReview({
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-4 text-white/50 text-[10px] font-manrope mt-5">
+          <div className="flex items-center gap-4 text-white/50 text-gh-label font-manrope mt-5">
             <span className="cursor-pointer hover:text-white transition-colors">
               Cancel within 24 hours for refund
             </span>
@@ -689,7 +689,7 @@ function BookPageContent() {
       const canNext = !!(dateRange.checkIn && dateRange.checkOut);
       return (
         <div className="flex items-center justify-between">
-          <div className="text-white/60 text-sm font-manrope">
+          <div className="text-white/60 text-gh-body font-manrope">
             <span>{formatDate(dateRange.checkIn)}</span>
             <span className="mx-2 text-white/30">to</span>
             <span>{formatDate(dateRange.checkOut)}</span>
@@ -697,7 +697,7 @@ function BookPageContent() {
           <button
             disabled={!canNext}
             onClick={goNextFromDates}
-            className={`px-8 py-2.5 text-xs font-bold tracking-widest uppercase transition-all font-manrope ${canNext ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
+            className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${canNext ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
           >
             NEXT
           </button>
@@ -708,7 +708,7 @@ function BookPageContent() {
       const totalGuests = guests.adults + guests.children;
       return (
         <div className="flex items-center justify-between">
-          <span className="text-white/60 text-sm font-manrope">
+          <span className="text-white/60 text-gh-body font-manrope">
             {totalGuests > 0
               ? `${guests.adults} Guest${guests.adults !== 1 ? "s" : ""}${guests.children > 0 ? `, ${guests.children} Children` : ""}`
               : "-- --"}
@@ -716,14 +716,14 @@ function BookPageContent() {
           <div className="flex gap-3">
             <button
               onClick={() => setStep("dates")}
-              className="px-5 py-2.5 text-xs font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
+              className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
             >
               BACK
             </button>
             <button
               disabled={guests.adults === 0}
               onClick={goNextFromGuests}
-              className={`px-8 py-2.5 text-xs font-bold tracking-widest uppercase transition-all font-manrope ${guests.adults > 0 ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
+              className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${guests.adults > 0 ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
             >
               APPLY
             </button>
@@ -744,20 +744,20 @@ function BookPageContent() {
         details.fullName.trim() && details.phone.trim() && details.email.trim();
       return (
         <div className="flex items-center justify-between">
-          <span className="text-[#EFCD62] font-manrope text-sm">
+          <span className="text-[#EFCD62] font-manrope text-gh-label font-bold">
             ₹{basePrice.toLocaleString("en-IN")} onwards
           </span>
           <div className="flex gap-3">
             <button
               onClick={goBackFromDetails}
-              className="px-5 py-2.5 text-xs font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
+              className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
             >
               BACK
             </button>
             <button
               disabled={!isValid}
               onClick={() => setStep("review")}
-              className={`px-8 py-2.5 text-xs font-bold tracking-widest uppercase transition-all font-manrope ${isValid ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
+              className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${isValid ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
             >
               APPLY
             </button>
@@ -782,21 +782,21 @@ function BookPageContent() {
       return (
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-3 sm:gap-0">
           <div className="flex items-center gap-2">
-            <span className="text-white/80 font-manrope text-xs sm:text-sm font-bold tracking-wider">
+            <span className="text-white/80 font-manrope text-gh-desc font-bold tracking-wider">
               Total Price:
             </span>
-            <span className="text-[#EFCD62] sm:text-white font-manrope text-lg sm:text-xl font-bold">
+            <span className="text-[#EFCD62] sm:text-white font-manrope text-gh-label font-bold">
               {formatRupees(total)}
             </span>
           </div>
           <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
             <button
               onClick={() => setStep("details")}
-              className="px-4 sm:px-6 py-2 sm:py-2.5 text-[10px] sm:text-xs font-bold tracking-widest text-[#EFCD62] uppercase transition-colors font-manrope border border-[#EFCD62]/30 sm:border-transparent rounded-sm sm:rounded-none"
+              className="px-4 sm:px-6 py-2 sm:py-2.5 text-gh-label font-bold tracking-widest text-[#EFCD62] uppercase transition-colors font-manrope border border-[#EFCD62]/30 sm:border-transparent rounded-sm sm:rounded-none"
             >
               BACK
             </button>
-            <button className="bg-[#EFCD62] text-[#0D4032] flex-1 sm:flex-none text-center px-4 sm:px-8 py-2 sm:py-3 text-[10px] sm:text-xs font-bold tracking-widest uppercase hover:bg-white transition-colors font-manrope shrink-0 rounded-sm sm:rounded-none">
+            <button className="bg-[#EFCD62] text-[#0D4032] flex-1 sm:flex-none text-center px-4 sm:px-8 py-2 sm:py-3 text-gh-label font-bold tracking-widest uppercase hover:bg-white transition-colors font-manrope shrink-0 rounded-sm sm:rounded-none">
               PAY NOW
             </button>
           </div>
@@ -833,7 +833,7 @@ function BookPageContent() {
         <div className="flex items-center gap-4">
           <button
             onClick={handleReset}
-            className="text-[#EFCD62] text-[10px] font-bold tracking-widest uppercase hover:text-white transition-colors font-manrope"
+            className="text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors font-manrope"
           >
             RESET
           </button>

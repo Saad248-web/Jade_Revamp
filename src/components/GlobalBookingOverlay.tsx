@@ -196,11 +196,11 @@ function StepDates({
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
-        <h2 className="text-white text-xl font-philosopher">Select Dates</h2>
+        <h2 className="text-white text-gh-h2 font-philosopher">Select Dates</h2>
         <div className="flex items-center gap-3">
           <button
             onClick={onReset}
-            className="text-[#EFCD62] text-[10px] font-bold tracking-widest uppercase hover:text-white transition-colors"
+            className="text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
           >
             RESET
           </button>
@@ -214,7 +214,7 @@ function StepDates({
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-5 px-5 py-3 text-[10px] text-white/50 font-manrope shrink-0">
+      <div className="flex items-center gap-5 px-5 py-3 text-gh-label text-white/50 font-manrope shrink-0">
         <span className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-white/10 border border-white/20" />
           Available
@@ -236,7 +236,7 @@ function StepDates({
         {DAY_LABELS.map((d) => (
           <span
             key={d}
-            className="text-white/40 text-[9px] font-manrope tracking-wider"
+            className="text-white/40 text-gh-label font-manrope tracking-wider"
           >
             {d}
           </span>
@@ -247,7 +247,7 @@ function StepDates({
       <div className="flex-1 overflow-y-auto px-5 pb-4">
         {MONTHS.map((month, mIdx) => (
           <div key={month.name} className="mb-6">
-            <h3 className="text-white font-manrope font-semibold text-sm mb-3">
+            <h3 className="text-white font-manrope font-semibold text-gh-body mb-3">
               {month.name}
             </h3>
             <div className="grid grid-cols-7 gap-y-1.5 text-center">
@@ -264,7 +264,7 @@ function StepDates({
                       key={day}
                       disabled={unavail}
                       onClick={() => !unavail && handleDayClick(mIdx, day)}
-                      className={`w-9 h-9 mx-auto flex items-center justify-center text-xs font-manrope transition-colors rounded-sm relative
+                      className={`w-9 h-9 mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-sm relative
                       ${sel ? "bg-[#EFCD62] text-[#0D4032] font-bold" : ""}
                       ${inRange ? "bg-[#EFCD62]/20 text-white" : ""}
                       ${!sel && !inRange && !unavail ? "text-white hover:bg-white/10" : ""}
@@ -292,7 +292,7 @@ function StepDates({
           <StepDots step={currentStep} total={stepTotal} />
         </div>
         <div className="px-5 py-4 border-t border-white/10 flex items-center justify-between">
-          <div className="text-white/60 text-sm font-manrope">
+          <div className="text-white/60 text-gh-body font-manrope">
             <span>{formatDate(dateRange.checkIn)}</span>
             <span className="mx-2 text-white/30">to</span>
             <span>{formatDate(dateRange.checkOut)}</span>
@@ -300,7 +300,7 @@ function StepDates({
           <button
             disabled={!dateRange.checkIn || !dateRange.checkOut}
             onClick={onNext}
-            className={`px-8 py-2.5 text-xs font-bold tracking-widest uppercase transition-all font-manrope ${
+            className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
               dateRange.checkIn && dateRange.checkOut
                 ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white"
                 : "bg-white/10 text-white/30 cursor-not-allowed"
@@ -358,9 +358,9 @@ function StepGuests({
   }) => (
     <div className="flex items-center justify-between py-5 border-b border-white/8">
       <div>
-        <p className="text-white font-philosopher text-base">{label}</p>
+        <p className="text-white font-philosopher text-gh-body">{label}</p>
         {subtitle && (
-          <p className="text-white/40 text-xs font-manrope mt-0.5">
+          <p className="text-white/40 text-gh-label font-manrope mt-0.5">
             {subtitle}
           </p>
         )}
@@ -372,7 +372,7 @@ function StepGuests({
         >
           <Minus className="w-4 h-4" />
         </button>
-        <span className="text-white font-philosopher text-xl w-8 text-center">
+        <span className="text-white font-philosopher text-gh-scroll w-8 text-center">
           {String(value).padStart(2, "0")}
         </span>
         <button
@@ -389,11 +389,11 @@ function StepGuests({
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
-        <h2 className="text-white text-xl font-philosopher">Total Guests</h2>
+        <h2 className="text-white text-gh-h2 font-philosopher">Total Guests</h2>
         <div className="flex items-center gap-3">
           <button
             onClick={onReset}
-            className="text-[#EFCD62] text-[10px] font-bold tracking-widest uppercase hover:text-white transition-colors"
+            className="text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
           >
             RESET
           </button>
@@ -436,7 +436,7 @@ function StepGuests({
           <StepDots step={currentStep} total={stepTotal} />
         </div>
         <div className="px-5 py-4 border-t border-white/10 flex items-center justify-between">
-          <span className="text-white/60 text-sm font-manrope">
+          <span className="text-white/60 text-gh-body font-manrope">
             {totalGuests > 0
               ? `${guests.adults} Guest${guests.adults !== 1 ? "s" : ""}${guests.children > 0 ? `, ${guests.children} Children` : ""}`
               : "-- --"}
@@ -451,7 +451,7 @@ function StepGuests({
             <button
               disabled={guests.adults === 0}
               onClick={onNext}
-              className={`px-8 py-2.5 text-xs font-bold tracking-widest uppercase transition-all font-manrope ${
+              className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
                 guests.adults > 0
                   ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white"
                   : "bg-white/10 text-white/30 cursor-not-allowed"
@@ -505,10 +505,10 @@ function StepVillas({
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
         <div>
-          <h2 className="text-white text-xl font-philosopher">
+          <h2 className="text-white text-gh-h2 font-philosopher">
             Select a Villa
           </h2>
-          <p className="text-white/40 text-xs font-manrope mt-0.5">
+          <p className="text-white/40 text-gh-label font-manrope mt-0.5">
             {formatDate(dateRange.checkIn)} → {formatDate(dateRange.checkOut)} ·{" "}
             {guests.adults} Guests
           </p>
@@ -527,7 +527,7 @@ function StepVillas({
           <button
             key={f}
             onClick={() => setActiveFilter(f)}
-            className={`shrink-0 px-4 py-1.5 text-[11px] font-manrope font-semibold tracking-wide rounded-full transition-all ${
+            className={`shrink-0 px-4 py-1.5 text-gh-label font-manrope font-semibold tracking-wide rounded-full transition-all ${
               activeFilter === f
                 ? "bg-[#EFCD62] text-[#0D4032]"
                 : "bg-white/10 text-white/60 hover:bg-white/20"
@@ -563,24 +563,24 @@ function StepVillas({
                   <Check className="w-4 h-4 text-[#0D4032]" strokeWidth={3} />
                 </div>
               )}
-              <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm px-2 py-1 text-white text-[10px] font-manrope font-semibold tracking-widest uppercase">
+              <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm px-2 py-1 text-white text-gh-label font-manrope font-semibold tracking-widest uppercase">
                 {villa.type}
               </div>
             </div>
 
             {/* Info */}
             <div className="bg-[#0a3527] p-4">
-              <h3 className="text-white font-philosopher text-lg mb-1">
+              <h3 className="text-white font-philosopher text-gh-h3 mb-1">
                 {villa.name}
               </h3>
-              <div className="flex items-center gap-1 text-white/50 text-xs font-manrope mb-2">
+              <div className="flex items-center gap-1 text-white/50 text-gh-label font-manrope mb-2">
                 <MapPin className="w-3 h-3 shrink-0" />
                 {villa.location}
               </div>
-              <p className="text-white/60 text-xs font-manrope line-clamp-2 mb-3">
+              <p className="text-white/60 text-gh-body font-manrope line-clamp-2 mb-3">
                 {villa.description}
               </p>
-              <div className="flex flex-wrap gap-3 text-white/50 text-xs font-manrope">
+              <div className="flex flex-wrap gap-3 text-white/50 text-gh-label font-manrope">
                 {villa.stats.stay && (
                   <span className="flex items-center gap-1">
                     <Users className="w-3 h-3" /> {villa.stats.stay} Stay
@@ -600,10 +600,10 @@ function StepVillas({
 
               <div className="mt-3 flex items-center justify-between">
                 <div>
-                  <p className="text-white/40 text-[10px] font-manrope">
+                  <p className="text-white/40 text-gh-label font-manrope">
                     Starting from
                   </p>
-                  <p className="text-[#EFCD62] font-philosopher text-base">
+                  <p className="text-[#EFCD62] font-philosopher text-gh-body">
                     {formatRupees(
                       villa.pricing?.stay?.packages?.[0]?.price?.replace(
                         /[^0-9]/g,
@@ -625,7 +625,7 @@ function StepVillas({
                     setSelectedVillaId(villa.id);
                     onNext();
                   }}
-                  className="bg-[#EFCD62] text-[#0D4032] px-5 py-2 text-xs font-bold tracking-widest uppercase hover:bg-white transition-colors font-manrope"
+                  className="bg-[#EFCD62] text-[#0D4032] px-5 py-2 text-gh-label font-bold tracking-widest uppercase hover:bg-white transition-colors font-manrope"
                 >
                   BOOK VILLA
                 </button>
@@ -643,7 +643,7 @@ function StepVillas({
         <div className="px-5 py-4 border-t border-white/10 flex items-center justify-between">
           <button
             onClick={onBack}
-            className="text-sm font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
+            className="text-gh-body font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
           >
             BACK
           </button>
@@ -702,7 +702,7 @@ function StepDetails({
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
-        <h2 className="text-white text-xl font-philosopher">Your Details</h2>
+        <h2 className="text-white text-gh-h2 font-philosopher">Your Details</h2>
         <button
           onClick={onClose}
           className="text-white/50 hover:text-white transition-colors"
@@ -715,7 +715,7 @@ function StepDetails({
       <div className="flex-1 overflow-y-auto px-5 py-5 space-y-4">
         {/* Full Name */}
         <div className="relative border border-white/20 focus-within:border-[#EFCD62] transition-colors">
-          <label className="absolute -top-2.5 left-3 bg-[#0D4032] px-1 text-[10px] text-[#EFCD62] uppercase tracking-widest font-bold">
+          <label className="absolute -top-2.5 left-3 bg-[#0D4032] px-1 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
             Full Name
           </label>
           <input
@@ -724,7 +724,7 @@ function StepDetails({
             onChange={(e) =>
               setDetails({ ...details, fullName: e.target.value })
             }
-            className="w-full bg-transparent px-4 py-3.5 text-white text-sm placeholder:text-white/30 focus:outline-none font-manrope"
+            className="w-full bg-transparent px-4 py-3.5 text-white text-gh-body placeholder:text-white/30 focus:outline-none font-manrope"
           />
         </div>
 
@@ -733,7 +733,7 @@ function StepDetails({
           placeholder="Phone Number*"
           value={details.phone}
           onChange={(e) => setDetails({ ...details, phone: e.target.value })}
-          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-sm placeholder:text-white/40 focus:outline-none transition-colors font-manrope"
+          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors font-manrope"
         />
 
         <input
@@ -741,7 +741,7 @@ function StepDetails({
           placeholder="Email*"
           value={details.email}
           onChange={(e) => setDetails({ ...details, email: e.target.value })}
-          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-sm placeholder:text-white/40 focus:outline-none transition-colors font-manrope"
+          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors font-manrope"
         />
 
         <textarea
@@ -749,7 +749,7 @@ function StepDetails({
           placeholder="Additional requests or note to the host"
           value={details.notes}
           onChange={(e) => setDetails({ ...details, notes: e.target.value })}
-          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-sm placeholder:text-white/40 focus:outline-none transition-colors resize-none font-manrope"
+          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors resize-none font-manrope"
         />
       </div>
 
@@ -759,7 +759,7 @@ function StepDetails({
           <StepDots step={currentStep} />
         </div>
         <div className="px-5 py-4 border-t border-white/10 flex items-center justify-between">
-          <span className="text-[#EFCD62] font-manrope text-sm">
+          <span className="text-[#EFCD62] font-manrope text-gh-label font-bold">
             {formatRupees(basePrice)} onwards
           </span>
           <div className="flex gap-3">
@@ -838,7 +838,7 @@ function StepReview({
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
-        <h2 className="text-white text-xl font-philosopher">Review & Pay</h2>
+        <h2 className="text-white text-gh-h2 font-philosopher">Review & Pay</h2>
         <button
           onClick={onClose}
           className="text-white/50 hover:text-white transition-colors"
@@ -861,13 +861,13 @@ function StepReview({
               />
             </div>
             <div>
-              <p className="text-[#EFCD62] text-[10px] font-manrope font-bold tracking-widest uppercase mb-1">
+              <p className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-widest uppercase mb-1">
                 {selectedVilla.type}
               </p>
-              <h3 className="text-white font-philosopher text-base mb-2">
+              <h3 className="text-white font-philosopher text-gh-body mb-2">
                 {selectedVilla.name}
               </h3>
-              <div className="flex flex-col gap-1 text-white/50 text-xs font-manrope">
+              <div className="flex flex-col gap-1 text-white/50 text-gh-label font-manrope">
                 <span className="flex items-center gap-1">
                   <MapPin className="w-3 h-3" /> {selectedVilla.location}
                 </span>
@@ -896,16 +896,16 @@ function StepReview({
         {/* Dates */}
         <div className="bg-white/5 rounded-lg p-4 flex items-center justify-between">
           <div>
-            <p className="text-white/40 text-[10px] font-manrope font-bold tracking-widest uppercase mb-1">
+            <p className="text-white/40 text-gh-label font-manrope font-bold tracking-widest uppercase mb-1">
               Dates
             </p>
-            <p className="text-white font-manrope text-sm">
+            <p className="text-white font-manrope text-gh-body">
               {formatDate(dateRange.checkIn)} - {formatDate(dateRange.checkOut)}
             </p>
           </div>
           <button
             onClick={() => goToStep("dates")}
-            className="text-[10px] font-bold tracking-widest text-white/50 hover:text-[#EFCD62] uppercase border border-white/20 px-3 py-1.5 transition-colors font-manrope"
+            className="text-gh-label font-bold tracking-widest text-white/50 hover:text-[#EFCD62] uppercase border border-white/20 px-3 py-1.5 transition-colors font-manrope"
           >
             EDIT
           </button>
@@ -914,10 +914,10 @@ function StepReview({
         {/* Guests */}
         <div className="bg-white/5 rounded-lg p-4 flex items-center justify-between">
           <div>
-            <p className="text-white/40 text-[10px] font-manrope font-bold tracking-widest uppercase mb-1">
+            <p className="text-white/40 text-gh-label font-manrope font-bold tracking-widest uppercase mb-1">
               Total Guests
             </p>
-            <p className="text-white font-manrope text-sm">
+            <p className="text-white font-manrope text-gh-body">
               {guests.adults} Guests
               {guests.children > 0 ? `, ${guests.children} Children` : ""}
               {guests.pets > 0
@@ -927,7 +927,7 @@ function StepReview({
           </div>
           <button
             onClick={() => goToStep("guests")}
-            className="text-[10px] font-bold tracking-widest text-white/50 hover:text-[#EFCD62] uppercase border border-white/20 px-3 py-1.5 transition-colors font-manrope"
+            className="text-gh-label font-bold tracking-widest text-white/50 hover:text-[#EFCD62] uppercase border border-white/20 px-3 py-1.5 transition-colors font-manrope"
           >
             EDIT
           </button>
@@ -936,10 +936,10 @@ function StepReview({
         {/* Details */}
         <div className="bg-white/5 rounded-lg p-4 flex items-start justify-between">
           <div>
-            <p className="text-white/40 text-[10px] font-manrope font-bold tracking-widest uppercase mb-1">
+            <p className="text-white/40 text-gh-label font-manrope font-bold tracking-widest uppercase mb-1">
               Your Details
             </p>
-            <ul className="text-white/70 text-xs font-manrope space-y-0.5">
+            <ul className="text-white/70 text-gh-body font-manrope space-y-0.5">
               <li>• Name: {details.fullName}</li>
               <li>• Number: {details.phone}</li>
               <li>• Email: {details.email}</li>
@@ -953,7 +953,7 @@ function StepReview({
           </div>
           <button
             onClick={() => goToStep("details")}
-            className="text-[10px] font-bold tracking-widest text-white/50 hover:text-[#EFCD62] uppercase border border-white/20 px-3 py-1.5 transition-colors font-manrope shrink-0 ml-2"
+            className="text-gh-label font-bold tracking-widest text-white/50 hover:text-[#EFCD62] uppercase border border-white/20 px-3 py-1.5 transition-colors font-manrope shrink-0 ml-2"
           >
             EDIT
           </button>
@@ -961,10 +961,10 @@ function StepReview({
 
         {/* Add-ons */}
         <div>
-          <h4 className="text-white font-philosopher text-base mb-2">
+          <h4 className="text-white font-philosopher text-gh-body mb-2">
             Add On Experiences
           </h4>
-          <p className="text-white/40 text-xs font-manrope mb-3">
+          <p className="text-white/40 text-gh-label font-manrope mb-3">
             Optional experiences available at an additional cost. Pricing is
             subject to confirmation based on group size.
           </p>
@@ -990,11 +990,11 @@ function StepReview({
                       />
                     )}
                   </div>
-                  <span className="text-white/80 text-sm font-manrope">
+                  <span className="text-white/80 text-gh-body font-manrope">
                     {addon.label}
                   </span>
                 </div>
-                <span className="text-white/60 text-sm font-manrope shrink-0">
+                <span className="text-white/60 text-gh-body font-manrope shrink-0">
                   {addon.price > 0
                     ? formatRupees(addon.price)
                     : "Price on request"}
@@ -1006,26 +1006,26 @@ function StepReview({
 
         {/* Price details */}
         <div className="border border-white/10 rounded-lg p-4 space-y-2">
-          <h4 className="text-white font-philosopher text-base mb-3">
+          <h4 className="text-white font-philosopher text-gh-body mb-3">
             Price Details
           </h4>
-          <div className="flex items-center justify-between text-sm font-manrope">
+          <div className="flex items-center justify-between text-gh-body font-manrope">
             <span className="text-white/60">
               1 Night × {formatRupees(basePrice)}
             </span>
             <span className="text-white">{formatRupees(basePrice)}</span>
           </div>
           {addOnTotal > 0 && (
-            <div className="flex items-center justify-between text-sm font-manrope">
+            <div className="flex items-center justify-between text-gh-body font-manrope">
               <span className="text-white/60">Add On Experiences</span>
               <span className="text-white">{formatRupees(addOnTotal)}</span>
             </div>
           )}
-          <div className="flex items-center justify-between text-sm font-manrope">
+          <div className="flex items-center justify-between text-gh-body font-manrope">
             <span className="text-white/60">Taxes</span>
             <span className="text-white">{formatRupees(NIGHT_TAX)}</span>
           </div>
-          <div className="flex items-center gap-3 text-white/30 text-[10px] font-manrope mt-1">
+          <div className="flex items-center gap-3 text-white/30 text-gh-label font-manrope mt-1">
             <span className="underline cursor-pointer hover:text-white/60 transition-colors">
               Cancel within 24 hours for refund
             </span>
@@ -1043,21 +1043,21 @@ function StepReview({
         </div>
         <div className="px-5 py-4 border-t border-white/10 flex items-center justify-between">
           <div>
-            <p className="text-white/40 text-[10px] font-manrope uppercase tracking-widest">
+            <p className="text-white/40 text-gh-label font-manrope uppercase tracking-widest">
               Total Price:
             </p>
-            <p className="text-white font-philosopher text-lg">
+            <p className="text-white font-philosopher text-gh-label font-bold">
               {formatRupees(total)}
             </p>
           </div>
           <div className="flex gap-3">
             <button
               onClick={onBack}
-              className="px-5 py-2.5 text-xs font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
+              className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
             >
               BACK
             </button>
-            <button className="bg-[#EFCD62] text-[#0D4032] px-8 py-2.5 text-xs font-bold tracking-widest uppercase hover:bg-white transition-colors font-manrope">
+            <button className="bg-[#EFCD62] text-[#0D4032] px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase hover:bg-white transition-colors font-manrope">
               PAY NOW
             </button>
           </div>

@@ -101,7 +101,7 @@ export default function VillasCarousel() {
                 <button
                   key={category}
                   onClick={() => handleCategoryChange(category)}
-                  className={`whitespace-nowrap flex-shrink-0 px-4 py-2 text-xs md:text-sm font-manrope font-medium transition-all duration-300 ${
+                  className={`whitespace-nowrap flex-shrink-0 px-4 py-2 text-gh-label font-manrope font-medium transition-all duration-300 ${
                     activeCategory === category
                       ? "bg-[#EFCD62] text-[#1A1C1E] border border-[#EFCD62]"
                       : "bg-transparent text-white/60 border border-white/20 hover:border-white/50 hover:text-white"
@@ -131,7 +131,7 @@ export default function VillasCarousel() {
         ) : (
           // No results fallback
           <div className="flex flex-col items-center justify-center h-[50vh] text-center">
-            <span className="text-white/40 font-manrope text-lg">
+            <span className="text-white/40 font-manrope text-gh-body">
               No villas found for "{activeCategory}".
             </span>
             <button

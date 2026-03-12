@@ -1179,6 +1179,123 @@ export const VILLAS = [
       },
     ],
   },
+  {
+    id: "emerald",
+    name: "Emerald",
+    type: "LUXURY PARTY VILLA WITH POOL",
+    location: "Kanakapura Road · South Bengaluru",
+    stats: { stay: "20 Guests", events: "40 Guests", bhk: "5 BHK" },
+    description:
+      "A premium luxury villa designed for high-end parties and celebrations. Featuring a large swimming pool, landscaped gardens, and a spacious 5-BHK layout, Emerald offers the perfect backdrop for memorable gatherings and weekend escapes.",
+    perfectFor: ["Parties", "Staycations", "Celebrations"],
+    categories: ["Weddings", "Corporate Retreats", "Pet friendly"],
+    image: "/assets/corporate_retreat.png",
+    amenities: [
+      { label: "Private Pool", icon: "Waves" },
+      { label: "Garden", icon: "Trees" },
+      { label: "Music System", icon: "Music" },
+    ],
+    spaces: [
+      { name: "Poolside", image: "/assets/corporate_retreat.png" },
+      { name: "Living Hall", image: "/assets/corporate_retreat.png" },
+      { name: "Deck", image: "/assets/corporate_retreat.png" },
+    ],
+    services: [
+      {
+        title: "Chef on Call",
+        description: "Private chef for pool parties.",
+        icon: "ChefHat",
+      },
+      {
+        title: "Housekeeping",
+        description: "Dedicated staff for clean-ups.",
+        icon: "SprayCan",
+      },
+    ],
+    propertyDetails: [
+      {
+        title: "5-BHK Layout",
+        description: "Spacious bedrooms with ensuite baths.",
+      },
+      {
+        title: "Private Pool",
+        description: "Large pool ideal for afternoon parties.",
+      },
+    ],
+    pricing: {
+      event: {
+        title: "Party Rental",
+        subtitle: "12 hours (Selectable)",
+        packages: [{ label: "Base Package", price: "₹65,000 onwards" }],
+        features: ["Pool Access", "Garden Access"],
+      },
+    },
+    locationDetails: {
+      address: "Emerald, Kanakapura Road, Bangalore",
+      distance: "45 mins from City Center",
+    },
+    activities: [
+      { title: "Pool Parties", image: "/assets/experience_wellness.png" },
+      { title: "Stays", image: "/assets/Wedding_for_Both.png" },
+    ],
+    video: "/assets/video_placeholder.png",
+    faq: [
+      {
+        question: "Is music allowed?",
+        answer: "Yes, until 10 PM outdoors, indoors after.",
+      },
+    ],
+  },
+  {
+    id: "wonderland-treehouse",
+    name: "Wonderland Treehouse",
+    type: "NATURE-THEMED BOUTIQUE STAY",
+    location: "Doddaballapur",
+    stats: { stay: "6 Guests", events: "8 Guests", bhk: "2 BHK" },
+    description:
+      "Experience the magic of slow living in our boutique treehouse-themed villa. Perfect for intimate groups, this cozy 2-BHK property offers a unique connection with nature, featuring rustic architecture and serene views.",
+    perfectFor: ["Slow Living", "Intimate Gatherings", "Romantic Stays"],
+    categories: ["Pre-wedding", "Pet friendly"],
+    image: "/assets/caravan_journey.png",
+    amenities: [
+      { label: "Treehouse Deck", icon: "Home" },
+      { label: "Nature View", icon: "Mountain" },
+      { label: "Cozy Interiors", icon: "Wind" },
+    ],
+    spaces: [
+      { name: "Main Deck", image: "/assets/caravan_journey.png" },
+      { name: "Cozy Room", image: "/assets/caravan_journey.png" },
+    ],
+    services: [
+      {
+        title: "Breakfast Included",
+        description: "Traditional Karnataka breakfast.",
+        icon: "ChefHat",
+      },
+    ],
+    propertyDetails: [
+      {
+        title: "2-BHK Treehouse",
+        description: "Rustic charm with modern comforts.",
+      },
+    ],
+    pricing: {
+      event: {
+        title: "Boutique Stay",
+        subtitle: "22 hours",
+        packages: [{ label: "Standard Stay", price: "₹30,000 onwards" }],
+        features: ["Breakfast", "Nature Trail"],
+      },
+    },
+    locationDetails: {
+      address: "Wonderland Treehouse, Doddaballapur, Bangalore",
+    },
+    activities: [
+      { title: "Nature Walks", image: "/assets/experience_wellness.png" },
+    ],
+    video: "/assets/video_placeholder.png",
+    faq: [{ question: "Is it safe?", answer: "Yes, fully secured and gated." }],
+  },
 ];
 
 export const CATEGORIES = [

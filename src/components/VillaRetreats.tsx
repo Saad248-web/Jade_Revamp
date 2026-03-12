@@ -71,7 +71,7 @@ export default function VillaRetreats() {
         variants={containerReveal}
       >
         {/* Main Heading */}
-        <h2 className="font-philosopher text-3xl md:text-5xl lg:text-7xl leading-[1.1] md:leading-[1.1] text-white/90 mb-12">
+        <h2 className="font-philosopher text-gh-h1 leading-[1.1] md:leading-[1.1] text-white/90 mb-12">
           <div className="overflow-hidden">
             <motion.div variants={lineReveal}>
               Private villa's transform into
@@ -107,7 +107,7 @@ export default function VillaRetreats() {
           <motion.div variants={buttonReveal}>
             <Link
               href="#villas"
-              className="inline-flex items-center gap-3 text-jade-gold font-manrope text-sm md:text-base tracking-widest uppercase hover:text-white transition-colors group"
+              className="inline-flex items-center gap-3 text-jade-gold font-manrope text-gh-label tracking-widest uppercase hover:text-white transition-colors group"
             >
               VIEW ALL VILLA RETREATS
               <svg

@@ -143,7 +143,7 @@ export default function PartnerOverlay() {
               {/* Header */}
               {view === "form" && (
                 <div className="flex items-center px-6 pt-6 pb-2">
-                  <h2 className="text-white text-2xl font-philosopher">
+                  <h2 className="text-white text-gh-h2 font-philosopher">
                     Partner with us
                   </h2>
                 </div>
@@ -153,7 +153,7 @@ export default function PartnerOverlay() {
               <div className="flex-1 overflow-y-auto scrollbar-hide">
                 {view === "form" ? (
                   <div className="flex flex-col px-6 pb-8">
-                    <p className="text-white/80 text-sm mb-6 mt-2">
+                    <p className="text-white/80 text-gh-body mb-6 mt-2">
                       Share a few details. Our team will get back to you shortly
                     </p>
 
@@ -170,7 +170,7 @@ export default function PartnerOverlay() {
                               fullName: e.target.value,
                             })
                           }
-                          className="block w-full bg-transparent border border-white/20 rounded-sm px-4 pt-5 pb-2 text-white text-sm focus:outline-none focus:border-[#EFCD62] peer"
+                          className="block w-full bg-transparent border border-white/20 rounded-sm px-4 pt-5 pb-2 text-white text-gh-body focus:outline-none focus:border-[#EFCD62] peer"
                           placeholder=" "
                         />
                         <label
@@ -191,7 +191,7 @@ export default function PartnerOverlay() {
                             phoneNumber: e.target.value,
                           })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-sm placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
+                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
                       />
 
                       <input
@@ -201,7 +201,7 @@ export default function PartnerOverlay() {
                         onChange={(e) =>
                           setFormData({ ...formData, email: e.target.value })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-sm placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
+                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
                       />
 
                       <input
@@ -211,12 +211,12 @@ export default function PartnerOverlay() {
                         onChange={(e) =>
                           setFormData({ ...formData, company: e.target.value })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-sm placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
+                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
                       />
 
                       {/* Partnership Type Checkboxes */}
                       <div className="mt-4">
-                        <h3 className="text-white text-sm mb-3">
+                        <h3 className="text-white text-gh-body mb-3">
                           Partnership Type:
                         </h3>
                         <div className="grid grid-cols-2 gap-y-3 gap-x-2">
@@ -255,7 +255,7 @@ export default function PartnerOverlay() {
                                   />
                                 )}
                               </div>
-                              <span className="text-white/90 text-[13px] mt-[1px] group-hover:text-white transition-colors tracking-wide">
+                              <span className="text-white/90 text-gh-label mt-[1px] group-hover:text-white transition-colors tracking-wide">
                                 {item.label}
                               </span>
                             </label>
@@ -270,13 +270,13 @@ export default function PartnerOverlay() {
                               partnershipOther: e.target.value,
                             })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3 mt-4 text-white text-sm placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope"
+                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3 mt-4 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope"
                         />
                       </div>
 
                       {/* Property Type Checkboxes */}
                       <div className="mt-2 text-white">
-                        <h3 className="text-white text-sm mb-3">
+                        <h3 className="text-white text-gh-body mb-3">
                           Property Type
                         </h3>
                         <div className="grid grid-cols-2 gap-y-3 gap-x-2">
@@ -312,7 +312,7 @@ export default function PartnerOverlay() {
                                   />
                                 )}
                               </div>
-                              <span className="text-white/90 text-[13px] mt-[1px] group-hover:text-white transition-colors tracking-wide">
+                              <span className="text-white/90 text-gh-label mt-[1px] group-hover:text-white transition-colors tracking-wide">
                                 {item.label}
                               </span>
                             </label>
@@ -327,13 +327,13 @@ export default function PartnerOverlay() {
                               propertyOther: e.target.value,
                             })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3 mt-4 text-white text-sm placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope"
+                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3 mt-4 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope"
                         />
                       </div>
 
                       {/* Property Details */}
                       <div className="mt-2 flex flex-col gap-4 text-white">
-                        <h3 className="text-white text-sm mb-0">
+                        <h3 className="text-white text-gh-body mb-0">
                           Property Details
                         </h3>
                         <input
@@ -349,7 +349,7 @@ export default function PartnerOverlay() {
                               },
                             })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-sm placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
+                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
                         />
                         <input
                           type="text"
@@ -364,7 +364,7 @@ export default function PartnerOverlay() {
                               },
                             })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-sm placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
+                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
                         />
                         <input
                           type="text"
@@ -379,13 +379,13 @@ export default function PartnerOverlay() {
                               },
                             })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-sm placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
+                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
                         />
                       </div>
 
                       {/* Image Upload Area */}
                       <div className="mt-6 flex flex-col items-center">
-                        <button className="flex items-center gap-2 text-[#EFCD62] text-[11px] font-bold tracking-widest uppercase mb-6 hover:text-white transition-colors">
+                        <button className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase mb-6 hover:text-white transition-colors">
                           UPLOAD IMAGES
                           <Upload className="w-4 h-4" />
                         </button>
@@ -412,7 +412,7 @@ export default function PartnerOverlay() {
 
                       <button
                         onClick={handleSubmit}
-                        className="w-full mt-2 bg-[#EFCD62] text-[#122A23] hover:bg-white transition-colors py-4 text-xs font-bold tracking-widest uppercase rounded-sm flex items-center justify-center gap-2"
+                        className="w-full mt-2 bg-[#EFCD62] text-[#122A23] hover:bg-white transition-colors py-4 text-gh-label font-bold tracking-widest uppercase rounded-sm flex items-center justify-center gap-2"
                       >
                         SUBMIT
                         <ArrowRight className="w-4 h-4" />
@@ -435,11 +435,11 @@ export default function PartnerOverlay() {
                       </div>
                     </div>
 
-                    <h2 className="text-white text-shadow-sm text-3xl font-philosopher mb-4">
+                    <h2 className="text-white text-shadow-sm text-gh-h1 font-philosopher mb-4">
                       We've got it from here
                     </h2>
 
-                    <p className="text-white text-sm leading-relaxed mb-12 max-w-xs mx-auto">
+                    <p className="text-white text-gh-body leading-relaxed mb-12 max-w-xs mx-auto">
                       Thanks for sharing your details!
                       <br />
                       Our team will take a look and reach out shortly to
@@ -447,7 +447,7 @@ export default function PartnerOverlay() {
                     </p>
 
                     <div className="flex flex-col w-full max-w-[280px] mx-auto mt-auto">
-                      <p className="text-white/60 text-[10px] font-bold tracking-[0.2em] uppercase mb-4">
+                      <p className="text-white/60 text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
                         MEANWHILE CHECK US OUT HERE
                       </p>
 
@@ -478,13 +478,13 @@ export default function PartnerOverlay() {
                         ))}
                       </div>
 
-                      <p className="text-white/60 text-xs mb-8">
+                      <p className="text-white/60 text-gh-label mb-8">
                         Thoughtfully operated. Always.
                       </p>
 
                       <button
                         onClick={handleClose}
-                        className="w-full bg-[#EFCD62] text-[#122A23] hover:bg-white transition-colors py-4 text-xs font-bold tracking-widest uppercase rounded-sm"
+                        className="w-full bg-[#EFCD62] text-[#122A23] hover:bg-white transition-colors py-4 text-gh-label font-bold tracking-widest uppercase rounded-sm"
                       >
                         OKAY
                       </button>

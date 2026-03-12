@@ -76,13 +76,11 @@ export default function FormatsCarousel() {
     <div className="w-full max-w-7xl mx-auto px-8">
       {/* SECTION HEADER: Tightened mb-8 lg:mb-12 */}
       <div className="flex flex-col mb-8 lg:mb-12">
-        <p className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-4 md:mb-6">
+        <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4 md:mb-6">
           CORPORATE EXPERIENCE AT JADE
         </p>
         <div className="flex items-center justify-between w-full">
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-philosopher text-white">
-            Formats
-          </h2>
+          <h2 className="text-gh-h1 font-philosopher text-white">Formats</h2>
           <div className="flex gap-px pt-2">
             <button
               onClick={prev}
@@ -161,10 +159,10 @@ export default function FormatsCarousel() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
               >
-                <h3 className="text-3xl md:text-5xl lg:text-6xl font-philosopher text-white mb-4 md:mb-6">
+                <h3 className="text-gh-h1 font-philosopher text-white mb-4 md:mb-6">
                   {FORMATS[index].title}
                 </h3>
-                <p className="text-white/70 font-manrope text-sm md:text-lg leading-relaxed max-w-xl">
+                <p className="text-white/70 font-manrope text-gh-body leading-relaxed max-w-xl">
                   {FORMATS[index].description}
                 </p>
               </motion.div>

@@ -198,16 +198,16 @@ export default function VillaDetailsPage() {
         <div className="flex justify-between items-start mb-8 relative">
           <div className="flex flex-col gap-2 relative w-full">
             <div className="flex items-center justify-between w-full">
-              <span className="text-jade-gold text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase max-w-[80%]">
+              <span className="text-jade-gold text-gh-label font-bold tracking-[0.2em] uppercase max-w-[80%]">
                 {villa.type}
               </span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-philosopher text-white">
+            <h1 className="text-gh-h1 font-philosopher text-white">
               {villa.name}
             </h1>
             <div className="flex items-center gap-2 text-white/60 mt-1">
               <MapPin className="w-4 h-4" />
-              <span className="font-manrope text-sm">
+              <span className="font-manrope text-gh-label">
                 {villa.location.split("·")[0]}
               </span>
             </div>
@@ -219,10 +219,10 @@ export default function VillaDetailsPage() {
           {/* Box 1: Stay */}
           <div className="w-32 md:w-40 aspect-square border border-white/10 rounded-sm p-4 flex flex-col items-center justify-center text-center bg-white/5 snap-start shrink-0">
             <Bed className="w-6 h-6 text-white/70 mb-3" />
-            <span className="text-white font-manrope text-sm font-bold mb-1 leading-tight">
+            <span className="text-white font-manrope text-gh-body font-bold mb-1 leading-tight">
               {villa.stats.stay}
             </span>
-            <span className="text-white/40 text-[10px] uppercase tracking-wider">
+            <span className="text-white/40 text-gh-label uppercase tracking-wider">
               Stay
             </span>
           </div>
@@ -230,10 +230,10 @@ export default function VillaDetailsPage() {
           {/* Box 2: Events */}
           <div className="w-32 md:w-40 aspect-square border border-white/10 rounded-sm p-4 flex flex-col items-center justify-center text-center bg-white/5 snap-start shrink-0">
             <Users className="w-6 h-6 text-white/70 mb-3" />
-            <span className="text-white font-manrope text-sm font-bold mb-1 leading-tight">
+            <span className="text-white font-manrope text-gh-body font-bold mb-1 leading-tight">
               {villa.stats.events}
             </span>
-            <span className="text-white/40 text-[10px] uppercase tracking-wider">
+            <span className="text-white/40 text-gh-label uppercase tracking-wider">
               Events
             </span>
           </div>
@@ -241,10 +241,10 @@ export default function VillaDetailsPage() {
           {/* Box 3: BHK+Bathroom */}
           <div className="w-32 md:w-40 aspect-square border border-white/10 rounded-sm p-4 flex flex-col items-center justify-center text-center bg-white/5 snap-start shrink-0">
             <Home className="w-6 h-6 text-white/70 mb-3" />
-            <span className="text-white font-manrope text-sm font-bold mb-1 leading-tight">
+            <span className="text-white font-manrope text-gh-body font-bold mb-1 leading-tight">
               {villa.stats.bhk}
             </span>
-            <span className="text-white/40 text-[10px] uppercase tracking-wider">
+            <span className="text-white/40 text-gh-label uppercase tracking-wider">
               BHK+Bathroom
             </span>
           </div>
@@ -253,10 +253,10 @@ export default function VillaDetailsPage() {
           {villa.stats.lawn && (
             <div className="w-32 md:w-40 aspect-square border border-white/10 rounded-sm p-4 flex flex-col items-center justify-center text-center bg-white/5 snap-start shrink-0">
               <Bed className="w-6 h-6 text-white/70 mb-3" />
-              <span className="text-white font-manrope text-sm font-bold mb-1 leading-tight">
+              <span className="text-white font-manrope text-gh-body font-bold mb-1 leading-tight">
                 {villa.stats.lawn}
               </span>
-              <span className="text-white/40 text-[10px] uppercase tracking-wider">
+              <span className="text-white/40 text-gh-label uppercase tracking-wider">
                 Lawn
               </span>
             </div>
@@ -266,10 +266,10 @@ export default function VillaDetailsPage() {
           {villa.stats.homeTheater && (
             <div className="w-32 md:w-40 aspect-square border border-white/10 rounded-sm p-4 flex flex-col items-center justify-center text-center bg-white/5 snap-start shrink-0">
               <Users className="w-6 h-6 text-white/70 mb-3" />
-              <span className="text-white font-manrope text-sm font-bold mb-1 leading-tight">
+              <span className="text-white font-manrope text-gh-body font-bold mb-1 leading-tight">
                 {villa.stats.homeTheater}
               </span>
-              <span className="text-white/40 text-[10px] uppercase tracking-wider">
+              <span className="text-white/40 text-gh-label uppercase tracking-wider">
                 Home Theater
               </span>
             </div>
@@ -279,23 +279,23 @@ export default function VillaDetailsPage() {
           {villa.stats.villaArea && (
             <div className="w-32 md:w-40 aspect-square border border-white/10 rounded-sm p-4 flex flex-col items-center justify-center text-center bg-white/5 snap-start shrink-0">
               <Home className="w-6 h-6 text-white/70 mb-3" />
-              <span className="text-white font-manrope text-sm font-bold mb-1 leading-tight">
+              <span className="text-white font-manrope text-gh-body font-bold mb-1 leading-tight">
                 {villa.stats.villaArea}
               </span>
-              <span className="text-white/40 text-[10px] uppercase tracking-wider">
+              <span className="text-white/40 text-gh-label uppercase tracking-wider">
                 Villa
               </span>
             </div>
           )}
         </div>
 
-        <p className="font-manrope text-white/70 text-sm md:text-base leading-relaxed mb-12 whitespace-pre-line text-justify">
+        <p className="font-manrope text-white/70 text-gh-body leading-relaxed mb-12 whitespace-pre-line text-justify">
           {villa.description}
         </p>
 
         {/* PERFECT FOR & DOWNLOAD */}
         <div className="flex flex-col gap-8 mb-12">
-          <div className="flex items-center gap-2 text-sm md:text-base overflow-hidden">
+          <div className="flex items-center gap-2 text-gh-body overflow-hidden">
             <span className="text-white/60 font-manrope font-bold min-w-fit flex-shrink-0">
               Perfect for:
             </span>
@@ -303,7 +303,7 @@ export default function VillaDetailsPage() {
               {villa.perfectFor.map((tag) => (
                 <span
                   key={tag}
-                  className="bg-white/10 text-white/90 px-3 py-1.5 md:px-4 md:py-2 text-[13px] md:text-sm rounded-[4px] font-manrope whitespace-nowrap flex-shrink-0 snap-start"
+                  className="bg-white/10 text-white/90 px-3 py-1.5 md:px-4 md:py-2 text-gh-label rounded-[4px] font-manrope whitespace-nowrap flex-shrink-0 snap-start"
                 >
                   {tag}
                 </span>
@@ -311,7 +311,7 @@ export default function VillaDetailsPage() {
             </div>
           </div>
 
-          <button className="w-full bg-[#2A2C30] border border-white/10 text-white px-6 py-4 uppercase tracking-widest text-xs font-bold hover:bg-white hover:text-black transition-colors flex items-center justify-between group">
+          <button className="w-full bg-[#2A2C30] border border-white/10 text-white px-6 py-4 uppercase tracking-widest text-gh-label font-bold hover:bg-white hover:text-black transition-colors flex items-center justify-between group">
             <span>Download Brochure</span>
             <Download className="w-4 h-4 text-white/60 group-hover:text-black transition-colors" />
           </button>
@@ -326,7 +326,7 @@ export default function VillaDetailsPage() {
               (tab, idx) => (
                 <button
                   key={tab}
-                  className={`px-6 py-3 text-xs md:text-sm uppercase tracking-widest font-bold transition-colors whitespace-nowrap ${
+                  className={`px-6 py-3 text-gh-label uppercase tracking-widest font-bold transition-colors whitespace-nowrap ${
                     idx === 0
                       ? "bg-[#EFCD62] text-black"
                       : "text-white/60 hover:text-white bg-transparent"
@@ -345,7 +345,7 @@ export default function VillaDetailsPage() {
               {/* SPACES CAROUSEL SECTION */}
               <section>
                 <div className="flex justify-between items-center mb-8">
-                  <h3 className="text-3xl md:text-4xl font-philosopher text-white">
+                  <h3 className="text-gh-h1 font-philosopher text-white">
                     Spaces
                   </h3>
                   <div className="flex gap-2">
@@ -384,7 +384,7 @@ export default function VillaDetailsPage() {
               </section>
               {/* AMENITIES */}
               <section>
-                <h3 className="text-2xl md:text-3xl font-philosopher text-white mb-8">
+                <h3 className="text-gh-h2 font-philosopher text-white mb-8">
                   Amenities
                 </h3>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-8 mb-8">
@@ -396,7 +396,7 @@ export default function VillaDetailsPage() {
                           <Icon className="w-5 h-5 text-[#EFCD62]" />
                         </div>
                         <div className="flex flex-col justify-center h-12">
-                          <span className="text-white font-manrope font-semibold text-sm md:text-base leading-tight">
+                          <span className="text-white font-manrope font-semibold text-gh-body leading-tight">
                             {amenity.label.split(" ").map((word, i) => (
                               <span key={i} className="block">
                                 {word}
@@ -411,15 +411,15 @@ export default function VillaDetailsPage() {
 
                 <button
                   onClick={() => openDrawer("Amenities", villa.amenities || [])}
-                  className="flex items-center gap-2 text-[#EFCD62] text-xs font-bold tracking-widest uppercase hover:text-white transition-colors"
+                  className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
                 >
-                  See More <ArrowRight className="w-3 h-3" />
+                  Know More <ArrowRight className="w-3 h-3" />
                 </button>
               </section>
 
               {/* SERVICES SECTION */}
               <section>
-                <h3 className="text-2xl md:text-3xl font-philosopher text-white mb-8">
+                <h3 className="text-gh-h2 font-philosopher text-white mb-8">
                   Services
                 </h3>
                 <div className="flex flex-col gap-8 mb-12">
@@ -441,13 +441,13 @@ export default function VillaDetailsPage() {
                           />
                         </div>
                         <div>
-                          <h4 className="text-lg font-bold font-manrope text-white mb-1 transition-colors group-hover:text-[#EFCD62]">
+                          <h4 className="text-gh-h2 font-bold font-manrope text-white mb-1 transition-colors group-hover:text-[#EFCD62]">
                             {service.title}
                           </h4>
-                          <p className="text-white/70 text-sm mb-2 leading-relaxed">
+                          <p className="text-white/70 text-gh-body mb-2 leading-relaxed">
                             {service.description}
                           </p>
-                          <p className="text-white/40 text-[10px] uppercase tracking-wider">
+                          <p className="text-white/40 text-gh-label uppercase tracking-wider">
                             {service.footer}
                           </p>
                         </div>
@@ -460,7 +460,7 @@ export default function VillaDetailsPage() {
               {/* EXPERIENCES SECTION */}
               <section>
                 <div className="flex justify-between items-end mb-8">
-                  <h3 className="text-3xl md:text-4xl font-philosopher text-white">
+                  <h3 className="text-gh-h1 font-philosopher text-white">
                     Experiences
                   </h3>
                   <div className="flex gap-2">
@@ -483,15 +483,15 @@ export default function VillaDetailsPage() {
                   />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10" />
                   <div className="absolute bottom-0 left-0 w-full p-8 text-center bg-gradient-to-t from-black/80 to-transparent z-20">
-                    <h4 className="text-2xl md:text-3xl font-philosopher text-white mb-4">
+                    <h4 className="text-gh-h2 font-philosopher text-white mb-4">
                       Weekend Getaways
                     </h4>
-                    <p className="text-white/80 text-sm mb-6 leading-relaxed">
+                    <p className="text-white/80 text-gh-body mb-6 leading-relaxed">
                       A day or two with your friends and family away from the
                       bustling city in the wilderness is truly on everyone's
                       wishlist.
                     </p>
-                    <button className="w-full border border-white/30 bg-white/10 backdrop-blur-sm text-white py-4 uppercase tracking-widest text-xs font-bold hover:bg-white hover:text-black transition-colors flex items-center justify-center gap-2">
+                    <button className="w-full border border-white/30 bg-white/10 backdrop-blur-sm text-white py-4 uppercase tracking-widest text-gh-label font-bold hover:bg-white hover:text-black transition-colors flex items-center justify-center gap-2">
                       See what a getaway looks like{" "}
                       <ArrowRight className="w-4 h-4" />
                     </button>
@@ -501,7 +501,7 @@ export default function VillaDetailsPage() {
 
               {/* PROPERTY DETAILS SECTION */}
               <section>
-                <h3 className="text-3xl md:text-4xl font-philosopher text-white mb-8">
+                <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                   Property Details
                 </h3>
                 <div className="flex flex-col gap-8 mb-8">
@@ -509,10 +509,10 @@ export default function VillaDetailsPage() {
                     <div key={idx} className="flex gap-4">
                       <div className="mt-1.5 w-2 h-2 rotate-45 bg-[#EFCD62] flex-shrink-0" />
                       <div>
-                        <h4 className="text-lg text-white font-manrope font-medium mb-2">
+                        <h4 className="text-gh-body text-white font-manrope font-medium mb-2">
                           {(detail as any).label || (detail as any).title}
                         </h4>
-                        <p className="text-white/60 text-sm leading-relaxed">
+                        <p className="text-white/60 text-gh-body leading-relaxed">
                           {detail.description}
                         </p>
                       </div>
@@ -526,23 +526,23 @@ export default function VillaDetailsPage() {
                   }
                   className="flex items-center gap-2 text-[#EFCD62] text-xs font-bold tracking-widest uppercase hover:text-white transition-colors"
                 >
-                  See More <ArrowRight className="w-3 h-3" />
+                  Know More <ArrowRight className="w-3 h-3" />
                 </button>
               </section>
 
               {/* PRICING SECTION */}
               {villa.pricing && (
                 <section>
-                  <h3 className="text-3xl md:text-4xl font-philosopher text-white mb-8">
+                  <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                     Pricing
                   </h3>
                   <div className="flex flex-col gap-6 border border-white/10 rounded-2xl p-4 md:p-6 bg-transparent">
                     {/* Stay Experience */}
                     <div className="bg-transparent rounded-lg p-0">
-                      <h4 className="text-[#EFCD62] text-xl font-bold font-manrope mb-1">
+                      <h4 className="text-[#EFCD62] text-gh-h2 font-bold font-manrope mb-1">
                         {villa.pricing.stay.title}
                       </h4>
-                      <p className="text-white/60 text-sm mb-6 max-w-xs">
+                      <p className="text-white/60 text-gh-body mb-6 max-w-xs">
                         {villa.pricing.stay.subtitle}
                       </p>
 
@@ -553,16 +553,16 @@ export default function VillaDetailsPage() {
                             className="flex justify-between items-start md:items-center bg-[#174539] p-4 rounded-sm"
                           >
                             <div>
-                              <div className="text-white font-bold text-base leading-tight mb-1">
+                              <div className="text-white font-bold text-gh-body leading-tight mb-1">
                                 {pkg.label}
                               </div>
                               {pkg.sublabel && (
-                                <div className="text-white/40 text-xs">
+                                <div className="text-white/40 text-gh-label">
                                   {pkg.sublabel}
                                 </div>
                               )}
                             </div>
-                            <div className="text-white font-mono text-base font-bold text-right shrink-0">
+                            <div className="text-white font-mono text-gh-body font-bold text-right shrink-0">
                               {pkg.price}
                             </div>
                           </div>
@@ -573,7 +573,7 @@ export default function VillaDetailsPage() {
                         {villa.pricing.stay.features.map((feat, i) => (
                           <span
                             key={i}
-                            className="bg-[#174539] text-white/80 px-4 py-2 text-xs rounded-full border border-white/5 font-medium"
+                            className="bg-[#174539] text-white/80 px-4 py-2 text-gh-label rounded-full border border-white/5 font-medium"
                           >
                             {feat}
                           </span>
@@ -583,10 +583,10 @@ export default function VillaDetailsPage() {
 
                     {/* Event Experience */}
                     <div className="bg-transparent rounded-lg p-0 pt-6 border-t border-white/10">
-                      <h4 className="text-[#EFCD62] text-xl font-bold font-manrope mb-1">
+                      <h4 className="text-[#EFCD62] text-gh-h2 font-bold font-manrope mb-1">
                         {villa.pricing.event.title}
                       </h4>
-                      <p className="text-white/60 text-sm mb-6 max-w-xs">
+                      <p className="text-white/60 text-gh-body mb-6 max-w-xs">
                         {villa.pricing.event.subtitle}
                       </p>
 
@@ -597,16 +597,16 @@ export default function VillaDetailsPage() {
                             className="flex justify-between items-start md:items-center bg-[#174539] p-4 rounded-sm"
                           >
                             <div>
-                              <div className="text-white font-bold text-base leading-tight mb-1">
+                              <div className="text-white font-bold text-gh-body leading-tight mb-1">
                                 {pkg.label}
                               </div>
                               {pkg.sublabel && (
-                                <div className="text-white/40 text-xs">
+                                <div className="text-white/40 text-gh-label">
                                   {pkg.sublabel}
                                 </div>
                               )}
                             </div>
-                            <div className="text-white font-mono text-base font-bold text-right shrink-0">
+                            <div className="text-white font-mono text-gh-body font-bold text-right shrink-0">
                               {pkg.price}
                             </div>
                           </div>
@@ -616,7 +616,7 @@ export default function VillaDetailsPage() {
                         {villa.pricing.event.features.map((feat, i) => (
                           <span
                             key={i}
-                            className="bg-[#174539] text-white/80 px-4 py-2 text-xs rounded-full border border-white/5 font-medium"
+                            className="bg-[#174539] text-white/80 px-4 py-2 text-gh-label rounded-full border border-white/5 font-medium"
                           >
                             {feat}
                           </span>
@@ -624,7 +624,7 @@ export default function VillaDetailsPage() {
                       </div>
                     </div>
                   </div>
-                  <p className="text-white/40 text-[10px] mt-4 leading-relaxed">
+                  <p className="text-white/40 text-gh-label mt-4 leading-relaxed">
                     Note: Prices are base rates and may vary based on season,
                     day of week, and specific requirements. Additional charges
                     may apply for decorations, catering, and extended hours.
@@ -635,7 +635,7 @@ export default function VillaDetailsPage() {
               {/* LOCATION SECTION */}
               {villa.locationDetails && (
                 <section>
-                  <h3 className="text-3xl md:text-4xl font-philosopher text-white mb-8">
+                  <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                     Location
                   </h3>
                   <div className="bg-[#1A1C1E] rounded-xl overflow-hidden mb-8 border border-white/10">
@@ -660,11 +660,11 @@ export default function VillaDetailsPage() {
                       <div className="flex items-start gap-4 mb-6">
                         <MapPin className="w-6 h-6 text-white/60 mt-1 shrink-0" />
                         <div>
-                          <p className="text-white text-lg font-manrope font-medium leading-relaxed mb-4">
+                          <p className="text-white text-gh-body font-manrope font-medium leading-relaxed mb-4">
                             {villa.locationDetails.address}
                           </p>
                           <div className="bg-white/5 inline-block px-4 py-2 rounded-md">
-                            <p className="text-white/60 text-xs">
+                            <p className="text-white/60 text-gh-label">
                               {villa.locationDetails.distance}
                             </p>
                           </div>
@@ -673,7 +673,7 @@ export default function VillaDetailsPage() {
 
                       {/* Whats Nearby */}
                       <div>
-                        <h4 className="text-[#EFCD62] text-xl font-bold font-manrope mb-6">
+                        <h4 className="text-[#EFCD62] text-gh-h2 font-bold font-manrope mb-6">
                           Whats nearby:
                         </h4>
                         <div className="flex flex-col gap-4">
@@ -703,7 +703,7 @@ export default function VillaDetailsPage() {
               {/* ACTIVITIES SECTION */}
               {villa.activities && (
                 <section>
-                  <h3 className="text-3xl md:text-4xl font-philosopher text-white mb-8">
+                  <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                     Activities
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
@@ -722,7 +722,7 @@ export default function VillaDetailsPage() {
                         />
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <h4 className="text-white text-lg md:text-2xl font-philosopher text-center px-2 drop-shadow-md">
+                          <h4 className="text-white text-gh-h2 font-philosopher text-center px-2 drop-shadow-md">
                             {activity.title}
                           </h4>
                         </div>
@@ -734,7 +734,7 @@ export default function VillaDetailsPage() {
 
               {/* VIDEO WALKTHROUGH SECTION */}
               <section className="mb-12">
-                <h3 className="text-3xl md:text-4xl font-philosopher text-white mb-8">
+                <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                   Video Walkthrough
                 </h3>
                 <div className="relative w-full aspect-video bg-black/50 rounded-lg overflow-hidden group cursor-pointer border border-white/10">
@@ -748,7 +748,7 @@ export default function VillaDetailsPage() {
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-white flex items-center justify-center backdrop-blur-sm bg-white/10 group-hover:scale-110 transition-transform">
-                      <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                      <div className="w-0 h-0 border-t-gh-label border-t-transparent border-l-[18px] border-l-white border-b-gh-label border-b-transparent ml-1" />
                     </div>
                   </div>
                   <div className="absolute bottom-4 right-4 bg-black/60 text-white text-xs px-2 py-1 rounded">
@@ -760,7 +760,7 @@ export default function VillaDetailsPage() {
               {/* FAQ SECTION */}
               {villa.faq && (
                 <section className="mb-20">
-                  <h3 className="text-3xl md:text-4xl font-philosopher text-white mb-8">
+                  <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                     FAQ
                   </h3>
                   <div className="flex flex-col gap-8">
@@ -768,10 +768,10 @@ export default function VillaDetailsPage() {
                       <div key={idx} className="flex gap-4">
                         <div className="mt-1.5 w-2 h-2 rotate-45 bg-[#EFCD62] flex-shrink-0" />
                         <div>
-                          <h4 className="text-lg text-white font-manrope font-medium mb-2">
+                          <h4 className="text-gh-body text-white font-manrope font-medium mb-2">
                             {item.question}
                           </h4>
-                          <p className="text-white/60 text-sm leading-relaxed">
+                          <p className="text-white/60 text-gh-body leading-relaxed">
                             {item.answer}
                           </p>
                         </div>
@@ -783,7 +783,7 @@ export default function VillaDetailsPage() {
                       onClick={() => openDrawer("FAQ", villa.faq || [])}
                       className="mt-8 text-[#EFCD62] text-xs font-bold tracking-widest uppercase hover:text-white transition-colors flex items-center gap-2"
                     >
-                      VIEW MORE <ArrowRight className="w-3 h-3" />
+                      KNOW MORE <ArrowRight className="w-3 h-3" />
                     </button>
                   )}
                 </section>
@@ -793,27 +793,27 @@ export default function VillaDetailsPage() {
             {/* RIGHT COLUMN (Booking Card / Info) */}
             <div className="relative">
               <div className="sticky top-32 bg-[#252629] p-8 rounded-2xl border border-white/10">
-                <h4 className="text-xl font-philosopher text-white mb-2">
+                <h4 className="text-gh-h2 font-philosopher text-white mb-2">
                   Interested in {villa.name}?
                 </h4>
-                <p className="text-white/60 text-sm mb-8 font-manrope">
+                <p className="text-white/60 text-gh-body mb-8 font-manrope">
                   Contact us to check availability, pricing, or to schedule a
                   site visit.
                 </p>
 
-                <button className="w-full bg-[#EFCD62] text-[#1A1C1E] font-bold py-4 rounded-lg uppercase tracking-widest text-xs hover:bg-white transition-colors mb-4">
+                <button className="w-full bg-[#EFCD62] text-[#1A1C1E] font-bold py-4 rounded-lg uppercase tracking-widest text-gh-label hover:bg-white transition-colors mb-4">
                   Request Booking
                 </button>
-                <button className="w-full bg-transparent border border-white/20 text-white font-bold py-4 rounded-lg uppercase tracking-widest text-xs hover:bg-white/5 transition-colors">
+                <button className="w-full bg-transparent border border-white/20 text-white font-bold py-4 rounded-lg uppercase tracking-widest text-gh-label hover:bg-white/5 transition-colors">
                   Speak with our team
                 </button>
 
                 <div className="mt-8 pt-8 border-t border-white/10 flex flex-col gap-4">
-                  <div className="flex items-center gap-3 text-white/60 text-sm">
+                  <div className="flex items-center gap-3 text-white/60 text-gh-body">
                     <Info className="w-4 h-4" />
                     <span>Minimum advance booking required</span>
                   </div>
-                  <div className="flex items-center gap-3 text-white/60 text-sm">
+                  <div className="flex items-center gap-3 text-white/60 text-gh-body">
                     <HelpCircle className="w-4 h-4" />
                     <span>
                       Questions? <strong>+91 99999 99999</strong>
@@ -830,25 +830,18 @@ export default function VillaDetailsPage() {
       {/* FLOATING BOOKING BAR */}
       <div className="fixed bottom-[72px] lg:bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 p-3 md:p-4 md:px-8 z-40 transition-all">
         <div className="max-w-7xl mx-auto flex justify-between items-center gap-2">
-          <div>
-            <p className="text-white/60 text-[10px] md:text-xs mb-0.5 font-manrope">
-              Starting from
-            </p>
-            <p className="text-white text-lg md:text-xl font-bold font-manrope">
-              ₹65,000
-            </p>
-          </div>
-          <div className="flex items-center gap-2 md:gap-4">
-            <button className="text-[#EFCD62] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase px-2 py-2 md:px-4 md:py-3 hover:text-white transition-colors">
-              ENQUIRE
-            </button>
-            <Link
-              href={`/book?villa=${villa.id}`}
-              className="bg-[#EFCD62] text-[#1A1C1E] inline-flex items-center justify-center text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase px-4 py-2 md:px-8 md:py-3 rounded-sm hover:bg-white transition-colors"
-            >
-              BOOK VILLA
-            </Link>
-          </div>
+          <p className="text-white text-gh-label font-bold font-manrope">
+            ₹65,000 onwards
+          </p>
+          <button className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase px-2 py-2 md:px-4 md:py-3 hover:text-white transition-colors">
+            ENQUIRE
+          </button>
+          <Link
+            href={`/book?villa=${villa.id}`}
+            className="bg-[#EFCD62] text-[#1A1C1E] inline-flex items-center justify-center text-gh-label font-bold tracking-[0.2em] uppercase px-4 py-2 md:px-8 md:py-3 rounded-sm hover:bg-white transition-colors"
+          >
+            BOOK VILLA
+          </Link>
         </div>
       </div>
       <div className="h-36 lg:h-20" />{" "}

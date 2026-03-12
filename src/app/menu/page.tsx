@@ -55,7 +55,7 @@ export default function MenuPage() {
                 exit={{ opacity: 0, x: -20 }}
                 className={`absolute inset-0 flex flex-col px-6 md:px-12 py-4 pb-32 overflow-y-auto ${menuView !== "primary" ? "hidden lg:flex" : "flex"}`}
               >
-                <span className="text-white/40 text-[10px] font-manrope font-bold tracking-[0.2em] uppercase mb-6">
+                <span className="text-white/40 text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-6">
                   MENU
                 </span>
 
@@ -73,7 +73,7 @@ export default function MenuPage() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-3xl lg:text-4xl font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
+                        className={`text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
                           desktopSelectedView === "villas"
                             ? "bg-left text-[#EFCD62]"
                             : "bg-right"
@@ -103,7 +103,7 @@ export default function MenuPage() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-3xl lg:text-4xl font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
+                        className={`text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
                           desktopSelectedView === "experiences"
                             ? "bg-left text-[#EFCD62]"
                             : "bg-right"
@@ -122,21 +122,21 @@ export default function MenuPage() {
                   </li>
                   <li>
                     <Link href="/about">
-                      <span className="block text-3xl lg:text-4xl font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         About us
                       </span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/careers">
-                      <span className="block text-3xl lg:text-4xl font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         Careers
                       </span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/blogs">
-                      <span className="block text-3xl lg:text-4xl font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         Blogs
                       </span>
                     </Link>
@@ -148,7 +148,7 @@ export default function MenuPage() {
                       }}
                       className="text-left"
                     >
-                      <span className="block text-3xl lg:text-4xl font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         Partner with us
                       </span>
                     </button>
@@ -166,7 +166,7 @@ export default function MenuPage() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-3xl lg:text-4xl font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
+                        className={`text-gh-h1 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
                           desktopSelectedView === "more"
                             ? "bg-left text-[#EFCD62]"
                             : "bg-right"
@@ -231,11 +231,11 @@ export default function MenuPage() {
               >
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="flex items-center gap-2 text-[#EFCD62] text-[10px] font-manrope font-bold tracking-[0.2em] uppercase mb-6 hover:text-white transition-colors w-fit"
+                  className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-6 hover:text-white transition-colors w-fit"
                 >
                   <ArrowLeft className="w-4 h-4" /> BACK
                 </button>
-                <h2 className="text-4xl font-philosopher text-white mb-8">
+                <h2 className="text-gh-h1 font-philosopher text-white mb-8">
                   Villas
                 </h2>
                 <div className="space-y-8">
@@ -245,11 +245,11 @@ export default function MenuPage() {
                       href={`/villas/${villa.id}`}
                       className="flex flex-col cursor-pointer group"
                     >
-                      <p className="text-white/40 text-[9px] font-manrope font-bold tracking-[0.2em] uppercase mb-1">
+                      <p className="text-white/40 text-gh-desc font-manrope font-bold tracking-[0.2em] uppercase mb-1">
                         {villa.type}
                       </p>
                       <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-lg font-manrope text-white group-hover:text-[#EFCD62] transition-colors">
+                        <h3 className="text-gh-body font-manrope text-white group-hover:text-[#EFCD62] transition-colors">
                           {villa.name}
                         </h3>
                         <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
@@ -291,7 +291,7 @@ export default function MenuPage() {
               >
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="flex items-center gap-2 text-[#EFCD62] text-[10px] font-manrope font-bold tracking-[0.2em] uppercase mb-6 hover:text-white transition-colors w-fit"
+                  className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-6 hover:text-white transition-colors w-fit"
                 >
                   <ArrowLeft className="w-4 h-4" /> BACK
                 </button>
@@ -331,7 +331,7 @@ export default function MenuPage() {
                         </h3>
                         <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
                       </div>
-                      <p className="text-white/50 text-[11px] font-manrope mb-3 leading-relaxed pr-4">
+                      <p className="text-white/50 text-gh-label font-manrope mb-3 leading-relaxed pr-4">
                         {exp.desc}
                       </p>
                       <div className="flex gap-2">
@@ -370,7 +370,7 @@ export default function MenuPage() {
               >
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="flex items-center gap-2 text-[#EFCD62] text-[10px] font-manrope font-bold tracking-[0.2em] uppercase mb-12 hover:text-white transition-colors w-fit"
+                  className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-12 hover:text-white transition-colors w-fit"
                 >
                   <ArrowLeft className="w-4 h-4 cursor-pointer" /> BACK
                 </button>
@@ -462,7 +462,7 @@ export default function MenuPage() {
                           href={`/villas/${villa.id}`}
                           className="flex flex-col cursor-pointer"
                         >
-                          <p className="text-white/40 text-[9px] lg:text-[10px] uppercase font-manrope font-bold tracking-[0.2em] mb-1.5">
+                          <p className="text-white/40 text-gh-label uppercase font-manrope font-bold tracking-[0.2em] mb-1.5">
                             {villa.type}
                           </p>
                           <div className="flex items-center gap-2 group/title">
@@ -569,7 +569,7 @@ export default function MenuPage() {
                           href="/experiences"
                           className="flex flex-col cursor-pointer"
                         >
-                          <p className="text-white/40 text-[9px] lg:text-[10px] uppercase font-manrope font-bold tracking-[0.2em] mb-1.5">
+                          <p className="text-white/40 text-gh-label uppercase font-manrope font-bold tracking-[0.2em] mb-1.5">
                             {exp.type}
                           </p>
                           <div className="flex items-center gap-2 group/title">

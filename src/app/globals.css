@@ -6,7 +6,46 @@
   :root {
     --font-philosopher: "Philosopher", sans-serif;
     --font-manrope: "Manrope", sans-serif;
+
+    /* Global Typography Scale - Mobile First */
+    --fs-h1: 32px;
+    --fs-h2: 28px;
+    --fs-scroll: 24px;
+    --fs-body: 14px;
+    --fs-desc: 12px;
+    --fs-label: 12px;
   }
+
+  @media (min-width: 768px) {
+    :root {
+      --fs-h1: 52px;
+      --fs-h2: 44px;
+      --fs-scroll: 32px;
+      --fs-body: 16px;
+      --fs-desc: 13px;
+      --fs-label: 12px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --fs-h1: 72px;
+      --fs-h2: 60px;
+      --fs-scroll: 40px;
+      --fs-body: 18px;
+      --fs-desc: 14px;
+      --fs-label: 12px;
+    }
+  }
+}
+
+@layer utilities {
+  .text-gh-h1 { font-size: var(--fs-h1) !important; }
+  .text-gh-h2 { font-size: var(--fs-h2) !important; }
+  .text-gh-scroll { font-size: var(--fs-scroll) !important; }
+  .text-gh-body { font-size: var(--fs-body) !important; }
+  .text-gh-desc { font-size: var(--fs-desc) !important; }
+  .text-gh-label { font-size: var(--fs-label) !important; }
 }
 
 html {

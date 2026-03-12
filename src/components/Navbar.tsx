@@ -82,7 +82,7 @@ export default function Navbar() {
                   <span className="block h-[1px] w-3 bg-current transition-all group-hover:w-5" />
                 </span>
               </div>
-              <span className="text-[10px] font-manrope tracking-[0.25em] uppercase">
+              <span className="text-gh-label font-manrope tracking-[0.25em] uppercase">
                 Menu
               </span>
             </Link>
@@ -101,7 +101,7 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-[11px] font-manrope tracking-[0.18em] uppercase transition-colors ${
+                  className={`text-gh-label font-manrope tracking-[0.18em] uppercase transition-colors ${
                     pathname === item.href
                       ? "text-jade-gold"
                       : "text-white/55 hover:text-white"
@@ -158,7 +158,7 @@ export default function Navbar() {
             {isDetailPage ? (
               <Link
                 href="/contact"
-                className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-[10px] font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px]"
+                className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px]"
               >
                 CONTACT US
               </Link>
@@ -191,14 +191,14 @@ export default function Navbar() {
                 {pathname?.startsWith("/experiences") ? (
                   <button
                     onClick={() => setPartnerOverlayOpen(true)}
-                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-[10px] font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px] whitespace-nowrap"
+                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px] whitespace-nowrap"
                   >
                     ENQUIRE NOW
                   </button>
                 ) : (
                   <Link
                     href="/book"
-                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-[10px] font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px] whitespace-nowrap"
+                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px] whitespace-nowrap"
                   >
                     BOOK NOW
                   </Link>

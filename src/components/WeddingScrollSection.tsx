@@ -62,7 +62,7 @@ export default function WeddingScrollSection() {
             style={{ y: sectionY }}
           >
             <div className="max-w-5xl mx-auto text-center">
-              <h2 className="font-manrope font-normal text-2xl md:text-5xl lg:text-7xl leading-[1.2] md:leading-[1.2] text-white/90 mb-12">
+              <h2 className="font-manrope font-normal text-gh-h1 leading-[1.2] md:leading-[1.2] text-white/90 mb-12">
                 <motion.div style={{ opacity: line1Opacity }}>
                   Hospitainment is the art of
                 </motion.div>

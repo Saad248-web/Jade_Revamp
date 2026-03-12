@@ -76,7 +76,7 @@ export default function WeddingCelebrationsSection() {
             <div className="absolute top-0 left-0 w-full h-[20vh] bg-gradient-to-b from-black/80 to-transparent" />
 
             <div className="relative mt-24 md:mt-28 flex flex-col items-center">
-              <span className="font-manrope text-[10px] md:text-sm tracking-[0.4em] uppercase mb-4 font-bold text-[#EFCD62]">
+              <span className="font-manrope text-gh-label tracking-[0.4em] uppercase mb-4 font-bold text-[#EFCD62]">
                 PRE WEDDING CELEBRATIONS
               </span>
               <CelebrationCounter
@@ -120,7 +120,7 @@ function CelebrationCounter({
   }, [progress, total]);
 
   return (
-    <div className="relative flex items-center gap-8 md:gap-12 font-philosopher text-xl md:text-2xl mt-1">
+    <div className="relative flex items-center gap-8 md:gap-12 font-philosopher text-gh-scroll mt-1">
       <span className="text-white drop-shadow-lg">{current}</span>
       <div className="w-16 md:w-20 h-[1px] bg-white/40" />
       <span className="text-white/40">{total}</span>
@@ -202,10 +202,10 @@ function CelebrationPanel({
           transition={{ duration: 0.8, delay: 0.2 }}
           className="max-w-2xl"
         >
-          <h2 className="font-philosopher text-5xl md:text-7xl text-white mb-6 drop-shadow-xl">
+          <h2 className="font-philosopher text-gh-h1 text-white mb-6 drop-shadow-xl">
             {data.title}
           </h2>
-          <p className="font-manrope text-sm md:text-lg text-white/80 leading-relaxed drop-shadow-lg max-w-xl mx-auto">
+          <p className="font-manrope text-gh-body text-white/80 leading-relaxed drop-shadow-lg max-w-xl mx-auto">
             {data.subtext}
           </p>
         </motion.div>

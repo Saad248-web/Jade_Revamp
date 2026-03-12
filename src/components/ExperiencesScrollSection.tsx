@@ -96,7 +96,7 @@ export default function ExperiencesScrollSection() {
           <div className="absolute top-0 left-0 w-full z-[100] flex flex-col items-center pointer-events-none">
             <div className="absolute top-0 left-0 w-full h-[16.6vh] bg-gradient-to-b from-black/90 to-transparent" />
             <div className="relative mt-20 md:mt-24 text-center">
-              <span className="font-manrope text-sm md:text-base lg:text-lg tracking-[0.3em] uppercase mb-4 md:mb-6 font-semibold text-[#EFCD62] drop-shadow-lg block">
+              <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-4 md:mb-6 font-semibold text-[#EFCD62] drop-shadow-lg block">
                 WAYS JADE IS EXPERIENCED
               </span>
             </div>
@@ -289,10 +289,10 @@ function StackedPanel({
         viewport={{ amount: 0.5 }}
         variants={contentVars}
       >
-        <h2 className="font-philosopher text-4xl md:text-5xl lg:text-7xl text-white mb-6 drop-shadow-lg">
+        <h2 className="font-philosopher text-gh-h2 text-white mb-6 drop-shadow-lg">
           {data.title}
         </h2>
-        <p className="font-manrope text-base md:text-lg text-white/90 font-light max-w-xl mb-10 leading-relaxed drop-shadow-md">
+        <p className="font-manrope text-gh-body text-white/90 font-light max-w-xl mb-10 leading-relaxed drop-shadow-md">
           {data.subtext}
         </p>
         <Link

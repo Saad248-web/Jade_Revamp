@@ -42,17 +42,17 @@ export default function AboutPage() {
             />
           </div>
 
-          <h2 className="text-[#EFCD62] text-xs md:text-sm font-bold tracking-[0.2em] uppercase mb-4">
+          <h2 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
             ABOUT JADEHOSPITAINMENT
           </h2>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-philosopher text-white mb-6 leading-tight">
+          <h1 className="text-gh-h1 font-philosopher text-white mb-6 leading-tight">
             Curated Villas.
             <br />
             Thoughtfully Operated.
           </h1>
 
-          <p className="text-white/80 font-manrope text-base md:text-lg max-w-2xl leading-relaxed mb-16">
+          <p className="text-white/80 font-manrope text-gh-body max-w-2xl leading-relaxed mb-16">
             Where hospitality and experience go beyond conventional listing
             platforms.
           </p>
@@ -60,26 +60,24 @@ export default function AboutPage() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-8 md:gap-16 w-full max-w-3xl border border-white/10 bg-white/5 backdrop-blur-sm rounded-none p-6 md:p-8">
             <div className="flex flex-col items-center gap-1">
-              <span className="text-2xl md:text-4xl font-philosopher text-white">
-                16
-              </span>
-              <span className="text-white/60 text-[10px] md:text-xs uppercase tracking-widest text-center">
+              <span className="text-gh-h2 font-philosopher text-white">16</span>
+              <span className="text-white/60 text-gh-desc uppercase tracking-widest text-center">
                 LUXURY VILLA
               </span>
             </div>
             <div className="flex flex-col items-center gap-1 border-l border-r border-white/10 px-4">
-              <span className="text-2xl md:text-4xl font-philosopher text-white">
+              <span className="text-gh-h2 font-philosopher text-white">
                 7500+
               </span>
-              <span className="text-white/60 text-[10px] md:text-xs uppercase tracking-widest text-center">
+              <span className="text-white/60 text-gh-desc uppercase tracking-widest text-center">
                 CHECK-INS
               </span>
             </div>
             <div className="flex flex-col items-center gap-1">
-              <span className="text-2xl md:text-4xl font-philosopher text-white">
+              <span className="text-gh-h2 font-philosopher text-white">
                 100+
               </span>
-              <span className="text-white/60 text-[10px] md:text-xs uppercase tracking-widest text-center">
+              <span className="text-white/60 text-gh-desc uppercase tracking-widest text-center">
                 EVENTS HOSTED
               </span>
             </div>
@@ -90,49 +88,49 @@ export default function AboutPage() {
       {/* 2. TRUSTED BY SECTION */}
       <section className="py-20 bg-[#1A1C1E] border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h3 className="text-[#EFCD62] text-xs font-bold tracking-[0.2em] uppercase mb-4">
+          <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
             TRUSTED BY
           </h3>
-          <h2 className="text-3xl md:text-4xl font-philosopher text-white mb-16">
+          <h2 className="text-gh-h2 font-philosopher text-white mb-16">
             World-Class Organizations
           </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
             {/* Logo 1: Google */}
             <div className="bg-[#25282C] aspect-square flex items-center justify-center p-8 hover:bg-[#2A2D32] transition-colors group">
-              <span className="text-white font-manrope text-2xl font-bold group-hover:text-white/80 transition-colors">
+              <span className="text-white font-manrope text-gh-body font-bold group-hover:text-white/80 transition-colors">
                 Google
               </span>
             </div>
             {/* Logo 2: Microsoft */}
             <div className="bg-[#25282C] aspect-square flex items-center justify-center p-8 hover:bg-[#2A2D32] transition-colors group">
-              <span className="text-white font-manrope text-2xl font-bold group-hover:text-white/80 transition-colors">
+              <span className="text-white font-manrope text-gh-body font-bold group-hover:text-white/80 transition-colors">
                 Microsoft
               </span>
             </div>
             {/* Logo 3: L&T */}
             <div className="bg-[#25282C] aspect-square flex items-center justify-center p-8 hover:bg-[#2A2D32] transition-colors group">
               <div className="w-16 h-16 rounded-full border-2 border-white/80 flex items-center justify-center">
-                <span className="text-white font-manrope text-xl font-bold italic">
+                <span className="text-white font-manrope text-gh-body font-bold italic">
                   L&T
                 </span>
               </div>
             </div>
             {/* Logo 4: IBM */}
             <div className="bg-[#25282C] aspect-square flex items-center justify-center p-8 hover:bg-[#2A2D32] transition-colors group">
-              <span className="text-white font-mono text-4xl font-bold tracking-tighter group-hover:text-white/80 transition-colors">
+              <span className="text-white font-mono text-gh-h1 font-bold tracking-tighter group-hover:text-white/80 transition-colors">
                 IBM
               </span>
             </div>
             {/* Logo 5: Capgemini */}
             <div className="bg-[#25282C] aspect-square flex items-center justify-center p-8 hover:bg-[#2A2D32] transition-colors group">
-              <span className="text-white font-manrope text-2xl font-bold group-hover:text-white/80 transition-colors">
+              <span className="text-white font-manrope text-gh-body font-bold group-hover:text-white/80 transition-colors">
                 Capgemini
               </span>
             </div>
             {/* Logo 6: Mercedes-Benz */}
             <div className="bg-[#25282C] aspect-square flex items-center justify-center p-8 hover:bg-[#2A2D32] transition-colors group">
-              <span className="text-white font-philosopher text-2xl group-hover:text-white/80 transition-colors">
+              <span className="text-white font-philosopher text-gh-body group-hover:text-white/80 transition-colors">
                 Mercedes-Benz
               </span>
             </div>
@@ -146,11 +144,11 @@ export default function AboutPage() {
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]" />
 
         <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
-          <h3 className="text-[#EFCD62] text-xs font-bold tracking-[0.2em] uppercase mb-8">
+          <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-8">
             OUR STORY
           </h3>
 
-          <div className="space-y-6 text-white/90 font-manrope text-lg md:text-xl leading-relaxed mb-16">
+          <div className="space-y-6 text-white/90 font-manrope text-gh-body leading-relaxed mb-16">
             <p>
               Founded in 2011 under Jade Retreats, Jade Hospitainment created
               exclusive private retreat experiences, starting with one of
@@ -181,7 +179,7 @@ export default function AboutPage() {
               <div className="w-16 h-16 rounded-full border border-[#EFCD62] flex items-center justify-center bg-black/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
                 <Play className="w-6 h-6 text-[#EFCD62] fill-[#EFCD62]" />
               </div>
-              <span className="text-[#EFCD62]/60 text-xs tracking-[0.3em] font-light uppercase mt-2">
+              <span className="text-[#EFCD62]/60 text-gh-label tracking-[0.3em] font-light uppercase mt-2">
                 Hospitainment
               </span>
             </div>
@@ -193,10 +191,10 @@ export default function AboutPage() {
       <section className="py-24 bg-[#1A1C1E]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h3 className="text-[#EFCD62] text-xs font-bold tracking-[0.2em] uppercase mb-4">
+            <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
               WHY JADE
             </h3>
-            <h2 className="text-3xl md:text-5xl font-philosopher text-white">
+            <h2 className="text-gh-h1 font-philosopher text-white">
               Because how you <br className="hidden md:block" />
               operate matters
             </h2>
@@ -212,10 +210,10 @@ export default function AboutPage() {
               />
 
               <div className="relative z-10">
-                <span className="font-philosopher text-white/80 text-xl italic mb-2 block">
+                <span className="font-philosopher text-white/80 text-gh-body italic mb-2 block">
                   operate
                 </span>
-                <h3 className="text-5xl md:text-7xl font-bold text-white mb-4 leading-none">
+                <h3 className="text-gh-h1 font-bold text-white mb-4 leading-none">
                   BY <br /> INTENT
                 </h3>
                 <p className="text-white/70 font-manrope text-sm md:text-base leading-relaxed mt-12 max-w-sm">
@@ -236,10 +234,10 @@ export default function AboutPage() {
               />
 
               <div className="relative z-10">
-                <span className="font-philosopher text-white/80 text-xl italic mb-2 block">
+                <span className="font-philosopher text-white/80 text-gh-body italic mb-2 block">
                   curate
                 </span>
-                <h3 className="text-5xl md:text-7xl font-bold text-white mb-4 leading-none">
+                <h3 className="text-gh-h1 font-bold text-white mb-4 leading-none">
                   THE <br /> CANVAS
                 </h3>
                 <p className="text-white/70 font-manrope text-sm md:text-base leading-relaxed mt-12 max-w-sm">
@@ -254,14 +252,14 @@ export default function AboutPage() {
 
           {/* CTA Button */}
           <div className="flex flex-col items-center text-center gap-6">
-            <p className="text-white/60 font-manrope font-light">
+            <p className="text-white/60 font-manrope font-light text-gh-body">
               Bringing unique villas and curated experiences together
               <br />
               under one standard of hospitality.
             </p>
             <button
               onClick={() => setPartnerOverlayOpen(true)}
-              className="bg-[#EFCD62] text-black font-bold uppercase tracking-widest text-sm px-8 py-4 w-full md:w-auto min-w-[300px] hover:bg-white transition-colors flex items-center justify-center gap-2 rounded-none"
+              className="bg-[#EFCD62] text-black font-bold uppercase tracking-widest text-gh-label px-8 py-4 w-full md:w-auto min-w-[300px] hover:bg-white transition-colors flex items-center justify-center gap-2 rounded-none"
             >
               PARTNER WITH JADE <ArrowRight className="w-4 h-4" />
             </button>
@@ -274,10 +272,10 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h3 className="text-[#EFCD62] text-xs font-bold tracking-[0.2em] uppercase mb-4">
+              <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
                 WHAT WE DO
               </h3>
-              <h2 className="text-3xl md:text-5xl font-philosopher text-white">
+              <h2 className="text-gh-h2 font-philosopher text-white">
                 Our Offering
               </h2>
             </div>
@@ -302,14 +300,14 @@ export default function AboutPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
             <div className="absolute inset-0 flex flex-col items-center justify-end p-8 md:p-16 text-center">
-              <h3 className="text-3xl md:text-5xl font-philosopher text-white mb-4">
+              <h3 className="text-gh-h2 font-philosopher text-white mb-4">
                 Weekend Getaways
               </h3>
-              <p className="text-white/70 max-w-xl mb-10 font-manrope text-sm md:text-base leading-relaxed text-justify">
+              <p className="text-white/70 max-w-xl mb-10 font-manrope text-gh-body leading-relaxed text-justify">
                 A day or two with your friends and family away from the bustling
                 city in the wilderness is truly on everyone's wishlist.
               </p>
-              <button className="border border-white/30 bg-white/5 backdrop-blur-sm text-white px-8 py-4 uppercase tracking-widest text-xs font-bold hover:bg-white hover:text-black transition-all flex items-center gap-3">
+              <button className="border border-white/30 bg-white/5 backdrop-blur-sm text-white px-8 py-4 uppercase tracking-widest text-gh-label font-bold hover:bg-white hover:text-black transition-all flex items-center gap-3">
                 SEE WHAT A GETAWAY LOOKS LIKE <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -325,13 +323,13 @@ export default function AboutPage() {
         </div>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
-          <h3 className="text-[#EFCD62] text-xs font-bold tracking-[0.2em] uppercase mb-4">
+          <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
             MEET THE TEAM
           </h3>
-          <h2 className="text-3xl md:text-5xl font-philosopher text-white mb-6">
+          <h2 className="text-gh-h2 font-philosopher text-white mb-6">
             The Faces of Hospitainment
           </h2>
-          <p className="text-white/60 max-w-2xl mx-auto mb-16 font-manrope">
+          <p className="text-white/60 max-w-2xl mx-auto mb-16 font-manrope text-gh-body">
             Seasoned leadership with hands-on experience across hospitality,
             events, and operations.
           </p>
@@ -350,10 +348,10 @@ export default function AboutPage() {
                     className="object-cover grayscale"
                   />
                 </div>
-                <h4 className="text-white text-xl md:text-2xl font-bold font-manrope mb-2">
+                <h4 className="text-white text-gh-body font-bold font-manrope mb-2">
                   Aakansh Kundi
                 </h4>
-                <p className="text-white/40 uppercase tracking-widest text-[10px] md:text-xs">
+                <p className="text-white/40 uppercase tracking-widest text-gh-desc">
                   Director
                 </p>
               </div>
@@ -366,10 +364,10 @@ export default function AboutPage() {
       <section className="py-24 bg-[#1A1C1E]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h3 className="text-[#EFCD62] text-xs font-bold tracking-[0.2em] uppercase mb-4">
+            <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
               MEDIA
             </h3>
-            <h2 className="text-3xl md:text-5xl font-philosopher text-white mb-6">
+            <h2 className="text-gh-h2 font-philosopher text-white mb-6">
               Awards and Recognition
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto font-manrope">
@@ -415,7 +413,7 @@ export default function AboutPage() {
                   className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
-                  <p className="text-white font-philosopher text-2xl">
+                  <p className="text-white font-philosopher text-gh-h2">
                     Recognized for Excellence in Hospitality
                   </p>
                 </div>

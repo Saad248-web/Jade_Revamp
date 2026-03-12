@@ -64,7 +64,7 @@ export default function MobileBottomNav() {
                     className="object-contain"
                   />
                 </div>
-                <span className="text-[10px] font-manrope font-medium tracking-wide translate-y-[-2px]">
+                <span className="text-gh-label font-manrope font-medium tracking-wide translate-y-[-2px]">
                   {item.label}
                 </span>
               </Link>
@@ -80,7 +80,7 @@ export default function MobileBottomNav() {
               className={`flex flex-col items-center gap-1.5 w-16 ${colorClass}`}
             >
               <Icon className="w-5 h-5" strokeWidth={1.5} />
-              <span className="text-[10px] font-manrope font-medium tracking-wide">
+              <span className="text-gh-label font-manrope font-medium tracking-wide">
                 {item.label}
               </span>
             </Link>

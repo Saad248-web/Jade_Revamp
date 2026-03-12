@@ -146,7 +146,7 @@ export default function SplashScreen() {
             <div className="overflow-hidden">
               <motion.p
                 variants={textItemVars}
-                className="text-[10px] md:text-xs font-manrope tracking-[0.2em] text-white/60 uppercase"
+                className="text-gh-label font-manrope tracking-[0.2em] text-white/60 uppercase"
               >
                 Step into the world of
               </motion.p>
@@ -157,7 +157,7 @@ export default function SplashScreen() {
               <div className="overflow-hidden">
                 <motion.h1
                   variants={textItemVars}
-                  className="text-5xl md:text-7xl font-philosopher text-white text-center leading-tight"
+                  className="text-gh-h1 font-philosopher text-white text-center leading-tight"
                 >
                   Jade
                 </motion.h1>
@@ -165,7 +165,7 @@ export default function SplashScreen() {
               <div className="overflow-hidden">
                 <motion.h2
                   variants={textItemVars}
-                  className="text-3xl md:text-5xl font-philosopher text-white/90 text-center"
+                  className="text-gh-h2 font-philosopher text-white/90 text-center"
                 >
                   Hospitainment
                 </motion.h2>

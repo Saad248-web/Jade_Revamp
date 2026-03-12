@@ -125,15 +125,15 @@ function IntroPanel({
     >
       <div className="relative w-full max-w-4xl mx-auto flex flex-col items-center text-center">
         <motion.div style={{ y: textY }} className="z-10 relative">
-          <span className="font-manrope text-xs tracking-[0.3em] uppercase text-[#EFCD62] mb-4 font-bold block">
+          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-4 font-bold block">
             FEATURED VILLA'S
           </span>
-          <h2 className="font-philosopher text-5xl md:text-8xl text-white leading-tight mb-6">
+          <h2 className="font-philosopher text-gh-h1 text-white leading-tight mb-6">
             Spaces That Hold
             <br />
             the Experience
           </h2>
-          <p className="font-manrope text-sm md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+          <p className="font-manrope text-gh-body text-white/80 max-w-2xl mx-auto leading-relaxed">
             Every Jade experience is defined by its setting—chosen for
             atmosphere, flow, and the freedom it allows.
           </p>
@@ -230,7 +230,7 @@ function VillaSlide({
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="font-manrope text-xs tracking-[0.2em] uppercase text-[#EFCD62] mb-2 font-bold"
+              className="font-manrope text-gh-label tracking-[0.2em] uppercase text-[#EFCD62] mb-2 font-bold"
             >
               {data.category}
             </motion.p>
@@ -238,7 +238,7 @@ function VillaSlide({
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="font-philosopher text-5xl md:text-7xl text-white leading-none mb-2"
+              className="font-philosopher text-gh-h2 text-white leading-none mb-2"
             >
               {data.title}
             </motion.h2>
@@ -246,7 +246,7 @@ function VillaSlide({
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="font-manrope text-sm md:text-lg text-white/80 leading-relaxed mb-4 max-w-lg"
+              className="font-manrope text-gh-body text-white/80 leading-relaxed mb-4 max-w-lg"
             >
               {data.description}
             </motion.p>
@@ -257,7 +257,7 @@ function VillaSlide({
             >
               <Link
                 href={data.link}
-                className="inline-flex items-center gap-2 text-[#EFCD62] text-xs md:text-sm font-bold tracking-widest uppercase hover:gap-4 transition-all"
+                className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-4 transition-all"
               >
                 Learn more about {data.title} <ArrowRight className="w-5 h-5" />
               </Link>
@@ -288,7 +288,7 @@ function FinalGreenSection({
       <div className="flex flex-col items-center justify-center p-12">
         <Link
           href="/villas"
-          className="flex items-center gap-4 px-8 py-6 bg-[#EFCD62] text-[#1a1d21] rounded-none shadow-xl font-manrope font-bold text-sm tracking-[0.2em] uppercase hover:bg-white transition-colors"
+          className="flex items-center gap-4 px-8 py-6 bg-[#EFCD62] text-[#1a1d21] rounded-none shadow-xl font-manrope font-bold text-gh-label tracking-[0.2em] uppercase hover:bg-white transition-colors"
         >
           EXPLORE ALL JADE VILLAS <ArrowRight className="w-5 h-5" />
         </Link>

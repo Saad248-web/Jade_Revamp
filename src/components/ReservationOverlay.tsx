@@ -88,7 +88,7 @@ export default function ReservationOverlay({
           >
             {/* HEADER */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
-              <h2 className="text-white text-xl md:text-2xl font-philosopher">
+              <h2 className="text-white text-gh-h2 font-philosopher">
                 {view === "dates" ? "Select Dates" : "Total Guests"}
               </h2>
               <div className="flex items-center gap-4">
@@ -100,7 +100,7 @@ export default function ReservationOverlay({
                       setDates([]);
                     }
                   }}
-                  className="text-[#EFCD62] text-xs font-bold tracking-widest uppercase hover:text-white transition-colors"
+                  className="text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
                 >
                   RESET
                 </button>
@@ -121,7 +121,7 @@ export default function ReservationOverlay({
               {view === "dates" && (
                 <div className="flex flex-col gap-6">
                   {/* Legend */}
-                  <div className="flex items-center justify-between text-[10px] text-white/50 uppercase tracking-widest mb-2">
+                  <div className="flex items-center justify-between text-gh-label text-white/50 uppercase tracking-widest mb-2">
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 rounded-sm bg-white/5 border border-white/10" />
                       <span>Available</span>
@@ -139,7 +139,7 @@ export default function ReservationOverlay({
                   </div>
 
                   {/* Days Header */}
-                  <div className="grid grid-cols-7 gap-1 text-center text-[10px] text-white/40 uppercase tracking-widest mb-2">
+                  <div className="grid grid-cols-7 gap-1 text-center text-gh-label text-white/40 uppercase tracking-widest mb-2">
                     <div>Mon</div>
                     <div>Tue</div>
                     <div>Wed</div>
@@ -151,7 +151,7 @@ export default function ReservationOverlay({
 
                   {/* January 2026 Mock Calendar */}
                   <div>
-                    <h3 className="text-white font-manrope font-semibold text-sm mb-4">
+                    <h3 className="text-white font-manrope font-semibold text-gh-body mb-4">
                       January 2026
                     </h3>
                     <div className="grid grid-cols-7 gap-y-2 gap-x-1 text-center">
@@ -168,7 +168,7 @@ export default function ReservationOverlay({
                             onClick={() =>
                               !isUnavailable && handleDateToggle(day)
                             }
-                            className={`w-8 h-8 md:w-10 md:h-10 mx-auto flex items-center justify-center text-xs transition-colors rounded-sm
+                            className={`w-8 h-8 md:w-10 md:h-10 mx-auto flex items-center justify-center text-gh-body transition-colors rounded-sm
                               ${
                                 isSelected
                                   ? "bg-[#EFCD62] text-[#0E211A] font-bold"
@@ -189,7 +189,7 @@ export default function ReservationOverlay({
 
                   {/* February 2026 Mock Calendar */}
                   <div>
-                    <h3 className="text-white font-manrope font-semibold text-sm mb-4 mt-4">
+                    <h3 className="text-white font-manrope font-semibold text-gh-body mb-4 mt-4">
                       February 2026
                     </h3>
                     <div className="grid grid-cols-7 gap-y-2 gap-x-1 text-center">
@@ -205,7 +205,7 @@ export default function ReservationOverlay({
                         return (
                           <button
                             key={`feb-${day}`}
-                            className={`w-8 h-8 md:w-10 md:h-10 mx-auto flex items-center justify-center text-xs transition-colors rounded-sm
+                            className={`w-8 h-8 md:w-10 md:h-10 mx-auto flex items-center justify-center text-gh-body transition-colors rounded-sm
                               ${isUnavailable ? "text-white/20 relative overflow-hidden" : "text-white hover:bg-white/10"}`}
                           >
                             {isUnavailable && (
@@ -225,10 +225,10 @@ export default function ReservationOverlay({
                   {/* Adults */}
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="text-white font-semibold text-lg">
+                      <h4 className="text-white font-semibold text-gh-body">
                         Adults
                       </h4>
-                      <p className="text-white/40 text-xs">
+                      <p className="text-white/40 text-gh-desc">
                         Age 13 years and more
                       </p>
                     </div>
@@ -239,7 +239,7 @@ export default function ReservationOverlay({
                       >
                         <Minus className="w-4 h-4" />
                       </button>
-                      <span className="text-white font-philosopher text-xl w-6 text-center">
+                      <span className="text-white font-philosopher text-gh-h2 w-6 text-center">
                         {adults.toString().padStart(2, "0")}
                       </span>
                       <button
@@ -254,10 +254,12 @@ export default function ReservationOverlay({
                   {/* Children */}
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="text-white font-semibold text-lg">
+                      <h4 className="text-white font-semibold text-gh-body">
                         Children
                       </h4>
-                      <p className="text-white/40 text-xs">Age 3 - 12 years</p>
+                      <p className="text-white/40 text-gh-desc">
+                        Age 3 - 12 years
+                      </p>
                     </div>
                     <div className="flex items-center gap-4">
                       <button
@@ -266,7 +268,7 @@ export default function ReservationOverlay({
                       >
                         <Minus className="w-4 h-4" />
                       </button>
-                      <span className="text-white font-philosopher text-xl w-6 text-center">
+                      <span className="text-white font-philosopher text-gh-h2 w-6 text-center">
                         {children.toString().padStart(2, "0")}
                       </span>
                       <button
@@ -281,7 +283,9 @@ export default function ReservationOverlay({
                   {/* Pets */}
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="text-white font-semibold text-lg">Pets</h4>
+                      <h4 className="text-white font-semibold text-gh-body">
+                        Pets
+                      </h4>
                     </div>
                     <div className="flex items-center gap-4">
                       <button
@@ -290,7 +294,7 @@ export default function ReservationOverlay({
                       >
                         <Minus className="w-4 h-4" />
                       </button>
-                      <span className="text-white font-philosopher text-xl w-6 text-center">
+                      <span className="text-white font-philosopher text-gh-h2 w-6 text-center">
                         {pets.toString().padStart(2, "0")}
                       </span>
                       <button
@@ -320,7 +324,7 @@ export default function ReservationOverlay({
               {view === "dates" ? (
                 <div className="flex items-center justify-between mt-2">
                   {dates.length > 0 ? (
-                    <div className="text-white font-manrope text-sm font-semibold">
+                    <div className="text-white font-manrope text-gh-body font-semibold">
                       {dates[0]} Jan{" "}
                       {dates.length > 1 && (
                         <>
@@ -332,13 +336,13 @@ export default function ReservationOverlay({
                       )}
                     </div>
                   ) : (
-                    <div className="text-white/40 font-manrope text-sm">
+                    <div className="text-white/40 font-manrope text-gh-body">
                       -- -- to -- --
                     </div>
                   )}
                   <button
                     onClick={() => setView("guests")}
-                    className="bg-[#EFCD62] text-[#122A23] hover:bg-white transition-colors px-6 py-2.5 text-xs font-bold tracking-widest uppercase rounded-sm"
+                    className="bg-[#EFCD62] text-[#122A23] hover:bg-white transition-colors px-6 py-2.5 text-gh-label font-bold tracking-widest uppercase rounded-sm"
                   >
                     NEXT
                   </button>
@@ -346,25 +350,25 @@ export default function ReservationOverlay({
               ) : (
                 <div className="flex items-center justify-between mt-2">
                   {adults > 0 || children > 0 ? (
-                    <div className="text-white font-manrope text-sm font-semibold">
+                    <div className="text-white font-manrope text-gh-body font-semibold">
                       {adults + children} Guests
                       {pets > 0 ? `, ${pets} Pets` : ""}
                     </div>
                   ) : (
-                    <div className="text-white/40 font-manrope text-sm">
+                    <div className="text-white/40 font-manrope text-gh-body">
                       -- --
                     </div>
                   )}
                   <div className="flex items-center gap-4">
                     <button
                       onClick={() => setView("dates")}
-                      className="text-[#EFCD62] hover:text-white transition-colors text-xs font-bold tracking-widest uppercase"
+                      className="text-[#EFCD62] hover:text-white transition-colors text-gh-label font-bold tracking-widest uppercase"
                     >
                       BACK
                     </button>
                     <button
                       onClick={handleApply}
-                      className="bg-[#EFCD62] text-[#122A23] hover:bg-white transition-colors px-6 py-2.5 text-xs font-bold tracking-widest uppercase rounded-sm"
+                      className="bg-[#EFCD62] text-[#122A23] hover:bg-white transition-colors px-6 py-2.5 text-gh-label font-bold tracking-widest uppercase rounded-sm"
                     >
                       APPLY
                     </button>

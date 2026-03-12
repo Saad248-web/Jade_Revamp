@@ -54,7 +54,7 @@ export default function WhyJadeWeddings() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="font-philosopher text-5xl md:text-6xl text-white mb-16"
+              className="font-philosopher text-gh-h1 text-white mb-16"
             >
               Why Jade Wedding Venues
             </motion.h2>
@@ -75,7 +75,7 @@ export default function WhyJadeWeddings() {
                   </div>
 
                   <div className="flex flex-col gap-3">
-                    <h3 className="font-manrope font-bold text-white text-lg tracking-[0.1em] uppercase">
+                    <h3 className="font-manrope font-bold text-white text-gh-body tracking-[0.1em] uppercase">
                       {benefit.title}
                     </h3>
                     <p className="font-manrope text-white/60 leading-relaxed max-w-lg">

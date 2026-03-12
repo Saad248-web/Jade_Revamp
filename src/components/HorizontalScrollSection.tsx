@@ -100,7 +100,7 @@ export default function HorizontalScrollSection() {
           <div className="absolute top-0 left-0 w-full z-50 flex flex-col items-center pointer-events-none">
             <div className="absolute top-0 left-0 w-full h-[16.6vh] bg-gradient-to-b from-black/90 to-transparent" />
             <div className="relative mt-20 md:mt-24">
-              <span className="font-manrope text-sm md:text-base lg:text-lg tracking-[0.3em] uppercase mb-4 md:mb-6 font-semibold text-jade-gold drop-shadow-lg">
+              <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-4 md:mb-6 font-semibold text-jade-gold drop-shadow-lg block">
                 WAYS JADE IS EXPERIENCED
               </span>
             </div>
@@ -164,7 +164,7 @@ function GlobalCounter({ progress, total }: { progress: any; total: number }) {
   }, [progress, total]);
 
   return (
-    <div className="relative flex items-center gap-12 md:gap-16 font-philosopher text-xl md:text-2xl lg:text-3xl mt-2">
+    <div className="relative flex items-center gap-12 md:gap-16 font-philosopher text-gh-scroll mt-2">
       <span className="text-white drop-shadow-lg transition-all duration-300">
         {current}
       </span>
@@ -385,7 +385,7 @@ function StackedPanel({
       >
         {!isGrid ? (
           <>
-            <motion.h2 className="font-philosopher text-4xl md:text-6xl text-white mb-4 drop-shadow-lg">
+            <motion.h2 className="font-philosopher text-gh-h1 text-white mb-4 drop-shadow-lg">
               <div className="overflow-hidden">
                 <motion.span className="block" variants={lineVars}>
                   {data.title}
@@ -394,14 +394,14 @@ function StackedPanel({
             </motion.h2>
             <motion.p
               variants={lineVars}
-              className="font-manrope text-base md:text-lg text-white/90 font-light max-w-xl mb-8 leading-relaxed drop-shadow-md"
+              className="font-manrope text-gh-body text-white/90 font-light max-w-xl mb-8 leading-relaxed drop-shadow-md"
             >
               {data.subtext}
             </motion.p>
             <motion.div variants={lineVars} className="w-full max-w-md">
               <Link
                 href="#"
-                className="w-full block bg-jade-gold text-jade-charcoal py-4 px-6 uppercase tracking-widest text-xs md:text-sm font-bold hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center gap-3"
+                className="w-full block bg-jade-gold text-jade-charcoal py-4 px-6 uppercase tracking-widest text-gh-label font-bold hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center gap-3"
               >
                 {data.cta}
                 <ArrowRight className="w-4 h-4" />
@@ -424,7 +424,7 @@ function StackedPanel({
                     className="object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-700"
                   />
                   <div className="absolute bottom-4 left-0 w-full text-center">
-                    <h3 className="font-philosopher text-white text-lg">
+                    <h3 className="font-philosopher text-white text-gh-body">
                       {item.title}
                     </h3>
                   </div>
@@ -434,7 +434,7 @@ function StackedPanel({
             <motion.div variants={lineVars} className="w-full max-w-md">
               <Link
                 href="#"
-                className="w-full block bg-jade-gold text-jade-charcoal py-3 px-6 uppercase tracking-widest text-xs md:text-sm font-bold flex items-center justify-center gap-3"
+                className="w-full block bg-jade-gold text-jade-charcoal py-3 px-6 uppercase tracking-widest text-gh-label font-bold flex items-center justify-center gap-3"
               >
                 {data.cta} <ArrowRight className="w-4 h-4" />
               </Link>

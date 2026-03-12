@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ArrowLeft, ArrowRight, MapPin, Users, Car, Home } from "lucide-react";
 import Link from "next/link";
 import { VILLAS } from "@/data/villas";
+import VenueOverlay from "./VenueOverlay";
 
 // Filter villas to specifically show Set 2: Tranquil Woods, Magnolia, Diamond
 const SET2_IDS = ["tranquil-woods", "magnolia", "diamond"];
@@ -14,6 +15,7 @@ const WEDDING_VENUES = VILLAS.filter((villa) => SET2_IDS.includes(villa.id));
 export default function WeddingVenuesCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
   const nextSlide = () => {
     setDirection(1);
@@ -68,7 +70,7 @@ export default function WeddingVenuesCarousel() {
             <div className="absolute top-6 right-6 z-20">
               <Link
                 href="/contact"
-                className="bg-black/40 backdrop-blur-md hover:bg-white hover:text-black text-white text-[10px] font-manrope font-semibold tracking-[0.2em] uppercase px-6 py-3 border border-white/20 transition-all duration-300"
+                className="bg-black/40 backdrop-blur-md hover:bg-white hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-6 py-3 border border-white/20 transition-all duration-300"
               >
                 Contact Us
               </Link>
@@ -90,15 +92,15 @@ export default function WeddingVenuesCarousel() {
 
             {/* Bottom Center Indicator (Label, Line, Numbers) - Elevated for Mobile Bottom Nav */}
             <div className="absolute bottom-24 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
-              <span className="text-white font-manrope text-xs font-bold tracking-[0.3em] uppercase">
+              <span className="text-white font-manrope text-gh-label font-bold tracking-[0.3em] uppercase">
                 LAWN
               </span>
               <div className="flex items-center gap-4">
-                <span className="text-white font-philosopher text-2xl">
+                <span className="text-white font-philosopher text-gh-scroll">
                   {currentIndex + 1}
                 </span>
                 <div className="w-24 h-px bg-white/40" />
-                <span className="text-white/40 font-philosopher text-xl">
+                <span className="text-white/40 font-philosopher text-gh-scroll">
                   {WEDDING_VENUES.length}
                 </span>
               </div>
@@ -108,19 +110,19 @@ export default function WeddingVenuesCarousel() {
           {/* CONTENT SECTION BELOW IMAGE */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mt-8">
             <div className="lg:col-span-7 flex flex-col gap-4">
-              <span className="text-[#EFCD62] text-xs font-manrope font-bold tracking-[0.2em] uppercase">
+              <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase">
                 {currentVilla.type}
               </span>
-              <h2 className="font-philosopher text-5xl md:text-6xl text-white mb-2">
+              <h2 className="font-philosopher text-gh-h1 text-white mb-2">
                 {currentVilla.name}
               </h2>
               <div className="flex items-center gap-2 text-white/60 mb-6">
                 <MapPin className="w-4 h-4" />
-                <span className="font-manrope text-sm">
+                <span className="font-manrope text-gh-label">
                   {currentVilla.location}
                 </span>
               </div>
-              <p className="font-manrope text-white/70 leading-relaxed text-sm md:text-base max-w-2xl">
+              <p className="font-manrope text-white/70 leading-relaxed text-gh-body max-w-2xl">
                 {currentVilla.description.split(".")[0]}.{" "}
                 {currentVilla.description.split(".")[1] || ""}. Built to support
                 high-guest-count weddings and grand celebrations.
@@ -132,56 +134,61 @@ export default function WeddingVenuesCarousel() {
               <div className="grid grid-cols-3 gap-4 border-y border-white/10 py-8">
                 <div className="flex flex-col items-center gap-2 text-center border-r border-white/10">
                   <Users className="w-5 h-5 text-white/40" />
-                  <span className="text-white font-philosopher text-2xl">
+                  <span className="text-white font-philosopher text-gh-scroll">
                     {currentVilla.stats.events.split("-")[1]?.split(" ")[0] ||
                       "1500"}
                   </span>
-                  <span className="text-white/40 text-[10px] uppercase tracking-widest font-manrope">
+                  <span className="text-white/40 text-gh-label uppercase tracking-widest font-manrope">
                     Guests
                   </span>
                 </div>
                 <div className="flex flex-col items-center gap-2 text-center border-r border-white/10">
                   <Car className="w-5 h-5 text-white/40" />
-                  <span className="text-white font-philosopher text-2xl">
+                  <span className="text-white font-philosopher text-gh-scroll">
                     80
                   </span>
-                  <span className="text-white/40 text-[10px] uppercase tracking-widest font-manrope">
+                  <span className="text-white/40 text-gh-label uppercase tracking-widest font-manrope">
                     Parking
                   </span>
                 </div>
                 <div className="flex flex-col items-center gap-2 text-center">
                   <Home className="w-5 h-5 text-white/40" />
-                  <span className="text-white font-philosopher text-2xl">
+                  <span className="text-white font-philosopher text-gh-scroll">
                     {currentVilla.stats.stay.split("-")[1]?.split(" ")[0] ||
                       "50"}
                   </span>
-                  <span className="text-white/40 text-[10px] uppercase tracking-widest font-manrope">
+                  <span className="text-white/40 text-gh-label uppercase tracking-widest font-manrope">
                     Stay
                   </span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-white/40 text-xs font-manrope uppercase tracking-widest block mb-1">
-                    Starting from
-                  </span>
-                  <span className="text-white font-manrope font-bold text-xl">
-                    ₹99,000 onwards
-                  </span>
-                </div>
-                <Link
-                  href={`/villas/${currentVilla.id}`}
-                  className="inline-flex items-center gap-3 text-[#EFCD62] font-manrope text-sm md:text-base tracking-[0.2em] font-bold uppercase hover:text-white transition-all group"
+                <span className="text-white font-manrope font-bold text-gh-label">
+                  ₹99,000 onwards
+                </span>
+                <button
+                  onClick={() => setIsOverlayOpen(true)}
+                  className="inline-flex items-center gap-3 text-[#EFCD62] font-manrope text-gh-label tracking-[0.2em] font-bold uppercase hover:text-white transition-all group"
                 >
                   KNOW MORE
                   <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {isOverlayOpen && (
+          <VenueOverlay
+            isOpen={isOverlayOpen}
+            onClose={() => setIsOverlayOpen(false)}
+            villa={currentVilla}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

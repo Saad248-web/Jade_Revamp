@@ -128,7 +128,7 @@ export default function WeddingServicesSection() {
             key={`label-${currentIndex}`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-manrope text-[10px] font-bold tracking-[0.3em] uppercase text-[#EFCD62] mb-4"
+            className="font-manrope text-gh-label font-bold tracking-[0.3em] uppercase text-[#EFCD62] mb-4"
           >
             {currentSlide.label}
           </motion.p>
@@ -139,7 +139,7 @@ export default function WeddingServicesSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="font-philosopher text-4xl text-white leading-tight"
+                className="font-philosopher text-gh-h2 text-white leading-tight"
               >
                 {line}
               </motion.h2>
@@ -150,7 +150,7 @@ export default function WeddingServicesSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="font-manrope text-sm text-white/80 leading-relaxed max-w-sm mx-auto"
+            className="font-manrope text-gh-body text-white/80 leading-relaxed max-w-sm mx-auto"
           >
             {currentSlide.subtext}
           </motion.p>
@@ -258,7 +258,7 @@ export default function WeddingServicesSection() {
               transition={{ duration: 0.8 }}
             >
               <p
-                className="font-manrope text-xs tracking-[0.4em] uppercase mb-8"
+                className="font-manrope text-gh-label tracking-[0.4em] uppercase mb-8"
                 style={{ color: "#EFCD62" }}
               >
                 {currentSlide.label}
@@ -267,13 +267,13 @@ export default function WeddingServicesSection() {
                 {currentSlide.heading.map((line, index) => (
                   <h2
                     key={index}
-                    className="font-philosopher text-7xl text-white leading-tight mb-2"
+                    className="font-philosopher text-gh-h1 text-white leading-tight mb-2"
                   >
                     {line}
                   </h2>
                 ))}
               </div>
-              <p className="font-manrope text-lg text-white/70 leading-relaxed max-w-lg">
+              <p className="font-manrope text-gh-body text-white/70 leading-relaxed max-w-lg">
                 {currentSlide.subtext}
               </p>
             </motion.div>

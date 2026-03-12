@@ -170,10 +170,10 @@ export default function Footer() {
             <div className="lg:col-span-6 flex flex-col gap-16">
               {/* Heading */}
               <div>
-                <p className="font-manrope text-[10px] tracking-[0.3em] uppercase text-[#EFCD62]/70 mb-4">
+                <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]/70 mb-4">
                   Get In Touch
                 </p>
-                <h2 className="font-philosopher text-5xl md:text-6xl text-white leading-tight">
+                <h2 className="font-philosopher text-gh-h1 text-white leading-tight">
                   We'd love to <br />
                   hear from <span className="italic text-[#EFCD62]">you</span>
                 </h2>
@@ -190,7 +190,7 @@ export default function Footer() {
                         href={link.href}
                         className="group font-manrope text-sm text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
                       >
-                        <span className="inline-block transition-transform duration-300 group-hover:translate-x-1 text-[10px]">
+                        <span className="inline-block transition-transform duration-300 group-hover:translate-x-1 text-gh-label">
                           ▶
                         </span>
                         {link.label}
@@ -204,7 +204,7 @@ export default function Footer() {
                         href={link.href}
                         className="group font-manrope text-sm text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
                       >
-                        <span className="inline-block transition-transform duration-300 group-hover:translate-x-1 text-[10px]">
+                        <span className="inline-block transition-transform duration-300 group-hover:translate-x-1 text-gh-label">
                           ▶
                         </span>
                         {link.label}
@@ -224,7 +224,7 @@ export default function Footer() {
                       className="object-contain"
                     />
                   </div>
-                  <div className="flex flex-col gap-3 text-white/60 font-manrope text-sm">
+                  <div className="flex flex-col gap-3 text-white/60 font-manrope text-gh-body">
                     <div className="flex items-start gap-3">
                       <MapPin className="w-4 h-4 text-[#EFCD62] shrink-0 mt-0.5" />
                       <span>
@@ -290,7 +290,7 @@ export default function Footer() {
                   />
                   <label
                     htmlFor="fullName"
-                    className="absolute left-4 -top-2.5 text-xs text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
+                    className="absolute left-4 -top-2.5 text-gh-label text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
                   >
                     Full Name
                   </label>
@@ -310,7 +310,7 @@ export default function Footer() {
                   />
                   <label
                     htmlFor="phoneNumber"
-                    className="absolute left-4 -top-2.5 text-xs text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
+                    className="absolute left-4 -top-2.5 text-gh-label text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
                   >
                     Phone Number
                   </label>
@@ -330,7 +330,7 @@ export default function Footer() {
                   />
                   <label
                     htmlFor="subject"
-                    className="absolute left-4 -top-2.5 text-xs text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
+                    className="absolute left-4 -top-2.5 text-gh-label text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
                   >
                     Subject
                   </label>
@@ -362,7 +362,7 @@ export default function Footer() {
 
                   {/* Floating label when date selected */}
                   {dateLabel && (
-                    <span className="absolute left-4 -top-2.5 text-xs text-[#EFCD62] bg-[#2E3034] px-2 pointer-events-none">
+                    <span className="absolute left-4 -top-2.5 text-gh-label text-[#EFCD62] bg-[#2E3034] px-2 pointer-events-none">
                       Check-In &amp; Out Date
                     </span>
                   )}
@@ -394,7 +394,7 @@ export default function Footer() {
                           >
                             <ChevronLeft className="w-4 h-4" />
                           </button>
-                          <p className="font-manrope text-sm font-semibold text-white tracking-widest uppercase">
+                          <p className="font-manrope text-gh-body font-semibold text-white tracking-widest uppercase">
                             {MONTHS[calMonth.getMonth()]}{" "}
                             {calMonth.getFullYear()}
                           </p>
@@ -420,7 +420,7 @@ export default function Footer() {
                           {DAYS.map((d) => (
                             <div
                               key={d}
-                              className="text-center font-manrope text-[10px] text-white/30 tracking-widest py-1"
+                              className="text-center font-manrope text-gh-label text-white/30 tracking-widest py-1"
                             >
                               {d}
                             </div>
@@ -468,7 +468,7 @@ export default function Footer() {
                                 onClick={() => !isPast && handleDayClick(day)}
                                 onMouseEnter={() => setHoverDate(day)}
                                 onMouseLeave={() => setHoverDate(null)}
-                                className={`relative h-9 w-full font-manrope text-xs transition-all duration-150 ${
+                                className={`relative h-9 w-full font-manrope text-gh-desc transition-all duration-150 ${
                                   isPast
                                     ? "text-white/15 cursor-not-allowed"
                                     : isStart || isEnd
@@ -488,7 +488,7 @@ export default function Footer() {
 
                         {/* Footer hint */}
                         <div className="mt-4 pt-4 border-t border-white/8 flex items-center justify-between">
-                          <p className="font-manrope text-[10px] text-white/30">
+                          <p className="font-manrope text-gh-label text-white/30">
                             {!checkIn
                               ? "Select check-in date"
                               : !checkOut
@@ -502,7 +502,7 @@ export default function Footer() {
                                 setCheckIn(null);
                                 setCheckOut(null);
                               }}
-                              className="font-manrope text-[10px] text-white/30 hover:text-[#EFCD62] transition-colors tracking-widest uppercase"
+                              className="font-manrope text-gh-label text-white/30 hover:text-[#EFCD62] transition-colors tracking-widest uppercase"
                             >
                               Clear
                             </button>
@@ -527,7 +527,7 @@ export default function Footer() {
                   />
                   <label
                     htmlFor="queries"
-                    className="absolute left-4 -top-2.5 text-xs text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
+                    className="absolute left-4 -top-2.5 text-gh-label text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
                   >
                     Queries
                   </label>
@@ -537,7 +537,7 @@ export default function Footer() {
                 <button
                   type="submit"
                   disabled={!isFormValid}
-                  className={`w-full py-4 mt-6 font-manrope tracking-[0.25em] text-xs transition-all duration-300 uppercase border ${
+                  className={`w-full py-4 mt-6 font-manrope tracking-[0.25em] text-gh-label transition-all duration-300 uppercase border ${
                     isFormValid
                       ? "bg-transparent border-[#EFCD62]/50 text-[#EFCD62] hover:bg-[#EFCD62] hover:text-black hover:border-[#EFCD62]"
                       : "bg-white/[0.03] border-white/10 text-white/20 cursor-not-allowed"
@@ -560,9 +560,9 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="group font-manrope text-[11px] text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
+                    className="group font-manrope text-gh-label text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
                   >
-                    <span className="text-[9px] inline-block transition-transform duration-300 group-hover:translate-x-0.5">
+                    <span className="text-gh-label inline-block transition-transform duration-300 group-hover:translate-x-0.5">
                       ▶
                     </span>
                     {link.label}
@@ -574,9 +574,9 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="group font-manrope text-[11px] text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
+                    className="group font-manrope text-gh-label text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
                   >
-                    <span className="text-[9px] inline-block transition-transform duration-300 group-hover:translate-x-0.5">
+                    <span className="text-gh-label inline-block transition-transform duration-300 group-hover:translate-x-0.5">
                       ▶
                     </span>
                     {link.label}
@@ -597,7 +597,7 @@ export default function Footer() {
                 />
               </div>
 
-              <div className="flex flex-col gap-3 text-white/55 font-manrope text-xs">
+              <div className="flex flex-col gap-3 text-white/55 font-manrope text-gh-desc">
                 <div className="flex items-start gap-2.5">
                   <MapPin className="w-3.5 h-3.5 text-[#EFCD62] shrink-0 mt-0.5" />
                   <span>
@@ -648,10 +648,10 @@ export default function Footer() {
 
           {/* ── BOTTOM COPYRIGHT BAR ─────────────────────────────────────── */}
           <div className="border-t border-white/8 mt-14 pt-7 flex flex-col md:flex-row items-center justify-between gap-3">
-            <p className="font-manrope text-[10px] text-white/35 tracking-widest uppercase">
+            <p className="font-manrope text-gh-label text-white/35 tracking-widest uppercase">
               © {currentYear} Jade Hospitainment — All Rights Reserved
             </p>
-            <p className="font-manrope text-[10px] text-white/25 tracking-wide">
+            <p className="font-manrope text-gh-label text-white/25 tracking-wide">
               Crafted with excellence
             </p>
           </div>
@@ -752,7 +752,7 @@ export default function Footer() {
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
-                      className="text-white/80 text-sm leading-relaxed mb-10 max-w-sm mx-auto font-manrope"
+                      className="text-white/80 text-gh-body leading-relaxed mb-10 max-w-sm mx-auto font-manrope"
                     >
                       Thanks for sharing your details!
                       <br />
@@ -766,7 +766,7 @@ export default function Footer() {
                       transition={{ delay: 0.4 }}
                       className="flex flex-col w-full max-w-[280px] mx-auto gap-5"
                     >
-                      <p className="text-white/50 text-[10px] font-bold tracking-[0.2em] uppercase text-center">
+                      <p className="text-white/50 text-gh-label font-bold tracking-[0.2em] uppercase text-center">
                         MEANWHILE CHECK US OUT HERE
                       </p>
 
@@ -797,14 +797,14 @@ export default function Footer() {
                         ))}
                       </div>
 
-                      <p className="text-white/30 text-[10px] italic text-center">
+                      <p className="text-white/30 text-gh-label italic text-center">
                         Thoughtfully operated. Always.
                       </p>
 
                       <button
                         type="button"
                         onClick={() => setIsSuccess(false)}
-                        className="w-full bg-[#EFCD62] text-[#0E3A2F] py-5 text-xs font-bold tracking-widest uppercase hover:bg-white transition-colors rounded-none"
+                        className="w-full bg-[#EFCD62] text-[#0E3A2F] py-5 text-gh-label font-bold tracking-widest uppercase hover:bg-white transition-colors rounded-none"
                       >
                         OKAY
                       </button>

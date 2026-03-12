@@ -27,7 +27,7 @@ export default function ExperiencesHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-[#EFCD62] text-xs md:text-sm font-manrope font-bold tracking-[0.25em] uppercase mb-8"
+          className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase mb-8"
         >
           EXPERIENCES
         </motion.span>
@@ -37,7 +37,7 @@ export default function ExperiencesHero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="font-philosopher text-5xl md:text-7xl lg:text-8xl text-white mb-8 leading-tight tracking-tight"
+          className="font-philosopher text-gh-h1 text-white mb-8 leading-tight tracking-tight"
         >
           Moments <br className="hidden md:block" /> Thoughtfully Hosted
         </motion.h1>
@@ -47,7 +47,7 @@ export default function ExperiencesHero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="font-manrope text-white/70 text-sm md:text-lg max-w-xl leading-relaxed"
+          className="font-manrope text-white/70 text-gh-body max-w-xl leading-relaxed"
         >
           A collection of curated experiences designed across Jade’s private
           villas and distinctive settings.
@@ -67,7 +67,7 @@ export default function ExperiencesHero() {
         className="absolute bottom-24 md:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-20 cursor-pointer hover:opacity-80 transition-opacity"
       >
         <div className="w-[1px] h-12 bg-white/20" />
-        <span className="text-[10px] text-white/40 font-manrope tracking-[0.2em] uppercase">
+        <span className="text-gh-label text-white/40 font-manrope tracking-[0.2em] uppercase">
           SCROLL TO EXPERIENCES
         </span>
       </motion.div>

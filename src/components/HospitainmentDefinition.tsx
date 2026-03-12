@@ -70,7 +70,7 @@ export default function HospitainmentDefinition() {
         variants={containerReveal}
       >
         {/* Main Definition Heading */}
-        <h2 className="font-philosopher text-3xl md:text-5xl lg:text-7xl leading-[1.1] md:leading-[1.1] text-white/90 mb-12">
+        <h2 className="font-philosopher text-gh-h1 leading-[1.1] md:leading-[1.1] text-white/90 mb-12">
           {/* Split into lines for animation */}
           <div className="overflow-hidden">
             <motion.div variants={lineReveal}>
@@ -91,7 +91,7 @@ export default function HospitainmentDefinition() {
         <div className="overflow-hidden">
           <motion.p
             variants={subtextReveal}
-            className="font-manrope text-lg md:text-2xl text-white/60 font-light max-w-3xl mx-auto leading-relaxed"
+            className="font-manrope text-gh-scroll text-white/60 font-light max-w-3xl mx-auto leading-relaxed"
           >
             At Jade, hospitality sets the foundation and
             <br className="hidden md:block" /> entertainment activates the

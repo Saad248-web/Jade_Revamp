@@ -188,8 +188,8 @@ export default function UnifiedScrollSection() {
             style={{ y: section1Y }}
           >
             <div className="max-w-5xl mx-auto text-center">
-              {/* Font Manrope Regular (font-normal), size updated to 24px (text-2xl) */}
-              <h2 className="font-manrope font-normal text-2xl md:text-5xl lg:text-7xl leading-[1.2] md:leading-[1.2] text-white/90 mb-12">
+              {/* Font Manrope Regular (font-normal), size updated to Global Scroll Scale */}
+              <h2 className="font-manrope font-normal text-gh-scroll leading-[1.2] md:leading-[1.2] text-white/90 mb-12">
                 <motion.div style={{ opacity: line1Opacity }}>
                   Hospitainment is the art of
                 </motion.div>
@@ -219,7 +219,7 @@ export default function UnifiedScrollSection() {
           >
             <div className="max-w-5xl mx-auto text-center">
               {/* Updated to Manrope, Normal, 24px */}
-              <h2 className="font-manrope font-normal text-2xl md:text-5xl lg:text-7xl leading-[1.2] md:leading-[1.2] text-white/90 mb-12">
+              <h2 className="font-manrope font-normal text-gh-scroll leading-[1.2] md:leading-[1.2] text-white/90 mb-12">
                 <motion.div style={{ opacity: s2Line1 }}>
                   Private villas transform into
                 </motion.div>
@@ -270,7 +270,7 @@ export default function UnifiedScrollSection() {
           >
             <div className="max-w-5xl mx-auto text-center">
               {/* Updated to Manrope, Normal, 24px */}
-              <h2 className="font-manrope font-normal text-2xl md:text-5xl lg:text-7xl leading-[1.2] md:leading-[1.2] text-white/90 mb-12">
+              <h2 className="font-manrope font-normal text-gh-scroll leading-[1.2] md:leading-[1.2] text-white/90 mb-12">
                 <motion.div style={{ opacity: s3Line1 }}>
                   From high-energy parties and
                 </motion.div>

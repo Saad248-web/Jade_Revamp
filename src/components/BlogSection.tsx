@@ -59,14 +59,14 @@ const BlogCard = ({ post }: { post: any }) => {
       </div>
 
       <div className="space-y-3 pr-4">
-        <h3 className="font-philosopher text-3xl text-white group-hover:text-[#EFCD62] transition-colors">
+        <h3 className="font-philosopher text-gh-h2 text-white group-hover:text-[#EFCD62] transition-colors">
           {post.title}
         </h3>
-        <p className="font-manrope text-white/60 text-sm leading-relaxed line-clamp-3">
+        <p className="font-manrope text-white/60 text-gh-body leading-relaxed line-clamp-3">
           {post.excerpt}
         </p>
 
-        <div className="flex items-center gap-2 text-[#EFCD62] text-xs font-bold tracking-[0.2em] mt-4 uppercase group-hover:gap-4 transition-all duration-300">
+        <div className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] mt-4 uppercase group-hover:gap-4 transition-all duration-300">
           View Blog <ArrowRight className="w-4 h-4" />
         </div>
       </div>
@@ -95,13 +95,13 @@ export default function BlogSection() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div className="max-w-2xl">
-            <p className="font-manrope text-xs tracking-[0.3em] uppercase text-[#EFCD62] mb-4">
+            <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-4">
               BLOG
             </p>
-            <h2 className="font-philosopher text-5xl md:text-6xl text-white mb-6">
+            <h2 className="font-philosopher text-gh-h1 text-white mb-6">
               From the Journal
             </h2>
-            <p className="font-manrope text-white/60 text-lg leading-relaxed max-w-md">
+            <p className="font-manrope text-white/60 text-gh-body leading-relaxed max-w-md">
               Thoughts on hosting, travel, and creating meaningful experiences
               through space.
             </p>
