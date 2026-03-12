@@ -448,7 +448,7 @@ export default function VillaDetailsPage() {
                             {service.description}
                           </p>
                           <p className="text-white/40 text-gh-label uppercase tracking-wider">
-                            {service.footer}
+                            {(service as any).footer}
                           </p>
                         </div>
                       </div>
@@ -538,48 +538,50 @@ export default function VillaDetailsPage() {
                   </h3>
                   <div className="flex flex-col gap-6 border border-white/10 rounded-2xl p-4 md:p-6 bg-transparent">
                     {/* Stay Experience */}
-                    <div className="bg-transparent rounded-lg p-0">
-                      <h4 className="text-[#EFCD62] text-gh-h2 font-bold font-manrope mb-1">
-                        {villa.pricing.stay.title}
-                      </h4>
-                      <p className="text-white/60 text-gh-body mb-6 max-w-xs">
-                        {villa.pricing.stay.subtitle}
-                      </p>
+                    {villa.pricing.stay && (
+                      <div className="bg-transparent rounded-lg p-0">
+                        <h4 className="text-[#EFCD62] text-gh-h2 font-bold font-manrope mb-1">
+                          {villa.pricing.stay.title}
+                        </h4>
+                        <p className="text-white/60 text-gh-body mb-6 max-w-xs">
+                          {villa.pricing.stay.subtitle}
+                        </p>
 
-                      <div className="flex flex-col gap-3 mb-6">
-                        {villa.pricing.stay.packages.map((pkg, i) => (
-                          <div
-                            key={i}
-                            className="flex justify-between items-start md:items-center bg-[#174539] p-4 rounded-sm"
-                          >
-                            <div>
-                              <div className="text-white font-bold text-gh-body leading-tight mb-1">
-                                {pkg.label}
-                              </div>
-                              {pkg.sublabel && (
-                                <div className="text-white/40 text-gh-label">
-                                  {pkg.sublabel}
+                        <div className="flex flex-col gap-3 mb-6">
+                          {villa.pricing.stay.packages.map((pkg, i) => (
+                            <div
+                              key={i}
+                              className="flex justify-between items-start md:items-center bg-[#174539] p-4 rounded-sm"
+                            >
+                              <div>
+                                <div className="text-white font-bold text-gh-body leading-tight mb-1">
+                                  {pkg.label}
                                 </div>
-                              )}
+                                {(pkg as any).sublabel && (
+                                  <div className="text-white/40 text-gh-label">
+                                    {(pkg as any).sublabel}
+                                  </div>
+                                )}
+                              </div>
+                              <div className="text-white font-mono text-gh-body font-bold text-right shrink-0">
+                                {pkg.price}
+                              </div>
                             </div>
-                            <div className="text-white font-mono text-gh-body font-bold text-right shrink-0">
-                              {pkg.price}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                          ))}
+                        </div>
 
-                      <div className="flex flex-wrap gap-2">
-                        {villa.pricing.stay.features.map((feat, i) => (
-                          <span
-                            key={i}
-                            className="bg-[#174539] text-white/80 px-4 py-2 text-gh-label rounded-full border border-white/5 font-medium"
-                          >
-                            {feat}
-                          </span>
-                        ))}
+                        <div className="flex flex-wrap gap-2">
+                          {villa.pricing.stay.features.map((feat, i) => (
+                            <span
+                              key={i}
+                              className="bg-[#174539] text-white/80 px-4 py-2 text-gh-label rounded-full border border-white/5 font-medium"
+                            >
+                              {feat}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Event Experience */}
                     <div className="bg-transparent rounded-lg p-0 pt-6 border-t border-white/10">
@@ -600,9 +602,9 @@ export default function VillaDetailsPage() {
                               <div className="text-white font-bold text-gh-body leading-tight mb-1">
                                 {pkg.label}
                               </div>
-                              {pkg.sublabel && (
+                              {(pkg as any).sublabel && (
                                 <div className="text-white/40 text-gh-label">
-                                  {pkg.sublabel}
+                                  {(pkg as any).sublabel}
                                 </div>
                               )}
                             </div>
@@ -646,7 +648,7 @@ export default function VillaDetailsPage() {
                         Map Placeholder
                       </div>
                       <Image
-                        src={villa.locationDetails.mapImage}
+                        src={villa.locationDetails.mapImage || ""}
                         alt="Map Location"
                         fill
                         className="object-cover opacity-80"
@@ -677,7 +679,7 @@ export default function VillaDetailsPage() {
                           Whats nearby:
                         </h4>
                         <div className="flex flex-col gap-4">
-                          {villa.locationDetails.nearby.map((place, idx) => (
+                          {villa.locationDetails.nearby?.map((place, idx) => (
                             <div
                               key={idx}
                               className="flex justify-between items-center border-b border-white/5 pb-4 last:border-0 hover:bg-white/5 transition-colors p-2 rounded-lg"

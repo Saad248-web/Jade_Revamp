@@ -6,6 +6,28 @@ import Link from "next/link";
 import LiveBackground from "./LiveBackground";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
+const ScrollButton = ({ href, label }: { href: string; label: string }) => (
+  <Link
+    href={href}
+    className="inline-flex items-center gap-4 bg-jade-gold text-jade-dark font-manrope font-bold text-gh-label tracking-[0.2em] uppercase px-6 py-4 hover:bg-white transition-all duration-300 group shadow-lg"
+  >
+    {label}
+    <svg
+      className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M17 8l4 4m0 0l-4 4m4-4H3"
+      />
+    </svg>
+  </Link>
+);
+
 export default function UnifiedScrollSection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -161,9 +183,14 @@ export default function UnifiedScrollSection() {
     [s3Start + 0.075, s3Start + 0.095, s3FadeOut, s3End],
     [0, 1, 1, 0],
   );
-  const s3Btn = useTransform(
+  const s3Line7 = useTransform(
     scrollYProgress,
     [s3Start + 0.09, s3Start + 0.11, s3FadeOut, s3End],
+    [0, 1, 1, 0],
+  );
+  const s3Btn = useTransform(
+    scrollYProgress,
+    [s3Start + 0.105, s3Start + 0.125, s3FadeOut, s3End],
     [0, 1, 1, 0],
   );
 
@@ -174,7 +201,7 @@ export default function UnifiedScrollSection() {
   );
 
   return (
-    <div ref={containerRef} className="relative h-[600vh]">
+    <div ref={containerRef} className="relative h-[400vh]">
       <NavbarThemeTrigger theme="golden" sectionRef={containerRef} />
       {/* ===== STICKY BACKGROUND (100vh, stays for full 300vh) ===== */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
@@ -184,11 +211,11 @@ export default function UnifiedScrollSection() {
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           {/* ===== SECTION 1: Hospitainment Definition ===== */}
           <motion.div
-            className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12 pointer-events-auto"
+            className="absolute inset-x-0 flex items-center justify-center px-4 md:px-12 pointer-events-auto"
             style={{ y: section1Y }}
           >
-            <div className="max-w-5xl mx-auto text-center">
-              {/* Font Manrope Regular (font-normal), size updated to Global Scroll Scale */}
+            <div className="text-center">
+              {/* Font Manrope Regular (font-normal), scaled using text-gh-scroll */}
               <h2 className="font-manrope font-normal text-gh-scroll leading-[1.2] md:leading-[1.2] text-white/90 mb-12">
                 <motion.div style={{ opacity: line1Opacity }}>
                   Hospitainment is the art of
@@ -214,14 +241,14 @@ export default function UnifiedScrollSection() {
 
           {/* ===== SECTION 2: Villa Retreats ===== */}
           <motion.div
-            className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12 pointer-events-auto"
+            className="absolute inset-x-0 flex items-center justify-center px-4 md:px-12 pointer-events-auto"
             style={{ y: section2Y }}
           >
-            <div className="max-w-5xl mx-auto text-center">
-              {/* Updated to Manrope, Normal, 24px */}
+            <div className="text-center">
+              {/* Updated to Manrope, Normal, text-gh-scroll */}
               <h2 className="font-manrope font-normal text-gh-scroll leading-[1.2] md:leading-[1.2] text-white/90 mb-12">
                 <motion.div style={{ opacity: s2Line1 }}>
-                  Private villas transform into
+                  Private villa&apos;s transform into
                 </motion.div>
                 <motion.div style={{ opacity: s2Line2 }}>
                   venues for celebration,
@@ -230,46 +257,26 @@ export default function UnifiedScrollSection() {
                   immersive retreats, and
                 </motion.div>
                 <motion.div style={{ opacity: s2Line4 }}>
-                  bespoke gatherings,
+                  bespoke gatherings, adapting
                 </motion.div>
                 <motion.div style={{ opacity: s2Line5 }}>
-                  adapting to the moment
+                  to the moment they are meant
                 </motion.div>
-                <motion.div style={{ opacity: s2Line6 }}>
-                  they are meant to host.
-                </motion.div>
+                <motion.div style={{ opacity: s2Line6 }}>to host.</motion.div>
               </h2>
               <motion.div style={{ opacity: s2Btn }}>
-                <Link
-                  href="#villas"
-                  className="inline-flex items-center gap-3 text-jade-gold font-manrope text-sm md:text-base tracking-widest uppercase hover:text-white transition-colors group"
-                >
-                  VIEW ALL VILLA RETREATS
-                  <svg
-                    className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </Link>
+                <ScrollButton href="#villas" label="VIEW ALL VILLA RETREATS" />
               </motion.div>
             </div>
           </motion.div>
 
           {/* ===== SECTION 3: Experiences ===== */}
           <motion.div
-            className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12 pointer-events-auto"
+            className="absolute inset-x-0 flex items-center justify-center px-4 md:px-12 pointer-events-auto"
             style={{ y: section3Y }}
           >
-            <div className="max-w-5xl mx-auto text-center">
-              {/* Updated to Manrope, Normal, 24px */}
+            <div className="text-center">
+              {/* Updated to Manrope, Normal, text-gh-scroll */}
               <h2 className="font-manrope font-normal text-gh-scroll leading-[1.2] md:leading-[1.2] text-white/90 mb-12">
                 <motion.div style={{ opacity: s3Line1 }}>
                   From high-energy parties and
@@ -281,35 +288,21 @@ export default function UnifiedScrollSection() {
                   corporate offsites, wellness
                 </motion.div>
                 <motion.div style={{ opacity: s3Line4 }}>
-                  retreats, and private getaways.
+                  retreats, and private
                 </motion.div>
                 <motion.div style={{ opacity: s3Line5 }}>
-                  Jade&apos;s spaces are designed
+                  getaways, Jade&apos;s spaces are
                 </motion.div>
                 <motion.div style={{ opacity: s3Line6 }}>
-                  to evolve with every occasion.
+                  designed to evolve with every
                 </motion.div>
+                <motion.div style={{ opacity: s3Line7 }}>occasion.</motion.div>
               </h2>
               <motion.div style={{ opacity: s3Btn }}>
-                <Link
+                <ScrollButton
                   href="#experiences"
-                  className="inline-flex items-center gap-3 text-jade-gold font-manrope text-sm md:text-base tracking-widest uppercase hover:text-white transition-colors group"
-                >
-                  VIEW EXPERIENCES AT JADE
-                  <svg
-                    className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </Link>
+                  label="VIEW EXPERIENCES AT JADE"
+                />
               </motion.div>
             </div>
           </motion.div>
