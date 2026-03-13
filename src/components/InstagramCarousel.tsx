@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Heart, MessageCircle, Instagram } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import PrimaryButton from "./PrimaryButton";
 
 const INSTAGRAM_POSTS = [
   {
@@ -217,15 +218,8 @@ export default function InstagramCarousel() {
             href="https://www.instagram.com/jadehospitainment"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-jade-gold text-jade-charcoal px-8 py-4 uppercase tracking-widest text-gh-label font-bold hover:bg-white transition-all duration-300 group"
           >
-            Visit Jade on Instagram
-            <div className="flex items-center gap-2">
-              <span className="text-xl group-hover:translate-x-1 transition-transform">
-                →
-              </span>
-              <Instagram className="w-5 h-5" />
-            </div>
+            <PrimaryButton>Visit Jade on Instagram</PrimaryButton>
           </a>
         </div>
       </div>

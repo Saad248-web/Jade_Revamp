@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import PrimaryButton from "@/components/PrimaryButton";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   X,
@@ -778,9 +779,7 @@ function BookPageContent() {
             >
               BACK
             </button>
-            <button className="bg-[#EFCD62] text-[#0D4032] flex-1 sm:flex-none text-center px-4 sm:px-8 py-2 sm:py-3 text-gh-label font-bold tracking-widest uppercase hover:bg-white transition-colors font-manrope shrink-0 rounded-sm sm:rounded-none">
-              PAY NOW
-            </button>
+            <PrimaryButton withArrow={false}>PAY NOW</PrimaryButton>
           </div>
         </div>
       );

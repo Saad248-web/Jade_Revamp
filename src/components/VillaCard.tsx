@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Bed, Users, Home, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { VILLAS } from "@/data/villas";
+import PrimaryButton from "@/components/PrimaryButton";
 
 interface VillaCardProps {
   villa: (typeof VILLAS)[0];
@@ -179,12 +180,12 @@ export default function VillaCard({ villa }: VillaCardProps) {
             >
               VIEW VILLA
             </Link>
-            <button
+            <PrimaryButton
+              withArrow={false}
               onClick={() => router.push(`/book?villa=${villa.id}`)}
-              className="bg-[#EFCD62] text-black border border-[#EFCD62] hover:bg-white hover:border-white transition-colors px-5 py-2.5 font-manrope font-bold text-gh-desc tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
             >
               BOOK VILLA
-            </button>
+            </PrimaryButton>
           </div>
         </div>
       </div>

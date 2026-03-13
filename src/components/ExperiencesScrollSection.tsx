@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import PrimaryButton from "@/components/PrimaryButton";
 
 const PANELS = [
   {
@@ -295,12 +296,7 @@ function StackedPanel({
         <p className="font-manrope text-gh-body text-white/90 font-light max-w-xl mb-10 leading-relaxed drop-shadow-md">
           {data.subtext}
         </p>
-        <Link
-          href="#"
-          className="bg-[#EFCD62] text-black py-4 px-8 uppercase tracking-widest text-xs md:text-sm font-bold hover:bg-white transition-all duration-300 flex items-center gap-3"
-        >
-          {data.cta} <ArrowRight className="w-4 h-4" />
-        </Link>
+        <PrimaryButton href="#">{data.cta}</PrimaryButton>
       </motion.div>
     </motion.div>
   );

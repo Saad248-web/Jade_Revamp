@@ -2,9 +2,9 @@
 
 import { useRef, ReactNode } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
-import Link from "next/link";
 import LiveBackground from "./LiveBackground";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import PrimaryButton from "./PrimaryButton";
 
 export interface ScrollSlide {
   label?: string;
@@ -23,25 +23,9 @@ interface ScrollSectionComposerProps {
 }
 
 const ScrollButton = ({ href, label }: { href: string; label: string }) => (
-  <Link
-    href={href}
-    className="inline-flex items-center gap-4 bg-jade-gold text-jade-dark font-manrope font-bold text-gh-label tracking-[0.2em] uppercase px-6 py-4 hover:bg-white transition-all duration-300 group shadow-lg pointer-events-auto"
-  >
-    {label}
-    <svg
-      className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-        d="M17 8l4 4m0 0l-4 4m4-4H3"
-      />
-    </svg>
-  </Link>
+  <div className="pointer-events-auto">
+    <PrimaryButton href={href}>{label}</PrimaryButton>
+  </div>
 );
 
 const SlideLines = ({

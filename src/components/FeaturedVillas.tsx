@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import PrimaryButton from "@/components/PrimaryButton";
 
 const VILLAS = [
   {
@@ -286,12 +287,7 @@ function FinalGreenSection({
       className="absolute inset-0 w-full h-full bg-[#0D4032] flex items-center justify-center border-t border-white/5"
     >
       <div className="flex flex-col items-center justify-center p-12">
-        <Link
-          href="/villas"
-          className="flex items-center gap-4 px-8 py-6 bg-[#EFCD62] text-[#1a1d21] rounded-none shadow-xl font-manrope font-bold text-gh-label tracking-[0.2em] uppercase hover:bg-white transition-colors"
-        >
-          EXPLORE ALL JADE VILLAS <ArrowRight className="w-5 h-5" />
-        </Link>
+        <PrimaryButton href="/villas">EXPLORE ALL JADE VILLAS</PrimaryButton>
       </div>
     </motion.div>
   );

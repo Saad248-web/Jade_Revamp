@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import PrimaryButton from "@/components/PrimaryButton";
 import {
   X,
   Minus,
@@ -630,16 +631,16 @@ function StepVillas({
                     )}
                   </p>
                 </div>
-                <button
+                <PrimaryButton
+                  withArrow={false}
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedVillaId(villa.id);
                     onNext();
                   }}
-                  className="bg-[#EFCD62] text-[#0D4032] px-5 py-2 text-gh-label font-bold tracking-widest uppercase hover:bg-white transition-colors font-manrope"
                 >
                   BOOK VILLA
-                </button>
+                </PrimaryButton>
               </div>
             </div>
           </div>
@@ -1068,9 +1069,7 @@ function StepReview({
             >
               BACK
             </button>
-            <button className="bg-[#EFCD62] text-[#0D4032] px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase hover:bg-white transition-colors font-manrope">
-              PAY NOW
-            </button>
+            <PrimaryButton withArrow={false}>PAY NOW</PrimaryButton>
           </div>
         </div>
       </div>

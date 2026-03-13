@@ -6,6 +6,7 @@ import { VILLAS, CATEGORIES } from "@/data/villas";
 import ReservationOverlay from "./ReservationOverlay";
 import VillaCard from "./VillaCard";
 import BookingBanner from "./BookingBanner";
+import PrimaryButton from "@/components/PrimaryButton";
 import { useBooking } from "@/context/BookingContext";
 
 // Navbar height to offset the sticky filter bar
@@ -255,12 +256,12 @@ export default function VillasCarousel() {
             ))}
           </div>
           <p className="text-white/30 text-[12px] font-manrope">or</p>
-          <button
+          <PrimaryButton
+            withArrow={false}
             onClick={() => {
               setDateRange({ checkIn: null, checkOut: null });
               setActiveCategory("All");
             }}
-            className="flex items-center gap-2 bg-[#EFCD62] text-[#1A1C1E] px-7 py-3.5 font-manrope font-bold text-[13px] tracking-[0.15em] uppercase hover:brightness-110 transition-all"
           >
             CLEAR ALL FILTERS
             <svg
@@ -276,7 +277,7 @@ export default function VillasCarousel() {
               <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
               <path d="M3 3v5h5" />
             </svg>
-          </button>
+          </PrimaryButton>
         </div>
       ) : (
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full mt-12 pb-20 min-h-screen">

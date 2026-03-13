@@ -75,8 +75,8 @@ export default function FormatsCarousel() {
   return (
     <div className="w-full max-w-7xl mx-auto px-8">
       {/* SECTION HEADER: Tightened mb-8 lg:mb-12 */}
-      <div className="flex flex-col mb-8 lg:mb-12">
-        <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4 md:mb-6">
+      <div className="flex flex-col mb-4 md:mb-[16px]">
+        <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-[14px] font-manrope">
           CORPORATE EXPERIENCE AT JADE
         </p>
         <div className="flex items-center justify-between w-full">
@@ -98,7 +98,7 @@ export default function FormatsCarousel() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-16 items-start">
         {/* IMAGES: Optimized for 8pt Spacing grid */}
         <div className="relative order-1 lg:order-1">
           <div className="relative overflow-hidden aspect-[4/5] md:aspect-[3/2] lg:aspect-[4/3] w-full">
@@ -159,7 +159,7 @@ export default function FormatsCarousel() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
               >
-                <h3 className="text-gh-h1 font-philosopher text-white mb-4 md:mb-6">
+                <h3 className="text-gh-scroll font-philosopher text-white mb-2 md:mb-[8px]">
                   {FORMATS[index].title}
                 </h3>
                 <p className="text-white/70 font-manrope text-gh-body leading-relaxed max-w-xl">

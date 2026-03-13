@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import React from "react";
+import GlassButton from "./GlassButton";
 
 export interface HeroButton {
   icon: React.ReactNode;
@@ -93,9 +94,14 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
             </p>
           </motion.div>
 
-          {/* Optional Stats Bar */}
           {stats && stats.length > 0 && (
-            <div className="grid grid-cols-3 gap-4 w-full max-w-xl border border-white/10 bg-black/40 backdrop-blur-md rounded-none p-4 mb-4">
+            <div
+              style={{
+                backdropFilter: "blur(64px)",
+                WebkitBackdropFilter: "blur(64px)",
+              }}
+              className="grid grid-cols-3 gap-4 w-full max-w-xl border border-white/10 bg-black/60 rounded-none p-4 mb-4 shadow-2xl"
+            >
               {stats.map((stat, idx) => (
                 <div
                   key={idx}
@@ -120,16 +126,14 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
           {children}
 
           {/* Action Buttons */}
-          <div className="flex flex-row items-center justify-center gap-4 w-full max-w-2xl mb-24 md:mb-16">
+          <div className="flex flex-row items-center justify-center gap-3 w-full max-w-2xl mb-24 md:mb-16">
             {buttons.map((btn, idx) => (
-              <button
+              <GlassButton
                 key={idx}
+                icon={btn.icon}
+                label={btn.label}
                 onClick={btn.onClick}
-                className="flex-1 flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white font-manrope text-gh-label md:text-xs font-bold tracking-[0.2em] uppercase px-4 py-4 md:px-8 md:py-6 hover:bg-white/20 transition-all"
-              >
-                {btn.icon}
-                <span>{btn.label}</span>
-              </button>
+              />
             ))}
           </div>
         </div>

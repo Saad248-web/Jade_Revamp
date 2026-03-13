@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Play, ArrowRight, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import PrimaryButton from "@/components/PrimaryButton";
+import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import LiveBackground from "@/components/LiveBackground";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -86,51 +88,51 @@ export default function AboutPage() {
       </section>
 
       {/* 2. TRUSTED BY SECTION */}
-      <section className="py-20 bg-[#1A1C1E] border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
+      <section className="min-h-screen flex flex-col items-center justify-center py-24 bg-[#1A1C1E]">
+        <div className="max-w-4xl mx-auto px-8 text-center w-full">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
             TRUSTED BY
-          </h3>
-          <h2 className="text-gh-h2 font-philosopher text-white mb-16">
-            World-Class Organizations
+          </p>
+          <h2 className="text-gh-h1 font-philosopher text-white mb-20 leading-tight">
+            World-Class <br /> Organizations
           </h2>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
+          <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6">
             {/* Logo 1: Google */}
-            <div className="bg-[#25282C] aspect-square flex items-center justify-center p-8 hover:bg-[#2A2D32] transition-colors group">
-              <span className="text-white font-manrope text-gh-body font-bold group-hover:text-white/80 transition-colors">
+            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
+              <span className="text-white font-manrope text-gh-h3 font-bold opacity-60 group-hover:opacity-100 transition-opacity">
                 Google
               </span>
             </div>
             {/* Logo 2: Microsoft */}
-            <div className="bg-[#25282C] aspect-square flex items-center justify-center p-8 hover:bg-[#2A2D32] transition-colors group">
-              <span className="text-white font-manrope text-gh-body font-bold group-hover:text-white/80 transition-colors">
+            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
+              <span className="text-white font-manrope text-gh-h3 font-bold opacity-60 group-hover:opacity-100 transition-opacity">
                 Microsoft
               </span>
             </div>
             {/* Logo 3: L&T */}
-            <div className="bg-[#25282C] aspect-square flex items-center justify-center p-8 hover:bg-[#2A2D32] transition-colors group">
-              <div className="w-16 h-16 rounded-full border-2 border-white/80 flex items-center justify-center">
-                <span className="text-white font-manrope text-gh-body font-bold italic">
+            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
+              <div className="w-16 h-16 rounded-full border-2 border-white/40 flex items-center justify-center opacity-60 group-hover:opacity-100 transition-opacity">
+                <span className="text-white font-manrope text-gh-h3 font-bold italic">
                   L&T
                 </span>
               </div>
             </div>
             {/* Logo 4: IBM */}
-            <div className="bg-[#25282C] aspect-square flex items-center justify-center p-8 hover:bg-[#2A2D32] transition-colors group">
-              <span className="text-white font-mono text-gh-h1 font-bold tracking-tighter group-hover:text-white/80 transition-colors">
+            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
+              <span className="text-white font-mono text-gh-h2 font-bold tracking-tighter opacity-60 group-hover:opacity-100 transition-opacity">
                 IBM
               </span>
             </div>
             {/* Logo 5: Capgemini */}
-            <div className="bg-[#25282C] aspect-square flex items-center justify-center p-8 hover:bg-[#2A2D32] transition-colors group">
-              <span className="text-white font-manrope text-gh-body font-bold group-hover:text-white/80 transition-colors">
+            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
+              <span className="text-white font-manrope text-gh-h3 font-bold opacity-60 group-hover:opacity-100 transition-opacity">
                 Capgemini
               </span>
             </div>
             {/* Logo 6: Mercedes-Benz */}
-            <div className="bg-[#25282C] aspect-square flex items-center justify-center p-8 hover:bg-[#2A2D32] transition-colors group">
-              <span className="text-white font-philosopher text-gh-body group-hover:text-white/80 transition-colors">
+            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
+              <span className="text-white font-philosopher text-gh-h3 opacity-60 group-hover:opacity-100 transition-opacity">
                 Mercedes-Benz
               </span>
             </div>
@@ -188,84 +190,34 @@ export default function AboutPage() {
       </section>
 
       {/* 4. WHY JADE SECTION */}
-      <section className="py-24 bg-[#1A1C1E]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
-              WHY JADE
-            </h3>
-            <h2 className="text-gh-h1 font-philosopher text-white">
-              Because how you <br className="hidden md:block" />
-              operate matters
-            </h2>
-          </div>
-
-          <div className="flex overflow-x-auto gap-6 mb-16 pb-4 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar">
-            {/* Card 1 */}
-            <div className="flex-shrink-0 w-[85vw] md:w-[45%] aspect-[4/5] relative bg-gradient-to-br from-[#4A4B4F] to-[#25282C] p-8 md:p-12 flex flex-col justify-center rounded-none overflow-hidden group snap-center">
-              {/* Grainy Texture Overlay */}
-              <div
-                className="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay"
-                style={{ backgroundImage: "url(/assets/Noise.png)" }}
-              />
-
-              <div className="relative z-10">
-                <span className="font-philosopher text-white/80 text-gh-body italic mb-2 block">
-                  operate
-                </span>
-                <h3 className="text-gh-h1 font-bold text-white mb-4 leading-none">
-                  BY <br /> INTENT
-                </h3>
-                <p className="text-white/70 font-manrope text-sm md:text-base leading-relaxed mt-12 max-w-sm">
-                  Private villas are thoughtfully positioned and operated with
-                  clarity around how they are meant to be experienced, whether
-                  for stays, celebrations, or retreats.
-                </p>
-                <span className="text-white/40 text-sm mt-4 block">curate</span>
-              </div>
-            </div>
-
-            {/* Card 2 */}
-            <div className="flex-shrink-0 w-[85vw] md:w-[45%] aspect-[4/5] relative bg-gradient-to-br from-[#4A4B4F] to-[#25282C] p-8 md:p-12 flex flex-col justify-center rounded-none overflow-hidden group snap-center">
-              {/* Grainy Texture Overlay */}
-              <div
-                className="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay"
-                style={{ backgroundImage: "url(/assets/Noise.png)" }}
-              />
-
-              <div className="relative z-10">
-                <span className="font-philosopher text-white/80 text-gh-body italic mb-2 block">
-                  curate
-                </span>
-                <h3 className="text-gh-h1 font-bold text-white mb-4 leading-none">
-                  THE <br /> CANVAS
-                </h3>
-                <p className="text-white/70 font-manrope text-sm md:text-base leading-relaxed mt-12 max-w-sm">
-                  Private villas are thoughtfully positioned and operated with
-                  clarity around how they are meant to be experienced, whether
-                  for stays, celebrations, or retreats.
-                </p>
-                <span className="text-white/40 text-sm mt-4 block">curate</span>
-              </div>
-            </div>
-          </div>
-
-          {/* CTA Button */}
-          <div className="flex flex-col items-center text-center gap-6">
-            <p className="text-white/60 font-manrope font-light text-gh-body">
-              Bringing unique villas and curated experiences together
-              <br />
-              under one standard of hospitality.
-            </p>
-            <button
-              onClick={() => setPartnerOverlayOpen(true)}
-              className="bg-[#EFCD62] text-black font-bold uppercase tracking-widest text-gh-label px-8 py-4 w-full md:w-auto min-w-[300px] hover:bg-white transition-colors flex items-center justify-center gap-2 rounded-none"
-            >
-              PARTNER WITH JADE <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </section>
+      <PremiumFeaturesSection
+        subheading="WHY JADE"
+        heading={
+          <>
+            Because how you <br className="hidden md:block" /> operate matters
+          </>
+        }
+        cards={[
+          {
+            tag: "operate",
+            title: "BY INTENT",
+            desc: "Private villas are thoughtfully positioned and operated with clarity around how they are meant to be experienced, whether for stays, celebrations, or retreats.",
+          },
+          {
+            tag: "curate",
+            title: "THE CANVAS",
+            desc: "Each space is selected and shaped to host specific moments — from intimate getaways to large-scale celebrations — with the infrastructure and aesthetic to match.",
+          },
+          {
+            tag: "deliver",
+            title: "THE EXPERIENCE",
+            desc: "End-to-end operations ensure every detail is managed — from booking to checkout — so guests experience seamless, premium hospitality at every touchpoint.",
+          },
+        ]}
+        footerText="Bringing unique villas and curated experiences together under one standard of hospitality."
+        ctaText="PARTNER WITH JADE"
+        ctaLink="/contact"
+      />
 
       {/* 5. WHAT WE DO SECTION */}
       <section className="py-24 bg-[#1A1C1E]">

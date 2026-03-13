@@ -10,6 +10,8 @@ import {
 } from "framer-motion";
 import CorporateHeader from "@/components/CorporateHeader";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
+import PrimaryButton from "@/components/PrimaryButton";
 import {
   Home,
   Calendar,
@@ -61,7 +63,7 @@ export default function WeekendGetawaysPage() {
         description="Private villas designed for relaxed escapes, small celebrations, and memorable weekends with friends and family."
         buttons={[
           {
-            icon: <Calendar className="w-4 h-4" />,
+            icon: <Calendar className="w-5 h-5" />,
             label: "VENUES",
             onClick: () => {
               const venuesSection = document.getElementById("themed-villas");
@@ -70,7 +72,7 @@ export default function WeekendGetawaysPage() {
             },
           },
           {
-            icon: <Download className="w-4 h-4" />,
+            icon: <Download className="w-5 h-5" />,
             label: "BROCHURE",
             onClick: () => window.open("/brochure.pdf", "_blank"),
           },
@@ -263,11 +265,8 @@ function WeekendCarouselSection() {
           </div>
 
           {/* Action Button */}
-          <div className="relative z-10 pt-4">
-            <button className="w-full bg-[#EFCB62] border-[1.5px] border-[#634F1B] text-[#634F1B] font-manrope font-bold py-6 md:py-8 flex items-center justify-center gap-4 hover:bg-[#E5C158] transition-all uppercase tracking-[0.3em] text-gh-label group">
-              BOOK JADE WEEKEND
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 stroke-[1.5]" />
-            </button>
+          <div className="relative z-10 pt-4 flex justify-center">
+            <PrimaryButton>BOOK JADE WEEKEND</PrimaryButton>
           </div>
         </div>
       </div>
@@ -276,88 +275,36 @@ function WeekendCarouselSection() {
 }
 
 function WhyChooseJadeSection() {
-  const cards = [
-    {
-      label: "provide",
-      title: "PRIVATE VILLAS",
-      desc: "Stay in fully private villas designed for relaxed getaways, with no shared spaces and complete freedom to enjoy your time.",
-    },
-    {
-      label: "create",
-      title: "ROOM TO UNWIND",
-      desc: "Spacious lawns, private pools, and open settings that make it easy to slow down and enjoy the weekend.",
-    },
-    {
-      label: "customise",
-      title: "YOUR EXPERIENCE",
-      desc: "Add bonfires, BBQ nights, movie screenings, or curated dining experiences to make your getaway truly memorable.",
-    },
-    {
-      label: "host",
-      title: "SEAMLESS STAYS",
-      desc: "From check-in to curated experiences, our team ensures your weekend getaway is effortless and well taken care of.",
-    },
-  ];
-
   return (
-    <section className="py-24 bg-[#1A1C1E] border-t border-white/5">
-      <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-6">
-            WHY CHOOSE JADE
-          </p>
-          <h2 className="text-gh-h1 font-philosopher text-white max-w-3xl mx-auto leading-tight">
-            Designed for Private Weekend Escapes
-          </h2>
-        </div>
-
-        {/* Cards - Horizontally Stacked and Scrollable */}
-        <div className="relative mb-8 md:mb-12 -mx-6 md:-mx-12 lg:-mx-24 px-6 md:px-12 lg:px-24">
-          <div className="flex overflow-x-auto hide-scrollbar gap-6 snap-x snap-mandatory pb-8 lg:justify-center">
-            {cards.map((card, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                viewport={{ once: true }}
-                className="relative p-8 md:p-10 w-[280px] md:w-[320px] lg:w-[350px] aspect-[3/4] flex flex-col justify-between bg-gradient-to-b from-[#2C2E31] to-[#1A1C1E] border border-white/5 group hover:border-[#EFCD62]/30 transition-colors flex-shrink-0 snap-center first:ml-0"
-              >
-                <div>
-                  <p className="text-[#EFCD62] font-philosopher italic text-gh-h3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
-                    {card.label}
-                  </p>
-                  <h3 className="text-gh-h1 font-bold font-manrope text-white leading-tight tracking-tight uppercase">
-                    {card.title.split(" ").map((word, i) => (
-                      <React.Fragment key={i}>
-                        {word}
-                        <br />
-                      </React.Fragment>
-                    ))}
-                  </h3>
-                </div>
-                <p className="text-white/50 font-manrope text-gh-body leading-relaxed group-hover:text-white/70 transition-colors">
-                  {card.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Footer Text & Button */}
-        <div className="max-w-2xl mx-auto text-center space-y-6">
-          <p className="text-white/60 font-philosopher text-gh-body leading-relaxed italic px-4">
-            Private villas and curated experiences designed to make every
-            weekend feel like an escape.
-          </p>
-          <button className="w-full bg-[#EFCB62] border-[1.5px] border-[#634F1B] text-[#634F1B] font-manrope font-bold py-5 md:py-7 flex items-center justify-center gap-4 hover:bg-[#E5C158] transition-all uppercase tracking-[0.2em] text-gh-label group">
-            PLAN YOUR WEEKEND ESCAPE
-            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 stroke-[1.5]" />
-          </button>
-        </div>
-      </div>
-    </section>
+    <PremiumFeaturesSection
+      subheading="WHY CHOOSE JADE"
+      heading="Designed for Private Weekend Escapes"
+      cards={[
+        {
+          tag: "provide",
+          title: "PRIVATE VILLAS",
+          desc: "Stay in fully private villas designed for relaxed getaways, with no shared spaces and complete freedom to enjoy your time.",
+        },
+        {
+          tag: "create",
+          title: "ROOM TO UNWIND",
+          desc: "Spacious lawns, private pools, and open settings that make it easy to slow down and enjoy the weekend.",
+        },
+        {
+          tag: "customise",
+          title: "YOUR EXPERIENCE",
+          desc: "Add bonfires, BBQ nights, movie screenings, or curated dining experiences to make your getaway truly memorable.",
+        },
+        {
+          tag: "host",
+          title: "SEAMLESS STAYS",
+          desc: "From check-in to curated experiences, our team ensures your weekend getaway is effortless and well taken care of.",
+        },
+      ]}
+      footerText="Private villas and curated experiences designed to make every weekend feel like an escape."
+      ctaText="PLAN YOUR WEEKEND ESCAPE"
+      ctaLink="/contact"
+    />
   );
 }
 
@@ -441,11 +388,8 @@ function ThemedVillasSection() {
         </div>
 
         {/* Action Button */}
-        <div className="max-w-md mx-auto">
-          <button className="w-full bg-[#EFCB62] border-[1.5px] border-[#634F1B] text-[#634F1B] font-manrope font-bold py-5 md:py-6 flex items-center justify-center gap-4 hover:bg-[#E5C158] transition-all uppercase tracking-[0.2em] text-gh-label group">
-            VIEW ALL VILLA RETREATS
-            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 stroke-[1.5]" />
-          </button>
+        <div className="max-w-md mx-auto flex justify-center">
+          <PrimaryButton>VIEW ALL VILLA RETREATS</PrimaryButton>
         </div>
       </div>
     </section>

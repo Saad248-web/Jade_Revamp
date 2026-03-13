@@ -13,6 +13,7 @@ import {
   Youtube,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import PrimaryButton from "@/components/PrimaryButton";
 import LiveBackground from "@/components/LiveBackground";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -362,13 +363,13 @@ export default function ContactPage() {
                         Thoughtfully operated. Always.
                       </p>
 
-                      <button
-                        type="button"
+                      <PrimaryButton
+                        withArrow={false}
+                        className="w-full"
                         onClick={closeModal}
-                        className="w-full bg-[#EFCD62] text-[#0E3A2F] py-5 text-gh-label font-bold tracking-widest uppercase hover:bg-white transition-colors rounded-none"
                       >
                         OKAY
-                      </button>
+                      </PrimaryButton>
                     </motion.div>
                   </div>
                 </motion.div>

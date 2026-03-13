@@ -14,6 +14,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Image from "next/image";
+import PrimaryButton from "@/components/PrimaryButton";
 import { useAnimation } from "@/context/AnimationContext";
 import Link from "next/link";
 
@@ -410,13 +411,12 @@ export default function PartnerOverlay() {
                         </div>
                       </div>
 
-                      <button
+                      <PrimaryButton
+                        className="w-full mt-2"
                         onClick={handleSubmit}
-                        className="w-full mt-2 bg-[#EFCD62] text-[#122A23] hover:bg-white transition-colors py-4 text-gh-label font-bold tracking-widest uppercase rounded-sm flex items-center justify-center gap-2"
                       >
                         SUBMIT
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
+                      </PrimaryButton>
                     </div>
                   </div>
                 ) : (
@@ -482,12 +482,13 @@ export default function PartnerOverlay() {
                         Thoughtfully operated. Always.
                       </p>
 
-                      <button
+                      <PrimaryButton
+                        withArrow={false}
+                        className="w-full"
                         onClick={handleClose}
-                        className="w-full bg-[#EFCD62] text-[#122A23] hover:bg-white transition-colors py-4 text-gh-label font-bold tracking-widest uppercase rounded-sm"
                       >
                         OKAY
-                      </button>
+                      </PrimaryButton>
                     </div>
                   </div>
                 )}

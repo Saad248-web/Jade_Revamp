@@ -16,6 +16,7 @@ import {
   Waves,
   ShieldCheck,
 } from "lucide-react";
+import PrimaryButton from "@/components/PrimaryButton";
 
 interface PartyVenueOverlayProps {
   isOpen: boolean;
@@ -488,12 +489,9 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
             {price}
           </span>
         </div>
-        <button
-          onClick={scrollToForm}
-          className="bg-[#EFCD62] text-black px-6 py-2.5 font-manrope font-bold text-[12px] tracking-widest uppercase rounded-none hover:bg-white transition-all"
-        >
+        <PrimaryButton withArrow={false} onClick={scrollToForm}>
           ENQUIRE
-        </button>
+        </PrimaryButton>
       </div>
     </motion.div>,
     document.body,

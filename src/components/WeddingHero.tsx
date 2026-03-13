@@ -10,7 +10,7 @@ export default function WeddingHero() {
 
   const heroButtons: [HeroButton, HeroButton] = [
     {
-      icon: <Home className="w-4 h-4" />,
+      icon: <Home className="w-5 h-5" />,
       label: "Venues",
       onClick: () => {
         const venuesSection = document.getElementById("wedding-venues");
@@ -20,7 +20,7 @@ export default function WeddingHero() {
       },
     },
     {
-      icon: <Download className="w-4 h-4" />,
+      icon: <Download className="w-5 h-5" />,
       label: "Brochure",
       onClick: () => {
         window.open("/brochure.pdf", "_blank");

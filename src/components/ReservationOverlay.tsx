@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Headset, Minus, Plus, ChevronLeft } from "lucide-react";
 import Image from "next/image";
+import PrimaryButton from "@/components/PrimaryButton";
 import { useEffect, useState } from "react";
 
 interface ReservationOverlayProps {
@@ -367,12 +368,12 @@ export default function ReservationOverlay({
                       -- -- to -- --
                     </div>
                   )}
-                  <button
+                  <PrimaryButton
+                    withArrow={false}
                     onClick={() => setView("guests")}
-                    className="bg-[#EFCD62] text-[#122A23] hover:bg-white transition-colors px-6 py-2.5 text-gh-label font-bold tracking-widest uppercase rounded-sm"
                   >
                     NEXT
-                  </button>
+                  </PrimaryButton>
                 </div>
               ) : (
                 <div className="flex items-center justify-between mt-2">
@@ -393,12 +394,9 @@ export default function ReservationOverlay({
                     >
                       BACK
                     </button>
-                    <button
-                      onClick={handleApply}
-                      className="bg-[#EFCD62] text-[#122A23] hover:bg-white transition-colors px-6 py-2.5 text-gh-label font-bold tracking-widest uppercase rounded-sm"
-                    >
+                    <PrimaryButton withArrow={false} onClick={handleApply}>
                       APPLY
-                    </button>
+                    </PrimaryButton>
                   </div>
                 </div>
               )}

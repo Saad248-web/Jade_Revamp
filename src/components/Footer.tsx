@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import PrimaryButton from "@/components/PrimaryButton";
 import Link from "next/link";
 import {
   MapPin,
@@ -801,13 +802,13 @@ export default function Footer() {
                         Thoughtfully operated. Always.
                       </p>
 
-                      <button
-                        type="button"
+                      <PrimaryButton
+                        withArrow={false}
+                        className="w-full"
                         onClick={() => setIsSuccess(false)}
-                        className="w-full bg-[#EFCD62] text-[#0E3A2F] py-5 text-gh-label font-bold tracking-widest uppercase hover:bg-white transition-colors rounded-none"
                       >
                         OKAY
-                      </button>
+                      </PrimaryButton>
                     </motion.div>
                   </div>
                 </motion.div>

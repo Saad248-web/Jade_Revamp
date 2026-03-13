@@ -15,6 +15,7 @@ import {
   Youtube,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import PrimaryButton from "@/components/PrimaryButton";
 import LiveBackground from "@/components/LiveBackground";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -289,16 +290,16 @@ export default function CareersPage() {
                           </ul>
                         </div>
 
-                        <button
+                        <PrimaryButton
+                          className="w-full mt-4"
                           onClick={(e) => {
                             e.stopPropagation();
                             e.preventDefault();
                             setIsApplyModalOpen(true);
                           }}
-                          className="w-full bg-[#EFCD62] text-black font-bold uppercase tracking-widest text-gh-label py-5 mt-4 hover:bg-white transition-colors flex items-center justify-center gap-2 rounded-none"
                         >
-                          APPLY NOW <ArrowRight className="w-4 h-4" />
-                        </button>
+                          APPLY NOW
+                        </PrimaryButton>
                       </div>
                     </motion.div>
                   )}
@@ -332,16 +333,15 @@ export default function CareersPage() {
             </p>
           </div>
 
-          <button
+          <PrimaryButton
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
               setIsApplyModalOpen(true);
             }}
-            className="inline-flex bg-[#EFCD62] text-black font-bold uppercase tracking-widest text-sm px-12 py-5 hover:bg-white transition-all items-center gap-2 rounded-none shadow-xl"
           >
-            SEND US YOUR CV <ArrowRight className="w-4 h-4" />
-          </button>
+            SEND US YOUR CV
+          </PrimaryButton>
         </div>
       </section>
 
@@ -484,13 +484,9 @@ export default function CareersPage() {
                         </div>
 
                         {/* Submit */}
-                        <button
-                          type="submit"
-                          className="w-full bg-[#EFCD62] text-[#0D4032] font-bold uppercase tracking-[0.2em] text-sm py-5 hover:bg-white transition-all flex items-center justify-center gap-3 rounded-none shadow-lg group"
-                        >
-                          SUBMIT APPLICATION{" "}
-                          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                        </button>
+                        <PrimaryButton type="submit" className="w-full">
+                          SUBMIT APPLICATION
+                        </PrimaryButton>
                       </form>
                     </div>
                   ) : (
@@ -606,16 +602,17 @@ export default function CareersPage() {
                         </p>
                       </motion.div>
 
-                      <button
+                      <PrimaryButton
+                        withArrow={false}
+                        className="w-full"
                         onClick={() => {
                           setIsApplyModalOpen(false);
                           setIsSuccess(false);
                           setSelectedFileName(null);
                         }}
-                        className="w-full bg-[#EFCD62] text-[#0D4032] font-bold uppercase tracking-widest text-sm py-5 hover:bg-white transition-all rounded-none"
                       >
                         OKAY
-                      </button>
+                      </PrimaryButton>
                     </div>
                   )}
                 </div>
@@ -712,13 +709,9 @@ export default function CareersPage() {
                           )}
                         </div>
 
-                        <button
-                          type="submit"
-                          className="w-full bg-[#EFCD62] text-black font-bold uppercase tracking-[0.2em] text-sm py-5 hover:bg-white transition-all flex items-center justify-center gap-3 rounded-none mt-4 shadow-lg group"
-                        >
-                          SUBMIT APPLICATION{" "}
-                          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                        </button>
+                        <PrimaryButton type="submit" className="w-full mt-4">
+                          SUBMIT APPLICATION
+                        </PrimaryButton>
                       </form>
                     </>
                   ) : (

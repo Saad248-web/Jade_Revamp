@@ -3,6 +3,7 @@
 import { useParams, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import PrimaryButton from "@/components/PrimaryButton";
 import { useEffect, useRef } from "react";
 import {
   ArrowLeft,
@@ -803,9 +804,9 @@ export default function VillaDetailsPage() {
                   site visit.
                 </p>
 
-                <button className="w-full bg-[#EFCD62] text-[#1A1C1E] font-bold py-4 rounded-lg uppercase tracking-widest text-gh-label hover:bg-white transition-colors mb-4">
+                <PrimaryButton withArrow={false} className="w-full">
                   Request Booking
-                </button>
+                </PrimaryButton>
                 <button className="w-full bg-transparent border border-white/20 text-white font-bold py-4 rounded-lg uppercase tracking-widest text-gh-label hover:bg-white/5 transition-colors">
                   Speak with our team
                 </button>
@@ -838,12 +839,9 @@ export default function VillaDetailsPage() {
           <button className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase px-2 py-2 md:px-4 md:py-3 hover:text-white transition-colors">
             ENQUIRE
           </button>
-          <Link
-            href={`/book?villa=${villa.id}`}
-            className="bg-[#EFCD62] text-[#1A1C1E] inline-flex items-center justify-center text-gh-label font-bold tracking-[0.2em] uppercase px-4 py-2 md:px-8 md:py-3 rounded-sm hover:bg-white transition-colors"
-          >
+          <PrimaryButton href={`/book?villa=${villa.id}`} withArrow={false}>
             BOOK VILLA
-          </Link>
+          </PrimaryButton>
         </div>
       </div>
       <div className="h-36 lg:h-20" />{" "}

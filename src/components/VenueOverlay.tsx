@@ -20,6 +20,7 @@ import {
   Mail,
   User,
 } from "lucide-react";
+import PrimaryButton from "@/components/PrimaryButton";
 
 interface VenueOverlayProps {
   isOpen: boolean;
@@ -728,12 +729,9 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
           >
             VIEW VENUE
           </button>
-          <button
-            onClick={scrollToForm}
-            className="bg-[#EFCD62] text-black px-6 py-2.5 font-manrope font-bold text-[12px] tracking-widest uppercase rounded-none hover:bg-white transition-all shadow-lg active:scale-95"
-          >
+          <PrimaryButton withArrow={false} onClick={scrollToForm}>
             ENQUIRE
-          </button>
+          </PrimaryButton>
         </div>
       </div>
     </motion.div>,

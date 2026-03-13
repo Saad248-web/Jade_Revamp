@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import PrimaryButton from "@/components/PrimaryButton";
 
 interface FloatingBottomActionProps {
   price: string;
@@ -26,12 +27,9 @@ export default function FloatingBottomAction({
           >
             ENQUIRE
           </Link>
-          <Link
-            href={linkHref}
-            className="bg-[#EFCD62] text-[#1A1C1E] text-gh-label font-bold tracking-[0.2em] uppercase px-4 py-2 md:px-8 md:py-3 rounded-sm hover:bg-white transition-colors"
-          >
+          <PrimaryButton href={linkHref} withArrow={false}>
             {linkLabel}
-          </Link>
+          </PrimaryButton>
         </div>
       </div>
     </div>
