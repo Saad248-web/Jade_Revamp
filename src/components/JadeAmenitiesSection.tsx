@@ -219,18 +219,6 @@ export default function JadeAmenitiesSection() {
               <ChevronRight className="w-6 h-6 text-white" />
             </button>
           </div>
-
-          {/* Dots - Elevated for Mobile Bottom Nav */}
-          <div className="absolute bottom-24 left-0 right-0 flex justify-center gap-2 z-30">
-            {SLIDES.map((_, index) => (
-              <div
-                key={index}
-                className={`w-1.5 h-1.5 rounded-none transition-colors ${
-                  index === currentIndex ? "bg-[#EFCD62]" : "bg-white/30"
-                }`}
-              />
-            ))}
-          </div>
         </div>
       </div>
 
@@ -333,17 +321,7 @@ export default function JadeAmenitiesSection() {
             >
               <ChevronLeft className="w-8 h-8 text-[#EFCD62]" />
             </button>
-            <div className="flex gap-3">
-              {SLIDES.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-none transition-all ${
-                    index === currentIndex ? "bg-[#EFCD62]" : "bg-[#AC8831]/50"
-                  }`}
-                />
-              ))}
-            </div>
+            <div className="flex gap-3" />
             <button
               onClick={handleNext}
               className="group p-4 rounded-none hover:bg-white/10 transition-all"

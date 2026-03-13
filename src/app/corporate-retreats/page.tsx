@@ -13,6 +13,23 @@ import CorporateVillasCarousel from "@/components/CorporateVillasCarousel";
 import { VILLAS } from "@/data/villas";
 import Footer from "@/components/Footer";
 import ExperienceHero from "@/components/ExperienceHero";
+import ScrollSectionComposer, {
+  ScrollSlide,
+} from "@/components/ScrollSectionComposer";
+
+const animatedSlides: ScrollSlide[] = [
+  {
+    lines: [
+      "At Jade Hospitainment, corporate",
+      "retreats are thoughtfully designed to",
+      "balance productivity and relaxation.",
+      "From strategic planning sessions and",
+      "workshops to recognition nights and",
+      "team celebrations, each gathering is",
+      "structured around your objectives.",
+    ],
+  },
+];
 
 export default function CorporateRetreatsPage() {
   return (
@@ -108,7 +125,7 @@ export default function CorporateRetreatsPage() {
         </div>
       </section>
       {/* SECTION 3: ANIMATED TEXT SECTION */}
-      <AnimatedTextSection />
+      <ScrollSectionComposer slides={animatedSlides} height="250vh" />
 
       {/* SECTION 4: py-12 (48px) for tighter flow */}
       <section className="py-12 bg-[#1A1C1E] border-t border-white/5">
@@ -237,75 +254,5 @@ export default function CorporateRetreatsPage() {
       </section>
       <Footer />
     </main>
-  );
-}
-
-function AnimatedTextSection() {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  const lines = [
-    "At Jade Hospitainment, corporate",
-    "retreats are thoughtfully designed to",
-    "balance productivity and relaxation.",
-    "From strategic planning sessions and",
-    "workshops to recognition nights and",
-    "team celebrations, each gathering is",
-    "structured around your objectives.",
-  ];
-
-  // Locking Logic and holding: match Unified Section feel
-  const fadeOutStart = 0.8;
-  const sectionY = useTransform(
-    scrollYProgress,
-    [0, fadeOutStart, 1],
-    [0, 0, -50],
-  );
-
-  return (
-    <section ref={containerRef} className="relative h-[400vh] bg-black">
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-        <LiveBackground />
-
-        <motion.div
-          style={{ y: sectionY }}
-          className="relative z-10 w-full max-w-5xl mx-auto px-6 text-center pt-16 md:pt-24"
-        >
-          <h2 className="font-manrope font-light text-gh-h1 leading-[1.8] md:leading-[1.6] text-white/90 flex flex-col items-center">
-            {lines.map((line, idx) => {
-              const start = idx * 0.08;
-              const end = start + 0.12;
-              const opacity = useTransform(
-                scrollYProgress,
-                [start, end, fadeOutStart, 1],
-                [0, 1, 1, 0],
-              );
-
-              return (
-                <motion.span
-                  key={idx}
-                  style={{ opacity }}
-                  className="block text-center"
-                >
-                  {line}
-                </motion.span>
-              );
-            })}
-          </h2>
-
-          {/* Animated Vertical Line Indicator - Lengthened to 200px */}
-          <motion.div
-            style={{
-              height: useTransform(scrollYProgress, [0.7, 0.9], [0, 200]),
-              opacity: useTransform(scrollYProgress, [0.7, 0.8], [0, 1]),
-            }}
-            className="w-px bg-white/20 mt-16 md:mt-24 mx-auto"
-          />
-        </motion.div>
-      </div>
-    </section>
   );
 }

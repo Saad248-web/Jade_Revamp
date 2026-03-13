@@ -33,6 +33,24 @@ import LiveBackground from "@/components/LiveBackground";
 import Footer from "@/components/Footer";
 import PartyVillasCarousel from "@/components/PartyVillasCarousel";
 import ExperienceHero from "@/components/ExperienceHero";
+import ScrollSectionComposer, {
+  ScrollSlide,
+} from "@/components/ScrollSectionComposer";
+
+const animatedSlides: ScrollSlide[] = [
+  {
+    label: "CELEBRATIONS, REIMAGINED",
+    lines: [
+      "Jade's private villas offer the perfect",
+      "setting for unforgettable celebrations.",
+      "Whether it's a birthday, anniversary,",
+      "pool party, or reunion with friends,",
+      "each space is designed for private",
+      "gatherings with curated setups, great",
+      "music, and moments worth celebrating.",
+    ],
+  },
+];
 
 export default function PartyVillasPage() {
   return (
@@ -73,7 +91,7 @@ export default function PartyVillasPage() {
       />
 
       {/* SECTION 2: ANIMATED TEXT SECTION */}
-      <PartyAnimatedText />
+      <ScrollSectionComposer slides={animatedSlides} height="250vh" />
 
       {/* SECTION 3: PARTY TYPES CAROUSEL */}
       <PartyTypesSection />
@@ -89,78 +107,6 @@ export default function PartyVillasPage() {
 
       <Footer />
     </main>
-  );
-}
-
-function PartyAnimatedText() {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  const lines = [
-    "Jade's private villas offer the perfect",
-    "setting for unforgettable celebrations.",
-    "Whether it's a birthday, anniversary,",
-    "pool party, or reunion with friends,",
-    "each space is designed for private",
-    "gatherings with curated setups, great",
-    "music, and moments worth celebrating.",
-  ];
-
-  const fadeOutStart = 0.8;
-  const sectionY = useTransform(
-    scrollYProgress,
-    [0, fadeOutStart, 1],
-    [0, 0, -50],
-  );
-
-  return (
-    <section ref={containerRef} className="relative h-[400vh] bg-black">
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-        <LiveBackground />
-
-        <motion.div
-          style={{ y: sectionY }}
-          className="relative z-10 w-full max-w-5xl mx-auto px-6 text-center pt-16 md:pt-24"
-        >
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-12 text-center">
-            CELEBRATIONS, REIMAGINED
-          </p>
-
-          <h2 className="font-manrope font-light text-gh-h1 leading-[1.8] md:leading-[1.6] text-white/90 flex flex-col items-center">
-            {lines.map((line, idx) => {
-              const start = idx * 0.08;
-              const end = start + 0.12;
-              const opacity = useTransform(
-                scrollYProgress,
-                [start, end, fadeOutStart, 1],
-                [0, 1, 1, 0],
-              );
-
-              return (
-                <motion.span
-                  key={idx}
-                  style={{ opacity }}
-                  className="block text-center"
-                >
-                  {line}
-                </motion.span>
-              );
-            })}
-          </h2>
-
-          <motion.div
-            style={{
-              height: useTransform(scrollYProgress, [0.7, 0.9], [0, 200]),
-              opacity: useTransform(scrollYProgress, [0.7, 0.8], [0, 1]),
-            }}
-            className="w-px bg-white/20 mt-16 md:mt-24 mx-auto"
-          />
-        </motion.div>
-      </div>
-    </section>
   );
 }
 

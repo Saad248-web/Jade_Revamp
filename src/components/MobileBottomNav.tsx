@@ -54,17 +54,17 @@ export default function MobileBottomNav() {
                 className={`flex flex-col items-center gap-1.5 w-16 ${colorClass}`}
               >
                 <div
-                  className={`relative w-8 h-8 ${isActive ? "" : "opacity-50 grayscale"}`}
+                  className={`relative w-5 h-5 ${isActive ? "" : "opacity-50 grayscale"}`}
                 >
                   <Image
                     src="/assets/Golden_Logo.png"
                     alt="Home"
                     fill
-                    sizes="32px"
+                    sizes="20px"
                     className="object-contain"
                   />
                 </div>
-                <span className="text-gh-label font-manrope font-medium tracking-wide translate-y-[-2px]">
+                <span className="text-gh-label font-manrope font-medium tracking-wide">
                   {item.label}
                 </span>
               </Link>
