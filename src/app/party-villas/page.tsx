@@ -39,6 +39,7 @@ import ScrollSectionComposer, {
   ScrollSlide,
 } from "@/components/ScrollSectionComposer";
 import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
+import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
 
 const partySlides = [
   {
@@ -130,7 +131,20 @@ export default function PartyVillasPage() {
       />
 
       {/* SECTION 4: CURATED EXPERIENCES */}
-      <CuratedExperiencesSection />
+      <CuratedExperiencesGrid
+        label="PERSONALIZE YOUR CELEBRATION"
+        title="Curated Experiences"
+        ctaText="PLAN YOUR CELEBRATION"
+        ctaLink="/contact"
+        experiences={[
+          { title: "DJ & Music Setup", image: "/assets/music_exp.png" },
+          { title: "BBQ & Live Grills", image: "/assets/bbq_exp.png" },
+          { title: "Cocktail Bar Setup", image: "/assets/poolside_exp.png" },
+          { title: "Bonfire Nights", image: "/assets/bonfire_exp.png" },
+          { title: "Movie Under the Stars", image: "/assets/movie_exp.png" },
+          { title: "Themed Decor & Styling", image: "/assets/dinner_exp.png" },
+        ]}
+      />
 
       {/* SECTION 5: SPACES MADE FOR CELEBRATIONS */}
       <SpacesForCelebrationsSection />
@@ -140,60 +154,6 @@ export default function PartyVillasPage() {
 
       <Footer />
     </main>
-  );
-}
-
-function CuratedExperiencesSection() {
-  const experiences = [
-    { title: "DJ & Music Setup", image: "/assets/music_exp.png" },
-    { title: "BBQ & Live Grills", image: "/assets/bbq_exp.png" },
-    { title: "Cocktail Bar Setup", image: "/assets/poolside_exp.png" },
-    { title: "Bonfire Nights", image: "/assets/bonfire_exp.png" },
-    { title: "Movie Under the Stars", image: "/assets/movie_exp.png" },
-    { title: "Themed Decor & Styling", image: "/assets/dinner_exp.png" },
-  ];
-
-  return (
-    <section className="py-24 bg-[#141517]">
-      <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-6">
-            PERSONALIZE YOUR CELEBRATION
-          </p>
-          <h2 className="text-gh-h1 font-philosopher text-white">
-            Curated Experiences
-          </h2>
-        </div>
-
-        {/* Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-          {experiences.map((exp, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              viewport={{ once: true }}
-              className="relative aspect-square md:aspect-[4/5] overflow-hidden group border border-white/5"
-            >
-              <Image
-                src={exp.image}
-                alt={exp.title}
-                fill
-                sizes="(max-width: 768px) 50vw, 33vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center p-4 text-center">
-                <h3 className="text-white text-gh-h3 font-philosopher leading-tight">
-                  {exp.title}
-                </h3>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
 

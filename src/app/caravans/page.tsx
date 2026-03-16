@@ -10,6 +10,11 @@ import ScrollSectionComposer, {
   ScrollSlide,
 } from "@/components/ScrollSectionComposer";
 import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
+import CaravanUsageSection from "@/components/CaravanUsageSection";
+import CaravanJourneySection from "@/components/CaravanJourneySection";
+import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
+import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
+import TravelGuidelinesSection from "@/components/TravelGuidelinesSection";
 import { Info, Calendar } from "lucide-react";
 
 const caravanSlides = [
@@ -27,6 +32,21 @@ const caravanSlides = [
     title: "Entertainment System",
     desc: "Dual screens, music system, and plug-and-play connectivity for entertainment during the journey.",
     image: "/assets/music_exp.png",
+  },
+  {
+    title: "Kitchenette & Refreshments",
+    desc: "Refrigerator, water dispenser, and essential utilities to keep you refreshed throughout the trip.",
+    image: "/assets/outdoor_dining.png",
+  },
+  {
+    title: "Climate-Controlled Interiors",
+    desc: "Fully air-conditioned interiors designed for comfortable travel in all seasons.",
+    image: "/assets/wellness_retreat.png",
+  },
+  {
+    title: "Capacity",
+    desc: "Ideal for 6–8 guests travelling together.",
+    image: "/assets/corporate_retreat.png",
   },
 ];
 
@@ -99,6 +119,59 @@ export default function CaravansPage() {
           buttonContainerClassName="h-[54px]"
         />
       </div>
+
+      <CaravanUsageSection />
+      <CaravanJourneySection />
+
+      <CuratedExperiencesGrid
+        label="CURATED EXPERIENCES"
+        title="Enhance Your Stay"
+        ctaText="ENQUIRE"
+        onCtaClick={() => window.open("/contact", "_blank")}
+        experiences={[
+          { title: "Bonfire Experience", image: "/assets/bonfire_exp.png" },
+          { title: "BBQ & Outdoor Dining", image: "/assets/bbq_exp.png" },
+          { title: "Camping & Tent Kits", image: "/assets/nature_escapes.png" },
+          { title: "Activity Kits", image: "/assets/games_exp.png" },
+          { title: "Butler Service", image: "/assets/chef_exp.png" },
+          {
+            title: "Custom Celebration Setups",
+            image: "/assets/celebrations_friends.png",
+          },
+        ]}
+      />
+
+      <PremiumFeaturesSection
+        subheading="WHY RATHAA"
+        heading="Travel Reimagined"
+        cards={[
+          {
+            tag: "experience",
+            title: "PRIVATE JOURNEYS",
+            desc: "Travel with your group in a fully private caravan, designed for small gatherings, celebrations, and relaxed escapes.",
+          },
+          {
+            tag: "explore",
+            title: "CURATED ROUTES",
+            desc: "Discover scenic destinations and offbeat stops through thoughtfully designed travel circuits around and beyond the city.",
+          },
+          {
+            tag: "enjoy",
+            title: "COMFORT ON THE ROAD",
+            desc: "A fully equipped caravan with lounge seating, sleeping spaces, entertainment, and modern travel amenities.",
+          },
+          {
+            tag: "create",
+            title: "CUSTOM JOURNEYS",
+            desc: "From one-day escapes to overnight retreats and multi-day road trips, every journey can be tailored to your plan.",
+          },
+        ]}
+        footerText="Rathaa turns every road into an experience for those who travel beyond the ordinary."
+        ctaText="PLAN YOUR JOURNEY"
+        ctaLink="/contact"
+      />
+
+      <TravelGuidelinesSection />
 
       <Footer />
     </main>
