@@ -125,6 +125,8 @@ export default function PartyVillasPage() {
         title="Party Types"
         slides={partySlides}
         ctaText="BOOK A PARTY VILLA"
+        aspectClass="aspect-[343/531]"
+        buttonContainerClassName="h-[54px]"
       />
 
       {/* SECTION 4: CURATED EXPERIENCES */}

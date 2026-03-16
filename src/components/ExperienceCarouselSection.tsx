@@ -19,6 +19,9 @@ interface ExperienceCarouselSectionProps {
   ctaText: string;
   ctaLink?: string;
   onCtaClick?: () => void;
+  aspectClass?: string;
+  buttonClassName?: string;
+  buttonContainerClassName?: string;
 }
 
 export default function ExperienceCarouselSection({
@@ -28,6 +31,9 @@ export default function ExperienceCarouselSection({
   ctaText,
   ctaLink,
   onCtaClick,
+  aspectClass = "aspect-[4/5] md:aspect-[21/9]",
+  buttonClassName = "w-full text-[12px]",
+  buttonContainerClassName = "",
 }: ExperienceCarouselSectionProps) {
   const [activeSlide, setActiveSlide] = React.useState(0);
 
@@ -66,7 +72,9 @@ export default function ExperienceCarouselSection({
           </div>
 
           {/* Carousel Content */}
-          <div className="relative aspect-[4/5] md:aspect-[21/9] w-full bg-[#121417] overflow-hidden mb-4">
+          <div
+            className={`relative ${aspectClass} w-full bg-[#121417] overflow-hidden mb-4`}
+          >
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeSlide}
@@ -96,9 +104,9 @@ export default function ExperienceCarouselSection({
           </div>
 
           {/* Action Button */}
-          <div className="relative z-10 w-full">
+          <div className={`relative z-10 w-full ${buttonContainerClassName}`}>
             <PrimaryButton
-              className="w-full text-[12px]"
+              className={`${buttonClassName} h-full`}
               href={ctaLink}
               onClick={onCtaClick}
             >

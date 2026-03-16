@@ -134,6 +134,7 @@ export default function Footer() {
     { label: "CORPORATE RETREATS", href: "/corporate-retreats" },
     { label: "WEEKEND GETAWAYS", href: "/weekend-getaways" },
     { label: "PARTY VILLAS", href: "/party-villas" },
+    { label: "CARAVANS", href: "/caravans" },
     { label: "ABOUT", href: "/about" },
     { label: "CAREERS", href: "/careers" },
   ];
