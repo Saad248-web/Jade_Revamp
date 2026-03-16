@@ -38,6 +38,30 @@ import ExperienceHero from "@/components/ExperienceHero";
 import ScrollSectionComposer, {
   ScrollSlide,
 } from "@/components/ScrollSectionComposer";
+import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
+
+const partySlides = [
+  {
+    title: "Pool Parties",
+    desc: "Celebrate poolside with loungers, BBQ setups, cocktail stations, and vibrant lighting.",
+    image: "/assets/poolside_exp.png",
+  },
+  {
+    title: "Bachelor/Bachelorette Parties",
+    desc: "Private villas designed for pre-wedding celebrations with music, entertainment, and curated dining.",
+    image: "/assets/caravan_journey.png", // Using relevant existing assets
+  },
+  {
+    title: "Reunions & Graduation Parties",
+    desc: "Spacious villas perfect for reconnecting, celebrating milestones, and hosting memorable gatherings.",
+    image: "/assets/outdoor_dining.png",
+  },
+  {
+    title: "Birthdays & Anniversaries",
+    desc: "Host memorable celebrations in beautifully curated villas with décor, dining, music, and private pools.",
+    image: "/assets/celebrations_friends.png",
+  },
+];
 
 const animatedSlides: ScrollSlide[] = [
   {
@@ -96,7 +120,12 @@ export default function PartyVillasPage() {
       <ScrollSectionComposer slides={animatedSlides} height="250vh" />
 
       {/* SECTION 3: PARTY TYPES CAROUSEL */}
-      <PartyTypesSection />
+      <ExperienceCarouselSection
+        label="WHAT WE OFFER"
+        title="Party Types"
+        slides={partySlides}
+        ctaText="BOOK A PARTY VILLA"
+      />
 
       {/* SECTION 4: CURATED EXPERIENCES */}
       <CuratedExperiencesSection />
@@ -109,105 +138,6 @@ export default function PartyVillasPage() {
 
       <Footer />
     </main>
-  );
-}
-
-function PartyTypesSection() {
-  const [activeSlide, setActiveSlide] = React.useState(0);
-  const slides = [
-    {
-      title: "Pool Parties",
-      desc: "Celebrate poolside with loungers, BBQ setups, cocktail stations, and vibrant lighting.",
-      image: "/assets/poolside_exp.png",
-    },
-    {
-      title: "Bachelor/Bachelorette Parties",
-      desc: "Private villas designed for pre-wedding celebrations with music, entertainment, and curated dining.",
-      image: "/assets/caravan_journey.png", // Using relevant existing assets
-    },
-    {
-      title: "Reunions & Graduation Parties",
-      desc: "Spacious villas perfect for reconnecting, celebrating milestones, and hosting memorable gatherings.",
-      image: "/assets/outdoor_dining.png",
-    },
-    {
-      title: "Birthdays & Anniversaries",
-      desc: "Host memorable celebrations in beautifully curated villas with décor, dining, music, and private pools.",
-      image: "/assets/celebrations_friends.png",
-    },
-  ];
-
-  const nextSlide = () => setActiveSlide((prev) => (prev + 1) % slides.length);
-  const prevSlide = () =>
-    setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
-
-  return (
-    <section className="py-24 bg-[#141517]">
-      <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
-        <div className="relative">
-          {/* Header Area */}
-          <div className="relative z-10 mb-10">
-            <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope mb-6">
-              WHAT WE OFFER
-            </p>
-            <div className="flex items-center justify-between gap-4">
-              <h2 className="text-gh-h1 font-philosopher text-white leading-tight">
-                Party Types
-              </h2>
-              <div className="flex gap-3 shrink-0">
-                <button
-                  onClick={prevSlide}
-                  className="w-10 h-10 md:w-14 md:h-14 rounded-none border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors text-white"
-                >
-                  <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 stroke-[1.25]" />
-                </button>
-                <button
-                  onClick={nextSlide}
-                  className="w-10 h-10 md:w-14 md:h-14 rounded-none border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors text-white"
-                >
-                  <ArrowRight className="w-5 h-5 md:w-6 md:h-6 stroke-[1.25]" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Carousel Content */}
-          <div className="relative aspect-[4/5] md:aspect-[21/9] w-full bg-[#121417] overflow-hidden mb-10">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeSlide}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.8 }}
-                className="absolute inset-0"
-              >
-                <Image
-                  src={slides[activeSlide].image}
-                  alt={slides[activeSlide].title}
-                  fill
-                  sizes="100vw"
-                  className="object-cover opacity-75"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent flex flex-col items-center justify-end pb-12 md:pb-20 px-8 text-center">
-                  <h3 className="text-gh-h1 font-philosopher text-white mb-4">
-                    {slides[activeSlide].title}
-                  </h3>
-                  <p className="text-white/60 font-manrope text-gh-body max-w-xl mx-auto leading-relaxed">
-                    {slides[activeSlide].desc}
-                  </p>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Action Button */}
-          <div className="relative z-10 pt-4 flex justify-center">
-            <PrimaryButton>BOOK A PARTY VILLA</PrimaryButton>
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
 

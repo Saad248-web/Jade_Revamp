@@ -27,6 +27,79 @@ import ExperienceHero from "@/components/ExperienceHero";
 import ScrollSectionComposer, {
   ScrollSlide,
 } from "@/components/ScrollSectionComposer";
+import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
+import VillasCarouselSection from "@/components/VillasCarouselSection";
+
+const themedVillas = [
+  {
+    name: "Dome Villa",
+    tag: "HOBBIT-INSPIRED PRIVATE RETREAT",
+    image: "/assets/Dome_Villa.png",
+  },
+  {
+    name: "Magnolia",
+    tag: "CONTEMPORARY LUXURY VILLA",
+    image: "/assets/Magnolia_for_Desktop.png",
+  },
+  {
+    name: "Diamond Pavilion",
+    tag: "MODERN ARCHITECTURAL MARVEL",
+    image: "/assets/Jade_735_for_Desktop.png",
+  },
+  {
+    name: "Retreat on the Ridge",
+    tag: "SCENIC HILLTOP ESCAPE",
+    image: "/assets/ROR_for_Desktop.png",
+  },
+  {
+    name: "The Haven",
+    tag: "PRIVATE SERENE SANCTUARY",
+    image: "/assets/Lemon_Tree_for_Desktop.png",
+  },
+];
+
+const weekendSlides = [
+  {
+    title: "Poolside Mornings",
+    desc: "Slow mornings by the pool with coffee, sunlight, and nowhere else to be.",
+    image: "/assets/Bathing_Girls.png",
+  },
+  {
+    title: "Evenings Under the Stars",
+    desc: "Bonfires, music, and long conversations that stretch late into the night.",
+    image: "/assets/evening_under_stars.png",
+  },
+  {
+    title: "Outdoor Dining",
+    desc: "Freshly grilled meals, laughter around the table, and food shared with friends.",
+    image: "/assets/outdoor_dining.png",
+  },
+  {
+    title: "Nature & Nearby Escapes",
+    desc: "Morning treks, quiet lakes, and scenic walks just minutes from your villa.",
+    image: "/assets/nature_escapes.png",
+  },
+  {
+    title: "Celebrations With Friends",
+    desc: "Birthdays, reunions, or simply an excuse to gather everyone together.",
+    image: "/assets/celebrations_friends.png",
+  },
+  {
+    title: "Movie Nights Under The Stars",
+    desc: "Projector nights, cozy spaces, and the perfect way to wind down the day.",
+    image: "/assets/movie_nights.png",
+  },
+  {
+    title: "Private Dinners",
+    desc: "Experience curated dining in the privacy of your villa under the starlit sky.",
+    image: "/assets/corporate_retreat.png",
+  },
+  {
+    title: "Golden Evenings",
+    desc: "Watching the sun dip below the horizon with those who matter most.",
+    image: "/assets/wellness_retreat.png",
+  },
+];
 
 const animatedSlides: ScrollSlide[] = [
   {
@@ -83,7 +156,12 @@ export default function WeekendGetawaysPage() {
       <ScrollSectionComposer slides={animatedSlides} height="250vh" />
 
       {/* SECTION 3: CAROUSEL SECTION */}
-      <WeekendCarouselSection />
+      <ExperienceCarouselSection
+        label="WHAT WEEKENDS AT JADE LOOK LIKE"
+        title="Jade Weekends"
+        slides={weekendSlides}
+        ctaText="BOOK JADE WEEKEND"
+      />
 
       {/* SECTION 4: CURATED EXPERIENCES */}
       <EnhanceYourStaySection />
@@ -92,7 +170,18 @@ export default function WeekendGetawaysPage() {
       <WhyChooseJadeSection />
 
       {/* SECTION 6: THEMED VILLAS */}
-      <ThemedVillasSection />
+      <VillasCarouselSection
+        label="OUR VILLAS"
+        title={
+          <>
+            Themed Villas
+            <br />
+            By Jade
+          </>
+        }
+        villas={themedVillas}
+        ctaText="VIEW ALL VILLA RETREATS"
+      />
 
       <Footer />
     </main>
@@ -155,125 +244,6 @@ function EnhanceYourStaySection() {
   );
 }
 
-function WeekendCarouselSection() {
-  const [activeSlide, setActiveSlide] = React.useState(0);
-  const slides = [
-    {
-      title: "Poolside Mornings",
-      desc: "Slow mornings by the pool with coffee, sunlight, and nowhere else to be.",
-      image: "/assets/Bathing_Girls.png",
-    },
-    {
-      title: "Evenings Under the Stars",
-      desc: "Bonfires, music, and long conversations that stretch late into the night.",
-      image: "/assets/evening_under_stars.png",
-    },
-    {
-      title: "Outdoor Dining",
-      desc: "Freshly grilled meals, laughter around the table, and food shared with friends.",
-      image: "/assets/outdoor_dining.png",
-    },
-    {
-      title: "Nature & Nearby Escapes",
-      desc: "Morning treks, quiet lakes, and scenic walks just minutes from your villa.",
-      image: "/assets/nature_escapes.png",
-    },
-    {
-      title: "Celebrations With Friends",
-      desc: "Birthdays, reunions, or simply an excuse to gather everyone together.",
-      image: "/assets/celebrations_friends.png",
-    },
-    {
-      title: "Movie Nights Under The Stars",
-      desc: "Projector nights, cozy spaces, and the perfect way to wind down the day.",
-      image: "/assets/movie_nights.png",
-    },
-    {
-      title: "Private Dinners",
-      desc: "Experience curated dining in the privacy of your villa under the starlit sky.",
-      image: "/assets/corporate_retreat.png",
-    },
-    {
-      title: "Golden Evenings",
-      desc: "Watching the sun dip below the horizon with those who matter most.",
-      image: "/assets/wellness_retreat.png",
-    },
-  ];
-
-  const nextSlide = () => setActiveSlide((prev) => (prev + 1) % slides.length);
-  const prevSlide = () =>
-    setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
-
-  return (
-    <section className="py-24 bg-[#141517]">
-      <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
-        <div className="relative">
-          {/* Header Area */}
-          <div className="relative z-10 mb-10">
-            <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope mb-6">
-              WHAT WEEKENDS AT JADE LOOK LIKE
-            </p>
-            <div className="flex items-center justify-between gap-4">
-              <h2 className="text-gh-h1 font-philosopher text-white leading-tight">
-                Jade Weekends
-              </h2>
-              <div className="flex gap-3 shrink-0">
-                <button
-                  onClick={prevSlide}
-                  className="w-10 h-10 md:w-14 md:h-14 rounded-none border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors text-white"
-                >
-                  <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 stroke-[1.25]" />
-                </button>
-                <button
-                  onClick={nextSlide}
-                  className="w-10 h-10 md:w-14 md:h-14 rounded-none border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors text-white"
-                >
-                  <ArrowRight className="w-5 h-5 md:w-6 md:h-6 stroke-[1.25]" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Carousel Content */}
-          <div className="relative aspect-[4/5] md:aspect-[21/9] w-full bg-[#121417] overflow-hidden mb-10">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeSlide}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.8 }}
-                className="absolute inset-0"
-              >
-                <Image
-                  src={slides[activeSlide].image}
-                  alt={slides[activeSlide].title}
-                  fill
-                  sizes="100vw"
-                  className="object-cover opacity-75"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent flex flex-col items-center justify-end pb-12 md:pb-20 px-8 text-center">
-                  <h3 className="text-gh-h1 font-philosopher text-white mb-4">
-                    {slides[activeSlide].title}
-                  </h3>
-                  <p className="text-white/60 font-manrope text-gh-body max-w-xl mx-auto leading-relaxed">
-                    {slides[activeSlide].desc}
-                  </p>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Action Button */}
-          <div className="relative z-10 pt-4 flex justify-center">
-            <PrimaryButton>BOOK JADE WEEKEND</PrimaryButton>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function WhyChooseJadeSection() {
   return (
     <PremiumFeaturesSection
@@ -305,93 +275,5 @@ function WhyChooseJadeSection() {
       ctaText="PLAN YOUR WEEKEND ESCAPE"
       ctaLink="/contact"
     />
-  );
-}
-
-function ThemedVillasSection() {
-  const villas = [
-    {
-      name: "Dome Villa",
-      tag: "HOBBIT-INSPIRED PRIVATE RETREAT",
-      image: "/assets/Dome_Villa.png",
-    },
-    {
-      name: "Magnolia",
-      tag: "CONTEMPORARY LUXURY VILLA",
-      image: "/assets/Magnolia_for_Desktop.png",
-    },
-    {
-      name: "Diamond Pavilion",
-      tag: "MODERN ARCHITECTURAL MARVEL",
-      image: "/assets/Jade_735_for_Desktop.png",
-    },
-    {
-      name: "Retreat on the Ridge",
-      tag: "SCENIC HILLTOP ESCAPE",
-      image: "/assets/ROR_for_Desktop.png",
-    },
-    {
-      name: "The Haven",
-      tag: "PRIVATE SERENE SANCTUARY",
-      image: "/assets/Lemon_Tree_for_Desktop.png",
-    },
-  ];
-
-  return (
-    <section className="py-24 bg-[#141517] border-t border-white/5">
-      <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-6">
-            OUR VILLAS
-          </p>
-          <h2 className="text-gh-h1 font-philosopher text-white leading-tight">
-            Themed Villas
-            <br />
-            By Jade
-          </h2>
-        </div>
-
-        {/* Scrollable List */}
-        <div className="relative mb-8 md:mb-12 -mx-6 md:-mx-12 lg:-mx-24 px-6 md:px-12 lg:px-24">
-          <div className="flex overflow-x-auto hide-scrollbar gap-8 snap-x snap-mandatory pb-8 lg:justify-center">
-            {villas.map((villa, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-                viewport={{ once: true }}
-                className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[400px] snap-center group cursor-pointer"
-              >
-                <div className="relative aspect-[3/4] overflow-hidden mb-6 border border-white/5 group-hover:border-[#EFCD62]/30 transition-colors">
-                  <Image
-                    src={villa.image}
-                    alt={villa.name}
-                    fill
-                    sizes="(max-width: 768px) 85vw, (max-width: 1024px) 45vw, 400px"
-                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-                </div>
-                <div>
-                  <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-2 text-left">
-                    {villa.tag}
-                  </p>
-                  <h3 className="text-gh-h2 font-philosopher text-white group-hover:text-[#EFCD62] transition-colors text-left leading-tight">
-                    {villa.name}
-                  </h3>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Action Button */}
-        <div className="max-w-md mx-auto flex justify-center">
-          <PrimaryButton>VIEW ALL VILLA RETREATS</PrimaryButton>
-        </div>
-      </div>
-    </section>
   );
 }
