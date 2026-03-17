@@ -49,7 +49,7 @@ export default function PrimaryButton({
         // Fluid padding: scales between mobile → desktop automatically
         "px-[clamp(14px,2.5vw,28px)] py-[clamp(10px,1.2vw,14px)]",
         // Fluid typography
-        "text-[clamp(10px,1vw,12px)] tracking-[0.15em] uppercase",
+        "text-gh-label tracking-[0.15em] uppercase",
         // Interaction
         "hover:bg-[#dfbd52] transition-all duration-300",
         // User overrides (w-full, custom sizing, etc.)

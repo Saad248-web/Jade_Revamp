@@ -73,7 +73,7 @@ export default function MenuPage() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
+                        className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
                           desktopSelectedView === "villas"
                             ? "bg-left text-[#EFCD62]"
                             : "bg-right"
@@ -103,7 +103,7 @@ export default function MenuPage() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
+                        className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
                           desktopSelectedView === "experiences"
                             ? "bg-left text-[#EFCD62]"
                             : "bg-right"
@@ -122,21 +122,21 @@ export default function MenuPage() {
                   </li>
                   <li>
                     <Link href="/about">
-                      <span className="block text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         About us
                       </span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/careers">
-                      <span className="block text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         Careers
                       </span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/blogs">
-                      <span className="block text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         Blogs
                       </span>
                     </Link>
@@ -148,7 +148,7 @@ export default function MenuPage() {
                       }}
                       className="text-left"
                     >
-                      <span className="block text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         Partner with us
                       </span>
                     </button>
@@ -166,7 +166,7 @@ export default function MenuPage() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-[32px] md:text-[36px] lg:text-[40px] xl:text-[48px] leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
+                        className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
                           desktopSelectedView === "more"
                             ? "bg-left text-[#EFCD62]"
                             : "bg-right"
@@ -295,7 +295,7 @@ export default function MenuPage() {
                 >
                   <ArrowLeft className="w-4 h-4" /> BACK
                 </button>
-                <h2 className="text-4xl font-philosopher text-white mb-8">
+                <h2 className="text-gh-h1 font-philosopher text-white mb-8">
                   Experiences
                 </h2>
 
@@ -326,7 +326,7 @@ export default function MenuPage() {
                       className="flex flex-col cursor-pointer group"
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <h3 className="text-lg font-manrope text-white group-hover:text-[#EFCD62] transition-colors">
+                        <h3 className="text-gh-body font-manrope text-white group-hover:text-[#EFCD62] transition-colors">
                           {exp.title}
                         </h3>
                         <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
@@ -374,7 +374,7 @@ export default function MenuPage() {
                 >
                   <ArrowLeft className="w-4 h-4 cursor-pointer" /> BACK
                 </button>
-                <h2 className="text-5xl font-philosopher text-white mb-10">
+                <h2 className="text-gh-h1 font-philosopher text-white mb-10">
                   More
                 </h2>
 
@@ -382,7 +382,7 @@ export default function MenuPage() {
                   <li>
                     <Link
                       href="/privacy"
-                      className="block text-2xl font-manrope text-white/70 hover:text-[#EFCD62] transition-colors"
+                      className="block text-gh-scroll font-manrope text-white/70 hover:text-[#EFCD62] transition-colors"
                     >
                       Privacy Policy
                     </Link>
@@ -390,7 +390,7 @@ export default function MenuPage() {
                   <li>
                     <Link
                       href="/terms"
-                      className="block text-2xl font-manrope text-white/70 hover:text-[#EFCD62] transition-colors"
+                      className="block text-gh-scroll font-manrope text-white/70 hover:text-[#EFCD62] transition-colors"
                     >
                       Terms & Conditions
                     </Link>
@@ -398,7 +398,7 @@ export default function MenuPage() {
                   <li>
                     <Link
                       href="/refund"
-                      className="block text-2xl font-manrope text-white/70 hover:text-[#EFCD62] transition-colors"
+                      className="block text-gh-scroll font-manrope text-white/70 hover:text-[#EFCD62] transition-colors"
                     >
                       Refund Policy
                     </Link>
@@ -466,7 +466,7 @@ export default function MenuPage() {
                             {villa.type}
                           </p>
                           <div className="flex items-center gap-2 group/title">
-                            <h3 className="text-2xl lg:text-3xl font-philosopher text-white transition-colors capitalize">
+                            <h3 className="text-gh-scroll lg:text-gh-h2 font-philosopher text-white transition-colors capitalize">
                               {villa.name}
                             </h3>
                             <ChevronRight className="w-5 h-5 text-white/50 group-hover/title:text-[#EFCD62] transition-colors" />
@@ -573,7 +573,7 @@ export default function MenuPage() {
                             {exp.type}
                           </p>
                           <div className="flex items-center gap-2 group/title">
-                            <h3 className="text-2xl lg:text-3xl font-philosopher text-white transition-colors">
+                            <h3 className="text-gh-scroll lg:text-gh-h2 font-philosopher text-white transition-colors">
                               {exp.title}
                             </h3>
                             <ChevronRight className="w-5 h-5 text-white/50 group-hover/title:text-[#EFCD62] transition-colors" />
@@ -631,7 +631,7 @@ export default function MenuPage() {
                         className="group flex items-center gap-4 cursor-pointer"
                       >
                         <div className="w-1.5 h-1.5 rounded-full bg-[#EFCD62] opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <span className="text-2xl font-manrope text-white/50 group-hover:text-white transition-all transform group-hover:translate-x-2">
+                        <span className="text-gh-scroll font-manrope text-white/50 group-hover:text-white transition-all transform group-hover:translate-x-2">
                           {policy.name}
                         </span>
                       </Link>

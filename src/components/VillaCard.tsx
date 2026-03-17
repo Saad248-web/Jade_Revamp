@@ -87,11 +87,11 @@ export default function VillaCard({ villa }: VillaCardProps) {
                 {currentSpace.name || "VIEW"}
               </span>
               <div className="flex items-center gap-2">
-                <span className="text-white font-manrope text-xs md:text-sm font-light">
+                <span className="text-white font-manrope text-gh-label font-light">
                   {currentImageIndex + 1}
                 </span>
                 <div className="w-16 md:w-24 h-[1px] bg-white/40" />
-                <span className="text-white/60 font-manrope text-xs md:text-sm font-light">
+                <span className="text-white/60 font-manrope text-gh-label font-light">
                   {images.length}
                 </span>
               </div>
@@ -125,7 +125,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
         </p>
 
         {/* Stats Row */}
-        <div className="flex flex-nowrap overflow-x-auto items-center gap-x-4 mb-4 text-white/80 font-manrope text-xs md:text-sm [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+        <div className="flex flex-nowrap overflow-x-auto items-center gap-x-4 mb-4 text-white/80 font-manrope text-gh-label [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
           <div className="flex shrink-0 items-center gap-2">
             <Bed className="w-4 h-4 text-[#EFCD62]" />
             <span className="whitespace-nowrap">{villa.stats.stay}</span>

@@ -176,7 +176,7 @@ export default function PartnerOverlay() {
                         />
                         <label
                           htmlFor="fullName"
-                          className="absolute text-white/80 text-xs duration-300 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-sm peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:text-white bg-[#0E3A2F] px-1"
+                          className="absolute text-white/80 text-gh-label duration-300 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-gh-body peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:text-white bg-[#0E3A2F] px-1"
                         >
                           Full Name
                         </label>

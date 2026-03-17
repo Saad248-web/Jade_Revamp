@@ -149,7 +149,7 @@ export default function VillaDetailsPage() {
   if (!villa) {
     return (
       <div className="min-h-screen bg-[#1A1C1E] flex flex-col items-center justify-center text-white">
-        <h1 className="text-4xl font-philosopher mb-4">Villa Not Found</h1>
+        <h1 className="text-gh-h1 font-philosopher mb-4">Villa Not Found</h1>
         <Link href="/villas" className="text-jade-gold hover:underline">
           Back to Villas
         </Link>
@@ -182,7 +182,7 @@ export default function VillaDetailsPage() {
             <ArrowLeft className="w-4 h-4" />
           </button>
 
-          <div className="flex items-center gap-4 text-white text-xs font-bold tracking-widest">
+          <div className="flex items-center gap-4 text-white text-gh-label font-bold tracking-widest">
             <span>1</span>
             <div className="w-12 h-[1px] bg-white/50" />
             <span className="text-white/50">37</span>
@@ -372,10 +372,10 @@ export default function VillaDetailsPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90" />
 
                   <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
-                    <h4 className="text-white text-xl uppercase tracking-widest font-bold mb-4 font-manrope">
+                    <h4 className="text-white text-gh-h3 uppercase tracking-widest font-bold mb-4 font-manrope">
                       {villa.spaces?.[0]?.name || "Lawn"}
                     </h4>
-                    <div className="flex items-center justify-center gap-3 text-white text-xs font-bold tracking-widest">
+                    <div className="flex items-center justify-center gap-3 text-white text-gh-label font-bold tracking-widest">
                       <span>4</span>
                       <div className="w-12 h-[1px] bg-white/60" />
                       <span className="text-white/60">7</span>
@@ -525,7 +525,7 @@ export default function VillaDetailsPage() {
                   onClick={() =>
                     openDrawer("Property Details", villa.propertyDetails || [])
                   }
-                  className="flex items-center gap-2 text-[#EFCD62] text-xs font-bold tracking-widest uppercase hover:text-white transition-colors"
+                  className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
                 >
                   Know More <ArrowRight className="w-3 h-3" />
                 </button>
@@ -687,11 +687,11 @@ export default function VillaDetailsPage() {
                             >
                               <div className="flex items-center gap-3">
                                 <div className="w-2 h-2 rotate-45 bg-[#EFCD62]" />
-                                <span className="text-white font-bold uppercase tracking-wider text-sm">
+                                <span className="text-white font-bold uppercase tracking-wider text-gh-desc">
                                   {place.label}
                                 </span>
                               </div>
-                              <span className="text-white/60 text-sm">
+                              <span className="text-white/60 text-gh-desc">
                                 {place.distance}
                               </span>
                             </div>
@@ -754,7 +754,7 @@ export default function VillaDetailsPage() {
                       <div className="w-0 h-0 border-t-gh-label border-t-transparent border-l-[18px] border-l-white border-b-gh-label border-b-transparent ml-1" />
                     </div>
                   </div>
-                  <div className="absolute bottom-4 right-4 bg-black/60 text-white text-xs px-2 py-1 rounded">
+                  <div className="absolute bottom-4 right-4 bg-black/60 text-white text-gh-label px-2 py-1 rounded">
                     1:41
                   </div>
                 </div>
@@ -784,7 +784,7 @@ export default function VillaDetailsPage() {
                   {villa.faq.length > 3 && (
                     <button
                       onClick={() => openDrawer("FAQ", villa.faq || [])}
-                      className="mt-8 text-[#EFCD62] text-xs font-bold tracking-widest uppercase hover:text-white transition-colors flex items-center gap-2"
+                      className="mt-8 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors flex items-center gap-2"
                     >
                       KNOW MORE <ArrowRight className="w-3 h-3" />
                     </button>

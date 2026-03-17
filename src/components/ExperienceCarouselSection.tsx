@@ -32,7 +32,7 @@ export default function ExperienceCarouselSection({
   ctaLink,
   onCtaClick,
   aspectClass = "aspect-[4/5] md:aspect-[21/9]",
-  buttonClassName = "w-full text-[12px]",
+  buttonClassName = "w-full text-gh-label",
   buttonContainerClassName = "",
 }: ExperienceCarouselSectionProps) {
   const [activeSlide, setActiveSlide] = React.useState(0);
@@ -47,11 +47,11 @@ export default function ExperienceCarouselSection({
         <div className="relative">
           {/* Header Area */}
           <div className="relative z-10 mb-4">
-            <p className="text-[#EFCD62] text-[12px] font-bold tracking-[0.3em] uppercase font-manrope mb-[14px]">
+            <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope mb-[14px]">
               {label}
             </p>
             <div className="flex items-center justify-between gap-4">
-              <h2 className="text-[32px] font-philosopher text-white leading-tight">
+              <h2 className="text-gh-h2 font-philosopher text-white leading-tight">
                 {title}
               </h2>
               <div className="flex gap-3 shrink-0">
@@ -92,10 +92,10 @@ export default function ExperienceCarouselSection({
                   className="object-cover opacity-75"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent flex flex-col items-center justify-end pb-12 md:pb-20 px-8 text-center">
-                  <h3 className="text-[24px] font-philosopher text-white mb-2">
+                  <h3 className="text-gh-scroll font-philosopher text-white mb-2">
                     {slides[activeSlide].title}
                   </h3>
-                  <p className="text-white/60 font-manrope text-[12px] max-w-xl mx-auto leading-relaxed">
+                  <p className="text-white/60 font-manrope text-gh-label max-w-xl mx-auto leading-relaxed">
                     {slides[activeSlide].desc}
                   </p>
                 </div>

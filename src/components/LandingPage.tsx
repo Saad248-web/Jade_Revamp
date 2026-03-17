@@ -71,9 +71,8 @@ export default function LandingPage() {
     <motion.div
       ref={containerRef}
       className="relative min-h-[300vh] bg-jade-dark text-white" // Extended height for scroll testing
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isSplashComplete ? 1 : 0 }}
-      transition={{ duration: 0.1 }} // Instant appear, relying on splash seamlessness
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 1 }}
     >
       {/* 1. Navigation & Header */}
       <Navbar />

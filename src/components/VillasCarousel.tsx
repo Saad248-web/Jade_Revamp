@@ -149,7 +149,7 @@ export default function VillasCarousel() {
                 <button
                   key={category}
                   onClick={() => handleCategoryChange(category)}
-                  className={`whitespace-nowrap flex-shrink-0 px-4 py-2 text-[12px] font-manrope font-medium transition-all duration-300 ${
+                  className={`whitespace-nowrap flex-shrink-0 px-4 py-2 text-gh-label font-manrope font-medium transition-all duration-300 ${
                     activeCategory === category
                       ? "bg-[#EFCD62] text-[#1A1C1E] border border-[#EFCD62]"
                       : "bg-transparent text-white/60 border border-white/20 hover:border-white/50 hover:text-white"
@@ -238,10 +238,10 @@ export default function VillasCarousel() {
               />
             </svg>
           </div>
-          <p className="text-white/40 text-[13px] font-manrope tracking-wide">
+          <p className="text-white/40 text-gh-desc font-manrope tracking-wide">
             No matching search results
           </p>
-          <h2 className="text-white text-[26px] md:text-[34px] font-philosopher leading-tight">
+          <h2 className="text-white text-gh-h2 font-philosopher leading-tight">
             Next Available Dates:
           </h2>
           <div className="flex flex-wrap justify-center gap-3">
@@ -249,13 +249,13 @@ export default function VillasCarousel() {
               <button
                 key={d.label}
                 onClick={() => setDateRange({ checkIn: null, checkOut: null })}
-                className="border border-white/25 text-white text-[13px] font-manrope px-5 py-2.5 rounded-[2px] hover:bg-white/10 transition-colors"
+                className="border border-white/25 text-white text-gh-desc font-manrope px-5 py-2.5 rounded-[2px] hover:bg-white/10 transition-colors"
               >
                 {d.label}
               </button>
             ))}
           </div>
-          <p className="text-white/30 text-[12px] font-manrope">or</p>
+          <p className="text-white/30 text-gh-label font-manrope">or</p>
           <PrimaryButton
             withArrow={false}
             onClick={() => {

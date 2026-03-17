@@ -96,7 +96,7 @@ export default function ReservationOverlay({
                 className="flex items-center gap-1.5 text-white/70 hover:text-white transition-colors"
               >
                 <ChevronLeft className="w-5 h-5" />
-                <span className="font-manrope text-[15px] pt-[1px]">Exit</span>
+                <span className="font-manrope text-gh-body pt-[1px]">Exit</span>
               </button>
 
               {/* Center: Logo & Title (Absolute centering for perfect alignment) */}
@@ -109,7 +109,7 @@ export default function ReservationOverlay({
                     className="object-contain"
                   />
                 </div>
-                <span className="text-white font-philosopher text-[18px] md:text-[22px]">
+                <span className="text-white font-philosopher text-gh-scroll">
                   Book a Stay
                 </span>
               </div>
@@ -124,7 +124,7 @@ export default function ReservationOverlay({
                       setDates([]);
                     }
                   }}
-                  className="text-[#EFCD62] text-[12px] md:text-[14px] font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors pt-[2px]"
+                  className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors pt-[2px]"
                 >
                   RESET
                 </button>
@@ -144,12 +144,12 @@ export default function ReservationOverlay({
             <div className="flex-1 bg-[#0D4032] overflow-y-auto px-5 md:px-6 py-6 overflow-x-hidden scrollbar-hide">
               {view === "dates" && (
                 <div className="flex flex-col gap-5">
-                  <h2 className="text-white text-[28px] md:text-[32px] font-philosopher leading-none mb-1">
+                  <h2 className="text-white text-gh-h2 font-philosopher leading-none mb-1">
                     Select Dates
                   </h2>
 
                   {/* Legend */}
-                  <div className="flex justify-start items-center gap-5 md:gap-8 text-[13px] md:text-[15px] text-[#A6C0B5] font-manrope font-medium mb-2">
+                  <div className="flex justify-start items-center gap-5 md:gap-8 text-gh-label text-[#A6C0B5] font-manrope font-medium mb-2">
                     <span className="flex items-center gap-2">
                       <span className="w-4 h-4 md:w-5 md:h-5 bg-[#165040] rounded-[2px]" />
                       Available

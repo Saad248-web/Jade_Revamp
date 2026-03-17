@@ -33,10 +33,10 @@ export default function VillasCarouselSection({
       <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
         {/* Header */}
         <div className="text-center mb-[40px]">
-          <p className="text-[#EFCD62] text-[12px] font-bold tracking-[0.3em] uppercase mb-[14px]">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-[14px]">
             {label}
           </p>
-          <h2 className="text-[32px] font-philosopher text-white leading-tight">
+          <h2 className="text-gh-h2 font-philosopher text-white leading-tight">
             {title}
           </h2>
         </div>
@@ -64,10 +64,10 @@ export default function VillasCarouselSection({
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
                 </div>
                 <div>
-                  <p className="text-[#EFCD62] text-[10px] font-bold tracking-[0.2em] uppercase mb-1 text-left">
+                  <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-1 text-left">
                     {villa.tag}
                   </p>
-                  <h3 className="text-[28px] font-philosopher text-white group-hover:text-[#EFCD62] transition-colors text-left leading-tight">
+                  <h3 className="text-gh-scroll font-philosopher text-white group-hover:text-[#EFCD62] transition-colors text-left leading-tight">
                     {villa.name}
                   </h3>
                 </div>
@@ -79,7 +79,7 @@ export default function VillasCarouselSection({
         {/* Action Button */}
         <div className="mt-[40px] flex justify-center w-full">
           <PrimaryButton
-            className="w-full text-[12px]"
+            className="w-full text-gh-label"
             href={ctaLink}
             onClick={onCtaClick}
           >

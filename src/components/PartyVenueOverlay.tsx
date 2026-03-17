@@ -126,11 +126,11 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
 
               {/* Numerical Pagination */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/5">
-                <span className="text-white font-philosopher text-lg leading-none">
+                <span className="text-white font-philosopher text-gh-scroll leading-none">
                   {currentImageIndex + 1}
                 </span>
                 <div className="w-8 h-[1px] bg-white/40" />
-                <span className="text-white/40 font-philosopher text-lg leading-none">
+                <span className="text-white/40 font-philosopher text-gh-scroll leading-none">
                   {images.length}
                 </span>
               </div>
@@ -156,7 +156,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
 
             {/* SPACE NAME */}
             <div className="mt-6 px-4 text-center">
-              <span className="text-white/40 font-manrope text-[10px] font-bold tracking-[0.4em] uppercase">
+              <span className="text-white/40 font-manrope text-gh-label font-bold tracking-[0.4em] uppercase">
                 {images[currentImageIndex].name || "SPACE"}
               </span>
             </div>
@@ -164,11 +164,11 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
             {/* INFO SECTION */}
             <div className="px-6 py-8">
               <div className="mb-4">
-                <span className="text-[#EFCD62] text-[10px] font-bold tracking-[0.2em] uppercase block mb-1">
+                <span className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase block mb-1">
                   {villa.type || "PARTY VILLA"}
                 </span>
                 <div className="flex justify-between items-center">
-                  <h1 className="text-3xl md:text-5xl font-philosopher leading-tight">
+                  <h1 className="text-gh-h1 font-philosopher leading-tight">
                     {villa.name}
                   </h1>
                   <button className="p-2 text-white/70 hover:text-white transition-colors">
@@ -177,7 +177,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center flex-wrap gap-4 text-white/70 font-manrope text-xs mb-8">
+              <div className="flex items-center flex-wrap gap-4 text-white/70 font-manrope text-gh-label mb-8">
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-[#EFCD62]" />
                   <span>{villa.location.split("·")[0]}</span>
@@ -217,10 +217,10 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                     className="flex flex-col items-center justify-center py-6 border border-white/10 bg-white/5 rounded-sm"
                   >
                     <stat.icon className="w-5 h-5 text-[#EFCD62] mb-3" />
-                    <span className="text-white font-philosopher text-2xl md:text-3xl mb-1">
+                    <span className="text-white font-philosopher text-gh-scroll md:text-gh-h3 mb-1">
                       {stat.value}
                     </span>
-                    <span className="text-[#EFCD62] text-[9px] font-bold tracking-[0.2em] uppercase">
+                    <span className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase">
                       {stat.label}
                     </span>
                   </div>
@@ -255,7 +255,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                   <button
                     key={tab}
                     onClick={() => handleTabClick(tab)}
-                    className={`px-4 py-4 text-xs md:text-gh-label font-bold tracking-widest uppercase transition-colors whitespace-nowrap border-b-2 ${
+                    className={`px-4 py-4 text-gh-label md:text-gh-label font-bold tracking-widest uppercase transition-colors whitespace-nowrap border-b-2 ${
                       activeTab === tab
                         ? "border-[#EFCD62] text-[#EFCD62] bg-[#EFCD62]/5"
                         : "border-transparent text-white/40 hover:text-white"
@@ -278,7 +278,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                   >
                     {activeTab === "Amenities" && (
                       <section className="animate-in fade-in duration-500">
-                        <h2 className="text-3xl font-philosopher mb-8">
+                        <h2 className="text-gh-h2 font-philosopher mb-8">
                           Villa Amenities
                         </h2>
                         <div className="space-y-6">
@@ -304,7 +304,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
 
                     {activeTab === "Pricing" && (
                       <section className="animate-in fade-in duration-500">
-                        <h2 className="text-3xl font-philosopher mb-8">
+                        <h2 className="text-gh-h2 font-philosopher mb-8">
                           Party Pricing
                         </h2>
                         {(() => {
@@ -329,10 +329,10 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                               key={idx}
                               className="border border-white/10 rounded-sm p-6 bg-white/5 mb-6"
                             >
-                              <h4 className="text-[#EFCD62] text-xl font-manrope font-semibold mb-1">
+                              <h4 className="text-[#EFCD62] text-gh-h3 font-manrope font-semibold mb-1">
                                 {rent.title}
                               </h4>
-                              <p className="text-white/40 text-sm mb-6">
+                              <p className="text-white/40 text-gh-desc mb-6">
                                 {rent.subtitle || rent.duration}
                               </p>
                               <div className="space-y-3 mb-8">
@@ -343,14 +343,14 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                                       className="flex justify-between items-center bg-black/20 p-4 rounded-sm border border-white/5"
                                     >
                                       <div className="flex flex-col">
-                                        <span className="text-white font-bold text-sm mb-1 uppercase tracking-wide">
+                                        <span className="text-white font-bold text-gh-desc mb-1 uppercase tracking-wide">
                                           {item.label}
                                         </span>
-                                        <span className="text-white/40 text-[10px] leading-tight">
+                                        <span className="text-white/40 text-gh-label leading-tight">
                                           {item.sublabel || item.head}
                                         </span>
                                       </div>
-                                      <div className="text-white font-bold text-lg md:text-xl uppercase tracking-tighter text-right">
+                                      <div className="text-white font-bold text-gh-scroll md:text-gh-h3 uppercase tracking-tighter text-right">
                                         {item.price}
                                       </div>
                                     </div>
@@ -358,7 +358,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                                 )}
                               </div>
                               <div className="space-y-4">
-                                <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                                <span className="text-white/40 text-gh-label font-bold uppercase tracking-widest">
                                   Included:
                                 </span>
                                 <div className="flex flex-wrap gap-2">
@@ -366,7 +366,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                                     (inc: string) => (
                                       <span
                                         key={inc}
-                                        className="px-3 py-1.5 bg-[#174539] border border-white/5 rounded-sm text-white/70 text-[11px]"
+                                        className="px-3 py-1.5 bg-[#174539] border border-white/5 rounded-sm text-white/70 text-gh-label"
                                       >
                                         {inc}
                                       </span>
@@ -377,7 +377,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                             </div>
                           ));
                         })()}
-                        <p className="mt-6 text-[10px] text-white/30 leading-relaxed italic">
+                        <p className="mt-6 text-gh-label text-white/30 leading-relaxed italic">
                           Note: All party pricing is exclusive of GST. Custom
                           packages available.
                         </p>
@@ -386,7 +386,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
 
                     {activeTab === "Location" && (
                       <section className="animate-in fade-in duration-500">
-                        <h2 className="text-3xl font-philosopher mb-8">
+                        <h2 className="text-gh-h2 font-philosopher mb-8">
                           Location
                         </h2>
                         <div className="rounded-xl overflow-hidden border border-white/5 bg-white/5">
@@ -402,14 +402,14 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                             <div className="flex gap-4 mb-6">
                               <MapPin className="w-6 h-6 text-[#EFCD62] shrink-0" />
                               <div>
-                                <p className="text-sm font-manrope leading-relaxed">
+                                <p className="text-gh-body font-manrope leading-relaxed">
                                   {villa.locationDetails?.address ||
                                     villa.location}
                                 </p>
                               </div>
                             </div>
                             <div className="p-3 bg-white/5 rounded-lg text-center">
-                              <p className="text-[11px] text-white/60">
+                              <p className="text-gh-label text-white/60">
                                 Approximately 45 minutes from Bangalore City
                                 Center
                               </p>
@@ -421,7 +421,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
 
                     {activeTab === "Walkthrough" && (
                       <section className="animate-in fade-in duration-500">
-                        <h2 className="text-3xl font-philosopher mb-8">
+                        <h2 className="text-gh-h2 font-philosopher mb-8">
                           Video Walkthrough
                         </h2>
                         <div className="relative aspect-video w-full overflow-hidden rounded-sm bg-black/40 border border-white/10 group cursor-pointer">
@@ -442,7 +442,9 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
 
                     {activeTab === "FAQ" && (
                       <section className="animate-in fade-in duration-500">
-                        <h2 className="text-3xl font-philosopher mb-10">FAQ</h2>
+                        <h2 className="text-gh-h2 font-philosopher mb-10">
+                          FAQ
+                        </h2>
                         <div className="space-y-8">
                           {villa.faq?.map((item: any, idx: number) => (
                             <div key={idx} className="flex gap-4 group">
@@ -462,7 +464,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                         </div>
 
                         <div className="mt-16 pt-12 border-t border-white/5">
-                          <h3 className="text-2xl font-philosopher mb-8">
+                          <h3 className="text-gh-scroll font-philosopher mb-8">
                             Key Policies
                           </h3>
                           <div className="space-y-6">
@@ -485,10 +487,10 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                                   <div className="w-2 h-2 rotate-45 bg-[#EFCD62]" />
                                 </div>
                                 <div>
-                                  <h4 className="text-white font-manrope font-bold text-sm mb-1">
+                                  <h4 className="text-white font-manrope font-bold text-gh-body mb-1">
                                     {policy.title}
                                   </h4>
-                                  <p className="text-white/40 text-xs leading-relaxed">
+                                  <p className="text-white/40 text-gh-desc leading-relaxed">
                                     {policy.desc}
                                   </p>
                                 </div>
@@ -507,7 +509,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                 ref={formRef}
                 className="mt-24 pt-24 border-t border-white/10"
               >
-                <h2 className="text-4xl md:text-5xl font-philosopher mb-4">
+                <h2 className="text-gh-h1 font-philosopher mb-4">
                   Plan Your Celebration
                 </h2>
                 <p className="text-white/50 text-gh-body mb-12">
@@ -517,7 +519,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
 
                 <form className="space-y-6">
                   <div className="relative">
-                    <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-white/40 text-[10px] uppercase font-bold tracking-widest z-10">
+                    <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10">
                       Full Name
                     </label>
                     <input
@@ -529,7 +531,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="relative">
-                      <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-white/40 text-[10px] uppercase font-bold tracking-widest z-10">
+                      <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10">
                         Phone Number
                       </label>
                       <input
@@ -539,7 +541,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                       />
                     </div>
                     <div className="relative">
-                      <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-white/40 text-[10px] uppercase font-bold tracking-widest z-10">
+                      <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10">
                         Event Date
                       </label>
                       <input
@@ -550,7 +552,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                   </div>
 
                   <div className="relative">
-                    <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-white/40 text-[10px] uppercase font-bold tracking-widest z-10">
+                    <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10">
                       Celebration Type
                     </label>
                     <select className="w-full bg-[#0D4032] border border-white/20 rounded-sm px-6 py-4 focus:border-[#EFCD62] outline-none transition-colors appearance-none">
@@ -575,17 +577,17 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
       {/* FLOATING BOTTOM BAR */}
       <div className="fixed bottom-0 inset-x-0 z-50 px-4 py-3 bg-[#0D4032] border-t border-white/10 flex items-center justify-between gap-4 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.4)]">
         <div className="flex flex-col">
-          <span className="text-white/40 text-[10px] uppercase font-bold tracking-[0.2em] block mb-0.5">
+          <span className="text-white/40 text-gh-label uppercase font-bold tracking-[0.2em] block mb-0.5">
             Starting from
           </span>
-          <span className="text-white font-manrope font-bold text-[14px] tracking-tight">
+          <span className="text-white font-manrope font-bold text-gh-body tracking-tight">
             ₹35,000 onwards
           </span>
         </div>
         <div className="flex items-center gap-6">
           <button
             onClick={() => window.open("#", "_blank")}
-            className="text-[#EFCD62] font-manrope font-bold text-[12px] tracking-widest uppercase hover:text-white transition-colors border-b border-transparent hover:border-[#EFCD62]"
+            className="text-[#EFCD62] font-manrope font-bold text-gh-label tracking-widest uppercase hover:text-white transition-colors border-b border-transparent hover:border-[#EFCD62]"
           >
             VIEW VENUE
           </button>

@@ -28,10 +28,10 @@ export default function PremiumFeaturesSection({
     <section className="min-h-screen flex flex-col items-center justify-center py-24 bg-[#1A1C1E]">
       <div className="max-w-7xl mx-auto px-4 w-full flex flex-col items-center">
         <div className="text-center mb-[40px]">
-          <p className="text-[#EFCD62] text-[12px] md:text-gh-label font-bold tracking-[0.2em] uppercase mb-[14px] font-manrope">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-[14px] font-manrope">
             {subheading}
           </p>
-          <h2 className="text-[32px] md:text-gh-h2 font-philosopher text-white leading-tight">
+          <h2 className="text-gh-h2 font-philosopher text-white leading-tight">
             {heading}
           </h2>
         </div>
@@ -142,10 +142,10 @@ export default function PremiumFeaturesSection({
               </div>
 
               <div className="relative z-20">
-                <span className="text-[#A2A4A7] font-philosopher italic text-[clamp(14px,1.2vw,16px)] mb-6 block tracking-wide">
+                <span className="text-[#A2A4A7] font-philosopher italic text-gh-desc mb-6 block tracking-wide">
                   {card.tag}
                 </span>
-                <h3 className="text-[clamp(24px,2.5vw,32px)] md:text-gh-scroll font-manrope font-bold text-white leading-[1.1] tracking-tight uppercase">
+                <h3 className="text-gh-h3 font-manrope font-bold text-white leading-[1.1] tracking-tight uppercase">
                   {card.title.split(" ").map((word, i) => (
                     <React.Fragment key={i}>
                       {word}
@@ -155,7 +155,7 @@ export default function PremiumFeaturesSection({
                 </h3>
               </div>
 
-              <p className="relative z-20 text-white/40 font-manrope text-[clamp(9px,0.8vw,10px)] leading-relaxed max-w-[95%]">
+              <p className="relative z-20 text-white/40 font-manrope text-gh-label leading-relaxed max-w-[95%]">
                 {card.desc}
               </p>
             </div>
@@ -163,7 +163,7 @@ export default function PremiumFeaturesSection({
         </div>
 
         <div className="flex flex-col items-center">
-          <p className="text-white/60 font-philosopher italic text-[14px] md:text-gh-body text-center max-w-3xl leading-relaxed mb-[24px]">
+          <p className="text-white/60 font-philosopher italic text-gh-body text-center max-w-3xl leading-relaxed mb-[24px]">
             {footerText}
           </p>
 

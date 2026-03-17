@@ -153,7 +153,7 @@ function StepDates({
           {DAY_LABELS.map((d) => (
             <span
               key={d}
-              className="text-white/50 text-[11px] font-manrope tracking-widest uppercase"
+              className="text-white/50 text-gh-label font-manrope tracking-widest uppercase"
             >
               {d}
             </span>
@@ -168,7 +168,7 @@ function StepDates({
       >
         {MONTHS.map((month, mIdx) => (
           <div key={month.name} className="mb-8">
-            <h3 className="text-white font-manrope font-bold text-[20px] mb-4">
+            <h3 className="text-white font-manrope font-bold text-gh-scroll mb-4">
               {month.name}
             </h3>
             <div className="grid grid-cols-7 gap-[12px] text-center">
@@ -185,7 +185,7 @@ function StepDates({
                       key={day}
                       disabled={unavail}
                       onClick={() => !unavail && handleDayClick(mIdx, day)}
-                      className={`w-[35px] h-[35px] mx-auto flex items-center justify-center text-[16px] font-manrope transition-colors rounded-[3px] relative overflow-hidden
+                      className={`w-[35px] h-[35px] mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-[3px] relative overflow-hidden
                       ${sel ? "bg-[#EFCD62] text-[#0D4032] font-bold" : ""}
                       ${inRange ? "bg-[#EFCD62]/20 text-white" : ""}
                       ${!sel && !inRange && !unavail ? "bg-[#165040] text-white hover:bg-[#1e6050]" : ""}
@@ -237,11 +237,9 @@ function StepGuests({
   }) => (
     <div className="flex items-center justify-between py-5 border-b border-white/10">
       <div>
-        <p className="text-white font-philosopher text-[16px] md:text-[18px]">
-          {label}
-        </p>
+        <p className="text-white font-philosopher text-gh-body">{label}</p>
         {subtitle && (
-          <p className="text-white/40 text-[12px] md:text-[13px] font-manrope mt-0.5">
+          <p className="text-white/40 text-gh-label font-manrope mt-0.5">
             {subtitle}
           </p>
         )}
@@ -253,7 +251,7 @@ function StepGuests({
         >
           <Minus className="w-4 h-4" />
         </button>
-        <span className="text-white font-philosopher text-[28px] md:text-[36px] w-12 text-center leading-none">
+        <span className="text-white font-philosopher text-gh-h2 w-12 text-center leading-none">
           {String(value).padStart(2, "0")}
         </span>
         <button
@@ -792,7 +790,7 @@ function BookPageContent() {
       {/* Header — step title left, actions right */}
       <div className="bg-[#0D4032] shrink-0">
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
-          <h2 className="text-white text-[24px] md:text-[36px] font-philosopher leading-none">
+          <h2 className="text-white text-gh-h2 font-philosopher leading-none">
             {step === "dates" && "Select Dates"}
             {step === "guests" && "Total Guests"}
             {step === "details" && "Your Details"}
@@ -801,7 +799,7 @@ function BookPageContent() {
           <div className="flex items-center gap-5">
             <button
               onClick={handleReset}
-              className="text-[#EFCD62] text-[12px] font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors"
+              className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors"
             >
               RESET
             </button>
@@ -822,7 +820,7 @@ function BookPageContent() {
 
         {/* Legend — only on dates step */}
         {step === "dates" && (
-          <div className="flex justify-start items-center gap-2 md:gap-4 px-5 md:px-6 py-3 md:py-4 text-[12px] text-[#A6C0B5] font-manrope font-medium border-b border-white/10">
+          <div className="flex justify-start items-center gap-2 md:gap-4 px-5 md:px-6 py-3 md:py-4 text-gh-label text-[#A6C0B5] font-manrope font-medium border-b border-white/10">
             <span className="flex items-center gap-2">
               <span className="w-4 h-4 bg-[#165040] rounded-[2px] shrink-0" />
               Available

@@ -322,7 +322,7 @@ export default function AboutPage() {
             <h2 className="text-gh-h2 font-philosopher text-white mb-6">
               Awards and Recognition
             </h2>
-            <p className="text-white/60 max-w-2xl mx-auto font-manrope">
+            <p className="text-white/60 max-w-2xl mx-auto font-manrope text-gh-body">
               Recognised by industry platforms, media, and partners for our
               approach to private hospitality and curated experiences.
             </p>

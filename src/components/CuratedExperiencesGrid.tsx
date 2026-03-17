@@ -36,10 +36,10 @@ export default function CuratedExperiencesGrid({
         <div className="text-center mb-10">
           {" "}
           {/* 40px spacing (mb-10 is exactly 40px in tailwind) */}
-          <p className="text-[#EFCD62] text-[12px] font-bold tracking-[0.3em] uppercase mb-[14px] font-manrope">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-[14px] font-manrope">
             {label}
           </p>
-          <h2 className="text-[32px] md:text-[42px] font-philosopher text-white leading-tight">
+          <h2 className="text-gh-h1 font-philosopher text-white leading-tight">
             {title}
           </h2>
         </div>
@@ -65,7 +65,7 @@ export default function CuratedExperiencesGrid({
                 className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-center justify-center p-4 text-center">
-                <h3 className="text-white text-[18px] md:text-[24px] font-philosopher leading-tight">
+                <h3 className="text-white text-gh-scroll font-philosopher leading-tight">
                   {exp.title}
                 </h3>
               </div>
@@ -76,7 +76,7 @@ export default function CuratedExperiencesGrid({
         {/* Footer CTA */}
         <div className="max-w-4xl mx-auto">
           <PrimaryButton
-            className="w-full h-[54px] text-[12px]"
+            className="w-full h-[54px] text-gh-label"
             href={ctaLink}
             onClick={onCtaClick}
           >

@@ -80,7 +80,7 @@ const SlideLines = ({
             {slide.label}
           </motion.p>
         )}
-        <h2 className="font-manrope font-normal text-[20px] md:text-gh-scroll leading-[1.6] md:leading-[1.6] tracking-[0.01em] text-white/90 mb-12">
+        <h2 className="font-manrope font-normal text-gh-scroll lg:text-gh-scroll leading-[1.6] md:leading-[1.6] tracking-[0.01em] text-white/90 mb-12">
           {slide.lines.map((line, lineIdx) => {
             const lineStart = start + lineIdx * 0.015;
             const lineShow = lineStart + 0.02;

@@ -134,11 +134,11 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
               {/* Numerical Pagination */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4 bg-black/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/5">
-                <span className="text-white font-philosopher text-lg leading-none">
+                <span className="text-white font-philosopher text-gh-scroll leading-none">
                   {currentImageIndex + 1}
                 </span>
                 <div className="w-8 h-[1px] bg-white/40" />
-                <span className="text-white/40 font-philosopher text-lg leading-none">
+                <span className="text-white/40 font-philosopher text-gh-scroll leading-none">
                   {images.length}
                 </span>
               </div>
@@ -164,7 +164,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
             {/* SPACE NAME - ELEVATED FOR FLOATING FEEL */}
             <div className="mt-6 px-4 text-center">
-              <span className="text-white/40 font-manrope text-[10px] font-bold tracking-[0.4em] uppercase">
+              <span className="text-white/40 font-manrope text-gh-label font-bold tracking-[0.4em] uppercase">
                 {images[currentImageIndex].name || "SPACE"}
               </span>
             </div>
@@ -223,10 +223,10 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                     className="flex flex-col items-center justify-center py-6 border border-white/10 bg-white/5 rounded-sm"
                   >
                     <stat.icon className="w-5 h-5 text-[#EFCD62] mb-3" />
-                    <span className="text-white font-philosopher text-2xl md:text-3xl mb-1">
+                    <span className="text-white font-philosopher text-gh-scroll md:text-gh-h3 mb-1">
                       {stat.value}
                     </span>
-                    <span className="text-[#EFCD62] text-[9px] font-bold tracking-[0.2em] uppercase">
+                    <span className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase">
                       {stat.label}
                     </span>
                   </div>
@@ -256,7 +256,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-4 py-4 text-xs md:text-gh-label font-bold tracking-widest uppercase transition-colors whitespace-nowrap border-b-2 ${
+                    className={`px-4 py-4 text-gh-label md:text-gh-label font-bold tracking-widest uppercase transition-colors whitespace-nowrap border-b-2 ${
                       activeTab === tab
                         ? "border-[#EFCD62] text-[#EFCD62] bg-[#EFCD62]/5"
                         : "border-transparent text-white/40 hover:text-white"
@@ -356,10 +356,10 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                               key={idx}
                               className="border border-white/10 rounded-sm p-5 md:p-6 bg-white/5 mb-6"
                             >
-                              <h4 className="text-[#EFCD62] text-xl font-manrope font-semibold mb-1">
+                              <h4 className="text-[#EFCD62] text-gh-h3 font-manrope font-semibold mb-1">
                                 {rent.title}
                               </h4>
-                              <p className="text-white/40 text-sm mb-6">
+                              <p className="text-white/40 text-gh-desc mb-6">
                                 {rent.subtitle || rent.duration}
                               </p>
 
@@ -371,14 +371,14 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                                       className="flex justify-between items-center bg-black/20 p-4 rounded-sm border border-white/5"
                                     >
                                       <div className="flex flex-col">
-                                        <span className="text-white font-bold text-sm mb-1 uppercase tracking-wide">
+                                        <span className="text-white font-bold text-gh-desc mb-1 uppercase tracking-wide">
                                           {item.label}
                                         </span>
-                                        <span className="text-white/40 text-[10px] leading-tight">
+                                        <span className="text-white/40 text-gh-label leading-tight">
                                           {item.sublabel || item.head}
                                         </span>
                                       </div>
-                                      <div className="text-white font-bold text-lg md:text-xl uppercase tracking-tighter text-right">
+                                      <div className="text-white font-bold text-gh-scroll md:text-gh-h3 uppercase tracking-tighter text-right">
                                         {item.price}
                                       </div>
                                     </div>
@@ -387,7 +387,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                               </div>
 
                               <div className="space-y-4">
-                                <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                                <span className="text-white/40 text-gh-label font-bold uppercase tracking-widest">
                                   Included:
                                 </span>
                                 <div className="flex flex-wrap gap-2">
@@ -395,7 +395,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                                     (inc: string) => (
                                       <span
                                         key={inc}
-                                        className="px-3 py-1.5 bg-[#174539] border border-white/5 rounded-sm text-white/70 text-[11px]"
+                                        className="px-3 py-1.5 bg-[#174539] border border-white/5 rounded-sm text-white/70 text-gh-label"
                                       >
                                         {inc}
                                       </span>
@@ -463,11 +463,11 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                               >
                                 <div className="flex items-center gap-3">
                                   <div className="w-2 h-2 rotate-45 bg-[#EFCD62]" />
-                                  <span className="text-white font-bold uppercase tracking-wider text-sm">
+                                  <span className="text-white font-bold uppercase tracking-wider text-gh-desc">
                                     {place.label}
                                   </span>
                                 </div>
-                                <span className="text-white/60 text-sm">
+                                <span className="text-white/60 text-gh-desc">
                                   {place.dist}
                                 </span>
                               </div>
@@ -494,7 +494,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                               <Play className="w-8 h-8 text-white fill-white ml-1" />
                             </div>
                           </div>
-                          <div className="absolute bottom-4 right-4 px-2 py-1 bg-black/60 rounded text-xs">
+                          <div className="absolute bottom-4 right-4 px-2 py-1 bg-black/60 rounded text-gh-label">
                             1:41
                           </div>
                         </div>
@@ -581,7 +581,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
                 <form className="space-y-6">
                   <div className="relative">
-                    <label className="absolute -top-3 left-4 bg-[#0D4032] px-2 text-white/40 text-[10px] uppercase font-bold tracking-widest z-10 font-manrope">
+                    <label className="absolute -top-3 left-4 bg-[#0D4032] px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope">
                       Full Name
                     </label>
                     <input
@@ -635,7 +635,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                           <div className="w-5 h-5 border border-white/20 flex items-center justify-center group-hover:border-[#EFCD62] transition-colors">
                             <Check className="w-4 h-4 text-[#EFCD62] opacity-0" />
                           </div>
-                          <span className="text-white/80 text-sm md:text-gh-body">
+                          <span className="text-white/80 text-gh-desc md:text-gh-body">
                             {s}
                           </span>
                         </label>
@@ -663,7 +663,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                           <div className="w-5 h-5 border border-white/20 flex items-center justify-center group-hover:border-[#EFCD62] transition-colors">
                             <Check className="w-4 h-4 text-[#EFCD62] opacity-0" />
                           </div>
-                          <span className="text-white/80 text-sm md:text-gh-body">
+                          <span className="text-white/80 text-gh-desc md:text-gh-body">
                             {e}
                           </span>
                         </label>
@@ -684,7 +684,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                           <div className="w-5 h-5 border border-white/20 flex items-center justify-center group-hover:border-[#EFCD62] transition-colors">
                             <Check className="w-4 h-4 text-[#EFCD62] opacity-0" />
                           </div>
-                          <span className="text-white/80 text-sm md:text-gh-body">
+                          <span className="text-white/80 text-gh-desc md:text-gh-body">
                             {p}
                           </span>
                         </label>
@@ -713,10 +713,10 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
       {/* PRICING BAR (REPLACES BOTTOM NAV) */}
       <div className="fixed bottom-0 inset-x-0 z-50 px-4 py-3 bg-[#0D4032] border-t border-white/10 flex items-center justify-between gap-4 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.4)]">
         <div className="flex flex-col">
-          <span className="text-white/40 text-[10px] uppercase font-bold tracking-[0.2em] block mb-0.5">
+          <span className="text-white/40 text-gh-label uppercase font-bold tracking-[0.2em] block mb-0.5">
             Starting from
           </span>
-          <span className="text-white font-manrope font-bold text-[14px] tracking-tight">
+          <span className="text-white font-manrope font-bold text-gh-body tracking-tight">
             {price}
           </span>
         </div>
@@ -725,7 +725,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             onClick={() =>
               window.open(villa.locationDetails?.mapLink || "#", "_blank")
             }
-            className="text-[#EFCD62] font-manrope font-bold text-[12px] tracking-widest uppercase hover:text-white transition-colors border-b border-transparent hover:border-[#EFCD62]"
+            className="text-[#EFCD62] font-manrope font-bold text-gh-label tracking-widest uppercase hover:text-white transition-colors border-b border-transparent hover:border-[#EFCD62]"
           >
             VIEW VENUE
           </button>

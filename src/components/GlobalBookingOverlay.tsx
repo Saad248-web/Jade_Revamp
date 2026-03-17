@@ -199,13 +199,13 @@ function StepDates({
       {/* Header Area (Title & Actions) */}
       <div className="bg-[#0D4032] shrink-0">
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
-          <h2 className="text-white text-[32px] md:text-[40px] font-philosopher leading-none">
+          <h2 className="text-white text-gh-h1 font-philosopher leading-none">
             Select Dates
           </h2>
           <div className="flex items-center gap-5 md:gap-6">
             <button
               onClick={onReset}
-              className="text-[#EFCD62] text-[14px] md:text-[16px] font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors"
+              className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors"
             >
               RESET
             </button>
@@ -225,7 +225,7 @@ function StepDates({
         </div>
 
         {/* Legend */}
-        <div className="flex justify-center md:justify-start items-center gap-6 md:gap-10 px-6 py-5 text-[15px] md:text-[17px] text-[#A6C0B5] font-manrope font-medium">
+        <div className="flex justify-center md:justify-start items-center gap-6 md:gap-10 px-6 py-5 text-gh-label text-[#A6C0B5] font-manrope font-medium">
           <span className="flex items-center gap-3">
             <span className="w-6 h-6 bg-[#165040] rounded-[2px]" />
             Available
@@ -456,7 +456,7 @@ function StepGuests({
           <div className="flex gap-3">
             <button
               onClick={onBack}
-              className="px-5 py-2.5 text-xs font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
+              className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
             >
               BACK
             </button>
@@ -662,7 +662,7 @@ function StepVillas({
           <button
             disabled={!selectedVillaId}
             onClick={onNext}
-            className={`px-8 py-2.5 text-xs font-bold tracking-widest uppercase transition-all font-manrope ${
+            className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
               selectedVillaId
                 ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white"
                 : "bg-white/10 text-white/30 cursor-not-allowed"
@@ -777,14 +777,14 @@ function StepDetails({
           <div className="flex gap-3">
             <button
               onClick={onBack}
-              className="px-5 py-2.5 text-xs font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
+              className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
             >
               BACK
             </button>
             <button
               disabled={!isValid}
               onClick={onNext}
-              className={`px-8 py-2.5 text-xs font-bold tracking-widest uppercase transition-all font-manrope ${
+              className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
                 isValid
                   ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white"
                   : "bg-white/10 text-white/30 cursor-not-allowed"
@@ -1022,20 +1022,28 @@ function StepReview({
             Price Details
           </h4>
           <div className="flex items-center justify-between text-gh-body font-manrope">
-            <span className="text-white/60">
+            <span className="text-white/60 text-gh-desc">
               1 Night × {formatRupees(basePrice)}
             </span>
-            <span className="text-white">{formatRupees(basePrice)}</span>
+            <span className="text-white text-gh-desc">
+              {formatRupees(basePrice)}
+            </span>
           </div>
           {addOnTotal > 0 && (
             <div className="flex items-center justify-between text-gh-body font-manrope">
-              <span className="text-white/60">Add On Experiences</span>
-              <span className="text-white">{formatRupees(addOnTotal)}</span>
+              <span className="text-white/60 text-gh-desc">
+                Add On Experiences
+              </span>
+              <span className="text-white text-gh-desc">
+                {formatRupees(addOnTotal)}
+              </span>
             </div>
           )}
           <div className="flex items-center justify-between text-gh-body font-manrope">
-            <span className="text-white/60">Taxes</span>
-            <span className="text-white">{formatRupees(NIGHT_TAX)}</span>
+            <span className="text-white/60 text-gh-desc">Taxes</span>
+            <span className="text-white text-gh-desc">
+              {formatRupees(NIGHT_TAX)}
+            </span>
           </div>
           <div className="flex items-center gap-3 text-white/30 text-gh-label font-manrope mt-1">
             <span className="underline cursor-pointer hover:text-white/60 transition-colors">

@@ -78,7 +78,7 @@ export default function WhyJadeWeddings() {
                     <h3 className="font-manrope font-bold text-white text-gh-body tracking-[0.1em] uppercase">
                       {benefit.title}
                     </h3>
-                    <p className="font-manrope text-white/60 leading-relaxed max-w-lg">
+                    <p className="font-manrope text-white/60 text-gh-body leading-relaxed max-w-lg">
                       {benefit.description}
                     </p>
                   </div>

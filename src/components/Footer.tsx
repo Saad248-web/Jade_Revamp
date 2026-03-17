@@ -190,7 +190,7 @@ export default function Footer() {
                       <Link
                         key={link.label}
                         href={link.href}
-                        className="group font-manrope text-sm text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
+                        className="group font-manrope text-gh-label text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
                       >
                         <span className="inline-block transition-transform duration-300 group-hover:translate-x-1 text-gh-label">
                           ▶
@@ -204,7 +204,7 @@ export default function Footer() {
                       <Link
                         key={link.label}
                         href={link.href}
-                        className="group font-manrope text-sm text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
+                        className="group font-manrope text-gh-label text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
                       >
                         <span className="inline-block transition-transform duration-300 group-hover:translate-x-1 text-gh-label">
                           ▶
@@ -349,7 +349,7 @@ export default function Footer() {
                     }`}
                   >
                     <span
-                      className={`font-manrope text-sm ${
+                      className={`font-manrope text-gh-label ${
                         dateLabel ? "text-white" : "text-white/40"
                       }`}
                     >
@@ -470,7 +470,7 @@ export default function Footer() {
                                 onClick={() => !isPast && handleDayClick(day)}
                                 onMouseEnter={() => setHoverDate(day)}
                                 onMouseLeave={() => setHoverDate(null)}
-                                className={`relative h-9 w-full font-manrope text-gh-desc transition-all duration-150 ${
+                                className={`relative h-9 w-full font-manrope text-gh-label transition-all duration-150 ${
                                   isPast
                                     ? "text-white/15 cursor-not-allowed"
                                     : isStart || isEnd
@@ -745,7 +745,7 @@ export default function Footer() {
                       initial={{ opacity: 0, y: 16 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
-                      className="text-white text-3xl font-philosopher mb-4"
+                      className="text-white text-gh-h2 font-philosopher mb-4"
                     >
                       We've got it from here
                     </motion.h2>

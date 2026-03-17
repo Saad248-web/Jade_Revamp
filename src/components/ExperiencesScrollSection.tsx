@@ -142,12 +142,12 @@ function GlobalCounter({ progress, total }: { progress: any; total: number }) {
   }, [progress, total]);
 
   return (
-    <div className="relative flex items-center gap-12 md:gap-16 font-philosopher text-xl md:text-2xl lg:text-3xl mt-2">
-      <span className="text-white drop-shadow-lg transition-all duration-300 w-8 text-center text-3xl font-bold">
+    <div className="relative flex items-center gap-12 md:gap-16 font-philosopher text-gh-h3 md:text-gh-h3 lg:text-gh-h3 mt-2">
+      <span className="text-white drop-shadow-lg transition-all duration-300 w-8 text-center text-gh-h2 font-bold">
         {current}
       </span>
       <div className="w-16 md:w-24 h-[1px] bg-white/70 drop-shadow-lg opacity-70" />
-      <span className="text-white/70 drop-shadow-lg w-8 text-center text-xl">
+      <span className="text-white/70 drop-shadow-lg w-8 text-center text-gh-h3">
         {total}
       </span>
     </div>

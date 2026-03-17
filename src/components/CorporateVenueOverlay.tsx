@@ -129,11 +129,11 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
               {/* Numerical Pagination */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/5">
-                <span className="text-white font-philosopher text-lg leading-none">
+                <span className="text-white font-philosopher text-gh-scroll leading-none">
                   {currentImageIndex + 1}
                 </span>
                 <div className="w-8 h-[1px] bg-white/40" />
-                <span className="text-white/40 font-philosopher text-lg leading-none">
+                <span className="text-white/40 font-philosopher text-gh-scroll leading-none">
                   {images.length}
                 </span>
               </div>
@@ -159,7 +159,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
             {/* SPACE NAME */}
             <div className="mt-6 px-4 text-center">
-              <span className="text-white/40 font-manrope text-[10px] font-bold tracking-[0.4em] uppercase">
+              <span className="text-white/40 font-manrope text-gh-label font-bold tracking-[0.4em] uppercase">
                 {images[currentImageIndex].name || "Property"}
               </span>
             </div>
@@ -167,11 +167,11 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
             {/* INFO SECTION */}
             <div className="px-6 py-8">
               <div className="mb-4">
-                <span className="text-[#EFCD62] text-[10px] font-bold tracking-[0.2em] uppercase block mb-1">
+                <span className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase block mb-1">
                   {villa.type || "HOBBIT-INSPIRED CORPORATE RETREAT"}
                 </span>
                 <div className="flex justify-between items-center">
-                  <h1 className="text-3xl md:text-5xl font-philosopher leading-tight">
+                  <h1 className="text-gh-h1 font-philosopher leading-tight">
                     {villa.name}
                   </h1>
                   <button className="p-2 text-white/70 hover:text-white transition-colors">
@@ -180,7 +180,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center flex-wrap gap-4 text-white/70 font-manrope text-xs mb-8">
+              <div className="flex items-center flex-wrap gap-4 text-white/70 font-manrope text-gh-label mb-8">
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-[#EFCD62]" />
                   <span>{villa.location.split("·")[0]}</span>
@@ -209,10 +209,10 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                     className="flex flex-col items-center justify-center py-6 border border-white/10 bg-white/5 rounded-sm"
                   >
                     <stat.icon className="w-5 h-5 text-[#EFCD62] mb-3" />
-                    <span className="text-white font-philosopher text-2xl md:text-3xl mb-1">
+                    <span className="text-white font-philosopher text-gh-scroll md:text-gh-h3 mb-1">
                       {stat.value}
                     </span>
-                    <span className="text-[#EFCD62] text-[9px] font-bold tracking-[0.2em] uppercase">
+                    <span className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase">
                       {stat.label}
                     </span>
                   </div>
@@ -248,7 +248,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                   <button
                     key={tab}
                     onClick={() => handleTabClick(tab)}
-                    className={`px-4 py-4 text-xs md:text-gh-label font-bold tracking-widest uppercase transition-colors whitespace-nowrap border-b-2 ${
+                    className={`px-4 py-4 text-gh-label font-bold tracking-widest uppercase transition-colors whitespace-nowrap border-b-2 ${
                       activeTab === tab
                         ? "border-[#EFCD62] text-[#EFCD62] bg-[#EFCD62]/5"
                         : "border-transparent text-white/40 hover:text-white"
@@ -271,7 +271,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                   >
                     {activeTab === "Amenities" && (
                       <section className="animate-in fade-in duration-500">
-                        <h2 className="text-3xl font-philosopher mb-8">
+                        <h2 className="text-gh-h2 font-philosopher mb-8">
                           Venue Amenities
                         </h2>
                         <div className="space-y-6">
@@ -289,7 +289,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           ].map((item, idx) => (
                             <div key={idx} className="flex items-center gap-4">
                               <div className="w-3 h-3 rotate-45 bg-[#EFCD62]" />
-                              <span className="text-white/90 text-[13px] font-bold uppercase tracking-wider">
+                              <span className="text-white/90 text-gh-body font-bold uppercase tracking-wider">
                                 {item}
                               </span>
                             </div>
@@ -300,53 +300,57 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
                     {activeTab === "Pricing" && (
                       <section className="animate-in fade-in duration-500">
-                        <h2 className="text-3xl font-philosopher mb-8">
+                        <h2 className="text-gh-h2 font-philosopher mb-8">
                           Pricing
                         </h2>
                         <div className="space-y-8">
                           {/* Day Outing Card */}
                           <div className="p-6 border border-white/5 bg-white/5 rounded-xl">
                             <div className="mb-6">
-                              <h3 className="text-[#EFCD62] text-xl font-bold mb-1">
+                              <h3 className="text-[#EFCD62] text-gh-h3 font-bold mb-1">
                                 Day Outing
                               </h3>
-                              <p className="text-white/40 text-sm italic">
+                              <p className="text-white/40 text-gh-desc italic">
                                 8 hours
                               </p>
                             </div>
                             <div className="space-y-4 mb-8">
                               <div className="flex justify-between items-center p-4 bg-white/5 rounded-lg border border-white/5">
                                 <div>
-                                  <p className="font-bold text-sm">
+                                  <p className="font-bold text-gh-body">
                                     Up to 100 Guests
                                   </p>
-                                  <p className="text-[10px] text-white/40">
+                                  <p className="text-gh-label text-white/40">
                                     ≈ ₹1500/head
                                   </p>
                                 </div>
-                                <p className="text-lg font-bold">₹1,50,000</p>
+                                <p className="text-gh-scroll md:text-gh-h3 font-bold">
+                                  ₹1,50,000
+                                </p>
                               </div>
                               <div className="flex justify-between items-center p-4 bg-white/5 rounded-lg border border-white/5">
                                 <div>
-                                  <p className="font-bold text-sm">
+                                  <p className="font-bold text-gh-body">
                                     Up to 200 Guests
                                   </p>
-                                  <p className="text-[10px] text-white/40">
+                                  <p className="text-gh-label text-white/40">
                                     ≈ ₹1250/head
                                   </p>
                                 </div>
-                                <p className="text-lg font-bold">₹2,25,000</p>
+                                <p className="text-gh-scroll md:text-gh-h3 font-bold">
+                                  ₹2,25,000
+                                </p>
                               </div>
                             </div>
                             <div>
-                              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">
+                              <p className="text-gh-label font-bold uppercase tracking-widest text-white/40 mb-3">
                                 Included:
                               </p>
                               <div className="flex flex-wrap gap-2">
-                                <span className="px-3 py-1.5 bg-white/5 rounded-md text-[11px] text-white/80">
+                                <span className="px-3 py-1.5 bg-white/5 rounded-md text-gh-label text-white/80">
                                   Includes lunch & high tea
                                 </span>
-                                <span className="px-3 py-1.5 bg-white/5 rounded-md text-[11px] text-white/80">
+                                <span className="px-3 py-1.5 bg-white/5 rounded-md text-gh-label text-white/80">
                                   Custom activity available at additional cost
                                 </span>
                               </div>
@@ -356,42 +360,42 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           {/* Overnight Card */}
                           <div className="p-6 border border-white/5 bg-white/5 rounded-xl">
                             <div className="mb-6">
-                              <h3 className="text-[#EFCD62] text-xl font-bold mb-1">
+                              <h3 className="text-[#EFCD62] text-gh-h3 font-bold mb-1">
                                 Overnight Corporate Stay
                               </h3>
-                              <p className="text-white/40 text-sm italic">
+                              <p className="text-white/40 text-gh-desc italic">
                                 22 hours
                               </p>
                             </div>
                             <div className="space-y-4 mb-8">
                               <div className="flex justify-between items-center p-4 bg-white/5 rounded-lg border border-white/5">
-                                <p className="font-bold text-sm">
+                                <p className="font-bold text-gh-body">
                                   Up to 30 Guests
                                 </p>
-                                <p className="text-lg font-bold">
+                                <p className="text-gh-scroll md:text-gh-h3 font-bold">
                                   ₹3,500-5,000/head
                                 </p>
                               </div>
                             </div>
                             <div>
-                              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">
+                              <p className="text-gh-label font-bold uppercase tracking-widest text-white/40 mb-3">
                                 Included:
                               </p>
                               <div className="flex flex-wrap gap-2">
-                                <span className="px-3 py-1.5 bg-white/5 rounded-md text-[11px] text-white/80">
+                                <span className="px-3 py-1.5 bg-white/5 rounded-md text-gh-label text-white/80">
                                   Includes all meals
                                 </span>
-                                <span className="px-3 py-1.5 bg-white/5 rounded-md text-[11px] text-white/80">
+                                <span className="px-3 py-1.5 bg-white/5 rounded-md text-gh-label text-white/80">
                                   Customised menus
                                 </span>
-                                <span className="px-3 py-1.5 bg-white/5 rounded-md text-[11px] text-white/80">
+                                <span className="px-3 py-1.5 bg-white/5 rounded-md text-gh-label text-white/80">
                                   team-building activities available on request.
                                 </span>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <p className="mt-6 text-[10px] text-white/30 leading-relaxed italic">
+                        <p className="mt-6 text-gh-label text-white/30 leading-relaxed italic">
                           Note: Prices are base rates and may vary based on
                           season, day of week, and specific requirements.
                           Additional charges may apply for decorations,
@@ -402,7 +406,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
                     {activeTab === "Location" && (
                       <section className="animate-in fade-in duration-500">
-                        <h2 className="text-3xl font-philosopher mb-8">
+                        <h2 className="text-gh-h2 font-philosopher mb-8">
                           Location
                         </h2>
                         <div className="rounded-xl overflow-hidden border border-white/5 bg-white/5">
@@ -418,14 +422,14 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                             <div className="flex gap-4 mb-6">
                               <MapPin className="w-6 h-6 text-[#EFCD62] shrink-0" />
                               <div>
-                                <p className="text-sm font-manrope leading-relaxed">
+                                <p className="text-gh-body font-manrope leading-relaxed">
                                   Sy 48/14, Channaveerenahalli Village, Sasalu
                                   Hobli Doddaballapura, 561204
                                 </p>
                               </div>
                             </div>
                             <div className="p-3 bg-white/5 rounded-lg text-center">
-                              <p className="text-[11px] text-white/60">
+                              <p className="text-gh-label text-white/60">
                                 Approximately 60-75 minutes from Central
                                 Bengaluru
                               </p>
@@ -434,7 +438,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         </div>
 
                         <div className="mt-12">
-                          <h4 className="text-[#EFCD62] text-[10px] font-bold uppercase tracking-[0.2em] mb-6">
+                          <h4 className="text-[#EFCD62] text-gh-label font-bold uppercase tracking-[0.2em] mb-6">
                             WHATS NEARBY:
                           </h4>
                           <div className="space-y-4">
@@ -449,11 +453,11 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                               >
                                 <div className="flex items-center gap-4">
                                   <div className="w-2.5 h-2.5 rotate-45 bg-[#EFCD62]" />
-                                  <span className="text-[13px] font-bold uppercase tracking-widest">
+                                  <span className="text-gh-body font-bold uppercase tracking-widest">
                                     {item.name}
                                   </span>
                                 </div>
-                                <span className="text-[12px] text-white/60">
+                                <span className="text-gh-label text-white/60">
                                   {item.dist}
                                 </span>
                               </div>
@@ -465,7 +469,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
                     {activeTab === "Walkthrough" && (
                       <section className="animate-in fade-in duration-500">
-                        <h2 className="text-3xl font-philosopher mb-8">
+                        <h2 className="text-gh-h2 font-philosopher mb-8">
                           Video Walkthrough
                         </h2>
                         <div className="relative aspect-video rounded-xl overflow-hidden group cursor-pointer">
@@ -477,10 +481,10 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           />
                           <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/20 transition-all">
                             <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/40">
-                              <Play className="w-8 h-8 fill-white text-white" />
+                              <Play className="w-6 h-6 fill-white text-white" />
                             </div>
                           </div>
-                          <div className="absolute bottom-4 right-4 bg-black/60 px-2 py-1 rounded text-[10px] font-bold">
+                          <div className="absolute bottom-4 right-4 bg-black/60 px-2 py-1 rounded text-gh-label font-bold">
                             1:41
                           </div>
                         </div>
@@ -489,7 +493,9 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
                     {activeTab === "FAQ" && (
                       <section className="animate-in fade-in duration-500">
-                        <h2 className="text-3xl font-philosopher mb-8">FAQ</h2>
+                        <h2 className="text-gh-h2 font-philosopher mb-8">
+                          FAQ
+                        </h2>
                         <div className="space-y-10">
                           {[
                             {
@@ -513,10 +519,10 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                               <div className="flex items-start gap-4">
                                 <div className="w-2.5 h-2.5 rotate-45 bg-[#EFCD62] mt-1 shrink-0" />
                                 <div>
-                                  <h4 className="text-[14px] font-bold text-white leading-tight mb-2">
+                                  <h4 className="text-gh-body font-bold text-white leading-tight mb-2">
                                     {item.q}
                                   </h4>
-                                  <p className="text-[13px] text-white/60 leading-relaxed">
+                                  <p className="text-gh-label text-white/60 leading-relaxed">
                                     {item.a}
                                   </p>
                                 </div>
@@ -527,7 +533,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
                         {/* KEY POLICIES */}
                         <div className="mt-24">
-                          <h2 className="text-3xl font-philosopher mb-8">
+                          <h2 className="text-gh-h2 font-philosopher mb-8">
                             Key Policies
                           </h2>
                           <div className="space-y-10">
@@ -548,10 +554,10 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                               <div key={idx} className="flex items-start gap-4">
                                 <div className="w-2.5 h-2.5 rotate-45 bg-[#EFCD62] mt-1 shrink-0" />
                                 <div>
-                                  <h4 className="text-[14px] font-bold text-white mb-2">
+                                  <h4 className="text-gh-body font-bold text-white mb-2">
                                     {item.t}
                                   </h4>
-                                  <p className="text-[13px] text-white/60 leading-relaxed">
+                                  <p className="text-gh-label text-white/60 leading-relaxed">
                                     {item.d}
                                   </p>
                                 </div>
@@ -571,57 +577,57 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                 ref={formRef}
                 className="mt-32 pt-16 border-t border-white/5"
               >
-                <h2 className="text-3xl md:text-5xl font-philosopher mb-4">
+                <h2 className="text-gh-h1 font-philosopher mb-4">
                   Plan Your Corporate Retreat
                 </h2>
-                <p className="text-white/60 text-sm mb-12">
+                <p className="text-white/60 text-gh-body mb-12">
                   Share a few details. Our wedding team will guide you through
                   venues & pricing.
                 </p>
 
                 <form className="space-y-6">
                   <div className="relative">
-                    <label className="absolute -top-3 left-4 bg-[#0D4032] px-2 text-white/40 text-[10px] uppercase font-bold tracking-widest z-10 font-manrope">
+                    <label className="absolute -top-3 left-4 bg-[#0D4032] px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope">
                       Full Name
                     </label>
                     <input
                       type="text"
-                      className="w-full bg-transparent border border-white/20 rounded-[4px] px-6 py-4 focus:border-[#EFCD62] outline-none transition-colors text-white text-sm"
+                      className="w-full bg-transparent border border-white/20 rounded-[4px] px-6 py-4 focus:border-[#EFCD62] outline-none transition-colors text-white text-gh-body"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <input
                       placeholder="Company Name*"
-                      className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-sm transition-colors"
+                      className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors"
                     />
                     <input
                       placeholder="Phone Number*"
-                      className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-sm transition-colors"
+                      className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <input
                       placeholder="Email*"
-                      className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-sm transition-colors"
+                      className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors"
                     />
                     <input
                       placeholder="Team Size*"
-                      className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-sm transition-colors"
+                      className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors"
                     />
                   </div>
 
                   <div className="relative">
                     <input
                       placeholder="Date"
-                      className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-sm transition-colors pr-12"
+                      className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors pr-12"
                     />
                     <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
                   </div>
 
                   <div className="py-6">
-                    <h4 className="text-white font-bold text-[13px] mb-4">
+                    <h4 className="text-white font-bold text-gh-body mb-4">
                       Retreat Format
                     </h4>
                     <div className="grid grid-cols-2 gap-y-4">
@@ -640,7 +646,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           <div className="w-5 h-5 border border-white/20 rounded flex items-center justify-center group-hover:border-[#EFCD62] transition-colors">
                             <Check className="w-3 h-3 text-[#EFCD62] opacity-0 group-hover:opacity-100" />
                           </div>
-                          <span className="text-xs text-white/70 group-hover:text-white">
+                          <span className="text-gh-label text-white/70 group-hover:text-white">
                             {label}
                           </span>
                         </label>
@@ -649,7 +655,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                   </div>
 
                   <div className="py-6 border-t border-white/5">
-                    <h4 className="text-white font-bold text-[13px] mb-4">
+                    <h4 className="text-white font-bold text-gh-body mb-4">
                       Services Required:
                     </h4>
                     <div className="grid grid-cols-2 gap-y-4">
@@ -670,7 +676,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           <div className="w-5 h-5 border border-white/20 rounded flex items-center justify-center group-hover:border-[#EFCD62] transition-colors">
                             <Check className="w-3 h-3 text-[#EFCD62] opacity-0 group-hover:opacity-100" />
                           </div>
-                          <span className="text-xs text-white/70 group-hover:text-white">
+                          <span className="text-gh-label text-white/70 group-hover:text-white">
                             {label}
                           </span>
                         </label>
@@ -679,7 +685,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                   </div>
 
                   <div className="py-6 border-t border-white/5">
-                    <h4 className="text-white font-bold text-[13px] mb-4">
+                    <h4 className="text-white font-bold text-gh-body mb-4">
                       Preferred Setting
                     </h4>
                     <div className="grid grid-cols-2 gap-y-4">
@@ -696,7 +702,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           <div className="w-5 h-5 border border-white/20 rounded flex items-center justify-center group-hover:border-[#EFCD62] transition-colors">
                             <Check className="w-3 h-3 text-[#EFCD62] opacity-0 group-hover:opacity-100" />
                           </div>
-                          <span className="text-xs text-white/70 group-hover:text-white">
+                          <span className="text-gh-label text-white/70 group-hover:text-white">
                             {label}
                           </span>
                         </label>
@@ -708,7 +714,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                     <textarea
                       placeholder="Additional requests"
                       rows={4}
-                      className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-sm transition-colors"
+                      className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors"
                     />
                   </div>
 
@@ -725,17 +731,17 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
       {/* FLOATING BOTTOM BAR */}
       <div className="fixed bottom-0 inset-x-0 z-50 px-4 py-3 bg-[#0D4032] border-t border-white/10 flex items-center justify-between gap-4 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.4)]">
         <div className="flex flex-col">
-          <span className="text-white/40 text-[10px] uppercase font-bold tracking-[0.2em] block mb-0.5">
+          <span className="text-white/40 text-gh-label uppercase font-bold tracking-[0.2em] block mb-0.5">
             Starting from
           </span>
-          <span className="text-white font-manrope font-bold text-[14px] tracking-tight">
+          <span className="text-white font-manrope font-bold text-gh-body tracking-tight">
             ₹1,50,000
           </span>
         </div>
         <div className="flex items-center gap-6">
           <button
             onClick={() => window.open("#", "_blank")}
-            className="text-[#EFCD62] font-manrope font-bold text-[12px] tracking-widest uppercase hover:text-white transition-colors border-b border-transparent hover:border-[#EFCD62]"
+            className="text-[#EFCD62] font-manrope font-bold text-gh-label tracking-widest uppercase hover:text-white transition-colors border-b border-transparent hover:border-[#EFCD62]"
           >
             VIEW VENUE
           </button>

@@ -1,8 +1,7 @@
-"use client";
-
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { ArrowRight, Diamond } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import TravelGuidelinesModal from "./TravelGuidelinesModal";
 
 const GUIDELINES = [
   {
@@ -20,6 +19,8 @@ const GUIDELINES = [
 ];
 
 export default function TravelGuidelinesSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <section className="bg-[#0D4032] py-20 px-6 md:px-12 lg:px-24">
       <div className="max-w-[1920px] mx-auto">
@@ -36,7 +37,7 @@ export default function TravelGuidelinesSection() {
 
         {/* Content */}
         <div className="max-w-4xl">
-          <h2 className="text-[32px] md:text-[42px] font-philosopher text-white leading-tight mb-12">
+          <h2 className="text-gh-h1 font-philosopher text-white leading-tight mb-12">
             Important Travel Guidelines
           </h2>
 
@@ -47,10 +48,10 @@ export default function TravelGuidelinesSection() {
                   <div className="w-2.5 h-2.5 bg-[#EFCD62] rotate-45" />
                 </div>
                 <div>
-                  <h3 className="text-[#EFCD62] text-[14px] font-bold tracking-[0.2em] uppercase font-manrope mb-3">
+                  <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope mb-3">
                     {item.title}
                   </h3>
-                  <p className="text-white/80 text-[16px] leading-relaxed font-manrope max-w-2xl">
+                  <p className="text-white/80 text-gh-body leading-relaxed font-manrope max-w-2xl">
                     {item.desc}
                   </p>
                 </div>
@@ -59,14 +60,19 @@ export default function TravelGuidelinesSection() {
           </div>
 
           <button
-            className="flex items-center gap-3 text-[#EFCD62] text-[14px] font-bold tracking-[0.2em] uppercase font-manrope group"
-            onClick={() => window.open("/guidelines", "_blank")}
+            className="flex items-center gap-3 text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope group"
+            onClick={() => setIsModalOpen(true)}
           >
             SEE ALL
             <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
           </button>
         </div>
       </div>
+
+      <TravelGuidelinesModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </section>
   );
 }

@@ -29,43 +29,43 @@ const JourneyCard = ({
   <div className="relative border border-white/20 p-6 md:p-8 bg-[#0D4032] overflow-hidden">
     {isPopular && (
       <div className="absolute top-0 right-0 w-32 h-32 overflow-hidden pointer-events-none">
-        <div className="absolute top-6 -right-8 w-40 bg-[#EFCD62] text-[#0D4032] text-[10px] font-bold py-1 text-center transform rotate-45 uppercase tracking-wider shadow-lg">
+        <div className="absolute top-6 -right-8 w-40 bg-[#EFCD62] text-[#0D4032] text-gh-label font-bold py-1 text-center transform rotate-45 uppercase tracking-wider shadow-lg">
           Popular
         </div>
       </div>
     )}
 
-    <h3 className="text-[#EFCD62] text-[20px] font-philosopher mb-1">
+    <h3 className="text-[#EFCD62] text-gh-scroll font-philosopher mb-1">
       {title}
     </h3>
-    <p className="text-white/60 text-[14px] font-manrope mb-6">{duration}</p>
+    <p className="text-white/60 text-gh-label font-manrope mb-6">{duration}</p>
 
-    <p className="text-white/80 text-[14px] leading-relaxed font-manrope mb-8 max-w-xl">
+    <p className="text-white/80 text-gh-body leading-relaxed font-manrope mb-8 max-w-xl">
       {description}
     </p>
 
     <div className="bg-[#0A3328] p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
-        <p className="text-white text-[16px] font-manrope font-medium">
+        <p className="text-white text-gh-body font-manrope font-medium">
           {capacity}
         </p>
         {pricePerHead && (
-          <p className="text-white/40 text-[12px] font-manrope mt-1">
+          <p className="text-white/40 text-gh-label font-manrope mt-1">
             {pricePerHead}
           </p>
         )}
       </div>
-      <p className="text-white text-[18px] font-philosopher">{totalPrice}</p>
+      <p className="text-white text-gh-scroll font-philosopher">{totalPrice}</p>
     </div>
 
-    <p className="text-white/40 text-[12px] uppercase tracking-wider font-manrope mb-4">
+    <p className="text-white/40 text-gh-label uppercase tracking-wider font-manrope mb-4">
       {tagsLabel}
     </p>
     <div className="flex flex-wrap gap-2">
       {tags.map((tag, idx) => (
         <span
           key={idx}
-          className="px-3 py-1.5 bg-white/5 border border-white/10 text-white/80 text-[13px] font-manrope"
+          className="px-3 py-1.5 bg-white/5 border border-white/10 text-white/80 text-gh-label font-manrope"
         >
           {tag}
         </span>
@@ -80,10 +80,10 @@ export default function CaravanJourneySection() {
       <div className="max-w-[1920px] mx-auto">
         {/* Header */}
         <div className="mb-12">
-          <p className="text-[#EFCD62] text-[12px] font-bold tracking-[0.3em] uppercase font-manrope mb-4">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope mb-4">
             TRAVEL EXPERIENCES
           </p>
-          <h2 className="text-[32px] md:text-[42px] font-philosopher text-white leading-tight">
+          <h2 className="text-gh-h1 font-philosopher text-white leading-tight">
             Choose Your Journey
           </h2>
         </div>
@@ -149,13 +149,13 @@ export default function CaravanJourneySection() {
 
         {/* Footer Disclaimer & CTA */}
         <div className="max-w-4xl">
-          <p className="text-white/40 text-[11px] leading-relaxed font-manrope mb-8">
+          <p className="text-white/40 text-gh-label leading-relaxed font-manrope mb-8">
             Note: Prices are base rates and may vary based on season, day of
             week, and specific requirements. Fuel charges may apply depending on
             the travel route.
           </p>
           <PrimaryButton
-            className="w-full h-[54px] text-[12px]"
+            className="w-full h-[54px] text-gh-label"
             onClick={() => window.open("/contact", "_blank")}
           >
             BOOK CARAVAN

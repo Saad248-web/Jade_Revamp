@@ -12,21 +12,21 @@ export default function SplashScreen() {
   // --- Sequence Logic ---
   useEffect(() => {
     const sequence = async () => {
-      // 1. Start Delay
-      await new Promise((r) => setTimeout(r, 200));
-      setStage(1); // ACTION: Text moves to Mid + Curtain Opens to Teaser
+      // Step 1: Text Enters (slight below center)
+      await new Promise((r) => setTimeout(r, 400));
+      setStage(1); // ACTION: Text enters at 55%
 
-      // 2. Reading Time (Wait for text to settle)
-      await new Promise((r) => setTimeout(r, 2500));
-      setStage(2); // ACTION: Text Fades Out (Curtain WAITS)
-
-      // 3. Text Exit + The "Hold"
-      // Text exit animation takes 800ms.
-      // We want a 400ms hold after that.
-      // Total wait = 1200ms.
+      // Step 2: Curtain Reveals + Text Pushes UP
       await new Promise((r) => setTimeout(r, 1200));
+      setStage(2); // ACTION: Curtain opens, text moves to 40%
 
-      setStage(3); // ACTION: Curtain Expands to Full Screen
+      // Step 3: Text Reading & Exit (1 sec stay at top)
+      await new Promise((r) => setTimeout(r, 3000)); // 2s motion + 1s stay = 3s total from stage 2 start
+      setStage(3); // ACTION: Text exits
+
+      // Step 4: Final Expansion
+      await new Promise((r) => setTimeout(r, 1200));
+      setStage(4); // ACTION: Curtain expands to full
     };
 
     sequence();
@@ -34,8 +34,7 @@ export default function SplashScreen() {
 
   // --- Completion Handler ---
   const handleAnimationComplete = (definition: any) => {
-    // Only trigger completion when the Curtain is fully expanded (Stage 3)
-    if (stage === 3) {
+    if (stage === 4) {
       setSplashComplete(true);
     }
   };
@@ -43,50 +42,68 @@ export default function SplashScreen() {
   // --- Curtain Variants ---
   const curtainVariants = {
     initial: { width: "0vw", height: "0vh" },
-    teaser: {
-      width: "35vw",
-      height: "35vh",
-      transition: { duration: 1.2, ease: [0.76, 0, 0.24, 1], delay: 0.4 },
+    stage2: {
+      width: "clamp(250px, 35vw, 450px)",
+      height: "clamp(250px, 35vh, 450px)",
+      transition: { duration: 2.0, ease: [0.76, 0, 0.24, 1] },
     },
     full: {
-      width: "100vw", // Expands to fill screen
+      width: "100vw",
       height: "100vh",
-      transition: { duration: 2.0, ease: "easeInOut" },
+      transition: { duration: 1.8, ease: "easeInOut" },
     },
   };
 
   // --- Text Variants ---
   const textContainerVars = {
-    initial: { opacity: 1 },
+    initial: { top: "55%", opacity: 0 },
     enter: {
+      top: "55%",
       opacity: 1,
       transition: {
+        duration: 0.8,
         staggerChildren: 0.1,
         delayChildren: 0.2,
       },
     },
+    push: {
+      top: "40%",
+      opacity: 1,
+      transition: { duration: 2.0, ease: [0.76, 0, 0.24, 1] },
+    },
     exit: {
+      top: "40%", // Lock at top-center position
       opacity: 1,
       transition: {
-        staggerChildren: 0,
+        staggerChildren: 0.1,
         staggerDirection: 1,
       },
     },
   };
 
   const textItemVars = {
-    initial: { y: 60, opacity: 0, clipPath: "inset(0 0 0 0)" },
+    initial: {
+      y: 40,
+      opacity: 0,
+      clipPath: "inset(0 0 0 0)",
+    },
     enter: {
       y: 0,
       opacity: 1,
       clipPath: "inset(0 0 0 0)",
-      transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
     },
-    exit: {
+    push: {
       y: 0,
       opacity: 1,
-      clipPath: "inset(100% 0 0 0)", // Per-line Shutter Close
-      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+      clipPath: "inset(0 0 0 0)",
+      transition: { duration: 2.0 },
+    },
+    exit: {
+      y: 0, // No downward motion of the text itself
+      opacity: 0,
+      clipPath: "inset(100% 0 0 0)", // Wipe from top to bottom
+      transition: { duration: 1.0, ease: [0.76, 0, 0.24, 1] },
     },
   };
 
@@ -97,18 +114,8 @@ export default function SplashScreen() {
       {/* ------------------------------------------------------- */}
       {/* [ LAYER 0 ] HERO IMAGE (Hidden behind the "Shadow")     */}
       {/* ------------------------------------------------------- */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/assets/desktop-bg.jpg"
-          alt="Hero Background"
-          fill
-          sizes="100vw"
-          className="object-cover"
-          priority
-        />
-        {/* Optional overlay to darken image slightly for text contrast */}
-        <div className="absolute inset-0 bg-black/20" />
-      </div>
+      {/* [ LAYER 0 ] HOME SCREEN (revealed through the hole) */}
+      {/* Background is removed here to show LandingPage directly */}
 
       {/* ------------------------------------------------------- */}
       {/* [ LAYER 1 ] THE TRANSPARENT DIV (Window)                */}
@@ -123,9 +130,7 @@ export default function SplashScreen() {
           boxShadow: "0 0 0 500vmax #25282C",
         }}
         initial="initial"
-        animate={
-          stage === 0 ? "initial" : stage === 3 ? "full" : "teaser" // Stays at "teaser" during stage 1 & 2
-        }
+        animate={stage < 2 ? "initial" : stage === 4 ? "full" : "stage2"}
         variants={curtainVariants}
         onAnimationComplete={handleAnimationComplete}
       />
@@ -133,56 +138,72 @@ export default function SplashScreen() {
       {/* ------------------------------------------------------- */}
       {/* [ LAYER 2 ] TEXT CONTAINER                              */}
       {/* ------------------------------------------------------- */}
-      <AnimatePresence mode="wait">
-        {(stage === 1 || stage === 2) && (
+      <AnimatePresence>
+        {stage >= 1 && stage <= 3 && (
           <motion.div
-            className="absolute z-20 flex flex-col items-center justify-center space-y-6 md:space-y-8 top-[42%] md:top-1/2 left-1/2"
+            className="absolute z-20 flex flex-col items-center justify-center left-1/2"
             style={{ x: "-50%", y: "-50%" }}
             variants={textContainerVars}
             initial="initial"
-            animate={stage === 1 ? "enter" : "exit"}
+            animate={stage === 1 ? "enter" : stage === 2 ? "push" : "exit"}
+            exit="exit"
           >
             {/* 1. Intro Label */}
             <div className="overflow-hidden">
               <motion.p
                 variants={textItemVars}
-                className="text-gh-label font-manrope tracking-[0.2em] text-white/60 uppercase"
+                style={{ fontSize: "clamp(12px, 3.2vw, 16px)" }}
+                className="font-manrope tracking-[0.2em] text-white/60 uppercase"
               >
                 Step into the world of
               </motion.p>
             </div>
 
+            {/* Spacing 16px Base */}
+            <div style={{ height: "16px" }} />
+
             {/* 2. Main Title Group */}
-            <div className="flex flex-col items-center -space-y-2 md:-space-y-4">
+            <div className="flex flex-col items-center">
               <div className="overflow-hidden">
                 <motion.h1
                   variants={textItemVars}
-                  className="text-gh-h1 font-philosopher text-white text-center leading-tight"
+                  style={{ fontSize: "clamp(32px, 8.5vw, 54px)" }}
+                  className="font-philosopher text-white text-center leading-tight"
                 >
                   Jade
                 </motion.h1>
               </div>
+              {/* Spacing 8px Base */}
+              <div style={{ height: "8px" }} />
               <div className="overflow-hidden">
                 <motion.h2
                   variants={textItemVars}
-                  className="text-gh-h2 font-philosopher text-white/90 text-center"
+                  style={{ fontSize: "clamp(32px, 8.5vw, 54px)" }}
+                  className="font-philosopher text-white/90 text-center"
                 >
                   Hospitainment
                 </motion.h2>
               </div>
             </div>
 
+            {/* Spacing 24px Base */}
+            <div style={{ height: "24px" }} />
+
             {/* 3. Logo Icon */}
             <div className="overflow-hidden pt-4">
               <motion.div
                 variants={textItemVars}
-                className="relative w-12 h-12 md:w-20 md:h-20"
+                className="relative"
+                style={{
+                  width: "clamp(45px, 12vw, 75px)",
+                  height: "clamp(45px, 12vw, 75px)",
+                }}
               >
                 <Image
                   src="/assets/Golden_Logo.png"
                   alt="Jade Logo"
                   fill
-                  sizes="(max-width: 768px) 48px, 80px"
+                  sizes="45px"
                   className="object-contain"
                   priority
                 />

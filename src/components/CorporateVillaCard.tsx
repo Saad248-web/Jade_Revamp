@@ -102,11 +102,11 @@ export default function CorporateVillaCard({
               {currentSpace.name || "ESTATE"}
             </span>
             <div className="flex items-center gap-4">
-              <span className="text-white font-philosopher text-xl">
+              <span className="text-white font-philosopher text-gh-scroll">
                 {currentImageIndex + 1}
               </span>
               <div className="w-12 h-[1px] bg-white/40" />
-              <span className="text-white/60 font-philosopher text-xl">
+              <span className="text-white/60 font-philosopher text-gh-scroll">
                 {images.length}
               </span>
             </div>
@@ -127,7 +127,7 @@ export default function CorporateVillaCard({
           {villa.type}
         </span>
 
-        <h2 className="font-philosopher text-2xl lg:text-3xl text-white mb-2 leading-tight">
+        <h2 className="font-philosopher text-gh-h3 text-white mb-2 leading-tight">
           {villa.name}
         </h2>
 
@@ -154,10 +154,10 @@ export default function CorporateVillaCard({
               className="flex flex-col items-center justify-center py-4 border border-white/10 text-center hover:border-[#EFCD62]/30 transition-colors"
             >
               <stat.icon className="w-4 h-4 text-white/30 mb-2" />
-              <span className="text-white font-philosopher text-xl md:text-2xl mb-1 truncate w-full px-2">
+              <span className="text-white font-philosopher text-gh-scroll md:text-gh-h3 mb-1 truncate w-full px-2">
                 {stat.value}
               </span>
-              <span className="text-[#EFCD62]/80 uppercase font-bold tracking-[0.2em] font-manrope text-[9px]">
+              <span className="text-[#EFCD62]/80 uppercase font-bold tracking-[0.2em] font-manrope text-gh-label">
                 {stat.label}
               </span>
             </div>

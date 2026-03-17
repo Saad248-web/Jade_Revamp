@@ -271,7 +271,7 @@ export default function CareersPage() {
                             <h4 className="font-bold text-white mb-4 uppercase tracking-wider text-gh-label">
                               Your Purpose to the Team:
                             </h4>
-                            <ul className="list-disc pl-5 space-y-2 text-sm">
+                            <ul className="list-disc pl-5 space-y-2 text-gh-desc">
                               {job.purposeToTeam.map((item, idx) => (
                                 <li key={idx}>{item}</li>
                               ))}
@@ -283,7 +283,7 @@ export default function CareersPage() {
                           <h4 className="font-bold text-white mb-4 uppercase tracking-wider text-gh-label">
                             What We&apos;re Looking For:
                           </h4>
-                          <ul className="list-disc pl-5 space-y-2 text-sm">
+                          <ul className="list-disc pl-5 space-y-2 text-gh-desc">
                             {job.lookingFor.map((item, idx) => (
                               <li key={idx}>{item}</li>
                             ))}
@@ -408,11 +408,11 @@ export default function CareersPage() {
                     <div className="px-5 pt-8 pb-10 w-full box-border">
                       {/* Title row */}
                       <div className="flex items-start justify-between mb-4">
-                        <h3 className="text-3xl font-philosopher text-white mt-2">
+                        <h3 className="text-gh-h3 font-philosopher text-white mt-2">
                           Apply Now
                         </h3>
                       </div>
-                      <p className="text-white/60 text-sm mb-8 leading-relaxed">
+                      <p className="text-white/60 text-gh-desc mb-8 leading-relaxed">
                         Share a few details. Our team will get back to you
                         shortly
                       </p>
@@ -426,7 +426,7 @@ export default function CareersPage() {
                           <input
                             type="text"
                             required
-                            className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-sm focus:border-[#EFCD62] outline-none transition-colors"
+                            className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors"
                           />
                         </div>
 
@@ -435,7 +435,7 @@ export default function CareersPage() {
                           type="email"
                           required
                           placeholder="Email"
-                          className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-sm focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
+                          className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
                         />
 
                         {/* Phone */}
@@ -443,14 +443,14 @@ export default function CareersPage() {
                           type="tel"
                           required
                           placeholder="Phone Number"
-                          className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-sm focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
+                          className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
                         />
 
                         {/* Company */}
                         <input
                           type="text"
                           placeholder="Company/Organization"
-                          className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-sm focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
+                          className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
                         />
 
                         {/* Upload CV */}
@@ -554,7 +554,7 @@ export default function CareersPage() {
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3, duration: 0.4 }}
-                        className="text-white/70 text-sm leading-relaxed mb-10 max-w-xs mx-auto"
+                        className="text-white/70 text-gh-desc leading-relaxed mb-10 max-w-xs mx-auto"
                       >
                         Thanks for sharing your details!
                         <br />
@@ -647,10 +647,10 @@ export default function CareersPage() {
                 <div className="p-12 overflow-y-auto overflow-x-hidden rounded-3xl">
                   {!isSuccess ? (
                     <>
-                      <h3 className="text-4xl font-philosopher text-white mb-4 pr-16">
+                      <h3 className="text-gh-h1 font-philosopher text-white mb-4 pr-16">
                         Apply Now
                       </h3>
-                      <p className="text-white/60 text-sm mb-10">
+                      <p className="text-white/60 text-gh-desc mb-10">
                         Share a few details. Our team will get back to you
                         shortly
                       </p>
@@ -762,10 +762,10 @@ export default function CareersPage() {
                         />
                       </motion.div>
 
-                      <h3 className="text-3xl font-philosopher text-white mb-6">
+                      <h3 className="text-gh-h3 font-philosopher text-white mb-6">
                         We&apos;ve got it from here
                       </h3>
-                      <p className="text-white/70 text-sm leading-relaxed mb-10 max-w-xs mx-auto text-center">
+                      <p className="text-white/70 text-gh-desc leading-relaxed mb-10 max-w-xs mx-auto text-center">
                         Thanks for sharing your details! Our team will take a
                         look and reach out shortly to understand things better.
                       </p>
