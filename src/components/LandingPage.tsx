@@ -1,9 +1,14 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { useAnimation } from "@/context/AnimationContext";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 import Navbar from "./Navbar";
 import UnifiedScrollSection from "./UnifiedScrollSection";
 import MobileBottomNav from "./MobileBottomNav";
@@ -67,6 +72,17 @@ export default function LandingPage() {
     },
   };
 
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const videoSources = [
+    "https://assets.mixkit.co/videos/51532/51532-720.mp4", // Villa Party - Elegant Toast
+    "https://assets.mixkit.co/videos/36167/36167-720.mp4", // Pool Party - Azure Water
+    "https://assets.mixkit.co/videos/49555/49555-720.mp4", // Resort - Premium Architecture
+  ];
+
+  const handleVideoEnd = () => {
+    setCurrentVideoIndex((prev: number) => (prev + 1) % videoSources.length);
+  };
+
   return (
     <motion.div
       ref={containerRef}
@@ -85,21 +101,28 @@ export default function LandingPage() {
         className="relative min-h-screen w-full overflow-hidden"
       >
         <NavbarThemeTrigger theme="white" sectionRef={heroRef} />
-        {/* Background Layer */}
+        {/* Background Layer: Video Sequence */}
         <motion.div
           style={{ y: yBackground }}
-          className="absolute inset-0 w-full h-[120%] z-0" // Taller for parallax room
+          className="absolute inset-0 w-full h-[120%] z-0"
         >
-          <Image
-            src="/assets/desktop-bg.jpg"
-            alt="Hero Background"
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
-            quality={90}
-          />
-          <div className="absolute inset-0 bg-black/30" />
+          <AnimatePresence mode="wait">
+            <motion.video
+              key={currentVideoIndex}
+              autoPlay
+              muted
+              playsInline
+              onEnded={handleVideoEnd}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1 }}
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src={videoSources[currentVideoIndex]} type="video/mp4" />
+            </motion.video>
+          </AnimatePresence>
+          <div className="absolute inset-0 bg-black/40" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
         </motion.div>
 
