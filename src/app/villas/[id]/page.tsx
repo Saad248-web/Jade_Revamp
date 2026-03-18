@@ -340,9 +340,9 @@ export default function VillaDetailsPage() {
           </div>
 
           {/* CONTENT GRID */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-24">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-24">
             {/* LEFT COLUMN (Details) */}
-            <div className="lg:col-span-2 flex flex-col gap-16">
+            <div className="lg:col-span-3 flex flex-col gap-16">
               {/* SPACES CAROUSEL SECTION */}
               <section>
                 <div className="flex justify-between items-center mb-8">
@@ -442,7 +442,7 @@ export default function VillaDetailsPage() {
                           />
                         </div>
                         <div>
-                          <h4 className="text-gh-h2 font-bold font-manrope text-white mb-1 transition-colors group-hover:text-[#EFCD62]">
+                          <h4 className="text-xl md:text-2xl font-bold font-manrope text-white mb-1 transition-colors group-hover:text-[#EFCD62]">
                             {service.title}
                           </h4>
                           <p className="text-white/70 text-gh-body mb-2 leading-relaxed">
@@ -797,7 +797,7 @@ export default function VillaDetailsPage() {
             </div>
 
             {/* RIGHT COLUMN (Booking Card / Info) */}
-            <div className="relative">
+            <div className="relative lg:col-span-2">
               <div className="sticky top-32 bg-[#252629] p-8 rounded-2xl border border-white/10">
                 <h4 className="text-gh-h2 font-philosopher text-white mb-2">
                   Interested in {villa.name}?
@@ -841,25 +841,25 @@ export default function VillaDetailsPage() {
       {/* FOOTER */}
       <Footer />
       {/* FLOATING BOOKING BAR */}
-      <div className="fixed bottom-[72px] lg:bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 p-3 md:p-4 md:px-8 z-40 transition-all">
-        <div className="max-w-7xl mx-auto flex justify-between items-center gap-2">
-          <p className="text-white text-gh-label font-bold font-manrope">
+      <div className="fixed bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 p-3 md:p-4 md:px-8 z-50 transition-all">
+        <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
+          <p className="text-white text-base md:text-gh-h3 font-bold font-manrope whitespace-nowrap">
             ₹65,000 onwards
           </p>
-          <Link
-            href="/contact"
-            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase px-2 py-2 md:px-4 md:py-3 hover:text-white transition-colors"
-          >
-            ENQUIRE
-          </Link>
-          <PrimaryButton href={`/book?villa=${villa.id}`} withArrow={false}>
-            BOOK VILLA
-          </PrimaryButton>
+          <div className="flex items-center gap-4 md:gap-6">
+            <Link
+              href="/contact"
+              className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap"
+            >
+              ENQUIRE
+            </Link>
+            <PrimaryButton href={`/book?villa=${villa.id}`} withArrow={false}>
+              BOOK VILLA
+            </PrimaryButton>
+          </div>
         </div>
       </div>
-      <div className="h-36 lg:h-20" />{" "}
-      {/* Spacer for floating bar and mobile nav */}
-      <MobileBottomNav />
+      <div className="h-24 lg:h-20" /> {/* Spacer for floating bar */}
       <DetailsDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
