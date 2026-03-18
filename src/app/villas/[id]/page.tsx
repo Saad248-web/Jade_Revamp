@@ -492,10 +492,13 @@ export default function VillaDetailsPage() {
                       bustling city in the wilderness is truly on everyone's
                       wishlist.
                     </p>
-                    <button className="w-full border border-white/30 bg-white/10 backdrop-blur-sm text-white py-4 uppercase tracking-widest text-gh-label font-bold hover:bg-white hover:text-black transition-colors flex items-center justify-center gap-2">
+                    <Link
+                      href="/weekend-getaways"
+                      className="w-full border border-white/30 bg-white/10 backdrop-blur-sm text-white py-4 uppercase tracking-widest text-gh-label font-bold hover:bg-white hover:text-black transition-colors flex items-center justify-center gap-2"
+                    >
                       See what a getaway looks like{" "}
                       <ArrowRight className="w-4 h-4" />
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </section>
@@ -804,12 +807,19 @@ export default function VillaDetailsPage() {
                   site visit.
                 </p>
 
-                <PrimaryButton withArrow={false} className="w-full">
+                <PrimaryButton
+                  href={`/book?villa=${villa.id}`}
+                  withArrow={false}
+                  className="w-full"
+                >
                   Request Booking
                 </PrimaryButton>
-                <button className="w-full bg-transparent border border-white/20 text-white font-bold py-4 rounded-lg uppercase tracking-widest text-gh-label hover:bg-white/5 transition-colors">
+                <Link
+                  href="/contact"
+                  className="w-full bg-transparent border border-white/20 text-white font-bold py-4 rounded-lg uppercase tracking-widest text-gh-label hover:bg-white/5 transition-colors text-center inline-block"
+                >
                   Speak with our team
-                </button>
+                </Link>
 
                 <div className="mt-8 pt-8 border-t border-white/10 flex flex-col gap-4">
                   <div className="flex items-center gap-3 text-white/60 text-gh-body">
@@ -836,9 +846,12 @@ export default function VillaDetailsPage() {
           <p className="text-white text-gh-label font-bold font-manrope">
             ₹65,000 onwards
           </p>
-          <button className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase px-2 py-2 md:px-4 md:py-3 hover:text-white transition-colors">
+          <Link
+            href="/contact"
+            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase px-2 py-2 md:px-4 md:py-3 hover:text-white transition-colors"
+          >
             ENQUIRE
-          </button>
+          </Link>
           <PrimaryButton href={`/book?villa=${villa.id}`} withArrow={false}>
             BOOK VILLA
           </PrimaryButton>

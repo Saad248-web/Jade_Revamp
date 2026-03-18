@@ -14,6 +14,7 @@ const PANELS = [
     subtext:
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone’s wishlist.",
     cta: "SEE WHAT A GETAWAY LOOKS LIKE",
+    href: "/weekend-getaways",
     image: "/assets/Bathing_Girls.png",
     type: "full",
   },
@@ -23,6 +24,7 @@ const PANELS = [
     subtext:
       "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
+    href: "/party-villas",
     image: "/assets/Jade_735_for_Desktop.png",
     type: "full",
   },
@@ -32,6 +34,7 @@ const PANELS = [
     subtext:
       "Intimate ceremonies to grand, multi-day wedding celebrations, set amid private gardens, sprawling lawns, and luxury rooms.",
     cta: "SEE HOW WEDDINGS UNFOLD", // As per screenshot
+    href: "/weddings",
     image: "/assets/Wedding_for_Both.png",
     type: "full",
   },
@@ -41,6 +44,7 @@ const PANELS = [
     subtext:
       "Unwinding and ice-breaking sessions with colleagues, away from cubicles and glass walls, in private farmhouses ideal for offsites or workations.",
     cta: "SEE HOW TEAMS GATHER",
+    href: "/corporate-retreats",
     image: "/assets/corporate_retreat.png",
     type: "full",
   },
@@ -50,6 +54,7 @@ const PANELS = [
     subtext:
       "Element-led wellness restoration through mud baths, massages, spa and aroma therapies, designed for deep rejuvenation.",
     cta: "SEE HOW RETREAT TAKES SHAPE",
+    href: "/experiences", // Note: mapped to /experiences as /wellness-retreats doesn't exist
     image: "/assets/wellness_retreat.png",
     type: "full",
   },
@@ -59,6 +64,7 @@ const PANELS = [
     subtext:
       "Luxury motor caravans carry the idea of private retreat onto the road, offering comfort and privacy for glamping, pilgrimages or any evolving journeys.",
     cta: "SEE HOW THE JOURNEY UNFOLDS",
+    href: "/caravans",
     image: "/assets/caravan_journey.png",
     type: "full",
   },
@@ -68,6 +74,7 @@ const PANELS = [
     subtext:
       "A curated collection of fully private farmhouses, suited for everything from quiet stays to vibrant celebrations and bespoke experiences.",
     cta: "SEE THE VILLAS THAT HOST IT ALL",
+    href: "/villas",
     image: "/assets/casual_stays.png",
     type: "full",
   },
@@ -296,7 +303,7 @@ function StackedPanel({
         <p className="font-manrope text-gh-body text-white/90 font-light max-w-xl mb-10 leading-relaxed drop-shadow-md">
           {data.subtext}
         </p>
-        <PrimaryButton href="#">{data.cta}</PrimaryButton>
+        <PrimaryButton href={data.href || "#"}>{data.cta}</PrimaryButton>
       </motion.div>
     </motion.div>
   );

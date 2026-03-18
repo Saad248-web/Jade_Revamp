@@ -259,9 +259,12 @@ export default function AboutPage() {
                 A day or two with your friends and family away from the bustling
                 city in the wilderness is truly on everyone's wishlist.
               </p>
-              <button className="border border-white/30 bg-white/5 backdrop-blur-sm text-white px-8 py-4 uppercase tracking-widest text-gh-label font-bold hover:bg-white hover:text-black transition-all flex items-center gap-3">
+              <Link
+                href="/weekend-getaways"
+                className="inline-flex w-fit border border-white/30 bg-white/5 backdrop-blur-sm text-white px-8 py-4 uppercase tracking-widest text-gh-label font-bold hover:bg-white hover:text-black transition-all items-center gap-3"
+              >
                 SEE WHAT A GETAWAY LOOKS LIKE <ArrowRight className="w-4 h-4" />
-              </button>
+              </Link>
             </div>
           </div>
         </div>

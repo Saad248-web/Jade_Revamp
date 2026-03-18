@@ -24,7 +24,7 @@ const slides: ScrollSlide[] = [
     ],
     button: {
       label: "VIEW ALL VILLA RETREATS",
-      href: "#villas",
+      href: "/villas",
     },
   },
   {
@@ -39,7 +39,7 @@ const slides: ScrollSlide[] = [
     ],
     button: {
       label: "VIEW EXPERIENCES AT JADE",
-      href: "#experiences",
+      href: "/experiences",
     },
   },
 ];

@@ -14,6 +14,7 @@ const PANELS = [
     subtext:
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone’s wishlist.",
     cta: "SEE WHAT A GETAWAY LOOKS LIKE",
+    href: "/weekend-getaways",
     image: "/assets/Bathing_Girls.png",
     type: "full",
   },
@@ -23,6 +24,7 @@ const PANELS = [
     subtext:
       "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
+    href: "/party-villas",
     image: "/assets/Jade_735_for_Desktop.png",
     type: "full",
   },
@@ -32,6 +34,7 @@ const PANELS = [
     subtext:
       "Intimate ceremonies to grand, multi-day wedding celebrations, set amid private gardens, sprawling lawns, and luxury rooms.",
     cta: "SEE HOW WEDDINGS UNFOLD",
+    href: "/weddings",
     image: "/assets/Wedding_for_Both.png",
     type: "full",
   },
@@ -57,6 +60,7 @@ const PANELS = [
       },
     ],
     cta: "SEE ALL EXPERIENCES",
+    href: "/experiences",
   },
 ];
 
@@ -264,7 +268,7 @@ function StackedPanel({
                   className="w-full max-w-md"
                 >
                   <Link
-                    href="#"
+                    href={data.href || "#"}
                     className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-4 transition-all"
                   >
                     {data.cta} <ArrowRight className="w-5 h-5" />
@@ -297,7 +301,7 @@ function StackedPanel({
                   transition={{ delay: 0.5 }}
                 >
                   <Link
-                    href="#"
+                    href={data.href || "#"}
                     className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-4 transition-all"
                   >
                     {data.cta} <ArrowRight className="w-5 h-5" />
