@@ -108,7 +108,7 @@ export default function ExperiencesSection() {
         <div className="overflow-hidden">
           <motion.div variants={buttonReveal}>
             <Link
-              href="#experiences"
+              href="/experiences"
               className="inline-flex items-center gap-3 text-jade-gold font-manrope text-gh-label tracking-widest uppercase hover:text-white transition-colors group"
             >
               VIEW EXPERIENCES AT JADE

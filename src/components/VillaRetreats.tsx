@@ -106,7 +106,7 @@ export default function VillaRetreats() {
         <div className="overflow-hidden">
           <motion.div variants={buttonReveal}>
             <Link
-              href="#villas"
+              href="/villas"
               className="inline-flex items-center gap-3 text-jade-gold font-manrope text-gh-label tracking-widest uppercase hover:text-white transition-colors group"
             >
               VIEW ALL VILLA RETREATS
