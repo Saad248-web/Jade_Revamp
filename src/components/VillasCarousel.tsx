@@ -139,12 +139,9 @@ export default function VillasCarousel() {
         style={{ top: navbarVisible ? `${NAVBAR_HEIGHT}px` : "0px" }}
       >
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 pt-4 md:pt-6 pb-4">
-          <div className="flex flex-col gap-3 md:gap-4">
-            {/* SEARCH BAR */}
-            <BookingBanner onSearch={handleSearch} />
-
-            {/* CATEGORIES */}
-            <div className="flex overflow-x-auto items-center gap-2 md:gap-3 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-6">
+            {/* CATEGORIES - Left Side on Desktop */}
+            <div className="flex overflow-x-auto items-center gap-2 md:gap-3 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none] order-2 lg:order-1">
               {CATEGORIES.map((category) => (
                 <button
                   key={category}
@@ -158,6 +155,11 @@ export default function VillasCarousel() {
                   {category}
                 </button>
               ))}
+            </div>
+
+            {/* SEARCH BAR - Right Side on Desktop */}
+            <div className="order-1 lg:order-2 w-full lg:w-auto flex justify-start lg:justify-end">
+              <BookingBanner onSearch={handleSearch} />
             </div>
           </div>
         </div>

@@ -131,6 +131,7 @@ export default function FormatsCarousel() {
                       alt={FORMATS[index].title}
                       fill
                       className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                       priority
                     />
                   </div>
@@ -140,6 +141,7 @@ export default function FormatsCarousel() {
                       alt={FORMATS[index].title}
                       fill
                       className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                     />
                   </div>
                 </div>

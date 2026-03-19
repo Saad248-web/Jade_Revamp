@@ -54,38 +54,46 @@ export default function BookingBanner({ onSearch }: { onSearch?: () => void }) {
   };
 
   return (
-    <div className="w-full md:max-w-[70%] bg-[#252729] border border-white/10 p-2 sm:p-2.5 rounded flex items-center justify-between">
-      <Link href="/book?step=dates" className="flex-1 flex min-w-0">
-        <div className="flex-1 px-3 sm:px-4 cursor-pointer hover:bg-white/5 transition-colors rounded py-1 sm:py-2 min-w-0">
-          <p className="text-gh-label text-white/50 font-manrope font-bold tracking-widest uppercase mb-0.5 sm:mb-1">
-            CHECK IN - CHECK OUT
+    <div className="w-fit bg-[#1A1C1E]/40 backdrop-blur-md border border-white/10 px-3.5 sm:px-4 py-1.5 sm:py-1 rounded-none flex flex-nowrap items-center justify-start gap-x-3 sm:gap-x-5 gap-y-2">
+      <Link
+        href="/book?step=dates"
+        className="flex-none transition-all hover:opacity-80 py-1"
+      >
+        <div className="flex items-center gap-2 sm:gap-3">
+          <p className="text-[7px] sm:text-[8px] lg:text-[9px] text-white/50 font-manrope font-bold tracking-[0.15em] uppercase whitespace-nowrap">
+            CHECK IN - CHECK OUT :
           </p>
-          <p className="text-gh-body text-white font-manrope whitespace-nowrap overflow-hidden text-ellipsis">
+          <p className="text-[9px] sm:text-[10px] lg:text-[11px] text-white font-manrope whitespace-nowrap">
             {formatDateRange()}
           </p>
         </div>
       </Link>
 
-      <div className="w-[1px] h-8 sm:h-10 bg-white/10 shrink-0 mx-1 sm:mx-2" />
+      <div className="block w-[1px] h-3 sm:h-4 bg-white/10 shrink-0 mx-0.5 sm:mx-0" />
 
-      <Link href="/book?step=guests" className="flex-1 flex min-w-0">
-        <div className="flex-1 px-3 sm:px-4 cursor-pointer hover:bg-white/5 transition-colors rounded py-1 sm:py-2 min-w-0">
-          <p className="text-gh-label text-white/50 font-manrope font-bold tracking-widest uppercase mb-0.5 sm:mb-1">
-            GUESTS
-          </p>
-          <p className="text-gh-body text-white font-manrope whitespace-nowrap overflow-hidden text-ellipsis">
-            {formatGuests()}
-          </p>
-        </div>
-      </Link>
+      <div className="flex items-center gap-4 sm:gap-6 lg:gap-10 flex-none justify-center">
+        <Link
+          href="/book?step=guests"
+          className="flex-none transition-all hover:opacity-80 py-1"
+        >
+          <div className="flex items-center gap-2 sm:gap-3">
+            <p className="text-[7px] sm:text-[8px] lg:text-[9px] text-white/50 font-manrope font-bold tracking-[0.15em] uppercase whitespace-nowrap">
+              GUESTS :
+            </p>
+            <p className="text-[9px] sm:text-[10px] lg:text-[11px] text-white font-manrope whitespace-nowrap">
+              {mounted ? guests.adults + guests.children : "2"}
+            </p>
+          </div>
+        </Link>
 
-      <button
-        onClick={onSearch}
-        className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shrink-0 hover:bg-white/5 transition-colors rounded cursor-pointer ml-1 sm:ml-2"
-        aria-label="Search Villas"
-      >
-        <Search className="w-5 h-5 sm:w-6 sm:h-6 text-white/70 hover:text-white transition-colors" />
-      </button>
+        <button
+          onClick={onSearch}
+          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center shrink-0 hover:bg-white/5 transition-colors rounded-none"
+          aria-label="Search Villas"
+        >
+          <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/70 hover:text-white transition-colors" />
+        </button>
+      </div>
     </div>
   );
 }

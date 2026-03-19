@@ -4,6 +4,8 @@ import Link from "next/link";
 
 interface PrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
+  target?: string;
+  rel?: string;
   withArrow?: boolean;
   className?: string;
   children: React.ReactNode;
@@ -23,6 +25,8 @@ interface PrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
  */
 export default function PrimaryButton({
   href,
+  target,
+  rel,
   withArrow = true,
   className = "",
   children,
@@ -64,7 +68,11 @@ export default function PrimaryButton({
   );
 
   if (href) {
-    return <Link href={href}>{btn}</Link>;
+    return (
+      <Link href={href} target={target} rel={rel}>
+        {btn}
+      </Link>
+    );
   }
 
   return btn;

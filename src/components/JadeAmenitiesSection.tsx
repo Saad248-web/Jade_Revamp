@@ -225,108 +225,111 @@ export default function JadeAmenitiesSection() {
       {/* 
         DESKTOP LAYOUT (>= 1024px) 
       */}
-      <div className="hidden lg:block relative min-h-screen overflow-hidden">
-        {/* Background Image with Parallax */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden">
-          <motion.div className="w-full h-[120%]" style={{ y: bgY }}>
-            <AnimatePresence mode="wait">
+      <div className="hidden lg:flex flex-col relative h-[100vh] overflow-hidden">
+        {/* Top Area: Background Image & Content (Flex-1) */}
+        <div className="relative flex-1 w-full overflow-hidden">
+          {/* Background Image with Parallax */}
+          <div className="absolute inset-0 w-full h-full z-0">
+            <motion.div className="w-full h-[120%]" style={{ y: bgY }}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentIndex}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="absolute inset-0 w-full h-full"
+                >
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={currentSlide.bgImage}
+                      alt="Background"
+                      fill
+                      className="object-cover"
+                      sizes="100vw"
+                      priority
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#25282C]/80 via-transparent to-[#25282C]/40" />
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+          </div>
+
+          {/* Desktop Content */}
+          <div className="relative z-10 flex flex-col justify-center h-full px-12 xl:px-24 py-8 pointer-events-none">
+            <div className="max-w-[1920px] mx-auto w-full grid grid-cols-2 gap-12 xl:gap-16 items-center pointer-events-auto">
+              {/* Text Card */}
               <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.8 }}
-                className="absolute inset-0 w-full h-full"
+                key={`text-desk-${currentIndex}`}
+                className="relative p-10 xl:p-12 rounded-lg bg-[#25282C]/95 backdrop-blur-md shadow-2xl"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
               >
-                <div className="relative w-full h-full">
+                <p
+                  className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-4 xl:mb-6"
+                  style={{ color: "#EFCD62" }}
+                >
+                  {currentSlide.label}
+                </p>
+                <div className="mb-4 xl:mb-6">
+                  {currentSlide.heading.map((line, index) => (
+                    <h2
+                      key={index}
+                      className="font-philosopher text-gh-h1 text-white leading-tight mb-2"
+                    >
+                      {line}
+                    </h2>
+                  ))}
+                </div>
+                <p className="font-manrope text-gh-body text-white/70 leading-relaxed max-w-lg">
+                  {currentSlide.subtext}
+                </p>
+              </motion.div>
+
+              {/* Feature Image */}
+              <div className="relative justify-self-center w-full max-w-[500px]">
+                <motion.div
+                  key={`img-desk-${currentIndex}`}
+                  className="relative w-full aspect-[4/5] max-h-[65vh] rounded-lg overflow-hidden shadow-2xl border border-white/10"
+                  style={{ y: imageY }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8 }}
+                >
                   <Image
-                    src={currentSlide.bgImage}
-                    alt="Background"
+                    src={currentSlide.cardImage}
+                    alt="Feature"
                     fill
                     className="object-cover"
-                    sizes="100vw"
+                    sizes="50vw"
                     priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#25282C]/80 via-transparent to-[#0D4032]/90" />
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-        </div>
-
-        {/* Desktop Content */}
-        <div className="relative z-10 flex flex-col justify-center min-h-[85vh] px-24">
-          <div className="max-w-[1920px] mx-auto w-full grid grid-cols-2 gap-16 items-center">
-            {/* Text Card */}
-            <motion.div
-              key={`text-desk-${currentIndex}`}
-              className="relative p-12 rounded-none bg-[#25282C]"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <p
-                className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-6"
-                style={{ color: "#EFCD62" }}
-              >
-                {currentSlide.label}
-              </p>
-              <div className="mb-6">
-                {currentSlide.heading.map((line, index) => (
-                  <h2
-                    key={index}
-                    className="font-philosopher text-gh-h1 text-white leading-tight mb-2"
-                  >
-                    {line}
-                  </h2>
-                ))}
+                </motion.div>
               </div>
-              <p className="font-manrope text-gh-body text-white/70 leading-relaxed">
-                {currentSlide.subtext}
-              </p>
-            </motion.div>
-
-            {/* Feature Image */}
-            <div className="relative">
-              <motion.div
-                key={`img-desk-${currentIndex}`}
-                className="relative w-full aspect-[4/5] rounded-none overflow-hidden shadow-2xl"
-                style={{ y: imageY }}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8 }}
-              >
-                <Image
-                  src={currentSlide.cardImage}
-                  alt="Feature"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  priority
-                />
-              </motion.div>
             </div>
           </div>
         </div>
 
         {/* Desktop Navigation */}
         <div
-          className="relative z-20 py-6 px-24"
+          className="relative shrink-0 z-20 py-4 xl:py-6 px-12 xl:px-24"
           style={{ backgroundColor: "#0D4032" }}
         >
           <div className="max-w-[1920px] mx-auto flex items-center justify-between">
             <button
               onClick={handlePrev}
-              className="group p-4 rounded-none hover:bg-white/10 transition-all"
+              className="group p-4 bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-none transition-all shadow-md"
             >
-              <ChevronLeft className="w-8 h-8 text-[#EFCD62]" />
+              <ChevronLeft className="w-6 h-6 xl:w-8 xl:h-8 text-[#EFCD62] group-hover:scale-110 transition-transform" />
             </button>
             <div className="flex gap-3" />
             <button
               onClick={handleNext}
-              className="group p-4 rounded-none hover:bg-white/10 transition-all"
+              className="group p-4 bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-none transition-all shadow-md"
             >
-              <ChevronRight className="w-8 h-8 text-[#EFCD62]" />
+              <ChevronRight className="w-6 h-6 xl:w-8 xl:h-8 text-[#EFCD62] group-hover:scale-110 transition-transform" />
             </button>
           </div>
         </div>

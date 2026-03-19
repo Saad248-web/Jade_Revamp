@@ -133,24 +133,24 @@ export default function InstagramCarousel() {
           {INSTAGRAM_POSTS.map((post, index) => (
             <div
               key={post.id}
-              className="flex-shrink-0 w-[280px] snap-center h-full"
+              className="flex-shrink-0 w-[300px] md:w-[380px] snap-center h-full py-4"
             >
               {/* Instagram Post Card */}
-              <div className="w-full h-full flex flex-col bg-[#FAFAFA]/[0.04] backdrop-blur-xl rounded-[16px] overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-300 border border-[#FAFAFA]/[0.12] group">
+              <div className="w-full h-full flex flex-col bg-[#FAFAFA]/[0.04] backdrop-blur-xl rounded-[20px] overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-500 border border-[#FAFAFA]/[0.12] group">
                 {/* Header */}
-                <div className="flex items-center justify-between p-[14px] bg-transparent">
-                  <div className="flex items-center gap-3">
-                    <div className="relative w-10 h-10 rounded-full overflow-hidden border-[1px] border-white/20">
+                <div className="flex items-center justify-between p-5 bg-transparent">
+                  <div className="flex items-center gap-4 min-w-0">
+                    <div className="relative w-11 h-11 rounded-full overflow-hidden border-[1px] border-white/20 shrink-0">
                       <Image
                         src={post.userAvatar}
                         alt="Profile"
                         fill
                         className="object-cover"
-                        sizes="40px"
+                        sizes="44px"
                       />
                     </div>
-                    <div>
-                      <p className="font-manrope text-gh-body font-semibold text-[#FAFAFA]">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-manrope text-gh-body font-semibold text-[#FAFAFA] truncate">
                         {post.username}
                       </p>
                       <p className="font-manrope text-gh-label text-[#FAFAFA]/60">
@@ -158,39 +158,41 @@ export default function InstagramCarousel() {
                       </p>
                     </div>
                   </div>
-                  <Instagram className="w-5 h-5 text-[#FAFAFA]/60" />
+                  <Instagram className="w-5 h-5 text-jade-gold shrink-0 opacity-70" />
                 </div>
 
                 {/* Image */}
-                <div className="relative w-full aspect-[4/5] bg-black">
+                <div className="relative w-full aspect-square bg-black overflow-hidden">
                   <Image
                     src={post.image}
                     alt="Post"
                     fill
-                    className="object-cover"
-                    sizes="380px"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    sizes="(max-width: 1024px) 300px, 380px"
                   />
                 </div>
 
                 {/* Footer */}
-                <div className="p-[14px] bg-transparent flex-grow flex flex-col justify-end">
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="flex items-center gap-1 text-[#FAFAFA]/90">
+                <div className="p-5 bg-transparent shrink-0 flex flex-col">
+                  <div className="flex items-center gap-5 mb-4">
+                    <div className="flex items-center gap-1.5 text-[#FAFAFA]/90">
                       <Heart className="w-5 h-5" />
-                      <span className="font-manrope text-gh-label">
+                      <span className="font-manrope text-gh-label font-bold">
                         {post.likes}
                       </span>
                     </div>
-                    <div className="flex items-center gap-1 text-white/90">
+                    <div className="flex items-center gap-1.5 text-white/90">
                       <MessageCircle className="w-5 h-5" />
-                      <span className="font-manrope text-gh-label">
+                      <span className="font-manrope text-gh-label font-bold">
                         {post.comments}
                       </span>
                     </div>
                   </div>
-                  <p className="font-manrope text-gh-body text-[#FAFAFA]/60 truncate">
-                    {post.caption}
-                  </p>
+                  <div className="min-h-[3rem] lg:min-h-[3.5rem]">
+                    <p className="font-manrope text-gh-body text-[#FAFAFA]/80 line-clamp-2 leading-relaxed">
+                      {post.caption}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -214,15 +216,13 @@ export default function InstagramCarousel() {
 
         {/* CTA Button */}
         <div className="flex justify-center mt-8 mb-8 px-6">
-          <a
+          <PrimaryButton
             href="https://www.instagram.com/jadehospitainment"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <PrimaryButton href="https://www.instagram.com/jade_retreats">
-              Visit Jade on Instagram
-            </PrimaryButton>
-          </a>
+            Visit Jade on Instagram
+          </PrimaryButton>
         </div>
       </div>
 

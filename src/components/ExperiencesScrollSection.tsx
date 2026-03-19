@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import PrimaryButton from "@/components/PrimaryButton";
+import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
 const PANELS = [
   {
@@ -16,7 +16,6 @@ const PANELS = [
     cta: "SEE WHAT A GETAWAY LOOKS LIKE",
     href: "/weekend-getaways",
     image: "/assets/Bathing_Girls.png",
-    type: "full",
   },
   {
     id: "celebrations",
@@ -26,17 +25,15 @@ const PANELS = [
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
     href: "/party-villas",
     image: "/assets/Jade_735_for_Desktop.png",
-    type: "full",
   },
   {
     id: "weddings",
     title: "Weddings",
     subtext:
       "Intimate ceremonies to grand, multi-day wedding celebrations, set amid private gardens, sprawling lawns, and luxury rooms.",
-    cta: "SEE HOW WEDDINGS UNFOLD", // As per screenshot
+    cta: "SEE HOW WEDDINGS UNFOLD",
     href: "/weddings",
     image: "/assets/Wedding_for_Both.png",
-    type: "full",
   },
   {
     id: "corporate",
@@ -46,7 +43,6 @@ const PANELS = [
     cta: "SEE HOW TEAMS GATHER",
     href: "/corporate-retreats",
     image: "/assets/corporate_retreat.png",
-    type: "full",
   },
   {
     id: "wellness",
@@ -54,9 +50,8 @@ const PANELS = [
     subtext:
       "Element-led wellness restoration through mud baths, massages, spa and aroma therapies, designed for deep rejuvenation.",
     cta: "SEE HOW RETREAT TAKES SHAPE",
-    href: "/experiences", // Note: mapped to /experiences as /wellness-retreats doesn't exist
+    href: "/experiences",
     image: "/assets/wellness_retreat.png",
-    type: "full",
   },
   {
     id: "caravans",
@@ -66,7 +61,6 @@ const PANELS = [
     cta: "SEE HOW THE JOURNEY UNFOLDS",
     href: "/caravans",
     image: "/assets/caravan_journey.png",
-    type: "full",
   },
   {
     id: "private-villas",
@@ -76,7 +70,6 @@ const PANELS = [
     cta: "SEE THE VILLAS THAT HOST IT ALL",
     href: "/villas",
     image: "/assets/casual_stays.png",
-    type: "full",
   },
 ];
 
@@ -93,34 +86,36 @@ export default function ExperiencesScrollSection() {
     restDelta: 0.001,
   });
 
-  // Total panels
-  const totalPanels = PANELS.length;
+  const totalSteps = PANELS.length + 1; // 8 steps total
 
   return (
-    <section ref={targetRef} className="relative h-[800vh] bg-[#050505]">
-      <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="relative w-full h-full">
-          {/* Top Label & Counter - Global (Fixed on top of everything) */}
-          <div className="absolute top-0 left-0 w-full z-[100] flex flex-col items-center pointer-events-none">
-            <div className="absolute top-0 left-0 w-full h-[16.6vh] bg-gradient-to-b from-black/90 to-transparent" />
-            <div className="relative mt-20 md:mt-24 text-center">
-              <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-4 md:mb-6 font-semibold text-[#EFCD62] drop-shadow-lg block">
-                WAYS JADE IS EXPERIENCED
-              </span>
-            </div>
+    <section ref={targetRef} className="relative h-[800vh] bg-[#0D4032]">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#0D4032]">
+        {/* Top Label & Counter - Global */}
+        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-20 md:pt-24 pb-[16px] md:pb-[24px]">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/90 to-transparent -z-10" />
+          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-4 md:mb-6 font-semibold text-jade-gold drop-shadow-lg block">
+            WAYS JADE IS EXPERIENCED
+          </span>
+          <GlobalCounter
+            progress={smoothProgress}
+            total={PANELS.length}
+            totalSteps={totalSteps}
+          />
+        </div>
 
-            <GlobalCounter progress={smoothProgress} total={totalPanels} />
-          </div>
-
+        {/* Panels Interactive Area */}
+        <div className="relative w-full flex-1 min-h-0 z-10">
           {PANELS.map((panel, i) => (
-            <StackedPanel
+            <PanelSlide
               key={panel.id}
               data={panel}
               index={i}
               globalProgress={smoothProgress}
-              totalPanels={totalPanels}
+              totalSteps={totalSteps}
             />
           ))}
+          <EndButton globalProgress={smoothProgress} />
         </div>
       </div>
     </section>
@@ -128,183 +123,150 @@ export default function ExperiencesScrollSection() {
 }
 
 // Global Counter Component
-function GlobalCounter({ progress, total }: { progress: any; total: number }) {
+function GlobalCounter({
+  progress,
+  total,
+  totalSteps,
+}: {
+  progress: any;
+  total: number;
+  totalSteps: number;
+}) {
   const [current, setCurrent] = useState(1);
 
   useEffect(() => {
     return progress.on("change", (v: number) => {
-      // Logic to determine current slide
-      const segment = 1 / (total - 1);
-      // We want to snap to the closest logical index
-      // v goes from 0 to 1
-      // If v=0 -> 1
-      // If v=1 -> total
+      const step = 1 / (totalSteps - 1);
+      const lastPanelP = (total - 1) / (totalSteps - 1);
+      const effectiveP = Math.min(v, lastPanelP);
 
-      // Simple division:
-      let idx = Math.round(v * (total - 1)) + 1;
+      let idx = Math.round(effectiveP / step) + 1;
       if (idx > total) idx = total;
       if (idx < 1) idx = 1;
+
       setCurrent(idx);
     });
-  }, [progress, total]);
+  }, [progress, total, totalSteps]);
 
   return (
-    <div className="relative flex items-center gap-12 md:gap-16 font-philosopher text-gh-h3 md:text-gh-h3 lg:text-gh-h3 mt-2">
-      <span className="text-white drop-shadow-lg transition-all duration-300 w-8 text-center text-gh-h2 font-bold">
+    <div className="relative flex items-center gap-12 md:gap-16 font-philosopher text-gh-scroll mt-2">
+      <span className="text-white drop-shadow-lg transition-all duration-300">
         {current}
       </span>
-      <div className="w-16 md:w-24 h-[1px] bg-white/70 drop-shadow-lg opacity-70" />
-      <span className="text-white/70 drop-shadow-lg w-8 text-center text-gh-h3">
-        {total}
-      </span>
+      <div className="w-24 md:w-32 h-[1px] bg-white/70 drop-shadow-lg" />
+      <span className="text-white/70 drop-shadow-lg">{total}</span>
     </div>
   );
 }
 
-function StackedPanel({
+function EndButton({ globalProgress }: { globalProgress: any }) {
+  const opacity = useTransform(globalProgress, [0.85, 1.0], [0, 1]);
+  const scale = useTransform(globalProgress, [0.85, 1.0], [0.8, 1]);
+  const y = useTransform(globalProgress, [0.85, 1.0], [60, 0]);
+
+  return (
+    <motion.div
+      style={{ opacity, scale, y, zIndex: 100 }}
+      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+    >
+      <Link
+        href="/villas"
+        className="pointer-events-auto relative overflow-hidden flex items-center justify-center gap-4 px-10 py-5 md:px-14 md:py-6 rounded-full bg-[#EFCD62] text-[#0D4032] font-philosopher text-xl md:text-2xl shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:bg-[#F3DA85] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-all duration-500 group hover:scale-105"
+      >
+        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/10 to-white/40 pointer-events-none" />
+        <span className="relative z-10 font-bold whitespace-nowrap text-center">
+          See Best Experience Villas
+        </span>
+        <ArrowRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-2 transition-transform duration-500 relative z-10" />
+      </Link>
+    </motion.div>
+  );
+}
+
+function PanelSlide({
   data,
   index,
   globalProgress,
-  totalPanels,
+  totalSteps,
 }: {
   data: any;
   index: number;
   globalProgress: any;
-  totalPanels: number;
+  totalSteps: number;
 }) {
-  const step = 1 / (totalPanels - 1);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [offsetPx, setOffsetPx] = useState(1000);
 
-  const enterStart = (index - 1) * step;
-  const enterEnd = index * step;
-  const exitStart = index * step;
-  const exitEnd = (index + 1) * step;
+  useEffect(() => {
+    const handleResize = () =>
+      setOffsetPx(window.innerWidth >= 1024 ? 672 : window.innerWidth);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  // Transforms
-  const xInput = [enterStart, enterEnd];
-  const xOutput = ["100%", "0%"];
-
-  // Entry
-  const x = useTransform(globalProgress, xInput, xOutput, { clamp: false });
-
-  // Exit (Recede)
-  const exitScale = useTransform(
-    globalProgress,
-    [exitStart, exitEnd],
-    [1, 0.8],
-  );
-  const exitOpacity = useTransform(
-    globalProgress,
-    [exitStart, exitEnd],
-    [1, 0.4],
-  );
-  const exitFilter = useTransform(
-    globalProgress,
-    [exitStart, exitEnd],
-    ["brightness(1)", "brightness(0.3)"],
-  );
-
-  let style: any = { zIndex: index * 10 };
-
-  if (index === 0) {
-    // First panel: Static start, then exit
-    style.scale = exitScale;
-    style.opacity = exitOpacity;
-    style.filter = exitFilter;
-    style.x = 0;
-  } else if (index === totalPanels - 1) {
-    // Last panel: Enter, no exit
-    style.x = useTransform(
-      globalProgress,
-      [enterStart, enterEnd],
-      ["100%", "0%"],
-    );
-  } else {
-    // Middle panels: Enter then Exit
-    const xCombined = useTransform(
-      globalProgress,
-      [enterStart, enterEnd, exitEnd],
-      ["100%", "0%", "0%"],
-    );
-    const scaleCombined = useTransform(
-      globalProgress,
-      [enterStart, enterEnd, exitEnd],
-      [1, 1, 0.8],
-    );
-    const opacityCombined = useTransform(
-      globalProgress,
-      [enterStart, enterEnd, exitEnd],
-      [1, 1, 0.4],
-    );
-    const filterCombined = useTransform(
-      globalProgress,
-      [enterStart, enterEnd, exitEnd],
-      ["brightness(1)", "brightness(1)", "brightness(0.3)"],
-    );
-
-    style.x = xCombined;
-    style.scale = scaleCombined;
-    style.opacity = opacityCombined;
-    style.filter = filterCombined;
-  }
-
-  // Ken Burns Effect for Image
-  // Slowly scale up while visible
-  const kbScale = useTransform(
-    globalProgress,
-    [Math.max(0, enterStart), Math.min(1, exitEnd)],
-    [1.0, 1.15],
-  );
-
-  // Content Animation
-  const contentVars = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut", delay: 0.3 },
-    },
-  };
+  const x = useTransform(globalProgress, (p: number) => {
+    return (index - p * totalSteps) * offsetPx;
+  });
 
   return (
     <motion.div
-      style={style}
-      className="absolute inset-0 w-full h-full bg-[#050505] overflow-hidden shadow-2xl"
+      style={{ x, zIndex: index * 10 }}
+      className="absolute inset-0 w-full h-full flex items-center justify-center bg-transparent pointer-events-none"
     >
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <motion.div
-          style={{ scale: kbScale }}
-          className="relative w-full h-full"
-        >
-          <Image
-            src={data.image}
-            alt={data.title}
-            fill
-            className="object-cover"
-            priority={index === 0}
-            sizes="100vw"
-          />
-        </motion.div>
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30" />
-      </div>
+      <div className="pointer-events-auto flex items-center justify-center w-full h-full">
+        <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
+        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-24">
+          <div className="relative w-full h-full max-w-xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
+            {/* Image Section */}
+            <div className="relative w-full aspect-[4/5] md:aspect-square lg:aspect-[4/3] max-h-[50vh] lg:max-h-[60vh] overflow-hidden shadow-2xl rounded-none bg-black">
+              <div className="w-full h-full relative">
+                <Image
+                  src={data.image}
+                  alt={data.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 600px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              </div>
+            </div>
 
-      {/* Content */}
-      <motion.div
-        className="relative z-20 w-full h-full px-6 pb-32 md:pb-24 text-center flex flex-col items-center justify-end"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.5 }}
-        variants={contentVars}
-      >
-        <h2 className="font-philosopher text-gh-h2 text-white mb-6 drop-shadow-lg">
-          {data.title}
-        </h2>
-        <p className="font-manrope text-gh-body text-white/90 font-light max-w-xl mb-10 leading-relaxed drop-shadow-md">
-          {data.subtext}
-        </p>
-        <PrimaryButton href={data.href || "#"}>{data.cta}</PrimaryButton>
-      </motion.div>
+            {/* Text Section */}
+            <div className="relative w-full flex flex-col items-start text-left mt-2 h-[220px] lg:h-[260px]">
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="font-philosopher text-gh-h2 text-white leading-none mb-4"
+              >
+                {data.title}
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="font-manrope text-gh-body text-white/80 leading-relaxed mb-6 lg:mb-8 line-clamp-3 max-w-lg"
+              >
+                {data.subtext}
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="w-full max-w-md"
+              >
+                <Link
+                  href={data.href || "#"}
+                  className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-4 transition-all"
+                >
+                  {data.cta} <ArrowRight className="w-5 h-5" />
+                </Link>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 }
