@@ -73,7 +73,7 @@ export default function MenuPage() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
+                        className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
                           desktopSelectedView === "villas"
                             ? "bg-left text-[#EFCD62]"
                             : "bg-right"
@@ -103,7 +103,7 @@ export default function MenuPage() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
+                        className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
                           desktopSelectedView === "experiences"
                             ? "bg-left text-[#EFCD62]"
                             : "bg-right"
@@ -122,21 +122,21 @@ export default function MenuPage() {
                   </li>
                   <li>
                     <Link href="/about">
-                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         About us
                       </span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/careers">
-                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         Careers
                       </span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/blogs">
-                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         Blogs
                       </span>
                     </Link>
@@ -148,7 +148,7 @@ export default function MenuPage() {
                       }}
                       className="text-left"
                     >
-                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
                         Partner with us
                       </span>
                     </button>
@@ -166,7 +166,7 @@ export default function MenuPage() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
+                        className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${
                           desktopSelectedView === "more"
                             ? "bg-left text-[#EFCD62]"
                             : "bg-right"
@@ -245,11 +245,14 @@ export default function MenuPage() {
                       href={`/villas/${villa.id}`}
                       className="flex flex-col cursor-pointer group"
                     >
-                      <p className="text-white/40 text-gh-desc font-manrope font-bold tracking-[0.2em] uppercase mb-1">
+                      <p className="text-white/40 text-[10px] font-manrope font-medium tracking-[0.2em] uppercase mb-1">
                         {villa.type}
                       </p>
                       <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-gh-body font-manrope text-white group-hover:text-[#EFCD62] transition-colors">
+                        <h3
+                          style={{ fontWeight: 200 }}
+                          className="text-gh-scroll font-manrope text-white group-hover:text-[#EFCD62] transition-colors leading-none tracking-wide"
+                        >
                           {villa.name}
                         </h3>
                         <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
@@ -326,7 +329,10 @@ export default function MenuPage() {
                       className="flex flex-col cursor-pointer group"
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <h3 className="text-gh-body font-manrope text-white group-hover:text-[#EFCD62] transition-colors">
+                        <h3
+                          style={{ fontWeight: 200 }}
+                          className="text-gh-scroll font-manrope text-white group-hover:text-[#EFCD62] transition-colors tracking-wide"
+                        >
                           {exp.title}
                         </h3>
                         <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
@@ -462,11 +468,14 @@ export default function MenuPage() {
                           href={`/villas/${villa.id}`}
                           className="flex flex-col cursor-pointer"
                         >
-                          <p className="text-white/40 text-gh-label uppercase font-manrope font-bold tracking-[0.2em] mb-1.5">
+                          <p className="text-white/40 text-gh-label uppercase font-manrope font-medium tracking-[0.2em] mb-1.5">
                             {villa.type}
                           </p>
                           <div className="flex items-center gap-2 group/title">
-                            <h3 className="text-gh-scroll lg:text-gh-h2 font-philosopher text-white transition-colors capitalize">
+                            <h3
+                              style={{ fontWeight: 200 }}
+                              className="text-gh-scroll lg:text-gh-h2 font-manrope text-white transition-colors capitalize tracking-wide"
+                            >
                               {villa.name}
                             </h3>
                             <ChevronRight className="w-5 h-5 text-white/50 group-hover/title:text-[#EFCD62] transition-colors" />
@@ -573,7 +582,10 @@ export default function MenuPage() {
                             {exp.type}
                           </p>
                           <div className="flex items-center gap-2 group/title">
-                            <h3 className="text-gh-scroll lg:text-gh-h2 font-philosopher text-white transition-colors">
+                            <h3
+                              style={{ fontWeight: 200 }}
+                              className="text-gh-scroll lg:text-gh-h2 font-manrope text-white transition-colors tracking-wide"
+                            >
                               {exp.title}
                             </h3>
                             <ChevronRight className="w-5 h-5 text-white/50 group-hover/title:text-[#EFCD62] transition-colors" />
