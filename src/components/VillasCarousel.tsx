@@ -138,8 +138,8 @@ export default function VillasCarousel() {
         className="sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/8 transition-all duration-300 ease-in-out"
         style={{ top: navbarVisible ? `${NAVBAR_HEIGHT}px` : "0px" }}
       >
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 pt-4 md:pt-6 pb-4">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-6">
+        <div className="max-w-[1920px] mx-auto px-2 md:px-8 lg:px-16 pt-3 md:pt-6 pb-3">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 md:gap-6">
             {/* CATEGORIES - Left Side on Desktop */}
             <div className="flex overflow-x-auto items-center gap-2 md:gap-3 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none] order-2 lg:order-1">
               {CATEGORIES.map((category) => (

@@ -54,16 +54,16 @@ export default function BookingBanner({ onSearch }: { onSearch?: () => void }) {
   };
 
   return (
-    <div className="w-fit bg-[#1A1C1E]/40 backdrop-blur-md border border-white/10 px-3.5 sm:px-4 py-1.5 sm:py-1 rounded-none flex flex-nowrap items-center justify-start gap-x-3 sm:gap-x-5 gap-y-2">
+    <div className="w-full sm:w-fit bg-[#1A1C1E]/40 backdrop-blur-md border border-white/10 px-3 sm:px-4 py-1.5 sm:py-1 rounded-none flex flex-nowrap items-center justify-center sm:justify-start gap-x-2 sm:gap-x-5">
       <Link
         href="/book?step=dates"
         className="flex-none transition-all hover:opacity-80 py-1"
       >
-        <div className="flex items-center gap-2 sm:gap-3">
-          <p className="text-[7px] sm:text-[8px] lg:text-[9px] text-white/50 font-manrope font-bold tracking-[0.15em] uppercase whitespace-nowrap">
+        <div className="flex items-center gap-1 flex-none">
+          <p className="text-[10px] text-white/50 font-manrope font-bold tracking-[0.15em] uppercase whitespace-nowrap">
             CHECK IN - CHECK OUT :
           </p>
-          <p className="text-[9px] sm:text-[10px] lg:text-[11px] text-white font-manrope whitespace-nowrap">
+          <p className="text-[12px] text-white font-manrope whitespace-nowrap">
             {formatDateRange()}
           </p>
         </div>
@@ -71,16 +71,16 @@ export default function BookingBanner({ onSearch }: { onSearch?: () => void }) {
 
       <div className="block w-[1px] h-3 sm:h-4 bg-white/10 shrink-0 mx-0.5 sm:mx-0" />
 
-      <div className="flex items-center gap-4 sm:gap-6 lg:gap-10 flex-none justify-center">
+      <div className="flex items-center gap-2 sm:gap-6 lg:gap-10 shrink-0">
         <Link
           href="/book?step=guests"
           className="flex-none transition-all hover:opacity-80 py-1"
         >
-          <div className="flex items-center gap-2 sm:gap-3">
-            <p className="text-[7px] sm:text-[8px] lg:text-[9px] text-white/50 font-manrope font-bold tracking-[0.15em] uppercase whitespace-nowrap">
+          <div className="flex items-center gap-1">
+            <p className="text-[10px] text-white/50 font-manrope font-bold tracking-[0.15em] uppercase whitespace-nowrap">
               GUESTS :
             </p>
-            <p className="text-[9px] sm:text-[10px] lg:text-[11px] text-white font-manrope whitespace-nowrap">
+            <p className="text-[12px] text-white font-manrope whitespace-nowrap">
               {mounted ? guests.adults + guests.children : "2"}
             </p>
           </div>
@@ -88,10 +88,10 @@ export default function BookingBanner({ onSearch }: { onSearch?: () => void }) {
 
         <button
           onClick={onSearch}
-          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center shrink-0 hover:bg-white/5 transition-colors rounded-none"
+          className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shrink-0 hover:bg-white/5 transition-colors rounded-none"
           aria-label="Search Villas"
         >
-          <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/70 hover:text-white transition-colors" />
+          <Search className="w-[17px] h-[17px] text-white/70 hover:text-white transition-colors" />
         </button>
       </div>
     </div>
