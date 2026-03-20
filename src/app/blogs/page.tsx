@@ -1,0 +1,144 @@
+"use client";
+
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, Clock, Calendar } from "lucide-react";
+import { motion } from "framer-motion";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import MobileBottomNav from "@/components/MobileBottomNav";
+import { BLOG_POSTS, BlogPost } from "@/data/blogs";
+
+const BlogCard = ({ post, index }: { post: BlogPost; index: number }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+      className="group flex flex-col h-full bg-[#1E2023] border border-white/5 hover:border-[#EFCD62]/30 transition-all duration-500"
+    >
+      <Link
+        href={post.link}
+        className="relative aspect-[16/10] overflow-hidden block"
+      >
+        <Image
+          src={post.image}
+          alt={post.title}
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+        <div className="absolute top-4 left-4 z-10">
+          <span className="bg-[#EFCD62] text-black text-[10px] font-manrope font-bold tracking-widest uppercase px-3 py-1">
+            {post.category}
+          </span>
+        </div>
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
+      </Link>
+
+      <div className="flex flex-col flex-1 p-6 md:p-8">
+        <div className="flex items-center gap-4 mb-4 text-white/40 text-[11px] font-manrope tracking-wider uppercase">
+          <div className="flex items-center gap-1.5">
+            <Calendar className="w-3.5 h-3.5 text-[#EFCD62]" />
+            {post.date}
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 text-[#EFCD62]" />
+            {post.readTime}
+          </div>
+        </div>
+
+        <h3 className="font-philosopher text-gh-h3 md:text-gh-h3 text-white group-hover:text-[#EFCD62] transition-colors mb-4 leading-snug">
+          <Link href={post.link}>{post.title}</Link>
+        </h3>
+
+        <p className="font-manrope text-white/60 text-gh-body leading-relaxed mb-8 line-clamp-3">
+          {post.excerpt}
+        </p>
+
+        <div className="mt-auto">
+          <Link
+            href={post.link}
+            className="inline-flex items-center gap-3 text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase group-hover:gap-5 transition-all duration-300"
+          >
+            Read More <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default function BlogsPage() {
+  return (
+    <main className="relative min-h-screen bg-[#25282C] text-white">
+      <Navbar />
+      <MobileBottomNav />
+
+      {/* Hero Section */}
+      <section className="pt-32 pb-16 md:pt-48 md:pb-24 px-6 md:px-12 lg:px-24">
+        <div className="max-w-[1920px] mx-auto">
+          <div className="max-w-3xl">
+            <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-6">
+              OUR JOURNAL
+            </p>
+            <h1 className="font-philosopher text-gh-h1 text-white mb-8 leading-tight">
+              Stories of Hospitality, <br />
+              <span className="italic text-[#EFCD62]">Architecture</span> &
+              Escape
+            </h1>
+            <p className="font-manrope text-white/70 text-gh-body max-w-xl leading-relaxed">
+              Explore our curation of thoughts on luxury private stays,
+              corporate culture, and the art of hosted entertainment near
+              Bangalore.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Search/Filters Placeholder (Optional) */}
+      <div className="w-full h-[1px] bg-white/10" />
+
+      {/* Blog Grid */}
+      <section className="py-16 md:py-24 px-6 md:px-12 lg:px-24">
+        <div className="max-w-[1920px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+            {BLOG_POSTS.map((post, idx) => (
+              <BlogCard key={post.id} post={post} index={idx} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-24 bg-[#1E2023] border-t border-white/5">
+        <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
+          <div className="bg-[#EFCD62] p-12 md:p-20 flex flex-col md:flex-row items-center justify-between gap-12 rounded-none">
+            <div className="max-w-xl text-black">
+              <h2 className="font-philosopher text-gh-h2 mb-4 leading-tight">
+                Get the latest from <br /> Jade Hospitainment
+              </h2>
+              <p className="font-manrope text-black/70 text-gh-body">
+                Subscribe to our newsletter for exclusive offers, curated escape
+                ideas, and architectural highlights.
+              </p>
+            </div>
+            <div className="w-full max-w-md flex flex-col md:flex-row gap-4">
+              <input
+                type="email"
+                placeholder="YOUR EMAIL ADDRESS"
+                className="flex-1 bg-white/20 border border-black/10 px-6 py-4 text-black placeholder:text-black/40 focus:outline-none focus:bg-white/30 transition-all font-manrope text-gh-label"
+              />
+              <button className="bg-black text-[#EFCD62] px-10 py-4 font-manrope font-bold tracking-[0.2em] uppercase hover:bg-black/90 transition-all text-gh-label">
+                JOIN
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </main>
+  );
+}

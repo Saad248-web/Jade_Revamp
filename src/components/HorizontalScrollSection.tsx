@@ -83,9 +83,8 @@ export default function HorizontalScrollSection() {
     <section ref={targetRef} className="relative h-[400vh] bg-[#0D4032]">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#0D4032]">
         {/* Top Label & Counter - Global */}
-        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-20 md:pt-24 pb-[16px] md:pb-[24px]">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/90 to-transparent -z-10" />
-          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-4 md:mb-6 font-semibold text-jade-gold drop-shadow-lg block">
+        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-16 md:pt-20 pb-[20px] md:pb-[28px]">
+          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-3 md:mb-5 font-semibold text-jade-gold drop-shadow-lg block">
             WAYS JADE IS EXPERIENCED
           </span>
           <GlobalCounter
@@ -106,8 +105,9 @@ export default function HorizontalScrollSection() {
               totalSteps={totalSteps}
             />
           ))}
-          <EndButton globalProgress={smoothProgress} />
         </div>
+        {/* End Button — positioned in the outer sticky container for true screen centering */}
+        <EndButton globalProgress={smoothProgress} />
       </div>
     </section>
   );
@@ -146,11 +146,11 @@ function GlobalCounter({
   }, [progress, total, totalSteps]);
 
   return (
-    <div className="relative flex items-center gap-12 md:gap-16 font-philosopher text-gh-scroll mt-2">
+    <div className="relative flex items-center gap-8 md:gap-12 font-philosopher text-[18px] md:text-[22px] mt-2">
       <span className="text-white drop-shadow-lg transition-all duration-300">
         {current}
       </span>
-      <div className="w-24 md:w-32 h-[1px] bg-white/70 drop-shadow-lg" />
+      <div className="w-20 md:w-28 h-[1px] bg-white/70 drop-shadow-lg" />
       <span className="text-white/70 drop-shadow-lg">{total}</span>
     </div>
   );
@@ -233,12 +233,12 @@ function StackedPanel({
           theme={isGrid ? "golden" : "white"}
           sectionRef={panelRef}
         />
-        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-24">
-          {/* Layout Container: Stacked universally on all screen sizes to mimic mobile */}
-          <div className="relative w-full max-w-xl mx-auto flex flex-col items-center justify-center gap-6 lg:gap-8">
+        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24">
+          {/* Layout Container */}
+          <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg xl:max-w-xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
             {/* Image/Grid Section */}
             <div
-              className={`relative w-full aspect-[4/5] md:aspect-square lg:aspect-[4/3] max-h-[50vh] lg:max-h-[60vh] overflow-hidden shadow-2xl rounded-none ${isGrid ? "bg-transparent" : "bg-black"}`}
+              className={`relative w-full aspect-[4/5] sm:aspect-[3/4] md:aspect-square lg:aspect-[4/3] max-h-[45vh] md:max-h-[52vh] lg:max-h-[58vh] overflow-hidden shadow-2xl rounded-none ${isGrid ? "bg-transparent" : "bg-black"}`}
             >
               <div className="w-full h-full relative">
                 {!isGrid ? (

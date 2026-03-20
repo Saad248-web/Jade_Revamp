@@ -137,6 +137,7 @@ export default function Footer() {
     { label: "CARAVANS", href: "/caravans" },
     { label: "ABOUT", href: "/about" },
     { label: "CAREERS", href: "/careers" },
+    { label: "BLOG", href: "/blogs" },
   ];
 
   const LINKS_COLUMN_2 = [

@@ -384,11 +384,11 @@ export default function MenuPage() {
                   More
                 </h2>
 
-                <ul className="flex flex-col space-y-10">
+                <ul className="flex flex-col space-y-6 pl-4">
                   <li>
                     <Link
                       href="/privacy"
-                      className="block text-gh-scroll font-manrope text-white/70 hover:text-[#EFCD62] transition-colors"
+                      className="block text-[14px] font-manrope text-white/70 hover:text-[#EFCD62] transition-colors"
                     >
                       Privacy Policy
                     </Link>
@@ -396,7 +396,7 @@ export default function MenuPage() {
                   <li>
                     <Link
                       href="/terms"
-                      className="block text-gh-scroll font-manrope text-white/70 hover:text-[#EFCD62] transition-colors"
+                      className="block text-[14px] font-manrope text-white/70 hover:text-[#EFCD62] transition-colors"
                     >
                       Terms & Conditions
                     </Link>
@@ -404,7 +404,7 @@ export default function MenuPage() {
                   <li>
                     <Link
                       href="/refund"
-                      className="block text-gh-scroll font-manrope text-white/70 hover:text-[#EFCD62] transition-colors"
+                      className="block text-[14px] font-manrope text-white/70 hover:text-[#EFCD62] transition-colors"
                     >
                       Refund Policy
                     </Link>

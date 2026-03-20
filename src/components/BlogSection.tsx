@@ -7,40 +7,7 @@ import { ArrowRight, ChevronRight, MoveRight } from "lucide-react";
 import Link from "next/link";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
-const BLOG_POSTS = [
-  {
-    id: 1,
-    title: "Heading",
-    excerpt:
-      "Welcome to Jade Hospitainment, where hospitality meets entertainment. Discover our unique approach to hosting.",
-    image: "/assets/casual_stays.png",
-    link: "/blog/post-1",
-  },
-  {
-    id: 2,
-    title: "Heading",
-    excerpt:
-      "Creating spaces that inspire connection and creativity. How we design our villas for maximum impact.",
-    image: "/assets/casual_stays.png",
-    link: "/blog/post-2",
-  },
-  {
-    id: 3,
-    title: "Heading",
-    excerpt:
-      "The art of slow living. Why taking time to disconnect is essential for modern wellbeing.",
-    image: "/assets/casual_stays.png",
-    link: "/blog/post-3",
-  },
-  {
-    id: 4,
-    title: "Heading",
-    excerpt:
-      "From intimate gatherings to grand celebrations. A guide to hosting the perfect event at Jade.",
-    image: "/assets/casual_stays.png",
-    link: "/blog/post-4",
-  },
-];
+import { BLOG_POSTS } from "@/data/blogs";
 
 const BlogCard = ({ post }: { post: any }) => {
   return (
@@ -108,12 +75,20 @@ export default function BlogSection() {
             </p>
           </div>
 
-          <button
-            onClick={scrollRight}
-            className="hidden md:flex items-center justify-center w-14 h-14 rounded-full border border-white/20 hover:border-[#EFCD62] hover:bg-[#EFCD62]/10 transition-all text-white hover:text-[#EFCD62]"
-          >
-            <ArrowRight className="w-6 h-6" />
-          </button>
+          <div className="flex items-center gap-6">
+            <Link
+              href="/blogs"
+              className="font-manrope text-gh-label text-[#EFCD62] tracking-widest uppercase border-b border-[#EFCD62]/30 hover:border-[#EFCD62] transition-colors pb-1"
+            >
+              View All
+            </Link>
+            <button
+              onClick={scrollRight}
+              className="hidden md:flex items-center justify-center w-14 h-14 rounded-full border border-white/20 hover:border-[#EFCD62] hover:bg-[#EFCD62]/10 transition-all text-white hover:text-[#EFCD62]"
+            >
+              <ArrowRight className="w-6 h-6" />
+            </button>
+          </div>
         </div>
 
         {/* Carousel */}

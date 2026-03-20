@@ -199,21 +199,6 @@ export default function InstagramCarousel() {
           ))}
         </div>
 
-        {/* Unified Scroll Indicator */}
-        <div className="flex justify-center gap-2 mt-[8px]">
-          {[...Array(5)].map((_, i) => {
-            const isActive = Math.round((scrollProgress / 100) * 4) === i;
-            return (
-              <div
-                key={i}
-                className={`h-[6px] transition-all duration-300 ${
-                  isActive ? "bg-jade-gold w-6" : "bg-white/20 w-[6px]"
-                }`}
-              />
-            );
-          })}
-        </div>
-
         {/* CTA Button */}
         <div className="flex justify-center mt-8 mb-8 px-6">
           <PrimaryButton
