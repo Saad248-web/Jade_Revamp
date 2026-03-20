@@ -1,5 +1,36 @@
+export interface BlogSection {
+  type:
+    | "text"
+    | "image"
+    | "quote"
+    | "list"
+    | "table"
+    | "faq"
+    | "heading"
+    | "cta";
+  content?: string;
+  image?: string;
+  caption?: string;
+  items?: string[];
+  level?: 2 | 3;
+  tableData?: {
+    headers: string[];
+    rows: string[][];
+  };
+  faqs?: {
+    question: string;
+    answer: string;
+  }[];
+  ctas?: {
+    label: string;
+    link: string;
+    variant: "primary" | "outline";
+  }[];
+}
+
 export interface BlogPost {
   id: number;
+  slug: string;
   title: string;
   excerpt: string;
   image: string;
@@ -7,51 +38,202 @@ export interface BlogPost {
   date: string;
   category: string;
   readTime: string;
+  sections: BlogSection[];
 }
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: 99,
+    slug: "corporate-team-outing-bangalore-guide",
+    title:
+      "Elevate Your Corporate Team Outing in Bangalore: Exclusive Luxury Villas & Private Retreats",
+    excerpt:
+      "Planning a company offsite? Step away from generic hotels and discover why a private luxury villa buyout is the ultimate canvas for team bonding and productivity.",
+    image:
+      "https://jadehospitainment.com/wp-content/uploads/2025/12/dome-banner-one.webp",
+    link: "/blogs/corporate-team-outing-bangalore-guide",
+    date: "March 20, 2024",
+    category: "CORPORATE",
+    readTime: "20 min read",
+    sections: [
+      {
+        type: "text",
+        content:
+          "Planning a corporate team outing in Bangalore requires more than just booking a generic hotel block; it demands a space that fosters genuine connection, unobstructed focus, and memorable team bonding. At Jade Hospitainment, we redefine the company offsite. Step away from crowded lobbies, shared buffets, and rigid conference rooms. Instead, imagine your team stepping into a sprawling, private luxury villa located in the serene landscapes of Devanahalli or Kanakapura Road—where the entire estate belongs exclusively to your group.",
+      },
+      {
+        type: "cta",
+        ctas: [
+          { label: "Plan Your Offsite", link: "/contact", variant: "primary" },
+          { label: "Explore Retreats", link: "/villas", variant: "outline" },
+        ],
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "The Jade Difference: Private Villas vs. Shared Hotels",
+      },
+      {
+        type: "text",
+        content:
+          "When searching for private corporate retreat locations, decision-makers frequently default to standard luxury hotels out of habit. However, standard hotels dilute the offsite experience through shared infrastructure and rigid operational hours. A private villa buyout shifts the paradigm, ensuring your team building luxury villas cater entirely to your schedule, your culture, and your objectives.",
+      },
+      {
+        type: "table",
+        tableData: {
+          headers: ["Traditional Shared Resorts", "Jade Private Villas"],
+          rows: [
+            [
+              "Shared Infrastructure: Navigating common areas, shared buffets, and lobbies with hundreds of other strangers.",
+              "Absolute Exclusivity: The entire property—including expansive lawns and private pools—is a private buyout dedicated solely to your team.",
+            ],
+            [
+              "Rigid F&B Policies: Mandatory use of in-house catering with inflexible menus and strict dining schedules.",
+              "Bespoke & Flexible Catering: Total freedom. We allow outside catering for large events, ensuring your specific culinary preferences are perfectly met.",
+            ],
+            [
+              "Siloed Accommodations: Employees scattered across different floors, reducing spontaneous interaction.",
+              "Unified Living Spaces: Grand lounges and interconnected pavilions naturally encourage collaboration and organic team bonding.",
+            ],
+            [
+              "Cookie-Cutter Conference Rooms: Windowless, uninspiring boardrooms that drain energy and stifle creative thinking.",
+              "Inspiring Environments: Strategy sessions by a shimmering pool, brainstorms on emerald lawns, or sunlit dome workshops.",
+            ],
+          ],
+        },
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "Tailored Exclusivity: Designed for Groups & Corporates",
+      },
+      {
+        type: "text",
+        content:
+          "We provide 'Private & Exclusive Spaces.' Unlike conventional hotels, we do not operate on a room-by-room basis for individual couples. Our estates are exclusively available for groups—startup offsites, corporate delegations, and large family gatherings—guaranteeing 100% privacy and an uninterrupted sanctuary for your team.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "Signature Retreats for Your Next Company Offsite",
+      },
+      {
+        type: "heading",
+        level: 3,
+        content: "Jade 735",
+      },
+      {
+        type: "text",
+        content:
+          "Located in Devanahalli, Jade 735 is an architectural masterpiece just 15 minutes from the airport. Perfect for intimate high-stakes board meetings and C-suite escapes.",
+      },
+      {
+        type: "heading",
+        level: 3,
+        content: "Magnolia by Jade",
+      },
+      {
+        type: "text",
+        content:
+          "A colonial-inspired estate with vast manicured lawns ideal for expansive team-building exercises and outdoor workshops.",
+      },
+      {
+        type: "heading",
+        level: 3,
+        content: "Dome Villas",
+      },
+      {
+        type: "text",
+        content:
+          "Futuristic, eco-luxury aesthetic. The sweeping interior spaces foster a sense of unity and boundless creativity for hackathons and innovation sprints.",
+      },
+      {
+        type: "image",
+        image:
+          "https://jadehospitainment.com/wp-content/uploads/2024/12/image-6.png",
+        caption:
+          "Jade 735: The pinnacle of boutique luxury with temperature-controlled pools.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "Beyond the Boardroom: Mid-Week Workcations",
+      },
+      {
+        type: "text",
+        content:
+          "While weekends are often sold out, we aggressively champion the 'Mid-Week Workcation' (Monday–Thursday). Relocating to a serene environment mid-week eliminates urban distractions, injecting fresh energy into ongoing projects without encroaching on personal weekend time.",
+      },
+      {
+        type: "faq",
+        faqs: [
+          {
+            question: "Can we bring outside catering for our corporate event?",
+            answer:
+              "Yes, absolutely. We are highly flexible. While we offer exceptional in-house culinary services, we allow outside catering for large group offsites.",
+          },
+          {
+            question: "What is the alcohol policy at Jade retreats?",
+            answer:
+              "We strictly adhere to local Homestay Guidelines (2.3L per person). For larger events serving alcohol, we facilitate the procurement of a standard one-day liquor license.",
+          },
+          {
+            question:
+              "Is mid-week booking available at a discount for workcations?",
+            answer:
+              "Yes! We offer curated mid-week packages and favorable rates for corporate teams looking for a productive Mon-Thu escape.",
+          },
+        ],
+      },
+      {
+        type: "heading",
+        level: 2,
+        content: "Ready to Transform Your Next Corporate Event?",
+      },
+      {
+        type: "text",
+        content:
+          "Your team's potential is unlocked when you remove them from the mundane and place them in the extraordinary. Stop settling for shared spaces. Elevate your corporate outing with Jade.",
+      },
+      {
+        type: "cta",
+        ctas: [
+          {
+            label: "Connect With Our Corporate Concierge",
+            link: "/contact",
+            variant: "primary",
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: 1,
+    slug: "the-art-of-slow-living",
     title: "The Art of Slow Living: A Guide to Disconnecting",
     excerpt:
-      "Welcome to Jade Hospitainment, where hospitality meets entertainment. Discover our unique approach to hosting and why taking time to disconnect is essential for modern wellbeing.",
+      "Welcome to Jade Hospitainment. Discover our unique approach to hosting and why taking time to disconnect is essential for modern wellbeing.",
     image: "/assets/casual_stays.png",
     link: "/blogs/the-art-of-slow-living",
     date: "March 15, 2024",
     category: "WELLNESS",
-    readTime: "5 min read",
-  },
-  {
-    id: 2,
-    title: "Designing for Connection: Architecture at Jade",
-    excerpt:
-      "Creating spaces that inspire connection and creativity. How we design our villas for maximum impact and meaningful interactions.",
-    image: "/assets/casual_stays.png",
-    link: "/blogs/designing-for-connection",
-    date: "March 10, 2024",
-    category: "ARCHITECTURE",
-    readTime: "4 min read",
-  },
-  {
-    id: 3,
-    title: "The Perfect Corporate Offsite: Beyond the Boardroom",
-    excerpt:
-      "From intimate gatherings to grand celebrations. A guide to hosting the perfect corporate event that fosters teamwork and innovation.",
-    image: "/assets/casual_stays.png",
-    link: "/blogs/perfect-corporate-offsite",
-    date: "March 05, 2024",
-    category: "CORPORATE",
-    readTime: "6 min read",
-  },
-  {
-    id: 4,
-    title: "Celebracying milestones: Private Villa Edition",
-    excerpt:
-      "Birthdays, poolside parties, or bachelor parties. Discover why a private villa is the ultimate canvas for your next big celebration.",
-    image: "/assets/casual_stays.png",
-    link: "/blogs/celebrating-milestones",
-    date: "February 28, 2024",
-    category: "CELEBRATIONS",
-    readTime: "5 min read",
+    readTime: "8 min read",
+    sections: [
+      {
+        type: "text",
+        content:
+          "In an era of relentless notifications and 'always-on' culture, the art of slow living has become a revolutionary act. At Jade, we design our villas as sanctuaries where the digital world fades into the background. It's about reclaiming your time and refocusing your senses on the immediate environment.",
+      },
+      {
+        type: "quote",
+        content:
+          "Solitude is where we find ourselves; Jade is where we find our peace.",
+      },
+      {
+        type: "text",
+        content:
+          "From the tactile quality of our hand-picked finishes to the sound of wind through the trees in our garden retreats, every element is an invitation to pause. Slow living isn't about doing nothing; it's about doing everything with intention.",
+      },
+    ],
   },
 ];
