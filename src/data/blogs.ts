@@ -49,8 +49,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "Elevate Your Corporate Team Outing in Bangalore: Exclusive Luxury Villas & Private Retreats",
     excerpt:
       "Planning a company offsite? Step away from generic hotels and discover why a private luxury villa buyout is the ultimate canvas for team bonding and productivity.",
-    image:
-      "https://jadehospitainment.com/wp-content/uploads/2025/12/dome-banner-one.webp",
+    image: "/assets/corporate_retreat.png",
     link: "/blogs/corporate-team-outing-bangalore-guide",
     date: "March 20, 2024",
     category: "CORPORATE",

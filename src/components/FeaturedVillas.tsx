@@ -113,7 +113,6 @@ function IntroPanel({
   // Parallax - Text and Image overlap initially (at center) and then separate
   // Vertical animation finishes before horizontal slide starts
   const textY = useTransform(globalProgress, [0, step * 0.8], [0, -600]);
-  const imageY = useTransform(globalProgress, [0, step * 0.8], [0, 600]);
   const opacity = useTransform(globalProgress, [exitStart, exitEnd], [1, 0]);
 
   return (
@@ -135,19 +134,6 @@ function IntroPanel({
             Every Jade experience is defined by its setting—chosen for
             atmosphere, flow, and the freedom it allows.
           </p>
-        </motion.div>
-
-        <motion.div
-          style={{ y: imageY }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full aspect-[4/5] md:aspect-video opacity-40 mix-blend-overlay pointer-events-none"
-        >
-          <Image
-            src="/assets/Dome_Villa.png"
-            alt="Background Intro"
-            fill
-            sizes="100vw"
-            className="object-cover"
-          />
         </motion.div>
       </div>
     </motion.div>
