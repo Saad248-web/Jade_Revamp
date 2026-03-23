@@ -4,7 +4,6 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Play, ArrowRight, ArrowLeft } from "lucide-react";
-import { motion } from "framer-motion";
 import PrimaryButton from "@/components/PrimaryButton";
 import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import LiveBackground from "@/components/LiveBackground";
@@ -12,9 +11,52 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { useAnimation } from "@/context/AnimationContext";
+import GlassStatsBanner from "@/components/GlassStatsBanner";
+import { AnimatePresence, motion } from "framer-motion";
+
+const OFFERINGS = [
+  {
+    title: "Weekend Getaways",
+    description:
+      "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone's wishlist.",
+    image: "/assets/Bathing_Girls.png",
+    link: "/weekend-getaways",
+  },
+  {
+    title: "Corporate Retreats",
+    description:
+      "Private venues designed for focused sessions, team alignment, and meaningful downtime.",
+    image: "/assets/corporate_retreat.png",
+    link: "/corporate-retreats",
+  },
+  {
+    title: "Weddings",
+    description:
+      "Bespoke celebrations in curated settings that make your special day truly unforgettable.",
+    image: "/assets/poolside_exp.png",
+    link: "/weddings",
+  },
+  {
+    title: "Party Villas",
+    description:
+      "Host birthdays, pool parties, reunions or milestone celebrations in exclusive Jade villas.",
+    image: "/assets/celebrations_friends.png",
+    link: "/party-villas",
+  },
+];
 
 export default function AboutPage() {
   const { setPartnerOverlayOpen } = useAnimation();
+  const [currentOffering, setCurrentOffering] = React.useState(0);
+
+  const nextOffering = () =>
+    setCurrentOffering((prev) => (prev + 1) % OFFERINGS.length);
+  const prevOffering = () =>
+    setCurrentOffering(
+      (prev) => (prev - 1 + OFFERINGS.length) % OFFERINGS.length,
+    );
+
+  const offering = OFFERINGS[currentOffering];
 
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
@@ -22,7 +64,7 @@ export default function AboutPage() {
       <Navbar />
       <MobileBottomNav />
       {/* 1. HERO SECTION */}
-      <section className="relative min-h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden">
+      <section className="relative min-h-[100svh] w-full flex flex-col items-center justify-end pb-24 overflow-hidden">
         {/* Live Background */}
         <div className="absolute inset-0 z-0">
           <LiveBackground />
@@ -31,9 +73,9 @@ export default function AboutPage() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto mt-20">
+        <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto">
           {/* Logo */}
-          <div className="mb-12 relative w-24 h-24 md:w-32 md:h-32">
+          <div className="mb-10 relative w-24 h-24 md:w-32 md:h-32">
             <Image
               src="/assets/Golden_Logo.png"
               alt="Jade Logo"
@@ -44,46 +86,29 @@ export default function AboutPage() {
             />
           </div>
 
-          <h2 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
+          <h2 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-2">
             ABOUT JADEHOSPITAINMENT
           </h2>
 
-          <h1 className="text-gh-h1 font-philosopher text-white mb-6 leading-tight">
+          <h1 className="text-gh-h1 font-philosopher text-white mb-4 leading-tight">
             Curated Villas.
             <br />
             Thoughtfully Operated.
           </h1>
 
-          <p className="text-white/80 font-manrope text-gh-body max-w-2xl leading-relaxed mb-16">
+          <p className="text-white/80 font-manrope text-gh-body max-w-2xl leading-relaxed mb-6">
             Where hospitality and experience go beyond conventional listing
             platforms.
           </p>
 
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 md:gap-16 w-full max-w-3xl border border-white/10 bg-white/5 backdrop-blur-sm rounded-none p-6 md:p-8">
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-gh-h2 font-philosopher text-white">16</span>
-              <span className="text-white/60 text-gh-desc uppercase tracking-widest text-center">
-                LUXURY VILLA
-              </span>
-            </div>
-            <div className="flex flex-col items-center gap-1 border-l border-r border-white/10 px-4">
-              <span className="text-gh-h2 font-philosopher text-white">
-                7500+
-              </span>
-              <span className="text-white/60 text-gh-desc uppercase tracking-widest text-center">
-                CHECK-INS
-              </span>
-            </div>
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-gh-h2 font-philosopher text-white">
-                100+
-              </span>
-              <span className="text-white/60 text-gh-desc uppercase tracking-widest text-center">
-                EVENTS HOSTED
-              </span>
-            </div>
-          </div>
+          {/* Stats Bar (Figma Accurate & Responsive) */}
+          <GlassStatsBanner
+            stats={[
+              { value: "16", label: "LUXURY VILLA" },
+              { value: "7500+", label: "CHECK-INS" },
+              { value: "100+", label: "EVENTS HOSTED" },
+            ]}
+          />
         </div>
       </section>
 
@@ -150,17 +175,15 @@ export default function AboutPage() {
             OUR STORY
           </h3>
 
-          <div className="space-y-6 text-white/90 font-manrope text-gh-body leading-relaxed mb-16">
+          <div className="text-white/90 font-manrope text-gh-body leading-relaxed mb-16 text-center">
             <p>
               Founded in 2011 under Jade Retreats, Jade Hospitainment created
               exclusive private retreat experiences, starting with one of
-              Bengaluru's most sought-after vacation homes.
-            </p>
-            <p>
-              Jade expanded beyond stays, transforming villas and farmhouses
-              into curated retreats across hospitality and experience. Today,
-              Jade operates a growing portfolio of private retreats for
-              getaways, celebrations, and corporate offsites.
+              Bengaluru's most sought-after vacation homes. Jade expanded beyond
+              stays, transforming villas and farmhouses into curated retreats
+              across hospitality and experience. Today, Jade operates a growing
+              portfolio of private retreats for getaways, celebrations, and
+              corporate offsites.
             </p>
           </div>
 
@@ -219,53 +242,91 @@ export default function AboutPage() {
         ctaLink="/contact"
       />
 
-      {/* 5. WHAT WE DO SECTION */}
-      <section className="py-24 bg-[#1A1C1E]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex justify-between items-end mb-12">
+      {/* 5. WHAT WE DO SECTION (Offering Carousel) */}
+      <section className="relative h-screen min-h-[600px] flex flex-col justify-center bg-[#1A1C1E] py-12 md:py-16 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 w-full flex flex-col h-full">
+          {/* Header & Nav */}
+          <div className="flex justify-between items-end mb-8 md:mb-12">
             <div>
-              <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
+              <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3 font-manrope">
                 WHAT WE DO
               </h3>
-              <h2 className="text-gh-h2 font-philosopher text-white">
+              <h2 className="text-gh-h2 font-philosopher text-white leading-none">
                 Our Offering
               </h2>
             </div>
-            <div className="hidden md:flex gap-1">
-              <button className="w-12 h-12 rounded-none bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all">
-                <ArrowLeft className="w-5 h-5" />
+            <div className="flex gap-2">
+              <button
+                onClick={prevOffering}
+                className="w-10 h-10 md:w-12 md:h-12 rounded-none bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all group"
+              >
+                <ArrowLeft className="w-5 h-5 group-active:scale-90 transition-transform" />
               </button>
-              <button className="w-12 h-12 rounded-none bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all">
-                <ArrowRight className="w-5 h-5" />
+              <button
+                onClick={nextOffering}
+                className="w-10 h-10 md:w-12 md:h-12 rounded-none bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all group"
+              >
+                <ArrowRight className="w-5 h-5 group-active:scale-90 transition-transform" />
               </button>
             </div>
           </div>
 
-          <div className="relative aspect-[3/4] md:aspect-video w-full rounded-none overflow-hidden group">
-            <Image
-              src="/assets/Bathing_Girls.png"
-              alt="Weekend Getaways"
-              fill
-              className="object-cover"
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-
-            <div className="absolute inset-0 flex flex-col items-center justify-end p-8 md:p-16 text-center">
-              <h3 className="text-gh-h2 font-philosopher text-white mb-4">
-                Weekend Getaways
-              </h3>
-              <p className="text-white/70 max-w-xl mb-10 font-manrope text-gh-body leading-relaxed text-justify">
-                A day or two with your friends and family away from the bustling
-                city in the wilderness is truly on everyone's wishlist.
-              </p>
-              <Link
-                href="/weekend-getaways"
-                className="inline-flex w-fit border border-white/30 bg-white/5 backdrop-blur-sm text-white px-8 py-4 uppercase tracking-widest text-gh-label font-bold hover:bg-white hover:text-black transition-all items-center gap-3"
+          {/* Carousel Slide */}
+          <div className="relative flex-1 max-h-[540px] md:max-h-[700px] lg:max-h-[820px] w-full rounded-none overflow-hidden group min-h-0 mx-auto">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentOffering}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="absolute inset-0 w-full h-full"
               >
-                SEE WHAT A GETAWAY LOOKS LIKE <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+                <Image
+                  src={offering.image}
+                  alt={offering.title}
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                  priority
+                />
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+
+                {/* Content Overlay (Matching Image 2) */}
+                <div className="absolute inset-0 flex flex-col items-center justify-end p-8 md:p-16 text-center max-w-4xl mx-auto pb-12 md:pb-20">
+                  <motion.h3
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-gh-h2 font-philosopher text-white mb-4"
+                  >
+                    {offering.title}
+                  </motion.h3>
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-white/70 max-w-xl mb-8 md:mb-12 font-manrope text-gh-body leading-relaxed text-center"
+                  >
+                    {offering.description}
+                  </motion.p>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    <Link
+                      href={offering.link}
+                      className="inline-flex w-fit border border-white/30 bg-white/5 backdrop-blur-sm text-white px-8 py-4 uppercase tracking-widest text-gh-label font-bold hover:bg-white hover:text-black transition-all items-center gap-3"
+                    >
+                      SEE WHAT A {offering.title.toUpperCase().split(" ")[0]}{" "}
+                      LOOKS LIKE <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </section>
@@ -277,23 +338,26 @@ export default function AboutPage() {
           <LiveBackground />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
+        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center mb-16">
           <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
             MEET THE TEAM
           </h3>
           <h2 className="text-gh-h2 font-philosopher text-white mb-6">
             The Faces of Hospitainment
           </h2>
-          <p className="text-white/60 max-w-2xl mx-auto mb-16 font-manrope text-gh-body">
+          <p className="text-white/60 max-w-2xl mx-auto font-manrope text-gh-body">
             Seasoned leadership with hands-on experience across hospitality,
             events, and operations.
           </p>
+        </div>
 
-          <div className="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x snap-mandatory">
+        {/* Full-width Slider Bleeding to Right */}
+        <div className="relative z-10 pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]">
+          <div className="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x snap-mandatory pr-12 md:pr-24 lg:pr-[30vw]">
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="flex-shrink-0 w-[280px] md:w-[350px] bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 flex flex-col items-center text-center rounded-none snap-center"
+                className="flex-shrink-0 w-[240px] xs:w-[280px] md:w-[350px] bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 flex flex-col items-center text-center rounded-none snap-center"
               >
                 <div className="relative w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden border-2 border-[#EFCD62]/20 mb-8">
                   <Image

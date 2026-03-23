@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import React from "react";
 import GlassButton from "./GlassButton";
+import GlassStatsBanner from "./GlassStatsBanner";
 
 export interface HeroButton {
   icon: React.ReactNode;
@@ -93,38 +94,11 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
               {description}
             </p>
           </motion.div>
-
           {stats && stats.length > 0 && (
-            <div
-              style={{
-                backdropFilter: "blur(64px)",
-                WebkitBackdropFilter: "blur(64px)",
-              }}
-              className="grid grid-cols-3 gap-4 w-full max-w-xl border border-white/10 bg-black/60 rounded-none p-4 mb-4 shadow-2xl"
-            >
-              {stats.map((stat, idx) => (
-                <div
-                  key={idx}
-                  className={`flex flex-col items-center gap-1 ${
-                    idx > 0 && idx < stats.length - 1
-                      ? "border-l border-r border-white/10 px-4"
-                      : ""
-                  }`}
-                >
-                  <span className="text-gh-h2 font-philosopher text-white">
-                    {stat.value}
-                  </span>
-                  <span className="text-white/60 text-gh-label uppercase tracking-widest text-center">
-                    {stat.label}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <GlassStatsBanner stats={stats} marginBottom="mb-4" />
           )}
-
           {/* Optional Extra Content */}
           {children}
-
           {/* Action Buttons */}
           <div className="flex flex-row items-center justify-center gap-3 w-full max-w-2xl mb-24 md:mb-16">
             {buttons.map((btn, idx) => (
