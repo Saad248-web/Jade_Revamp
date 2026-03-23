@@ -321,27 +321,26 @@ export default function CareersPage() {
           </h2>
 
           <div className="text-white/70 max-w-2xl mx-auto space-y-6 font-manrope leading-relaxed mb-12 text-gh-body">
-            <p className="text-justify">
+            <p className="text-center">
               Our culture is built on accountability, teamwork, and consistent
               execution. We take our work seriously, knowing that experience is
               shaped by effort. And when we succeed, we celebrate it with the
               same energy we bring to the job.
             </p>
-            <p className="text-white/40 italic text-justify">
+            <p className="text-white/40 italic text-center">
               Bringing unique villas and curated experiences together under one
               standard of hospitality.
             </p>
           </div>
 
-          <PrimaryButton
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              setIsApplyModalOpen(true);
-            }}
-          >
-            SEND US YOUR CV
-          </PrimaryButton>
+          <div className="flex justify-center">
+            <button
+              onClick={() => setIsApplyModalOpen(true)}
+              className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold uppercase tracking-widest text-gh-label px-12 py-5 rounded-none transition-all shadow-xl"
+            >
+              SEND US YOUR CV
+            </button>
+          </div>
         </div>
       </section>
 
