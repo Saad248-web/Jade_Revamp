@@ -310,9 +310,9 @@ export default function CareersPage() {
         </div>
       </section>
 
-      {/* 3. CULTURE SECTION */}
-      <section className="py-24 bg-[#1A1C1E] border-t border-white/5">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      {/* 3. CULTURE SECTION (Optimized for 100vh) */}
+      <section className="relative min-h-[100svh] flex flex-col justify-center bg-[#1A1C1E] border-t border-white/5 py-16 md:py-24 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 text-center relative z-10 w-full">
           <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
             CULTURE
           </p>
@@ -333,13 +333,17 @@ export default function CareersPage() {
             </p>
           </div>
 
-          <div className="flex justify-center">
-            <button
-              onClick={() => setIsApplyModalOpen(true)}
-              className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold uppercase tracking-widest text-gh-label px-12 py-5 rounded-none transition-all shadow-xl"
+          <div className="w-full max-w-4xl mx-auto">
+            <PrimaryButton
+              className="w-full h-[54px]"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setIsApplyModalOpen(true);
+              }}
             >
               SEND US YOUR CV
-            </button>
+            </PrimaryButton>
           </div>
         </div>
       </section>
