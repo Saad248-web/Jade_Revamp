@@ -2,6 +2,8 @@
 
 import React from "react";
 import PrimaryButton from "./PrimaryButton";
+import { ArrowLeft, Headset } from "lucide-react";
+import { useAnimation } from "@/context/AnimationContext";
 
 interface JourneyCardProps {
   title: string;
@@ -26,16 +28,18 @@ const JourneyCard = ({
   tags,
   isPopular,
 }: JourneyCardProps) => (
-  <div className="relative border border-white/20 p-6 md:p-8 bg-[#0D4032] overflow-hidden">
+  <div
+    className={`relative border ${isPopular ? "border-[#EFCD62]" : "border-white/10"} p-6 md:p-8 bg-[#0D4032] overflow-hidden`}
+  >
     {isPopular && (
       <div className="absolute top-0 right-0 w-32 h-32 overflow-hidden pointer-events-none">
-        <div className="absolute top-6 -right-8 w-40 bg-[#EFCD62] text-[#0D4032] text-gh-label font-bold py-1 text-center transform rotate-45 uppercase tracking-wider shadow-lg">
+        <div className="absolute top-6 -right-8 w-40 bg-[#EFCD62] text-[#0D4032] text-[10px] font-bold py-1 text-center transform rotate-45 uppercase tracking-[0.2em] shadow-lg">
           Popular
         </div>
       </div>
     )}
 
-    <h3 className="text-[#EFCD62] text-gh-scroll font-philosopher mb-1">
+    <h3 className="text-[#EFCD62] text-gh-scroll font-philosopher mb-1.5">
       {title}
     </h3>
     <p className="text-white/60 text-gh-label font-manrope mb-6">{duration}</p>
@@ -44,28 +48,28 @@ const JourneyCard = ({
       {description}
     </p>
 
-    <div className="bg-[#0A3328] p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-      <div>
-        <p className="text-white text-gh-body font-manrope font-medium">
-          {capacity}
-        </p>
+    <div className="bg-white/5 p-6 mb-8 flex flex-row justify-between items-center gap-4">
+      <div className="flex flex-col gap-1">
+        <p className="text-white text-gh-desc font-manrope">{capacity}</p>
         {pricePerHead && (
-          <p className="text-white/40 text-gh-label font-manrope mt-1">
+          <p className="text-white/40 text-[10px] font-manrope">
             {pricePerHead}
           </p>
         )}
       </div>
-      <p className="text-white text-gh-scroll font-philosopher">{totalPrice}</p>
+      <p className="text-white text-gh-body font-philosopher text-right whitespace-nowrap">
+        {totalPrice}
+      </p>
     </div>
 
-    <p className="text-white/40 text-gh-label uppercase tracking-wider font-manrope mb-4">
+    <p className="text-white/40 text-gh-label uppercase tracking-widest font-manrope mb-4">
       {tagsLabel}
     </p>
     <div className="flex flex-wrap gap-2">
       {tags.map((tag, idx) => (
         <span
           key={idx}
-          className="px-3 py-1.5 bg-white/5 border border-white/10 text-white/80 text-gh-label font-manrope"
+          className="px-3 py-1.5 bg-white/5 border border-white/5 text-white/80 text-gh-label font-manrope"
         >
           {tag}
         </span>
@@ -74,11 +78,27 @@ const JourneyCard = ({
   </div>
 );
 
-export default function CaravanJourneySection() {
+const CaravanJourneySection = () => {
+  const { setRathaaOverlayOpen } = useAnimation();
+
+  const [activeCard, setActiveCard] = React.useState<number | null>(null);
   return (
     <section className="bg-[#0D4032] py-20 px-6 md:px-12 lg:px-24">
-      <div className="max-w-[1920px] mx-auto">
-        {/* Header */}
+      <div className="max-w-6xl mx-auto">
+        {/* Header with Icons */}
+        <div className="flex items-center justify-between mb-8">
+          <button
+            onClick={() => window.history.back()}
+            className="w-10 h-10 flex items-center justify-center text-white/60 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-6 h-6" />
+          </button>
+          <button className="w-10 h-10 flex items-center justify-center bg-white/5 border border-white/10 text-white/60 hover:text-white transition-colors">
+            <Headset className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Title Group */}
         <div className="mb-12">
           <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope mb-4">
             TRAVEL EXPERIENCES
@@ -148,20 +168,22 @@ export default function CaravanJourneySection() {
         </div>
 
         {/* Footer Disclaimer & CTA */}
-        <div className="max-w-4xl">
-          <p className="text-white/40 text-gh-label leading-relaxed font-manrope mb-8">
+        <div className="">
+          <p className="text-white/40 text-[10px] md:text-gh-label leading-relaxed font-manrope mb-8">
             Note: Prices are base rates and may vary based on season, day of
             week, and specific requirements. Fuel charges may apply depending on
             the travel route.
           </p>
           <PrimaryButton
-            className="w-full h-[54px] text-gh-label"
-            onClick={() => window.open("/contact", "_blank")}
+            className="w-full h-[54px]"
+            onClick={() => setRathaaOverlayOpen(true)}
           >
-            BOOK CARAVAN
+            ENQUIRE
           </PrimaryButton>
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default CaravanJourneySection;

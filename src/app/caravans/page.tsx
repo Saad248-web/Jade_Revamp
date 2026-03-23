@@ -16,6 +16,7 @@ import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
 import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import TravelGuidelinesSection from "@/components/TravelGuidelinesSection";
 import { Info, Calendar } from "lucide-react";
+import { useAnimation } from "@/context/AnimationContext";
 
 const caravanSlides = [
   {
@@ -54,22 +55,18 @@ const animatedSlides: ScrollSlide[] = [
   {
     label: "A PRIVATE RETREAT ON WHEELS",
     lines: [
-      "Rathaa is a fully equipped luxury",
-      "caravan designed for small-group",
-      "journeys. Combining the comfort of",
-      "a private stay with the freedom of",
-      "road travel, it allows you to explore",
-      "scenic destinations, celebrate",
-      "special moments, or simply travel",
-      "differently. From short day escapes",
-      "to overnight and multi-day journeys,",
-      "every experience is curated around",
-      "your route, your group, and your pace.",
+      "Rathaa is a fully equipped luxury caravan designed for small-group journeys.",
+      "Combining the comfort of a private stay with the freedom of road travel, it allows you to explore",
+      "scenic destinations, celebrate special moments, or simply travel differently.",
+      "From short day escapes to overnight and multi-day journeys, every experience is",
+      "curated around your route, your group, and your pace.",
     ],
   },
 ];
 
 export default function CaravansPage() {
+  const { setRathaaOverlayOpen } = useAnimation();
+
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
       <CorporateHeader />
@@ -168,7 +165,7 @@ export default function CaravansPage() {
         ]}
         footerText="Rathaa turns every road into an experience for those who travel beyond the ordinary."
         ctaText="PLAN YOUR JOURNEY"
-        ctaLink="/contact"
+        onCtaClick={() => setRathaaOverlayOpen(true)}
       />
 
       <TravelGuidelinesSection />

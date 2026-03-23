@@ -256,7 +256,7 @@ function StepDates({
       </div>
 
       {/* Calendars */}
-      <div className="flex-1 overflow-y-auto px-5 pb-4">
+      <div className="flex-1 overflow-y-auto px-5 pb-4" data-lenis-prevent>
         {MONTHS.map((month, mIdx) => (
           <div key={month.name} className="mb-6">
             <h3 className="text-white font-manrope font-semibold text-gh-body mb-3">
@@ -419,7 +419,7 @@ function StepGuests({
       </div>
 
       {/* Counters */}
-      <div className="flex-1 overflow-y-auto px-5">
+      <div className="flex-1 overflow-y-auto px-5" data-lenis-prevent>
         <Counter
           label="Adults"
           subtitle="Age 13 years and more"
@@ -551,7 +551,10 @@ function StepVillas({
       </div>
 
       {/* Villa cards */}
-      <div className="flex-1 overflow-y-auto px-5 pb-4 space-y-5">
+      <div
+        className="flex-1 overflow-y-auto px-5 pb-4 space-y-5"
+        data-lenis-prevent
+      >
         {filtered.map((villa) => (
           <div
             key={villa.id}
@@ -724,7 +727,10 @@ function StepDetails({
       </div>
 
       {/* Form */}
-      <div className="flex-1 overflow-y-auto px-5 py-5 space-y-4">
+      <div
+        className="flex-1 overflow-y-auto px-5 py-5 space-y-4"
+        data-lenis-prevent
+      >
         {/* Full Name */}
         <div className="relative border border-white/20 focus-within:border-[#EFCD62] transition-colors">
           <label className="absolute -top-2.5 left-3 bg-[#0D4032] px-1 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
@@ -860,7 +866,10 @@ function StepReview({
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+      <div
+        className="flex-1 overflow-y-auto px-5 py-4 space-y-5"
+        data-lenis-prevent
+      >
         {/* Villa preview */}
         {selectedVilla && (
           <div className="flex gap-4 bg-white/5 rounded-lg p-3">

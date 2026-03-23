@@ -65,19 +65,22 @@ export default function TravelGuidelinesModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-2xl max-h-[90vh] flex flex-col pointer-events-auto"
+              className="relative w-full max-w-2xl max-h-[calc(100vh-8rem)] mt-12 flex flex-col pointer-events-auto"
             >
-              {/* Close Button */}
+              {/* Floating Close Button */}
               <button
                 onClick={onClose}
-                className="absolute -top-16 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#0D4032] border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-[#EFCD62] hover:text-[#0D4032] transition-all duration-300 shadow-2xl"
+                className="absolute -top-14 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#0D4032] border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-[#EFCD62] hover:text-[#0D4032] transition-all duration-300 shadow-2xl"
               >
                 <X className="w-6 h-6" />
               </button>
 
               {/* Content Box */}
-              <div className="bg-[#0D4032] border border-white/10 rounded-[24px] overflow-hidden shadow-2xl flex flex-col">
-                <div className="p-8 md:p-12 overflow-y-auto custom-scrollbar">
+              <div className="bg-[#0D4032] border border-white/10 rounded-[24px] overflow-hidden shadow-2xl flex flex-col relative h-full">
+                <div
+                  className="p-8 md:p-12 overflow-y-auto custom-scrollbar h-full"
+                  data-lenis-prevent
+                >
                   <h2 className="text-gh-h1 font-philosopher text-white mb-10">
                     Property Details
                   </h2>

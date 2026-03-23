@@ -14,6 +14,7 @@ interface PremiumFeaturesSectionProps {
   footerText: string;
   ctaText: string;
   ctaLink?: string;
+  onCtaClick?: () => void;
 }
 
 export default function PremiumFeaturesSection({
@@ -22,7 +23,8 @@ export default function PremiumFeaturesSection({
   cards,
   footerText,
   ctaText,
-  ctaLink = "/contact",
+  ctaLink,
+  onCtaClick,
 }: PremiumFeaturesSectionProps) {
   return (
     <section className="min-h-screen flex flex-col items-center justify-center py-24 bg-[#1A1C1E]">
@@ -167,7 +169,15 @@ export default function PremiumFeaturesSection({
             {footerText}
           </p>
 
-          <PrimaryButton href={ctaLink}>{ctaText}</PrimaryButton>
+          <div className="w-full max-w-4xl mx-auto">
+            <PrimaryButton
+              href={ctaLink}
+              onClick={onCtaClick}
+              className="w-full h-[54px]"
+            >
+              {ctaText}
+            </PrimaryButton>
+          </div>
         </div>
       </div>
     </section>

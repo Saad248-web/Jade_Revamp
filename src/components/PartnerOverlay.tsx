@@ -139,7 +139,7 @@ export default function PartnerOverlay() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className={`w-full md:w-[600px] bg-[#0E3A2F] flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 ${view === "success" ? "h-[80vh] md:h-[650px]" : "h-[90vh] md:max-h-[85vh]"}`}
+              className={`relative w-full md:w-[600px] bg-[#0E3A2F] flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 ${view === "success" ? "h-[80vh] md:h-[650px]" : "max-h-[calc(100vh-8rem)]"}`}
             >
               {/* Header */}
               {view === "form" && (
@@ -151,7 +151,10 @@ export default function PartnerOverlay() {
               )}
 
               {/* CONTENT AREA */}
-              <div className="flex-1 overflow-y-auto scrollbar-hide">
+              <div
+                className="flex-1 overflow-y-auto scrollbar-hide"
+                data-lenis-prevent
+              >
                 {view === "form" ? (
                   <div className="flex flex-col px-6 pb-8">
                     <p className="text-white/80 text-gh-body mb-6 mt-2">

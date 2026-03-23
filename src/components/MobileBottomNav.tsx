@@ -43,7 +43,7 @@ export default function MobileBottomNav() {
 
   return (
     <AnimatePresence>
-      {isSplashComplete && (
+      {(isSplashComplete || pathname !== "/") && (
         <motion.div
           initial={{ y: "100%", opacity: 0 }}
           animate={{ y: "0%", opacity: 1 }}

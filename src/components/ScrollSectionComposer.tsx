@@ -2,6 +2,7 @@
 
 import { useRef, ReactNode } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
+import { ArrowLeft, Headset } from "lucide-react";
 import LiveBackground from "./LiveBackground";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import PrimaryButton from "./PrimaryButton";
@@ -20,6 +21,7 @@ interface ScrollSectionComposerProps {
   theme?: "golden" | "white";
   background?: ReactNode;
   height?: string; // e.g. "400vh"
+  showNavigation?: boolean;
 }
 
 const ScrollButton = ({ href, label }: { href: string; label: string }) => (
@@ -50,8 +52,6 @@ const SlideLines = ({
   const fadeOut = Math.min(linesFinishedAt + 0.3, end - span * 0.1);
 
   // Locking/Y-parallax logic
-  // First slide stays at 0 until fade out
-  // Middle/Last slides come from 100 to 0, stay, then move to -80
   const yInput =
     index === 0
       ? [start, fadeOut, end]
@@ -62,10 +62,10 @@ const SlideLines = ({
 
   return (
     <motion.div
-      className="absolute inset-x-0 flex items-center justify-center px-2 md:px-6 pointer-events-none"
+      className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12 pointer-events-none"
       style={{ y }}
     >
-      <div className="text-center w-full max-w-[95vw] md:max-w-6xl mx-auto">
+      <div className="text-center w-full max-w-[90vw] md:max-w-4xl mx-auto mb-12">
         {slide.label && (
           <motion.p
             style={{
@@ -80,7 +80,7 @@ const SlideLines = ({
             {slide.label}
           </motion.p>
         )}
-        <h2 className="font-manrope font-normal text-gh-scroll lg:text-gh-scroll leading-[1.6] md:leading-[1.6] tracking-[0.01em] text-white/90 mb-12">
+        <h2 className="font-manrope font-normal text-gh-scroll leading-[1.6] tracking-[0.01em] text-white/90 mb-12">
           {slide.lines.map((line, lineIdx) => {
             const lineStart = start + lineIdx * 0.015;
             const lineShow = lineStart + 0.02;
@@ -127,6 +127,7 @@ export default function ScrollSectionComposer({
   theme = "golden",
   background = <LiveBackground />,
   height = "400vh",
+  showNavigation = false,
 }: ScrollSectionComposerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -136,12 +137,7 @@ export default function ScrollSectionComposer({
   });
 
   const total = slides.length;
-  // Calculate segments
-  // We want slides to be active for a portion of the scroll.
-  // In UnifiedScrollSection, S1: 0-0.3, S2: 0.35-0.65, S3: 0.7-1.0
-  // Gap is 0.05. Active span is ~0.3.
   const segmentSpan = 1.0 / total;
-  const activeSpan = segmentSpan * 0.9; // 90% of segment is active/fade
   const gap = segmentSpan * 0.1;
 
   return (
@@ -150,6 +146,21 @@ export default function ScrollSectionComposer({
 
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         {background}
+
+        {/* Floating Icons - Only if showNavigation is true */}
+        {showNavigation && (
+          <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-6 md:p-12">
+            <button
+              onClick={() => window.history.back()}
+              className="w-10 h-10 flex items-center justify-center text-white/60 hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-6 h-6" />
+            </button>
+            <button className="w-10 h-10 flex items-center justify-center bg-white/5 border border-white/10 text-white/60 hover:text-white transition-colors">
+              <Headset className="w-5 h-5" />
+            </button>
+          </div>
+        )}
 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           {slides.map((slide, i) => {
@@ -168,6 +179,11 @@ export default function ScrollSectionComposer({
               />
             );
           })}
+        </div>
+
+        {/* Scroll Indicator at the bottom */}
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
+          <div className="h-24 w-[1px] bg-gradient-to-b from-white/40 to-transparent" />
         </div>
       </div>
     </div>

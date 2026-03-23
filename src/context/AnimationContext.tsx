@@ -13,6 +13,8 @@ interface AnimationContextType {
   setGlobalBookingOpen: (value: boolean) => void;
   villaBookingId: string | null;
   setVillaBookingId: (id: string | null) => void;
+  isRathaaOverlayOpen: boolean;
+  setRathaaOverlayOpen: (value: boolean) => void;
 }
 
 const AnimationContext = createContext<AnimationContextType | undefined>(
@@ -29,6 +31,7 @@ export const AnimationProvider = ({
   const [navbarTheme, setNavbarTheme] = useState<"white" | "golden">("golden");
   const [isGlobalBookingOpen, setGlobalBookingOpen] = useState(false);
   const [villaBookingId, setVillaBookingId] = useState<string | null>(null);
+  const [isRathaaOverlayOpen, setRathaaOverlayOpen] = useState(false);
 
   return (
     <AnimationContext.Provider
@@ -43,6 +46,8 @@ export const AnimationProvider = ({
         setGlobalBookingOpen,
         villaBookingId,
         setVillaBookingId,
+        isRathaaOverlayOpen,
+        setRathaaOverlayOpen,
       }}
     >
       {children}
