@@ -289,11 +289,13 @@ export default function Footer() {
                       setFormData({ ...formData, fullName: e.target.value })
                     }
                     placeholder=" "
-                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62] focus:outline-none transition-colors rounded-none h-14 placeholder-transparent"
+                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-white focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
                   />
                   <label
                     htmlFor="fullName"
-                    className="absolute left-4 -top-2.5 text-gh-label text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/50 transition-all duration-300 pointer-events-none px-2 
+                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white peer-focus:bg-[#2E3034] 
+                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
                   >
                     Full Name
                   </label>
@@ -309,11 +311,13 @@ export default function Footer() {
                       setFormData({ ...formData, phoneNumber: e.target.value })
                     }
                     placeholder=" "
-                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62] focus:outline-none transition-colors rounded-none h-14 placeholder-transparent"
+                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-white focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
                   />
                   <label
                     htmlFor="phoneNumber"
-                    className="absolute left-4 -top-2.5 text-gh-label text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/50 transition-all duration-300 pointer-events-none px-2 
+                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white peer-focus:bg-[#2E3034] 
+                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
                   >
                     Phone Number
                   </label>
@@ -329,11 +333,13 @@ export default function Footer() {
                       setFormData({ ...formData, subject: e.target.value })
                     }
                     placeholder=" "
-                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62] focus:outline-none transition-colors rounded-none h-14 placeholder-transparent"
+                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-white focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
                   />
                   <label
                     htmlFor="subject"
-                    className="absolute left-4 -top-2.5 text-gh-label text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/50 transition-all duration-300 pointer-events-none px-2 
+                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white peer-focus:bg-[#2E3034] 
+                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
                   >
                     Subject
                   </label>
@@ -526,11 +532,13 @@ export default function Footer() {
                       setFormData({ ...formData, queries: e.target.value })
                     }
                     placeholder=" "
-                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62] focus:outline-none transition-colors rounded-none resize-none placeholder-transparent"
+                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-white focus:outline-none transition-all duration-300 rounded-none resize-none placeholder-transparent"
                   />
                   <label
                     htmlFor="queries"
-                    className="absolute left-4 -top-2.5 text-gh-label text-white/50 bg-[#2E3034] px-2 transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:text-[#EFCD62]"
+                    className="absolute left-4 top-8 text-gh-label text-white/50 transition-all duration-300 pointer-events-none px-2 
+                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white peer-focus:bg-[#2E3034] 
+                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
                   >
                     Queries
                   </label>
