@@ -168,7 +168,7 @@ export default function InstagramCarousel() {
                     alt="Post"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    sizes="(max-width: 1024px) 300px, 380px"
+                    sizes="(max-width: 768px) 300px, 380px"
                   />
                 </div>
 

@@ -197,7 +197,7 @@ function VillaSlide({
                 alt={data.title}
                 fill
                 className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 600px"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 600px"
                 unoptimized={data.title === "Retreat on the Ridge"}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent lg:hidden" />

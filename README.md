@@ -1,80 +1,53 @@
-# Jade Hospitainment - ReVamp
+# Jade Hospitainment — ReVamp
 
-Welcome to the **Jade Hospitainment** web application repository. This project is a modern, high-performance Next.js application designed to showcase luxury villas and unique hospitality experiences.
+Welcome to the **Jade Hospitainment** digital platform. This is a high-performance, SEO-first Next.js 14 application designed for India's premium private retreat operator.
 
-## 🚀 Overview
+## 🚀 Project Overview
 
-Jade Hospitainment combines hospitality and entertainment to offer unforgettable stays and events. This web application serves as the digital front door for guests to explore properties, view amenities, and book their next getaway.
+Jade Hospitainment redefines luxury stays, destination weddings, and corporate retreats. This platform serves as a cinematic gateway for guests to explore a curated portfolio of private estates near Bangalore.
 
-## 🛠️ Tech Stack
+## 🛠️ Technical Excellence
 
-- **Framework:** [Next.js](https://nextjs.org/) (App Router)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **Icons:** [Lucide React](https://lucide.dev/)
-- **Fonts:** Google Fonts (Philosopher & Manrope)
+### Core Stack
 
-## ✨ Key Features
+- **Next.js 14 (App Router)**: Utilizing Server Components for optimal SEO and performance.
+- **TypeScript**: Strict type-safety across the data and component layers.
+- **Tailwind CSS**: Utility-first styling for a premium, responsive UI.
+- **Animations**: GSAP, Framer Motion, and Rive for immersive user experiences.
 
-- **Cinematic Villa Showcases:** Detailed pages for each villa (`/villas/[id]`) featuring high-quality imagery, carousel sliders, and immersive descriptions.
-- **Interactive Details:** Custom-built `DetailsDrawer` providing deep dives into amenities, services, and property specifications without cluttering the main view.
-- **Performance Optimized:**
-  - Aggressive image optimization using `next/image` with proper sizing and format selection.
-  - GPU-accelerated animations for smooth scrolling and transitions on all devices.
-  - Mobile-first design with reduced layout thrashing for low-end devices.
-- **Responsive Design:** Fully responsive layout ensuring a premium experience across desktops, tablets, and mobile phones.
+### Performance Optimization
 
-## 📂 Project Structure
+- **Code Splitting**: Heavy components (Carousels, GSAP sections) are dynamically imported to improve TTI (Time to Interactive).
+- **Next-Gen Images**: Configured for AVIF/WebP with smart responsive breakpoints in `next.config.mjs`.
+- **Zero Layout Shift**: Font optimization and pre-allocation of image spaces ensure a stable CLS score.
 
-```
+### SEO & Structured Data
+
+- **Dynamic Metadata**: Automated SEO tags for all routes, including dynamic blog posts.
+- **JSON-LD Schema**: Full implementation of Organization, Lodging, Event, and Article schemas for Google Rich Results.
+- **Crawl Efficiency**: Native `sitemap.ts` and `robots.ts` integration.
+
+## 📂 Architecture
+
+```bash
 ├── src/
-│   ├── app/              # Next.js App Router pages and layouts
-│   ├── components/       # Reusable UI components (Navbar, Footer, Drawer, etc.)
-│   ├── data/             # Static data files (villas.ts)
-│   └── context/          # React Context providers (AnimationContext)
-├── public/               # Static assets (images, fonts)
-└── ...config files       # Tailwind, Next.js, TypeScript configurations
+│   ├── app/              # Next.js App Router (Layouts, Pages, Metadata)
+│   ├── components/       # UI Components (Seo-optimized, dynamically imported)
+│   ├── data/             # Hardened data models for Villas and Blogs
+│   └── context/          # Global state (Animation, UI)
+├── public/               # Optimized assets & social images
+└── ...config files       # Performance-tuned Next.js & Tailwind configs
 ```
 
-## ⚡ Getting Started
+## ⚡ Development
 
-1.  **Clone the repository:**
-
-    ```bash
-    git clone <repository-url>
-    cd Jade_ReVamp
-    ```
-
-2.  **Install dependencies:**
-
-    ```bash
-    npm install
-    # or
-    yarn install
-    ```
-
-3.  **Run the development server:**
-
-    ```bash
-    npm run dev
-    # or
-    yarn dev
-    ```
-
-4.  **Open your browser:**
-    Navigate to [http://localhost:3000](http://localhost:3000) to view the application.
-
-## 📱 Performance Notes
-
-This application has been tuned for performance, particularly on mobile devices:
-
-- **Backdrop Filters:** Heavy `backdrop-blur` effects have been minimized or replaced with semi-transparent backgrounds on mobile to ensure 60fps scrolling.
-- **Image Loading:** Critical images use `priority` loading, while off-screen images are lazy-loaded with appropriate `sizes` attributes.
-
-## 🤝 Contribution
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+1. **Install Dependencies**: `npm install`
+2. **Launch Dev Server**: `npm run dev`
+3. **Build Profile**: `npm run build` (Ensures all metadata and sitemaps generate correctly)
 
 ---
 
-_Verified & Refactored by Antigravity_
+> [!IMPORTANT]
+> This platform is optimized for **Core Web Vitals**. Any UI changes should be audited for performance impact.
+
+**Technical Architect**: Antigravity

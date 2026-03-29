@@ -8,17 +8,81 @@ const philosopher = Philosopher({
   weight: ["400", "700"],
   subsets: ["latin"],
   variable: "--font-philosopher",
+  display: "swap", // Prevent FOIT — show fallback font until Philosopher loads
 });
 
 const manrope = Manrope({
   weight: ["200", "300", "400", "500", "600", "700", "800"],
   subsets: ["latin"],
   variable: "--font-manrope",
+  display: "swap", // Prevent FOIT — show fallback font until Manrope loads
 });
 
+// ─── Base metadata — inherited & extended by every page ──────────────────────
 export const metadata: Metadata = {
-  title: "Jade Hospitainment",
-  description: "Step into the world of Jade Hospitainment",
+  // Enables relative paths in OG images (e.g. '/og-default.jpg')
+  metadataBase: new URL("https://jadehospitainment.com"),
+
+  // Every page gets " | Jade Hospitainment" appended automatically
+  title: {
+    default: "Jade Hospitainment — Luxury Villas, Weddings & Experiences",
+    template: "%s | Jade Hospitainment",
+  },
+
+  description:
+    "Discover curated luxury villas, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore with Jade Hospitainment.",
+
+  keywords: [
+    "luxury villas Bangalore",
+    "destination weddings",
+    "corporate retreats Bangalore",
+    "weekend getaways",
+    "private villa stays",
+    "Jade Hospitainment",
+  ],
+
+  authors: [
+    { name: "Jade Hospitainment", url: "https://jadehospitainment.com" },
+  ],
+
+  alternates: { canonical: "https://jadehospitainment.com" },
+
+  openGraph: {
+    type: "website",
+    siteName: "Jade Hospitainment",
+    locale: "en_IN",
+    url: "https://jadehospitainment.com",
+    title: "Jade Hospitainment — Luxury Villas, Weddings & Experiences",
+    description:
+      "Discover curated luxury villas, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore.",
+    images: [
+      {
+        url: "/og-default.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Jade Hospitainment — Luxury Private Villa Stays",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Jade Hospitainment — Luxury Villas, Weddings & Experiences",
+    description:
+      "Discover curated luxury villas, bespoke destination weddings, and immersive experiences near Bangalore.",
+    images: ["/og-default.jpg"],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({

@@ -10,16 +10,32 @@ import {
   AnimatePresence,
 } from "framer-motion";
 import Navbar from "./Navbar";
-import UnifiedScrollSection from "./UnifiedScrollSection";
 import MobileBottomNav from "./MobileBottomNav";
-import HorizontalScrollSection from "./HorizontalScrollSection";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
-import InstagramCarousel from "./InstagramCarousel";
-import ValuePropositionSection from "./ValuePropositionSection";
-import FeaturedVillas from "./FeaturedVillas";
-import JadeAmenitiesSection from "./JadeAmenitiesSection";
-import BlogSection from "./BlogSection";
-import Footer from "./Footer";
+import dynamic from "next/dynamic";
+
+const UnifiedScrollSection = dynamic(() => import("./UnifiedScrollSection"), {
+  ssr: false,
+});
+const HorizontalScrollSection = dynamic(
+  () => import("./HorizontalScrollSection"),
+  { ssr: false },
+);
+const InstagramCarousel = dynamic(() => import("./InstagramCarousel"), {
+  ssr: false,
+});
+const ValuePropositionSection = dynamic(
+  () => import("./ValuePropositionSection"),
+  { ssr: false },
+);
+const FeaturedVillas = dynamic(() => import("./FeaturedVillas"), {
+  ssr: false,
+});
+const JadeAmenitiesSection = dynamic(() => import("./JadeAmenitiesSection"), {
+  ssr: false,
+});
+const BlogSection = dynamic(() => import("./BlogSection"), { ssr: false });
+const Footer = dynamic(() => import("./Footer"), { ssr: false });
 
 export default function LandingPage() {
   const { isSplashComplete } = useAnimation();
@@ -33,10 +49,16 @@ export default function LandingPage() {
     }
     window.scrollTo(0, 0);
 
+    // Sync scroll after dynamic imports mount
+    const timer = setTimeout(() => {
+      window.dispatchEvent(new Event("resize"));
+    }, 1000);
+
     return () => {
       if (history.scrollRestoration) {
         history.scrollRestoration = "auto";
       }
+      clearTimeout(timer);
     };
   }, []);
 
