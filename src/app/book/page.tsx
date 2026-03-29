@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
@@ -9,20 +9,26 @@ import {
   X,
   Minus,
   Plus,
-  ChevronLeft,
   MapPin,
   Users,
   Bed,
   Home,
-  Check,
   Headset,
 } from "lucide-react";
-import { VILLAS } from "@/data/villas";
+import { VILLAS } from "@/lib/mockData";
+import PaymentModal from "@/components/ui/PaymentModal";
+import { submitBooking } from "@/lib/api";
+import {
+  initiatePayment,
+  handleSuccess,
+  handleFailure,
+} from "@/lib/paymentService";
 
 /* ─────────────────────────────────────────────────────────────────────
-   Types
+   Types — shared interfaces imported from @/lib/types
 ───────────────────────────────────────────────────────────────────── */
 type Step = "dates" | "guests" | "details" | "review";
+type PaymentStatus = "idle" | "processing" | "success" | "failed";
 
 interface UserDetails {
   fullName: string;
@@ -607,6 +613,7 @@ function StepReview({
    Main Book Page Content (reads searchParams)
 ───────────────────────────────────────────────────────────────────── */
 import { useBooking, DateRange, Guests } from "@/context/BookingContext";
+import type { BookingPayload } from "@/lib/types";
 
 function BookPageContent() {
   const router = useRouter();
@@ -635,6 +642,11 @@ function BookPageContent() {
     notes: "",
   });
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
+
+  // ── Payment modal state ──────────────────────────────────────────────
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("idle");
+  const [bookingRef, setBookingRef] = useState("");
 
   useEffect(() => {
     if (villaParam) {
@@ -760,6 +772,23 @@ function BookPageContent() {
       );
       const total = basePrice + addOnTotal + NIGHT_TAX;
 
+      const handlePayNow = async () => {
+        // 1. Submit booking request to API
+        const payload: BookingPayload = {
+          villaId: selectedVillaId ?? "",
+          villaName: selectedVilla?.name ?? "",
+          dateRange,
+          guests,
+          details,
+          addOns: selectedAddOns,
+          totalAmount: total,
+        };
+        const response = await submitBooking(payload);
+        setBookingRef(response.referenceId);
+        // 2. Open payment modal
+        setIsPaymentOpen(true);
+      };
+
       return (
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-3 sm:gap-0">
           <div className="flex items-center gap-2">
@@ -777,7 +806,9 @@ function BookPageContent() {
             >
               BACK
             </button>
-            <PrimaryButton withArrow={false}>PAY NOW</PrimaryButton>
+            <PrimaryButton withArrow={false} onClick={handlePayNow}>
+              PAY NOW
+            </PrimaryButton>
           </div>
         </div>
       );
@@ -904,6 +935,59 @@ function BookPageContent() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* ── Payment Modal ── */}
+      <PaymentModal
+        isOpen={isPaymentOpen}
+        onClose={() => {
+          if (paymentStatus !== "processing") {
+            setIsPaymentOpen(false);
+            setPaymentStatus("idle");
+          }
+        }}
+        onSuccess={(orderId) => {
+          handleSuccess(orderId);
+          const params = new URLSearchParams({
+            ref: orderId,
+            villa: selectedVilla?.name ?? "",
+            checkIn: dateRange.checkIn
+              ? `${dateRange.checkIn.day} ${["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][dateRange.checkIn.month]}`
+              : "",
+            checkOut: dateRange.checkOut
+              ? `${dateRange.checkOut.day} ${["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][dateRange.checkOut.month]}`
+              : "",
+            guests: String(guests.adults + guests.children),
+          });
+          router.push(`/book/success?${params.toString()}`);
+        }}
+        onFailure={(reason) => {
+          handleFailure(reason);
+          setPaymentStatus("failed");
+        }}
+        amount={(() => {
+          const basePrice = selectedVilla
+            ? parseInt(
+                (
+                  selectedVilla.pricing?.stay?.packages?.[0]?.price ?? "99000"
+                ).replace(/[^0-9]/g, ""),
+              ) || 99000
+            : 99000;
+          const addOnTotal = selectedAddOns.reduce(
+            (sum, id) => sum + (ADD_ONS.find((a) => a.id === id)?.price ?? 0),
+            0,
+          );
+          return basePrice + addOnTotal + NIGHT_TAX;
+        })()}
+        villaName={selectedVilla?.name}
+        referenceId={bookingRef}
+        status={paymentStatus}
+        onConfirm={async () => {
+          setPaymentStatus("processing");
+          // Simulate payment processing
+          await new Promise((r) => setTimeout(r, 2000));
+          setPaymentStatus("success");
+        }}
+      />
 
       {/* ── Floating bottom bar (fixed) ── */}
       <div className="fixed bottom-0 left-0 right-0 bg-[#0D4032] border-t border-white/10 z-50">

@@ -10,12 +10,15 @@ import {
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { Heart } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
+import { useWishlist } from "@/context/WishlistContext";
 
 export default function Navbar() {
   const pathname = usePathname();
   const { isSplashComplete, setPartnerOverlayOpen, navbarTheme } =
     useAnimation();
+  const { count: wishlistCount } = useWishlist();
   const { scrollY } = useScroll();
   const [isHidden, setIsHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -187,6 +190,20 @@ export default function Navbar() {
                     <path d="M9 10h6v4H9z" />
                     <path d="M10 12h.01M12 12h.01M14 12h.01" />
                   </svg>
+                </Link>
+
+                {/* Wishlist icon with badge */}
+                <Link
+                  href="/wishlist"
+                  className="relative bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center w-[35px] h-[35px] md:w-[38px] md:h-[38px] rounded-none border border-white/20 transition-all duration-300 shrink-0"
+                  aria-label="Wishlist"
+                >
+                  <Heart className="w-[18px] h-[18px]" strokeWidth={1.25} />
+                  {wishlistCount > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-0.5 bg-red-500 text-white text-[9px] font-bold flex items-center justify-center rounded-full leading-none">
+                      {wishlistCount > 9 ? "9+" : wishlistCount}
+                    </span>
+                  )}
                 </Link>
                 {pathname?.startsWith("/experiences") ? (
                   <button

@@ -4,10 +4,19 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Bed, Users, Home, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
+import {
+  Bed,
+  Users,
+  Home,
+  MapPin,
+  ArrowLeft,
+  ArrowRight,
+  Heart,
+} from "lucide-react";
 import Link from "next/link";
-import { VILLAS } from "@/data/villas";
+import { VILLAS } from "@/lib/mockData";
 import PrimaryButton from "@/components/PrimaryButton";
+import { useWishlist } from "@/context/WishlistContext";
 
 interface VillaCardProps {
   villa: (typeof VILLAS)[0];
@@ -17,6 +26,19 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const router = useRouter();
+  const { toggleWishlist, isWishlisted } = useWishlist();
+
+  const wishlisted = isWishlisted(villa.id);
+
+  const wishlistItem = {
+    id: villa.id,
+    name: villa.name,
+    type: villa.type,
+    location: villa.location,
+    image: villa.image,
+    startingPrice:
+      villa.pricing?.stay?.packages?.[0]?.price?.split(" ")[0] ?? null,
+  };
 
   // If a villa doesn't have multiple spaces defined yet, we'll create a fallback array
   // of just its main image so the UI doesn't break.
@@ -70,6 +92,19 @@ export default function VillaCard({ villa }: VillaCardProps) {
             <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
           </motion.div>
         </AnimatePresence>
+
+        {/* WISHLIST HEART */}
+        <button
+          onClick={() => toggleWishlist(wishlistItem)}
+          aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+          className="absolute top-3 right-3 z-10 w-9 h-9 flex items-center justify-center bg-black/40 backdrop-blur-sm border border-white/20 hover:border-white/60 transition-colors rounded-sm"
+        >
+          <Heart
+            className={`w-4 h-4 transition-colors ${
+              wishlisted ? "fill-red-400 text-red-400" : "text-white/70"
+            }`}
+          />
+        </button>
 
         {/* IMAGE CONTROLS */}
         {images.length > 1 && (
@@ -166,26 +201,31 @@ export default function VillaCard({ villa }: VillaCardProps) {
         </div>
 
         {/* Action Row */}
-        <div className="flex flex-row items-center justify-between gap-4 mt-auto">
+        <div className="flex flex-row items-center justify-between gap-2 md:gap-4 mt-auto">
           {/* Price */}
-          <span className="text-white font-manrope font-bold text-gh-label tracking-wide">
-            {startingPrice || "Upon Request"} onwards
-          </span>
+          <div className="text-white font-manrope font-bold text-gh-label tracking-wide leading-tight line-clamp-2 md:line-clamp-1">
+            {startingPrice || "Upon Request"}{" "}
+            <span className="text-white/80 font-normal md:font-bold md:text-white inline-block">
+              onwards
+            </span>
+          </div>
 
           {/* Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3 shrink-0">
             <Link
               href={`/villas/${villa.id}?autoScroll=true`}
-              className="border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-5 py-2.5 font-manrope font-bold text-gh-desc tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
+              className="border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-3 py-2 md:px-5 md:py-2.5 font-manrope font-bold text-gh-desc tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
             >
               VIEW VILLA
             </Link>
-            <PrimaryButton
-              withArrow={false}
-              onClick={() => router.push(`/book?villa=${villa.id}`)}
-            >
-              BOOK VILLA
-            </PrimaryButton>
+            <div className="whitespace-nowrap">
+              <PrimaryButton
+                withArrow={false}
+                onClick={() => router.push(`/book?villa=${villa.id}`)}
+              >
+                BOOK VILLA
+              </PrimaryButton>
+            </div>
           </div>
         </div>
       </div>
