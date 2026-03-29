@@ -45,9 +45,8 @@ export async function getBlogs() {
 export async function getBlogBySlug(slug: string) {
   await delay(200);
   return (
-    BLOGS.find((b: { slug?: string; id?: string }) =>
-      b.slug ? b.slug === slug : b.id === slug,
-    ) ?? null
+    BLOGS.find((b) => (b.slug ? b.slug === slug : String(b.id) === slug)) ??
+    null
   );
 }
 
