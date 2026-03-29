@@ -392,7 +392,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                         <div className="rounded-xl overflow-hidden border border-white/5 bg-white/5">
                           <div className="relative aspect-video w-full bg-white/10">
                             <Image
-                              src="/assets/map_placeholder.png"
+                              src="/X/Magnolia/VILLA2.webp"
                               alt="Map"
                               fill
                               className="object-cover opacity-60"
@@ -426,7 +426,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                         </h2>
                         <div className="relative aspect-video w-full overflow-hidden rounded-sm bg-black/40 border border-white/10 group cursor-pointer">
                           <Image
-                            src="/assets/Walkthrough_Cover.png"
+                            src="/X/Magnolia/22.webp"
                             alt="Video Cover"
                             fill
                             className="object-cover opacity-60 group-hover:opacity-40 transition-opacity"

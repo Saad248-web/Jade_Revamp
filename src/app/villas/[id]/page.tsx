@@ -82,6 +82,9 @@ export default function VillaDetailsPage() {
     items: [] as any[],
   });
 
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentSpaceIndex, setCurrentSpaceIndex] = useState(0);
+
   const scrollFrameRef = useRef<number>();
   const isAutoScrolling = useRef(false);
 
@@ -157,15 +160,47 @@ export default function VillaDetailsPage() {
     );
   }
 
+  const imagesList =
+    villa.images && villa.images.length > 0 ? villa.images : [villa.image];
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex(
+      (prev) => (prev - 1 + imagesList.length) % imagesList.length,
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % imagesList.length);
+  };
+
+  const handlePrevSpace = () => {
+    if (villa.spaces && villa.spaces.length > 0) {
+      setCurrentSpaceIndex(
+        (prev) => (prev - 1 + villa.spaces!.length) % villa.spaces!.length,
+      );
+    }
+  };
+
+  const handleNextSpace = () => {
+    if (villa.spaces && villa.spaces.length > 0) {
+      setCurrentSpaceIndex((prev) => (prev + 1) % villa.spaces!.length);
+    }
+  };
+
+  const currentSpace =
+    villa.spaces && villa.spaces.length > 0
+      ? villa.spaces[currentSpaceIndex]
+      : null;
+
   return (
     <main className="bg-[#1A1C1E] min-h-screen relative">
       <Navbar />
       {/* HERO / CAROUSEL SECTION */}
       <section className="relative h-[60vh] md:h-[80vh] w-full bg-[#1A1C1E]">
-        {/* Image (Simulated Carousel for now with single image) */}
+        {/* Image (Interactive Carousel) */}
         <div className="absolute inset-0">
           <Image
-            src={villa.image}
+            src={imagesList[currentImageIndex]}
             alt={villa.name}
             fill
             className="object-cover"
@@ -176,19 +211,25 @@ export default function VillaDetailsPage() {
           <div className="absolute inset-0 bg-black/20" />
         </div>
 
-        {/* Carousel Controls (Simulated) */}
+        {/* Carousel Controls */}
         <div className="absolute bottom-8 left-0 w-full px-4 md:px-8 flex justify-between items-center z-20">
-          <button className="w-10 h-10 flex items-center justify-center bg-black/40 border border-white/10 text-white hover:bg-white hover:text-black transition-all">
+          <button
+            onClick={handlePrevImage}
+            className="w-10 h-10 flex items-center justify-center bg-black/40 border border-white/10 text-white hover:bg-white hover:text-black transition-all"
+          >
             <ArrowLeft className="w-4 h-4" />
           </button>
 
           <div className="flex items-center gap-4 text-white text-gh-label font-bold tracking-widest">
-            <span>1</span>
+            <span>{currentImageIndex + 1}</span>
             <div className="w-12 h-[1px] bg-white/50" />
-            <span className="text-white/50">37</span>
+            <span className="text-white/50">{imagesList.length}</span>
           </div>
 
-          <button className="w-10 h-10 flex items-center justify-center bg-black/40 border border-white/10 text-white hover:bg-white hover:text-black transition-all">
+          <button
+            onClick={handleNextImage}
+            className="w-10 h-10 flex items-center justify-center bg-black/40 border border-white/10 text-white hover:bg-white hover:text-black transition-all"
+          >
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -344,45 +385,59 @@ export default function VillaDetailsPage() {
             {/* LEFT COLUMN (Details) */}
             <div className="lg:col-span-3 flex flex-col gap-16">
               {/* SPACES CAROUSEL SECTION */}
-              <section>
-                <div className="flex justify-between items-center mb-8">
-                  <h3 className="text-gh-h1 font-philosopher text-white">
-                    Spaces
-                  </h3>
-                  <div className="flex gap-2">
-                    <button className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors">
-                      <ArrowLeft className="w-4 h-4" />
-                    </button>
-                    <button className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors">
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
+              {currentSpace && (
+                <section>
+                  <div className="flex justify-between items-center mb-8">
+                    <h3 className="text-gh-h1 font-philosopher text-white">
+                      Spaces
+                    </h3>
+                    {villa.spaces && villa.spaces.length > 1 && (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={handlePrevSpace}
+                          className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+                        >
+                          <ArrowLeft className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={handleNextSpace}
+                          className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+                        >
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      </div>
+                    )}
                   </div>
-                </div>
 
-                {/* Space Card */}
-                <div className="relative aspect-[3/4] md:aspect-[4/5] w-full rounded-sm overflow-hidden group bg-emerald-900/20">
-                  <Image
-                    src={villa.spaces?.[0]?.image || villa.image}
-                    alt={villa.spaces?.[0]?.name || "Space"}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, 66vw"
-                    quality={60}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90" />
+                  {/* Space Card */}
+                  <div className="relative aspect-[3/4] md:aspect-[4/5] w-full rounded-sm overflow-hidden group bg-emerald-900/20">
+                    <Image
+                      src={currentSpace.image || villa.image}
+                      alt={currentSpace.name || "Space"}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 66vw"
+                      quality={60}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90" />
 
-                  <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
-                    <h4 className="text-white text-gh-h3 uppercase tracking-widest font-bold mb-4 font-manrope">
-                      {villa.spaces?.[0]?.name || "Lawn"}
-                    </h4>
-                    <div className="flex items-center justify-center gap-3 text-white text-gh-label font-bold tracking-widest">
-                      <span>4</span>
-                      <div className="w-12 h-[1px] bg-white/60" />
-                      <span className="text-white/60">7</span>
+                    <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
+                      <h4 className="text-white text-gh-h3 uppercase tracking-widest font-bold mb-4 font-manrope">
+                        {currentSpace.name || "Lawn"}
+                      </h4>
+                      {villa.spaces && villa.spaces.length > 1 && (
+                        <div className="flex items-center justify-center gap-3 text-white text-gh-label font-bold tracking-widest">
+                          <span>{currentSpaceIndex + 1}</span>
+                          <div className="w-12 h-[1px] bg-white/60" />
+                          <span className="text-white/60">
+                            {villa.spaces.length}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
-              </section>
+                </section>
+              )}
               {/* AMENITIES */}
               <section>
                 <h3 className="text-gh-h2 font-philosopher text-white mb-8">
@@ -475,7 +530,7 @@ export default function VillaDetailsPage() {
                 </div>
                 <div className="relative aspect-[4/5] md:aspect-[3/4] w-full bg-gray-900 group overflow-hidden">
                   <Image
-                    src="/assets/experience_wellness.png"
+                    src="/X/Tranquil Woods/10.webp"
                     alt="Experiences"
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -745,7 +800,7 @@ export default function VillaDetailsPage() {
                 </h3>
                 <div className="relative w-full aspect-video bg-black/50 rounded-lg overflow-hidden group cursor-pointer border border-white/10">
                   <Image
-                    src="/assets/Walkthrough_Cover.png" // Placeholder or reuse an existing asset
+                    src="/X/Magnolia/22.webp" // Placeholder or reuse an existing asset
                     alt="Video Walkthrough"
                     fill
                     className="object-cover opacity-60 group-hover:opacity-40 transition-opacity"

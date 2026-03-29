@@ -12,7 +12,8 @@ const INSTAGRAM_POSTS = [
     username: "@jadehospitainment",
     userLabel: "Instagram",
     userAvatar: "https://i.pravatar.cc/150?img=1",
-    image: "/assets/Bathing_Girls.png",
+    image:
+      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
     likes: "2.4k",
     comments: "89",
     caption: "Paradise found @jade 🌺🌸",
@@ -22,7 +23,7 @@ const INSTAGRAM_POSTS = [
     username: "@jadehospitainment",
     userLabel: "Instagram",
     userAvatar: "https://i.pravatar.cc/150?img=1",
-    image: "/assets/Wedding_for_Both.png",
+    image: "/X/Magnolia/9.webp",
     likes: "3.2k",
     comments: "124",
     caption: "Amazing celebrations ✨",
@@ -32,7 +33,7 @@ const INSTAGRAM_POSTS = [
     username: "@jadehospitainment",
     userLabel: "Instagram",
     userAvatar: "https://i.pravatar.cc/150?img=2",
-    image: "/assets/Jade_735_for_Desktop.png",
+    image: "/X/ROR/14.webp",
     likes: "2.8k",
     comments: "95",
     caption: "Weekend vibes 🌴",
@@ -42,7 +43,8 @@ const INSTAGRAM_POSTS = [
     username: "@jadehospitainment",
     userLabel: "Instagram",
     userAvatar: "https://i.pravatar.cc/150?img=3",
-    image: "/assets/Bathing_Girls.png",
+    image:
+      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
     likes: "4.1k",
     comments: "156",
     caption: "Perfect venue for unforgettable moments 💫",
@@ -52,7 +54,7 @@ const INSTAGRAM_POSTS = [
     username: "@jadehospitainment",
     userLabel: "Instagram",
     userAvatar: "https://i.pravatar.cc/150?img=4",
-    image: "/assets/Wedding_for_Both.png",
+    image: "/X/Magnolia/9.webp",
     likes: "5.3k",
     comments: "203",
     caption: "Dream weddings come alive @jade 💍✨",
@@ -62,7 +64,7 @@ const INSTAGRAM_POSTS = [
     username: "@jadehospitainment",
     userLabel: "Instagram",
     userAvatar: "https://i.pravatar.cc/150?img=5",
-    image: "/assets/Jade_735_for_Desktop.png",
+    image: "/X/ROR/14.webp",
     likes: "3.7k",
     comments: "142",
     caption: "Summer pool parties done right 🏊‍♀️☀️",
@@ -72,7 +74,8 @@ const INSTAGRAM_POSTS = [
     username: "@jadehospitainment",
     userLabel: "Instagram",
     userAvatar: "https://i.pravatar.cc/150?img=1",
-    image: "/assets/Bathing_Girls.png",
+    image:
+      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
     likes: "4.5k",
     comments: "178",
     caption: "Escape to luxury and tranquility 🌅",
@@ -133,7 +136,7 @@ export default function InstagramCarousel() {
           {INSTAGRAM_POSTS.map((post, index) => (
             <div
               key={post.id}
-              className="flex-shrink-0 w-[300px] md:w-[380px] snap-center h-full py-4"
+              className="flex-shrink-0 w-[280px] md:w-[320px] snap-center h-full py-4"
             >
               {/* Instagram Post Card */}
               <div className="w-full h-full flex flex-col bg-[#FAFAFA]/[0.04] backdrop-blur-xl rounded-[20px] overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-500 border border-[#FAFAFA]/[0.12] group">

@@ -412,7 +412,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         <div className="rounded-xl overflow-hidden border border-white/5 bg-white/5">
                           <div className="relative aspect-video w-full bg-white/10">
                             <Image
-                              src="/assets/map_placeholder.png"
+                              src="/X/Magnolia/VILLA2.webp"
                               alt="Map"
                               fill
                               className="object-cover opacity-60"
@@ -474,7 +474,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         </h2>
                         <div className="relative aspect-video rounded-xl overflow-hidden group cursor-pointer">
                           <Image
-                            src="/assets/Walkthrough_Cover.png"
+                            src="/X/Magnolia/22.webp"
                             alt="Walkthrough"
                             fill
                             className="object-cover"

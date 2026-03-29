@@ -19,28 +19,28 @@ const OFFERINGS = [
     title: "Weekend Getaways",
     description:
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone's wishlist.",
-    image: "/assets/Bathing_Girls.png",
+    image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
     link: "/weekend-getaways",
   },
   {
     title: "Corporate Retreats",
     description:
       "Private venues designed for focused sessions, team alignment, and meaningful downtime.",
-    image: "/assets/corporate_retreat.png",
+    image: "/X/ROR/15.webp",
     link: "/corporate-retreats",
   },
   {
     title: "Weddings",
     description:
       "Bespoke celebrations in curated settings that make your special day truly unforgettable.",
-    image: "/assets/poolside_exp.png",
+    image: "/X/HAVEN/pool new.webp",
     link: "/weddings",
   },
   {
     title: "Party Villas",
     description:
       "Host birthdays, pool parties, reunions or milestone celebrations in exclusive Jade villas.",
-    image: "/assets/celebrations_friends.png",
+    image: "/X/HAVEN/pool new.webp",
     link: "/party-villas",
   },
 ];
@@ -361,7 +361,7 @@ export default function AboutPage() {
               >
                 <div className="relative w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden border-2 border-[#EFCD62]/20 mb-8">
                   <Image
-                    src={`/assets/corporate_retreat.png`} // Placeholder for team member
+                    src={`/X/ROR/15.webp`} // Placeholder for team member
                     alt="Team Member"
                     fill
                     className="object-cover grayscale"
@@ -399,7 +399,7 @@ export default function AboutPage() {
             {/* Row 1 */}
             <div className="relative aspect-square md:aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
               <Image
-                src="/assets/Dome_Villa.png"
+                src="/X/Dome Villas/Red Dome/1.webp"
                 alt="Media"
                 fill
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
@@ -415,7 +415,7 @@ export default function AboutPage() {
             </div>
             <div className="relative hidden lg:block aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
               <Image
-                src="/assets/caravan_journey.png"
+                src="/X/Magnolia/14.webp"
                 alt="Media"
                 fill
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
@@ -426,7 +426,7 @@ export default function AboutPage() {
             <div className="col-span-2 lg:col-span-3 pb-4">
               <div className="relative aspect-video w-full bg-white/5 border border-white/10 rounded-none overflow-hidden group">
                 <Image
-                  src="/assets/wellness_retreat.png"
+                  src="/X/Magnolia/16.webp"
                   alt="Media Item"
                   fill
                   className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
@@ -442,7 +442,7 @@ export default function AboutPage() {
             {/* Row 3 */}
             <div className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
               <Image
-                src="/assets/corporate_retreat.png"
+                src="/X/ROR/15.webp"
                 alt="Media"
                 fill
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
@@ -450,7 +450,7 @@ export default function AboutPage() {
             </div>
             <div className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
               <Image
-                src="/assets/casual_stays.png"
+                src="/X/Magnolia/15.webp"
                 alt="Media"
                 fill
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
@@ -458,7 +458,7 @@ export default function AboutPage() {
             </div>
             <div className="relative col-span-2 lg:col-span-1 aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
               <Image
-                src="/assets/Magnolia_for_Desktop.png"
+                src="/X/Magnolia/VILLA.webp"
                 alt="Media"
                 fill
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"

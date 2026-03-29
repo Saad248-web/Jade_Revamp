@@ -15,8 +15,8 @@ const VILLAS = [
     title: "Dome Villa",
     description:
       "A hobbit-home inspired retreat set amidst rolling hills, defined by its iconic dome architecture, private pool and immersive connection to nature. Ideal for intimate getaways and quiet celebrations.",
-    desktopImage: "/assets/Dome_Villa.png",
-    mobileImage: "/assets/Dome_Villa.png",
+    desktopImage: "/X/Dome Villas/Red Dome/1.webp",
+    mobileImage: "/X/Dome Villas/Red Dome/1.webp",
     link: "/villas/dome-villa",
   },
   {
@@ -25,8 +25,8 @@ const VILLAS = [
     title: "Lemon Tree",
     description:
       "A farmhouse retreat nestled within a lemon grove, featuring a rooftop pool and a flexible indoor hall—well suited for relaxed getaways, intimate celebrations, and countryside offsites.",
-    desktopImage: "/assets/Lemon_Tree_for_Desktop.png",
-    mobileImage: "/assets/Lemon_Tree_for_Mobile.png",
+    desktopImage: "/X/Dome Villas/Yellow Dome/DSC00323.webp",
+    mobileImage: "/X/Dome Villas/Yellow Dome/DSC00608.webp",
     link: "/villas/lemon-tree",
   },
   {
@@ -35,8 +35,8 @@ const VILLAS = [
     title: "Retreat on the Ridge",
     description:
       "A hill-facing private villa known for panoramic views, sunset backdrops, and a serene pool setting—designed for group getaways, nature-led retreats, and slow weekends away from the city.",
-    desktopImage: "/assets/ROR_for_Desktop.png",
-    mobileImage: "/assets/ROR_for_Mobile.png",
+    desktopImage: "/X/ROR/2.webp",
+    mobileImage: "/X/ROR/2.webp",
     link: "/villas/retreat-on-ridge",
   },
   {
@@ -45,8 +45,8 @@ const VILLAS = [
     title: "Magnolia",
     description:
       "A modern glass-walled estate with expansive lawns, a private pool, and an in-house theatre—crafted for vibrant celebrations, social gatherings, and large-format experiences with complete privacy.",
-    desktopImage: "/assets/Magnolia_for_Desktop.png",
-    mobileImage: "/assets/Magnolia_for_Mobile.png",
+    desktopImage: "/X/Magnolia/VILLA.webp",
+    mobileImage: "/X/Magnolia/VILLA.webp",
     link: "/villas/magnolia",
   },
 ];
@@ -190,7 +190,7 @@ function VillaSlide({
         {/* Layout Container: Stacked universally on all screen sizes */}
         <div className="relative w-full max-w-xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
           {/* Image Section */}
-          <div className="relative w-full aspect-[4/5] md:aspect-square lg:aspect-[4/3] max-h-[50vh] lg:max-h-[60vh] overflow-hidden shadow-2xl rounded-none bg-black">
+          <div className="relative w-full h-[45vh] lg:h-[55vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
             <div className="w-full h-full relative">
               <Image
                 src={data.desktopImage}
@@ -216,7 +216,7 @@ function VillaSlide({
           </div>
 
           {/* Text Section */}
-          <div className="relative w-full flex flex-col items-start text-left mt-2 h-[220px] lg:h-[260px]">
+          <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 pb-4">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

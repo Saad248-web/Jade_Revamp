@@ -17,24 +17,24 @@ const SLIDES = [
     label: "PERFECT FOR",
     heading: ["Family Road", "Trips"],
     subtext: "Reconnect and explore scenic destinations together.",
-    bgImage: "/assets/nature_escapes.png",
-    cardImage: "/assets/nature_escapes.png",
+    bgImage: "/X/Tranquil Woods/1.webp",
+    cardImage: "/X/Tranquil Woods/1.webp",
   },
   {
     id: 2,
     label: "PERFECT FOR",
     heading: ["Romantic", "Getaways"],
     subtext: "Private journeys designed for couples seeking quiet escapes.",
-    bgImage: "/assets/evening_under_stars.png",
-    cardImage: "/assets/evening_under_stars.png",
+    bgImage: "/X/Dome Villas/Red Dome/1.webp",
+    cardImage: "/X/Dome Villas/Red Dome/1.webp",
   },
   {
     id: 3,
     label: "PERFECT FOR",
     heading: ["Private", "Celebrations"],
     subtext: "Birthdays, proposals, bridal showers, and milestone moments.",
-    bgImage: "/assets/celebrations_friends.png",
-    cardImage: "/assets/celebrations_friends.png",
+    bgImage: "/X/HAVEN/pool new.webp",
+    cardImage: "/X/HAVEN/pool new.webp",
   },
   {
     id: 4,
@@ -42,8 +42,8 @@ const SLIDES = [
     heading: ["One-Day", "Escapes"],
     subtext:
       "Short journeys outside the city without the need for overnight stays.",
-    bgImage: "/assets/weekend_getaway_hero.png",
-    cardImage: "/assets/weekend_getaway_hero.png",
+    bgImage: "/X/Tranquil Woods/3.webp",
+    cardImage: "/X/Tranquil Woods/3.webp",
   },
   {
     id: 5,
@@ -51,8 +51,8 @@ const SLIDES = [
     heading: ["Content Shoots", "& Creative Projects"],
     subtext:
       "Unique mobile spaces for filming, photography, and creative work.",
-    bgImage: "/assets/caravan_journey.png",
-    cardImage: "/assets/caravan_journey.png",
+    bgImage: "/X/Magnolia/14.webp",
+    cardImage: "/X/Magnolia/14.webp",
   },
   {
     id: 6,
@@ -60,8 +60,8 @@ const SLIDES = [
     heading: ["Work on", "the Move"],
     subtext:
       "A quiet mobile environment for offsites, brainstorming, or remote work.",
-    bgImage: "/assets/corporate_retreat.png",
-    cardImage: "/assets/corporate_retreat.png",
+    bgImage: "/X/ROR/15.webp",
+    cardImage: "/X/ROR/15.webp",
   },
 ];
 

@@ -424,7 +424,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                           <Image
                             src={
                               villa.locationDetails?.mapImage ||
-                              "/assets/map_placeholder.png"
+                              "/X/Magnolia/VILLA2.webp"
                             }
                             alt="Map"
                             fill
@@ -484,7 +484,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                         </h3>
                         <div className="relative aspect-video w-full overflow-hidden rounded-sm bg-black/40 border border-white/10 group cursor-pointer">
                           <Image
-                            src="/assets/Walkthrough_Cover.png"
+                            src="/X/Magnolia/22.webp"
                             alt="Video Cover"
                             fill
                             className="object-cover opacity-60 group-hover:opacity-40 transition-opacity"

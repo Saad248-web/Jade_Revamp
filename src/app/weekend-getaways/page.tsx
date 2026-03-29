@@ -34,27 +34,27 @@ const themedVillas = [
   {
     name: "Dome Villa",
     tag: "HOBBIT-INSPIRED PRIVATE RETREAT",
-    image: "/assets/Dome_Villa.png",
+    image: "/X/Dome Villas/Red Dome/1.webp",
   },
   {
     name: "Magnolia",
     tag: "CONTEMPORARY LUXURY VILLA",
-    image: "/assets/Magnolia_for_Desktop.png",
+    image: "/X/Magnolia/VILLA.webp",
   },
   {
     name: "Diamond Pavilion",
     tag: "MODERN ARCHITECTURAL MARVEL",
-    image: "/assets/Jade_735_for_Desktop.png",
+    image: "/X/ROR/14.webp",
   },
   {
     name: "Retreat on the Ridge",
     tag: "SCENIC HILLTOP ESCAPE",
-    image: "/assets/ROR_for_Desktop.png",
+    image: "/X/ROR/2.webp",
   },
   {
     name: "The Haven",
     tag: "PRIVATE SERENE SANCTUARY",
-    image: "/assets/Lemon_Tree_for_Desktop.png",
+    image: "/X/Dome Villas/Yellow Dome/DSC00323.webp",
   },
 ];
 
@@ -62,42 +62,42 @@ const weekendSlides = [
   {
     title: "Poolside Mornings",
     desc: "Slow mornings by the pool with coffee, sunlight, and nowhere else to be.",
-    image: "/assets/Bathing_Girls.png",
+    image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
   },
   {
     title: "Evenings Under the Stars",
     desc: "Bonfires, music, and long conversations that stretch late into the night.",
-    image: "/assets/evening_under_stars.png",
+    image: "/X/Dome Villas/Red Dome/1.webp",
   },
   {
     title: "Outdoor Dining",
     desc: "Freshly grilled meals, laughter around the table, and food shared with friends.",
-    image: "/assets/outdoor_dining.png",
+    image: "/X/Magnolia/18.webp",
   },
   {
     title: "Nature & Nearby Escapes",
     desc: "Morning treks, quiet lakes, and scenic walks just minutes from your villa.",
-    image: "/assets/nature_escapes.png",
+    image: "/X/Tranquil Woods/1.webp",
   },
   {
     title: "Celebrations With Friends",
     desc: "Birthdays, reunions, or simply an excuse to gather everyone together.",
-    image: "/assets/celebrations_friends.png",
+    image: "/X/HAVEN/pool new.webp",
   },
   {
     title: "Movie Nights Under The Stars",
     desc: "Projector nights, cozy spaces, and the perfect way to wind down the day.",
-    image: "/assets/movie_nights.png",
+    image: "/X/Magnolia/12.webp",
   },
   {
     title: "Private Dinners",
     desc: "Experience curated dining in the privacy of your villa under the starlit sky.",
-    image: "/assets/corporate_retreat.png",
+    image: "/X/ROR/15.webp",
   },
   {
     title: "Golden Evenings",
     desc: "Watching the sun dip below the horizon with those who matter most.",
-    image: "/assets/wellness_retreat.png",
+    image: "/X/Magnolia/16.webp",
   },
 ];
 
@@ -124,7 +124,7 @@ export default function WeekendGetawaysPage() {
 
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
-        backgroundImage="/assets/weekend_getaway_hero.png"
+        backgroundImage="/X/Tranquil Woods/3.webp"
         backgroundAlt="Weekend Getaways"
         heading={
           <>
@@ -190,14 +190,14 @@ export default function WeekendGetawaysPage() {
 
 function EnhanceYourStaySection() {
   const experiences = [
-    { title: "Bonfire Nights", image: "/assets/bonfire_exp.png" },
-    { title: "BBQ Evenings", image: "/assets/bbq_exp.png" },
-    { title: "Movie Under the Stars", image: "/assets/movie_exp.png" },
-    { title: "Candlelight Dinner", image: "/assets/dinner_exp.png" },
-    { title: "Outdoor Games", image: "/assets/games_exp.png" },
-    { title: "Live Music / DJ", image: "/assets/music_exp.png" },
-    { title: "Private Chef Experience", image: "/assets/chef_exp.png" },
-    { title: "Poolside Celebrations", image: "/assets/poolside_exp.png" },
+    { title: "Bonfire Nights", image: "/X/HAVEN/BONFIRE.webp" },
+    { title: "BBQ Evenings", image: "/X/Tranquil Woods/9.webp" },
+    { title: "Movie Under the Stars", image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_13_Image_0001.webp" },
+    { title: "Candlelight Dinner", image: "/X/Magnolia/13.webp" },
+    { title: "Outdoor Games", image: "/X/HAVEN/POOL TABLE1.webp" },
+    { title: "Live Music / DJ", image: "/X/HAVEN/meco.webp" },
+    { title: "Private Chef Experience", image: "/X/HAVEN/dining 1.webp" },
+    { title: "Poolside Celebrations", image: "/X/HAVEN/pool new.webp" },
   ];
 
   return (

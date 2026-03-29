@@ -87,7 +87,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "Planning a company offsite? Step away from generic hotels and discover why a private luxury villa buyout is the ultimate canvas for team bonding and productivity.",
     description:
       "Discover why Jade Hospitainment's private luxury villas near Bangalore are the ultimate venue for corporate team outings, offsites, and workcations. Exclusive buyouts, bespoke catering, and inspiring spaces.",
-    image: "/assets/corporate_retreat.png",
+    image: "/X/ROR/15.webp",
     link: "/blogs/corporate-team-outing-bangalore-guide",
     date: "2024-03-20",
     dateModified: "2024-03-20",
@@ -263,7 +263,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "Welcome to Jade Hospitainment. Discover our unique approach to hosting and why taking time to disconnect is essential for modern wellbeing.",
     description:
       "Escape the always-on culture and embrace slow living at Jade Hospitainment's luxury private villas near Bangalore. A guide to intentional rest, digital detox, and the art of truly unwinding.",
-    image: "/assets/casual_stays.png",
+    image: "/X/Magnolia/15.webp",
     link: "/blogs/the-art-of-slow-living",
     date: "2024-03-15",
     dateModified: "2024-03-15",

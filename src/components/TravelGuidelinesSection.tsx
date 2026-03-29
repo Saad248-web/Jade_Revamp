@@ -27,7 +27,7 @@ export default function TravelGuidelinesSection() {
         {/* Banner Image */}
         <div className="relative w-full aspect-[16/9] md:aspect-[21/9] mb-12 overflow-hidden">
           <Image
-            src="/assets/caravan_journey.png"
+            src="/X/Magnolia/14.webp"
             alt="Rathaa Caravan"
             fill
             className="object-cover"
