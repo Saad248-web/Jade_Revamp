@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { VILLAS, CATEGORIES } from "@/data/villas";
+import { VILLAS, CATEGORIES } from "@/lib/mockData";
 import ReservationOverlay from "./ReservationOverlay";
 import VillaCard from "./VillaCard";
 import BookingBanner from "./BookingBanner";

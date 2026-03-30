@@ -306,20 +306,20 @@ export default function MenuPage() {
                     {
                       title: "Weekend Getaways",
                       desc: "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone's wishlist.",
-                      img1: "/assets/wellness_retreat.png",
-                      img2: "/assets/Bathing_Girls.png",
+                      img1: "/X/Magnolia/16.webp",
+                      img2: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
                     },
                     {
                       title: "Celebrations & Parties",
                       desc: "Birthdays, pool or bachelor parties unfold across private farmhouse villas with pools, open lawns and entertainment-ready spaces.",
-                      img1: "/assets/corporate_retreat.png",
-                      img2: "/assets/casual_stays.png",
+                      img1: "/X/ROR/15.webp",
+                      img2: "/X/Magnolia/15.webp",
                     },
                     {
                       title: "Wedding Celebrations",
                       desc: "Say 'I do' under the stars in sprawling lawns or intimate poolside setups designed just for you.",
-                      img1: "/assets/Wedding_for_Both.png",
-                      img2: "/assets/Jade_735_for_Desktop.png",
+                      img1: "/X/Magnolia/9.webp",
+                      img2: "/X/ROR/14.webp",
                     },
                   ].map((exp, idx) => (
                     <Link
@@ -531,38 +531,38 @@ export default function MenuPage() {
                     {
                       title: "Weekend Getaways",
                       type: "JOURNEY OF WELLNESS",
-                      img1: "/assets/wellness_retreat.png",
-                      img2: "/assets/Bathing_Girls.png",
+                      img1: "/X/Magnolia/16.webp",
+                      img2: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
                     },
                     {
                       title: "Celebrations & Parties",
                       type: "LUXURY PRIVATE STAYS",
-                      img1: "/assets/corporate_retreat.png",
-                      img2: "/assets/casual_stays.png",
+                      img1: "/X/ROR/15.webp",
+                      img2: "/X/Magnolia/15.webp",
                     },
                     {
                       title: "Wedding Celebrations",
                       type: "UNFORGETTABLE MOMENTS",
-                      img1: "/assets/Wedding_for_Both.png",
-                      img2: "/assets/Jade_735_for_Desktop.png",
+                      img1: "/X/Magnolia/9.webp",
+                      img2: "/X/ROR/14.webp",
                     },
                     {
                       title: "Corporate Offsites",
                       type: "JOURNEY OF TEAMWORK",
-                      img1: "/assets/corporate_retreat.png",
-                      img2: "/assets/Jade_735_for_Desktop.png",
+                      img1: "/X/ROR/15.webp",
+                      img2: "/X/ROR/14.webp",
                     },
                     {
                       title: "Wellness Retreats",
                       type: "PURE REJUVENATION",
-                      img1: "/assets/wellness_retreat.png",
-                      img2: "/assets/Bathing_Girls.png",
+                      img1: "/X/Magnolia/16.webp",
+                      img2: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
                     },
                     {
                       title: "Journeys in Caravans",
                       type: "LUXURY ON ROAD",
-                      img1: "/assets/caravan_journey.png",
-                      img2: "/assets/Dome_Villa.png",
+                      img1: "/X/Magnolia/14.webp",
+                      img2: "/X/Dome Villas/Red Dome/1.webp",
                     },
                   ].map((exp, idx) => (
                     <motion.div
@@ -652,7 +652,7 @@ export default function MenuPage() {
                   {/* Banner Image Section */}
                   <div className="flex-[2] relative h-[400px] overflow-hidden group/banner shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5">
                     <Image
-                      src="/assets/Wedding_for_Both.png"
+                      src="/X/Magnolia/9.webp"
                       alt="Jade Banner"
                       fill
                       className="object-cover opacity-60 group-hover/banner:scale-105 group-hover/banner:opacity-100 transition-all duration-1000 grayscale group-hover/banner:grayscale-0"

@@ -1,3 +1,4 @@
+// ─── Blog Section types ───────────────────────────────────────────────────────
 export interface BlogSection {
   type:
     | "text"
@@ -28,19 +29,54 @@ export interface BlogSection {
   }[];
 }
 
+// ─── BlogPost interface ───────────────────────────────────────────────────────
 export interface BlogPost {
   id: number;
-  slug: string;
+  slug: string; // URL-safe, lowercase, hyphenated
   title: string;
-  excerpt: string;
+  excerpt: string; // Short teaser shown on blog listing cards
+  description: string; // 120–160 chars — used as meta description & OG description
   image: string;
   link: string;
-  date: string;
+  date: string; // ISO 8601: "2024-03-20" — used in Article datePublished
+  dateModified?: string; // ISO 8601 — used in Article dateModified schema
   category: string;
   readTime: string;
+  author: string; // Author name for Article schema
+  tags: string[]; // For filtering & schema keywords
+  isFeatured?: boolean;
+  isPublished: boolean; // false = draft, excluded from listing and sitemap
   sections: BlogSection[];
 }
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/** Returns only published posts — use this everywhere instead of raw BLOG_POSTS */
+export function getPublishedPosts(): BlogPost[] {
+  return BLOG_POSTS.filter((p) => p.isPublished);
+}
+
+/** Find a single published post by its slug */
+export function getPostBySlug(slug: string): BlogPost | undefined {
+  const decoded = decodeURIComponent(slug).toLowerCase();
+  return BLOG_POSTS.find(
+    (p) => p.isPublished && p.slug.toLowerCase() === decoded,
+  );
+}
+
+// ─── Build-time duplicate slug guard ─────────────────────────────────────────
+// Throws during `next build` if any two posts share a slug
+function assertUniqueSlugs(posts: BlogPost[]) {
+  const seen = new Set<string>();
+  for (const post of posts) {
+    if (seen.has(post.slug)) {
+      throw new Error(`[blogs.ts] Duplicate slug detected: "${post.slug}"`);
+    }
+    seen.add(post.slug);
+  }
+}
+
+// ─── Blog Posts ───────────────────────────────────────────────────────────────
 export const BLOG_POSTS: BlogPost[] = [
   {
     id: 99,
@@ -49,11 +85,24 @@ export const BLOG_POSTS: BlogPost[] = [
       "Elevate Your Corporate Team Outing in Bangalore: Exclusive Luxury Villas & Private Retreats",
     excerpt:
       "Planning a company offsite? Step away from generic hotels and discover why a private luxury villa buyout is the ultimate canvas for team bonding and productivity.",
-    image: "/assets/corporate_retreat.png",
+    description:
+      "Discover why Jade Hospitainment's private luxury villas near Bangalore are the ultimate venue for corporate team outings, offsites, and workcations. Exclusive buyouts, bespoke catering, and inspiring spaces.",
+    image: "/X/ROR/15.webp",
     link: "/blogs/corporate-team-outing-bangalore-guide",
-    date: "March 20, 2024",
+    date: "2024-03-20",
+    dateModified: "2024-03-20",
     category: "CORPORATE",
     readTime: "20 min read",
+    author: "Jade Hospitainment",
+    tags: [
+      "corporate retreat",
+      "team outing",
+      "luxury villa",
+      "Bangalore",
+      "offsite",
+    ],
+    isFeatured: true,
+    isPublished: true,
     sections: [
       {
         type: "text",
@@ -212,11 +261,24 @@ export const BLOG_POSTS: BlogPost[] = [
     title: "The Art of Slow Living: A Guide to Disconnecting",
     excerpt:
       "Welcome to Jade Hospitainment. Discover our unique approach to hosting and why taking time to disconnect is essential for modern wellbeing.",
-    image: "/assets/casual_stays.png",
+    description:
+      "Escape the always-on culture and embrace slow living at Jade Hospitainment's luxury private villas near Bangalore. A guide to intentional rest, digital detox, and the art of truly unwinding.",
+    image: "/X/Magnolia/15.webp",
     link: "/blogs/the-art-of-slow-living",
-    date: "March 15, 2024",
+    date: "2024-03-15",
+    dateModified: "2024-03-15",
     category: "WELLNESS",
     readTime: "8 min read",
+    author: "Jade Hospitainment",
+    tags: [
+      "slow living",
+      "wellness",
+      "digital detox",
+      "luxury stays",
+      "Bangalore",
+    ],
+    isFeatured: false,
+    isPublished: true,
     sections: [
       {
         type: "text",
@@ -235,4 +297,34 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+
+  // ─── NEW ARTICLE TEMPLATE ─────────────────────────────────────────────────
+  // Copy the block below for every new article you publish.
+  // 1. Fill in all fields
+  // 2. Set isPublished: true when ready to go live
+  // 3. Place hero image in /public/blog/[slug]/hero.jpg (max 200KB)
+  // 4. Run `next build` to verify no errors
+  // 5. Submit URL in Google Search Console → Request Indexing
+  // ─────────────────────────────────────────────────────────────────────────
+  // {
+  //   id: 2,                         // Increment from last post
+  //   slug: "your-article-slug",     // lowercase, hyphenated, < 60 chars
+  //   title: "Your Article Title",
+  //   excerpt: "Short teaser shown on the blog listing card.",
+  //   description: "120–160 char meta description for Google search snippet.",
+  //   image: "/blog/your-article-slug/hero.jpg",
+  //   link: "/blogs/your-article-slug",
+  //   date: "2026-03-27",            // ISO 8601 — original publish date
+  //   dateModified: "2026-03-27",
+  //   category: "WELLNESS",          // WELLNESS | CORPORATE | TRAVEL | EXPERIENCES
+  //   readTime: "5 min read",
+  //   author: "Jade Hospitainment",
+  //   tags: ["tag1", "tag2", "tag3"],
+  //   isFeatured: false,
+  //   isPublished: false,            // ← Set to true to publish
+  //   sections: [],
+  // },
 ];
+
+// ─── Validate at build time ───────────────────────────────────────────────────
+assertUniqueSlugs(BLOG_POSTS);

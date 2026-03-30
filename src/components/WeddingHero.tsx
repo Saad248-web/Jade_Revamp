@@ -31,7 +31,7 @@ export default function WeddingHero() {
   return (
     <ExperienceHero
       ref={sectionRef}
-      backgroundImage="/assets/Wedding_for_Both.png"
+      backgroundImage="/X/Magnolia/9.webp"
       backgroundAlt="Boutique Weddings"
       heading={
         <>

@@ -40,7 +40,7 @@ export default function CorporateRetreatsPage() {
 
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
-        backgroundImage="/assets/corporate_retreat.png"
+        backgroundImage="/X/ROR/15.webp"
         backgroundAlt="Corporate Retreats"
         heading={
           <>

@@ -15,7 +15,8 @@ const PANELS = [
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone’s wishlist.",
     cta: "SEE WHAT A GETAWAY LOOKS LIKE",
     href: "/weekend-getaways",
-    image: "/assets/Bathing_Girls.png",
+    image:
+      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
   },
   {
     id: "celebrations",
@@ -24,7 +25,7 @@ const PANELS = [
       "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
     href: "/party-villas",
-    image: "/assets/Jade_735_for_Desktop.png",
+    image: "/X/ROR/14.webp",
   },
   {
     id: "weddings",
@@ -33,7 +34,7 @@ const PANELS = [
       "Intimate ceremonies to grand, multi-day wedding celebrations, set amid private gardens, sprawling lawns, and luxury rooms.",
     cta: "SEE HOW WEDDINGS UNFOLD",
     href: "/weddings",
-    image: "/assets/Wedding_for_Both.png",
+    image: "/X/Magnolia/9.webp",
   },
   {
     id: "corporate",
@@ -42,7 +43,7 @@ const PANELS = [
       "Unwinding and ice-breaking sessions with colleagues, away from cubicles and glass walls, in private farmhouses ideal for offsites or workations.",
     cta: "SEE HOW TEAMS GATHER",
     href: "/corporate-retreats",
-    image: "/assets/corporate_retreat.png",
+    image: "/X/ROR/15.webp",
   },
   {
     id: "wellness",
@@ -51,7 +52,7 @@ const PANELS = [
       "Element-led wellness restoration through mud baths, massages, spa and aroma therapies, designed for deep rejuvenation.",
     cta: "SEE HOW RETREAT TAKES SHAPE",
     href: "/experiences",
-    image: "/assets/wellness_retreat.png",
+    image: "/X/Magnolia/16.webp",
   },
   {
     id: "caravans",
@@ -60,7 +61,7 @@ const PANELS = [
       "Luxury motor caravans carry the idea of private retreat onto the road, offering comfort and privacy for glamping, pilgrimages or any evolving journeys.",
     cta: "SEE HOW THE JOURNEY UNFOLDS",
     href: "/caravans",
-    image: "/assets/caravan_journey.png",
+    image: "/X/Magnolia/14.webp",
   },
   {
     id: "private-villas",
@@ -69,7 +70,7 @@ const PANELS = [
       "A curated collection of fully private farmhouses, suited for everything from quiet stays to vibrant celebrations and bespoke experiences.",
     cta: "SEE THE VILLAS THAT HOST IT ALL",
     href: "/villas",
-    image: "/assets/casual_stays.png",
+    image: "/X/Magnolia/15.webp",
   },
 ];
 
@@ -92,9 +93,8 @@ export default function ExperiencesScrollSection() {
     <section ref={targetRef} className="relative h-[800vh] bg-[#0D4032]">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#0D4032]">
         {/* Top Label & Counter - Global */}
-        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-20 md:pt-24 pb-[16px] md:pb-[24px]">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/90 to-transparent -z-10" />
-          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-4 md:mb-6 font-semibold text-jade-gold drop-shadow-lg block">
+        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-12 md:pt-16 pb-[16px] md:pb-[24px]">
+          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-2 md:mb-4 font-semibold text-jade-gold drop-shadow-lg block">
             WAYS JADE IS EXPERIENCED
           </span>
           <GlobalCounter
@@ -219,7 +219,7 @@ function PanelSlide({
         <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-24">
           <div className="relative w-full h-full max-w-xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
             {/* Image Section */}
-            <div className="relative w-full aspect-[4/5] md:aspect-square lg:aspect-[4/3] max-h-[50vh] lg:max-h-[60vh] overflow-hidden shadow-2xl rounded-none bg-black">
+            <div className="relative w-full aspect-[4/5] md:aspect-square lg:aspect-[4/3] max-h-[45vh] lg:max-h-[50vh] overflow-hidden shadow-2xl rounded-none bg-black">
               <div className="w-full h-full relative">
                 <Image
                   src={data.image}
@@ -233,7 +233,7 @@ function PanelSlide({
             </div>
 
             {/* Text Section */}
-            <div className="relative w-full flex flex-col items-start text-left mt-2 h-[220px] lg:h-[260px]">
+            <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 pb-4">
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}

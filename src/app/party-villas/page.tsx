@@ -45,22 +45,22 @@ const partySlides = [
   {
     title: "Pool Parties",
     desc: "Celebrate poolside with loungers, BBQ setups, cocktail stations, and vibrant lighting.",
-    image: "/assets/poolside_exp.png",
+    image: "/X/HAVEN/pool new.webp",
   },
   {
     title: "Bachelor/Bachelorette Parties",
     desc: "Private villas designed for pre-wedding celebrations with music, entertainment, and curated dining.",
-    image: "/assets/caravan_journey.png", // Using relevant existing assets
+    image: "/X/Magnolia/14.webp", // Using relevant existing assets
   },
   {
     title: "Reunions & Graduation Parties",
     desc: "Spacious villas perfect for reconnecting, celebrating milestones, and hosting memorable gatherings.",
-    image: "/assets/outdoor_dining.png",
+    image: "/X/Magnolia/18.webp",
   },
   {
     title: "Birthdays & Anniversaries",
     desc: "Host memorable celebrations in beautifully curated villas with décor, dining, music, and private pools.",
-    image: "/assets/celebrations_friends.png",
+    image: "/X/HAVEN/pool new.webp",
   },
 ];
 
@@ -87,7 +87,7 @@ export default function PartyVillasPage() {
 
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
-        backgroundImage="/assets/celebrations_friends.png"
+        backgroundImage="/X/HAVEN/pool new.webp"
         backgroundAlt="Party Villas"
         heading={
           <>
@@ -137,12 +137,12 @@ export default function PartyVillasPage() {
         ctaText="PLAN YOUR CELEBRATION"
         ctaLink="/contact"
         experiences={[
-          { title: "DJ & Music Setup", image: "/assets/music_exp.png" },
-          { title: "BBQ & Live Grills", image: "/assets/bbq_exp.png" },
-          { title: "Cocktail Bar Setup", image: "/assets/poolside_exp.png" },
-          { title: "Bonfire Nights", image: "/assets/bonfire_exp.png" },
-          { title: "Movie Under the Stars", image: "/assets/movie_exp.png" },
-          { title: "Themed Decor & Styling", image: "/assets/dinner_exp.png" },
+          { title: "DJ & Music Setup", image: "/X/HAVEN/meco.webp" },
+          { title: "BBQ & Live Grills", image: "/X/Tranquil Woods/9.webp" },
+          { title: "Cocktail Bar Setup", image: "/X/HAVEN/pool new.webp" },
+          { title: "Bonfire Nights", image: "/X/HAVEN/BONFIRE.webp" },
+          { title: "Movie Under the Stars", image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_13_Image_0001.webp" },
+          { title: "Themed Decor & Styling", image: "/X/Magnolia/13.webp" },
         ]}
       />
 

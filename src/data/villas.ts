@@ -24,12 +24,13 @@ export const VILLAS = [
       "Pre-wedding",
     ],
     spaces: [
-      { name: "Lawn", image: "/assets/Jade_735_for_Desktop.png" },
-      { name: "Poolside", image: "/assets/Jade_735_for_Desktop.png" }, // Placeholder
-      { name: "Living Area", image: "/assets/Jade_735_for_Desktop.png" }, // Placeholder
+      { name: "Lawn", image: "/X/Magnolia/12.webp" },
+      { name: "Poolside", image: "/X/Magnolia/VILLA.webp" },
+      { name: "Living Area", image: "/X/Magnolia/LIVING ROOM.webp" },
     ],
     categories: ["Weddings", "Corporate Retreats", "Pre-wedding"],
-    image: "/assets/Jade_735_for_Desktop.png",
+    image: "/X/Magnolia/VILLA2.webp",
+    images: ["/X/Magnolia/12.webp","/X/Magnolia/13.webp","/X/Magnolia/14.webp","/X/Magnolia/15.webp","/X/Magnolia/16.webp","/X/Magnolia/17.webp","/X/Magnolia/18.webp","/X/Magnolia/19.webp","/X/Magnolia/22.webp","/X/Magnolia/VILLA.webp","/X/Magnolia/LIVING ROOM.webp","/X/Magnolia/BEDROOM1.webp","/X/Magnolia/FAMILY ROOM.webp","/X/Magnolia/VILLA2.webp"],
     amenities: [
       {
         label: "Private Pool",
@@ -204,7 +205,7 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/assets/map_placeholder.png",
+      mapImage: "/X/Magnolia/VILLA2.webp",
       address: "Magnolia, Harohalli, Kanakapura Road, Bangalore - 560082",
       distance: "Approximately 45 minutes from Bangalore City Center",
       nearby: [
@@ -214,12 +215,12 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Weekend Getaways", image: "/assets/experience_wellness.png" },
-      { title: "Weddings", image: "/assets/Wedding_for_Both.png" },
-      { title: "Corporate Events", image: "/assets/Jade_735_for_Desktop.png" },
-      { title: "Photo Shoots", image: "/assets/Bathing_Girls.png" },
+      { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
+      { title: "Weddings", image: "/X/Magnolia/9.webp" },
+      { title: "Corporate Events", image: "/X/ROR/14.webp" },
+      { title: "Photo Shoots", image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp" },
     ],
-    video: "/assets/video_placeholder.png",
+    video: "/X/Magnolia/9.webp",
     faq: [
       {
         question: "What is the maximum guest capacity?",
@@ -268,7 +269,8 @@ export const VILLAS = [
       "A private glass villa set within lush green surroundings, featuring a 1.5 acre landscaped lawn and a pool. Surrounded by peaceful nature yet close to the city, this is ideal for those seeking privacy and exclusivity within the city limits.",
     perfectFor: ["Celebrations", "Weddings", "Weekends"],
     categories: ["Weddings", "Pet friendly"],
-    image: "/assets/Wedding_for_Both.png",
+    image: "/X/Tranquil Woods/1.webp",
+    images: ["/X/Tranquil Woods/1.webp","/X/Tranquil Woods/2.webp","/X/Tranquil Woods/3.webp","/X/Tranquil Woods/4.webp","/X/Tranquil Woods/7.webp","/X/Tranquil Woods/8.webp","/X/Tranquil Woods/9.webp","/X/Tranquil Woods/10.webp","/X/Tranquil Woods/11.webp","/X/Tranquil Woods/12.webp","/X/Tranquil Woods/13.webp","/X/Tranquil Woods/14.webp","/X/Tranquil Woods/15.webp","/X/Tranquil Woods/16.webp","/X/Tranquil Woods/17.webp","/X/Tranquil Woods/18.webp","/X/Tranquil Woods/20.webp","/X/Tranquil Woods/24.webp"],
     amenities: [
       { label: "Wifi", icon: "Wifi" },
       { label: "Parking", icon: "Car" },
@@ -277,9 +279,9 @@ export const VILLAS = [
     ],
     // ADDED STRUCTURE
     spaces: [
-      { name: "Lawn", image: "/assets/Wedding_for_Both.png" },
-      { name: "Poolside", image: "/assets/Wedding_for_Both.png" },
-      { name: "Living Area", image: "/assets/Wedding_for_Both.png" },
+      { name: "Lawn", image: "/X/Tranquil Woods/2.webp" },
+      { name: "Poolside", image: "/X/Tranquil Woods/3.webp" },
+      { name: "Living Area", image: "/X/Tranquil Woods/12.webp" },
     ],
     services: [
       {
@@ -360,7 +362,7 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/assets/map_placeholder.png",
+      mapImage: "/X/Magnolia/VILLA2.webp",
       address: "Tranquil Woods, Kanakapura Road, Bangalore",
       distance: "Approximately 45 minutes from Bangalore City Center",
       nearby: [
@@ -370,12 +372,12 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Weekend Getaways", image: "/assets/experience_wellness.png" },
-      { title: "Weddings", image: "/assets/Wedding_for_Both.png" },
-      { title: "Corporate Events", image: "/assets/Jade_735_for_Desktop.png" },
-      { title: "Photo Shoots", image: "/assets/Bathing_Girls.png" },
+      { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
+      { title: "Weddings", image: "/X/Magnolia/9.webp" },
+      { title: "Corporate Events", image: "/X/ROR/14.webp" },
+      { title: "Photo Shoots", image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp" },
     ],
-    video: "/assets/video_placeholder.png",
+    video: "/X/Magnolia/9.webp",
     faq: [
       {
         question: "What is the maximum guest capacity?",
@@ -404,7 +406,8 @@ export const VILLAS = [
       "A luxury villa set against the dramatic backdrop of Varlakonda Hill, it blends contemporary glass architecture with open green spaces and an immersive equestrian experience—ideal for intimate stays, curated gatherings, and nature-led celebrations.",
     perfectFor: ["Staycations", "Private Celebrations"],
     categories: ["Pre-wedding", "Pet friendly"],
-    image: "/assets/casual_stays.png",
+    image: "/X/Magnolia/10.webp",
+    images: ["/X/Magnolia/17.webp","/X/Magnolia/18.webp","/X/Magnolia/19.webp","/X/Magnolia/22.webp","/X/Magnolia/VILLA.webp","/X/Magnolia/LIVING ROOM.webp","/X/Magnolia/BEDROOM1.webp"],
     amenities: [
       { label: "Wifi", icon: "Wifi" },
       { label: "Parking", icon: "Car" },
@@ -412,9 +415,9 @@ export const VILLAS = [
       { label: "Hill View", icon: "Mountain" },
     ],
     spaces: [
-      { name: "Hill View", image: "/assets/casual_stays.png" },
-      { name: "Stables", image: "/assets/casual_stays.png" },
-      { name: "Interior", image: "/assets/casual_stays.png" },
+      { name: "Hill View", image: "/X/Magnolia/11.webp" },
+      { name: "Stables", image: "/X/Magnolia/12.webp" },
+      { name: "Interior", image: "/X/Magnolia/13.webp" },
     ],
     services: [
       {
@@ -495,7 +498,7 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/assets/map_placeholder.png",
+      mapImage: "/X/Magnolia/VILLA2.webp",
       address: "Royalty, Chikkaballapur, Near Varlakonda Hill",
       distance: "Approximately 60 minutes from Bangalore Airport",
       nearby: [
@@ -505,12 +508,12 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Weekend Getaways", image: "/assets/experience_wellness.png" },
-      { title: "Weddings", image: "/assets/Wedding_for_Both.png" },
-      { title: "Corporate Events", image: "/assets/Jade_735_for_Desktop.png" },
-      { title: "Photo Shoots", image: "/assets/Bathing_Girls.png" },
+      { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
+      { title: "Weddings", image: "/X/Magnolia/9.webp" },
+      { title: "Corporate Events", image: "/X/ROR/14.webp" },
+      { title: "Photo Shoots", image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp" },
     ],
-    video: "/assets/video_placeholder.png",
+    video: "/X/Magnolia/9.webp",
     faq: [
       {
         question: "Is horse riding included?",
@@ -538,16 +541,21 @@ export const VILLAS = [
       "A one-of-a-kind private retreat featuring three dome shaped villas, designed to provide a tranquil escape, this villa with private pool & garden offers breathtaking hill views and a serene ambiance, making it the perfect for slow living and experience-led getaways close to nature.",
     perfectFor: ["Staycations", "Romantic Getaways"],
     categories: ["Pre-wedding"],
-    image: "/assets/caravan_journey.png",
+    image:
+      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_01_Image_0001.webp",
     amenities: [
       { label: "Private Pool", icon: "Waves" },
       { label: "Garden", icon: "Trees" }, // Changed 'Flower' to 'Trees' map as best fit
       { label: "Hill View", icon: "Mountain" },
     ],
     spaces: [
-      { name: "Dome Exterior", image: "/assets/caravan_journey.png" },
-      { name: "Pool Area", image: "/assets/caravan_journey.png" },
-      { name: "Cozy Interior", image: "/assets/caravan_journey.png" },
+      { name: "Dome Exterior", image: "/X/Dome Villas/Red Dome/1.webp" },
+      { name: "Pool Area", image: "/X/Dome Villas/Yellow Dome/DSC00323.webp" },
+      {
+        name: "Cozy Interior",
+        image:
+          "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_05_Image_0002.webp",
+      },
     ],
     services: [
       {
@@ -628,7 +636,7 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/assets/map_placeholder.png",
+      mapImage: "/X/Magnolia/VILLA2.webp",
       address: "Dome Villas, Doddaballapur, Bangalore",
       distance: "Approximately 60 minutes from Bangalore City Center",
       nearby: [
@@ -638,12 +646,12 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Weekend Getaways", image: "/assets/experience_wellness.png" },
-      { title: "Romantic Stays", image: "/assets/Wedding_for_Both.png" },
-      { title: "Nature Walks", image: "/assets/Jade_735_for_Desktop.png" },
-      { title: "Stargazing", image: "/assets/Bathing_Girls.png" },
+      { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
+      { title: "Romantic Stays", image: "/X/Magnolia/9.webp" },
+      { title: "Nature Walks", image: "/X/ROR/14.webp" },
+      { title: "Stargazing", image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp" },
     ],
-    video: "/assets/video_placeholder.png",
+    video: "/X/Magnolia/9.webp",
     faq: [
       {
         question: "Is the pool heated?",
@@ -670,16 +678,17 @@ export const VILLAS = [
       "A spacious three-acre private pool retreat surrounded by coconut groves, designed for large weddings, corporate gatherings, and high-energy social celebrations. Expansive lawns, staged event zones, and versatile indoor spaces allow seamless hosting at scale.",
     perfectFor: ["Weddings", "Corporate Retreats", "Large Events"],
     categories: ["Weddings", "Corporate Retreats"],
-    image: "/assets/corporate_retreat.png",
+    image: "/X/ROR/5.webp",
+    images: ["/X/ROR/3.webp","/X/ROR/4.webp","/X/ROR/5.webp","/X/ROR/6.webp","/X/ROR/7.webp","/X/ROR/8.webp","/X/ROR/9.webp","/X/ROR/10.webp"],
     amenities: [
       { label: "Large Pool", icon: "Waves" },
       { label: "Coconut Grove", icon: "Trees" },
       { label: "Event Zones", icon: "PartyPopper" },
     ],
     spaces: [
-      { name: "Grand Lawn", image: "/assets/corporate_retreat.png" },
-      { name: "Banquet Hall", image: "/assets/corporate_retreat.png" },
-      { name: "Pool Deck", image: "/assets/corporate_retreat.png" },
+      { name: "Grand Lawn", image: "/X/ROR/6.webp" },
+      { name: "Banquet Hall", image: "/X/ROR/7.webp" },
+      { name: "Pool Deck", image: "/X/ROR/8.webp" },
     ],
     services: [
       {
@@ -760,7 +769,7 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/assets/map_placeholder.png",
+      mapImage: "/X/Magnolia/VILLA2.webp",
       address: "Diamond Retreat, Kanakapura Road, South Bengaluru",
       distance: "Approximately 50 minutes from Bangalore City Center",
       nearby: [
@@ -770,14 +779,14 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Grand Weddings", image: "/assets/Wedding_for_Both.png" },
-      { title: "Concerts", image: "/assets/experience_wellness.png" },
+      { title: "Grand Weddings", image: "/X/Magnolia/9.webp" },
+      { title: "Concerts", image: "/X/Tranquil Woods/10.webp" },
       {
         title: "Corporate Offsites",
-        image: "/assets/Jade_735_for_Desktop.png",
+        image: "/X/ROR/14.webp",
       },
     ],
-    video: "/assets/video_placeholder.png",
+    video: "/X/Magnolia/9.webp",
     faq: [
       {
         question: "Is there ample parking?",
@@ -806,16 +815,17 @@ export const VILLAS = [
       "A villa retreat set amidst lush orchards, featuring two separate units. With a lap pool, outdoor spaces & nature experiences, Vannani is ideal for brunch & relaxed group getaways.",
     perfectFor: ["Staycations", "Family Getaways", "Celebrations"],
     categories: ["Pet friendly", "Corporate Retreats"],
-    image: "/assets/wellness_retreat.png",
+    image: "/X/Magnolia/17.webp",
+    images: ["/X/Magnolia/12.webp","/X/Magnolia/13.webp","/X/Magnolia/14.webp","/X/Magnolia/15.webp","/X/Magnolia/16.webp","/X/Magnolia/17.webp","/X/Magnolia/18.webp","/X/Magnolia/19.webp"],
     amenities: [
       { label: "Waterfall Pool", icon: "Waves" },
       { label: "Jacuzzi", icon: "Bath" },
       { label: "Tiny Home", icon: "Home" },
     ],
     spaces: [
-      { name: "Main Villa", image: "/assets/wellness_retreat.png" },
-      { name: "Cottage", image: "/assets/wellness_retreat.png" },
-      { name: "Tiny Home", image: "/assets/wellness_retreat.png" },
+      { name: "Main Villa", image: "/X/Magnolia/18.webp" },
+      { name: "Cottage", image: "/X/Magnolia/19.webp" },
+      { name: "Tiny Home", image: "/X/Magnolia/22.webp" },
     ],
     services: [
       {
@@ -896,7 +906,7 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/assets/map_placeholder.png",
+      mapImage: "/X/Magnolia/VILLA2.webp",
       address: "Vanani, Mysore Road, Near Wonderla, Bangalore",
       distance: "Approximately 50 minutes from Bangalore City Center",
       nearby: [
@@ -906,11 +916,11 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Weekend Getaways", image: "/assets/experience_wellness.png" },
-      { title: "Family Reunions", image: "/assets/Wedding_for_Both.png" },
-      { title: "Nature Retreats", image: "/assets/Jade_735_for_Desktop.png" },
+      { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
+      { title: "Family Reunions", image: "/X/Magnolia/9.webp" },
+      { title: "Nature Retreats", image: "/X/ROR/14.webp" },
     ],
-    video: "/assets/video_placeholder.png",
+    video: "/X/Magnolia/9.webp",
     faq: [
       {
         question: "Is the jacuzzi heated?",
@@ -937,16 +947,17 @@ export const VILLAS = [
       "A private farmhouse villa set amidst greenery, designed for relaxed stays and intimate celebrations. Featuring a landscaped lawn, private pool and a glass-roof jacuzzi suite, it offers a calm, nature-led setting for small weddings, family gatherings, and meaningful get-togethers.",
     perfectFor: ["Staycations", "Private Celebrations"],
     categories: ["Pet friendly", "Pre-wedding"],
-    image: "/assets/Bathing_Girls.png",
+    image: "/X/HAVEN/1.webp",
+    images: ["/X/HAVEN/1.webp","/X/HAVEN/2.webp","/X/HAVEN/3.webp","/X/HAVEN/4.webp","/X/HAVEN/BEDROOM1.webp","/X/HAVEN/BEDROOM2.webp","/X/HAVEN/BEDROOM3.webp","/X/HAVEN/BONFIRE.webp","/X/HAVEN/DRONE LAWN NIGHT.webp","/X/HAVEN/DSC00104.webp","/X/HAVEN/HAVEN LIVING ROOM 4.webp","/X/HAVEN/POOL TABLE1.webp","/X/HAVEN/dining 1.webp","/X/HAVEN/lawn drone.webp","/X/HAVEN/pool new.webp"],
     amenities: [
       { label: "Private Pool", icon: "Waves" },
       { label: "Jacuzzi Suite", icon: "Bath" },
       { label: "Lawn", icon: "Trees" },
     ],
     spaces: [
-      { name: "Poolside", image: "/assets/Bathing_Girls.png" },
-      { name: "Jacuzzi Suite", image: "/assets/Bathing_Girls.png" },
-      { name: "Lawn Area", image: "/assets/Bathing_Girls.png" },
+      { name: "Poolside", image: "/X/HAVEN/pool new.webp" },
+      { name: "Jacuzzi Suite", image: "/X/HAVEN/BEDROOM3.webp" },
+      { name: "Lawn Area", image: "/X/HAVEN/lawn drone.webp" },
     ],
     services: [
       {
@@ -1026,7 +1037,7 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/assets/map_placeholder.png",
+      mapImage: "/X/Magnolia/VILLA2.webp",
       address: "The Haven, Hennur-Bagalur Road, North Bengaluru",
       distance: "Approximately 40 minutes from Hebbal",
       nearby: [
@@ -1036,11 +1047,11 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Wellness Retreats", image: "/assets/experience_wellness.png" },
-      { title: "Intimate Weddings", image: "/assets/Wedding_for_Both.png" },
-      { title: "Couple Shoots", image: "/assets/Jade_735_for_Desktop.png" },
+      { title: "Wellness Retreats", image: "/X/Tranquil Woods/10.webp" },
+      { title: "Intimate Weddings", image: "/X/Magnolia/9.webp" },
+      { title: "Couple Shoots", image: "/X/ROR/14.webp" },
     ],
-    video: "/assets/video_placeholder.png",
+    video: "/X/Magnolia/9.webp",
     faq: [
       {
         question: "Is alcohol permitted?",
@@ -1063,16 +1074,17 @@ export const VILLAS = [
       "A contemporary private pool villa set against the scenic Varalakonda hill range, offering panoramic views, a waterfall pool, and open outdoor spaces. Designed for peaceful stays, intimate celebrations, and nature-led getaways away from the city.",
     perfectFor: ["Staycations", "Small Events", "Family Gatherings"],
     categories: ["Pet friendly", "Weddings"],
-    image: "/assets/Jade_735_for_Desktop.png",
+    image: "/X/ROR/1.webp",
+    images: ["/X/ROR/1.webp","/X/ROR/2.webp","/X/ROR/3.webp","/X/ROR/4.webp","/X/ROR/5.webp","/X/ROR/6.webp","/X/ROR/7.webp","/X/ROR/8.webp","/X/ROR/9.webp","/X/ROR/10.webp","/X/ROR/11.webp","/X/ROR/12.webp"],
     amenities: [
       { label: "Infinity Pool", icon: "Waves" },
       { label: "Hill View", icon: "Mountain" },
       { label: "Outdoor Space", icon: "Sun" },
     ],
     spaces: [
-      { name: "Infinity Pool", image: "/assets/Jade_735_for_Desktop.png" },
-      { name: "Deck Area", image: "/assets/Jade_735_for_Desktop.png" },
-      { name: "Living Room", image: "/assets/Jade_735_for_Desktop.png" },
+      { name: "Infinity Pool", image: "/X/ROR/2.webp" },
+      { name: "Deck Area", image: "/X/ROR/3.webp" },
+      { name: "Living Room", image: "/X/ROR/4.webp" },
     ],
     services: [
       {
@@ -1152,7 +1164,7 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/assets/map_placeholder.png",
+      mapImage: "/X/Magnolia/VILLA2.webp",
       address: "Retreat on the Ridge, Ramanagara, Bengaluru",
       distance: "Approximately 90 minutes from Bangalore City Center",
       nearby: [
@@ -1162,11 +1174,11 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Trekking", image: "/assets/experience_wellness.png" },
-      { title: "Cycling", image: "/assets/Wedding_for_Both.png" },
-      { title: "Bird Watching", image: "/assets/Jade_735_for_Desktop.png" },
+      { title: "Trekking", image: "/X/Tranquil Woods/10.webp" },
+      { title: "Cycling", image: "/X/Magnolia/9.webp" },
+      { title: "Bird Watching", image: "/X/ROR/14.webp" },
     ],
-    video: "/assets/video_placeholder.png",
+    video: "/X/Magnolia/9.webp",
     faq: [
       {
         question: "Is the road accessible for large vehicles?",
@@ -1189,16 +1201,17 @@ export const VILLAS = [
       "A premium luxury villa designed for high-end parties and celebrations. Featuring a large swimming pool, landscaped gardens, and a spacious 5-BHK layout, Emerald offers the perfect backdrop for memorable gatherings and weekend escapes.",
     perfectFor: ["Parties", "Staycations", "Celebrations"],
     categories: ["Weddings", "Corporate Retreats", "Pet friendly"],
-    image: "/assets/corporate_retreat.png",
+    image: "/X/ROR/10.webp",
+    images: ["/X/ROR/6.webp","/X/ROR/7.webp","/X/ROR/8.webp","/X/ROR/9.webp","/X/ROR/10.webp","/X/ROR/11.webp","/X/ROR/12.webp"],
     amenities: [
       { label: "Private Pool", icon: "Waves" },
       { label: "Garden", icon: "Trees" },
       { label: "Music System", icon: "Music" },
     ],
     spaces: [
-      { name: "Poolside", image: "/assets/corporate_retreat.png" },
-      { name: "Living Hall", image: "/assets/corporate_retreat.png" },
-      { name: "Deck", image: "/assets/corporate_retreat.png" },
+      { name: "Poolside", image: "/X/ROR/11.webp" },
+      { name: "Living Hall", image: "/X/ROR/12.webp" },
+      { name: "Deck", image: "/X/ROR/13.webp" },
     ],
     services: [
       {
@@ -1235,10 +1248,10 @@ export const VILLAS = [
       distance: "45 mins from City Center",
     },
     activities: [
-      { title: "Pool Parties", image: "/assets/experience_wellness.png" },
-      { title: "Stays", image: "/assets/Wedding_for_Both.png" },
+      { title: "Pool Parties", image: "/X/Tranquil Woods/10.webp" },
+      { title: "Stays", image: "/X/Magnolia/9.webp" },
     ],
-    video: "/assets/video_placeholder.png",
+    video: "/X/Magnolia/9.webp",
     faq: [
       {
         question: "Is music allowed?",
@@ -1256,15 +1269,16 @@ export const VILLAS = [
       "Experience the magic of slow living in our boutique treehouse-themed villa. Perfect for intimate groups, this cozy 2-BHK property offers a unique connection with nature, featuring rustic architecture and serene views.",
     perfectFor: ["Slow Living", "Intimate Gatherings", "Romantic Stays"],
     categories: ["Pre-wedding", "Pet friendly"],
-    image: "/assets/caravan_journey.png",
+    image: "/X/Magnolia/14.webp",
+    images: ["/X/Magnolia/14.webp","/X/Magnolia/15.webp","/X/Magnolia/16.webp","/X/Magnolia/17.webp","/X/Magnolia/18.webp","/X/Magnolia/19.webp","/X/Magnolia/22.webp","/X/Magnolia/VILLA.webp"],
     amenities: [
       { label: "Treehouse Deck", icon: "Home" },
       { label: "Nature View", icon: "Mountain" },
       { label: "Cozy Interiors", icon: "Wind" },
     ],
     spaces: [
-      { name: "Main Deck", image: "/assets/caravan_journey.png" },
-      { name: "Cozy Room", image: "/assets/caravan_journey.png" },
+      { name: "Main Deck", image: "/X/Magnolia/15.webp" },
+      { name: "Cozy Room", image: "/X/Magnolia/16.webp" },
     ],
     services: [
       {
@@ -1291,9 +1305,9 @@ export const VILLAS = [
       address: "Wonderland Treehouse, Doddaballapur, Bangalore",
     },
     activities: [
-      { title: "Nature Walks", image: "/assets/experience_wellness.png" },
+      { title: "Nature Walks", image: "/X/Tranquil Woods/10.webp" },
     ],
-    video: "/assets/video_placeholder.png",
+    video: "/X/Magnolia/9.webp",
     faq: [{ question: "Is it safe?", answer: "Yes, fully secured and gated." }],
   },
 ];

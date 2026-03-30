@@ -19,8 +19,8 @@ const SLIDES = [
     heading: ["Private villas", "around Bangalore"],
     subtext:
       "Located in serene yet accessible pockets around Bangalore, offering privacy without disconnect.",
-    bgImage: "/assets/Jade_735_for_Desktop.png",
-    cardImage: "/assets/Bathing_Girls.png",
+    bgImage: "/X/ROR/14.webp",
+    cardImage: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
   },
   {
     id: 2,
@@ -28,8 +28,8 @@ const SLIDES = [
     heading: ["Distinctive,", "themed stays"],
     subtext:
       "From luxury pool villas and glass homes to landscaped farm estates and courtyard houses – each space chosen for its character and versatility.",
-    bgImage: "/assets/Wedding_for_Both.png",
-    cardImage: "/assets/casual_stays.png",
+    bgImage: "/X/Magnolia/9.webp",
+    cardImage: "/X/Magnolia/15.webp",
   },
   {
     id: 3,
@@ -37,8 +37,8 @@ const SLIDES = [
     heading: ["Built for", "every occasion"],
     subtext:
       "Weddings, corporate offsites, celebrations, wellness retreats, and private getaways – hosted seamlessly within fully private estates.",
-    bgImage: "/assets/Jade_735_for_Desktop.png",
-    cardImage: "/assets/wedding_for_both.png",
+    bgImage: "/X/ROR/14.webp",
+    cardImage: "/X/Magnolia/9.webp",
   },
   {
     id: 4,
@@ -46,8 +46,8 @@ const SLIDES = [
     heading: ["Designed for comfort", "and aesthetics"],
     subtext:
       "Refined interiors, ambient lighting, modern amenities, and thoughtful layouts that elevate both stays and gatherings.",
-    bgImage: "/assets/Bathing_Girls.png",
-    cardImage: "/assets/corporate_retreat.png",
+    bgImage: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+    cardImage: "/X/ROR/15.webp",
   },
 ];
 

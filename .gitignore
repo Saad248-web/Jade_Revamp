@@ -31,3 +31,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Migration Scripts
+replace_all.js
+replace_all2.js
+replace_assets.js
+add_arrays.js

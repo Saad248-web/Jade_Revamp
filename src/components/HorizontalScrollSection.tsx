@@ -15,7 +15,7 @@ const PANELS = [
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone’s wishlist.",
     cta: "SEE WHAT A GETAWAY LOOKS LIKE",
     href: "/weekend-getaways",
-    image: "/assets/Bathing_Girls.png",
+    image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
     type: "full",
   },
   {
@@ -25,7 +25,7 @@ const PANELS = [
       "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
     href: "/party-villas",
-    image: "/assets/Jade_735_for_Desktop.png",
+    image: "/X/ROR/14.webp",
     type: "full",
   },
   {
@@ -35,7 +35,7 @@ const PANELS = [
       "Intimate ceremonies to grand, multi-day wedding celebrations, set amid private gardens, sprawling lawns, and luxury rooms.",
     cta: "SEE HOW WEDDINGS UNFOLD",
     href: "/weddings",
-    image: "/assets/Wedding_for_Both.png",
+    image: "/X/Magnolia/9.webp",
     type: "full",
   },
   {
@@ -44,19 +44,19 @@ const PANELS = [
     items: [
       {
         title: "Corporate Retreats",
-        img: "/assets/corporate_retreat.png",
+        img: "/X/ROR/15.webp",
       },
       {
         title: "Wellness Retreats",
-        img: "/assets/wellness_retreat.png",
+        img: "/X/Magnolia/16.webp",
       },
       {
         title: "Caravan Journeys",
-        img: "/assets/caravan_journey.png",
+        img: "/X/Magnolia/14.webp",
       },
       {
         title: "Casual Stays",
-        img: "/assets/casual_stays.png",
+        img: "/X/Magnolia/15.webp",
       },
     ],
     cta: "SEE ALL EXPERIENCES",
@@ -248,7 +248,7 @@ function StackedPanel({
                       alt={data.title}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 600px"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
                     />
                     {/* Subtle Gradient Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />

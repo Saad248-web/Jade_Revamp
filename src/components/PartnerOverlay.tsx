@@ -401,7 +401,7 @@ export default function PartnerOverlay() {
                               className="relative aspect-square w-full bg-white/5 border border-white/10 rounded-sm overflow-hidden"
                             >
                               <Image
-                                src="/assets/Dome_Villa.png"
+                                src="/X/Dome Villas/Red Dome/1.webp"
                                 alt={`Upload ${i}`}
                                 fill
                                 className="object-cover"

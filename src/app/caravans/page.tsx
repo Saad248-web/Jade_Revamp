@@ -22,32 +22,32 @@ const caravanSlides = [
   {
     title: "Private Lounge",
     desc: "A spacious lounge area designed for relaxing, dining, and spending time together while on the move.",
-    image: "/assets/caravan_journey.png", // Using available assets fitting the caravan theme
+    image: "/X/Magnolia/14.webp", // Using available assets fitting the caravan theme
   },
   {
     title: "Convertible Sleeping Spaces",
     desc: "Flexible sleeping arrangements that comfortably accommodate small groups and families.",
-    image: "/assets/private_stay.png",
+    image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_05_Image_0003.webp",
   },
   {
     title: "Entertainment System",
     desc: "Dual screens, music system, and plug-and-play connectivity for entertainment during the journey.",
-    image: "/assets/music_exp.png",
+    image: "/X/HAVEN/meco.webp",
   },
   {
     title: "Kitchenette & Refreshments",
     desc: "Refrigerator, water dispenser, and essential utilities to keep you refreshed throughout the trip.",
-    image: "/assets/outdoor_dining.png",
+    image: "/X/Magnolia/18.webp",
   },
   {
     title: "Climate-Controlled Interiors",
     desc: "Fully air-conditioned interiors designed for comfortable travel in all seasons.",
-    image: "/assets/wellness_retreat.png",
+    image: "/X/Magnolia/16.webp",
   },
   {
     title: "Capacity",
     desc: "Ideal for 6–8 guests travelling together.",
-    image: "/assets/corporate_retreat.png",
+    image: "/X/ROR/15.webp",
   },
 ];
 
@@ -74,7 +74,7 @@ export default function CaravansPage() {
 
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
-        backgroundImage="/assets/caravan_journey.png"
+        backgroundImage="/X/Magnolia/14.webp"
         backgroundAlt="Caravans"
         heading={
           <>
@@ -126,14 +126,14 @@ export default function CaravansPage() {
         ctaText="ENQUIRE"
         onCtaClick={() => window.open("/contact", "_blank")}
         experiences={[
-          { title: "Bonfire Experience", image: "/assets/bonfire_exp.png" },
-          { title: "BBQ & Outdoor Dining", image: "/assets/bbq_exp.png" },
-          { title: "Camping & Tent Kits", image: "/assets/nature_escapes.png" },
-          { title: "Activity Kits", image: "/assets/games_exp.png" },
-          { title: "Butler Service", image: "/assets/chef_exp.png" },
+          { title: "Bonfire Experience", image: "/X/HAVEN/BONFIRE.webp" },
+          { title: "BBQ & Outdoor Dining", image: "/X/Tranquil Woods/9.webp" },
+          { title: "Camping & Tent Kits", image: "/X/Tranquil Woods/1.webp" },
+          { title: "Activity Kits", image: "/X/HAVEN/POOL TABLE1.webp" },
+          { title: "Butler Service", image: "/X/HAVEN/dining 1.webp" },
           {
             title: "Custom Celebration Setups",
-            image: "/assets/celebrations_friends.png",
+            image: "/X/HAVEN/pool new.webp",
           },
         ]}
       />
