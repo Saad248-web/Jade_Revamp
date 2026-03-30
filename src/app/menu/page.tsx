@@ -46,8 +46,7 @@ export default function MenuPage() {
         <div className="flex-1 lg:flex-none lg:w-1/3 relative overflow-hidden h-full z-10 border-r border-transparent lg:border-white/10">
           <AnimatePresence mode="wait">
             {/* Primary Menu: Always visible on desktop, or if menuView is primary on mobile */}
-            {(menuView === "primary" ||
-              (typeof window !== "undefined" && window.innerWidth >= 1024)) && (
+            {(menuView === "primary" || true) && (
               <motion.div
                 key="primary"
                 initial={{ opacity: 0, x: -20 }}

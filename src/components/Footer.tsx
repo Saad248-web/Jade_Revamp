@@ -57,7 +57,18 @@ function formatDate(d: Date | null) {
 }
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  // Defer new Date() to client-only to prevent hydration mismatches
+  const [currentYear, setCurrentYear] = useState(2026);
+  const [today, setToday] = useState<Date>(() => new Date(2026, 0, 1));
+  const [calMonth, setCalMonth] = useState<Date>(() => new Date(2026, 0, 1));
+
+  useEffect(() => {
+    const t = startOfDay(new Date());
+    setCurrentYear(t.getFullYear());
+    setToday(t);
+    setCalMonth(new Date(t.getFullYear(), t.getMonth(), 1));
+  }, []);
+
   const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -71,10 +82,6 @@ export default function Footer() {
   const [checkIn, setCheckIn] = useState<Date | null>(null);
   const [checkOut, setCheckOut] = useState<Date | null>(null);
   const [hoverDate, setHoverDate] = useState<Date | null>(null);
-  const today = startOfDay(new Date());
-  const [calMonth, setCalMonth] = useState(
-    new Date(today.getFullYear(), today.getMonth(), 1),
-  );
   const calendarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

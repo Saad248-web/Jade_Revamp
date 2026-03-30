@@ -8,6 +8,7 @@ import { Bed, Users, Home, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { VILLAS } from "@/data/villas";
 import PrimaryButton from "@/components/PrimaryButton";
+import { useBooking } from "@/context/BookingContext";
 
 interface VillaCardProps {
   villa: (typeof VILLAS)[0];
@@ -17,6 +18,16 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const router = useRouter();
+  const { dateRange, guests } = useBooking();
+
+  // If user already picked dates + guests (came through booking flow), jump straight to details
+  const bookHref = (() => {
+    const hasDates = dateRange.checkIn && dateRange.checkOut;
+    const hasGuests = guests.adults > 0;
+    return hasDates && hasGuests
+      ? `/book?villa=${villa.id}&step=details`
+      : `/book?villa=${villa.id}`;
+  })();
 
   // If a villa doesn't have multiple spaces defined yet, we'll create a fallback array
   // of just its main image so the UI doesn't break.
@@ -182,7 +193,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
             </Link>
             <PrimaryButton
               withArrow={false}
-              onClick={() => router.push(`/book?villa=${villa.id}`)}
+              onClick={() => router.push(bookHref)}
             >
               BOOK VILLA
             </PrimaryButton>
