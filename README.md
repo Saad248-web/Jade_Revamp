@@ -11,14 +11,15 @@ Jade Hospitainment redefines luxury stays, destination weddings, and corporate r
 ### Core Stack
 
 - **Next.js 14 (App Router)**: Utilizing Server Components for optimal SEO and performance.
-- **TypeScript**: Strict type-safety across the data and component layers.
+- **TypeScript**: Strict type-safety across the data and component layers, ensuring robust production builds.
 - **Tailwind CSS**: Utility-first styling for a premium, responsive UI.
 - **Animations**: GSAP, Framer Motion, and Rive for immersive user experiences.
 
-### Performance Optimization
+### Performance & Asset Optimization
 
+- **Asset Optimization**: Complete migration to compressed WebP/AVIF formats. Unused assets and legacy scripts have been pruned to maintain a minimal repository footprint.
 - **Code Splitting**: Heavy components (Carousels, GSAP sections) are dynamically imported to improve TTI (Time to Interactive).
-- **Next-Gen Images**: Configured for AVIF/WebP with smart responsive breakpoints in `next.config.mjs`.
+- **Responsive Images**: Configured with smart breakpoints in `next.config.mjs`.
 - **Zero Layout Shift**: Font optimization and pre-allocation of image spaces ensure a stable CLS score.
 
 ### SEO & Structured Data
@@ -33,6 +34,7 @@ Jade Hospitainment redefines luxury stays, destination weddings, and corporate r
 ├── src/
 │   ├── app/              # Next.js App Router (Layouts, Pages, Metadata)
 │   ├── components/       # UI Components (Seo-optimized, dynamically imported)
+│   ├── lib/              # API abstraction layer, Type definitions, and utility functions
 │   ├── data/             # Hardened data models for Villas and Blogs
 │   └── context/          # Global state (Animation, UI)
 ├── public/               # Optimized assets & social images
@@ -43,11 +45,11 @@ Jade Hospitainment redefines luxury stays, destination weddings, and corporate r
 
 1. **Install Dependencies**: `npm install`
 2. **Launch Dev Server**: `npm run dev`
-3. **Build Profile**: `npm run build` (Ensures all metadata and sitemaps generate correctly)
+3. **Build Profile**: `npm run build` (Ensures all metadata, types, and sitemaps generate correctly)
 
 ---
 
 > [!IMPORTANT]
-> This platform is optimized for **Core Web Vitals**. Any UI changes should be audited for performance impact.
+> This platform is optimized for **Core Web Vitals** and maintains strict TypeScript standards. Any UI changes should be audited for performance impact, and all code must pass type-checking before deployment.
 
 **Technical Architect**: Antigravity
