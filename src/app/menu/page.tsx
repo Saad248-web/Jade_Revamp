@@ -13,7 +13,7 @@ import {
   Youtube,
   Phone,
 } from "lucide-react";
-import { VILLAS } from "@/data/villas";
+import { VILLAS } from "@/data/retrats_data";
 import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
 

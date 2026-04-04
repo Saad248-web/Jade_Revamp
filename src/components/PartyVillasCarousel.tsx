@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { VILLAS } from "@/data/villas";
+import { VILLAS } from "@/data/retrats_data";
 import PartyVillaCard from "./PartyVillaCard";
 import PartyVenueOverlay from "./PartyVenueOverlay";
 import { AnimatePresence } from "framer-motion";

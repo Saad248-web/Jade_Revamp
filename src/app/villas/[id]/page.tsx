@@ -47,7 +47,7 @@ import Footer from "@/components/Footer";
 import DetailsDrawer from "@/components/DetailsDrawer";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { useState } from "react";
-import { VILLAS } from "@/data/villas";
+import { VILLAS } from "@/data/retrats_data";
 
 // Icon mapping helper
 const getIcon = (iconName: string) => {
@@ -144,7 +144,7 @@ export default function VillaDetailsPage() {
     setActiveTab(id);
     const element = document.getElementById(id);
     if (element) {
-      const offset = 160; // Increased to account for floating bar + sticky tabs
+      const offset = 80; // Reverted to 80 as header now scrolls away
       const elementPosition =
         element.getBoundingClientRect().top + window.pageYOffset;
       const offsetPosition = elementPosition - offset;
@@ -212,8 +212,8 @@ export default function VillaDetailsPage() {
 
   return (
     <main className="bg-[#1A1C1E] min-h-screen relative">
-      {/* Top Floating Navigation */}
-      <div className="fixed top-8 left-6 md:left-12 right-6 md:right-12 flex justify-between items-center z-[60] pointer-events-none">
+      {/* Top Navigation - Scrolls away with page */}
+      <div className="absolute top-8 left-6 md:left-12 right-6 md:right-12 flex justify-between items-center z-[60] pointer-events-none">
         <button
           onClick={() => window.history.back()}
           className="pointer-events-auto flex items-center justify-center text-white hover:text-jade-gold transition-all"
@@ -410,7 +410,7 @@ export default function VillaDetailsPage() {
       <section className="relative w-full bg-[#0B2C23] py-12 text-white">
         <div className="relative z-10 px-6 py-8 md:px-12 max-w-7xl mx-auto">
           {/* TABS NAVIGATION - STICKY */}
-          <div className="sticky top-[96px] z-40 bg-[#0B2C23] -mx-6 md:-mx-12 px-6 md:px-12 border-b border-white/10 mb-8 flex gap-1 overflow-x-auto pb-0 scrollbar-none">
+          <div className="sticky top-0 z-40 bg-[#0B2C23] -mx-6 md:-mx-12 px-6 md:px-12 border-b border-white/10 mb-8 flex gap-1 overflow-x-auto pb-0 scrollbar-none">
             {["Spaces", "Amenities", "Services", "Experiences", "Details"].map(
               (tab) => {
                 const isActive = activeTab === tab.toLowerCase();

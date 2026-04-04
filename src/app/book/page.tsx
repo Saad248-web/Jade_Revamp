@@ -20,7 +20,7 @@ import {
   AlertCircle,
   CheckCircle2,
 } from "lucide-react";
-import { VILLAS } from "@/data/villas";
+import { VILLAS } from "@/data/retrats_data";
 import { useBooking, DateRange, Guests } from "@/context/BookingContext";
 
 /* ─────────────────────────────────────────────────────────────────────
@@ -39,18 +39,28 @@ interface UserDetails {
    Static data
 ───────────────────────────────────────────────────────────────────── */
 const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const ADD_ONS = [
-  { id: "bonfire",  label: "Bonfire Setup",          price: 99000 },
-  { id: "bbq",      label: "Private BBQ Experience",  price: 99000 },
-  { id: "movie",    label: "Movie Under the Stars",   price: 99000 },
-  { id: "candle",   label: "Candle-Lit Dinner",       price: 99000 },
-  { id: "dj",       label: "DJ & Sound Setup",        price: 99000 },
-  { id: "wellness", label: "Guided Wellness Session",  price: 99000 },
-  { id: "culinary", label: "Culinary Experience",     price: 0 },
+  { id: "bonfire", label: "Bonfire Setup", price: 99000 },
+  { id: "bbq", label: "Private BBQ Experience", price: 99000 },
+  { id: "movie", label: "Movie Under the Stars", price: 99000 },
+  { id: "candle", label: "Candle-Lit Dinner", price: 99000 },
+  { id: "dj", label: "DJ & Sound Setup", price: 99000 },
+  { id: "wellness", label: "Guided Wellness Session", price: 99000 },
+  { id: "culinary", label: "Culinary Experience", price: 0 },
 ];
 
 const NIGHT_TAX = 99000;
@@ -67,7 +77,13 @@ function generateMonths(count = 3) {
     const days = new Date(year, month + 1, 0).getDate();
     // Convert JS Sunday=0 to Mon-first grid (0=Mon … 6=Sun)
     const startDay = (d.getDay() + 6) % 7;
-    return { name: `${MONTH_NAMES[month]} ${year}`, year, month, days, startDay };
+    return {
+      name: `${MONTH_NAMES[month]} ${year}`,
+      year,
+      month,
+      days,
+      startDay,
+    };
   });
 }
 
@@ -77,7 +93,20 @@ function toISO(year: number, month: number, day: number) {
 
 function formatDate(d: { month: number; day: number } | null): string {
   if (!d) return "---";
-  const SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const SHORT = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   return `${d.day} ${SHORT[d.month]}`;
 }
 
@@ -87,8 +116,12 @@ function formatRupees(n: number) {
 
 // Accept today's components as args so callers control when Date() is evaluated
 function isPastDate(
-  year: number, month: number, day: number,
-  todayYear: number, todayMonth: number, todayDay: number,
+  year: number,
+  month: number,
+  day: number,
+  todayYear: number,
+  todayMonth: number,
+  todayDay: number,
 ) {
   if (year !== todayYear) return year < todayYear;
   if (month !== todayMonth) return month < todayMonth;
@@ -128,7 +161,9 @@ function StepDates({
   // `mounted` defers all Date-based logic to the client only, preventing
   // server/client HTML mismatches (hydration errors).
   const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Compute months only on the client (after mount) to avoid hydration mismatch
   const MONTHS = mounted ? generateMonths(3) : [];
@@ -161,7 +196,7 @@ function StepDates({
         });
       }
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [villaId, mounted]);
 
   // Compute today's components once per render (always on client after mount)
@@ -172,7 +207,11 @@ function StepDates({
 
   const handleDayClick = (year: number, month: number, day: number) => {
     const iso = toISO(year, month, day);
-    if (bookedDates.has(iso) || isPastDate(year, month, day, todayRef.y, todayRef.m, todayRef.d)) return;
+    if (
+      bookedDates.has(iso) ||
+      isPastDate(year, month, day, todayRef.y, todayRef.m, todayRef.d)
+    )
+      return;
 
     const clicked = { month, day };
     const { checkIn, checkOut } = dateRange;
@@ -214,7 +253,12 @@ function StepDates({
         <div className="shrink-0 border-b border-white/10 py-3 px-5">
           <div className="grid grid-cols-7 text-center">
             {DAY_LABELS.map((d) => (
-              <span key={d} className="text-white/50 text-gh-label font-manrope tracking-widest uppercase">{d}</span>
+              <span
+                key={d}
+                className="text-white/50 text-gh-label font-manrope tracking-widest uppercase"
+              >
+                {d}
+              </span>
             ))}
           </div>
         </div>
@@ -231,7 +275,10 @@ function StepDates({
       <div className="shrink-0 border-b border-white/10 py-3 px-5">
         <div className="grid grid-cols-7 text-center">
           {DAY_LABELS.map((d) => (
-            <span key={d} className="text-white/50 text-gh-label font-manrope tracking-widest uppercase">
+            <span
+              key={d}
+              className="text-white/50 text-gh-label font-manrope tracking-widest uppercase"
+            >
               {d}
             </span>
           ))}
@@ -247,10 +294,15 @@ function StepDates({
       )}
 
       {/* Calendars */}
-      <div className="flex-1 overflow-y-auto px-5 pb-24 pt-4" data-lenis-prevent>
+      <div
+        className="flex-1 overflow-y-auto px-5 pb-24 pt-4"
+        data-lenis-prevent
+      >
         {MONTHS.map(({ name, year, month, days, startDay }) => (
           <div key={name} className="mb-8">
-            <h3 className="text-white font-manrope font-bold text-gh-scroll mb-4">{name}</h3>
+            <h3 className="text-white font-manrope font-bold text-gh-scroll mb-4">
+              {name}
+            </h3>
             <div className="grid grid-cols-7 gap-[12px] text-center">
               {Array.from({ length: startDay }, (_, i) => (
                 <div key={`empty-${i}`} className="w-[35px] h-[35px]" />
@@ -258,7 +310,14 @@ function StepDates({
               {Array.from({ length: days }, (_, i) => i + 1).map((day) => {
                 const iso = toISO(year, month, day);
                 const booked = bookedDates.has(iso);
-                const past = isPastDate(year, month, day, todayRef.y, todayRef.m, todayRef.d);
+                const past = isPastDate(
+                  year,
+                  month,
+                  day,
+                  todayRef.y,
+                  todayRef.m,
+                  todayRef.d,
+                );
                 const unavail = booked || past;
                 const sel = isSelected(month, day);
                 const inRange = isInRange(year, month, day);
@@ -268,7 +327,9 @@ function StepDates({
                     key={day}
                     disabled={unavail}
                     onClick={() => handleDayClick(year, month, day)}
-                    title={booked ? "Already booked" : past ? "Past date" : undefined}
+                    title={
+                      booked ? "Already booked" : past ? "Past date" : undefined
+                    }
                     className={`w-[35px] h-[35px] mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-[3px] relative overflow-hidden
                       ${sel ? "bg-[#EFCD62] text-[#0D4032] font-bold" : ""}
                       ${inRange ? "bg-[#EFCD62]/20 text-white" : ""}
@@ -295,7 +356,13 @@ function StepDates({
 /* ─────────────────────────────────────────────────────────────────────
    Step 2: Total Guests
 ───────────────────────────────────────────────────────────────────── */
-function StepGuests({ guests, setGuests }: { guests: Guests; setGuests: (g: Guests) => void }) {
+function StepGuests({
+  guests,
+  setGuests,
+}: {
+  guests: Guests;
+  setGuests: (g: Guests) => void;
+}) {
   const update = (key: keyof Guests, val: number) =>
     setGuests({ ...guests, [key]: Math.max(0, val) });
 
@@ -315,7 +382,11 @@ function StepGuests({ guests, setGuests }: { guests: Guests; setGuests: (g: Gues
     <div className="flex items-center justify-between py-5 border-b border-white/10">
       <div>
         <p className="text-white font-philosopher text-gh-body">{label}</p>
-        {subtitle && <p className="text-white/40 text-gh-label font-manrope mt-0.5">{subtitle}</p>}
+        {subtitle && (
+          <p className="text-white/40 text-gh-label font-manrope mt-0.5">
+            {subtitle}
+          </p>
+        )}
       </div>
       <div className="flex items-center gap-3 shrink-0">
         <button
@@ -339,16 +410,30 @@ function StepGuests({ guests, setGuests }: { guests: Guests; setGuests: (g: Gues
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto px-5 md:px-8 pb-28" data-lenis-prevent>
-        <Counter label="Adults" subtitle="Age 13 years and more" value={guests.adults}
+      <div
+        className="flex-1 overflow-y-auto px-5 md:px-8 pb-28"
+        data-lenis-prevent
+      >
+        <Counter
+          label="Adults"
+          subtitle="Age 13 years and more"
+          value={guests.adults}
           onMinus={() => update("adults", guests.adults - 1)}
-          onPlus={() => update("adults", guests.adults + 1)} />
-        <Counter label="Children" subtitle="Age 3 – 12 years" value={guests.children}
+          onPlus={() => update("adults", guests.adults + 1)}
+        />
+        <Counter
+          label="Children"
+          subtitle="Age 3 – 12 years"
+          value={guests.children}
           onMinus={() => update("children", guests.children - 1)}
-          onPlus={() => update("children", guests.children + 1)} />
-        <Counter label="Pets" value={guests.pets}
+          onPlus={() => update("children", guests.children + 1)}
+        />
+        <Counter
+          label="Pets"
+          value={guests.pets}
           onMinus={() => update("pets", guests.pets - 1)}
-          onPlus={() => update("pets", guests.pets + 1)} />
+          onPlus={() => update("pets", guests.pets + 1)}
+        />
       </div>
     </div>
   );
@@ -366,7 +451,10 @@ function StepDetails({
 }) {
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto px-5 md:px-8 py-4 pb-28 space-y-4" data-lenis-prevent>
+      <div
+        className="flex-1 overflow-y-auto px-5 md:px-8 py-4 pb-28 space-y-4"
+        data-lenis-prevent
+      >
         <div className="relative border border-white/20 focus-within:border-[#EFCD62] transition-colors">
           <label className="absolute -top-2.5 left-3 bg-[#0D4032] px-1 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
             Full Name
@@ -374,7 +462,9 @@ function StepDetails({
           <input
             type="text"
             value={details.fullName}
-            onChange={(e) => setDetails({ ...details, fullName: e.target.value })}
+            onChange={(e) =>
+              setDetails({ ...details, fullName: e.target.value })
+            }
             className="w-full bg-transparent px-4 py-3.5 text-white text-gh-body placeholder:text-white/30 focus:outline-none font-manrope"
           />
         </div>
@@ -443,7 +533,12 @@ function StepReview({
         {selectedVilla && (
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative w-full sm:w-32 h-48 sm:h-32 shrink-0 border border-white/20">
-              <Image src={selectedVilla.image} alt={selectedVilla.name} fill className="object-cover" />
+              <Image
+                src={selectedVilla.image}
+                alt={selectedVilla.name}
+                fill
+                className="object-cover"
+              />
             </div>
             <div className="flex flex-col justify-center">
               <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.15em] uppercase mb-1 mt-2 sm:mt-0">
@@ -454,16 +549,19 @@ function StepReview({
               </h3>
               <div className="flex flex-col gap-1.5 text-white/80 text-gh-desc font-manrope">
                 <span className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-[#EFCD62]" /> {selectedVilla.location}
+                  <MapPin className="w-3.5 h-3.5 text-[#EFCD62]" />{" "}
+                  {selectedVilla.location}
                 </span>
                 {selectedVilla.stats.stay && (
                   <span className="flex items-center gap-2">
-                    <Bed className="w-3.5 h-3.5 text-[#EFCD62]" /> {selectedVilla.stats.stay} Stay
+                    <Bed className="w-3.5 h-3.5 text-[#EFCD62]" />{" "}
+                    {selectedVilla.stats.stay} Stay
                   </span>
                 )}
                 {selectedVilla.stats.bhk && (
                   <span className="flex items-center gap-2">
-                    <Home className="w-3.5 h-3.5 text-[#EFCD62]" /> {selectedVilla.stats.bhk}
+                    <Home className="w-3.5 h-3.5 text-[#EFCD62]" />{" "}
+                    {selectedVilla.stats.bhk}
                   </span>
                 )}
               </div>
@@ -473,8 +571,11 @@ function StepReview({
 
         {/* SUMMARY BLOCKS */}
         <div className="space-y-4">
-          <SummaryBlock label="Dates" value={`${formatDate(dateRange.checkIn)} – ${formatDate(dateRange.checkOut)}`}
-            onEdit={() => goToStep("dates")} />
+          <SummaryBlock
+            label="Dates"
+            value={`${formatDate(dateRange.checkIn)} – ${formatDate(dateRange.checkOut)}`}
+            onEdit={() => goToStep("dates")}
+          />
           <SummaryBlock
             label="Total Guests"
             value={`${guests.adults + guests.children} Guests${guests.children > 0 ? `, ${guests.children} Children` : ""}${guests.pets > 0 ? `, ${guests.pets} Pet${guests.pets > 1 ? "s" : ""}` : ""}`}
@@ -482,16 +583,25 @@ function StepReview({
           />
           <div className="bg-white/5 p-4 flex items-start justify-between">
             <div className="flex flex-col gap-1">
-              <p className="text-white font-manrope font-bold text-gh-body mb-1">Your Details</p>
+              <p className="text-white font-manrope font-bold text-gh-body mb-1">
+                Your Details
+              </p>
               <ul className="text-white/80 text-gh-desc font-manrope space-y-0.5 list-disc list-inside">
                 <li>Name: {details.fullName}</li>
                 <li>Number: {details.phone}</li>
                 <li>Email: {details.email}</li>
-                {details.notes && <li>Note: {details.notes.slice(0, 40)}{details.notes.length > 40 ? "…" : ""}</li>}
+                {details.notes && (
+                  <li>
+                    Note: {details.notes.slice(0, 40)}
+                    {details.notes.length > 40 ? "…" : ""}
+                  </li>
+                )}
               </ul>
             </div>
-            <button onClick={() => goToStep("details")}
-              className="bg-[#1E4336] border border-white/20 px-4 py-2 text-gh-label font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope shrink-0 ml-4">
+            <button
+              onClick={() => goToStep("details")}
+              className="bg-[#1E4336] border border-white/20 px-4 py-2 text-gh-label font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope shrink-0 ml-4"
+            >
               EDIT
             </button>
           </div>
@@ -499,24 +609,37 @@ function StepReview({
 
         {/* ADD-ONS */}
         <div className="mt-8">
-          <h4 className="text-white font-manrope font-bold text-gh-body mb-1">Add On Experiences</h4>
+          <h4 className="text-white font-manrope font-bold text-gh-body mb-1">
+            Add On Experiences
+          </h4>
           <p className="text-white/70 text-gh-desc font-manrope mb-4">
-            Optional experiences available at an additional cost.<br />
+            Optional experiences available at an additional cost.
+            <br />
             Pricing is subject to confirmation based on group size.
           </p>
           <div className="space-y-3">
             {ADD_ONS.map((addon) => (
-              <label key={addon.id}
+              <label
+                key={addon.id}
                 className="flex items-center justify-between py-1 cursor-pointer group"
-                onClick={() => toggleAddOn(addon.id)}>
+                onClick={() => toggleAddOn(addon.id)}
+              >
                 <div className="flex items-center gap-4">
-                  <div className={`w-4 h-4 border flex items-center justify-center shrink-0 transition-colors ${selectedAddOns.includes(addon.id) ? "border-white bg-transparent" : "border-white/50 group-hover:border-white"}`}>
-                    {selectedAddOns.includes(addon.id) && <div className="w-2 h-2 bg-white" />}
+                  <div
+                    className={`w-4 h-4 border flex items-center justify-center shrink-0 transition-colors ${selectedAddOns.includes(addon.id) ? "border-white bg-transparent" : "border-white/50 group-hover:border-white"}`}
+                  >
+                    {selectedAddOns.includes(addon.id) && (
+                      <div className="w-2 h-2 bg-white" />
+                    )}
                   </div>
-                  <span className="text-white text-gh-desc font-manrope">{addon.label}</span>
+                  <span className="text-white text-gh-desc font-manrope">
+                    {addon.label}
+                  </span>
                 </div>
                 <span className="text-white text-gh-desc font-manrope font-bold">
-                  {addon.price > 0 ? formatRupees(addon.price) : "Price on request"}
+                  {addon.price > 0
+                    ? formatRupees(addon.price)
+                    : "Price on request"}
                 </span>
               </label>
             ))}
@@ -525,19 +648,29 @@ function StepReview({
 
         {/* PRICE DETAILS */}
         <div className="mt-8 border-t border-white/10 pt-6">
-          <h4 className="text-white font-manrope font-bold text-gh-body mb-4">Price details</h4>
+          <h4 className="text-white font-manrope font-bold text-gh-body mb-4">
+            Price details
+          </h4>
           <div className="space-y-2 text-gh-desc font-manrope">
             <div className="flex items-center justify-between text-white/90">
-              <span className="text-white/80">1 Night × {formatRupees(basePrice)}</span>
-              <span className="font-bold text-white">{formatRupees(basePrice)}</span>
+              <span className="text-white/80">
+                1 Night × {formatRupees(basePrice)}
+              </span>
+              <span className="font-bold text-white">
+                {formatRupees(basePrice)}
+              </span>
             </div>
             <div className="flex items-center justify-between text-white/90">
               <span className="text-white/80">Add On Experiences</span>
-              <span className="font-bold text-white">{formatRupees(addOnTotal)}</span>
+              <span className="font-bold text-white">
+                {formatRupees(addOnTotal)}
+              </span>
             </div>
             <div className="flex items-center justify-between text-white/90">
               <span className="text-white/80">Taxes</span>
-              <span className="font-bold text-white">{formatRupees(NIGHT_TAX)}</span>
+              <span className="font-bold text-white">
+                {formatRupees(NIGHT_TAX)}
+              </span>
             </div>
           </div>
           <div className="flex items-center gap-4 text-white/50 text-gh-label font-manrope mt-5">
@@ -562,11 +695,15 @@ function SummaryBlock({
   return (
     <div className="bg-white/5 p-4 flex items-start justify-between border border-transparent">
       <div className="flex flex-col gap-1">
-        <p className="text-white font-manrope font-bold text-gh-body mb-1">{label}</p>
+        <p className="text-white font-manrope font-bold text-gh-body mb-1">
+          {label}
+        </p>
         <p className="text-white/80 font-manrope text-gh-desc">{value}</p>
       </div>
-      <button onClick={onEdit}
-        className="bg-[#1E4336] border border-white/20 px-4 py-2 text-gh-label font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope">
+      <button
+        onClick={onEdit}
+        className="bg-[#1E4336] border border-white/20 px-4 py-2 text-gh-label font-bold tracking-widest text-white uppercase hover:bg-[#285848] transition-colors font-manrope"
+      >
         EDIT
       </button>
     </div>
@@ -600,15 +737,20 @@ function SuccessScreen({
         <div className="w-20 h-20 rounded-full border-2 border-[#EFCD62] flex items-center justify-center mb-8">
           <CheckCircle2 className="w-10 h-10 text-[#EFCD62]" />
         </div>
-        <h1 className="font-philosopher text-white text-gh-h1 mb-3">Booking Confirmed</h1>
+        <h1 className="font-philosopher text-white text-gh-h1 mb-3">
+          Booking Confirmed
+        </h1>
         <p className="text-white/60 font-manrope text-gh-body mb-2">
-          Your stay at <span className="text-white font-bold">{villaName}</span> is confirmed.
+          Your stay at <span className="text-white font-bold">{villaName}</span>{" "}
+          is confirmed.
         </p>
         <p className="text-white/60 font-manrope text-gh-body mb-8">
           {formatDate(checkIn)} → {formatDate(checkOut)}
         </p>
         <div className="bg-white/5 border border-white/10 px-6 py-4 mb-8 w-full">
-          <p className="text-white/40 text-gh-label font-manrope uppercase tracking-widest mb-1">Booking ID</p>
+          <p className="text-white/40 text-gh-label font-manrope uppercase tracking-widest mb-1">
+            Booking ID
+          </p>
           <p className="text-[#EFCD62] font-manrope font-bold text-gh-body break-all">
             {bookingId.split("-")[0].toUpperCase()}
           </p>
@@ -636,7 +778,8 @@ function BookPageContent() {
   const villaParam = searchParams.get("villa");
   const isVillaPreSelected = !!villaParam;
 
-  const { dateRange, setDateRange, guests, setGuests, resetBooking } = useBooking();
+  const { dateRange, setDateRange, guests, setGuests, resetBooking } =
+    useBooking();
 
   const stepParam = searchParams.get("step") as Step | null;
 
@@ -647,21 +790,33 @@ function BookPageContent() {
   // hydration mismatch. Instead, we start at the URL-specified step (or "dates"),
   // and auto-advance in a useEffect after hydration.
   const getInitialStep = (): Step => {
-    if (stepParam && ["dates", "guests", "details", "review"].includes(stepParam)) {
+    if (
+      stepParam &&
+      ["dates", "guests", "details", "review"].includes(stepParam)
+    ) {
       return stepParam as Step;
     }
     return "dates";
   };
 
   const [step, setStep] = useState<Step>(getInitialStep);
-  const [selectedVillaId, setSelectedVillaId] = useState<string | null>(villaParam);
-  const [details, setDetails] = useState<UserDetails>({ fullName: "", phone: "", email: "", notes: "" });
+  const [selectedVillaId, setSelectedVillaId] = useState<string | null>(
+    villaParam,
+  );
+  const [details, setDetails] = useState<UserDetails>({
+    fullName: "",
+    phone: "",
+    email: "",
+    notes: "",
+  });
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
 
   // Submission state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [bookingResult, setBookingResult] = useState<{ id: string } | null>(null);
+  const [bookingResult, setBookingResult] = useState<{ id: string } | null>(
+    null,
+  );
 
   useEffect(() => {
     if (villaParam) setSelectedVillaId(villaParam);
@@ -681,14 +836,17 @@ function BookPageContent() {
     ) {
       setStep("details");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const selectedVilla = VILLAS.find((v) => v.id === selectedVillaId);
 
   const basePrice = selectedVilla
     ? parseInt(
-        (selectedVilla.pricing?.stay?.packages?.[0]?.price ?? "99000").replace(/[^0-9]/g, ""),
+        (selectedVilla.pricing?.stay?.packages?.[0]?.price ?? "99000").replace(
+          /[^0-9]/g,
+          "",
+        ),
       ) || 99000
     : 99000;
 
@@ -775,11 +933,21 @@ function BookPageContent() {
 
       setBookingResult({ id: data.bookingId });
     } catch {
-      setSubmitError("Network error. Please check your connection and try again.");
+      setSubmitError(
+        "Network error. Please check your connection and try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
-  }, [selectedVilla, dateRange, guests, details, selectedAddOns, basePrice, addOnTotal]);
+  }, [
+    selectedVilla,
+    dateRange,
+    guests,
+    details,
+    selectedAddOns,
+    basePrice,
+    addOnTotal,
+  ]);
 
   /* ── Show success screen ── */
   if (bookingResult) {
@@ -817,17 +985,22 @@ function BookPageContent() {
     }
 
     if (step === "guests") {
-      const guestLabel = guests.adults + guests.children > 0
-        ? `${guests.adults} Guest${guests.adults !== 1 ? "s" : ""}${guests.children > 0 ? `, ${guests.children} Children` : ""}`
-        : "-- --";
+      const guestLabel =
+        guests.adults + guests.children > 0
+          ? `${guests.adults} Guest${guests.adults !== 1 ? "s" : ""}${guests.children > 0 ? `, ${guests.children} Children` : ""}`
+          : "-- --";
       // Label depends on whether villa is already chosen
       const nextLabel = isVillaPreSelected ? "APPLY" : "NEXT";
       return (
         <div className="flex items-center justify-between">
-          <span className="text-white/60 text-gh-body font-manrope">{guestLabel}</span>
+          <span className="text-white/60 text-gh-body font-manrope">
+            {guestLabel}
+          </span>
           <div className="flex gap-3">
-            <button onClick={() => setStep("dates")}
-              className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope">
+            <button
+              onClick={() => setStep("dates")}
+              className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
+            >
               BACK
             </button>
             <button
@@ -843,15 +1016,18 @@ function BookPageContent() {
     }
 
     if (step === "details") {
-      const isValid = details.fullName.trim() && details.phone.trim() && details.email.trim();
+      const isValid =
+        details.fullName.trim() && details.phone.trim() && details.email.trim();
       return (
         <div className="flex items-center justify-between">
           <span className="text-[#EFCD62] font-manrope text-gh-label font-bold">
             {formatRupees(basePrice)} onwards
           </span>
           <div className="flex gap-3">
-            <button onClick={goBackFromDetails}
-              className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope">
+            <button
+              onClick={goBackFromDetails}
+              className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
+            >
               BACK
             </button>
             <button
@@ -936,10 +1112,16 @@ function BookPageContent() {
             >
               RESET
             </button>
-            <a href="tel:08970663366" className="text-white hover:text-[#EFCD62] transition-colors">
+            <a
+              href="tel:08970663366"
+              className="text-white hover:text-[#EFCD62] transition-colors"
+            >
               <Headset className="w-5 h-5" strokeWidth={1.5} />
             </a>
-            <button onClick={handleClose} className="text-white hover:text-[#EFCD62] transition-colors">
+            <button
+              onClick={handleClose}
+              className="text-white hover:text-[#EFCD62] transition-colors"
+            >
               <X className="w-5 h-5" strokeWidth={1.5} />
             </button>
           </div>
@@ -949,7 +1131,8 @@ function BookPageContent() {
         {step === "dates" && (
           <div className="flex justify-start items-center gap-2 md:gap-4 px-5 md:px-6 py-3 md:py-4 text-gh-label text-[#A6C0B5] font-manrope font-medium border-b border-white/10">
             <span className="flex items-center gap-2">
-              <span className="w-4 h-4 bg-[#165040] rounded-[2px] shrink-0" /> Available
+              <span className="w-4 h-4 bg-[#165040] rounded-[2px] shrink-0" />{" "}
+              Available
             </span>
             <span className="flex items-center gap-2 relative">
               <span className="w-4 h-4 bg-[#165040]/50 rounded-[2px] overflow-hidden relative shrink-0">
@@ -958,7 +1141,8 @@ function BookPageContent() {
               Unavailable
             </span>
             <span className="flex items-center gap-2">
-              <span className="w-4 h-4 bg-[#EFCD62] rounded-[2px] shrink-0" /> Selected
+              <span className="w-4 h-4 bg-[#EFCD62] rounded-[2px] shrink-0" />{" "}
+              Selected
             </span>
           </div>
         )}
@@ -968,34 +1152,54 @@ function BookPageContent() {
       <div className="flex-1 flex flex-col w-full max-w-[720px] mx-auto overflow-hidden">
         <AnimatePresence mode="wait">
           {step === "dates" && (
-            <motion.div key="dates"
-              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}
-              className="flex-1 flex flex-col min-h-0 overflow-hidden">
-              <StepDates dateRange={dateRange} setDateRange={setDateRange} villaId={selectedVillaId} />
+            <motion.div
+              key="dates"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
+              className="flex-1 flex flex-col min-h-0 overflow-hidden"
+            >
+              <StepDates
+                dateRange={dateRange}
+                setDateRange={setDateRange}
+                villaId={selectedVillaId}
+              />
             </motion.div>
           )}
           {step === "guests" && (
-            <motion.div key="guests"
-              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}
-              className="flex-1 overflow-hidden flex flex-col min-h-0">
+            <motion.div
+              key="guests"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
+              className="flex-1 overflow-hidden flex flex-col min-h-0"
+            >
               <StepGuests guests={guests} setGuests={setGuests} />
             </motion.div>
           )}
           {step === "details" && (
-            <motion.div key="details"
-              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}
-              className="flex-1 overflow-hidden flex flex-col min-h-0">
+            <motion.div
+              key="details"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
+              className="flex-1 overflow-hidden flex flex-col min-h-0"
+            >
               <StepDetails details={details} setDetails={setDetails} />
             </motion.div>
           )}
           {step === "review" && (
-            <motion.div key="review"
-              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}
-              className="flex-1 overflow-hidden flex flex-col min-h-0">
+            <motion.div
+              key="review"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
+              className="flex-1 overflow-hidden flex flex-col min-h-0"
+            >
               <StepReview
                 dateRange={dateRange}
                 guests={guests}

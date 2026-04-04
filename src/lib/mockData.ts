@@ -4,7 +4,7 @@
  * When the real backend is ready, replace this file's exports with API calls.
  */
 
-export { VILLAS, CATEGORIES } from "@/data/villas";
+export { VILLAS, CATEGORIES } from "@/data/retrats_data";
 export { BLOG_POSTS as BLOGS } from "@/data/blogs";
 
 // ─── Hardcoded booking constants (currently duplicated in 2 files) ───────────

@@ -18,7 +18,7 @@ import {
   Headset,
 } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
-import { VILLAS } from "@/data/villas";
+import { VILLAS } from "@/data/retrats_data";
 
 /* ─────────────────────────────────────────────────────────────────────
    Types
