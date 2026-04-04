@@ -13,7 +13,7 @@ const config: Config = {
           text: "hsla(0, 0%, 98%, 0.8)",
           // New Palette
           charcoal: "#25282C", // Primary Background
-          green: "#0D4032", // Secondary Background
+          green: "#0B2C23", // Secondary Background
           gold: "#EFCD62", // Primary Accent (Jade Gold)
           "gold-muted": "#AC8831",
           "gold-dull": "#5C4009",

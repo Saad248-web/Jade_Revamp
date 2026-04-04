@@ -30,7 +30,22 @@ export const VILLAS = [
     ],
     categories: ["Weddings", "Corporate Retreats", "Pre-wedding"],
     image: "/X/Magnolia/VILLA2.webp",
-    images: ["/X/Magnolia/12.webp","/X/Magnolia/13.webp","/X/Magnolia/14.webp","/X/Magnolia/15.webp","/X/Magnolia/16.webp","/X/Magnolia/17.webp","/X/Magnolia/18.webp","/X/Magnolia/19.webp","/X/Magnolia/22.webp","/X/Magnolia/VILLA.webp","/X/Magnolia/LIVING ROOM.webp","/X/Magnolia/BEDROOM1.webp","/X/Magnolia/FAMILY ROOM.webp","/X/Magnolia/VILLA2.webp"],
+    images: [
+      "/X/Magnolia/12.webp",
+      "/X/Magnolia/13.webp",
+      "/X/Magnolia/14.webp",
+      "/X/Magnolia/15.webp",
+      "/X/Magnolia/16.webp",
+      "/X/Magnolia/17.webp",
+      "/X/Magnolia/18.webp",
+      "/X/Magnolia/19.webp",
+      "/X/Magnolia/22.webp",
+      "/X/Magnolia/VILLA.webp",
+      "/X/Magnolia/LIVING ROOM.webp",
+      "/X/Magnolia/BEDROOM1.webp",
+      "/X/Magnolia/FAMILY ROOM.webp",
+      "/X/Magnolia/VILLA2.webp",
+    ],
     amenities: [
       {
         label: "Private Pool",
@@ -218,7 +233,11 @@ export const VILLAS = [
       { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
       { title: "Weddings", image: "/X/Magnolia/9.webp" },
       { title: "Corporate Events", image: "/X/ROR/14.webp" },
-      { title: "Photo Shoots", image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp" },
+      {
+        title: "Photo Shoots",
+        image:
+          "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+      },
     ],
     video: "/X/Magnolia/9.webp",
     faq: [
@@ -270,7 +289,26 @@ export const VILLAS = [
     perfectFor: ["Celebrations", "Weddings", "Weekends"],
     categories: ["Weddings", "Pet friendly"],
     image: "/X/Tranquil Woods/1.webp",
-    images: ["/X/Tranquil Woods/1.webp","/X/Tranquil Woods/2.webp","/X/Tranquil Woods/3.webp","/X/Tranquil Woods/4.webp","/X/Tranquil Woods/7.webp","/X/Tranquil Woods/8.webp","/X/Tranquil Woods/9.webp","/X/Tranquil Woods/10.webp","/X/Tranquil Woods/11.webp","/X/Tranquil Woods/12.webp","/X/Tranquil Woods/13.webp","/X/Tranquil Woods/14.webp","/X/Tranquil Woods/15.webp","/X/Tranquil Woods/16.webp","/X/Tranquil Woods/17.webp","/X/Tranquil Woods/18.webp","/X/Tranquil Woods/20.webp","/X/Tranquil Woods/24.webp"],
+    images: [
+      "/X/Tranquil Woods/1.webp",
+      "/X/Tranquil Woods/2.webp",
+      "/X/Tranquil Woods/3.webp",
+      "/X/Tranquil Woods/4.webp",
+      "/X/Tranquil Woods/7.webp",
+      "/X/Tranquil Woods/8.webp",
+      "/X/Tranquil Woods/9.webp",
+      "/X/Tranquil Woods/10.webp",
+      "/X/Tranquil Woods/11.webp",
+      "/X/Tranquil Woods/12.webp",
+      "/X/Tranquil Woods/13.webp",
+      "/X/Tranquil Woods/14.webp",
+      "/X/Tranquil Woods/15.webp",
+      "/X/Tranquil Woods/16.webp",
+      "/X/Tranquil Woods/17.webp",
+      "/X/Tranquil Woods/18.webp",
+      "/X/Tranquil Woods/20.webp",
+      "/X/Tranquil Woods/24.webp",
+    ],
     amenities: [
       { label: "Wifi", icon: "Wifi" },
       { label: "Parking", icon: "Car" },
@@ -375,7 +413,11 @@ export const VILLAS = [
       { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
       { title: "Weddings", image: "/X/Magnolia/9.webp" },
       { title: "Corporate Events", image: "/X/ROR/14.webp" },
-      { title: "Photo Shoots", image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp" },
+      {
+        title: "Photo Shoots",
+        image:
+          "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+      },
     ],
     video: "/X/Magnolia/9.webp",
     faq: [
@@ -407,7 +449,15 @@ export const VILLAS = [
     perfectFor: ["Staycations", "Private Celebrations"],
     categories: ["Pre-wedding", "Pet friendly"],
     image: "/X/Magnolia/10.webp",
-    images: ["/X/Magnolia/17.webp","/X/Magnolia/18.webp","/X/Magnolia/19.webp","/X/Magnolia/22.webp","/X/Magnolia/VILLA.webp","/X/Magnolia/LIVING ROOM.webp","/X/Magnolia/BEDROOM1.webp"],
+    images: [
+      "/X/Magnolia/17.webp",
+      "/X/Magnolia/18.webp",
+      "/X/Magnolia/19.webp",
+      "/X/Magnolia/22.webp",
+      "/X/Magnolia/VILLA.webp",
+      "/X/Magnolia/LIVING ROOM.webp",
+      "/X/Magnolia/BEDROOM1.webp",
+    ],
     amenities: [
       { label: "Wifi", icon: "Wifi" },
       { label: "Parking", icon: "Car" },
@@ -511,7 +561,11 @@ export const VILLAS = [
       { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
       { title: "Weddings", image: "/X/Magnolia/9.webp" },
       { title: "Corporate Events", image: "/X/ROR/14.webp" },
-      { title: "Photo Shoots", image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp" },
+      {
+        title: "Photo Shoots",
+        image:
+          "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+      },
     ],
     video: "/X/Magnolia/9.webp",
     faq: [
@@ -649,7 +703,11 @@ export const VILLAS = [
       { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
       { title: "Romantic Stays", image: "/X/Magnolia/9.webp" },
       { title: "Nature Walks", image: "/X/ROR/14.webp" },
-      { title: "Stargazing", image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp" },
+      {
+        title: "Stargazing",
+        image:
+          "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+      },
     ],
     video: "/X/Magnolia/9.webp",
     faq: [
@@ -679,7 +737,16 @@ export const VILLAS = [
     perfectFor: ["Weddings", "Corporate Retreats", "Large Events"],
     categories: ["Weddings", "Corporate Retreats"],
     image: "/X/ROR/5.webp",
-    images: ["/X/ROR/3.webp","/X/ROR/4.webp","/X/ROR/5.webp","/X/ROR/6.webp","/X/ROR/7.webp","/X/ROR/8.webp","/X/ROR/9.webp","/X/ROR/10.webp"],
+    images: [
+      "/X/ROR/3.webp",
+      "/X/ROR/4.webp",
+      "/X/ROR/5.webp",
+      "/X/ROR/6.webp",
+      "/X/ROR/7.webp",
+      "/X/ROR/8.webp",
+      "/X/ROR/9.webp",
+      "/X/ROR/10.webp",
+    ],
     amenities: [
       { label: "Large Pool", icon: "Waves" },
       { label: "Coconut Grove", icon: "Trees" },
@@ -816,7 +883,16 @@ export const VILLAS = [
     perfectFor: ["Staycations", "Family Getaways", "Celebrations"],
     categories: ["Pet friendly", "Corporate Retreats"],
     image: "/X/Magnolia/17.webp",
-    images: ["/X/Magnolia/12.webp","/X/Magnolia/13.webp","/X/Magnolia/14.webp","/X/Magnolia/15.webp","/X/Magnolia/16.webp","/X/Magnolia/17.webp","/X/Magnolia/18.webp","/X/Magnolia/19.webp"],
+    images: [
+      "/X/Magnolia/12.webp",
+      "/X/Magnolia/13.webp",
+      "/X/Magnolia/14.webp",
+      "/X/Magnolia/15.webp",
+      "/X/Magnolia/16.webp",
+      "/X/Magnolia/17.webp",
+      "/X/Magnolia/18.webp",
+      "/X/Magnolia/19.webp",
+    ],
     amenities: [
       { label: "Waterfall Pool", icon: "Waves" },
       { label: "Jacuzzi", icon: "Bath" },
@@ -948,7 +1024,23 @@ export const VILLAS = [
     perfectFor: ["Staycations", "Private Celebrations"],
     categories: ["Pet friendly", "Pre-wedding"],
     image: "/X/HAVEN/1.webp",
-    images: ["/X/HAVEN/1.webp","/X/HAVEN/2.webp","/X/HAVEN/3.webp","/X/HAVEN/4.webp","/X/HAVEN/BEDROOM1.webp","/X/HAVEN/BEDROOM2.webp","/X/HAVEN/BEDROOM3.webp","/X/HAVEN/BONFIRE.webp","/X/HAVEN/DRONE LAWN NIGHT.webp","/X/HAVEN/DSC00104.webp","/X/HAVEN/HAVEN LIVING ROOM 4.webp","/X/HAVEN/POOL TABLE1.webp","/X/HAVEN/dining 1.webp","/X/HAVEN/lawn drone.webp","/X/HAVEN/pool new.webp"],
+    images: [
+      "/X/HAVEN/1.webp",
+      "/X/HAVEN/2.webp",
+      "/X/HAVEN/3.webp",
+      "/X/HAVEN/4.webp",
+      "/X/HAVEN/BEDROOM1.webp",
+      "/X/HAVEN/BEDROOM2.webp",
+      "/X/HAVEN/BEDROOM3.webp",
+      "/X/HAVEN/BONFIRE.webp",
+      "/X/HAVEN/DRONE LAWN NIGHT.webp",
+      "/X/HAVEN/DSC00104.webp",
+      "/X/HAVEN/HAVEN LIVING ROOM 4.webp",
+      "/X/HAVEN/POOL TABLE1.webp",
+      "/X/HAVEN/dining 1.webp",
+      "/X/HAVEN/lawn drone.webp",
+      "/X/HAVEN/pool new.webp",
+    ],
     amenities: [
       { label: "Private Pool", icon: "Waves" },
       { label: "Jacuzzi Suite", icon: "Bath" },
@@ -1075,7 +1167,20 @@ export const VILLAS = [
     perfectFor: ["Staycations", "Small Events", "Family Gatherings"],
     categories: ["Pet friendly", "Weddings"],
     image: "/X/ROR/1.webp",
-    images: ["/X/ROR/1.webp","/X/ROR/2.webp","/X/ROR/3.webp","/X/ROR/4.webp","/X/ROR/5.webp","/X/ROR/6.webp","/X/ROR/7.webp","/X/ROR/8.webp","/X/ROR/9.webp","/X/ROR/10.webp","/X/ROR/11.webp","/X/ROR/12.webp"],
+    images: [
+      "/X/ROR/1.webp",
+      "/X/ROR/2.webp",
+      "/X/ROR/3.webp",
+      "/X/ROR/4.webp",
+      "/X/ROR/5.webp",
+      "/X/ROR/6.webp",
+      "/X/ROR/7.webp",
+      "/X/ROR/8.webp",
+      "/X/ROR/9.webp",
+      "/X/ROR/10.webp",
+      "/X/ROR/11.webp",
+      "/X/ROR/12.webp",
+    ],
     amenities: [
       { label: "Infinity Pool", icon: "Waves" },
       { label: "Hill View", icon: "Mountain" },
@@ -1194,24 +1299,27 @@ export const VILLAS = [
   {
     id: "emerald",
     name: "Emerald",
-    type: "LUXURY PARTY VILLA WITH POOL",
-    location: "Kanakapura Road · South Bengaluru",
-    stats: { stay: "20 Guests", events: "40 Guests", bhk: "5 BHK" },
+    type: "GLASSHOUSE COURTYARD RETREAT",
+    location: "Near Embassy Riding School, Bangalore",
+    stats: { stay: "10 Guests Stay", events: "30 Guests Event", bhk: "2 BHK" },
     description:
-      "A premium luxury villa designed for high-end parties and celebrations. Featuring a large swimming pool, landscaped gardens, and a spacious 5-BHK layout, Emerald offers the perfect backdrop for memorable gatherings and weekend escapes.",
+      "Emerald is a private pool villa designed as a traditional glasshouse around a central courtyard. This 2-bedroom villa combines indoor transparency with lush greenery, creating a setting suited for small group stays, intimate gatherings, and weekend getaways near Bangalore. With a private pool featuring an 8 ft waterfall, garden sit-outs, and courtyard living, the villa balances built space with open areas. Located 5 minutes from Embassy Riding School and 35 minutes from Hebbal, it offers accessibility with complete privacy.",
     perfectFor: ["Parties", "Staycations", "Celebrations"],
     categories: ["Weddings", "Corporate Retreats", "Pet friendly"],
     image: "/X/ROR/10.webp",
-    images: ["/X/ROR/6.webp","/X/ROR/7.webp","/X/ROR/8.webp","/X/ROR/9.webp","/X/ROR/10.webp","/X/ROR/11.webp","/X/ROR/12.webp"],
-    amenities: [
-      { label: "Private Pool", icon: "Waves" },
-      { label: "Garden", icon: "Trees" },
-      { label: "Music System", icon: "Music" },
+    images: [
+      "/X/ROR/6.webp",
+      "/X/ROR/7.webp",
+      "/X/ROR/8.webp",
+      "/X/ROR/9.webp",
+      "/X/ROR/10.webp",
+      "/X/ROR/11.webp",
+      "/X/ROR/12.webp",
     ],
-    spaces: [
-      { name: "Poolside", image: "/X/ROR/11.webp" },
-      { name: "Living Hall", image: "/X/ROR/12.webp" },
-      { name: "Deck", image: "/X/ROR/13.webp" },
+    amenities: [
+      { label: "8 ft Waterfall pool", icon: "Waves" },
+      { label: "Central Courtyard With Swing", icon: "LayoutGrid" },
+      { label: "Garden Sit-out Spaces", icon: "Leaf" },
     ],
     services: [
       {
@@ -1227,12 +1335,20 @@ export const VILLAS = [
     ],
     propertyDetails: [
       {
-        title: "5-BHK Layout",
-        description: "Spacious bedrooms with ensuite baths.",
+        title: "Traditional Glasshouse Design",
+        description: "Built with transparency to blend with lush surroundings.",
       },
       {
-        title: "Private Pool",
-        description: "Large pool ideal for afternoon parties.",
+        title: "Central Courtyard",
+        description: "Featuring a heritage swing and open-to-sky feel.",
+      },
+      {
+        title: "8ft Waterfall Private Pool",
+        description: "A unique water feature for a refreshing experience.",
+      },
+      {
+        title: "Prime Location",
+        description: "Just 5 minutes from Embassy Riding School.",
       },
     ],
     pricing: {
@@ -1270,7 +1386,16 @@ export const VILLAS = [
     perfectFor: ["Slow Living", "Intimate Gatherings", "Romantic Stays"],
     categories: ["Pre-wedding", "Pet friendly"],
     image: "/X/Magnolia/14.webp",
-    images: ["/X/Magnolia/14.webp","/X/Magnolia/15.webp","/X/Magnolia/16.webp","/X/Magnolia/17.webp","/X/Magnolia/18.webp","/X/Magnolia/19.webp","/X/Magnolia/22.webp","/X/Magnolia/VILLA.webp"],
+    images: [
+      "/X/Magnolia/14.webp",
+      "/X/Magnolia/15.webp",
+      "/X/Magnolia/16.webp",
+      "/X/Magnolia/17.webp",
+      "/X/Magnolia/18.webp",
+      "/X/Magnolia/19.webp",
+      "/X/Magnolia/22.webp",
+      "/X/Magnolia/VILLA.webp",
+    ],
     amenities: [
       { label: "Treehouse Deck", icon: "Home" },
       { label: "Nature View", icon: "Mountain" },
@@ -1304,9 +1429,7 @@ export const VILLAS = [
     locationDetails: {
       address: "Wonderland Treehouse, Doddaballapur, Bangalore",
     },
-    activities: [
-      { title: "Nature Walks", image: "/X/Tranquil Woods/10.webp" },
-    ],
+    activities: [{ title: "Nature Walks", image: "/X/Tranquil Woods/10.webp" }],
     video: "/X/Magnolia/9.webp",
     faq: [{ question: "Is it safe?", answer: "Yes, fully secured and gated." }],
   },

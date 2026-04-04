@@ -140,7 +140,7 @@ body {
   overflow-x: hidden;
   max-width: 100%;
   color: theme("colors.jade.text");
-  background: theme("colors.jade.charcoal");
+  background: #0b2c23;
 }
 
 /* Custom Utilities for Animation */

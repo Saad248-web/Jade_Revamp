@@ -98,8 +98,10 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
 
       {/* Modal */}
       <div
-        className={`relative w-full max-w-lg md:max-w-2xl max-h-[85vh] bg-[#0D4032] text-white shadow-lg transform transition-all duration-300 ease-out flex flex-col ${
-          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+        className={`relative w-full max-w-lg md:max-w-2xl max-h-[85vh] bg-[#0D4032]/95 backdrop-blur-2xl text-white shadow-2xl transform transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col ${
+          isOpen
+            ? "opacity-100 scale-100 translate-y-0"
+            : "opacity-0 scale-95 translate-y-4"
         } rounded-[32px] overflow-hidden border border-white/10`}
       >
         {/* Header */}
@@ -123,17 +125,20 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
               const description = item.description || (item as any).answer;
 
               return (
-                <div key={idx} className="flex gap-5 group">
+                <div
+                  key={idx}
+                  className="flex gap-5 group items-start p-4 hover:bg-white/5 rounded-2xl transition-colors duration-300"
+                >
                   {/* Icon Box - Only render if icon exists */}
                   {Icon && (
-                    <div className="shrink-0 w-12 h-12 flex items-center justify-center border border-[#EFCD62]/30 rounded-sm bg-[#EFCD62]/5">
+                    <div className="shrink-0 w-12 h-12 flex items-center justify-center border border-[#EFCD62]/30 rounded-xl bg-[#EFCD62]/10 group-hover:bg-[#EFCD62]/20 group-hover:scale-110 transition-all duration-300">
                       <Icon className="w-5 h-5 text-[#EFCD62]" />
                     </div>
                   )}
 
                   {/* Content Container - Adjust padding if no icon */}
                   <div className={!Icon ? "pl-2" : ""}>
-                    <h3 className="text-gh-body font-bold font-manrope mb-2 text-white">
+                    <h3 className="text-gh-body font-bold font-manrope mb-2 text-white group-hover:text-[#EFCD62] transition-colors">
                       {title}
                     </h3>
                     {description && (

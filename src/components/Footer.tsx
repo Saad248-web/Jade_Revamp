@@ -710,7 +710,7 @@ export default function Footer() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ type: "spring", damping: 30, stiffness: 300 }}
                   onClick={(e) => e.stopPropagation()}
-                  className="w-full max-h-[85vh] bg-[#0D4032] rounded-3xl flex flex-col shadow-2xl border border-white/10 overflow-hidden"
+                  className="w-full max-h-[85vh] bg-[#0B2C23] rounded-3xl flex flex-col shadow-2xl border border-white/10 overflow-hidden"
                 >
                   <div className="flex flex-col items-center justify-center px-8 text-center pt-8 pb-10 overflow-y-auto">
                     {/* Glassy circular wrapper for the checkmark */}
