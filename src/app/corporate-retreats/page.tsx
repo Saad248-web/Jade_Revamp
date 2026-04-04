@@ -10,7 +10,7 @@ import { useScroll, useTransform } from "framer-motion";
 import FormatsCarousel from "@/components/FormatsCarousel";
 import LiveBackground from "@/components/LiveBackground";
 import CorporateVillasCarousel from "@/components/CorporateVillasCarousel";
-import { VILLAS } from "@/data/retrats_data";
+import { VILLAS } from "@/lib/mockData";
 import Footer from "@/components/Footer";
 import ExperienceHero from "@/components/ExperienceHero";
 import ScrollSectionComposer, {

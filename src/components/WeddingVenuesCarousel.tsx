@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight, MapPin, Users, Car, Home } from "lucide-react";
 import Link from "next/link";
-import { VILLAS } from "@/data/retrats_data";
+import { VILLAS } from "@/lib/mockData";
 import VenueOverlay from "./VenueOverlay";
 
 // Filter villas to specifically show Set 2: Tranquil Woods, Magnolia, Diamond

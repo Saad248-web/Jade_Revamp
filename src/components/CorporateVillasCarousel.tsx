@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { VILLAS } from "@/data/retrats_data";
+import { VILLAS } from "@/lib/mockData";
 import CorporateVillaCard from "./CorporateVillaCard";
 import CorporateVenueOverlay from "./CorporateVenueOverlay";
 import { AnimatePresence } from "framer-motion";

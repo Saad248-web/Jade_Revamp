@@ -47,7 +47,7 @@ import Footer from "@/components/Footer";
 import DetailsDrawer from "@/components/DetailsDrawer";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { useState } from "react";
-import { VILLAS } from "@/data/retrats_data";
+import { VILLAS } from "@/lib/mockData";
 
 // Icon mapping helper
 const getIcon = (iconName: string) => {

@@ -20,7 +20,7 @@ import {
   AlertCircle,
   CheckCircle2,
 } from "lucide-react";
-import { VILLAS } from "@/data/retrats_data";
+import { VILLAS } from "@/lib/mockData";
 import { useBooking, DateRange, Guests } from "@/context/BookingContext";
 
 /* ─────────────────────────────────────────────────────────────────────
