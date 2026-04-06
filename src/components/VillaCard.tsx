@@ -186,11 +186,11 @@ export default function VillaCard({ villa }: VillaCardProps) {
             <Home className="w-4 h-4 text-[#EFCD62]" />
             <span className="whitespace-nowrap">{villa.stats.bhk}</span>
           </div>
-          {villa.stats.lawn && (
+          {"lawn" in villa.stats && (villa.stats as any).lawn && (
             <>
               <div className="shrink-0 w-1 h-1 rounded-full bg-white/20" />
               <span className="shrink-0 whitespace-nowrap">
-                {villa.stats.lawn}
+                {(villa.stats as any).lawn}
               </span>
             </>
           )}
