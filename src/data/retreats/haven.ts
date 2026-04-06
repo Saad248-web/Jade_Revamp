@@ -1,176 +1,146 @@
 export const haven = {
   id: "haven",
-  name: "The Haven",
-  type: "PRIVATE LUXURY VILLA RETREAT",
-  location: "Hennur-Bagalur Road · North Bengaluru",
+  name: "Haven",
+  type: "PRIVATE LUXURY VILLA · SOCIAL GATHERINGS",
+  location: "Marenahalli · North Bangalore",
   stats: {
     stay: "20 Guests",
     events: "100 Guests",
     bhk: "4 BHK",
-    lawn: "5,000 sqft",
-    villaArea: "3,500 sqft",
+    lawn: "Lawn Area Outdoor Space",
+    villaArea: "Private Standalone Property",
   },
   description:
-    "A private farmhouse villa set amidst greenery, designed for relaxed stays and intimate celebrations. Featuring a landscaped lawn, private pool with deck, a glass-roof jacuzzi suite, and contemporary interiors, it offers a calm, nature-led setting for small weddings, family gatherings, and meaningful get-togethers. Located on the Hennur-Bagalur Road in North Bengaluru, Haven blends accessibility with complete seclusion.",
+    "Haven is a contemporary 4-bedroom private villa offering modern design and residential comfort. Ideal for family stays and medium-scale gatherings, it features clean architectural style with emphasis on natural light. With a private pool, jacuzzi, terrace space, and large shared areas, the villa supports both relaxed stays and larger gatherings in a controlled, private setting.",
   perfectFor: [
+    "Family Gatherings",
+    "Intimate Weddings",
+    "Small Scale Celebrations",
     "Staycations",
-    "Private Celebrations",
-    "Pre-wedding",
-    "Corporate Retreats",
+    "Group Stays",
   ],
-  categories: ["Pet friendly", "Pre-wedding", "Weddings", "Corporate Retreats"],
-  image: "/X/HAVEN/1.webp",
+  categories: ["Luxury Retreats", "Social Gatherings", "Private Events"],
+  image: "",
   images: [
-    "/X/HAVEN/1.webp",
-    "/X/HAVEN/2.webp",
-    "/X/HAVEN/3.webp",
-    "/X/HAVEN/4.webp",
-    "/X/HAVEN/BEDROOM1.webp",
-    "/X/HAVEN/BEDROOM2.webp",
-    "/X/HAVEN/BEDROOM3.webp",
-    "/X/HAVEN/BONFIRE.webp",
-    "/X/HAVEN/DRONE LAWN NIGHT.webp",
-    "/X/HAVEN/DSC00104.webp",
-    "/X/HAVEN/HAVEN LIVING ROOM 4.webp",
-    "/X/HAVEN/POOL TABLE1.webp",
-    "/X/HAVEN/dining 1.webp",
-    "/X/HAVEN/lawn drone.webp",
-    "/X/HAVEN/pool new.webp",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
   ],
   amenities: [
     {
-      label: "Private Pool with Deck",
+      label: "Private Pool With Deck",
       icon: "Waves",
       description:
-        "A private swimming pool with a spacious wooden deck — perfect for poolside lounging, morning dips, and evening cocktails.",
+        "A private swimming pool with an adjacent wooden deck, perfect for poolside relaxation and social gatherings.",
     },
     {
-      label: "Glass-Roof Jacuzzi Suite",
-      icon: "Bath",
+      label: "Air-conditioned Interiors",
+      icon: "Wind",
       description:
-        "A signature suite featuring a glass roof for stargazing from the jacuzzi — the most romantic room at Haven.",
+        "All bedrooms and shared indoor spaces are fully air-conditioned for maximum comfort.",
     },
     {
-      label: "Landscaped Lawn",
-      icon: "Trees",
+      label: "Outdoor Seating",
+      icon: "Sun",
       description:
-        "A 5,000 sqft landscaped lawn ideal for intimate weddings, outdoor dinners, and private celebrations under the stars.",
+        "Lush outdoor lounge areas providing comfortable seating within the garden and poolside.",
     },
     {
-      label: "Contemporary Interiors",
-      icon: "LayoutGrid",
+      label: "Jacuzzi",
+      icon: "Waves",
       description:
-        "Thoughtfully designed contemporary interiors with premium furnishings across all living spaces and bedrooms.",
+        "On-site individual jacuzzi for a premium relaxation experience.",
     },
     {
-      label: "Bonfire Pit",
+      label: "Entertainment Systems",
+      icon: "Music",
+      description:
+        "High-fidelity sound systems throughout the villa for gatherings and entertainment.",
+    },
+    {
+      label: "Bonfire Setup",
       icon: "Flame",
       description:
-        "A dedicated bonfire area for cosy evenings, storytelling sessions, and late-night gatherings.",
+        "Dedicated bonfire zone for evening gatherings and group activities.",
     },
     {
-      label: "Pool Table",
-      icon: "Circle",
+      label: "Barbecue Setup",
+      icon: "Utensils",
       description:
-        "A professional pool table in the recreation zone for indoor entertainment.",
+        "Full barbecue facilities available for curated outdoor dining experiences.",
     },
     {
-      label: "Wifi",
-      icon: "Wifi",
+      label: "Fully Functional Kitchen",
+      icon: "Kitchen",
       description:
-        "High-speed wireless internet throughout the villa and outdoor areas.",
-    },
-    {
-      label: "Parking",
-      icon: "Car",
-      description:
-        "Secure on-site parking accommodating multiple vehicles with direct villa access.",
+        "Completely equipped kitchen suitable for both self-use and professional catering.",
     },
   ],
   spaces: [
-    { name: "Poolside", image: "/X/HAVEN/pool new.webp" },
-    { name: "Jacuzzi Suite", image: "/X/HAVEN/BEDROOM3.webp" },
-    { name: "Lawn Area", image: "/X/HAVEN/lawn drone.webp" },
-    { name: "Living Room", image: "/X/HAVEN/HAVEN LIVING ROOM 4.webp" },
+    { name: "Courtyard", image: "" },
+    { name: "Private Pool", image: "" },
+    { name: "Lawn Area", image: "" },
+    { name: "Modern Interior", image: "" },
   ],
   services: [
     {
       title: "Chef on Call",
       description:
-        "A private chef can be arranged for curated meals — from farm-to-table brunches to multi-course candlelight dinners and BBQ nights.",
+        "Private chef service available for curated meals and specialized event catering.",
       footer: "Available on request. Additional charges apply",
       icon: "ChefHat",
     },
     {
       title: "Butler Service",
       description:
-        "Dedicated on-site service support to manage hosted events, private celebrations, and ensure seamless hospitality throughout.",
+        "On-site service support to ensure your stay or event is managed seamlessly.",
       footer: "Available on request. Additional charges apply",
       icon: "User",
     },
     {
-      title: "Housekeeping",
+      title: "Pick-up & Drop",
       description:
-        "Daily housekeeping services during your stay to maintain bedrooms, pool area, lawn, and all common spaces.",
-      footer: "Service scope to be confirmed during booking",
-      icon: "SprayCan",
+        "Transport support can be arranged for guest arrival and departure logistics.",
+      footer: "Confirmed during booking",
+      icon: "Car",
     },
     {
-      title: "Concierge Assistance",
+      title: "Event Setup Support",
       description:
-        "Assistance with planning activities, nearby excursions, transportation, décor, and logistics around your stay or event.",
+        "Assistance with personalized decor and technical arrangements for your gathering.",
       footer: "Available on request",
-      icon: "Phone",
+      icon: "PartyPopper",
     },
   ],
   propertyDetails: [
     {
-      label: "Glass-Roof Jacuzzi Suite",
+      label: "4-Bedroom Private Villa",
       description:
-        "A signature suite featuring a glass roof for stargazing from the jacuzzi — the most romantic and unique feature of Haven.",
+        "Designed for mid-sized groups with spacious common areas and shared recreational zones.",
+      icon: "Bed",
+    },
+    {
+      label: "Private Standalone Property",
+      description:
+        "Independent villa ensuring absolute privacy and an exclusive experience for every group.",
+      icon: "Home",
+    },
+    {
+      label: "Modern Interior Design",
+      description:
+        "Clean, contemporary aesthetic with premium finishes across all living and sleeping areas.",
       icon: "Diamond",
     },
     {
       label: "Private Pool with Deck",
       description:
-        "A spacious pool with a wooden deck, designed for poolside relaxation, morning laps, and sunset cocktail sessions.",
-      icon: "Diamond",
-    },
-    {
-      label: "Private Farmhouse Setting",
-      description:
-        "Surrounded by greenery on the Hennur-Bagalur Road in North Bengaluru, offering peace, privacy, and complete seclusion.",
-      icon: "Diamond",
-    },
-    {
-      label: "Contemporary Design",
-      description:
-        "Modern, thoughtfully designed interiors with premium furnishings that balance luxury with comfort across all living spaces.",
-      icon: "Diamond",
-    },
-    {
-      label: "Landscaped Lawn & Garden",
-      description:
-        "A 5,000 sqft landscaped lawn with garden seating, ideal for intimate weddings, outdoor dinners, and private gatherings.",
-      icon: "Diamond",
-    },
-    {
-      label: "Bonfire & Outdoor Spaces",
-      description:
-        "Dedicated bonfire pit and outdoor seating areas for late-night get-togethers and al fresco dining under the stars.",
-      icon: "Diamond",
-    },
-    {
-      label: "4 BHK Accommodation",
-      description:
-        "Four spacious bedrooms with premium furnishings and air-conditioning, accommodating up to 20 guests for overnight stays.",
-      icon: "Diamond",
-    },
-    {
-      label: "Pet-friendly Property",
-      description:
-        "Haven welcomes pets with ample garden and lawn space. We request that pets are supervised at all times.",
-      icon: "Diamond",
+        "A signature feature providing a focal point for leisure and poolside social sessions.",
+      icon: "Waves",
     },
   ],
   pricing: {
@@ -179,75 +149,69 @@ export const haven = {
       subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
       packages: [
         {
-          label: "Up to 10 PAX",
-          sublabel: "≈ ₹3,200 / head",
-          price: "₹32,000 + taxes",
+          label: "Up to 12 PAX",
+          sublabel: "≈ ₹4,042 / head",
+          price: "₹48,500 + taxes",
         },
-        { label: "Additional Guests", price: "₹1,800 + taxes" },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
       ],
       features: [
-        "Venue access",
+        "Full venue access",
         "Overnight villa stay",
-        "Complimentary breakfast",
+        "Private pool access",
       ],
     },
     event: {
       title: "Event Experience",
-      subtitle: "8 hours (Selectable between 2 PM and 12 AM)",
+      subtitle: "8 hours (2 PM · 12 AM)",
       packages: [
         {
-          label: "Up to 40 PAX",
-          sublabel: "≈ ₹700/head",
-          price: "₹28,000 + taxes",
+          label: "Up to 24 PAX",
+          sublabel: "≈ ₹1,604 / head",
+          price: "₹38,500 + taxes",
         },
-        { label: "Additional Guests", price: "₹1,000 + taxes" },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
       ],
-      features: ["Private venue access", "Complimentary high tea"],
+      features: ["Private venue access", "On-site parking"],
     },
   },
   locationDetails: {
-    mapImage: "/X/Magnolia/VILLA2.webp",
-    address: "The Haven, Hennur-Bagalur Road, North Bengaluru",
-    distance: "Approximately 40 minutes from Hebbal",
+    mapImage: "",
+    address: "Netaji Road, Mitganahalli, Marenahalli, Bengaluru — 562149",
+    distance: "Approximately 45 minutes from Bangalore City Center",
     nearby: [
+      { label: "FETCH CANINE", distance: "Behind property" },
       { label: "AIRPORT", distance: "20 km away" },
-      { label: "BHARTIYA CITY", distance: "5 km away" },
-      { label: "YELAHANKA", distance: "10 km away" },
-      { label: "HIGHWAY", distance: "5 km away" },
+      { label: "HEBBAL", distance: "25 mins away" },
+      { label: "NICE ROAD", distance: "15 km away" },
     ],
   },
   activities: [
-    { title: "Wellness Retreats", image: "/X/Tranquil Woods/10.webp" },
-    { title: "Intimate Weddings", image: "/X/Magnolia/9.webp" },
-    { title: "Couple Shoots", image: "/X/ROR/14.webp" },
-    { title: "Corporate Offsites", image: "/X/HAVEN/HAVEN LIVING ROOM 4.webp" },
+    { title: "Poolside Relaxation", image: "" },
+    { title: "Social Gatherings", image: "" },
+    { title: "Couple Retreats", image: "" },
+    { title: "Celebrations", image: "" },
   ],
-  video: "/X/Magnolia/9.webp",
+  video: {
+    youtubeUrl: "https://www.youtube.com/watch?v=3Aid-re90HE",
+    thumbnail: "",
+    duration: "1:47",
+  },
   faq: [
     {
-      question: "How many guests can the villa accommodate?",
+      question: "How many guests can stay overnight?",
       answer:
-        "Haven can accommodate up to 20 guests for overnight stays across 4 spacious bedrooms. For events and celebrations, up to 100 guests can be hosted across the lawn, pool area, and indoor spaces.",
+        "Haven can accommodate up to 20 guests for an overnight stay across its 4 bedrooms.",
     },
     {
-      question: "Is there a pool?",
+      question: "Can we host large events here?",
       answer:
-        "Yes, Haven features a private pool with a spacious wooden deck for poolside lounging and entertainment.",
+        "Yes, the property supports event gatherings for up to 100 guests with ample outdoor and shared spaces.",
     },
     {
-      question: "What is the Jacuzzi Suite?",
+      question: "Is there a kitchen for our use?",
       answer:
-        "The Jacuzzi Suite is our signature room featuring a glass roof — perfect for stargazing from a private jacuzzi, making it the most romantic room at Haven.",
-    },
-    {
-      question: "Is alcohol permitted?",
-      answer:
-        "Yes, guests can bring their own alcohol. Corkage charges may apply for events.",
-    },
-    {
-      question: "Is there power backup?",
-      answer:
-        "Yes, the property has full generator backup ensuring uninterrupted power throughout your stay or event.",
+        "Absolutely. The villa features a fully functional kitchen equipped for both private use and professional catering support.",
     },
     {
       question: "Are pets allowed?",

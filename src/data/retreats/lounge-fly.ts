@@ -1,218 +1,220 @@
 export const loungeFly = {
   id: "lounge-fly",
   name: "Lounge Fly",
-  type: "PREMIUM LOUNGE RETREAT",
-  location: "[INFERRED] Bangalore City Outskirts",
-  shortDescription:
-    "[INFERRED] A stylish, modern lounge retreat designed for vibrant parties, casual get-togethers, and relaxed weekend stays for up to 30 guests.",
-  description:
-    "[INFERRED] Experience the ultimate party vibe at Lounge Fly. Boasting chic interiors, high-end entertainment systems, and dynamic outdoor spaces, it is the perfect venue for celebrations and exclusive weekend stays.",
-  thumbnail: "/X/Magnolia/VILLA.webp",
-  image: "/X/Magnolia/VILLA.webp",
-  images: [
-    "/X/Magnolia/LIVING ROOM.webp",
-    "/X/Magnolia/BEDROOM1.webp",
-    "/X/Magnolia/FAMILY ROOM.webp",
-    "/X/Magnolia/9.webp",
-    "/X/Magnolia/10.webp",
-  ],
+  type: "LUXURY APARTMENT SUITE · BHARTIYA CITY",
+  location: "Bhartiya City · North Bangalore",
   stats: {
-    stay: "[INFERRED] 12 Guests",
-    events: "[INFERRED] 30 Guests",
-    bhk: "[INFERRED] 3 BHK",
-    villaArea: "[INFERRED] 3000 Sq.Ft Lounge",
-    lawn: "[INFERRED] 1 Party Deck",
+    stay: "4 Guests",
+    events: "20 Guests",
+    bhk: "1 BHK Suite",
+    lawn: "Dual Balcony Views",
+    villaArea: "High-Floor Living",
   },
-  propertyDetails: [
-    {
-      label: "3 Bedrooms",
-      icon: "Bed",
-      description: "[INFERRED] Modern, comfortable bedrooms.",
-    },
-    {
-      label: "3 Bathrooms",
-      icon: "Bath",
-      description: "[INFERRED] Well-appointed bathrooms.",
-    },
-    {
-      label: "1 Kitchen",
-      icon: "ChefHat",
-      description: "[INFERRED] Fully equipped for party prep.",
-    },
-    {
-      label: "Party Lounge",
-      icon: "Sofa",
-      description: "[INFERRED] Spacious indoor entertaining area.",
-    },
-    {
-      label: "Dedicated Staff",
-      icon: "Users",
-      description: "[INFERRED] Host and service staff.",
-    },
-    {
-      label: "Open Deck",
-      icon: "Trees",
-      description: "[INFERRED] Outdoor space for socializing.",
-    },
-    {
-      label: "Modern Architecture",
-      icon: "Home",
-      description: "[INFERRED] Contemporary party design.",
-    },
-    {
-      label: "Daily Housekeeping",
-      icon: "Sparkles",
-      description: "[INFERRED] Cleaning pre/post event.",
-    },
+  description:
+    "Lounge Fly is a luxury 1-bedroom apartment suite located in the heart of Bhartiya City, designed for short stays and private escapes. The 1-bedroom layout combines compact living with elevated, curated lounge-style interiors. With dual balconies, direct access to the mall and Leela Hotel, and city-facing views, the space offers a premium urban stay experience. Designed for comfort and privacy, it suits couples, solo stays, and small groups.",
+  perfectFor: [
+    "Couple Stays",
+    "Short Getaways",
+    "City Escapes",
+    "Solo Travelers",
+    "Boutique Stays",
+  ],
+  categories: ["Luxury Suites", "Urban Retreats", "Apartment Stays"],
+  thumbnail: "",
+  image: "",
+  images: [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
   ],
   amenities: [
     {
-      label: "DJ/Music Setup",
-      description: "[INFERRED] Premium sound system for parties.",
+      label: "Dual Balcony Views",
+      icon: "Sunset",
+      description:
+        "Two private balconies offering panoramic city skyline views and overlooking the Leela Hotel pool area.",
+    },
+    {
+      label: "High-Floor Living",
+      icon: "Maximize",
+      description:
+        "Positioned on an elevated floor, ensuring excellent ventilation and a quiet atmosphere above the city's pulse.",
+    },
+    {
+      label: "Mall & Hotel Access",
+      icon: "Car",
+      description:
+        "Direct proximity and access to Bhartiya Mall and the Leela Hotel for dining, shopping, and entertainment.",
+    },
+    {
+      label: "Air-conditioned Interiors",
+      icon: "Wind",
+      description:
+        "Fully climate-controlled interiors for a seamless and comfortable urban stay experience.",
+    },
+    {
+      label: "Entertainment Systems",
       icon: "Music",
+      description:
+        "Integrated media and sound systems suited for private entertainment and relaxed evenings.",
     },
     {
-      label: "Cocktail Bar Setup",
-      description: "[INFERRED] Dedicated area for mixing drinks.",
-      icon: "GlassWater",
+      label: "Fully Functional Kitchen",
+      icon: "Kitchen",
+      description:
+        "Modern kitchen setup equipped with essential appliances for light catering and guest convenience.",
     },
     {
-      label: "Party Lighting",
-      description: "[INFERRED] Dynamic ambient lighting.",
-      icon: "Sparkles",
+      label: "Outdoor Seating",
+      icon: "Sun",
+      description:
+        "Curated seating on the balconies for morning coffee or sunset views over North Bangalore.",
     },
     {
-      label: "Lounge Seating",
-      description: "[INFERRED] Plush, extensive seating arrangements.",
-      icon: "Sofa",
+      label: "Premium In-room Dining",
+      icon: "Utensils",
+      description:
+        "Access to a wide range of dining options from nearby fine-dining restaurants and hotel outlets.",
+    },
+  ],
+  propertyDetails: [
+    {
+      label: "1-Bedroom Luxury Suite",
+      description:
+        "A compact and stylish apartment layout optimized for solo travelers or small groups of up to 4 guests.",
+      icon: "Bed",
     },
     {
-      label: "Dedicated Service",
-      description: "[INFERRED] Professional on-site staff.",
-      icon: "UserCheck",
-    },
-    {
-      label: "Outdoor Deck",
-      description: "[INFERRED] Perfect for evening socials.",
+      label: "City-Facing Balconies",
+      description:
+        "Direct views of the Leela Hotel pool and the expanding skyline of Bhartiya City.",
       icon: "Sunset",
     },
     {
-      label: "Bonfire & BBQ",
-      description: "[INFERRED] Outdoor grill options.",
-      icon: "Flame",
+      label: "Urban Boutique Vibe",
+      description:
+        "Curated lounge-style interiors that offer a sophisticated alternative to traditional hotel stays.",
+      icon: "Diamond",
     },
     {
-      label: "Wi-Fi included",
-      description: "[INFERRED] High-speed internet access.",
-      icon: "Wifi",
+      label: "Direct Connectivity",
+      description:
+        "Located within a massive integrated city with all urban amenities just a walk away.",
+      icon: "MapPin",
     },
   ],
   services: [
     {
-      title: "Chef & Catering",
-      description: "[INFERRED] Curated party menus and snacks.",
+      title: "Chef on Call",
+      description:
+        "Private chef service can be arranged for curated in-suite meals and small gatherings.",
+      footer: "Available on request. Additional charges apply",
       icon: "ChefHat",
-      footer: "[INFERRED] Available on request. Additional charges apply",
     },
     {
-      title: "Event Decor",
-      description: "[INFERRED] Thematic party setups.",
-      icon: "Sparkles",
-      footer: "[INFERRED] Custom pricing based on requirements",
+      title: "Butler Service",
+      description:
+        "On-site service support available for events or hosted stays to ensure a seamless experience.",
+      footer: "Available on request. Additional charges apply",
+      icon: "User",
     },
     {
-      title: "DJ Services",
-      description: "[INFERRED] Professional DJ and sound setup.",
-      icon: "Music",
-      footer: "[INFERRED] Requires prior booking",
+      title: "Pick-up & Drop",
+      description:
+        "Transport support available on request for airport transfers or city movement.",
+      footer: "Confirmed during booking",
+      icon: "Car",
     },
     {
-      title: "Photography",
-      description: "[INFERRED] Event photography coverage.",
-      icon: "Camera",
-      footer: "[INFERRED] Available in multiple packages",
+      title: "Event Setup Support",
+      description:
+        "Assistance with personalized decor and arrangements for small, intimate celebrations.",
+      footer: "Available on request",
+      icon: "PartyPopper",
     },
-  ],
-  categories: ["Villas", "Event Spaces"],
-  perfectFor: [
-    "Birthday Parties",
-    "Bachelors Parties",
-    "Weekend Bashes",
-    "Friends Getaways",
   ],
   activities: [
-    { title: "[INFERRED] DJ Night", image: "/X/Magnolia/LIVING ROOM.webp" },
-    { title: "[INFERRED] Mixology", image: "/X/Magnolia/9.webp" },
-    {
-      title: "[INFERRED] Board Games",
-      image: "/X/Magnolia/12.webp",
-    },
-    { title: "[INFERRED] BBQ Dinner", image: "/X/Magnolia/13.webp" },
+    { title: "In-room Dining", image: "" },
+    { title: "City Sunset Views", image: "" },
+    { title: "Mall Exploration", image: "" },
+    { title: "Boutique Stays", image: "" },
   ],
   spaces: [
-    {
-      name: "[INFERRED] Main Lounge",
-      image: "/X/Magnolia/LIVING ROOM.webp",
-    },
-    { name: "[INFERRED] Party Deck", image: "/X/Magnolia/VILLA.webp" },
-    { name: "[INFERRED] Bar Area", image: "/X/Magnolia/VILLA2.webp" },
-    { name: "[INFERRED] Master Suite", image: "/X/Magnolia/BEDROOM1.webp" },
+    { name: "Luxury Lounge", image: "" },
+    { name: "Master Suite", image: "" },
+    { name: "City Balcony", image: "" },
+    { name: "Kitchenette", image: "" },
   ],
-
   pricing: {
     stay: {
       title: "Stay Experience",
       subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
       packages: [
         {
-          label: "Starting From",
-          price: "[INFERRED] ₹45,000 + taxes",
+          label: "Up to 2 PAX",
+          sublabel: "≈ ₹6,250 / head",
+          price: "₹12,500 + taxes",
+        },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
+      ],
+      features: [
+        "Full suite access",
+        "Dual balcony access",
+        "Urban stay experience",
+      ],
+    },
+    event: {
+      title: "Event Experience",
+      subtitle: "8 hours (2 PM · 12 AM)",
+      packages: [
+        {
+          label: "Up to 20 PAX",
+          sublabel: "≈ ₹3,000 / head",
+          price: "₹59,999 + taxes",
         },
       ],
-      features: ["Venue access", "Overnight stay", "Sound system access"],
+      features: [
+        "Private suite for events",
+        "Mall proximity",
+        "Basic event support",
+      ],
     },
   },
   locationDetails: {
-    mapImage: "/X/Magnolia/VILLA.webp",
-    address: "[INFERRED] Lounge Fly Location, Bangalore",
-    distance: "[INFERRED] Within city limits",
-    nearby: [{ label: "CITY CENTER", distance: "30 mins" }],
+    mapImage: "",
+    address:
+      "Bhartiya City, Thanisandra Main Road, Bangalore (Near Leela Hotel)",
+    distance: "Approximately 45 minutes from KIAL Airport",
+    nearby: [
+      { label: "BHARTIYA MALL", distance: "Walking distance" },
+      { label: "LEELA HOTEL", distance: "Within premises" },
+      { label: "PVR CINEMAS", distance: "Walking distance" },
+      { label: "BREWERIES & RESTAURANTS", distance: "Within complex" },
+    ],
   },
-  video: "/X/Magnolia/VILLA.webp",
+  video: {
+    youtubeUrl: "https://www.youtube.com/watch?v=THDUAhzF_Sg",
+    thumbnail: "",
+    duration: "1:29",
+  },
   faq: [
     {
-      question: "Can we hire an outside DJ?",
+      question: "Is the pool private to the suite?",
       answer:
-        "[INFERRED] Yes, but please ensure volume limits are respected post 10 PM outdoors.",
+        "The suite overlooks the Leela Hotel pool. Guests may have access to the city's residential pool facilities nearby; please confirm access details during booking.",
     },
     {
-      question: "Is alcohol permitted?",
+      question: "Can we host large parties here?",
       answer:
-        "[INFERRED] You may bring your own beverages for private consumption inside the retreat.",
+        "Lounge Fly is designed for intimate gatherings of up to 20 guests. For larger events, we recommend our standalone villa properties.",
     },
     {
-      question: "Are bachelor parties allowed?",
+      question: "Is there direct access to the mall?",
       answer:
-        "[INFERRED] Yes, Lounge Fly is perfectly suited for lively parties and gatherings.",
-    },
-    {
-      question: "Is outside catering allowed?",
-      answer:
-        "[INFERRED] Yes, outside food is allowed with an added clean-up charge if required.",
-    },
-    {
-      question: "Do you provide BBQ equipment?",
-      answer:
-        "[INFERRED] Yes, a BBQ setup can be arranged on the outdoor deck upon request for an additional charge.",
-    },
-    {
-      question: "Is there a pool?",
-      answer:
-        "[INFERRED] Lounge Fly primarily features premium party spaces and a large deck.",
-    },
-    {
-      question: "Are the bedrooms air-conditioned?",
-      answer: "[INFERRED] Yes, all bedrooms are air-conditioned.",
+        "Yes, Lounge Fly is located within the Bhartiya City integrated development, offering direct and easy access to the Bhartiya Mall for shopping and dining.",
     },
   ],
 };

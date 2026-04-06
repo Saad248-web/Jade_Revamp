@@ -1,169 +1,152 @@
 export const lemonTree = {
   id: "lemon-tree",
   name: "Lemon Tree",
-  type: "HILL-VIEW FARMHOUSE RETREAT",
-  location: "[INFERRED] Nandi Hills Area",
-  shortDescription:
-    "[INFERRED] A scenic 3BHK farmhouse retreat offering lush hill views, ideal for weekend getaways and small events up to 40 guests.",
-  description:
-    "[INFERRED] Surrounded by nature, Lemon Tree is a tranquil 3BHK farmhouse that provides a perfect escape from the city. Featuring expansive lawns and panoramic hill views, it is designed for memorable weekend stays for up to 14 guests and intimate events for up to 40 guests.",
-  thumbnail: "/X/Tranquil Woods/1.webp",
-  image: "/X/Tranquil Woods/1.webp",
-  images: [
-    "/X/Tranquil Woods/2.webp",
-    "/X/Tranquil Woods/3.webp",
-    "/X/Tranquil Woods/4.webp",
-    "/X/Tranquil Woods/5.webp",
-    "/X/Tranquil Woods/6.webp",
-  ],
+  type: "LEMON ORCHARD RETREAT · PRIVATE ROOFTOP POOL",
+  location: "Sadahalli · North Bangalore",
   stats: {
-    stay: "14 Guests",
-    events: "40 Guests",
+    stay: "25 Guests",
+    events: "50 Guests",
     bhk: "3 BHK",
-    villaArea: "[INFERRED] 4500 Sq.Ft Farmhouse",
-    lawn: "[INFERRED] Large View Lawn",
+    lawn: "3-Acre Orchard Property",
+    villaArea: "Multipurpose Hall",
   },
-  propertyDetails: [
-    {
-      label: "3 Bedrooms",
-      icon: "Bed",
-      description: "[INFERRED] Cozy hill-view bedrooms.",
-    },
-    {
-      label: "3 Bathrooms",
-      icon: "Bath",
-      description: "[INFERRED] Attached modern bathrooms.",
-    },
-    {
-      label: "1 Kitchen",
-      icon: "ChefHat",
-      description: "[INFERRED] Fully equipped kitchen.",
-    },
-    {
-      label: "Open Living Area",
-      icon: "Sofa",
-      description: "[INFERRED] Spacious lounge with views.",
-    },
-    {
-      label: "Dedicated Staff",
-      icon: "Users",
-      description: "[INFERRED] On-site caretaker and staff.",
-    },
-    {
-      label: "Scenic Lawn",
-      icon: "Trees",
-      description: "[INFERRED] Expansive outdoor green space.",
-    },
-    {
-      label: "Farmhouse Architecture",
-      icon: "Home",
-      description: "[INFERRED] Rustic yet luxurious design.",
-    },
-    {
-      label: "Daily Housekeeping",
-      icon: "Sparkles",
-      description: "[INFERRED] Regular cleaning services included.",
-    },
+  description:
+    "Lemon Tree is a nature retreat set within a lemon orchard, designed for relaxed stays and group gatherings. The 3-bedroom villa combines indoor comfort with expansive outdoor spaces, creating a countryside experience within close reach of the city. With a private rooftop pool, multipurpose hall, and orchard setting, the property supports both stays and small events. Surrounded by greenery and open views, it offers a quiet environment for extended stays and group retreats.",
+  perfectFor: [
+    "Group Getaways",
+    "Nature Stays",
+    "Family Celebrations",
+    "Staycations",
+    "Team Outings",
+  ],
+  categories: ["Nature Retreats", "Orchard Properties", "Group Escapes"],
+  thumbnail: "",
+  image: "",
+  images: [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
   ],
   amenities: [
     {
-      label: "Hill Views",
-      description: "[INFERRED] Beautiful panoramic views of Nandi Hills.",
-      icon: "Mountain",
+      label: "Rooftop Private Pool",
+      icon: "Waves",
+      description:
+        "An exclusive swimming pool located on the rooftop, offering elevated views of the countryside and complete privacy.",
     },
     {
-      label: "Intimate Events",
-      description: "[INFERRED] Perfect setting for up to 40 guests.",
-      icon: "PartyPopper",
+      label: "3-Acre Orchard",
+      icon: "Trees",
+      description:
+        "The property is set within a massive lemon grove, providing a dense green canopy and a true countryside vibe.",
     },
     {
-      label: "Outdoor Dining",
-      description: "[INFERRED] Alfresco dining setup amidst nature.",
-      icon: "Utensils",
+      label: "Multipurpose Hall",
+      icon: "Home",
+      description:
+        "A large indoor hall combined with a gazebo lounge, ideal for workshops, group activities, or social gatherings.",
     },
     {
-      label: "Private Garden",
-      description: "[INFERRED] Exquisitely maintained private garden area.",
-      icon: "Leaf",
+      label: "Air-conditioned Interiors",
+      icon: "Wind",
+      description:
+        "All bedrooms are fully air-conditioned, ensuring comfort even in the midst of a nature retreat.",
     },
     {
-      label: "Dedicated Service",
-      description: "[INFERRED] Professional on-site staff for assistance.",
-      icon: "UserCheck",
+      label: "Jacuzzi",
+      icon: "Waves",
+      description:
+        "On-site individual jacuzzi available for guest relaxation and hydrotherapy.",
     },
     {
-      label: "Entertainment Setup",
-      description: "[INFERRED] Sound system and TV available.",
+      label: "Outdoor Seating",
+      icon: "Sun",
+      description:
+        "Multiple landscaped seating zones across the orchard and poolside for al fresco experiences.",
+    },
+    {
+      label: "Entertainment Systems",
       icon: "Music",
+      description:
+        "Full audio-visual setup available for movie nights, meetings, or social gatherings.",
     },
     {
-      label: "Bonfire & BBQ",
-      description: "[INFERRED] Enjoy evenings with a customized bonfire/BBQ.",
-      icon: "Flame",
+      label: "Fully Functional Kitchen",
+      icon: "Kitchen",
+      description:
+        "Equipped kitchen suitable for self-catering or for use by a private chef on demand.",
+    },
+  ],
+  propertyDetails: [
+    {
+      label: "3-Bedroom Villa",
+      description:
+        "A compact and efficient villa layout designed specifically for group stays and family retreats.",
+      icon: "Bed",
     },
     {
-      label: "Pet Friendly",
-      description: "[INFERRED] Wide open spaces perfect for pets to roam.",
-      icon: "Dog",
+      label: "Rooftop Private Pool",
+      description:
+        "Private pool located on the rooftop for elevated views and relaxation.",
+      icon: "Waves",
+    },
+    {
+      label: "3-Acre Orchard Property",
+      description:
+        "Set within a large lemon grove with dense greenery and a feeling of total seclusion.",
+      icon: "Trees",
+    },
+    {
+      label: "Countryside Ambience",
+      description:
+        "Offers a quiet, nature-led environment that feels like a getaway while remaining close to the city.",
+      icon: "Mountain",
     },
   ],
   services: [
     {
-      title: "Chef & Catering",
+      title: "Chef on Call",
       description:
-        "[INFERRED] Curated menus featuring local farm-fresh ingredients.",
+        "Private chef service available for curated orchard-style meals and specialized catering.",
+      footer: "Available on request. Additional charges apply",
       icon: "ChefHat",
-      footer: "[INFERRED] Available on request. Additional charges apply",
     },
     {
-      title: "Event Setup",
+      title: "Butler Service",
       description:
-        "[INFERRED] Beautiful rustic decor arrangements for your celebrations.",
-      icon: "Sparkles",
-      footer: "[INFERRED] Custom pricing based on requirements",
+        "On-site service support to handle guest logistics, housekeeping, and personalized assistance.",
+      footer: "Available on request. Additional charges apply",
+      icon: "User",
     },
     {
-      title: "Bonfire Evenings",
+      title: "Pick-up & Drop",
       description:
-        "[INFERRED] Cozy fire arrangements under the starry night sky.",
-      icon: "Flame",
-      footer: "[INFERRED] Requires prior booking",
+        "Transport support available for guest transfers to and from the property.",
+      footer: "Confirmed during booking",
+      icon: "Car",
     },
     {
-      title: "Photography",
+      title: "Event Setup Support",
       description:
-        "[INFERRED] Capture the natural beauty and memorable moments.",
-      icon: "Camera",
-      footer: "[INFERRED] Available in multiple packages",
+        "Assistance with personalized decor and event arrangements for small gatherings and celebrations.",
+      footer: "Available on request",
+      icon: "PartyPopper",
     },
-  ],
-  categories: ["Villas", "Pet friendly"],
-  perfectFor: [
-    "Weekend Getaways",
-    "Nature Escapes",
-    "Small Celebrations",
-    "Family Retreats",
   ],
   activities: [
-    {
-      title: "[INFERRED] Nature Treks",
-      image: "/X/Tranquil Woods/10.webp",
-    },
-    { title: "[INFERRED] BBQ Setup", image: "/X/Tranquil Woods/11.webp" },
-    {
-      title: "[INFERRED] Star Gazing",
-      image: "/X/Tranquil Woods/12.webp",
-    },
-    { title: "[INFERRED] Lawn Games", image: "/X/Tranquil Woods/13.webp" },
+    { title: "Orchard Walks", image: "" },
+    { title: "Rooftop Dips", image: "" },
+    { title: "Team Outings", image: "" },
+    { title: "Nature Stays", image: "" },
   ],
   spaces: [
-    {
-      name: "[INFERRED] Hill View Lawn",
-      image: "/X/Tranquil Woods/2.webp",
-    },
-    { name: "[INFERRED] Farmhouse Porch", image: "/X/Tranquil Woods/4.webp" },
-    { name: "[INFERRED] Living Room", image: "/X/Tranquil Woods/24.webp" },
-    { name: "[INFERRED] Garden Path", image: "/X/Tranquil Woods/7.webp" },
+    { name: "Courtyard", image: "" },
+    { name: "Rooftop Pool", image: "" },
+    { name: "Multipurpose Hall", image: "" },
+    { name: "Lemon Grove", image: "" },
   ],
   pricing: {
     stay: {
@@ -171,59 +154,68 @@ export const lemonTree = {
       subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
       packages: [
         {
-          label: "Starting From",
-          price: "[INFERRED] ₹42,000 + taxes",
+          label: "Up to 10 PAX",
+          sublabel: "≈ ₹2,700 / head",
+          price: "₹26,999 + taxes",
         },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
       ],
       features: [
-        "Venue access",
-        "Overnight farmhouse stay",
-        "Dedicated Caretaker",
+        "Orchard estate access",
+        "Overnight villa stay",
+        "Rooftop pool access",
       ],
+    },
+    event: {
+      title: "Event Experience",
+      subtitle: "8 hours (2 PM · 12 AM)",
+      packages: [
+        {
+          label: "Up to 20 PAX",
+          sublabel: "≈ ₹1,350 / head",
+          price: "₹26,999 + taxes",
+        },
+        {
+          label: "Up to 30 PAX",
+          sublabel: "≈ ₹1,500 / head",
+          price: "₹45,000 + taxes",
+        },
+        { label: "Additional Guest", price: "₹1,099 + taxes" },
+      ],
+      features: ["Private venue access", "Basic event support"],
     },
   },
   locationDetails: {
-    mapImage: "/X/Tranquil Woods/1.webp",
-    address: "[INFERRED] Lemon Tree, near Nandi Hills, Bangalore",
-    distance: "[INFERRED] Approx 1 hour from the city",
-    nearby: [{ label: "NANDI HILLS", distance: "20 mins" }],
+    mapImage: "",
+    address: "735, Jade Garden Phase II, Sadahalli, Bangalore — 562110",
+    distance: "Approximately 60 minutes from Bangalore City Center",
+    nearby: [
+      { label: "HONNASANDRA LAKE", distance: "10 mins away" },
+      { label: "EXHIBITION CENTRE", distance: "20 mins away" },
+      { label: "SHIVAGANGE HILLS", distance: "30 mins away" },
+      { label: "HULIYURDURGA", distance: "40 mins away" },
+    ],
   },
-  video: "/X/Tranquil Woods/1.webp",
+  video: {
+    youtubeUrl: "https://www.youtube.com/watch?v=ZJwPuw4evSM",
+    thumbnail: "",
+    duration: "1:28",
+  },
   faq: [
     {
-      question: "Is the property wheelchair accessible?",
+      question: "How many guests can stay overnight?",
       answer:
-        "[INFERRED] Yes, the ground floor of the farmhouse and the main lawns are easily accessible.",
+        "Lemon Tree can accommodate up to 25 guests for an overnight stay across its 3 bedrooms and common areas.",
     },
     {
-      question: "Can we host a loud party?",
+      question: "Is the pool private?",
       answer:
-        "[INFERRED] As it is a serene nature retreat, loud music is restricted outdoors past 10 PM. Indoor music is allowed.",
+        "Yes, the rooftop pool is exclusively for your group's use and offers a high level of privacy.",
     },
     {
-      question: "Is outside catering allowed?",
+      question: "Can we book it for small events?",
       answer:
-        "[INFERRED] Yes, for events up to 40 guests, outside catering is permitted with prior management approval.",
-    },
-    {
-      question: "Are pets allowed?",
-      answer:
-        "[INFERRED] Yes, Lemon Tree is a pet-friendly property with ample open space for them to roam.",
-    },
-    {
-      question: "Do you provide BBQ equipment?",
-      answer:
-        "[INFERRED] Yes, a BBQ setup and bonfire can be arranged upon request for an additional charge.",
-    },
-    {
-      question: "Is there a swimming pool?",
-      answer:
-        "[INFERRED] No, this specific farmhouse focuses on expansive lawns and hill views rather than a pool.",
-    },
-    {
-      question: "Are the bedrooms air-conditioned?",
-      answer:
-        "[INFERRED] Yes, all 3 bedrooms feature air-conditioning for your continuous comfort.",
+        "Absolutely. The multipurpose hall and expansive orchard grounds support gatherings of up to 50 guests.",
     },
   ],
 };

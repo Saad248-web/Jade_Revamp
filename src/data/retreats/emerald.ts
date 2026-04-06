@@ -1,163 +1,145 @@
 export const emerald = {
   id: "emerald",
   name: "Emerald",
-  type: "GLASS HOUSE · COURTYARD RETREAT · PARTY RETREAT",
-  location: "Near Embassy Riding School · North Bengaluru",
+  type: "GLASSHOUSE COURTYARD RETREAT",
+  location: "Sulikunte · Near Embassy Riding School",
   stats: {
     stay: "10 Guests",
     events: "30 Guests",
     bhk: "2 BHK",
     lawn: "3,000 sqft",
-    villaArea: "1,800 sqft",
+    villaArea: "Boutique Villa",
   },
   description:
     "Emerald is a private pool villa designed as a traditional glasshouse around a central courtyard. This 2-bedroom villa combines indoor transparency with lush greenery, creating a setting suited for small group stays, intimate gatherings, and weekend getaways near Bangalore. With a private pool featuring an 8 ft waterfall, garden sit-outs, and courtyard living, the villa balances built space with open areas. Located 5 minutes from Embassy Riding School and 35 minutes from Hebbal, it offers accessibility with complete privacy.",
-  perfectFor: ["Parties", "Staycations", "Celebrations", "Pre-wedding"],
-  categories: ["Weddings", "Corporate Retreats", "Pet friendly"],
-  image: "/X/ROR/10.webp",
+  perfectFor: [
+    "Private Gatherings",
+    "Weekend Getaways",
+    "Couple Retreats",
+    "Staycations",
+    "Workations",
+    "Small Celebrations",
+  ],
+  categories: ["Luxury Retreats", "Private Events", "Staycations"],
+  image: "",
   images: [
-    "/X/ROR/6.webp",
-    "/X/ROR/7.webp",
-    "/X/ROR/8.webp",
-    "/X/ROR/9.webp",
-    "/X/ROR/10.webp",
-    "/X/ROR/11.webp",
-    "/X/ROR/12.webp",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
   ],
   amenities: [
     {
       label: "8 ft Waterfall Pool",
       icon: "Waves",
       description:
-        "A private pool with an 8-foot cascading waterfall — a striking centrepiece designed for immersive relaxation and pool parties.",
+        "A private swimming pool featuring a signature 8-foot cascading waterfall, designed for relaxation and aesthetic appeal.",
     },
     {
-      label: "Central Courtyard",
-      icon: "LayoutGrid",
-      description:
-        "Open-to-sky central courtyard with a heritage swing, connecting all living spaces with natural light and greenery.",
-    },
-    {
-      label: "Garden Sit-out",
-      icon: "Leaf",
-      description:
-        "Lush garden sit-out spaces for outdoor lounging, morning coffee, and alfresco dining surrounded by nature.",
-    },
-    {
-      label: "Glasshouse Living",
+      label: "Central Courtyard with Swing",
       icon: "Sun",
       description:
-        "Floor-to-ceiling glass walls that merge indoor luxury with outdoor landscapes — the defining feature of Emerald.",
-    },
-    {
-      label: "Wifi",
-      icon: "Wifi",
-      description:
-        "High-speed wireless internet throughout the villa and poolside area.",
-    },
-    {
-      label: "Parking",
-      icon: "Car",
-      description:
-        "Secure on-site parking with direct access to the villa entrance.",
+        "A central open-to-sky courtyard with a swing that merges indoor luxury with surrounding natural elements.",
     },
     {
       label: "Air-conditioned Bedrooms",
       icon: "Wind",
       description:
-        "Both bedrooms are fully air-conditioned with premium bedding for a restful stay.",
+        "Premium air-conditioned bedrooms featuring floor-to-ceiling glass walls.",
     },
     {
-      label: "Music System",
+      label: "Garden Sit-out",
+      icon: "Leaf",
+      description:
+        "Lush outdoor seating areas perfectly integrated into the property's greenery.",
+    },
+    {
+      label: "Bonfire Setup",
+      icon: "Flame",
+      description: "Dedicated bonfire zone for cozy evening gatherings.",
+    },
+    {
+      label: "Barbecue Setup",
+      icon: "Utensils",
+      description:
+        "Full barbecue equipment available for curated outdoor dining.",
+    },
+    {
+      label: "Entertainment Systems",
       icon: "Music",
       description:
-        "Built-in sound system for poolside ambiance and party entertainment — music allowed until 10 PM outdoors.",
+        "High-fidelity sound systems for indoor entertainment and gatherings.",
+    },
+    {
+      label: "Fully Functional Kitchen",
+      icon: "Kitchen",
+      description:
+        "Equipped kitchen for guest use or for professional chef service.",
     },
   ],
   spaces: [
-    { name: "Waterfall Pool", image: "/X/ROR/6.webp" },
-    { name: "Glass House Interior", image: "/X/ROR/7.webp" },
-    { name: "Central Courtyard", image: "/X/ROR/8.webp" },
-    { name: "Garden Sit-out", image: "/X/ROR/9.webp" },
+    { name: "Waterfall Pool", image: "" },
+    { name: "Glass House Interior", image: "" },
+    { name: "Central Courtyard", image: "" },
+    { name: "Garden Sit-out", image: "" },
   ],
   services: [
     {
       title: "Chef on Call",
       description:
-        "A private chef can be arranged for pool parties, brunches, and curated dining experiences — from BBQ nights to candlelight dinners.",
+        "A private chef can be arranged for pool parties, brunches, and curated dining experiences.",
       footer: "Available on request. Additional charges apply",
       icon: "ChefHat",
     },
     {
       title: "Butler Service",
       description:
-        "Dedicated on-site service support to manage hosted events and ensure seamless hospitality.",
+        "Dedicated on-site support to manage your stay and ensure a premium experience.",
       footer: "Available on request. Additional charges apply",
       icon: "User",
     },
     {
-      title: "Housekeeping",
+      title: "Pick-up & Drop",
       description:
-        "Daily housekeeping services during your stay to maintain the villa, pool area, and common spaces.",
+        "Transport assistance available for guest arrivals and departures.",
       footer: "Service scope to be confirmed during booking",
-      icon: "SprayCan",
+      icon: "Car",
     },
     {
-      title: "Concierge Assistance",
+      title: "Event Setup Support",
       description:
-        "Assistance with planning activities, nearby excursions, transportation, and logistics around your stay.",
+        "Assistance with personalised decor and arrangements for social events and celebrations.",
       footer: "Available on request",
-      icon: "Phone",
+      icon: "PartyPopper",
     },
   ],
   propertyDetails: [
     {
       label: "Traditional Glasshouse Design",
       description:
-        "A unique architectural style featuring floor-to-ceiling glass walls that seamlessly blend indoor living with the surrounding lush greenery.",
-      icon: "Diamond",
+        "Floor-to-ceiling glass walls that seamlessly blend indoor living with the surrounding lush greenery.",
+      icon: "Home",
     },
     {
-      label: "Central Courtyard with Swing",
+      label: "Central Courtyard",
       description:
-        "An open-to-sky courtyard at the heart of the villa, featuring a heritage swing and connecting all living spaces through natural light.",
-      icon: "Diamond",
+        "An open-to-sky courtyard at the heart of the villa, connecting all living spaces through natural light.",
+      icon: "Sun",
     },
     {
       label: "8 ft Waterfall Private Pool",
       description:
-        "A private pool with a dramatic 8-foot cascading waterfall — designed for immersive relaxation and unforgettable pool parties.",
-      icon: "Diamond",
+        "A private pool with a dramatic 8-foot cascading waterfall — a signature feature of the Emerald retreat.",
+      icon: "Waves",
     },
     {
-      label: "Prime Location",
+      label: "Boutique 2-BHK Villa",
       description:
-        "Just 5 minutes from Embassy Riding School and 35 minutes from Hebbal — combining easy accessibility with complete seclusion.",
-      icon: "Diamond",
-    },
-    {
-      label: "Garden Sit-out Spaces",
-      description:
-        "Multiple outdoor seating areas nestled within lush gardens — ideal for lounging, reading, and alfresco dining.",
-      icon: "Diamond",
-    },
-    {
-      label: "Indoor-Outdoor Flow",
-      description:
-        "The glasshouse design creates a transparent living experience where every room opens to greenery, pool views, or the courtyard.",
-      icon: "Diamond",
-    },
-    {
-      label: "2 BHK Private Villa",
-      description:
-        "Two spacious bedrooms with premium furnishings and air-conditioning, accommodating up to 10 guests comfortably.",
-      icon: "Diamond",
-    },
-    {
-      label: "Pet-friendly Property",
-      description:
-        "The villa welcomes pets with ample garden space for them to explore safely under supervision.",
-      icon: "Diamond",
+        "Two spacious bedrooms with premium furnishings, ideal for up to 10 guests.",
+      icon: "Bed",
     },
   ],
   pricing: {
@@ -166,11 +148,11 @@ export const emerald = {
       subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
       packages: [
         {
-          label: "Per Villa (2 PAX)",
-          sublabel: "≈ ₹10,000 / head",
-          price: "₹20,000 + taxes",
+          label: "Up to 12 PAX",
+          sublabel: "≈ ₹3,625 / head",
+          price: "₹43,500 + taxes",
         },
-        { label: "Additional Guest", price: "₹2,500 + taxes" },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
       ],
       features: [
         "Private pool access",
@@ -179,77 +161,56 @@ export const emerald = {
       ],
     },
     event: {
-      title: "Party Rental",
-      subtitle: "12 hours (Selectable between 10 AM and 10 PM)",
+      title: "Event Experience",
+      subtitle: "8 hours (2 PM · 12 AM)",
       packages: [
         {
-          label: "Base Package (up to 15 PAX)",
-          sublabel: "≈ ₹4,333/head",
-          price: "₹65,000 + taxes",
+          label: "Up to 30 PAX",
+          sublabel: "≈ ₹883 / head",
+          price: "₹26,500 + taxes",
         },
-        { label: "Additional Guest", price: "₹3,000 + taxes" },
+        { label: "Additional Guest", price: "₹999 + taxes" },
       ],
-      features: [
-        "Pool access",
-        "Garden access",
-        "Music system",
-        "Courtyard access",
-      ],
+      features: ["Private venue access", "Complimentary high tea"],
     },
   },
   locationDetails: {
-    mapImage: "/X/Magnolia/VILLA2.webp",
-    address: "Emerald, Near Embassy Riding School, North Bengaluru",
-    distance: "Approximately 35 minutes from Hebbal, Bangalore",
+    mapImage: "",
+    address:
+      "Emerald, Milk Dairy Circle, Sulikunte, Kundana, Bengaluru, Karnataka 562110",
+    distance: "Approximately 35 minutes from Hebbal",
     nearby: [
-      { label: "EMBASSY RIDING SCHOOL", distance: "5 min away" },
-      { label: "AIRPORT", distance: "30 km away" },
-      { label: "HEBBAL", distance: "35 min away" },
-      { label: "HIGHWAY", distance: "5 km away" },
+      { label: "EMBASSY RIDING SCHOOL", distance: "5 mins away" },
+      { label: "AIRPORT", distance: "45 mins away" },
+      { label: "NANDI HILLS", distance: "1 hour away" },
     ],
   },
   activities: [
-    { title: "Pool Parties", image: "/X/Tranquil Woods/10.webp" },
-    { title: "Romantic Stays", image: "/X/Magnolia/9.webp" },
-    { title: "Pre-wedding Shoots", image: "/X/ROR/11.webp" },
-    { title: "Weekend Getaways", image: "/X/ROR/12.webp" },
+    { title: "Breakfast at Patio", image: "" },
+    { title: "Bonfire Evening", image: "" },
+    { title: "High Tea", image: "" },
+    { title: "Multi-cuisine Dining", image: "" },
   ],
-  video: "/X/Magnolia/9.webp",
+  video: {
+    youtubeUrl: "https://www.youtube.com/watch?v=mxoLej0IqmY",
+    thumbnail: "",
+    duration: "1:18",
+  },
   faq: [
     {
-      question: "How many guests can the villa accommodate?",
+      question: "Is the villa pet-friendly?",
       answer:
-        "Emerald can accommodate up to 10 guests for an overnight stay across 2 bedrooms. For events and parties, up to 30 guests can be hosted.",
+        "Yes, Emerald is a pet-friendly property with enclosed garden spaces for your furry friends.",
     },
     {
-      question: "Is there a pool?",
+      question: "What is the pool depth?",
       answer:
-        "Yes, the villa features a private pool with a dramatic 8-foot cascading waterfall — one of the signature features of Emerald.",
+        "The pool is approximately 4 ft deep. No lifeguard is provided — we recommend supervision at all times.",
     },
     {
-      question: "Is music allowed?",
+      question: "Is catering available?",
       answer:
-        "Yes, music is allowed until 10 PM in outdoor areas. After 10 PM, the built-in indoor sound system can be used at a reasonable volume.",
-    },
-    {
-      question: "Is food included?",
-      answer:
-        "Complimentary breakfast is included with overnight stays. Additional meals can be ordered from our in-house menu or prepared by a private chef on request.",
-    },
-    {
-      question: "Are pets allowed?",
-      answer:
-        "Yes, Emerald is a pet-friendly property with ample garden space. We request that pets are supervised at all times.",
-    },
-    {
-      question: "What is the check-in and check-out time?",
-      answer:
-        "Standard check-in is at 1:00 PM and check-out is at 11:00 AM. Early check-in or late check-out is subject to availability.",
-    },
-    {
-      question: "How far is Emerald from the city?",
-      answer:
-        "Emerald is approximately 35 minutes from Hebbal and 5 minutes from Embassy Riding School, making it easily accessible while maintaining complete privacy.",
+        "Yes, catering can be arranged on request through our chef on call service.",
     },
   ],
 };

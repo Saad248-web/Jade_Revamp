@@ -1,165 +1,160 @@
 export const jade735 = {
   id: "jade-735",
   name: "Jade 735",
-  type: "PRIVATE POOL VILLA RETREAT",
-  location: "Devanahalli · Bangalore",
-  shortDescription:
-    "A luxurious 4BHK retreat with a private pool, ideal for intimate gatherings and private escapes.",
-  description:
-    "A luxurious 4BHK retreat with a private pool, ideal for intimate gatherings and private escapes.",
-  thumbnail: "/X/Jade 735/Hero.webp",
-  image: "/X/Jade 735/Hero.webp",
-  images: [
-    "/X/Jade 735/1-x.webp",
-    "/X/Jade 735/12.webp",
-    "/X/Jade 735/13.webp",
-    "/X/Jade 735/14.webp",
-    "/X/Jade 735/16.webp",
-  ],
+  type: "PRIVATE BOUTIQUE VILLA · EXPERIENTIAL RETREAT",
+  location: "Sadahalli · North Bangalore",
   stats: {
-    stay: "10 Guests",
-    events: "60 Guests",
-    bhk: "4 BHK",
-    villaArea: "3500 Sq.Ft Villa",
-    lawn: "2 Lawns",
+    stay: "20 Guests",
+    events: "30 Guests",
+    bhk: "4+1 BHK",
+    lawn: "Private Gazebo Lounge",
+    villaArea: "10ft Waterfall Pool",
   },
-  propertyDetails: [
-    {
-      label: "4 Bedrooms",
-      icon: "Bed",
-      description: "Spacious luxury bedrooms.",
-    },
-    {
-      label: "4 Bathrooms",
-      icon: "Bath",
-      description: "En-suite modern bathrooms.",
-    },
-    {
-      label: "1 Kitchen",
-      icon: "ChefHat",
-      description: "Fully equipped kitchen.",
-    },
-    {
-      label: "3 Living Rooms",
-      icon: "Sofa",
-      description: "Comfortable lounge areas.",
-    },
-    {
-      label: "Dedicated Staff",
-      icon: "Users",
-      description: "On-site staff assistance.",
-    },
-    {
-      label: "2 Lawns",
-      icon: "Trees",
-      description: "Spacious outdoor lawns.",
-    },
-    {
-      label: "3500 Sq.Ft Villa",
-      icon: "Maximize",
-      description: "Large layout.",
-    },
-    {
-      label: "Daily Housekeeping",
-      icon: "Sparkles",
-      description: "Cleaning services.",
-    },
+  description:
+    "Jade 735 is a private boutique villa designed as a personal retreat within a resort-like setting. The 4+1 bedroom layout combines curated interiors with multiple experiential zones, creating a space suited for both stays and hosted gatherings. Featuring a private pool with a 10 ft waterfall, jacuzzi lounge, gazebo seating, and multiple indoor-outdoor zones, the property offers a layered experience across spaces.",
+  perfectFor: [
+    "Private Celebrations",
+    "Boutique Retreats",
+    "Social Stays",
+    "Staycations",
+    "Intimate Gatherings",
+  ],
+  categories: ["Boutique Villas", "Luxury Retreats", "Experiential Stays"],
+  thumbnail: "",
+  image: "",
+  images: [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
   ],
   amenities: [
     {
-      label: "Intimate Gatherings",
-      description: "Perfect setting for small celebrations.",
-      icon: "Users",
+      label: "Waterfall Pool",
+      icon: "Waves",
+      description:
+        "A private swimming pool featuring a signature 10 ft cascading waterfall for a tranquil and aesthetic experience.",
     },
     {
-      label: "Custom Decor",
-      description: "Personalized event arrangements.",
-      icon: "Sparkles",
+      label: "6-Seater Jacuzzi",
+      icon: "Waves",
+      description:
+        "A premium 6-seater jacuzzi lounge available on request for ultimate relaxation.",
     },
     {
-      label: "Catering & Bar",
-      description: "Premium food and beverage options.",
+      label: "Private Gazebo Lounge",
+      icon: "Sun",
+      description:
+        "An outdoor gazebo seating area perfect for morning coffees or evening conversations amidst nature.",
+    },
+    {
+      label: "Air-conditioned Interiors",
+      icon: "Wind",
+      description:
+        "Fully climate-controlled 4+1 bedroom setup with modern, curated interior design.",
+    },
+    {
+      label: "Entertainment Systems",
+      icon: "Music",
+      description:
+        "High-fidelity sound and media systems integrated throughout the living and pool areas.",
+    },
+    {
+      label: "Bonfire Setup",
+      icon: "Flame",
+      description:
+        "Dedicated bonfire zone for cozy evening gatherings and group experiences.",
+    },
+    {
+      label: "Barbecue Setup",
       icon: "Utensils",
+      description:
+        "Professional barbecue equipment available for curated poolside dining.",
     },
     {
-      label: "Swimming Pool",
-      description: "Private temperature-controlled pool.",
+      label: "Fully Functional Kitchen",
+      icon: "Kitchen",
+      description:
+        "Modern kitchen equipped with all necessary appliances for catering and guest use.",
+    },
+  ],
+  propertyDetails: [
+    {
+      label: "4+1 Bedroom Private Villa",
+      description:
+        "A spacious layout featuring four main bedrooms plus a flexible additional suite for larger groups.",
+      icon: "Bed",
+    },
+    {
+      label: "10 ft Waterfall Feature",
+      description:
+        "An architectural highlight that adds a serene acoustic and visual layer to the pool area.",
       icon: "Waves",
     },
     {
-      label: "Dedicated Service",
-      description: "Professional on-site staff.",
-      icon: "UserCheck",
+      label: "Boutique Resort Vibe",
+      description:
+        "Designed to offer the amenities of a resort with the absolute privacy of a standalone villa.",
+      icon: "Diamond",
     },
     {
-      label: "Entertainment",
-      description: "Premium audio-visual setup.",
-      icon: "Music",
-    },
-    {
-      label: "Bonfire/BBQ",
-      description: "Outdoor dining and bonfire setup.",
-      icon: "Flame",
-    },
-    {
-      label: "Serene Backdrops",
-      description: "Lush green surroundings for events.",
-      icon: "Mountain",
+      label: "Multiple Experiential Zones",
+      description:
+        "Diverse spaces including the jacuzzi lounge, sunset gazebo, and expansive pool deck.",
+      icon: "Maximize",
     },
   ],
   services: [
     {
-      title: "Chef & Catering",
+      title: "Chef on Call",
       description:
-        "Curated menus crafted by our expert culinary team for every occasion.",
-      icon: "ChefHat",
+        "Private chef service available to craft personalized menus for stays and celebrations.",
       footer: "Available on request. Additional charges apply",
+      icon: "ChefHat",
     },
     {
-      title: "Event Decor",
+      title: "Butler Service",
       description:
-        "Bespoke setups transforming spaces to match your vision perfectly.",
-      icon: "Sparkles",
-      footer: "Custom pricing based on requirements",
+        "On-site service support to ensure every guest need is met with professional hospitality.",
+      footer: "Available on request. Additional charges apply",
+      icon: "User",
     },
     {
-      title: "Entertainment",
+      title: "Pick-up & Drop",
       description:
-        "DJ, live bands, and ambient music arrangements for your events.",
-      icon: "Music",
-      footer: "Requires prior booking",
+        "Transport assistance for guest arrival and departure, particularly convenient for airport transfers.",
+      footer: "Confirmed during booking",
+      icon: "Car",
     },
     {
-      title: "Photography",
+      title: "Event Setup Support",
       description:
-        "Capture your precious moments with professional photography services.",
-      icon: "Camera",
-      footer: "Available in multiple packages",
+        "Assistance with personalized decor and technical production for intimate events.",
+      footer: "Available on request",
+      icon: "PartyPopper",
     },
-  ],
-  categories: ["Villas", "Event Spaces"],
-  perfectFor: [
-    "Private Escapes",
-    "Intimate Gatherings",
-    "Corporate Offsites",
-    "Weekend Getaways",
   ],
   activities: [
-    { title: "Pool Party", image: "/X/Jade 735/Pool Side_Foot Waterfall.webp" },
-    { title: "BBQ Night", image: "/X/Jade 735/12.webp" },
-    { title: "Board Games", image: "/X/Jade 735/13.webp" },
-    { title: "Outdoor Dining", image: "/X/Jade 735/14.webp" },
+    {
+      title: "Poolside Relaxation",
+      image: "",
+    },
+    { title: "Gazebo Evenings", image: "" },
+    { title: "Jacuzzi Sessions", image: "" },
+    { title: "Boutique Stays", image: "" },
   ],
   spaces: [
     {
-      name: "Private Pool",
-      image: "/X/Jade 735/Pool Side_Foot Waterfall.webp",
+      name: "Waterfall Pool",
+      image: "",
     },
-    { name: "Main Lawn", image: "/X/Jade 735/7.webp" },
-    { name: "Lounge Areas", image: "/X/Jade 735/Master_BedRoom.webp" },
+    { name: "Gazebo Lounge", image: "" },
+    { name: "Jacuzzi Area", image: "" },
     {
-      name: "Terrace Space",
-      image: "/X/Jade 735/5-Jade735-Swing in the Cloud (7) (1).webp",
+      name: "Master Suite",
+      image: "",
     },
   ],
   pricing: {
@@ -168,55 +163,72 @@ export const jade735 = {
       subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
       packages: [
         {
-          label: "Starting From",
-          price: "₹68,000 + taxes",
+          label: "Up to 10 PAX",
+          sublabel: "≈ ₹3,500 / head",
+          price: "₹35,000 + taxes",
         },
+        {
+          label: "Up to 20 PAX",
+          sublabel: "≈ ₹2,250 / head",
+          price: "₹45,000 + taxes",
+        },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
       ],
-      features: ["Venue access", "Overnight villa stay", "Private pool access"],
+      features: [
+        "Full villa access",
+        "Waterfall pool access",
+        "Overnight stay",
+      ],
+    },
+    event: {
+      title: "Event Experience",
+      subtitle: "8 hours (2 PM · 12 AM)",
+      packages: [
+        {
+          label: "Up to 20 PAX",
+          sublabel: "≈ ₹1,750 / head",
+          price: "₹35,000 + taxes",
+        },
+        {
+          label: "Up to 30 PAX",
+          sublabel: "≈ ₹1,500 / head",
+          price: "₹45,000 + taxes",
+        },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
+      ],
+      features: ["Private venue access", "Basic event support"],
     },
   },
   locationDetails: {
-    mapImage: "/X/Jade 735/Hero.webp",
-    address: "Jade 735, Devanahalli, Bangalore",
-    distance: "Near Airport",
-    nearby: [{ label: "AIRPORT", distance: "10 mins" }],
+    mapImage: "",
+    address: "735, Jade Garden Phase II, Sadahalli, Bangalore — 562110",
+    distance: "Approximately 20 minutes from Airport",
+    nearby: [
+      { label: "CLUB KABANA", distance: "Next to property" },
+      { label: "AIRPORT", distance: "20 mins away" },
+      { label: "HIGHWAY", distance: "5 mins away" },
+    ],
   },
-  video: "/X/Jade 735/Hero.webp",
+  video: {
+    youtubeUrl: "https://www.youtube.com/watch?v=tDHkITeT3HU",
+    thumbnail: "",
+    duration: "5:44",
+  },
   faq: [
     {
-      question: "Is the pool strictly private?",
+      question: "What is the 4+1 BHK configuration?",
       answer:
-        "[INFERRED] Yes, the swimming pool is completely private and accessible only to the guests staying at Jade 735.",
+        "The villa features four main luxury bedrooms and one additional versatile suite that can be used for extra guests or as a separate lounge area.",
     },
     {
-      question: "Can we invite day visitors for a party?",
+      question: "Is the jacuzzi always available?",
       answer:
-        "[INFERRED] Yes, day visitors can be accommodated for events up to 60 guests. Additional charges may apply per visitor.",
+        "The 6-seater jacuzzi is available on request. Please inform our staff in advance so it can be prepared for your session.",
     },
     {
-      question: "Is outside food allowed?",
+      question: "Can we host pool parties here?",
       answer:
-        "[INFERRED] While we have excellent in-house catering, outside food arrangements can be discussed based on your specific requirements.",
-    },
-    {
-      question: "Are pets allowed at the property?",
-      answer:
-        "[INFERRED] Jade 735 is a pet-friendly retreat. Please inform us in advance so we can arrange accordingly.",
-    },
-    {
-      question: "Is loud music permitted outdoors?",
-      answer:
-        "[INFERRED] Music is permitted within reasonable limits and in accordance with local regulations regarding outdoor sound.",
-    },
-    {
-      question: "Do you have a power backup?",
-      answer:
-        "[INFERRED] Yes, the property is equipped with a full capacity generator for uninterrupted power supply.",
-    },
-    {
-      question: "Are the lawns suitable for a small wedding?",
-      answer:
-        "[INFERRED] Absolutely. The two lawns combined can host intimate weddings and ceremonies for up to 60 guests.",
+        "Yes, the waterfall pool and surrounding deck were designed for social gatherings and celebrations for up to 30 guests.",
     },
   ],
 };

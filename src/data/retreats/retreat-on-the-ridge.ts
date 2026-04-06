@@ -1,81 +1,146 @@
 export const retreatOnTheRidge = {
   id: "retreat-on-the-ridge",
   name: "Retreat on the Ridge",
-  type: "HILL-VIEW FARMHOUSE",
-  location: "Ramanagara · South-West of Bengaluru",
-  stats: { stay: "20 Guests", events: "80 Guests", bhk: "4 BHK" },
+  type: "HILLSIDE PRIVATE RETREAT",
+  location: "Near Nandi Hills · North Bangalore",
+  stats: {
+    stay: "12 Guests",
+    events: "20 Guests",
+    bhk: "4 BHK",
+    lawn: "Ridge-view Terrace",
+    villaArea: "Hillside Property",
+  },
   description:
-    "A contemporary private pool villa set against the scenic Varalakonda hill range, offering panoramic views, a waterfall pool, and open outdoor spaces. Designed for peaceful stays, intimate celebrations, and nature-led getaways away from the city.",
-  perfectFor: ["Staycations", "Small Events", "Family Gatherings"],
-  categories: ["Pet friendly", "Weddings"],
-  image: "/X/ROR/1.webp",
+    "Retreat on the Ridge is a hillside villa at the foothills of Nandi Hills with panoramic ridge views. The 4-bedroom property combines semi-open living spaces with mountain-side experiences, designed for those seeking a mix of nature immersion and luxury living. With private pool, hillside terraces, and landscaped zones, it supports intimate stays and small gatherings.",
+  perfectFor: [
+    "Hillside Getaways",
+    "Nature Photography",
+    "Small Family Gatherings",
+    "Couple Retreats",
+    "Team Outings",
+  ],
+  categories: ["Hillside Retreats", "Nature Escapes", "Private Stays"],
+  thumbnail: "",
+  image: "",
   images: [
-    "/X/ROR/1.webp",
-    "/X/ROR/2.webp",
-    "/X/ROR/3.webp",
-    "/X/ROR/4.webp",
-    "/X/ROR/5.webp",
-    "/X/ROR/6.webp",
-    "/X/ROR/7.webp",
-    "/X/ROR/8.webp",
-    "/X/ROR/9.webp",
-    "/X/ROR/10.webp",
-    "/X/ROR/11.webp",
-    "/X/ROR/12.webp",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
   ],
   amenities: [
-    { label: "Infinity Pool", icon: "Waves" },
-    { label: "Hill View", icon: "Mountain" },
-    { label: "Outdoor Space", icon: "Sun" },
+    {
+      label: "Private Pool",
+      icon: "Waves",
+      description: "Private swimming pool with panoramic ridge views.",
+    },
+    {
+      label: "Hillside Terrace",
+      icon: "Mountain",
+      description:
+        "Expansive terrace offering sweeping views of the surrounding hills and valleys.",
+    },
+    {
+      label: "Air-conditioned Interiors",
+      icon: "Wind",
+      description: "Climate-controlled bedrooms and living areas.",
+    },
+    {
+      label: "Outdoor Seating",
+      icon: "Sun",
+      description:
+        "Curated hillside seating zones for sunrise and sunset views.",
+    },
+    {
+      label: "Semi-open Living",
+      icon: "Home",
+      description:
+        "Open-air living spaces that connect you directly with the landscape.",
+    },
+    {
+      label: "Entertainment Systems",
+      icon: "Music",
+      description: "Integrated audio-visual systems for indoor entertainment.",
+    },
+    {
+      label: "Bonfire Setup",
+      icon: "Flame",
+      description:
+        "Bonfire zone for evening gatherings with mountain backdrop.",
+    },
+    {
+      label: "Fully Functional Kitchen",
+      icon: "Kitchen",
+      description: "Equipped kitchen for self-use or chef service.",
+    },
   ],
-  spaces: [
-    { name: "Infinity Pool", image: "/X/ROR/2.webp" },
-    { name: "Deck Area", image: "/X/ROR/3.webp" },
-    { name: "Living Room", image: "/X/ROR/4.webp" },
+  propertyDetails: [
+    {
+      label: "4-Bedroom Hillside Villa",
+      description:
+        "Designed across elevation with ridge-view suites and semi-open living areas.",
+      icon: "Bed",
+    },
+    {
+      label: "Panoramic Terrace",
+      description:
+        "Extensive terrace with sweeping views of the Valley and Nandi Hills range.",
+      icon: "Mountain",
+    },
+    {
+      label: "Hillside Architecture",
+      description:
+        "Organic design that integrates with the natural hillside terrain and foliage.",
+      icon: "Trees",
+    },
+    {
+      label: "Near Nandi Hills",
+      description:
+        "Located at the foothills of Nandi Hills, approximately 90 minutes from Bangalore city.",
+      icon: "MapPin",
+    },
   ],
   services: [
     {
       title: "Chef on Call",
-      description: "A private chef can be arranged for curated meals.",
+      description: "Private chef for curated hillside dining and group meals.",
       footer: "Available on request. Additional charges apply",
       icon: "ChefHat",
     },
     {
       title: "Butler Service",
-      description:
-        "On-site service support can be arranged for events or hosted stays.",
+      description: "On-site service support for seamless hospitality.",
       footer: "Available on request. Additional charges apply",
       icon: "User",
     },
     {
-      title: "Housekeeping",
-      description:
-        "Housekeeping services are available during the stay to maintain rooms and common areas.",
-      footer: "Service scope to be confirmed during booking",
-      icon: "SprayCan",
+      title: "Pick-up & Drop",
+      description: "Transport support available for guest logistics.",
+      footer: "Confirmed during booking",
+      icon: "Car",
     },
     {
-      title: "Concierge Assistance",
+      title: "Event Setup Support",
       description:
-        "Assistance with planning activities, experiences, or logistics around the stay.",
+        "Assistance with decor and arrangements for small gatherings.",
       footer: "Available on request",
-      icon: "Phone",
+      icon: "PartyPopper",
     },
   ],
-  propertyDetails: [
-    {
-      title: "Infinity Pool",
-      description: "Stunning infinity pool overlooking the hills.",
-    },
-    {
-      title: "Hill-View Bedrooms",
-      description: "Rooms designed to maximize the scenic views of Ramanagara.",
-    },
-    {
-      title: "Outdoor Deck",
-      description:
-        "Large deck area perfect for sunrise yoga or evening stargazing.",
-    },
+  activities: [
+    { title: "Sunrise Treks", image: "" },
+    { title: "Poolside Sessions", image: "" },
+    { title: "Nature Photography", image: "" },
+    { title: "Hilltop Dining", image: "" },
+  ],
+  spaces: [
+    { name: "Pool Deck", image: "" },
+    { name: "Ridge Terrace", image: "" },
+    { name: "Living Area", image: "" },
+    { name: "Hillside Suite", image: "" },
   ],
   pricing: {
     stay: {
@@ -83,56 +148,62 @@ export const retreatOnTheRidge = {
       subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
       packages: [
         {
-          label: "Up to 12 PAX",
-          sublabel: "≈ ₹3,500 / head",
-          price: "₹42,000 + taxes",
+          label: "Up to 10 PAX",
+          sublabel: "≈ ₹3,000 / head",
+          price: "₹29,999 + taxes",
         },
-        { label: "Additional Guests", price: "₹1,800 + taxes" },
+        {
+          label: "Up to 12 PAX",
+          sublabel: "≈ ₹2,917 / head",
+          price: "₹34,999 + taxes",
+        },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
       ],
-      features: [
-        "Venue access",
-        "Overnight villa stay",
-        "Complimentary breakfast",
-      ],
+      features: ["Ridge-view access", "Overnight stay", "Pool access"],
     },
     event: {
       title: "Event Experience",
-      subtitle: "8 hours (Selectable between 2 PM and 12 AM)",
+      subtitle: "8 hours (2 PM · 12 AM)",
       packages: [
         {
-          label: "Up to 30 PAX",
-          sublabel: "≈ ₹800/head",
-          price: "₹24,000 + taxes",
+          label: "Up to 20 PAX",
+          sublabel: "≈ ₹1,500 / head",
+          price: "₹29,999 + taxes",
         },
-        { label: "Additional Guests", price: "₹1,200 + taxes" },
+        { label: "Additional Guest", price: "₹1,099 + taxes" },
       ],
-      features: ["Private venue access", "Complimentary high tea"],
+      features: ["Private venue access", "Hillside setting"],
     },
   },
   locationDetails: {
-    mapImage: "/X/Magnolia/VILLA2.webp",
-    address: "Retreat on the Ridge, Ramanagara, Bengaluru",
+    mapImage: "",
+    address: "Near Nandi Hills, Chikkaballapur, Karnataka — 562101",
     distance: "Approximately 90 minutes from Bangalore City Center",
     nearby: [
-      { label: "SHOLAY HILLS", distance: "5 km away" },
-      { label: "WONDERLA", distance: "20 km away" },
-      { label: "BIG BANYAN", distance: "15 km away" },
+      { label: "NANDI HILLS", distance: "15 mins away" },
+      { label: "SKANDAGIRI", distance: "25 mins away" },
+      { label: "BHOGA NANDEESHWARA TEMPLE", distance: "10 mins away" },
     ],
   },
-  activities: [
-    { title: "Trekking", image: "/X/Tranquil Woods/10.webp" },
-    { title: "Cycling", image: "/X/Magnolia/9.webp" },
-    { title: "Bird Watching", image: "/X/ROR/14.webp" },
-  ],
-  video: "/X/Magnolia/9.webp",
+  video: {
+    youtubeUrl: "https://www.youtube.com/watch?v=SiQ_0LH1MDk",
+    thumbnail: "",
+    duration: "1:25",
+  },
   faq: [
     {
-      question: "Is the road accessible for large vehicles?",
-      answer: "Yes, the approach road is well-paved.",
+      question: "How far is Nandi Hills from the property?",
+      answer:
+        "Nandi Hills is approximately 15 minutes away by road from Retreat on the Ridge.",
     },
     {
-      question: "Is there mobile network coverage?",
-      answer: "Network coverage is generally good, but WiFi is also provided.",
+      question: "Is the property suitable for children?",
+      answer:
+        "Yes, the property has safe outdoor areas and pool zones. Supervision is recommended for children near the pool and hillside areas.",
+    },
+    {
+      question: "How many guests can stay overnight?",
+      answer: "Up to 12 guests can stay overnight across the 4 bedrooms.",
     },
   ],
 };

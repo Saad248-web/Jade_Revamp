@@ -1,79 +1,145 @@
 export const royalty = {
   id: "royalty",
   name: "Royalty",
-  type: "EQUESTRIAN HILL-VIEW LUXURY VILLA",
-  location: "Chikkaballapur · Near Varlakonda Hill",
-  stats: { stay: "15 Guests", events: "30 Guests", bhk: "5 BHK" },
+  type: "EQUESTRIAN HILL VIEW RETREAT",
+  location: "Chikkaballapur · Near Nandi Hills",
+  stats: {
+    stay: "15 Guests",
+    events: "30 Guests",
+    bhk: "5 BHK",
+    lawn: "Equestrian Arena",
+    villaArea: "Hilltop Glasshouse",
+  },
   description:
-    "A luxury villa set against the dramatic backdrop of Varlakonda Hill, it blends contemporary glass architecture with open green spaces and an immersive equestrian experience—ideal for intimate stays, curated gatherings, and nature-led celebrations.",
-  perfectFor: ["Staycations", "Private Celebrations"],
-  categories: ["Pre-wedding", "Pet friendly"],
-  image: "/X/Magnolia/10.webp",
+    "Royalty is a private equestrian 5-bedroom glasshouse villa set against the Varlakonda hills. The property features indoor living with expansive outdoor spaces, including a private pool with a waterfall, a riding arena, and a horse stable. The property combines rustic hillside experiences with modern comforts, creating a unique retreat experience.",
+  perfectFor: [
+    "Equestrian Enthusiasts",
+    "Family Reunions",
+    "Premium Hill Stays",
+    "Staycations",
+    "Nature Stays",
+  ],
+  categories: ["Equestrian Retreats", "Hill Villas", "Luxury Stays"],
+  thumbnail: "",
+  image: "",
   images: [
-    "/X/Magnolia/17.webp",
-    "/X/Magnolia/18.webp",
-    "/X/Magnolia/19.webp",
-    "/X/Magnolia/22.webp",
-    "/X/Magnolia/VILLA.webp",
-    "/X/Magnolia/LIVING ROOM.webp",
-    "/X/Magnolia/BEDROOM1.webp",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
   ],
   amenities: [
-    { label: "Wifi", icon: "Wifi" },
-    { label: "Parking", icon: "Car" },
-    { label: "Horses", icon: "Home" },
-    { label: "Hill View", icon: "Mountain" },
+    {
+      label: "Private Pool",
+      icon: "Waves",
+      description:
+        "A private pool with a waterfall feature, set against a stunning hill backdrop.",
+    },
+    {
+      label: "Air-conditioned Interiors",
+      icon: "Wind",
+      description: "All 5 bedrooms and living areas are fully air-conditioned.",
+    },
+    {
+      label: "Outdoor Seating",
+      icon: "Sun",
+      description:
+        "Multiple outdoor seating zones with panoramic views of the Varlakonda hills.",
+    },
+    {
+      label: "Jacuzzi",
+      icon: "Waves",
+      description: "On-site jacuzzi for a premium relaxation experience.",
+    },
+    {
+      label: "Entertainment Systems",
+      icon: "Music",
+      description:
+        "Full audio-visual setup available for entertainment and events.",
+    },
+    {
+      label: "Bonfire Setup",
+      icon: "Flame",
+      description: "Dedicated bonfire zone for evening hillside gatherings.",
+    },
+    {
+      label: "Barbecue Setup",
+      icon: "Utensils",
+      description: "BBQ equipment for curated outdoor hillside dining.",
+    },
+    {
+      label: "Fully Functional Kitchen",
+      icon: "Kitchen",
+      description:
+        "Equipped kitchen for guest use or professional chef service.",
+    },
   ],
-  spaces: [
-    { name: "Hill View", image: "/X/Magnolia/11.webp" },
-    { name: "Stables", image: "/X/Magnolia/12.webp" },
-    { name: "Interior", image: "/X/Magnolia/13.webp" },
+  propertyDetails: [
+    {
+      label: "5-Bedroom Glasshouse Villa",
+      description:
+        "Spacious glasshouse design accommodating up to 15 guests with premium suites.",
+      icon: "Bed",
+    },
+    {
+      label: "Equestrian Facilities",
+      description:
+        "On-site horse stable and riding arena — a unique feature for equestrian enthusiasts.",
+      icon: "Mountain",
+    },
+    {
+      label: "Hilltop Location",
+      description:
+        "Set against the Varlakonda hills with panoramic views and fresh air.",
+      icon: "Trees",
+    },
+    {
+      label: "Private Pool with Waterfall",
+      description:
+        "A signature feature combining leisure with a dramatic water feature.",
+      icon: "Waves",
+    },
   ],
   services: [
     {
       title: "Chef on Call",
-      description: "A private chef can be arranged for curated meals.",
+      description: "Private chef for curated meals and event catering.",
       footer: "Available on request. Additional charges apply",
       icon: "ChefHat",
     },
     {
       title: "Butler Service",
-      description:
-        "On-site service support can be arranged for events or hosted stays.",
+      description: "On-site service support for seamless hospitality.",
       footer: "Available on request. Additional charges apply",
       icon: "User",
     },
     {
-      title: "Housekeeping",
-      description:
-        "Housekeeping services are available during the stay to maintain rooms and common areas.",
-      footer: "Service scope to be confirmed during booking",
-      icon: "SprayCan",
+      title: "Pick-up & Drop",
+      description: "Transport support available for guest transfers.",
+      footer: "Confirmed during booking",
+      icon: "Car",
     },
     {
-      title: "Concierge Assistance",
-      description:
-        "Assistance with planning activities, experiences, or logistics around the stay.",
+      title: "Event Setup Support",
+      description: "Assistance with decor and arrangements for events.",
       footer: "Available on request",
-      icon: "Phone",
+      icon: "PartyPopper",
     },
   ],
-  propertyDetails: [
-    {
-      title: "5-BHK Luxury Villa",
-      description:
-        "Spacious bedrooms with heavy glass utilization for panoramic hill views.",
-    },
-    {
-      title: "Equestrian Center",
-      description:
-        "Unique feature of on-site stables allowing for an immersive equestrian experience.",
-    },
-    {
-      title: "Hillside Location",
-      description:
-        "Set against Varlakonda Hill, offering dramatic natural scenery.",
-    },
+  activities: [
+    { title: "Horse Riding", image: "" },
+    { title: "Hill Treks", image: "" },
+    { title: "Poolside Sessions", image: "" },
+    { title: "Sunset Views", image: "" },
+  ],
+  spaces: [
+    { name: "Pool & Waterfall", image: "" },
+    { name: "Riding Arena", image: "" },
+    { name: "Glasshouse Living", image: "" },
+    { name: "Hill View Terrace", image: "" },
   ],
   pricing: {
     stay: {
@@ -82,66 +148,66 @@ export const royalty = {
       packages: [
         {
           label: "Up to 10 PAX",
-          sublabel: "≈ ₹4,000 / head",
-          price: "₹40,000 + taxes",
+          sublabel: "≈ ₹3,700 / head",
+          price: "₹36,999 + taxes",
         },
-        { label: "Additional Guests", price: "₹2,000 + taxes" },
+        {
+          label: "Up to 20 PAX",
+          sublabel: "≈ ₹1,850 / head",
+          price: "₹36,999 + taxes",
+        },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
       ],
       features: [
-        "Venue access",
-        "Overnight villa stay",
-        "Complimentary breakfast",
+        "Full venue access",
+        "Overnight stay",
+        "Pool & Jacuzzi access",
       ],
     },
     event: {
       title: "Event Experience",
-      subtitle: "8 hours (Selectable between 2 PM and 12 AM)",
+      subtitle: "8 hours (2 PM · 12 AM)",
       packages: [
         {
           label: "Up to 20 PAX",
-          sublabel: "≈ ₹1000/head",
-          price: "₹20,000 + taxes",
+          sublabel: "≈ ₹1,850 / head",
+          price: "₹36,999 + taxes",
         },
-        { label: "Additional Guests", price: "₹1,500 + taxes" },
+        { label: "Additional Guest", price: "₹1,099 + taxes" },
       ],
-      features: ["Private venue access", "Complimentary high tea"],
+      features: ["Private venue access", "Equestrian grounds"],
     },
   },
   locationDetails: {
-    mapImage: "/X/Magnolia/VILLA2.webp",
-    address: "Royalty, Chikkaballapur, Near Varlakonda Hill",
-    distance: "Approximately 60 minutes from Bangalore Airport",
+    mapImage: "",
+    address: "Gudibanda road, Varlakonda, Chikkaballapur, Karnataka 562104",
+    distance: "Approximately 75 minutes from Bangalore City Center",
     nearby: [
-      { label: "NANDI HILLS", distance: "15 km away" },
-      { label: "AIRPORT", distance: "20 km away" },
-      { label: "HIGHWAY", distance: "2 km away" },
+      { label: "GUDIBANDE LAKE", distance: "12 mins away" },
+      { label: "NANDI HILLS", distance: "55 mins away" },
+      { label: "SKANDAGIRI RANGE", distance: "40 mins away" },
+      { label: "ISHA YOGA CENTRE", distance: "40 mins away" },
     ],
   },
-  activities: [
-    { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
-    { title: "Weddings", image: "/X/Magnolia/9.webp" },
-    { title: "Corporate Events", image: "/X/ROR/14.webp" },
-    {
-      title: "Photo Shoots",
-      image:
-        "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
-    },
-  ],
-  video: "/X/Magnolia/9.webp",
+  video: {
+    youtubeUrl: "https://www.youtube.com/watch?v=VlACTqexHoI",
+    thumbnail: "",
+    duration: "1:53",
+  },
   faq: [
     {
-      question: "Is horse riding included?",
+      question: "Is horse riding available for guests?",
       answer:
-        "Interactions with horses are generally included, but riding sessions may be separately charged.",
+        "Yes, Royalty features an on-site horse stable and riding arena. Riding sessions can be arranged on request.",
     },
     {
-      question: "Can we check in early?",
-      answer:
-        "Early check-in is subject to availability and prior confirmation.",
+      question: "How many guests can stay overnight?",
+      answer: "Royalty can accommodate up to 15 guests across its 5 bedrooms.",
     },
     {
-      question: "Is suitable for pets?",
-      answer: "Yes, the property is pet-friendly with ample outdoor space.",
+      question: "Can we host events here?",
+      answer:
+        "Yes, the property supports gatherings of up to 30 guests with ample outdoor space and equestrian grounds.",
     },
   ],
 };

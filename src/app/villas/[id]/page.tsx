@@ -232,15 +232,17 @@ export default function VillaDetailsPage() {
       <section className="relative h-[60vh] md:h-[80vh] w-full bg-[#1A1C1E]">
         {/* Image (Interactive Carousel) */}
         <div className="absolute inset-0">
-          <Image
-            src={imagesList[currentImageIndex]}
-            alt={villa.name}
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-            quality={75}
-          />
+          {imagesList[currentImageIndex] && (
+            <Image
+              src={imagesList[currentImageIndex]}
+              alt={villa.name}
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+              quality={75}
+            />
+          )}
           <div className="absolute inset-0 bg-black/20" />
         </div>
 
@@ -326,12 +328,20 @@ export default function VillaDetailsPage() {
         <div className="flex flex-wrap gap-6 items-center text-white/90 mb-10 text-gh-label font-bold tracking-wide">
           <div className="flex items-center gap-2.5">
             <Bed className="w-5 h-5 text-white/40" strokeWidth={1.5} />
-            <span>{villa.stats.stay}</span>
+            <span>
+              {villa.stats.stay.toLowerCase().includes("stay")
+                ? villa.stats.stay
+                : `${villa.stats.stay} Stay`}
+            </span>
           </div>
           <div className="w-[4px] h-[4px] rounded-full bg-white/20" />
           <div className="flex items-center gap-2.5">
             <Users className="w-5 h-5 text-white/40" strokeWidth={1.5} />
-            <span>{villa.stats.events}</span>
+            <span>
+              {villa.stats.events.toLowerCase().includes("event")
+                ? villa.stats.events
+                : `${villa.stats.events} Event`}
+            </span>
           </div>
           <div className="w-[4px] h-[4px] rounded-full bg-white/20" />
           <div className="flex items-center gap-2.5">
@@ -382,24 +392,7 @@ export default function VillaDetailsPage() {
           {villa.description}
         </p>
 
-        {/* PERFECT FOR & DOWNLOAD */}
         <div className="flex flex-col gap-8 mb-12">
-          <div className="flex items-center gap-4 text-gh-body overflow-hidden">
-            <span className="text-jade-gold font-manrope font-bold min-w-fit flex-shrink-0 uppercase tracking-widest text-[11px]">
-              Perfect for:
-            </span>
-            <div className="flex gap-2 overflow-x-auto pb-2 -mb-2 scrollbar-none snap-x">
-              {villa.perfectFor.map((tag) => (
-                <span
-                  key={tag}
-                  className="bg-white/10 text-white/90 px-3 py-1.5 md:px-4 md:py-2 text-gh-label rounded-[4px] font-manrope whitespace-nowrap flex-shrink-0 snap-start"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
           <button className="w-full bg-white/5 border border-white/10 text-white px-8 py-5 uppercase tracking-[0.2em] text-[11px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-between group rounded-sm">
             <span>Download Brochure</span>
             <Download className="w-4 h-4 text-white/40 group-hover:text-black transition-colors" />
@@ -459,12 +452,14 @@ export default function VillaDetailsPage() {
                 </div>
 
                 <div className="relative aspect-[3/4] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20">
-                  <Image
-                    src={currentSpace.image || villa.image}
-                    alt={currentSpace.name || "Space"}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
+                  {(currentSpace.image || villa.image) && (
+                    <Image
+                      src={currentSpace.image || villa.image}
+                      alt={currentSpace.name || "Space"}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B2C23]/80 via-transparent to-transparent opacity-90" />
                   <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
                     <h4 className="text-white text-gh-h3 uppercase tracking-widest font-bold mb-4 font-manrope">
@@ -557,39 +552,51 @@ export default function VillaDetailsPage() {
             </section>
 
             {/* EXPERIENCES SECTION */}
-            <section id="experiences">
-              <div className="flex justify-between items-end mb-8">
-                <h3 className="text-gh-h1 font-philosopher text-white">
-                  Experiences
-                </h3>
-                <div className="flex gap-2">
-                  <button className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors">
-                    <ArrowLeft className="w-4 h-4" />
-                  </button>
-                  <button className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors">
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
+            {villa.activities && villa.activities.length > 0 && (
+              <section id="experiences">
+                <div className="flex justify-between items-end mb-8">
+                  <h3 className="text-gh-h1 font-philosopher text-white">
+                    Experiences
+                  </h3>
+                  <div className="flex gap-2">
+                    <button className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors">
+                      <ArrowLeft className="w-4 h-4" />
+                    </button>
+                    <button className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors">
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="relative aspect-[4/5] md:aspect-[16/9] w-full bg-gray-900 group overflow-hidden">
-                <Image
-                  src="/X/Tranquil Woods/10.webp"
-                  alt="Experiences"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0B2C23] via-transparent to-transparent z-10" />
-                <div className="absolute bottom-0 left-0 w-full p-8 flex flex-col items-start z-20">
-                  <h4 className="text-gh-h2 font-philosopher text-white mb-2">
-                    Candlelight Dining
-                  </h4>
-                  <p className="text-white/60 text-gh-body mb-6 max-w-lg leading-relaxed">
-                    A private setup amidst nature's serenity, perfect for those
-                    special moments.
-                  </p>
+                <div className="flex gap-6 overflow-x-auto pb-6 snap-x scrollbar-none">
+                  {villa.activities.map((activity: any, idx: number) => (
+                    <div
+                      key={idx}
+                      className="relative min-w-[85%] md:min-w-[50%] lg:min-w-[45%] aspect-[16/10] bg-[#1A1C1E] border border-white/5 group overflow-hidden snap-start flex-shrink-0 rounded-none"
+                    >
+                      {(activity.image || villa.image) && (
+                        <Image
+                          src={activity.image || villa.image}
+                          alt={activity.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent z-10" />
+                      <div className="absolute bottom-0 left-0 w-full p-8 md:p-10 flex flex-col items-start z-20">
+                        <h4 className="text-white font-philosopher text-2xl md:text-3xl mb-2 drop-shadow-lg">
+                          {activity.title}
+                        </h4>
+                        {activity.description && (
+                          <p className="text-white/70 font-manrope text-sm md:text-base leading-relaxed max-w-[85%]">
+                            {activity.description}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            </section>
+              </section>
+            )}
 
             {/* WHY JADE WEDDING VENUES */}
             <section className="py-12 border-t border-white/5">
@@ -666,44 +673,113 @@ export default function VillaDetailsPage() {
                 <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                   Pricing
                 </h3>
-                <div className="flex flex-col gap-6 border border-white/10 p-4 md:p-6 bg-transparent">
-                  {/* Event Experience */}
-                  <div className="bg-transparent rounded-none p-0">
-                    <h4 className="text-[#EFCD62] text-gh-h2 font-bold font-manrope mb-1">
-                      {villa.pricing.event.title}
-                    </h4>
-                    <p className="text-white/60 text-gh-body mb-6 max-w-xs">
-                      {villa.pricing.event.subtitle}
-                    </p>
-                    <div className="flex flex-col gap-3 mb-6">
-                      {villa.pricing.event.packages.map((pkg, i) => (
-                        <div
-                          key={i}
-                          className="flex justify-between items-start md:items-center bg-[#0B2C23] p-4 rounded-none border border-white/5"
-                        >
-                          <div>
-                            <div className="text-white font-bold text-gh-body leading-tight mb-1">
-                              {pkg.label}
+                <div className="flex flex-col gap-8">
+                  {/* Stay Experience */}
+                  {villa.pricing.stay && (
+                    <div className="border border-white/10 p-4 md:p-6 bg-transparent">
+                      <h4 className="text-[#EFCD62] text-gh-h2 font-bold font-manrope mb-1">
+                        {villa.pricing.stay.title}
+                      </h4>
+                      <p className="text-white/60 text-gh-body mb-6 max-w-xs">
+                        {villa.pricing.stay.subtitle}
+                      </p>
+                      <div className="flex flex-col gap-3 mb-6">
+                        {villa.pricing.stay.packages.map(
+                          (pkg: any, i: number) => (
+                            <div
+                              key={i}
+                              className="flex justify-between items-start md:items-center bg-[#0B2C23] p-4 rounded-none border border-white/5"
+                            >
+                              <div>
+                                <div className="text-white font-bold text-gh-body leading-tight mb-1">
+                                  {pkg.label}
+                                </div>
+                                {pkg.sublabel && (
+                                  <div className="text-white/40 text-gh-label">
+                                    {pkg.sublabel}
+                                  </div>
+                                )}
+                              </div>
+                              <div className="text-jade-gold font-mono text-gh-body font-bold text-right shrink-0">
+                                {pkg.price}
+                              </div>
                             </div>
-                          </div>
-                          <div className="text-jade-gold font-mono text-gh-body font-bold text-right shrink-0">
-                            {pkg.price}
-                          </div>
-                        </div>
-                      ))}
+                          ),
+                        )}
+                      </div>
+                      <p className="text-white/50 text-[10px] font-manrope mb-4">
+                        Included:
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {villa.pricing.stay.features.map(
+                          (feat: string, i: number) => (
+                            <span
+                              key={i}
+                              className="bg-[#0B2C23] text-white/80 px-4 py-2 text-gh-label rounded-none border border-white/5 font-medium"
+                            >
+                              {feat}
+                            </span>
+                          ),
+                        )}
+                      </div>
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {villa.pricing.event.features.map((feat, i) => (
-                        <span
-                          key={i}
-                          className="bg-[#0B2C23] text-white/80 px-4 py-2 text-gh-label rounded-none border border-white/5 font-medium"
-                        >
-                          {feat}
-                        </span>
-                      ))}
+                  )}
+                  {/* Event Experience */}
+                  {(villa.pricing as any).event && (
+                    <div className="border border-white/10 p-4 md:p-6 bg-transparent">
+                      <h4 className="text-[#EFCD62] text-gh-h2 font-bold font-manrope mb-1">
+                        {(villa.pricing as any).event.title}
+                      </h4>
+                      <p className="text-white/60 text-gh-body mb-6 max-w-xs">
+                        {(villa.pricing as any).event.subtitle}
+                      </p>
+                      <div className="flex flex-col gap-3 mb-6">
+                        {(villa.pricing as any).event.packages.map(
+                          (pkg: any, i: number) => (
+                            <div
+                              key={i}
+                              className="flex justify-between items-start md:items-center bg-[#0B2C23] p-4 rounded-none border border-white/5"
+                            >
+                              <div>
+                                <div className="text-white font-bold text-gh-body leading-tight mb-1">
+                                  {pkg.label}
+                                </div>
+                                {pkg.sublabel && (
+                                  <div className="text-white/40 text-gh-label">
+                                    {pkg.sublabel}
+                                  </div>
+                                )}
+                              </div>
+                              <div className="text-jade-gold font-mono text-gh-body font-bold text-right shrink-0">
+                                {pkg.price}
+                              </div>
+                            </div>
+                          ),
+                        )}
+                      </div>
+                      <p className="text-white/50 text-[10px] font-manrope mb-4">
+                        Included:
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {(villa.pricing as any).event.features.map(
+                          (feat: string, i: number) => (
+                            <span
+                              key={i}
+                              className="bg-[#0B2C23] text-white/80 px-4 py-2 text-gh-label rounded-none border border-white/5 font-medium"
+                            >
+                              {feat}
+                            </span>
+                          ),
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
+                <p className="text-white/40 text-[10px] mt-4 font-manrope leading-relaxed">
+                  Note: Prices are base rates and may vary based on season, day
+                  of week, and specific requirements. Additional charges may
+                  apply for decorations, catering, and extended hours.
+                </p>
               </section>
             )}
 
@@ -715,12 +791,14 @@ export default function VillaDetailsPage() {
                 </h3>
                 <div className="bg-[#1A1C1E] rounded-none overflow-hidden mb-8 border border-white/10">
                   <div className="relative w-full h-64 md:h-80 bg-gray-800">
-                    <Image
-                      src={villa.locationDetails.mapImage || villa.image}
-                      alt="Map Location"
-                      fill
-                      className="object-cover opacity-80"
-                    />
+                    {(villa.locationDetails.mapImage || villa.image) && (
+                      <Image
+                        src={villa.locationDetails.mapImage || villa.image}
+                        alt="Map Location"
+                        fill
+                        className="object-cover opacity-80"
+                      />
+                    )}
                   </div>
                   <div className="p-6 md:p-8 bg-[#0B2C23] border-t border-white/10">
                     <div className="flex items-start gap-4 mb-8">
@@ -736,33 +814,126 @@ export default function VillaDetailsPage() {
                         </div>
                       </div>
                     </div>
+                    {/* What's Nearby */}
+                    {villa.locationDetails.nearby &&
+                      villa.locationDetails.nearby.length > 0 && (
+                        <div className="mt-6">
+                          <h4 className="text-jade-gold text-gh-label font-bold tracking-widest uppercase mb-4 font-manrope">
+                            What&apos;s nearby:
+                          </h4>
+                          <div className="flex flex-col gap-3">
+                            {villa.locationDetails.nearby.map(
+                              (item: any, idx: number) => (
+                                <div
+                                  key={idx}
+                                  className="flex justify-between items-center"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <div className="w-2 h-2 rotate-45 bg-jade-gold" />
+                                    <span className="text-white font-manrope text-gh-body font-bold uppercase tracking-wider">
+                                      {item.label}
+                                    </span>
+                                  </div>
+                                  <span className="text-white/60 text-gh-body font-manrope">
+                                    {item.distance}
+                                  </span>
+                                </div>
+                              ),
+                            )}
+                          </div>
+                        </div>
+                      )}
                   </div>
                 </div>
               </section>
             )}
 
+            {/* PERFECT FOR SECTION */}
+            {villa.perfectFor && villa.perfectFor.length > 0 && (
+              <section
+                id="perfect-for"
+                className="py-12 border-t border-white/5"
+              >
+                <h3 className="text-gh-h1 font-philosopher text-white mb-8">
+                  Perfect for
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {villa.perfectFor.map((item: any, idx: number) => {
+                    const title = typeof item === "string" ? item : item.title;
+                    const image =
+                      typeof item === "string"
+                        ? villa.images && villa.images.length > idx
+                          ? villa.images[idx % villa.images.length]
+                          : villa.image
+                        : item.image || villa.image;
+
+                    return (
+                      <div
+                        key={idx}
+                        className="relative aspect-square md:aspect-[4/3] bg-[#1A1C1E] group overflow-hidden border border-white/5"
+                      >
+                        {image && (
+                          <Image
+                            src={image}
+                            alt={title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-black/40 z-10 transition-colors group-hover:bg-black/50" />
+                        <div className="absolute inset-0 flex items-center justify-center z-20 p-4">
+                          <h4 className="text-white font-manrope font-medium text-sm md:text-base text-center">
+                            {title}
+                          </h4>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
             {/* VIDEO WALKTHROUGH */}
-            <section id="video" className="py-12 border-t border-white/5">
-              <h3 className="text-gh-h1 font-philosopher text-white mb-8">
-                Video Walkthrough
-              </h3>
-              <div className="relative aspect-video w-full bg-gray-900 overflow-hidden group border border-white/10">
-                <Image
-                  src={villa.video || villa.image}
-                  alt="Video Thumbnail"
-                  fill
-                  className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hover:bg-white/30 transition-all cursor-pointer group shadow-2xl">
-                    <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+            {villa.video && (
+              <section id="video" className="py-12 border-t border-white/5">
+                <h3 className="text-gh-h1 font-philosopher text-white mb-8">
+                  Video Walkthrough
+                </h3>
+                {typeof villa.video === "object" && villa.video.youtubeUrl ? (
+                  <div className="relative aspect-video w-full bg-gray-900 overflow-hidden border border-white/10">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${villa.video.youtubeUrl.split("v=")[1]}`}
+                      title={`${villa.name} Walkthrough`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="absolute inset-0 w-full h-full"
+                    />
                   </div>
-                </div>
-                <div className="absolute bottom-4 right-4 bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded-none border border-white/10">
-                  1:41
-                </div>
-              </div>
-            </section>
+                ) : (
+                  <div className="relative aspect-video w-full bg-gray-900 overflow-hidden group border border-white/10">
+                    {(typeof villa.video === "string"
+                      ? villa.video
+                      : villa.image) && (
+                      <Image
+                        src={
+                          typeof villa.video === "string"
+                            ? villa.video
+                            : villa.image
+                        }
+                        alt="Video Thumbnail"
+                        fill
+                        className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+                      />
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hover:bg-white/30 transition-all cursor-pointer group shadow-2xl">
+                        <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </section>
+            )}
 
             {/* FAQ SECTION */}
             <section id="faq" className="py-12 border-t border-white/5 mb-20">
@@ -794,7 +965,11 @@ export default function VillaDetailsPage() {
       <div className="fixed bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 p-3 md:p-4 md:px-8 z-50 transition-all">
         <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
           <p className="text-white text-base md:text-gh-h3 font-bold font-manrope whitespace-nowrap">
-            ₹65,000 onwards
+            {(villa.pricing as any)?.stay?.packages?.[0]?.price
+              ? `Starting from ${(villa.pricing as any).stay.packages[0].price.replace(" + taxes", "")}`
+              : (villa.pricing as any)?.event?.packages?.[0]?.price
+                ? `Starting from ${(villa.pricing as any).event.packages[0].price.replace(" + taxes", "")}`
+                : "Contact for pricing"}
           </p>
           <div className="flex items-center gap-4 md:gap-6">
             <Link

@@ -1,90 +1,153 @@
 export const tranquil = {
   id: "tranquil",
   name: "Tranquil Woods",
-  type: "FARMHOUSE WITH EXPANSIVE LAWNS",
-  location: "Kanakapura Road · Near Art of Living",
-  stats: { stay: "20 Guests", events: "700 Guests", bhk: "2 BHK" },
+  type: "LUXURY GARDEN RETREAT · WEDDING VENUE",
+  location: "Kanakapura Road · South Bangalore",
+  stats: {
+    stay: "15 Guests",
+    events: "500 Guests",
+    bhk: "2 BHK",
+    lawn: "Multi-layered Garden",
+    villaArea: "Glass-walled Living Areas",
+  },
   description:
-    "A private glass villa set within lush green surroundings, featuring a 1.5 acre landscaped lawn and a pool. Surrounded by peaceful nature yet close to the city, this is ideal for those seeking privacy and exclusivity within the city limits.",
-  perfectFor: ["Celebrations", "Weddings", "Weekends"],
-  categories: ["Weddings", "Pet friendly"],
-  image: "/X/Tranquil Woods/1.webp",
+    "Tranquil Woods is a 2-bedroom private pool villa within an expansive multi-layered garden layout. Close to the Art of Living International Centre, the property features glass-walled living areas and undulating lawns. Designed for both overnight luxury stays and large-format weddings and events, it holds capacity for up to 500 guests in its outdoor event spaces while offering intimate villa living for smaller groups.",
+  perfectFor: [
+    "Grand Weddings",
+    "Private Celebrations",
+    "Weekend Getaways",
+    "Staycations",
+    "Corporate Retreats",
+  ],
+  categories: ["Wedding Venues", "Luxury Retreats", "Garden Properties"],
+  thumbnail: "",
+  image: "",
   images: [
-    "/X/Tranquil Woods/1.webp",
-    "/X/Tranquil Woods/2.webp",
-    "/X/Tranquil Woods/3.webp",
-    "/X/Tranquil Woods/4.webp",
-    "/X/Tranquil Woods/7.webp",
-    "/X/Tranquil Woods/8.webp",
-    "/X/Tranquil Woods/9.webp",
-    "/X/Tranquil Woods/10.webp",
-    "/X/Tranquil Woods/11.webp",
-    "/X/Tranquil Woods/12.webp",
-    "/X/Tranquil Woods/13.webp",
-    "/X/Tranquil Woods/14.webp",
-    "/X/Tranquil Woods/15.webp",
-    "/X/Tranquil Woods/16.webp",
-    "/X/Tranquil Woods/17.webp",
-    "/X/Tranquil Woods/18.webp",
-    "/X/Tranquil Woods/20.webp",
-    "/X/Tranquil Woods/24.webp",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
   ],
   amenities: [
-    { label: "Wifi", icon: "Wifi" },
-    { label: "Parking", icon: "Car" },
-    { label: "Pool", icon: "Waves" },
-    { label: "Lawn", icon: "Trees" },
+    {
+      label: "Private Pool",
+      icon: "Waves",
+      description:
+        "A private swimming pool set within landscaped garden for exclusive guest use.",
+    },
+    {
+      label: "Air-conditioned Interiors",
+      icon: "Wind",
+      description:
+        "Glass-walled living areas fully climate-controlled for year-round comfort.",
+    },
+    {
+      label: "Outdoor Seating",
+      icon: "Sun",
+      description:
+        "Multiple curated seating zones across the multi-layered garden landscape.",
+    },
+    {
+      label: "Central Courtyard",
+      icon: "Home",
+      description:
+        "An open-air courtyard connecting the villa's indoor and outdoor living spaces.",
+    },
+    {
+      label: "Bonfire Setup",
+      icon: "Flame",
+      description:
+        "Dedicated bonfire zone for evening gatherings amidst the garden setting.",
+    },
+    {
+      label: "Barbecue Setup",
+      icon: "Utensils",
+      description: "Full barbecue equipment for outdoor dining experiences.",
+    },
+    {
+      label: "Dry Kitchen",
+      icon: "Kitchen",
+      description:
+        "Modern kitchen for light preparation and professional catering support.",
+    },
+    {
+      label: "Entertainment Systems",
+      icon: "Music",
+      description: "Audio-visual systems for entertainment and event support.",
+    },
   ],
-  spaces: [
-    { name: "Lawn", image: "/X/Tranquil Woods/2.webp" },
-    { name: "Poolside", image: "/X/Tranquil Woods/3.webp" },
-    { name: "Living Area", image: "/X/Tranquil Woods/12.webp" },
+  propertyDetails: [
+    {
+      label: "2-Bedroom Glass Villa",
+      description:
+        "Floor-to-ceiling glass walls blending indoor luxury with surrounding garden views.",
+      icon: "Bed",
+    },
+    {
+      label: "Multi-layered Garden",
+      description:
+        "Expansive undulating lawn and garden design that supports large-scale outdoor events.",
+      icon: "Trees",
+    },
+    {
+      label: "500-Guest Event Capacity",
+      description:
+        "One of the largest event spaces in the Jade portfolio, designed for weddings and celebrations.",
+      icon: "Users",
+    },
+    {
+      label: "Near Art of Living",
+      description:
+        "Located just 5 minutes from the Art of Living International Centre on Kanakapura Road.",
+      icon: "MapPin",
+    },
   ],
   services: [
     {
       title: "Chef on Call",
-      description: "A private chef can be arranged for curated meals.",
+      description:
+        "Private chef service for curated meals and large-scale event catering.",
       footer: "Available on request. Additional charges apply",
       icon: "ChefHat",
     },
     {
       title: "Butler Service",
-      description:
-        "On-site service support can be arranged for events or hosted stays.",
+      description: "On-site hospitality support for seamless stays and events.",
       footer: "Available on request. Additional charges apply",
       icon: "User",
     },
     {
-      title: "Housekeeping",
-      description:
-        "Housekeeping services are available during the stay to maintain rooms and common areas.",
-      footer: "Service scope to be confirmed during booking",
-      icon: "SprayCan",
+      title: "Pick-up & Drop",
+      description: "Transport support available for guest logistics.",
+      footer: "Confirmed during booking",
+      icon: "Car",
     },
     {
-      title: "Concierge Assistance",
+      title: "Event Setup Support",
       description:
-        "Assistance with planning activities, experiences, or logistics around the stay.",
+        "Full-scale event coordination for weddings, corporate events, and celebrations.",
       footer: "Available on request",
-      icon: "Phone",
+      icon: "PartyPopper",
     },
   ],
-  propertyDetails: [
-    {
-      title: "Modern 2-BHK Structure",
-      description:
-        "Cozy living spaces designed to overlook the private pool and expansive lawns.",
-    },
-    {
-      title: "1.5 Acre Landscape",
-      description:
-        "Situated on a 1.5-acre plot with landscaped gardens perfect for outdoor gatherings.",
-    },
-    {
-      title: "Private Pool",
-      description:
-        "Features a private swimming pool accessible directly from the villa.",
-    },
+  activities: [
+    { title: "Garden Weddings", image: "" },
+    { title: "Candlelight Dining", image: "" },
+    { title: "Weekend Getaways", image: "" },
+    { title: "Poolside Relaxation", image: "" },
+  ],
+  spaces: [
+    { name: "Garden Lawn", image: "" },
+    { name: "Glass Villa Living", image: "" },
+    { name: "Private Pool", image: "" },
+    { name: "Event Grounds", image: "" },
   ],
   pricing: {
     stay: {
@@ -92,68 +155,62 @@ export const tranquil = {
       subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
       packages: [
         {
-          label: "Up to 15 PAX",
-          sublabel: "≈ ₹3,000 / head",
-          price: "₹45,000 + taxes",
+          label: "Up to 20 PAX",
+          sublabel: "≈ ₹2,175 / head",
+          price: "₹43,500 + taxes",
         },
-        { label: "Additional Guests", price: "₹1,500 + taxes" },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
       ],
       features: [
-        "Venue access",
+        "Full venue access",
         "Overnight villa stay",
         "Complimentary breakfast",
       ],
     },
     event: {
       title: "Event Experience",
-      subtitle: "8 hours (Selectable between 2 PM and 12 AM)",
+      subtitle: "8 hours (2 PM · 12 AM)",
       packages: [
         {
-          label: "Up to 50 PAX",
-          sublabel: "≈ ₹600/head",
-          price: "₹30,000 + taxes",
+          label: "Up to 30 PAX",
+          sublabel: "≈ ₹1,450 / head",
+          price: "₹43,500 + taxes",
         },
-        { label: "Additional Guests", price: "₹1,200 + taxes" },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
       ],
       features: ["Private venue access", "Complimentary high tea"],
     },
   },
   locationDetails: {
-    mapImage: "/X/Magnolia/VILLA2.webp",
-    address: "Tranquil Woods, Kanakapura Road, Bangalore",
+    mapImage: "",
+    address: "Kanakapura Main Rd, Badamanavarathekaval, Bangalore — 560082",
     distance: "Approximately 45 minutes from Bangalore City Center",
     nearby: [
-      { label: "JW MARRIOT", distance: "1 km away" },
-      { label: "AIRPORT", distance: "5 km away" },
-      { label: "BUS STATION", distance: "2 km away" },
+      { label: "ART OF LIVING", distance: "5 mins away" },
+      { label: "FORUM MALL", distance: "20 mins away" },
+      { label: "BANNERGHATTA NATIONAL PARK", distance: "30 mins away" },
     ],
   },
-  activities: [
-    { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
-    { title: "Weddings", image: "/X/Magnolia/9.webp" },
-    { title: "Corporate Events", image: "/X/ROR/14.webp" },
-    {
-      title: "Photo Shoots",
-      image:
-        "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
-    },
-  ],
-  video: "/X/Magnolia/9.webp",
+  video: {
+    youtubeUrl: "https://www.youtube.com/watch?v=KHJFdAVRmF8",
+    thumbnail: "",
+    duration: "2:51",
+  },
   faq: [
     {
-      question: "What is the maximum guest capacity?",
+      question: "What is the maximum event capacity?",
       answer:
-        "The venue can comfortably accommodate up to 700 guests for floating crowds.",
+        "Tranquil Woods can accommodate up to 500 guests for weddings and large-format events across its garden lawn.",
     },
     {
-      question: "Can we bring our own caterers?",
+      question: "How many overnight guests?",
       answer:
-        "Yes, you can bring your own caterers. We have a fully-equipped catering kitchen available for use.",
+        "Up to 15 guests can stay overnight across the 2 bedrooms and shared living areas.",
     },
     {
-      question: "What about outdoor events during monsoon?",
+      question: "Is outside catering allowed?",
       answer:
-        "We have focused on outdoor landscaping; strictly indoor areas are limited.",
+        "Yes, we support coordination with external caterers for events. In-house chef service is also available for stays.",
     },
   ],
 };

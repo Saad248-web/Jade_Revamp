@@ -1,78 +1,145 @@
 export const vannani = {
   id: "vannani",
-  name: "Vannani - Retreat by Nature",
-  type: "NATURE RETREAT FOR INTIMATE CELEBRATIONS",
-  location: "Bangalore",
-  stats: { stay: "20 Guests", events: "25 Guests", bhk: "2" },
+  name: "Vannani",
+  type: "PRIVATE FARMHOUSE RETREAT",
+  location: "Outskirts of Bangalore",
+  stats: {
+    stay: "15 Guests",
+    events: "40 Guests",
+    bhk: "3 BHK",
+    lawn: "Private Lawn",
+    villaArea: "Farm Estate",
+  },
   description:
-    "A villa retreat set amidst lush orchards, featuring two separate units. With a lap pool, outdoor spaces & nature experiences, Vannani is ideal for brunch & relaxed group getaways.",
-  perfectFor: ["Staycations", "Family Getaways", "Celebrations"],
-  categories: ["Pet friendly", "Corporate Retreats"],
-  image: "/X/Magnolia/17.webp",
+    "Vannani is a private farmhouse retreat designed for group stays and intimate events. The 3-bedroom property combines traditional farmhouse architecture with modern comforts, set within a private estate surrounded by greenery. With a private pool, outdoor seating areas, and dedicated event spaces, it offers a relaxed countryside experience accessible from Bangalore.",
+  perfectFor: [
+    "Group Getaways",
+    "Nature Retreats",
+    "Family Gatherings",
+    "Private Celebrations",
+    "Staycations",
+  ],
+  categories: ["Farmhouse Retreats", "Group Stays", "Nature Escapes"],
+  thumbnail: "",
+  image: "",
   images: [
-    "/X/Magnolia/12.webp",
-    "/X/Magnolia/13.webp",
-    "/X/Magnolia/14.webp",
-    "/X/Magnolia/15.webp",
-    "/X/Magnolia/16.webp",
-    "/X/Magnolia/17.webp",
-    "/X/Magnolia/18.webp",
-    "/X/Magnolia/19.webp",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
   ],
   amenities: [
-    { label: "Waterfall Pool", icon: "Waves" },
-    { label: "Jacuzzi", icon: "Bath" },
-    { label: "Tiny Home", icon: "Home" },
+    {
+      label: "Private Pool",
+      icon: "Waves",
+      description:
+        "A private swimming pool within the farmhouse estate for exclusive guest use.",
+    },
+    {
+      label: "Air-conditioned Interiors",
+      icon: "Wind",
+      description:
+        "All bedrooms and living areas are fully climate-controlled.",
+    },
+    {
+      label: "Outdoor Seating",
+      icon: "Sun",
+      description: "Multiple outdoor seating zones across the lawn and garden.",
+    },
+    {
+      label: "Jacuzzi",
+      icon: "Waves",
+      description: "On-site jacuzzi available for guest relaxation.",
+    },
+    {
+      label: "Entertainment Systems",
+      icon: "Music",
+      description:
+        "Audio-visual systems for group entertainment and gatherings.",
+    },
+    {
+      label: "Bonfire Setup",
+      icon: "Flame",
+      description: "Dedicated bonfire zone for evening social sessions.",
+    },
+    {
+      label: "Barbecue Setup",
+      icon: "Utensils",
+      description: "BBQ equipment for outdoor dining experiences.",
+    },
+    {
+      label: "Fully Functional Kitchen",
+      icon: "Kitchen",
+      description: "Equipped kitchen for guest use or professional catering.",
+    },
   ],
-  spaces: [
-    { name: "Main Villa", image: "/X/Magnolia/18.webp" },
-    { name: "Cottage", image: "/X/Magnolia/19.webp" },
-    { name: "Tiny Home", image: "/X/Magnolia/22.webp" },
+  propertyDetails: [
+    {
+      label: "3-Bedroom Farmhouse",
+      description:
+        "Traditional farmhouse design with modern amenities for comfortable group stays.",
+      icon: "Bed",
+    },
+    {
+      label: "Private Estate",
+      description:
+        "The entire property is booked exclusively, ensuring absolute privacy for your group.",
+      icon: "Home",
+    },
+    {
+      label: "Countryside Setting",
+      description:
+        "Surrounded by greenery and open spaces for a complete rural escape.",
+      icon: "Trees",
+    },
+    {
+      label: "Private Pool",
+      description:
+        "A welcome addition to the farmhouse experience for leisure and relaxation.",
+      icon: "Waves",
+    },
   ],
   services: [
     {
       title: "Chef on Call",
-      description: "A private chef can be arranged for curated meals.",
+      description:
+        "Private chef for curated farm-style meals and event catering.",
       footer: "Available on request. Additional charges apply",
       icon: "ChefHat",
     },
     {
       title: "Butler Service",
       description:
-        "On-site service support can be arranged for events or hosted stays.",
+        "On-site service support for a seamless hospitality experience.",
       footer: "Available on request. Additional charges apply",
       icon: "User",
     },
     {
-      title: "Housekeeping",
-      description:
-        "Housekeeping services are available during the stay to maintain rooms and common areas.",
-      footer: "Service scope to be confirmed during booking",
-      icon: "SprayCan",
+      title: "Pick-up & Drop",
+      description: "Transport support available for guest logistics.",
+      footer: "Confirmed during booking",
+      icon: "Car",
     },
     {
-      title: "Concierge Assistance",
-      description:
-        "Assistance with planning activities, experiences, or logistics around the stay.",
+      title: "Event Setup Support",
+      description: "Assistance with decor and event arrangements.",
       footer: "Available on request",
-      icon: "Phone",
+      icon: "PartyPopper",
     },
   ],
-  propertyDetails: [
-    {
-      title: "Eclectic Mix of Units",
-      description:
-        "Comprises a stone villa, a cottage, and a tiny home for diverse stay experiences.",
-    },
-    {
-      title: "Nature-Rich Location",
-      description: "Set amidst fruit orchards and lush greenery near Wonderla.",
-    },
-    {
-      title: "Waterfall Pool & Jacuzzi",
-      description:
-        "Features a unique pool with waterfall feature and a relaxing jacuzzi.",
-    },
+  activities: [
+    { title: "Farmhouse Living", image: "" },
+    { title: "Poolside Sessions", image: "" },
+    { title: "Bonfire Nights", image: "" },
+    { title: "Nature Walks", image: "" },
+  ],
+  spaces: [
+    { name: "Pool Area", image: "" },
+    { name: "Main Living", image: "" },
+    { name: "Garden Lawn", image: "" },
+    { name: "Farmhouse Interior", image: "" },
   ],
   pricing: {
     stay: {
@@ -80,61 +147,53 @@ export const vannani = {
       subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
       packages: [
         {
-          label: "Up to 12 PAX",
-          sublabel: "≈ ₹3,000 / head",
-          price: "₹36,000 + taxes",
+          label: "Up to 10 PAX",
+          sublabel: "≈ ₹2,500 / head",
+          price: "₹24,999 + taxes",
         },
-        { label: "Additional Guests", price: "₹1,800 + taxes" },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
       ],
-      features: [
-        "Venue access",
-        "access to all units",
-        "Complimentary breakfast",
-      ],
+      features: ["Full estate access", "Overnight stay", "Pool access"],
     },
     event: {
       title: "Event Experience",
-      subtitle: "8 hours (Selectable between 2 PM and 12 AM)",
+      subtitle: "8 hours (2 PM · 12 AM)",
       packages: [
         {
-          label: "Up to 50 PAX",
-          sublabel: "≈ ₹700/head",
-          price: "₹35,000 + taxes",
+          label: "Up to 20 PAX",
+          sublabel: "≈ ₹1,250 / head",
+          price: "₹24,999 + taxes",
         },
-        { label: "Additional Guests", price: "₹900 + taxes" },
+        { label: "Additional Guest", price: "₹1,099 + taxes" },
       ],
-      features: ["Private venue access", "Complimentary high tea"],
+      features: ["Private venue access", "Basic event support"],
     },
   },
   locationDetails: {
-    mapImage: "/X/Magnolia/VILLA2.webp",
-    address: "Vanani, Mysore Road, Near Wonderla, Bangalore",
-    distance: "Approximately 50 minutes from Bangalore City Center",
-    nearby: [
-      { label: "WONDERLA", distance: "2 km away" },
-      { label: "MYSORE RD", distance: "1 km away" },
-      { label: "KENGERI", distance: "10 km away" },
-    ],
+    mapImage: "",
+    address: "Vannani, Outskirts of Bangalore, Karnataka",
+    distance: "Approximately 60 minutes from Bangalore City Center",
+    nearby: [{ label: "NEARBY ATTRACTIONS", distance: "Within 30 mins" }],
   },
-  activities: [
-    { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
-    { title: "Family Reunions", image: "/X/Magnolia/9.webp" },
-    { title: "Nature Retreats", image: "/X/ROR/14.webp" },
-  ],
-  video: "/X/Magnolia/9.webp",
+  video: {
+    youtubeUrl: "https://www.youtube.com/watch?v=WU-4wS3jx3E",
+    thumbnail: "",
+    duration: "2:55",
+  },
   faq: [
     {
-      question: "Is the jacuzzi heated?",
-      answer: "Yes, the jacuzzi has temperature control functionality.",
-    },
-    {
-      question: "Is the property wheelchair accessible?",
+      question: "How many guests can stay overnight?",
       answer:
-        "Parts of the main villa are accessible, but the tiny home may not be.",
+        "Vannani accommodates up to 15 guests across its 3 bedrooms and shared areas.",
     },
     {
-      question: "Can we pick fruit?",
-      answer: "Fruit picking is allowed subject to season and availability.",
+      question: "Can we host events here?",
+      answer:
+        "Yes, the property supports gatherings of up to 40 guests with outdoor lawn and event space.",
+    },
+    {
+      question: "Is the pool private?",
+      answer: "Yes, the pool is exclusively for your group's use.",
     },
   ],
 };

@@ -6,183 +6,148 @@ export const magnolia = {
   stats: {
     stay: "10-30 Guests",
     events: "50-500 Guests",
-    bhk: "3-2",
-    lawn: "25,000 sqft",
-    homeTheater: "12 Seater",
-    villaArea: "7,000 sqft",
+    bhk: "3 BHK",
+    lawn: "25,000 sq.ft Lawn",
+    villaArea: "7,000 sq.ft Built-up",
   },
   description:
-    "A contemporary white multi-story villa with expansive glass windows and a large, lit swimming pool. The massive 25,000 sq ft landscaped lawn and professional catering services make it the perfect destination for your dream wedding or private gathering.",
+    "Magnolia is a contemporary private luxury villa designed for immersive stays and large-scale gatherings. This modern three-bedroom glass villa brings together luxury, scale, and ambience, making it ideal for weekend getaways, private parties, corporate outings, and wedding celebrations. Featuring a massive private pool, bar and lounge, personal home theatre, conference hall, and a basketball court, it offers a rare balance of accessibility and complete privacy.",
   perfectFor: [
-    "Wedding",
-    "Staycation",
+    "Grand Weddings",
+    "Staycations",
     "Corporate Retreats",
-    "Celebrations",
-    "Pre-wedding",
+    "Private Celebrations",
+    "Aesthetic Shoots",
   ],
-  spaces: [
-    { name: "Lawn", image: "/X/Magnolia/12.webp" },
-    { name: "Poolside", image: "/X/Magnolia/VILLA.webp" },
-    { name: "Living Area", image: "/X/Magnolia/LIVING ROOM.webp" },
-  ],
-  categories: ["Weddings", "Corporate Retreats", "Pre-wedding"],
-  image: "/X/Magnolia/VILLA2.webp",
+  categories: ["Luxury Villas", "Wedding Venues", "Corporate Retreats"],
+  thumbnail: "",
+  image: "",
   images: [
-    "/X/Magnolia/12.webp",
-    "/X/Magnolia/13.webp",
-    "/X/Magnolia/14.webp",
-    "/X/Magnolia/15.webp",
-    "/X/Magnolia/16.webp",
-    "/X/Magnolia/17.webp",
-    "/X/Magnolia/18.webp",
-    "/X/Magnolia/19.webp",
-    "/X/Magnolia/22.webp",
-    "/X/Magnolia/VILLA.webp",
-    "/X/Magnolia/LIVING ROOM.webp",
-    "/X/Magnolia/BEDROOM1.webp",
-    "/X/Magnolia/FAMILY ROOM.webp",
-    "/X/Magnolia/VILLA2.webp",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
   ],
   amenities: [
     {
       label: "Private Pool",
       icon: "Waves",
       description:
-        "A private swimming pool exclusively for guests, with poolside seating and deck access",
+        "A massive private swimming pool featuring a dedicated bar, lounge setup, and patio seating for premium relaxation.",
     },
     {
       label: "Air-conditioned Interiors",
       icon: "Wind",
       description:
-        "All rooms and common areas are fully air-conditioned for comfort throughout the stay.",
+        "All bedrooms and indoor areas are fully air-conditioned for year-round comfort.",
     },
     {
       label: "Outdoor Seating",
       icon: "Sun",
       description:
-        "Multiple outdoor seating zones across the lawn and poolside for relaxation or gatherings.",
+        "Multiple outdoor lounge and seating arrangements across the lawn and poolside.",
     },
     {
       label: "Entertainment Systems",
-      icon: "Dribbble",
+      icon: "Music",
       description:
-        "Entertainment systems are available in common areas, including indoor spaces.",
+        "High-quality sound and entertainment systems for events and casual listening.",
     },
     {
       label: "Home Theatre",
       icon: "Projector",
       description:
-        "A dedicated home theater space designed for small groups. Suitable for private screenings.",
+        "A private 12-seater home theatre designed for immersive movie watching and group indoor entertainment.",
     },
     {
       label: "Bar Lounge",
-      icon: "PartyPopper",
+      icon: "GlassWater",
       description:
-        "A bar-style lounge setup near the pool for casual gatherings and hosted evenings.",
+        "An integrated bar-style lounge area perfect for hosting social cocktail evenings by the poolside.",
     },
     {
       label: "Multipurpose Hall",
       icon: "Presentation",
       description:
-        "An indoor hall that can be used as a meeting space, gathering area, or dorm-style rooms.",
+        "Flexible indoor hall that can be used as a conference space, workshop area, or additional guest accommodation.",
     },
     {
       label: "Dry Kitchen",
-      icon: "Home",
+      icon: "Kitchen",
       description:
-        "A dry kitchen equipped for light food preparation and serving.",
+        "Modern dry kitchen equipped for light food preparation and professional event service.",
+    },
+  ],
+  propertyDetails: [
+    {
+      label: "3-Bedroom Glass Villa",
+      description:
+        "Luxury bedrooms and large living areas designed to overlook the private pool and estate greenery.",
+      icon: "Bed",
+    },
+    {
+      label: "One-Acre Estate",
+      description:
+        "Total privacy across a one-acre property with meticulously maintained landscapes and multiple activity zones.",
+      icon: "Sun",
+    },
+    {
+      label: "7,000 sq. ft. Built-up",
+      description:
+        "Spacious villa layout providing ample room for 30 stay-in guests and premium group experiences.",
+      icon: "Maximize",
+    },
+    {
+      label: "South Bangalore Location",
+      description:
+        "Conveniently located near the Art of Living International Centre and opposite Pyramid Valley.",
+      icon: "MapPin",
     },
   ],
   services: [
     {
       title: "Chef on Call",
-      description: "A private chef can be arranged for curated meals.",
+      description:
+        "Private chef service available for curated farm-to-table meals and specialized event catering.",
       footer: "Available on request. Additional charges apply",
       icon: "ChefHat",
     },
     {
       title: "Butler Service",
       description:
-        "On-site service support can be arranged for events or hosted stays.",
+        "Professional on-site butler support to ensure a seamless and high-end guest experience.",
       footer: "Available on request. Additional charges apply",
       icon: "User",
     },
     {
       title: "Housekeeping",
       description:
-        "Housekeeping services are available during the stay to maintain rooms and common areas.",
-      footer: "Service scope to be confirmed during booking",
+        "Regular housekeeping services to maintain the villa and common areas during your stay.",
+      footer: "Included in stay packages",
       icon: "SprayCan",
     },
     {
       title: "Concierge Assistance",
       description:
-        "Assistance with planning activities, experiences, or logistics around the stay.",
+        "Dedicated assistance for planning local experiences and logistics during the retreat.",
       footer: "Available on request",
       icon: "Phone",
     },
   ],
-  propertyDetails: [
-    {
-      label: "Modern 3-Bedroom Glass Villa",
-      description:
-        "Large living and dining areas designed to overlook the private pool and landscaped lawn, creating a strong indoor-outdoor connection.",
-      icon: "Diamond",
-    },
-    {
-      label: "One-Acre Private Property",
-      description:
-        "Set on a one-acre plot with a built-up villa area of approximately 7,000 sq ft, offering complete privacy.",
-      icon: "Diamond",
-    },
-    {
-      label: "Private Pool with Lounge Setup",
-      description:
-        "Features a large private swimming pool with a dedicated bar and lounge setup, along with patio seating by the pool.",
-      icon: "Diamond",
-    },
-    {
-      label: "Flexible Multipurpose Hall",
-      description:
-        "Includes a multipurpose indoor hall that can be converted into a conference space for meetings or a dorm room for additional accommodation.",
-      icon: "Diamond",
-    },
-    {
-      label: "12-Seater Home Theatre",
-      description:
-        "A private home theatre designed for movie watching and indoor entertainment for up to 12 guests.",
-      icon: "Diamond",
-    },
-    {
-      label: "Expansive Landscaped Lawn",
-      description:
-        "A 25,000 sq ft landscaped lawn, suitable for private parties, corporate team outings, and wedding events ranging from 100 to 500 people.",
-      icon: "Diamond",
-    },
-    {
-      label: "Stay & Event Hosting Capacity",
-      description:
-        "Can host overnight stays for 25–30 guests and outdoor events for up to 500 people, depending on the setup.",
-      icon: "Diamond",
-    },
-    {
-      label: "Accessible Yet Secluded Location",
-      description:
-        "Located approximately 20 minutes from the Art of Living International Centre and opposite Pyramid Valley.",
-      icon: "Diamond",
-    },
-    {
-      label: "Customised Hosted Experiences",
-      description:
-        "Customisable experiences such as bonfire evenings, BBQs, curated dining, camping, and movie nights under the stars with a projector setup are available on prior request.",
-      icon: "Diamond",
-    },
-    {
-      label: "Indoor & Outdoor Games",
-      description:
-        "Guests can enjoy a variety of indoor and outdoor games, including Monopoly, UNO, Jenga, cricket, archery, frisbee, volleyball, and more.",
-      icon: "Diamond",
-    },
+  activities: [
+    { title: "Poolside Cocktails", image: "" },
+    { title: "Garden Weddings", image: "" },
+    { title: "Basketball Matches", image: "" },
+    { title: "Movie Nights", image: "" },
+  ],
+  spaces: [
+    { name: "Glass Living Room", image: "" },
+    { name: "Pool Deck", image: "" },
+    { name: "Main Lawn", image: "" },
+    { name: "Luxury Suite", image: "" },
   ],
   pricing: {
     stay: {
@@ -190,11 +155,11 @@ export const magnolia = {
       subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
       packages: [
         {
-          label: "Up to 12 PAX",
+          label: "Up to 8 PAX",
           sublabel: "≈ ₹3,625 / head",
-          price: "₹43,500 + taxes",
+          price: "₹29,599 + taxes",
         },
-        { label: "Additional Guests", price: "₹1,999 + taxes" },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
       ],
       features: [
         "Venue access",
@@ -207,71 +172,46 @@ export const magnolia = {
       subtitle: "8 hours (Selectable between 2 PM and 12 AM)",
       packages: [
         {
-          label: "Up to 30 PAX",
-          sublabel: "≈ ₹800/head",
-          price: "₹43,500 + taxes",
+          label: "Up to 20 PAX",
+          sublabel: "≈ ₹3,625 / head",
+          price: "₹29,599 + taxes",
         },
-        { label: "Additional Guests", price: "₹1,999 + taxes" },
+        { label: "Additional Guest", price: "₹1,999 + taxes" },
       ],
       features: ["Private venue access", "Complimentary high tea"],
     },
   },
   locationDetails: {
-    mapImage: "/X/Magnolia/VILLA2.webp",
-    address: "Magnolia, Harohalli, Kanakapura Road, Bangalore - 560082",
+    mapImage: "",
+    address:
+      "Magnolia, Harohalli (Opposite Pyramid Valley), Bangalore — 562112",
     distance: "Approximately 45 minutes from Bangalore City Center",
     nearby: [
-      { label: "JW MARRIOT", distance: "1 km away" },
-      { label: "AIRPORT", distance: "5 km away" },
-      { label: "BUS STATION", distance: "2 km away" },
+      { label: "ART OF LIVING", distance: "20 mins away" },
+      { label: "PYRAMID VALLEY", distance: "Opposite property" },
+      { label: "KANAKAPURA ROAD", distance: "10 mins away" },
     ],
   },
-  activities: [
-    { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
-    { title: "Weddings", image: "/X/Magnolia/9.webp" },
-    { title: "Corporate Events", image: "/X/ROR/14.webp" },
-    {
-      title: "Photo Shoots",
-      image:
-        "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
-    },
-  ],
-  video: "/X/Magnolia/9.webp",
+  video: {
+    youtubeUrl: "https://www.youtube.com/watch?v=HkWkA_5op30",
+    thumbnail: "",
+    duration: "1:41",
+  },
   faq: [
     {
-      question: "What is the maximum guest capacity?",
+      question: "What is the maximum capacity for grand weddings?",
       answer:
-        "The venue can comfortably accommodate up to 700 guests for floating crowds, with seating capacity for 500-600 guests.",
+        "The 25,000 sq. ft. lawn can comfortably host events for up to 500 guests with ample seating and catering space.",
     },
     {
-      question: "Can we bring our own caterers?",
+      question: "Is the pool depth suitable for children?",
       answer:
-        "Yes, you can bring your own caterers. We have a fully-equipped catering kitchen available for use.",
+        "The massive private pool has varying depth levels, but we recommend supervising children at all times in the pool and deck areas.",
     },
     {
-      question: "What about outdoor events during monsoon?",
+      question: "Can we use the multipurpose hall for stay?",
       answer:
-        "We have a semi-open party hall and covered gazebo area that can be used during rainy weather.",
-    },
-    {
-      question: "Is there ample parking space?",
-      answer:
-        "Yes, we have designated parking for up to 50 cars within the property and additional valvlet services on request.",
-    },
-    {
-      question: "Do you have power backup?",
-      answer:
-        "The villa is equipped with a 24/7 generator backup to ensure uninterrupted power supply during your event or stay.",
-    },
-    {
-      question: "Are pets allowed?",
-      answer:
-        "Yes, we are a pet-friendly property. However, we request you to supervise your pets at all times.",
-    },
-    {
-      question: "What are the check-in and check-out timings?",
-      answer:
-        "Standard check-in is at 1:00 PM and check-out is at 11:00 AM. Early check-in or late check-out is subject to availability.",
+        "Yes, the hall is flexible and can be converted into a dorm-style room for larger groups or used for conference meetings.",
     },
   ],
 };
