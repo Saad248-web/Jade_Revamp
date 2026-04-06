@@ -23,16 +23,16 @@ export async function getVillas(filters?: {
 }): Promise<Villa[]> {
   await delay();
   if (!filters?.category || filters.category === "All") {
-    return VILLAS as Villa[];
+    return VILLAS as unknown as Villa[];
   }
   return VILLAS.filter((v) =>
     v.categories?.includes(filters.category!),
-  ) as Villa[];
+  ) as unknown as Villa[];
 }
 
 export async function getVillaById(id: string): Promise<Villa | null> {
   await delay(200);
-  return (VILLAS.find((v) => v.id === id) as Villa) ?? null;
+  return (VILLAS.find((v) => v.id === id) as unknown as Villa) ?? null;
 }
 
 // ─── Blogs ────────────────────────────────────────────────────────────────────
