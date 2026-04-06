@@ -34,7 +34,7 @@ export const VILLAS = [
       "/X/Magnolia/12.webp",
       "/X/Magnolia/13.webp",
       "/X/Magnolia/14.webp",
-      "/X/Magnolia/15.webp",
+      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
       "/X/Magnolia/16.webp",
       "/X/Magnolia/17.webp",
       "/X/Magnolia/18.webp",
@@ -302,7 +302,7 @@ export const VILLAS = [
       "/X/Tranquil Woods/12.webp",
       "/X/Tranquil Woods/13.webp",
       "/X/Tranquil Woods/14.webp",
-      "/X/Tranquil Woods/15.webp",
+      "https://images.unsplash.com/photo-1613490908688-66236b22eb5c?auto=format&fit=crop&w=1600&q=80",
       "/X/Tranquil Woods/16.webp",
       "/X/Tranquil Woods/17.webp",
       "/X/Tranquil Woods/18.webp",
@@ -1134,7 +1134,7 @@ export const VILLAS = [
       "/X/Magnolia/12.webp",
       "/X/Magnolia/13.webp",
       "/X/Magnolia/14.webp",
-      "/X/Magnolia/15.webp",
+      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
       "/X/Magnolia/16.webp",
       "/X/Magnolia/17.webp",
       "/X/Magnolia/18.webp",
@@ -1939,7 +1939,7 @@ export const VILLAS = [
     image: "/X/Magnolia/14.webp",
     images: [
       "/X/Magnolia/14.webp",
-      "/X/Magnolia/15.webp",
+      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
       "/X/Magnolia/16.webp",
       "/X/Magnolia/17.webp",
       "/X/Magnolia/18.webp",
@@ -1953,7 +1953,11 @@ export const VILLAS = [
       { label: "Cozy Interiors", icon: "Wind" },
     ],
     spaces: [
-      { name: "Main Deck", image: "/X/Magnolia/15.webp" },
+      {
+        name: "Main Deck",
+        image:
+          "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
+      },
       { name: "Cozy Room", image: "/X/Magnolia/16.webp" },
     ],
     services: [

@@ -19,14 +19,16 @@ const OFFERINGS = [
     title: "Weekend Getaways",
     description:
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone's wishlist.",
-    image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+    image:
+      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
     link: "/weekend-getaways",
   },
   {
     title: "Corporate Retreats",
     description:
       "Private venues designed for focused sessions, team alignment, and meaningful downtime.",
-    image: "/X/ROR/15.webp",
+    image:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
     link: "/corporate-retreats",
   },
   {
@@ -361,7 +363,7 @@ export default function AboutPage() {
               >
                 <div className="relative w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden border-2 border-[#EFCD62]/20 mb-8">
                   <Image
-                    src={`/X/ROR/15.webp`} // Placeholder for team member
+                    src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600"
                     alt="Team Member"
                     fill
                     className="object-cover grayscale"
@@ -442,7 +444,7 @@ export default function AboutPage() {
             {/* Row 3 */}
             <div className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
               <Image
-                src="/X/ROR/15.webp"
+                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600"
                 alt="Media"
                 fill
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
@@ -450,7 +452,7 @@ export default function AboutPage() {
             </div>
             <div className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
               <Image
-                src="/X/Magnolia/15.webp"
+                src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80"
                 alt="Media"
                 fill
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"

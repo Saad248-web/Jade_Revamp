@@ -60,8 +60,10 @@ const SLIDES = [
     heading: ["Work on", "the Move"],
     subtext:
       "A quiet mobile environment for offsites, brainstorming, or remote work.",
-    bgImage: "/X/ROR/15.webp",
-    cardImage: "/X/ROR/15.webp",
+    bgImage:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
+    cardImage:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
   },
 ];
 

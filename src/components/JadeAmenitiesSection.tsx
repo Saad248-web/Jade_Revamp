@@ -12,80 +12,42 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
-const SLIDES = [
+const AMENITIES = [
   {
-    id: 1,
-    label: "WHAT COMES WITH STAYING AT JADE",
-    heading: ["BBQ & Bonfire", "Evenings"],
-    subtext: "BBQ setups and bonfire gatherings create easy, social moments.",
+    title: "Culinary Experiences",
+    description: "From private chef dinners to starlit barbecues.",
+    tags: ["Private Chef", "Barbecue Setup", "Custom Menus"],
     bgImage:
-      "https://i.pinimg.com/1200x/25/71/46/257146678a9f6e9866924e0e31458d97.jpg", // BBQ/Bonfire
-    cardImage:
-      "https://i.pinimg.com/1200x/25/71/46/257146678a9f6e9866924e0e31458d97.jpg",
+      "https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
   {
-    id: 2,
-    label: "WHAT COMES WITH STAYING AT JADE",
-    heading: ["Candle-Lit", "Dinners"],
-    subtext:
-      "Private candle-lit dinners are curated within the villa or outdoors.",
+    title: "Leisure & Entertainment",
+    description: "Immersive games, private pools, and screening rooms.",
+    tags: ["Private Pools", "Home Theatre", "Indoor Games"],
     bgImage:
-      "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2874&auto=format&fit=crop", // Candle light dinner
-    cardImage:
-      "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2874&auto=format&fit=crop",
+      "https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
   {
-    id: 3,
-    label: "WHAT COMES WITH STAYING AT JADE",
-    heading: ["Pet-Friendly", "Stays"],
-    subtext:
-      "Select Jade villas are pet-friendly, allowing you to travel and celebrate without leaving anyone behind.",
+    title: "Wellness & Nature",
+    description: "Alfresco dining, lush lawns, and open-air decks.",
+    tags: ["Expansive Lawns", "Alfresco Dining", "Open Decks"],
     bgImage:
-      "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2940&auto=format&fit=crop", // Pet Friendly
-    cardImage:
-      "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2940&auto=format&fit=crop",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
   {
-    id: 4,
-    label: "WHAT COMES WITH STAYING AT JADE",
-    heading: ["Wellness &", "Rejuvenation"],
-    subtext:
-      "Spa therapies, yoga sessions, and nature-led wellness experiences offer balance without rigid schedules.",
+    title: "Seamless Hospitality",
+    description: "Concierge support and premium housekeeping.",
+    tags: ["24/7 Support", "Housekeeping", "Butler Service"],
     bgImage:
-      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=2940&auto=format&fit=crop", // Wellness/Spa
-    cardImage:
-      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=2940&auto=format&fit=crop",
-  },
-  {
-    id: 5,
-    label: "WHAT COMES WITH STAYING AT JADE",
-    heading: ["Movies Under", "the Stars"],
-    subtext:
-      "Outdoor movie screenings turn villa lawns and terraces into private cinemas, perfect for families and friends.",
-    bgImage:
-      "https://images.unsplash.com/photo-1595769816263-9b910be24d5f?q=80&w=2958&auto=format&fit=crop", // Movie night
-    cardImage:
-      "https://images.unsplash.com/photo-1595769816263-9b910be24d5f?q=80&w=2958&auto=format&fit=crop",
-  },
-  {
-    id: 6,
-    label: "WHAT COMES WITH STAYING AT JADE",
-    heading: ["Activities, Indoors", "and Out"],
-    subtext:
-      "Indoor games, outdoor activities, and open grounds allow each day to unfold at your own pace.",
-    bgImage:
-      "https://images.unsplash.com/photo-1532444458054-01a7dd3e9fca?q=80&w=2940&auto=format&fit=crop", // Outdoor games
-    cardImage:
-      "https://images.unsplash.com/photo-1532444458054-01a7dd3e9fca?q=80&w=2940&auto=format&fit=crop",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
 ];
 
 export default function JadeAmenitiesSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
 
-  const currentSlide = SLIDES[currentIndex];
+  const currentSlide = AMENITIES[currentIndex];
 
   // Scroll-based parallax
   const { scrollYProgress } = useScroll({
@@ -96,242 +58,118 @@ export default function JadeAmenitiesSection() {
   // Background parallax (Desktop only)
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
-  // Feature image parallax
-  const imageY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
-
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? SLIDES.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? AMENITIES.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev === SLIDES.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev === AMENITIES.length - 1 ? 0 : prev + 1));
   };
 
   return (
     <section
       ref={sectionRef}
-      className="relative flex flex-col"
-      style={{ backgroundColor: "#25282C" }}
+      className="relative flex flex-col h-[100vh] w-full overflow-hidden"
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
-      {/* 
-        MOBILE LAYOUT (< 1024px) 
-      */}
-      <div className="lg:hidden relative min-h-[92vh] flex flex-col">
-        {/* Background Layer */}
-        <div className="absolute inset-0 h-full w-full z-0">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
-              className="absolute inset-0 w-full h-full"
-            >
-              <Image
-                src={currentSlide.bgImage}
-                alt="Background"
-                fill
-                className="object-cover"
-                sizes="100vw"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-[#25282C]/90" />
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Text Content (Top Half) */}
-        <div className="relative z-10 pt-24 px-6 text-center">
-          <motion.p
-            key={`label-${currentIndex}`}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="font-manrope text-gh-label font-bold tracking-[0.2em] uppercase text-[#EFCD62] mb-4"
-          >
-            {currentSlide.label}
-          </motion.p>
-          <div className="mb-4">
-            {currentSlide.heading.map((line, index) => (
-              <motion.h2
-                key={`head-${currentIndex}-${index}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="font-philosopher text-gh-h2 text-white leading-tight"
-              >
-                {line}
-              </motion.h2>
-            ))}
-          </div>
-          <motion.p
-            key={`sub-${currentIndex}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="font-manrope text-gh-body text-white/80 leading-relaxed max-w-sm mx-auto"
-          >
-            {currentSlide.subtext}
-          </motion.p>
-        </div>
-
-        {/* Overlapping Card & Controls Section */}
-        <div className="mt-auto relative z-20 w-full">
-          {/* Green Bottom Bar Background */}
-          <div
-            className="absolute bottom-0 left-0 right-0 h-32"
-            style={{ backgroundColor: "#0D4032" }}
-          />
-
-          {/* Card & Arrows Container */}
-          <div className="relative px-4 pb-12 flex items-center justify-between max-w-md mx-auto">
-            {/* Prev Arrow */}
-            <button
-              onClick={handlePrev}
-              className="p-3 rounded-none bg-white/10 backdrop-blur-sm z-30"
-            >
-              <ChevronLeft className="w-6 h-6 text-white" />
-            </button>
-
-            {/* Feature Card (Overlapping) */}
-            <motion.div
-              key={`card-${currentIndex}`}
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="relative w-[220px] aspect-[4/3] rounded-none overflow-hidden shadow-2xl z-30 border-2 border-white/10"
-            >
-              <Image
-                src={currentSlide.cardImage}
-                alt="Feature"
-                fill
-                className="object-cover"
-                sizes="220px"
-              />
-            </motion.div>
-
-            {/* Next Arrow */}
-            <button
-              onClick={handleNext}
-              className="p-3 rounded-none bg-white/10 backdrop-blur-sm z-30"
-            >
-              <ChevronRight className="w-6 h-6 text-white" />
-            </button>
-          </div>
-        </div>
-      </div>
 
       {/* 
         DESKTOP LAYOUT (>= 1024px) 
       */}
-      <div className="hidden lg:flex flex-col relative h-[100vh] overflow-hidden">
-        {/* Top Area: Background Image & Content (Flex-1) */}
-        <div className="relative flex-1 w-full overflow-hidden">
-          {/* Background Image with Parallax */}
-          <div className="absolute inset-0 w-full h-full z-0">
-            <motion.div className="w-full h-[120%]" style={{ y: bgY }}>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentIndex}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="absolute inset-0 w-full h-full"
-                >
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={currentSlide.bgImage}
-                      alt="Background"
-                      fill
-                      className="object-cover"
-                      sizes="100vw"
-                      priority
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#25282C]/80 via-transparent to-[#25282C]/40" />
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </motion.div>
-          </div>
-
-          {/* Desktop Content */}
-          <div className="relative z-10 flex flex-col justify-center h-full px-12 xl:px-24 py-8 pointer-events-none">
-            <div className="max-w-[1920px] mx-auto w-full grid grid-cols-2 gap-12 xl:gap-16 items-center pointer-events-auto">
-              {/* Text Card */}
+      <div className="hidden lg:block relative h-[100vh] w-full overflow-hidden bg-[#25282C]">
+        {/* BACKGROUNDS */}
+        {/* Top 70% Image Background */}
+        <div className="absolute top-[0vh] left-0 right-0 h-[70vh] z-0 overflow-hidden bg-[#25282C]">
+          <motion.div className="w-full h-full lg:h-[120%]" style={{ y: bgY }}>
+            <AnimatePresence mode="wait">
               <motion.div
-                key={`text-desk-${currentIndex}`}
-                className="relative p-10 xl:p-12 rounded-lg bg-[#25282C]/95 backdrop-blur-md shadow-2xl"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
+                key={currentIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8 }}
+                className="absolute inset-0 w-full h-full"
               >
-                <p
-                  className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-4 xl:mb-6"
-                  style={{ color: "#EFCD62" }}
-                >
-                  {currentSlide.label}
-                </p>
-                <div className="mb-4 xl:mb-6">
-                  {currentSlide.heading.map((line, index) => (
-                    <h2
-                      key={index}
-                      className="font-philosopher text-gh-h1 text-white leading-tight mb-2"
-                    >
-                      {line}
-                    </h2>
-                  ))}
-                </div>
-                <p className="font-manrope text-gh-body text-white/70 leading-relaxed max-w-lg">
-                  {currentSlide.subtext}
-                </p>
+                <Image
+                  src={currentSlide.bgImage}
+                  alt="Background"
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                  priority
+                />
+                {/* Intelligent Fade - heavy top & bottom to keep text visible */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#25282C]/95 via-[#25282C]/30 to-[#25282C]/60" />
               </motion.div>
+            </AnimatePresence>
+          </motion.div>
+        </div>
 
-              {/* Feature Image */}
-              <div className="relative justify-self-center w-full max-w-[500px]">
-                <motion.div
-                  key={`img-desk-${currentIndex}`}
-                  className="relative w-full aspect-[4/5] max-h-[65vh] rounded-lg overflow-hidden shadow-2xl border border-white/10"
-                  style={{ y: imageY }}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.8 }}
-                >
-                  <Image
-                    src={currentSlide.cardImage}
-                    alt="Feature"
-                    fill
-                    className="object-cover"
-                    sizes="50vw"
-                    priority
-                  />
-                </motion.div>
-              </div>
-            </div>
+        {/* Solid Dark Anchor Bar Background at Bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-[30vh] z-10 bg-[#25282C]" />
+
+        {/* FOREGROUND CONTENT */}
+
+        {/* Top Text Cluster */}
+        <div className="absolute top-[12vh] xl:top-[16vh] left-0 right-0 z-20 flex flex-col justify-start items-center text-center px-12 pointer-events-none">
+          <motion.p
+            key={`label-${currentIndex}`}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="font-manrope text-gh-label font-bold tracking-[0.3em] uppercase text-[#EFCD62] mb-4"
+          >
+            {currentSlide.title}
+          </motion.p>
+          <div className="mb-4 flex flex-col items-center justify-center">
+            <h2 className="font-philosopher text-gh-h1 text-white leading-tight block mb-2">
+              {currentSlide.description}
+            </h2>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-3 max-w-2xl mt-4">
+            {currentSlide.tags.map((tag, i) => (
+              <span
+                key={i}
+                className="px-4 py-2 bg-white/5 border border-white/10 rounded-none text-white/90 text-sm font-manrope tracking-wider"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         </div>
 
-        {/* Desktop Navigation */}
-        <div
-          className="relative shrink-0 z-20 py-4 xl:py-6 px-12 xl:px-24"
-          style={{ backgroundColor: "#0D4032" }}
+        {/* Padded Edge Arrows - Straddling exactly on intersection boundary */}
+        <button
+          onClick={handlePrev}
+          className="absolute left-8 xl:left-32 top-[70vh] -translate-y-1/2 p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-none transition-all shadow-md z-30 group border border-white/5"
         >
-          <div className="max-w-[1920px] mx-auto flex items-center justify-between">
-            <button
-              onClick={handlePrev}
-              className="group p-4 bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-none transition-all shadow-md"
-            >
-              <ChevronLeft className="w-6 h-6 xl:w-8 xl:h-8 text-[#EFCD62] group-hover:scale-110 transition-transform" />
-            </button>
-            <div className="flex gap-3" />
-            <button
-              onClick={handleNext}
-              className="group p-4 bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-none transition-all shadow-md"
-            >
-              <ChevronRight className="w-6 h-6 xl:w-8 xl:h-8 text-[#EFCD62] group-hover:scale-110 transition-transform" />
-            </button>
-          </div>
+          <ChevronLeft className="w-6 h-6 xl:w-8 xl:h-8 text-white group-hover:-translate-x-1 transition-transform" />
+        </button>
+
+        <button
+          onClick={handleNext}
+          className="absolute right-8 xl:right-32 top-[70vh] -translate-y-1/2 p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-none transition-all shadow-md z-30 group border border-white/5"
+        >
+          <ChevronRight className="w-6 h-6 xl:w-8 xl:h-8 text-white group-hover:translate-x-1 transition-transform" />
+        </button>
+
+        {/* Landscape Master Feature Card - Scaled horizontally for Image 1 reference matching */}
+        <div className="absolute top-[70vh] -translate-y-1/2 left-1/2 -translate-x-1/2 w-[35vw] max-w-[480px] xl:w-[28vw] aspect-[4/3] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden border border-white/20 z-30">
+          <motion.div
+            key={`card-${currentIndex}`}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-full h-full relative"
+          >
+            <Image
+              src={currentSlide.bgImage}
+              alt="Feature"
+              fill
+              className="object-cover"
+              sizes="40vw"
+              priority
+            />
+          </motion.div>
         </div>
       </div>
     </section>

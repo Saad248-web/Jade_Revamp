@@ -312,8 +312,8 @@ export default function MenuPage() {
                     {
                       title: "Celebrations & Parties",
                       desc: "Birthdays, pool or bachelor parties unfold across private farmhouse villas with pools, open lawns and entertainment-ready spaces.",
-                      img1: "/X/ROR/15.webp",
-                      img2: "/X/Magnolia/15.webp",
+                      img1: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
+                      img2: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
                     },
                     {
                       title: "Wedding Celebrations",
@@ -537,8 +537,8 @@ export default function MenuPage() {
                     {
                       title: "Celebrations & Parties",
                       type: "LUXURY PRIVATE STAYS",
-                      img1: "/X/ROR/15.webp",
-                      img2: "/X/Magnolia/15.webp",
+                      img1: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
+                      img2: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
                     },
                     {
                       title: "Wedding Celebrations",
@@ -549,7 +549,7 @@ export default function MenuPage() {
                     {
                       title: "Corporate Offsites",
                       type: "JOURNEY OF TEAMWORK",
-                      img1: "/X/ROR/15.webp",
+                      img1: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
                       img2: "/X/ROR/14.webp",
                     },
                     {

@@ -15,7 +15,8 @@ const PANELS = [
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone’s wishlist.",
     cta: "SEE WHAT A GETAWAY LOOKS LIKE",
     href: "/weekend-getaways",
-    image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+    image:
+      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
     type: "full",
   },
   {
@@ -44,7 +45,7 @@ const PANELS = [
     items: [
       {
         title: "Corporate Retreats",
-        img: "/X/ROR/15.webp",
+        img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
       },
       {
         title: "Wellness Retreats",
@@ -56,7 +57,7 @@ const PANELS = [
       },
       {
         title: "Casual Stays",
-        img: "/X/Magnolia/15.webp",
+        img: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
       },
     ],
     cta: "SEE ALL EXPERIENCES",

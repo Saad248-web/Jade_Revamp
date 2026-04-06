@@ -27,7 +27,8 @@ const caravanSlides = [
   {
     title: "Convertible Sleeping Spaces",
     desc: "Flexible sleeping arrangements that comfortably accommodate small groups and families.",
-    image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_05_Image_0003.webp",
+    image:
+      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_05_Image_0003.webp",
   },
   {
     title: "Entertainment System",
@@ -47,7 +48,8 @@ const caravanSlides = [
   {
     title: "Capacity",
     desc: "Ideal for 6–8 guests travelling together.",
-    image: "/X/ROR/15.webp",
+    image:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
   },
 ];
 

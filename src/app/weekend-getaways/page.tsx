@@ -62,7 +62,8 @@ const weekendSlides = [
   {
     title: "Poolside Mornings",
     desc: "Slow mornings by the pool with coffee, sunlight, and nowhere else to be.",
-    image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+    image:
+      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
   },
   {
     title: "Evenings Under the Stars",
@@ -92,7 +93,8 @@ const weekendSlides = [
   {
     title: "Private Dinners",
     desc: "Experience curated dining in the privacy of your villa under the starlit sky.",
-    image: "/X/ROR/15.webp",
+    image:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
   },
   {
     title: "Golden Evenings",
@@ -192,7 +194,11 @@ function EnhanceYourStaySection() {
   const experiences = [
     { title: "Bonfire Nights", image: "/X/HAVEN/BONFIRE.webp" },
     { title: "BBQ Evenings", image: "/X/Tranquil Woods/9.webp" },
-    { title: "Movie Under the Stars", image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_13_Image_0001.webp" },
+    {
+      title: "Movie Under the Stars",
+      image:
+        "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_13_Image_0001.webp",
+    },
     { title: "Candlelight Dinner", image: "/X/Magnolia/13.webp" },
     { title: "Outdoor Games", image: "/X/HAVEN/POOL TABLE1.webp" },
     { title: "Live Music / DJ", image: "/X/HAVEN/meco.webp" },

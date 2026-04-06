@@ -15,8 +15,10 @@ const VILLAS = [
     title: "Dome Villa",
     description:
       "A hobbit-home inspired retreat set amidst rolling hills, defined by its iconic dome architecture, private pool and immersive connection to nature. Ideal for intimate getaways and quiet celebrations.",
-    desktopImage: "/X/Dome Villas/Red Dome/1.webp",
-    mobileImage: "/X/Dome Villas/Red Dome/1.webp",
+    desktopImage:
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop",
+    mobileImage:
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop",
     link: "/villas/dome-villa",
   },
   {
@@ -25,8 +27,10 @@ const VILLAS = [
     title: "Lemon Tree",
     description:
       "A farmhouse retreat nestled within a lemon grove, featuring a rooftop pool and a flexible indoor hall—well suited for relaxed getaways, intimate celebrations, and countryside offsites.",
-    desktopImage: "/X/Dome Villas/Yellow Dome/DSC00323.webp",
-    mobileImage: "/X/Dome Villas/Yellow Dome/DSC00608.webp",
+    desktopImage:
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2940&auto=format&fit=crop",
+    mobileImage:
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2940&auto=format&fit=crop",
     link: "/villas/lemon-tree",
   },
   {
@@ -35,8 +39,10 @@ const VILLAS = [
     title: "Retreat on the Ridge",
     description:
       "A hill-facing private villa known for panoramic views, sunset backdrops, and a serene pool setting—designed for group getaways, nature-led retreats, and slow weekends away from the city.",
-    desktopImage: "/X/ROR/2.webp",
-    mobileImage: "/X/ROR/2.webp",
+    desktopImage:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2950&auto=format&fit=crop",
+    mobileImage:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2950&auto=format&fit=crop",
     link: "/villas/retreat-on-ridge",
   },
   {
@@ -45,8 +51,10 @@ const VILLAS = [
     title: "Magnolia",
     description:
       "A modern glass-walled estate with expansive lawns, a private pool, and an in-house theatre—crafted for vibrant celebrations, social gatherings, and large-format experiences with complete privacy.",
-    desktopImage: "/X/Magnolia/VILLA.webp",
-    mobileImage: "/X/Magnolia/VILLA.webp",
+    desktopImage:
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2940&auto=format&fit=crop",
+    mobileImage:
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2940&auto=format&fit=crop",
     link: "/villas/magnolia",
   },
 ];

@@ -43,7 +43,8 @@ const PANELS = [
       "Unwinding and ice-breaking sessions with colleagues, away from cubicles and glass walls, in private farmhouses ideal for offsites or workations.",
     cta: "SEE HOW TEAMS GATHER",
     href: "/corporate-retreats",
-    image: "/X/ROR/15.webp",
+    image:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
   },
   {
     id: "wellness",
@@ -70,7 +71,8 @@ const PANELS = [
       "A curated collection of fully private farmhouses, suited for everything from quiet stays to vibrant celebrations and bespoke experiences.",
     cta: "SEE THE VILLAS THAT HOST IT ALL",
     href: "/villas",
-    image: "/X/Magnolia/15.webp",
+    image:
+      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
   },
 ];
 
