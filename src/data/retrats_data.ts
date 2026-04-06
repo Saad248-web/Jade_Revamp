@@ -24,27 +24,40 @@ export const VILLAS = [
       "Pre-wedding",
     ],
     spaces: [
-      { name: "Lawn", image: "/X/Magnolia/12.webp" },
-      { name: "Poolside", image: "/X/Magnolia/VILLA.webp" },
-      { name: "Living Area", image: "/X/Magnolia/LIVING ROOM.webp" },
+      {
+        name: "Lawn",
+        image:
+          "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Poolside",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Living Area",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     categories: ["Weddings", "Corporate Retreats", "Pre-wedding"],
-    image: "/X/Magnolia/VILLA2.webp",
+    image:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/X/Magnolia/12.webp",
-      "/X/Magnolia/13.webp",
-      "/X/Magnolia/14.webp",
+      "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
-      "/X/Magnolia/16.webp",
-      "/X/Magnolia/17.webp",
-      "/X/Magnolia/18.webp",
-      "/X/Magnolia/19.webp",
-      "/X/Magnolia/22.webp",
-      "/X/Magnolia/VILLA.webp",
-      "/X/Magnolia/LIVING ROOM.webp",
-      "/X/Magnolia/BEDROOM1.webp",
-      "/X/Magnolia/FAMILY ROOM.webp",
-      "/X/Magnolia/VILLA2.webp",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     amenities: [
       {
@@ -288,26 +301,27 @@ export const VILLAS = [
       "A private glass villa set within lush green surroundings, featuring a 1.5 acre landscaped lawn and a pool. Surrounded by peaceful nature yet close to the city, this is ideal for those seeking privacy and exclusivity within the city limits.",
     perfectFor: ["Celebrations", "Weddings", "Weekends"],
     categories: ["Weddings", "Pet friendly"],
-    image: "/X/Tranquil Woods/1.webp",
+    image:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/X/Tranquil Woods/1.webp",
-      "/X/Tranquil Woods/2.webp",
-      "/X/Tranquil Woods/3.webp",
-      "/X/Tranquil Woods/4.webp",
-      "/X/Tranquil Woods/7.webp",
-      "/X/Tranquil Woods/8.webp",
-      "/X/Tranquil Woods/9.webp",
-      "/X/Tranquil Woods/10.webp",
-      "/X/Tranquil Woods/11.webp",
-      "/X/Tranquil Woods/12.webp",
-      "/X/Tranquil Woods/13.webp",
-      "/X/Tranquil Woods/14.webp",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       "https://images.unsplash.com/photo-1613490908688-66236b22eb5c?auto=format&fit=crop&w=1600&q=80",
-      "/X/Tranquil Woods/16.webp",
-      "/X/Tranquil Woods/17.webp",
-      "/X/Tranquil Woods/18.webp",
-      "/X/Tranquil Woods/20.webp",
-      "/X/Tranquil Woods/24.webp",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     amenities: [
       { label: "Wifi", icon: "Wifi" },
@@ -317,9 +331,21 @@ export const VILLAS = [
     ],
     // ADDED STRUCTURE
     spaces: [
-      { name: "Lawn", image: "/X/Tranquil Woods/2.webp" },
-      { name: "Poolside", image: "/X/Tranquil Woods/3.webp" },
-      { name: "Living Area", image: "/X/Tranquil Woods/12.webp" },
+      {
+        name: "Lawn",
+        image:
+          "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Poolside",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Living Area",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     services: [
       {
@@ -448,15 +474,16 @@ export const VILLAS = [
       "A luxury villa set against the dramatic backdrop of Varlakonda Hill, it blends contemporary glass architecture with open green spaces and an immersive equestrian experience—ideal for intimate stays, curated gatherings, and nature-led celebrations.",
     perfectFor: ["Staycations", "Private Celebrations"],
     categories: ["Pre-wedding", "Pet friendly"],
-    image: "/X/Magnolia/10.webp",
+    image:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/X/Magnolia/17.webp",
-      "/X/Magnolia/18.webp",
-      "/X/Magnolia/19.webp",
-      "/X/Magnolia/22.webp",
-      "/X/Magnolia/VILLA.webp",
-      "/X/Magnolia/LIVING ROOM.webp",
-      "/X/Magnolia/BEDROOM1.webp",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     amenities: [
       { label: "Wifi", icon: "Wifi" },
@@ -465,9 +492,21 @@ export const VILLAS = [
       { label: "Hill View", icon: "Mountain" },
     ],
     spaces: [
-      { name: "Hill View", image: "/X/Magnolia/11.webp" },
-      { name: "Stables", image: "/X/Magnolia/12.webp" },
-      { name: "Interior", image: "/X/Magnolia/13.webp" },
+      {
+        name: "Hill View",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Stables",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Interior",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     services: [
       {
@@ -558,16 +597,29 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
-      { title: "Weddings", image: "/X/Magnolia/9.webp" },
-      { title: "Corporate Events", image: "/X/ROR/14.webp" },
+      {
+        title: "Weekend Getaways",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Weddings",
+        image:
+          "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Corporate Events",
+        image:
+          "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
       {
         title: "Photo Shoots",
         image:
-          "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
-    video: "/X/Magnolia/9.webp",
+    video:
+      "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "Is horse riding included?",
@@ -607,13 +659,13 @@ export const VILLAS = [
     ],
     categories: ["Pre-wedding", "Pet friendly", "Corporate Retreats"],
     image:
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_01_Image_0001.webp",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_01_Image_0001.webp",
-      "/X/Dome Villas/Red Dome/1.webp",
-      "/X/Dome Villas/Yellow Dome/DSC00323.webp",
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_05_Image_0002.webp",
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     amenities: [
       {
@@ -666,20 +718,25 @@ export const VILLAS = [
       },
     ],
     spaces: [
-      { name: "Dome Exterior", image: "/X/Dome Villas/Red Dome/1.webp" },
+      {
+        name: "Dome Exterior",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
       {
         name: "Pool Area",
-        image: "/X/Dome Villas/Yellow Dome/DSC00323.webp",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "Cozy Interior",
         image:
-          "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_05_Image_0002.webp",
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "Outdoor Deck",
         image:
-          "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     services: [
@@ -795,7 +852,8 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/X/Magnolia/VILLA2.webp",
+      mapImage:
+        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "Dome Villas, Doddaballapur, North Bengaluru",
       distance: "Approximately 60 minutes from Bangalore City Center",
       nearby: [
@@ -806,16 +864,29 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Romantic Stays", image: "/X/Magnolia/9.webp" },
-      { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
-      { title: "Nature Walks", image: "/X/ROR/14.webp" },
+      {
+        title: "Romantic Stays",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Weekend Getaways",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Nature Walks",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
       {
         title: "Pre-wedding Shoots",
         image:
-          "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+          "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
-    video: "/X/Magnolia/9.webp",
+    video:
+      "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "How many guests can each dome villa accommodate?",
@@ -876,16 +947,17 @@ export const VILLAS = [
       "Pre-wedding",
     ],
     categories: ["Weddings", "Corporate Retreats", "Pre-wedding"],
-    image: "/X/ROR/5.webp",
+    image:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/X/ROR/3.webp",
-      "/X/ROR/4.webp",
-      "/X/ROR/5.webp",
-      "/X/ROR/6.webp",
-      "/X/ROR/7.webp",
-      "/X/ROR/8.webp",
-      "/X/ROR/9.webp",
-      "/X/ROR/10.webp",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     amenities: [
       {
@@ -938,10 +1010,26 @@ export const VILLAS = [
       },
     ],
     spaces: [
-      { name: "Grand Lawn", image: "/X/ROR/6.webp" },
-      { name: "Banquet Hall", image: "/X/ROR/7.webp" },
-      { name: "Pool Deck", image: "/X/ROR/8.webp" },
-      { name: "Coconut Grove", image: "/X/ROR/9.webp" },
+      {
+        name: "Grand Lawn",
+        image:
+          "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Banquet Hall",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Pool Deck",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Coconut Grove",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     services: [
       {
@@ -1071,16 +1159,29 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Grand Weddings", image: "/X/Magnolia/9.webp" },
-      { title: "Corporate Offsites", image: "/X/ROR/14.webp" },
-      { title: "Concerts & Celebrations", image: "/X/Tranquil Woods/10.webp" },
+      {
+        title: "Grand Weddings",
+        image:
+          "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Corporate Offsites",
+        image:
+          "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Concerts & Celebrations",
+        image:
+          "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
       {
         title: "Pre-wedding Shoots",
         image:
-          "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+          "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
-    video: "/X/Magnolia/9.webp",
+    video:
+      "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "What is the maximum guest capacity?",
@@ -1129,16 +1230,17 @@ export const VILLAS = [
       "A villa retreat set amidst lush orchards, featuring two separate units. With a lap pool, outdoor spaces & nature experiences, Vannani is ideal for brunch & relaxed group getaways.",
     perfectFor: ["Staycations", "Family Getaways", "Celebrations"],
     categories: ["Pet friendly", "Corporate Retreats"],
-    image: "/X/Magnolia/17.webp",
+    image:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/X/Magnolia/12.webp",
-      "/X/Magnolia/13.webp",
-      "/X/Magnolia/14.webp",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
       "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
-      "/X/Magnolia/16.webp",
-      "/X/Magnolia/17.webp",
-      "/X/Magnolia/18.webp",
-      "/X/Magnolia/19.webp",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     amenities: [
       { label: "Waterfall Pool", icon: "Waves" },
@@ -1146,9 +1248,21 @@ export const VILLAS = [
       { label: "Tiny Home", icon: "Home" },
     ],
     spaces: [
-      { name: "Main Villa", image: "/X/Magnolia/18.webp" },
-      { name: "Cottage", image: "/X/Magnolia/19.webp" },
-      { name: "Tiny Home", image: "/X/Magnolia/22.webp" },
+      {
+        name: "Main Villa",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Cottage",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Tiny Home",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     services: [
       {
@@ -1229,7 +1343,8 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/X/Magnolia/VILLA2.webp",
+      mapImage:
+        "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "Vanani, Mysore Road, Near Wonderla, Bangalore",
       distance: "Approximately 50 minutes from Bangalore City Center",
       nearby: [
@@ -1239,11 +1354,24 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
-      { title: "Family Reunions", image: "/X/Magnolia/9.webp" },
-      { title: "Nature Retreats", image: "/X/ROR/14.webp" },
+      {
+        title: "Weekend Getaways",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Family Reunions",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Nature Retreats",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
-    video: "/X/Magnolia/9.webp",
+    video:
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "Is the jacuzzi heated?",
@@ -1286,23 +1414,24 @@ export const VILLAS = [
       "Weddings",
       "Corporate Retreats",
     ],
-    image: "/X/HAVEN/1.webp",
+    image:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/X/HAVEN/1.webp",
-      "/X/HAVEN/2.webp",
-      "/X/HAVEN/3.webp",
-      "/X/HAVEN/4.webp",
-      "/X/HAVEN/BEDROOM1.webp",
-      "/X/HAVEN/BEDROOM2.webp",
-      "/X/HAVEN/BEDROOM3.webp",
-      "/X/HAVEN/BONFIRE.webp",
-      "/X/HAVEN/DRONE LAWN NIGHT.webp",
-      "/X/HAVEN/DSC00104.webp",
-      "/X/HAVEN/HAVEN LIVING ROOM 4.webp",
-      "/X/HAVEN/POOL TABLE1.webp",
-      "/X/HAVEN/dining 1.webp",
-      "/X/HAVEN/lawn drone.webp",
-      "/X/HAVEN/pool new.webp",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     amenities: [
       {
@@ -1355,10 +1484,26 @@ export const VILLAS = [
       },
     ],
     spaces: [
-      { name: "Poolside", image: "/X/HAVEN/pool new.webp" },
-      { name: "Jacuzzi Suite", image: "/X/HAVEN/BEDROOM3.webp" },
-      { name: "Lawn Area", image: "/X/HAVEN/lawn drone.webp" },
-      { name: "Living Room", image: "/X/HAVEN/HAVEN LIVING ROOM 4.webp" },
+      {
+        name: "Poolside",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Jacuzzi Suite",
+        image:
+          "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Lawn Area",
+        image:
+          "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Living Room",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     services: [
       {
@@ -1473,7 +1618,8 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/X/Magnolia/VILLA2.webp",
+      mapImage:
+        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "The Haven, Hennur-Bagalur Road, North Bengaluru",
       distance: "Approximately 40 minutes from Hebbal",
       nearby: [
@@ -1484,15 +1630,29 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Wellness Retreats", image: "/X/Tranquil Woods/10.webp" },
-      { title: "Intimate Weddings", image: "/X/Magnolia/9.webp" },
-      { title: "Couple Shoots", image: "/X/ROR/14.webp" },
+      {
+        title: "Wellness Retreats",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Intimate Weddings",
+        image:
+          "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Couple Shoots",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
       {
         title: "Corporate Offsites",
-        image: "/X/HAVEN/HAVEN LIVING ROOM 4.webp",
+        image:
+          "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
-    video: "/X/Magnolia/9.webp",
+    video:
+      "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "How many guests can the villa accommodate?",
@@ -1541,20 +1701,21 @@ export const VILLAS = [
       "A contemporary private pool villa set against the scenic Varalakonda hill range, offering panoramic views, a waterfall pool, and open outdoor spaces. Designed for peaceful stays, intimate celebrations, and nature-led getaways away from the city.",
     perfectFor: ["Staycations", "Small Events", "Family Gatherings"],
     categories: ["Pet friendly", "Weddings"],
-    image: "/X/ROR/1.webp",
+    image:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/X/ROR/1.webp",
-      "/X/ROR/2.webp",
-      "/X/ROR/3.webp",
-      "/X/ROR/4.webp",
-      "/X/ROR/5.webp",
-      "/X/ROR/6.webp",
-      "/X/ROR/7.webp",
-      "/X/ROR/8.webp",
-      "/X/ROR/9.webp",
-      "/X/ROR/10.webp",
-      "/X/ROR/11.webp",
-      "/X/ROR/12.webp",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     amenities: [
       { label: "Infinity Pool", icon: "Waves" },
@@ -1562,9 +1723,21 @@ export const VILLAS = [
       { label: "Outdoor Space", icon: "Sun" },
     ],
     spaces: [
-      { name: "Infinity Pool", image: "/X/ROR/2.webp" },
-      { name: "Deck Area", image: "/X/ROR/3.webp" },
-      { name: "Living Room", image: "/X/ROR/4.webp" },
+      {
+        name: "Infinity Pool",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Deck Area",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Living Room",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     services: [
       {
@@ -1654,11 +1827,24 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Trekking", image: "/X/Tranquil Woods/10.webp" },
-      { title: "Cycling", image: "/X/Magnolia/9.webp" },
-      { title: "Bird Watching", image: "/X/ROR/14.webp" },
+      {
+        title: "Trekking",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Cycling",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Bird Watching",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
-    video: "/X/Magnolia/9.webp",
+    video:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "Is the road accessible for large vehicles?",
@@ -1687,15 +1873,16 @@ export const VILLAS = [
       "Emerald is a private pool villa designed as a traditional glasshouse around a central courtyard. This 2-bedroom villa combines indoor transparency with lush greenery, creating a setting suited for small group stays, intimate gatherings, and weekend getaways near Bangalore. With a private pool featuring an 8 ft waterfall, garden sit-outs, and courtyard living, the villa balances built space with open areas. Located 5 minutes from Embassy Riding School and 35 minutes from Hebbal, it offers accessibility with complete privacy.",
     perfectFor: ["Parties", "Staycations", "Celebrations", "Pre-wedding"],
     categories: ["Weddings", "Corporate Retreats", "Pet friendly"],
-    image: "/X/ROR/10.webp",
+    image:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/X/ROR/6.webp",
-      "/X/ROR/7.webp",
-      "/X/ROR/8.webp",
-      "/X/ROR/9.webp",
-      "/X/ROR/10.webp",
-      "/X/ROR/11.webp",
-      "/X/ROR/12.webp",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     amenities: [
       {
@@ -1748,10 +1935,26 @@ export const VILLAS = [
       },
     ],
     spaces: [
-      { name: "Waterfall Pool", image: "/X/ROR/6.webp" },
-      { name: "Glass House Interior", image: "/X/ROR/7.webp" },
-      { name: "Central Courtyard", image: "/X/ROR/8.webp" },
-      { name: "Garden Sit-out", image: "/X/ROR/9.webp" },
+      {
+        name: "Waterfall Pool",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Glass House Interior",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Central Courtyard",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Garden Sit-out",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     services: [
       {
@@ -1871,7 +2074,8 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/X/Magnolia/VILLA2.webp",
+      mapImage:
+        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "Emerald, Near Embassy Riding School, North Bengaluru",
       distance: "Approximately 35 minutes from Hebbal, Bangalore",
       nearby: [
@@ -1882,12 +2086,29 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Pool Parties", image: "/X/Tranquil Woods/10.webp" },
-      { title: "Romantic Stays", image: "/X/Magnolia/9.webp" },
-      { title: "Pre-wedding Shoots", image: "/X/ROR/11.webp" },
-      { title: "Weekend Getaways", image: "/X/ROR/12.webp" },
+      {
+        title: "Pool Parties",
+        image:
+          "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Romantic Stays",
+        image:
+          "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Pre-wedding Shoots",
+        image:
+          "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Weekend Getaways",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
-    video: "/X/Magnolia/9.webp",
+    video:
+      "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "How many guests can the villa accommodate?",
@@ -1936,16 +2157,17 @@ export const VILLAS = [
       "Experience the magic of slow living in our boutique treehouse-themed villa. Perfect for intimate groups, this cozy 2-BHK property offers a unique connection with nature, featuring rustic architecture and serene views.",
     perfectFor: ["Slow Living", "Intimate Gatherings", "Romantic Stays"],
     categories: ["Pre-wedding", "Pet friendly"],
-    image: "/X/Magnolia/14.webp",
+    image:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/X/Magnolia/14.webp",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
-      "/X/Magnolia/16.webp",
-      "/X/Magnolia/17.webp",
-      "/X/Magnolia/18.webp",
-      "/X/Magnolia/19.webp",
-      "/X/Magnolia/22.webp",
-      "/X/Magnolia/VILLA.webp",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     amenities: [
       { label: "Treehouse Deck", icon: "Home" },
@@ -1958,7 +2180,11 @@ export const VILLAS = [
         image:
           "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
       },
-      { name: "Cozy Room", image: "/X/Magnolia/16.webp" },
+      {
+        name: "Cozy Room",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     services: [
       {
@@ -1984,8 +2210,15 @@ export const VILLAS = [
     locationDetails: {
       address: "Wonderland Treehouse, Doddaballapur, Bangalore",
     },
-    activities: [{ title: "Nature Walks", image: "/X/Tranquil Woods/10.webp" }],
-    video: "/X/Magnolia/9.webp",
+    activities: [
+      {
+        title: "Nature Walks",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+    ],
+    video:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [{ question: "Is it safe?", answer: "Yes, fully secured and gated." }],
   },
   {
@@ -1997,14 +2230,16 @@ export const VILLAS = [
       "A luxurious 4BHK retreat with a private pool, ideal for intimate gatherings and private escapes.",
     description:
       "A luxurious 4BHK retreat with a private pool, ideal for intimate gatherings and private escapes.",
-    thumbnail: "/images/retreats/735/735-thumb.jpg",
-    image: "/images/retreats/735/735-thumb.jpg",
+    thumbnail:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    image:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/images/retreats/735/735-1.jpg",
-      "/images/retreats/735/735-2.jpg",
-      "/images/retreats/735/735-3.jpg",
-      "/images/retreats/735/735-4.jpg",
-      "/images/retreats/735/735-5.jpg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     stats: {
       stay: "10 Guests",
@@ -2135,16 +2370,48 @@ export const VILLAS = [
       "Weekend Getaways",
     ],
     activities: [
-      { title: "Pool Party", image: "/images/activities/pool.jpg" },
-      { title: "BBQ Night", image: "/images/activities/bbq.jpg" },
-      { title: "Board Games", image: "/images/activities/games.jpg" },
-      { title: "Outdoor Dining", image: "/images/activities/dining.jpg" },
+      {
+        title: "Pool Party",
+        image:
+          "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "BBQ Night",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Board Games",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "Outdoor Dining",
+        image:
+          "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     spaces: [
-      { name: "Private Pool", image: "/images/spaces/pool.jpg" },
-      { name: "Main Lawn", image: "/images/spaces/lawn.jpg" },
-      { name: "Lounge Areas", image: "/images/spaces/lounge.jpg" },
-      { name: "Terrace Space", image: "/images/spaces/terrace.jpg" },
+      {
+        name: "Private Pool",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Main Lawn",
+        image:
+          "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Lounge Areas",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "Terrace Space",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     pricing: {
       stay: {
@@ -2164,12 +2431,14 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/images/map/jade-735.jpg",
+      mapImage:
+        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "Jade 735, Devanahalli, Bangalore",
       distance: "Near Airport",
       nearby: [{ label: "AIRPORT", distance: "10 mins" }],
     },
-    video: "/images/retreats/735/video.jpg",
+    video:
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "Is the pool strictly private?",
@@ -2217,14 +2486,16 @@ export const VILLAS = [
       "[INFERRED] A scenic 3BHK farmhouse retreat offering lush hill views, ideal for weekend getaways and small events up to 40 guests.",
     description:
       "[INFERRED] Surrounded by nature, Lemon Tree is a tranquil 3BHK farmhouse that provides a perfect escape from the city. Featuring expansive lawns and panoramic hill views, it is designed for memorable weekend stays for up to 14 guests and intimate events for up to 40 guests.",
-    thumbnail: "/images/retreats/lemon/lemon-thumb.jpg",
-    image: "/images/retreats/lemon/lemon-thumb.jpg",
+    thumbnail:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    image:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/images/retreats/lemon/lemon-1.jpg",
-      "/images/retreats/lemon/lemon-2.jpg",
-      "/images/retreats/lemon/lemon-3.jpg",
-      "/images/retreats/lemon/lemon-4.jpg",
-      "/images/retreats/lemon/lemon-5.jpg",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     stats: {
       stay: "14 Guests",
@@ -2357,23 +2628,46 @@ export const VILLAS = [
     activities: [
       {
         title: "[INFERRED] Nature Treks",
-        image: "/images/activities/trek.jpg",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
-      { title: "[INFERRED] BBQ Setup", image: "/images/activities/bbq.jpg" },
+      {
+        title: "[INFERRED] BBQ Setup",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
       {
         title: "[INFERRED] Star Gazing",
-        image: "/images/activities/stars.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
-      { title: "[INFERRED] Lawn Games", image: "/images/activities/games.jpg" },
+      {
+        title: "[INFERRED] Lawn Games",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     spaces: [
       {
         name: "[INFERRED] Hill View Lawn",
-        image: "/images/spaces/view-lawn.jpg",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
-      { name: "[INFERRED] Farmhouse Porch", image: "/images/spaces/porch.jpg" },
-      { name: "[INFERRED] Living Room", image: "/images/spaces/living.jpg" },
-      { name: "[INFERRED] Garden Path", image: "/images/spaces/garden.jpg" },
+      {
+        name: "[INFERRED] Farmhouse Porch",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "[INFERRED] Living Room",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "[INFERRED] Garden Path",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     pricing: {
       stay: {
@@ -2393,12 +2687,14 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/images/map/lemon-tree.jpg",
+      mapImage:
+        "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "[INFERRED] Lemon Tree, near Nandi Hills, Bangalore",
       distance: "[INFERRED] Approx 1 hour from the city",
       nearby: [{ label: "NANDI HILLS", distance: "20 mins" }],
     },
-    video: "/images/retreats/lemon/video.jpg",
+    video:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "Is the property wheelchair accessible?",
@@ -2446,14 +2742,16 @@ export const VILLAS = [
       "[INFERRED] A stylish, modern lounge retreat designed for vibrant parties, casual get-togethers, and relaxed weekend stays for up to 30 guests.",
     description:
       "[INFERRED] Experience the ultimate party vibe at Lounge Fly. Boasting chic interiors, high-end entertainment systems, and dynamic outdoor spaces, it is the perfect venue for celebrations and exclusive weekend stays.",
-    thumbnail: "/images/retreats/lounge/lounge-thumb.jpg",
-    image: "/images/retreats/lounge/lounge-thumb.jpg",
+    thumbnail:
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    image:
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/images/retreats/lounge/lounge-1.jpg",
-      "/images/retreats/lounge/lounge-2.jpg",
-      "/images/retreats/lounge/lounge-3.jpg",
-      "/images/retreats/lounge/lounge-4.jpg",
-      "/images/retreats/lounge/lounge-5.jpg",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     stats: {
       stay: "[INFERRED] 12 Guests",
@@ -2580,22 +2878,48 @@ export const VILLAS = [
       "Friends Getaways",
     ],
     activities: [
-      { title: "[INFERRED] DJ Night", image: "/images/activities/dj.jpg" },
-      { title: "[INFERRED] Mixology", image: "/images/activities/bar.jpg" },
+      {
+        title: "[INFERRED] DJ Night",
+        image:
+          "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        title: "[INFERRED] Mixology",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
       {
         title: "[INFERRED] Board Games",
-        image: "/images/activities/games.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
-      { title: "[INFERRED] BBQ Dinner", image: "/images/activities/bbq.jpg" },
+      {
+        title: "[INFERRED] BBQ Dinner",
+        image:
+          "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     spaces: [
       {
         name: "[INFERRED] Main Lounge",
-        image: "/images/spaces/lounge-main.jpg",
+        image:
+          "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
-      { name: "[INFERRED] Party Deck", image: "/images/spaces/deck.jpg" },
-      { name: "[INFERRED] Bar Area", image: "/images/spaces/bar-area.jpg" },
-      { name: "[INFERRED] Master Suite", image: "/images/spaces/suite.jpg" },
+      {
+        name: "[INFERRED] Party Deck",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "[INFERRED] Bar Area",
+        image:
+          "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
+      {
+        name: "[INFERRED] Master Suite",
+        image:
+          "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
     ],
     pricing: {
       stay: {
@@ -2611,12 +2935,14 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/images/map/lounge-fly.jpg",
+      mapImage:
+        "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "[INFERRED] Lounge Fly Location, Bangalore",
       distance: "[INFERRED] Within city limits",
       nearby: [{ label: "CITY CENTER", distance: "30 mins" }],
     },
-    video: "/images/retreats/lounge/video.jpg",
+    video:
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "Can we hire an outside DJ?",
@@ -2663,14 +2989,16 @@ export const VILLAS = [
       "[INFERRED] An exquisite luxury retreat surrounded by lush greenery, perfect for intimate gatherings, elegant stays, and premium weekend escapes.",
     description:
       "[INFERRED] Discover the tranquility of Magnolia. This opulent retreat merges classic architecture with modern amenities, offering expansive lawns, plush interiors, and highly personalized services for an unforgettable experience.",
-    thumbnail: "/images/retreats/magnolia/magnolia-thumb.jpg",
-    image: "/images/retreats/magnolia/magnolia-thumb.jpg",
+    thumbnail:
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    image:
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/images/retreats/magnolia/magnolia-1.jpg",
-      "/images/retreats/magnolia/magnolia-2.jpg",
-      "/images/retreats/magnolia/magnolia-3.jpg",
-      "/images/retreats/magnolia/magnolia-4.jpg",
-      "/images/retreats/magnolia/magnolia-5.jpg",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     stats: {
       stay: "[INFERRED] 14 Guests",
@@ -2800,34 +3128,45 @@ export const VILLAS = [
     activities: [
       {
         title: "[INFERRED] Poolside Brunch",
-        image: "/images/activities/brunch.jpg",
+        image:
+          "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
-      { title: "[INFERRED] Garden Yoga", image: "/images/activities/yoga.jpg" },
+      {
+        title: "[INFERRED] Garden Yoga",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
       {
         title: "[INFERRED] Movie Night",
-        image: "/images/activities/movie.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Fine Dining",
-        image: "/images/activities/dining.jpg",
+        image:
+          "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     spaces: [
       {
         name: "[INFERRED] The Grand Lawn",
-        image: "/images/spaces/magnolia-lawn.jpg",
+        image:
+          "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Infinity Pool",
-        image: "/images/spaces/magnolia-pool.jpg",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Master Bedroom",
-        image: "/images/spaces/magnolia-room.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Elegant Living",
-        image: "/images/spaces/magnolia-living.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     pricing: {
@@ -2848,12 +3187,14 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/images/map/magnolia.jpg",
+      mapImage:
+        "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "[INFERRED] Magnolia Estate, Bangalore",
       distance: "[INFERRED] 45 mins from CBD",
       nearby: [{ label: "AIRPORT", distance: "60 mins" }],
     },
-    video: "/images/retreats/magnolia/video.jpg",
+    video:
+      "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "Is Magnolia pet-friendly?",
@@ -2901,14 +3242,16 @@ export const VILLAS = [
       "[INFERRED] A majestic luxury retreat inspired by royal architecture, featuring sprawling courtyards, opulent interiors, and world-class hospitality.",
     description:
       "[INFERRED] Experience the grandeur of Palatio. Designed with intricate architectural details and vast open spaces, this retreat offers a regal getaway perfect for high-profile events, luxury stays, and exclusive celebrations.",
-    thumbnail: "/images/retreats/palatio/palatio-thumb.jpg",
-    image: "/images/retreats/palatio/palatio-thumb.jpg",
+    thumbnail:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    image:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/images/retreats/palatio/palatio-1.jpg",
-      "/images/retreats/palatio/palatio-2.jpg",
-      "/images/retreats/palatio/palatio-3.jpg",
-      "/images/retreats/palatio/palatio-4.jpg",
-      "/images/retreats/palatio/palatio-5.jpg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     stats: {
       stay: "[INFERRED] 16 Guests",
@@ -3041,34 +3384,45 @@ export const VILLAS = [
     activities: [
       {
         title: "[INFERRED] Royal Dining",
-        image: "/images/activities/royal-dining.jpg",
+        image:
+          "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Courtyard Events",
-        image: "/images/activities/courtyard.jpg",
+        image:
+          "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
-      { title: "[INFERRED] Spa Sessions", image: "/images/activities/spa.jpg" },
+      {
+        title: "[INFERRED] Spa Sessions",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
       {
         title: "[INFERRED] Poolside Galas",
-        image: "/images/activities/gala.jpg",
+        image:
+          "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     spaces: [
       {
         name: "[INFERRED] The Grand Hall",
-        image: "/images/spaces/palatio-hall.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Royal Suite",
-        image: "/images/spaces/palatio-suite.jpg",
+        image:
+          "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Central Courtyard",
-        image: "/images/spaces/palatio-courtyard.jpg",
+        image:
+          "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Terraced Lawns",
-        image: "/images/spaces/palatio-lawns.jpg",
+        image:
+          "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     pricing: {
@@ -3089,12 +3443,14 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/images/map/palatio.jpg",
+      mapImage:
+        "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "[INFERRED] Legacy Estates, Bangalore",
       distance: "[INFERRED] 50 mins from CBD",
       nearby: [{ label: "AIRPORT", distance: "65 mins" }],
     },
-    video: "/images/retreats/palatio/video.jpg",
+    video:
+      "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "Can Palatio accommodate large events?",
@@ -3142,14 +3498,16 @@ export const VILLAS = [
       "[INFERRED] An architectural masterpiece perched on a ridge, offering uninterrupted panoramic views, infinity pools, and ultra-luxury living.",
     description:
       "[INFERRED] Elevate your getaway experience at Retreat on the Ridge. Nestled high above the city, this sanctuary combines striking modern design with the tranquility of nature. Experience edge-of-the-world living with floor-to-ceiling glass walls, sprawling decks, and an infinity pool that blends into the horizon.",
-    thumbnail: "/images/retreats/retreat-on-the-ridge/rotr-thumb.jpg",
-    image: "/images/retreats/retreat-on-the-ridge/rotr-thumb.jpg",
+    thumbnail:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    image:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/images/retreats/retreat-on-the-ridge/rotr-1.jpg",
-      "/images/retreats/retreat-on-the-ridge/rotr-2.jpg",
-      "/images/retreats/retreat-on-the-ridge/rotr-3.jpg",
-      "/images/retreats/retreat-on-the-ridge/rotr-4.jpg",
-      "/images/retreats/retreat-on-the-ridge/rotr-5.jpg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     stats: {
       stay: "[INFERRED] 12 Guests",
@@ -3284,34 +3642,45 @@ export const VILLAS = [
     activities: [
       {
         title: "[INFERRED] Infinity Swimming",
-        image: "/images/activities/infinity-pool.jpg",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Sunset Barbecue",
-        image: "/images/activities/barbecue.jpg",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Guided Trekking",
-        image: "/images/activities/trekking.jpg",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Stargazing",
-        image: "/images/activities/stargaze.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     spaces: [
-      { name: "[INFERRED] Ridge Deck", image: "/images/spaces/rotr-deck.jpg" },
+      {
+        name: "[INFERRED] Ridge Deck",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      },
       {
         name: "[INFERRED] Sky Living Room",
-        image: "/images/spaces/rotr-living.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Master Bedroom",
-        image: "/images/spaces/rotr-master.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Yoga Pavilion",
-        image: "/images/spaces/rotr-yoga.jpg",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     pricing: {
@@ -3332,12 +3701,14 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/images/map/retreat-on-the-ridge.jpg",
+      mapImage:
+        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "[INFERRED] Hilltop Estates, Nandi Hills, Bangalore",
       distance: "[INFERRED] 60 mins from CBD",
       nearby: [{ label: "AIRPORT", distance: "45 mins" }],
     },
-    video: "/images/retreats/retreat-on-the-ridge/video.jpg",
+    video:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "Is the infinity pool heated?",
@@ -3385,14 +3756,16 @@ export const VILLAS = [
       "[INFERRED] An extraordinary palatial estate designed for majestic celebrations and ultra-luxurious stays, featuring lush gardens and regal interiors.",
     description:
       "[INFERRED] Step into a world of grandeur at Royalty. This opulent estate offers a unique blend of classic palatial architecture and modern luxury. With its sweeping staircases, crystal chandeliers, expansive royal suites, and meticulously manicured grounds, Royalty is the ultimate destination for grand weddings, exclusive corporate retreats, and unforgettable family reunions.",
-    thumbnail: "/images/retreats/royalty/royalty-thumb.jpg",
-    image: "/images/retreats/royalty/royalty-thumb.jpg",
+    thumbnail:
+      "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    image:
+      "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/images/retreats/royalty/royalty-1.jpg",
-      "/images/retreats/royalty/royalty-2.jpg",
-      "/images/retreats/royalty/royalty-3.jpg",
-      "/images/retreats/royalty/royalty-4.jpg",
-      "/images/retreats/royalty/royalty-5.jpg",
+      "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     stats: {
       stay: "[INFERRED] 16 Guests",
@@ -3527,37 +3900,45 @@ export const VILLAS = [
     activities: [
       {
         title: "[INFERRED] Royal Banquet",
-        image: "/images/activities/banquet.jpg",
+        image:
+          "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Poolside Soiree",
-        image: "/images/activities/pool-party.jpg",
+        image:
+          "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Garden High Tea",
-        image: "/images/activities/high-tea.jpg",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Billiards & Cigars",
-        image: "/images/activities/billiards.jpg",
+        image:
+          "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     spaces: [
       {
         name: "[INFERRED] Grand Ballroom",
-        image: "/images/spaces/royalty-ballroom.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Imperial Garden",
-        image: "/images/spaces/royalty-garden.jpg",
+        image:
+          "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Royal Master Suite",
-        image: "/images/spaces/royalty-master.jpg",
+        image:
+          "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Fountain Courtyard",
-        image: "/images/spaces/royalty-courtyard.jpg",
+        image:
+          "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     pricing: {
@@ -3593,12 +3974,14 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/images/map/royalty.jpg",
+      mapImage:
+        "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "[INFERRED] Devanahalli main road, Bangalore",
       distance: "[INFERRED] 45 mins from CBD",
       nearby: [{ label: "AIRPORT", distance: "15 mins" }],
     },
-    video: "/images/retreats/royalty/video.jpg",
+    video:
+      "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "What is the maximum capacity for events?",
@@ -3646,14 +4029,16 @@ export const VILLAS = [
       "[INFERRED] Escape to a serene natural oasis with lush greenery, providing the perfect sanctuary for relaxation and rejuvenation.",
     description:
       "[INFERRED] Tranquil is a breathtaking nature retreat designed to seamlessly blend luxury with the environment. Surrounded by verdant landscapes and whispering trees, this villa offers a peaceful haven away from the city's hustle. Perfect for intimate family getaways, wellness retreats, or simply unwinding in the lap of nature.",
-    thumbnail: "/images/retreats/tranquil/tranquil-thumb.jpg",
-    image: "/images/retreats/tranquil/tranquil-thumb.jpg",
+    thumbnail:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    image:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/images/retreats/tranquil/tranquil-1.jpg",
-      "/images/retreats/tranquil/tranquil-2.jpg",
-      "/images/retreats/tranquil/tranquil-3.jpg",
-      "/images/retreats/tranquil/tranquil-4.jpg",
-      "/images/retreats/tranquil/tranquil-5.jpg",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     stats: {
       stay: "[INFERRED] 8 Guests",
@@ -3783,37 +4168,45 @@ export const VILLAS = [
     activities: [
       {
         title: "[INFERRED] Yoga Session",
-        image: "/images/activities/yoga.jpg",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Nature Walk",
-        image: "/images/activities/nature-walk.jpg",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Organic Dining",
-        image: "/images/activities/organic-dining.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Poolside Relaxation",
-        image: "/images/activities/pool-relax.jpg",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     spaces: [
       {
         name: "[INFERRED] Zen Garden",
-        image: "/images/spaces/tranquil-garden.jpg",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Yoga Deck",
-        image: "/images/spaces/tranquil-deck.jpg",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Nature Suite",
-        image: "/images/spaces/tranquil-suite.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Infinity Pool",
-        image: "/images/spaces/tranquil-pool.jpg",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     pricing: {
@@ -3849,12 +4242,14 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/images/map/tranquil.jpg",
+      mapImage:
+        "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "[INFERRED] Outskirts, Bangalore",
       distance: "[INFERRED] 60 mins from CBD",
       nearby: [{ label: "NATURE RESERVE", distance: "10 mins" }],
     },
-    video: "/images/retreats/tranquil/video.jpg",
+    video:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "What is the maximum capacity for a stay?",
@@ -3902,14 +4297,16 @@ export const VILLAS = [
       "[INFERRED] A magical escape designed for families, featuring whimsical themes, expansive play areas, and luxury comfort for all ages.",
     description:
       "[INFERRED] Step into a world of imagination at Wonderland. This uniquely designed retreat is built to enchant children and relax adults. With themed bedrooms, an exclusive kids' splash pool, outdoor adventure zones, and premium amenities for parents, Wonderland offers the ultimate family staycation experience.",
-    thumbnail: "/images/retreats/wonderland/wonderland-thumb.jpg",
-    image: "/images/retreats/wonderland/wonderland-thumb.jpg",
+    thumbnail:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    image:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
     images: [
-      "/images/retreats/wonderland/wonderland-1.jpg",
-      "/images/retreats/wonderland/wonderland-2.jpg",
-      "/images/retreats/wonderland/wonderland-3.jpg",
-      "/images/retreats/wonderland/wonderland-4.jpg",
-      "/images/retreats/wonderland/wonderland-5.jpg",
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     stats: {
       stay: "[INFERRED] 12 Guests",
@@ -4040,37 +4437,45 @@ export const VILLAS = [
     activities: [
       {
         title: "[INFERRED] Treasure Hunt",
-        image: "/images/activities/treasure-hunt.jpg",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Pool Games",
-        image: "/images/activities/pool-games.jpg",
+        image:
+          "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Outdoor Cinema",
-        image: "/images/activities/outdoor-cinema.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         title: "[INFERRED] Board Game Night",
-        image: "/images/activities/board-games.jpg",
+        image:
+          "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     spaces: [
       {
         name: "[INFERRED] Play Lawn",
-        image: "/images/spaces/wonderland-lawn.jpg",
+        image:
+          "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Treehouse",
-        image: "/images/spaces/wonderland-treehouse.jpg",
+        image:
+          "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Themed Bedroom",
-        image: "/images/spaces/wonderland-bed.jpg",
+        image:
+          "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
       {
         name: "[INFERRED] Splash Pool",
-        image: "/images/spaces/wonderland-pool.jpg",
+        image:
+          "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600",
       },
     ],
     pricing: {
@@ -4106,12 +4511,14 @@ export const VILLAS = [
       },
     },
     locationDetails: {
-      mapImage: "/images/map/wonderland.jpg",
+      mapImage:
+        "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
       address: "[INFERRED] Outskirts, Bangalore",
       distance: "[INFERRED] 45 mins from Airport",
       nearby: [{ label: "AMUSEMENT PARK", distance: "15 mins" }],
     },
-    video: "/images/retreats/wonderland/video.jpg",
+    video:
+      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
     faq: [
       {
         question: "Is the villa safe for toddlers?",

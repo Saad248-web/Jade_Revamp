@@ -56,15 +56,15 @@ export default function BlogSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen lg:h-screen flex flex-col justify-center overflow-hidden py-12 lg:py-10"
+      className="relative min-h-[60vh] lg:h-screen flex flex-col justify-center overflow-hidden py-8 lg:py-10"
       style={{ backgroundColor: "#25282C" }}
     >
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       <div className="max-w-[1920px] mx-auto w-full px-6 md:px-12 lg:px-24">
         {/* Header Area */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 lg:mb-12 gap-6 md:gap-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 lg:mb-12 gap-4 md:gap-8">
           <div className="max-w-2xl">
-            <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-3">
+            <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-2">
               BLOG
             </p>
             <h2 className="font-philosopher text-gh-h2 sm:text-gh-h1 text-white mb-4 lg:mb-5">

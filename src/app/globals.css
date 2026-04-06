@@ -15,6 +15,7 @@
     --fs-body: 14px;
     --fs-desc: 12px;
     --fs-label: 10px;
+    --fs-carousel-sub: 13px;
   }
 
   @media (min-width: 768px) {
@@ -26,6 +27,7 @@
       --fs-body: 16px;
       --fs-desc: 13px;
       --fs-label: 12px;
+      --fs-carousel-sub: 14px;
     }
   }
 
@@ -38,6 +40,7 @@
       --fs-body: 18px;
       --fs-desc: 14px;
       --fs-label: 12px;
+      --fs-carousel-sub: 16px;
     }
   }
 
@@ -50,6 +53,7 @@
       --fs-body: 18px;
       --fs-desc: 14px;
       --fs-label: 12px;
+      --fs-carousel-sub: 16px;
     }
   }
 }
@@ -121,6 +125,9 @@
   }
   .text-gh-label {
     font-size: var(--fs-label) !important;
+  }
+  .text-gh-carousel-sub {
+    font-size: var(--fs-carousel-sub) !important;
   }
 }
 

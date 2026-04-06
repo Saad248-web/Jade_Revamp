@@ -174,7 +174,7 @@ export default function Footer() {
         </div>
 
         {/* ── FORM SECTION ─────────────────────────────────────────────── */}
-        <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pt-20 pb-16">
+        <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pt-10 lg:pt-20 pb-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
             {/* LEFT: Heading + (Desktop) Links + Contact */}
             <div className="lg:col-span-6 flex flex-col gap-16">
