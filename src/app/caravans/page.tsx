@@ -114,7 +114,7 @@ export default function CaravansPage() {
           title="The Caravan"
           slides={caravanSlides}
           ctaText="BOOK CARAVAN"
-          aspectClass="aspect-[343/531]"
+          aspectClass="aspect-[343/240] md:aspect-[21/9]"
           buttonContainerClassName="h-[54px]"
         />
       </div>

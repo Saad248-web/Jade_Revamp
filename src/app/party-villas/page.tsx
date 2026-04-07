@@ -126,7 +126,7 @@ export default function PartyVillasPage() {
         title="Party Types"
         slides={partySlides}
         ctaText="BOOK A PARTY VILLA"
-        aspectClass="aspect-[343/531]"
+        aspectClass="aspect-[4/3] md:aspect-[16/9]"
         buttonContainerClassName="h-[54px]"
       />
 
@@ -141,7 +141,11 @@ export default function PartyVillasPage() {
           { title: "BBQ & Live Grills", image: "/X/Tranquil Woods/9.webp" },
           { title: "Cocktail Bar Setup", image: "/X/HAVEN/pool new.webp" },
           { title: "Bonfire Nights", image: "/X/HAVEN/BONFIRE.webp" },
-          { title: "Movie Under the Stars", image: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_13_Image_0001.webp" },
+          {
+            title: "Movie Under the Stars",
+            image:
+              "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_13_Image_0001.webp",
+          },
           { title: "Themed Decor & Styling", image: "/X/Magnolia/13.webp" },
         ]}
       />

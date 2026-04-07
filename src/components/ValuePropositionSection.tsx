@@ -57,8 +57,8 @@ export default function ValuePropositionSection() {
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
-      {/* ── TOP 70% (75% on Mobile) — full-bleed background image ── */}
-      <div className="absolute inset-x-0 top-0 h-[75%] lg:h-[70%] z-0 overflow-hidden">
+      {/* ── TOP 80vh — full-bleed background image ── */}
+      <div className="absolute inset-x-0 top-0 h-[80vh] z-0 overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
           <Image
             src={currentSlide.bgImage}
@@ -73,8 +73,8 @@ export default function ValuePropositionSection() {
         </div>
       </div>
 
-      {/* ── BOTTOM 30% (25% on Mobile) — solid charcoal anchor ── */}
-      <div className="absolute inset-x-0 bottom-0 h-[25%] lg:h-[30%] z-10 bg-[#25282C]" />
+      {/* ── BOTTOM 20vh — solid charcoal anchor ── */}
+      <div className="absolute inset-x-0 bottom-0 h-[20vh] z-10 bg-[#25282C]" />
 
       {/* ── TEXT — sits inside the image zone, near the top ── */}
       <div className="absolute inset-x-0 top-[8vh] z-20 flex flex-col items-center text-center px-6 sm:px-10 pointer-events-none">
@@ -106,7 +106,7 @@ export default function ValuePropositionSection() {
       <button
         onClick={handlePrev}
         aria-label="Previous"
-        className="absolute left-4 sm:left-8 lg:left-16 xl:left-28 top-[75%] lg:top-[70%] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
+        className="absolute left-4 sm:left-8 lg:left-16 xl:left-28 top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
       >
         <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white group-hover:-translate-x-1 transition-transform" />
       </button>
@@ -114,15 +114,15 @@ export default function ValuePropositionSection() {
       <button
         onClick={handleNext}
         aria-label="Next"
-        className="absolute right-4 sm:right-8 lg:right-16 xl:right-28 top-[75%] lg:top-[70%] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
+        className="absolute right-4 sm:right-8 lg:right-16 xl:right-28 top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
       >
         <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white group-hover:translate-x-1 transition-transform" />
       </button>
 
       {/* ── FEATURE CARD — perfectly centred on the seam ── */}
       <div
-        className="absolute top-[75%] lg:top-[70%] -translate-y-1/2 left-1/2 -translate-x-1/2 z-30
-                      w-[55vw] max-w-[340px] sm:w-[45vw] sm:max-w-[400px] lg:w-[32vw] lg:max-w-[460px] xl:w-[26vw]
+        className="absolute top-[80vh] -translate-y-1/2 left-1/2 -translate-x-1/2 z-30
+                      w-[45vw] max-w-[280px] sm:w-[35vw] sm:max-w-[320px] lg:w-[24vw] lg:max-w-[380px] xl:w-[20vw]
                       aspect-[4/3]
                       shadow-[0_20px_50px_rgba(0,0,0,0.55)] overflow-hidden border border-white/20"
       >

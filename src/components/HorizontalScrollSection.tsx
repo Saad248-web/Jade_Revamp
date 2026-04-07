@@ -239,7 +239,7 @@ function StackedPanel({
           <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg xl:max-w-xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
             {/* Image/Grid Section */}
             <div
-              className={`relative w-full aspect-[4/5] sm:aspect-[3/4] md:aspect-square lg:aspect-[4/3] max-h-[45vh] md:max-h-[52vh] lg:max-h-[58vh] overflow-hidden shadow-2xl rounded-none ${isGrid ? "bg-transparent" : "bg-black"}`}
+              className={`relative w-full aspect-[4/3] md:aspect-[16/9] max-h-[45vh] md:max-h-[52vh] lg:max-h-[58vh] overflow-hidden shadow-2xl rounded-none ${isGrid ? "bg-transparent" : "bg-black"}`}
             >
               <div className="w-full h-full relative">
                 {!isGrid ? (

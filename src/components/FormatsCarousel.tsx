@@ -107,7 +107,7 @@ export default function FormatsCarousel() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-16 items-start">
         {/* IMAGES: Optimized for 8pt Spacing grid */}
         <div className="relative order-1 lg:order-1">
-          <div className="relative overflow-hidden aspect-[4/5] md:aspect-[3/2] lg:aspect-[4/3] w-full">
+          <div className="relative overflow-hidden aspect-[4/3] md:aspect-[16/9] w-full">
             <AnimatePresence initial={false} custom={direction}>
               <motion.div
                 key={index}

@@ -106,7 +106,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
         {/* CONTENT SHEET */}
         <div className="flex-1 bg-[#0E3A2F] rounded-t-2xl md:rounded-t-[48px] shadow-[0_-20px_80px_rgba(0,0,0,0.6)] relative z-10">
           <div className="max-w-4xl mx-auto w-full pb-32">
-            <div className="relative aspect-[4/5] md:aspect-[16/9] w-full overflow-hidden rounded-t-[32px] md:rounded-t-[48px] group">
+            <div className="relative aspect-[4/3] md:aspect-[16/9] w-full overflow-hidden rounded-t-[32px] md:rounded-t-[48px] group">
               <AnimatePresence initial={false} custom={direction}>
                 <motion.div
                   key={currentImageIndex}

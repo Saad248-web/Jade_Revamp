@@ -210,7 +210,7 @@ function CelebrationPanelSlide({
         >
           <div className="relative w-full h-full max-w-xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
             {/* Image Section */}
-            <div className="relative w-full aspect-[4/5] md:aspect-square lg:aspect-[4/3] max-h-[50vh] lg:max-h-[60vh] overflow-hidden shadow-2xl rounded-none bg-black">
+            <div className="relative w-full aspect-[4/3] md:aspect-[16/9] max-h-[50vh] lg:max-h-[60vh] overflow-hidden shadow-2xl rounded-none bg-black">
               <div className="w-full h-full relative">
                 <Image
                   src={data.image}

@@ -31,7 +31,7 @@ export default function ExperienceCarouselSection({
   ctaText,
   ctaLink,
   onCtaClick,
-  aspectClass = "aspect-[4/5] md:aspect-[21/9]",
+  aspectClass = "aspect-[4/3] md:aspect-[16/9]",
   buttonClassName = "w-full text-gh-label",
   buttonContainerClassName = "",
 }: ExperienceCarouselSectionProps) {

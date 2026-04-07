@@ -55,7 +55,7 @@ export default function CuratedExperiencesGrid({
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               viewport={{ once: true }}
-              className="relative aspect-square md:aspect-[4/5] overflow-hidden group border border-white/5"
+              className="relative aspect-[4/3] md:aspect-[16/9] overflow-hidden group border border-white/5"
             >
               <Image
                 src={exp.image}

@@ -270,7 +270,7 @@ export default function WeddingServicesSection() {
             <div className="relative">
               <motion.div
                 key={`img-desk-${currentIndex}`}
-                className="relative w-full aspect-[4/5] rounded-none overflow-hidden shadow-2xl border border-white/10"
+                className="relative w-full aspect-[16/9] rounded-none overflow-hidden shadow-2xl border border-white/10"
                 style={{ y: imageY }}
                 initial={{ opacity: 0, scale: 0.95, x: 20 }}
                 animate={{ opacity: 1, scale: 1, x: 0 }}

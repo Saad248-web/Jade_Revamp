@@ -221,7 +221,7 @@ function PanelSlide({
         <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-24">
           <div className="relative w-full h-full max-w-xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
             {/* Image Section */}
-            <div className="relative w-full aspect-[4/5] md:aspect-square lg:aspect-[4/3] max-h-[45vh] lg:max-h-[50vh] overflow-hidden shadow-2xl rounded-none bg-black">
+            <div className="relative w-full aspect-[4/3] md:aspect-[16/9] max-h-[45vh] lg:max-h-[50vh] overflow-hidden shadow-2xl rounded-none bg-black">
               <div className="w-full h-full relative">
                 <Image
                   src={data.image}
