@@ -32,7 +32,7 @@ const AMENITIES = [
       "Alfresco dining, lush lawns, and open-air decks in serene surroundings.",
     tags: ["Expansive Lawns", "Alfresco Dining", "Open Decks"],
     bgImage:
-      "https://images.pexels.com/photos/1488267/pexels-photo-1488267.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
   {
     title: "WHAT COMES WITH STAYING AT JADE",

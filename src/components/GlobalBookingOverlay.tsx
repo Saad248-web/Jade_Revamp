@@ -1168,24 +1168,38 @@ export default function GlobalBookingOverlay() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm"
           />
 
-          {/* Centering wrapper — flex aligns to bottom on mobile, center on desktop */}
+          {/* Centering wrapper */}
           <div
-            className="fixed inset-0 z-[201] flex items-end md:items-center justify-center pointer-events-none"
+            className="fixed inset-0 z-[201] flex flex-col items-center justify-end md:justify-center px-4 md:px-0"
             onWheel={(e) => e.stopPropagation()}
           >
+            {/* Floating close button */}
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              onClick={handleClose}
+              className="w-12 h-12 mb-3 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0 z-[202]"
+            >
+              <X className="w-6 h-6 stroke-[1.5]" />
+            </motion.button>
+
             {/* Modal */}
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
-              transition={{ type: "spring", damping: 28, stiffness: 260 }}
-              className="pointer-events-auto w-full md:w-[640px] h-[88vh] md:h-[82vh] md:max-h-[760px] bg-[#0D4032] flex flex-col rounded-t-3xl md:rounded-2xl overflow-hidden shadow-2xl border border-white/10"
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="relative w-full md:w-[640px] h-[80vh] md:h-[82vh] md:max-h-[760px] bg-[#0E3A2F] flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
             >
               {/* Step content */}
-              <div className="flex-1 overflow-hidden flex flex-col min-h-0">
+              <div
+                className="flex-1 overflow-hidden flex flex-col min-h-0"
+                data-lenis-prevent
+              >
                 <AnimatePresence mode="wait">
                   {step === "dates" && (
                     <motion.div

@@ -41,6 +41,16 @@ import {
   LayoutGrid,
   Leaf,
   Plus,
+  HandPlatter,
+  Bell,
+  Sparkles,
+  ShieldCheck,
+  Heart,
+  Search,
+  Settings,
+  Coffee,
+  Mic,
+  Music,
 } from "lucide-react"; // Import all potentially used icons
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -50,7 +60,7 @@ import { useState } from "react";
 import { VILLAS } from "@/lib/mockData";
 
 // Icon mapping helper
-const getIcon = (iconName: string) => {
+const getIcon = (iconName?: string, title?: string) => {
   const icons: any = {
     Wifi,
     Car,
@@ -72,8 +82,51 @@ const getIcon = (iconName: string) => {
     Zap,
     LayoutGrid,
     Leaf,
+    HandPlatter,
+    Bell,
+    Sparkles,
+    ShieldCheck,
+    Heart,
+    Coffee,
+    Search,
+    Mic,
+    Music,
   };
-  return icons[iconName] || Info;
+
+  const name = iconName?.toLowerCase() || "";
+  const t = title?.toLowerCase() || "";
+
+  if (icons[iconName || ""]) return icons[iconName || ""];
+
+  // Semantic fallbacks based on name or title
+  if (name.includes("chef") || t.includes("chef") || t.includes("cooking"))
+    return ChefHat;
+  if (name.includes("butler") || t.includes("butler") || t.includes("service"))
+    return HandPlatter;
+  if (
+    name.includes("housekeeping") ||
+    t.includes("housekeeping") ||
+    t.includes("cleaning")
+  )
+    return Sparkles;
+  if (
+    name.includes("concierge") ||
+    t.includes("concierge") ||
+    t.includes("help") ||
+    t.includes("phone")
+  )
+    return Bell;
+  if (name.includes("security") || t.includes("security")) return ShieldCheck;
+  if (name.includes("wellness") || t.includes("wellness") || t.includes("spa"))
+    return Heart;
+  if (
+    name.includes("breakfast") ||
+    t.includes("breakfast") ||
+    t.includes("coffee")
+  )
+    return Coffee;
+
+  return icons[iconName || ""] || Info;
 };
 
 export default function VillaDetailsPage() {
@@ -90,7 +143,16 @@ export default function VillaDetailsPage() {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [currentSpaceIndex, setCurrentSpaceIndex] = useState(0);
+  const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("spaces");
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [expandedSections, setExpandedSections] = useState<
+    Record<string, boolean>
+  >({});
+
+  const toggleSection = (sectionId: string) => {
+    setExpandedSections((prev) => ({ ...prev, [sectionId]: !prev[sectionId] }));
+  };
 
   const scrollFrameRef = useRef<number>();
   const isAutoScrolling = useRef(false);
@@ -130,9 +192,28 @@ export default function VillaDetailsPage() {
     }
   };
 
+  const handlePrevActivity = () => {
+    if (villa.activities && villa.activities.length > 0) {
+      setCurrentActivityIndex((prev) =>
+        prev === 0 ? villa.activities!.length - 1 : prev - 1,
+      );
+    }
+  };
+
+  const handleNextActivity = () => {
+    if (villa.activities && villa.activities.length > 0) {
+      setCurrentActivityIndex((prev) => (prev + 1) % villa.activities!.length);
+    }
+  };
+
   const currentSpace =
     villa.spaces && villa.spaces.length > 0
       ? villa.spaces[currentSpaceIndex]
+      : null;
+
+  const currentActivity =
+    villa.activities && villa.activities.length > 0
+      ? villa.activities[currentActivityIndex]
       : null;
 
   const openDrawer = (title: string, items: any[]) => {
@@ -248,10 +329,10 @@ export default function VillaDetailsPage() {
 
         {/* Carousel Controls */}
         {/* Hero Overlays */}
-        <div className="absolute inset-0 z-20 pointer-events-none">
-          <div className="container mx-auto h-full relative px-6 md:px-12">
+        <div className="absolute inset-0 z-20 pointer-events-none flex justify-center">
+          <div className="max-w-7xl mx-auto h-full relative w-full">
             {/* Bottom Controls */}
-            <div className="absolute bottom-12 inset-x-0 px-6 md:px-12 pointer-events-auto flex items-end justify-between">
+            <div className="absolute bottom-12 left-0 right-0 px-6 md:px-12 pointer-events-auto flex items-end justify-between">
               {/* Previous Arrow */}
               <button
                 onClick={handlePrevImage}
@@ -261,38 +342,20 @@ export default function VillaDetailsPage() {
               </button>
 
               {/* Center Info and Button */}
-              <div className="flex flex-col items-center gap-8">
-                <div className="flex flex-col items-center">
-                  {/* Branding Header moved to Hero Title */}
-                  <div className="relative flex flex-col items-center mb-4">
-                    <h2 className="text-white font-philosopher text-2xl md:text-5xl uppercase tracking-[0.4em] text-center drop-shadow-2xl">
-                      {villa.name}
-                    </h2>
-                    <div className="w-12 h-[1px] bg-jade-gold/50 mt-4" />
-                  </div>
-
-                  {/* Pagination Dash Indicator */}
-                  <div className="flex items-center gap-4 text-white text-[10px] md:text-[12px] font-bold tracking-[0.3em] opacity-80">
-                    <span>
-                      {String(currentImageIndex + 1).padStart(2, "0")}
-                    </span>
-                    <div className="w-10 md:w-16 h-[1px] bg-white/40" />
-                    <span className="text-white/40">
-                      {String(imagesList.length).padStart(2, "0")}
-                    </span>
-                  </div>
-                </div>
-
-                {/* View All Pictures Container */}
-                <div className="flex flex-col items-center gap-2">
-                  <span className="text-[7px] md:text-[8px] text-white/60 uppercase tracking-[0.3em] font-bold">
-                    Gallery
+              <div className="flex flex-col items-center justify-center gap-4">
+                {/* Pagination Dash Indicator */}
+                <div className="flex items-center gap-4 text-white text-[12px] md:text-[14px] font-bold tracking-[0.2em] opacity-80">
+                  <span>{String(currentImageIndex + 1)}</span>
+                  <div className="w-16 md:w-24 h-[1px] bg-white/40" />
+                  <span className="text-white/40">
+                    {String(imagesList.length)}
                   </span>
-                  <button className="bg-white/5 backdrop-blur-sm border border-white/20 text-white px-6 py-2.5 md:px-10 md:py-4 uppercase tracking-[0.3em] text-[8px] md:text-[8px] font-bold hover:bg-white hover:text-black transition-all flex items-center gap-3 rounded-none whitespace-nowrap">
-                    <LayoutGrid className="w-3.5 h-3.5" />
-                    VIEW ALL PICTURES
-                  </button>
                 </div>
+
+                {/* Branding Header Below Number */}
+                <h2 className="text-white font-philosopher text-2xl md:text-4xl uppercase tracking-[0.4em] text-center drop-shadow-2xl">
+                  {villa.name}
+                </h2>
               </div>
 
               {/* Next Arrow */}
@@ -307,57 +370,57 @@ export default function VillaDetailsPage() {
         </div>
       </section>
       {/* CONTENT SECTION */}
-      <div className="relative bg-[#1A1C1E] -mt-4 rounded-none z-10 px-6 py-8 md:px-12 md:py-16 max-w-7xl mx-auto">
+      <div className="relative bg-[#1A1C1E] rounded-none z-10 px-6 py-8 md:px-12 md:py-16 max-w-7xl mx-auto">
         {/* HEADER INFO */}
-        <div className="flex flex-col gap-1 mb-8">
-          <span className="text-jade-gold text-gh-label font-bold tracking-[0.2em] uppercase">
+        <div className="flex flex-col gap-2 mb-8">
+          <span className="text-[#EFCD62] text-[10px] md:text-gh-label font-bold tracking-[0.2em] uppercase">
             {villa.type}
           </span>
-          <h1 className="text-5xl md:text-7xl font-philosopher text-white mb-2 leading-tight">
+          <h1 className="text-[28px] md:text-[32px] font-philosopher text-white mb-1 leading-tight">
             {villa.name}
           </h1>
           <div className="flex items-center gap-2 text-white/80">
             <MapPin className="w-4 h-4 text-white/60" />
-            <span className="font-manrope text-gh-label font-medium">
+            <span className="font-manrope text-[12px] md:text-[14px]">
               {villa.location}
             </span>
           </div>
         </div>
 
         {/* AMENITY SUMMARY LINE */}
-        <div className="flex flex-wrap gap-6 items-center text-white/90 mb-10 text-gh-label font-bold tracking-wide">
-          <div className="flex items-center gap-2.5">
-            <Bed className="w-5 h-5 text-white/40" strokeWidth={1.5} />
+        <div className="flex flex-wrap gap-4 items-center text-white/90 mb-10 text-[11px] md:text-[12px] font-semibold font-manrope tracking-wide">
+          <div className="flex items-center gap-2">
+            <Bed className="w-4 h-4 text-[#EFCD62]" strokeWidth={1.5} />
             <span>
               {villa.stats.stay.toLowerCase().includes("stay")
                 ? villa.stats.stay
                 : `${villa.stats.stay} Stay`}
             </span>
           </div>
-          <div className="w-[4px] h-[4px] rounded-full bg-white/20" />
-          <div className="flex items-center gap-2.5">
-            <Users className="w-5 h-5 text-white/40" strokeWidth={1.5} />
+          <div className="text-white/30 text-xs mt-[1px]">•</div>
+          <div className="flex items-center gap-2">
+            <Users className="w-4 h-4 text-[#EFCD62]" strokeWidth={1.5} />
             <span>
               {villa.stats.events.toLowerCase().includes("event")
                 ? villa.stats.events
                 : `${villa.stats.events} Event`}
             </span>
           </div>
-          <div className="w-[4px] h-[4px] rounded-full bg-white/20" />
-          <div className="flex items-center gap-2.5">
-            <Home className="w-5 h-5 text-white/40" strokeWidth={1.5} />
+          <div className="text-white/30 text-xs mt-[1px]">•</div>
+          <div className="flex items-center gap-2">
+            <Home className="w-4 h-4 text-[#EFCD62]" strokeWidth={1.5} />
             <span>{villa.stats.bhk}</span>
           </div>
         </div>
 
         {/* HORIZONTAL AMENITY CARDS */}
-        <div className="flex gap-4 overflow-x-auto pb-6 mb-12 snap-x scrollbar-none">
+        <div className="flex gap-3 overflow-x-auto pb-6 mb-12 snap-x scrollbar-none -mr-6 pr-6 md:-mr-12 md:pr-12">
           {villa.amenities?.map((amenity, idx) => {
             const Icon = getIcon(amenity.icon);
             // Splitting logic for label and sublabel (heuristic)
             const words = amenity.label.split(" ");
             const label =
-              words.length > 2 ? words.slice(0, 2).join(" ") : words[0];
+              words.length > 2 ? words.slice(0, 2).join(" ") : words[0] || "";
             const sublabel =
               words.length > 2
                 ? words.slice(2).join(" ")
@@ -366,22 +429,27 @@ export default function VillaDetailsPage() {
             return (
               <div
                 key={idx}
-                className="min-w-[160px] md:min-w-[180px] aspect-square bg-[#2A2C30] border border-white/5 p-6 flex flex-col items-center justify-center text-center gap-4 snap-start hover:bg-white/5 transition-colors group rounded-sm"
+                className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] p-[1px] rounded-none snap-start group flex-shrink-0 cursor-pointer"
+                style={{
+                  background:
+                    "linear-gradient(to bottom right, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0) 65%, rgba(255,255,255,0.54) 100%)",
+                }}
               >
-                <div className="w-12 h-12 flex items-center justify-center relative">
-                  <div className="absolute inset-0 bg-white/5 rounded-full blur-xl group-hover:bg-jade-gold/20 transition-colors" />
+                <div className="w-full h-full bg-gradient-to-b from-white/[0.08] to-transparent backdrop-blur-[70px] flex flex-col items-center justify-center text-center px-4 py-4 hover:bg-white/10 transition-colors">
                   <Icon
-                    className="w-8 h-8 text-white/80 group-hover:text-jade-gold transition-colors"
-                    strokeWidth={1}
+                    className="w-[24px] h-[24px] text-white/90 group-hover:text-[#EFCD62] transition-colors mb-3"
+                    strokeWidth={1.2}
                   />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-white font-manrope font-bold text-[14px] leading-tight">
-                    {label}
-                  </span>
-                  <span className="text-white/40 font-manrope text-[11px] font-medium tracking-wide">
-                    {sublabel}
-                  </span>
+                  <div className="flex flex-col items-center w-full">
+                    <span className="text-white font-manrope font-bold text-[12px] md:text-[14px] leading-snug text-center break-words w-full">
+                      {label}
+                    </span>
+                    {sublabel && (
+                      <span className="text-white/60 font-manrope font-medium text-[10px] md:text-[12px] leading-snug mt-1 text-center break-words w-full">
+                        {sublabel}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             );
@@ -403,25 +471,35 @@ export default function VillaDetailsPage() {
       <section className="relative w-full bg-[#0B2C23] py-12 text-white">
         <div className="relative z-10 px-6 py-8 md:px-12 max-w-7xl mx-auto">
           {/* TABS NAVIGATION - STICKY */}
-          <div className="sticky top-0 z-40 bg-[#0B2C23] -mx-6 md:-mx-12 px-6 md:px-12 border-b border-white/10 mb-8 flex gap-1 overflow-x-auto pb-0 scrollbar-none">
-            {["Spaces", "Amenities", "Services", "Experiences", "Details"].map(
-              (tab) => {
-                const isActive = activeTab === tab.toLowerCase();
-                return (
-                  <button
-                    key={tab}
-                    onClick={() => scrollToSection(tab.toLowerCase())}
-                    className={`px-6 py-4 text-[11px] uppercase tracking-widest font-bold transition-colors whitespace-nowrap border-b-2 ${
-                      isActive
-                        ? "border-jade-gold text-jade-gold"
-                        : "border-transparent text-white/60 hover:text-white"
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                );
-              },
-            )}
+          <div className="sticky top-0 z-40 bg-[#0B2C23] border-b border-white/10 mb-8 flex gap-6 md:gap-10 overflow-x-auto pb-0 scrollbar-none -mr-6 md:-mr-12 pr-6 md:pr-12">
+            {[
+              "Spaces",
+              "Amenities",
+              "Services",
+              "Experiences",
+              "Details",
+              "Pricing",
+              "Location",
+              "Perfect For",
+              "Video Walkthrough",
+              "FAQ",
+            ].map((tab) => {
+              const sectionId = tab.toLowerCase().replace(/ /g, "-");
+              const isActive = activeTab === sectionId;
+              return (
+                <button
+                  key={tab}
+                  onClick={() => scrollToSection(sectionId)}
+                  className={`py-4 text-[11px] uppercase tracking-widest font-bold transition-colors whitespace-nowrap border-b-2 ${
+                    isActive
+                      ? "border-[#EFCD62] text-[#EFCD62]"
+                      : "border-transparent text-white/60 hover:text-white"
+                  }`}
+                >
+                  {tab}
+                </button>
+              );
+            })}
           </div>
 
           {/* CONTENT AREA */}
@@ -451,7 +529,7 @@ export default function VillaDetailsPage() {
                   )}
                 </div>
 
-                <div className="relative aspect-[3/4] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20">
+                <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20">
                   {(currentSpace.image || villa.image) && (
                     <Image
                       src={currentSpace.image || villa.image}
@@ -462,7 +540,7 @@ export default function VillaDetailsPage() {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B2C23]/80 via-transparent to-transparent opacity-90" />
                   <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
-                    <h4 className="text-white text-gh-h3 uppercase tracking-widest font-bold mb-4 font-manrope">
+                    <h4 className="text-white text-sm md:text-base uppercase tracking-[0.2em] font-bold mb-4 font-manrope">
                       {currentSpace.name || "Lawn"}
                     </h4>
                     {villa.spaces && villa.spaces.length > 1 && (
@@ -487,8 +565,8 @@ export default function VillaDetailsPage() {
               <h3 className="text-gh-h2 font-philosopher text-white mb-8">
                 Amenities
               </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-                {villa.amenities?.map((amenity, idx) => {
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                {villa.amenities?.slice(0, 4).map((amenity, idx) => {
                   const Icon = getIcon(amenity.icon);
                   return (
                     <div
@@ -505,13 +583,19 @@ export default function VillaDetailsPage() {
                     </div>
                   );
                 })}
+                {/* Desktop view shows the rest without truncation logic in the same grid if needed, 
+                    but here we strictly follow the 4-item limit for mobile and rely on Know More for the rest.
+                    To show all on desktop, we would need a more complex responsive slice. 
+                    Given the request 'Remove View More', we maintain a clean 4-item preview. */}
               </div>
-              <button
-                onClick={() => openDrawer("Amenities", villa.amenities || [])}
-                className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
-              >
-                Know More <ArrowRight className="w-3 h-3" />
-              </button>
+              <div className="flex flex-col gap-4">
+                <button
+                  onClick={() => openDrawer("Amenities", villa.amenities || [])}
+                  className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
+                >
+                  Know More <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
             </section>
 
             {/* SERVICES SECTION */}
@@ -520,18 +604,11 @@ export default function VillaDetailsPage() {
                 Services
               </h3>
               <div className="flex flex-col gap-8 mb-12">
-                {villa.services?.map((service, idx) => {
-                  const Icon =
-                    service.icon === "ChefHat"
-                      ? ChefHat
-                      : service.icon === "User"
-                        ? User
-                        : service.icon === "SprayCan"
-                          ? SprayCan
-                          : Phone;
+                {villa.services?.slice(0, 4).map((service, idx) => {
+                  const Icon = getIcon(service.icon, service.title);
                   return (
-                    <div key={idx} className="flex gap-6 group">
-                      <div className="w-16 h-16 flex-shrink-0 border border-[#EFCD62] flex items-center justify-center p-3">
+                    <div key={idx} className="flex gap-4 md:gap-6 group">
+                      <div className="w-12 h-12 md:w-16 md:h-16 flex-shrink-0 border border-[#EFCD62] flex items-center justify-center p-2.5 md:p-3">
                         <Icon
                           strokeWidth={1}
                           className="w-full h-full text-[#EFCD62]"
@@ -549,51 +626,61 @@ export default function VillaDetailsPage() {
                   );
                 })}
               </div>
+              <div className="flex flex-col gap-4">
+                <button
+                  onClick={() => openDrawer("Services", villa.services || [])}
+                  className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
+                >
+                  Know More <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
             </section>
 
             {/* EXPERIENCES SECTION */}
-            {villa.activities && villa.activities.length > 0 && (
+            {currentActivity && (
               <section id="experiences">
                 <div className="flex justify-between items-end mb-8">
                   <h3 className="text-gh-h1 font-philosopher text-white">
                     Experiences
                   </h3>
-                  <div className="flex gap-2">
-                    <button className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors">
-                      <ArrowLeft className="w-4 h-4" />
-                    </button>
-                    <button className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors">
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-                <div className="flex gap-6 overflow-x-auto pb-6 snap-x scrollbar-none">
-                  {villa.activities.map((activity: any, idx: number) => (
-                    <div
-                      key={idx}
-                      className="relative min-w-[85%] md:min-w-[50%] lg:min-w-[45%] aspect-[16/10] bg-[#1A1C1E] border border-white/5 group overflow-hidden snap-start flex-shrink-0 rounded-none"
-                    >
-                      {(activity.image || villa.image) && (
-                        <Image
-                          src={activity.image || villa.image}
-                          alt={activity.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
-                        />
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent z-10" />
-                      <div className="absolute bottom-0 left-0 w-full p-8 md:p-10 flex flex-col items-start z-20">
-                        <h4 className="text-white font-philosopher text-2xl md:text-3xl mb-2 drop-shadow-lg">
-                          {activity.title}
-                        </h4>
-                        {activity.description && (
-                          <p className="text-white/70 font-manrope text-sm md:text-base leading-relaxed max-w-[85%]">
-                            {activity.description}
-                          </p>
-                        )}
-                      </div>
+                  {villa.activities && villa.activities.length > 1 && (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handlePrevActivity}
+                        className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={handleNextActivity}
+                        className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+                      >
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
                     </div>
-                  ))}
+                  )}
+                </div>
+
+                <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20 mt-4">
+                  {(currentActivity.image || villa.image) && (
+                    <Image
+                      src={currentActivity.image || villa.image}
+                      alt={currentActivity.title}
+                      fill
+                      className="object-cover transition-transform duration-700 opacity-90 group-hover:scale-105"
+                    />
+                  )}
+                  <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-[#1A1C1E]/95 via-[#1A1C1E]/50 to-transparent z-10" />
+                  <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 flex flex-col items-center justify-end text-center z-20">
+                    <h4 className="text-white font-philosopher text-[28px] md:text-[36px] mb-3">
+                      {currentActivity.title}
+                    </h4>
+                    {(currentActivity as any).description && (
+                      <p className="text-white/80 font-manrope text-[14px] md:text-[16px] leading-relaxed max-w-2xl">
+                        {(currentActivity as any).description}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </section>
             )}
@@ -643,7 +730,7 @@ export default function VillaDetailsPage() {
                 Property Details
               </h3>
               <div className="flex flex-col gap-8 mb-8">
-                {villa.propertyDetails?.map((detail, idx) => (
+                {villa.propertyDetails?.slice(0, 4).map((detail, idx) => (
                   <div key={idx} className="flex gap-4">
                     <div className="mt-1.5 w-2 h-2 rotate-45 bg-[#EFCD62] flex-shrink-0" />
                     <div>
@@ -657,14 +744,16 @@ export default function VillaDetailsPage() {
                   </div>
                 ))}
               </div>
-              <button
-                onClick={() =>
-                  openDrawer("Property Details", villa.propertyDetails || [])
-                }
-                className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
-              >
-                Know More <ArrowRight className="w-3 h-3" />
-              </button>
+              <div className="flex flex-col gap-4">
+                <button
+                  onClick={() =>
+                    openDrawer("Property Details", villa.propertyDetails || [])
+                  }
+                  className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
+                >
+                  Know More <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
             </section>
 
             {/* PRICING SECTION */}
@@ -857,8 +946,11 @@ export default function VillaDetailsPage() {
                 <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                   Perfect for
                 </h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {villa.perfectFor.map((item: any, idx: number) => {
+                <div className="grid grid-cols-2 gap-4 mb-8">
+                  {(expandedSections["perfect-for"]
+                    ? villa.perfectFor
+                    : villa.perfectFor.slice(0, 4)
+                  ).map((item: any, idx: number) => {
                     const title = typeof item === "string" ? item : item.title;
                     const image =
                       typeof item === "string"
@@ -890,12 +982,28 @@ export default function VillaDetailsPage() {
                     );
                   })}
                 </div>
+                {villa.perfectFor && villa.perfectFor.length > 4 && (
+                  <button
+                    onClick={() => toggleSection("perfect-for")}
+                    className="md:hidden flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
+                  >
+                    {expandedSections["perfect-for"]
+                      ? "View Less"
+                      : "View More"}
+                    <ArrowRight
+                      className={`w-3 h-3 transition-transform ${expandedSections["perfect-for"] ? "-rotate-90" : "rotate-90"}`}
+                    />
+                  </button>
+                )}
               </section>
             )}
 
             {/* VIDEO WALKTHROUGH */}
             {villa.video && (
-              <section id="video" className="py-12 border-t border-white/5">
+              <section
+                id="video-walkthrough"
+                className="py-12 border-t border-white/5"
+              >
                 <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                   Video Walkthrough
                 </h3>
@@ -941,19 +1049,34 @@ export default function VillaDetailsPage() {
                 FAQ
               </h3>
               <div className="flex flex-col gap-4">
-                {villa.faq?.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-[#0B2C23] border border-white/5 p-6 md:p-8"
-                  >
-                    <div className="flex justify-between items-center gap-4 cursor-pointer group">
-                      <h4 className="text-white font-bold text-gh-body leading-tight group-hover:text-jade-gold transition-colors">
-                        {item.question}
-                      </h4>
-                      <Plus className="w-4 h-4 text-white/40 group-hover:text-jade-gold transition-colors" />
+                {villa.faq?.map((item, idx) => {
+                  const isOpen = openFaqIndex === idx;
+                  return (
+                    <div
+                      key={idx}
+                      className="bg-[#0B2C23] border border-white/5 p-6 md:p-8"
+                    >
+                      <div
+                        className="flex justify-between items-center gap-4 cursor-pointer group"
+                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                      >
+                        <h4 className="text-white font-bold text-gh-body leading-tight group-hover:text-jade-gold transition-colors">
+                          {item.question}
+                        </h4>
+                        <div
+                          className={`transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`}
+                        >
+                          <Plus className="w-4 h-4 text-white/40 group-hover:text-jade-gold transition-colors" />
+                        </div>
+                      </div>
+                      {isOpen && (
+                        <div className="mt-4 text-white/70 font-manrope text-sm leading-relaxed border-t border-white/10 pt-4">
+                          {item.answer}
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
           </div>
@@ -961,10 +1084,9 @@ export default function VillaDetailsPage() {
       </section>
       {/* FOOTER */}
       <Footer />
-      {/* FLOATING BOOKING BAR */}
-      <div className="fixed bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 p-3 md:p-4 md:px-8 z-50 transition-all">
-        <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
-          <p className="text-white text-base md:text-gh-h3 font-bold font-manrope whitespace-nowrap">
+      <div className="fixed bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 py-4 z-50 transition-all flex justify-center">
+        <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-4 px-4 md:px-12">
+          <p className="text-white text-[12px] md:text-[14px] lg:text-base font-bold font-manrope whitespace-nowrap">
             {(villa.pricing as any)?.stay?.packages?.[0]?.price
               ? `Starting from ${(villa.pricing as any).stay.packages[0].price.replace(" + taxes", "")}`
               : (villa.pricing as any)?.event?.packages?.[0]?.price
@@ -978,7 +1100,11 @@ export default function VillaDetailsPage() {
             >
               ENQUIRE
             </Link>
-            <PrimaryButton href={`/book?villa=${villa.id}`} withArrow={false}>
+            <PrimaryButton
+              href={`/book?villa=${villa.id}`}
+              withArrow={false}
+              className="whitespace-nowrap"
+            >
               BOOK VILLA
             </PrimaryButton>
           </div>

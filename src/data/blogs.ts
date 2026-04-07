@@ -199,7 +199,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "image",
         image:
-          "https://jadehospitainment.com/wp-content/uploads/2024/12/image-6.png",
+          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1600",
         caption:
           "Jade 735: The pinnacle of boutique luxury with temperature-controlled pools.",
       },

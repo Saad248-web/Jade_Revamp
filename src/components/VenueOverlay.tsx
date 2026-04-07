@@ -92,12 +92,15 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
     >
       {/* FIXED CLOSE BUTTON IN TRANSPARENT AREA */}
       <div className="fixed top-0 inset-x-0 z-[100] flex items-center justify-center py-6 pointer-events-none">
-        <button
+        <motion.button
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
           onClick={onClose}
-          className="w-10 h-10 flex items-center justify-center bg-[#1E5D48] rounded-full border border-white/10 hover:bg-white/10 transition-colors pointer-events-auto shadow-xl"
+          className="w-12 h-12 flex items-center justify-center bg-[#124131] rounded-full text-white shadow-2xl pointer-events-auto hover:bg-[#1f5c48] transition-colors z-[102]"
         >
-          <X className="w-6 h-6" />
-        </button>
+          <X className="w-6 h-6 stroke-[1.5]" />
+        </motion.button>
       </div>
 
       <div className="flex flex-col min-h-screen">
@@ -108,7 +111,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
         />
 
         {/* CONTENT SHEET */}
-        <div className="flex-1 bg-[#0D4032] rounded-t-[32px] md:rounded-t-[48px] shadow-[0_-20px_80px_rgba(0,0,0,0.6)] relative z-10">
+        <div className="flex-1 bg-[#0E3A2F] rounded-t-2xl md:rounded-t-[48px] shadow-[0_-20px_80px_rgba(0,0,0,0.6)] relative z-10">
           <div className="max-w-4xl mx-auto w-full pb-32">
             {/* IMAGE CAROUSEL */}
             <div className="relative aspect-[4/5] md:aspect-[16/9] w-full overflow-hidden bg-black/20 group rounded-t-[32px] md:rounded-t-[48px]">
