@@ -19,13 +19,7 @@ export const wonderland = {
   ],
   categories: ["Treehouse", "Boutique Stay", "Pet Friendly"],
   image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  images: ["", "", "", "", ""],
   amenities: [
     {
       label: "Private Pool",
@@ -183,6 +177,29 @@ export const wonderland = {
     { title: "Trekking", image: "" },
     { title: "Candlelight Dining", image: "" },
     { title: "Pool Sessions", image: "" },
+  ],
+  categorizedSpaces: [
+    {
+      id: "treehouse-deck",
+      title: "Treehouse Deck",
+      category: "Outdoors",
+      amenities: ["Deck seating", "Nature views", "Party space"],
+      images: ["", ""],
+    },
+    {
+      id: "living-area",
+      title: "Living Area",
+      category: "Indoors",
+      amenities: ["Air conditioning", "Cozy seating", "Nature integration"],
+      images: ["", ""],
+    },
+    {
+      id: "rock-pool",
+      title: "Natural Rock Pool",
+      category: "Outdoors",
+      amenities: ["Freshwater pool", "Baby pool", "Jacuzzi jets"],
+      images: ["", ""],
+    },
   ],
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=OWJ_8WU1-vQ",

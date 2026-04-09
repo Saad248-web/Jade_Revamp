@@ -22,15 +22,7 @@ export const emerald = {
   ],
   categories: ["Luxury Retreats", "Private Events", "Staycations"],
   image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  images: ["", "", "", "", "", "", ""],
   amenities: [
     {
       label: "8 ft Waterfall Pool",
@@ -190,6 +182,60 @@ export const emerald = {
     { title: "Bonfire Evening", image: "" },
     { title: "High Tea", image: "" },
     { title: "Multi-cuisine Dining", image: "" },
+  ],
+  categorizedSpaces: [
+    {
+      id: "master-bedroom",
+      title: "Master Bedroom",
+      category: "Bed & Bath",
+      amenities: [
+        "King bed",
+        "Floor mattress",
+        "Ceiling fan",
+        "Room-darkening blinds",
+        "Air conditioning",
+        "5 Seater Sofa",
+      ],
+      images: ["", ""],
+    },
+    {
+      id: "guest-bedroom",
+      title: "Guest Bedroom",
+      category: "Bed & Bath",
+      amenities: [
+        "King bed",
+        "Floor mattress",
+        "Ceiling fan",
+        "Room-darkening blinds",
+        "Air conditioning",
+        "5 Seater Sofa",
+      ],
+      images: ["", ""],
+    },
+    {
+      id: "lawn",
+      title: "Lawn",
+      category: "Outdoors",
+      amenities: [
+        "Private pool access",
+        "Garden sit-out",
+        "Bonfire zone",
+        "Barbecue setup",
+      ],
+      images: ["", ""],
+    },
+    {
+      id: "living-area",
+      title: "Living Area",
+      category: "Indoors",
+      amenities: [
+        "Central courtyard swing",
+        "Entertainment system",
+        "Fully functional kitchen",
+        "Lounge seating",
+      ],
+      images: ["", ""],
+    },
   ],
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=mxoLej0IqmY",

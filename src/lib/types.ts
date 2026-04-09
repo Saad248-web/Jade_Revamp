@@ -83,6 +83,14 @@ export interface VillaActivity {
   image: string;
 }
 
+export interface VillaSpaceGroup {
+  id: string;
+  title: string;
+  category: "Outdoors" | "Indoors" | "Bed & Bath";
+  amenities: string[];
+  images: string[];
+}
+
 export interface VillaFAQ {
   question: string;
   answer: string;
@@ -118,7 +126,12 @@ export interface Villa {
     nearby: Array<{ label: string; distance: string }>;
   };
   activities?: VillaActivity[];
-  video?: string;
+  categorizedSpaces?: VillaSpaceGroup[];
+  video?: {
+    youtubeUrl: string;
+    thumbnail: string;
+    duration: string;
+  };
   faq?: VillaFAQ[];
 }
 

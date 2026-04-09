@@ -461,10 +461,14 @@ export default function VillaDetailsPage() {
         </p>
 
         <div className="flex flex-col gap-8 mb-12">
-          <button className="w-full bg-white/5 border border-white/10 text-white px-8 py-5 uppercase tracking-[0.2em] text-[11px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-between group rounded-sm">
+          <a
+            href="/All Properties - Jade Hospitainment.pdf"
+            download
+            className="w-full bg-white/5 border border-white/10 text-white px-8 py-5 uppercase tracking-[0.2em] text-[11px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-between group rounded-sm"
+          >
             <span>Download Brochure</span>
             <Download className="w-4 h-4 text-white/40 group-hover:text-black transition-colors" />
-          </button>
+          </a>
         </div>
       </div>
       {/* EMERALD GREEN SECTION: SPACES, AMENITIES, SERVICES, ETC. */}
@@ -554,9 +558,12 @@ export default function VillaDetailsPage() {
                     )}
                   </div>
                 </div>
-                <button className="mt-8 w-full border border-white/20 bg-white/5 py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2">
+                <Link
+                  href={`/villas/${id}/spaces`}
+                  className="mt-8 w-full border border-white/20 bg-white/5 py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2"
+                >
                   VIEW ALL SPACES
-                </button>
+                </Link>
               </section>
             )}
 
