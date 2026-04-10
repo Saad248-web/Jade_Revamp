@@ -3,6 +3,7 @@ import { Philosopher, Manrope } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
 import Providers from "./providers";
+import SchemaMarkup from "@/components/SchemaMarkup";
 
 const philosopher = Philosopher({
   weight: ["400", "700"],
@@ -85,6 +86,31 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Jade Hospitainment",
+  url: "https://jadehospitainment.com",
+  logo: "https://jadehospitainment.com/og-default.jpg",
+  description:
+    "Discover curated luxury villas, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore.",
+};
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: "Jade Hospitainment",
+  image: "https://jadehospitainment.com/og-default.jpg",
+  "@id": "https://jadehospitainment.com",
+  url: "https://jadehospitainment.com",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Bangalore",
+    addressRegion: "Karnataka",
+    addressCountry: "IN",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -100,6 +126,8 @@ export default function RootLayout({
         )}
       >
         <Providers>{children}</Providers>
+        <SchemaMarkup schema={organizationSchema} />
+        <SchemaMarkup schema={localBusinessSchema} />
       </body>
     </html>
   );
