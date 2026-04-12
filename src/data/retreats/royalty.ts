@@ -22,85 +22,48 @@ export const royalty = {
   categories: ["Equestrian Retreats", "Hill Villas", "Luxury Stays"],
   thumbnail: "",
   image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  images: ["", "", "", "", "", "", "", ""],
   amenities: [
-    {
-      label: "Private Pool",
-      icon: "Waves",
-      description:
-        "A private pool with a waterfall feature, set against a stunning hill backdrop.",
-    },
-    {
-      label: "Air-conditioned Interiors",
-      icon: "Wind",
-      description: "All 5 bedrooms and living areas are fully air-conditioned.",
-    },
-    {
-      label: "Outdoor Seating",
-      icon: "Sun",
-      description:
-        "Multiple outdoor seating zones with panoramic views of the Varlakonda hills.",
-    },
-    {
-      label: "Jacuzzi",
-      icon: "Waves",
-      description: "On-site jacuzzi for a premium relaxation experience.",
-    },
-    {
-      label: "Entertainment Systems",
-      icon: "Music",
-      description:
-        "Full audio-visual setup available for entertainment and events.",
-    },
-    {
-      label: "Bonfire Setup",
-      icon: "Flame",
-      description: "Dedicated bonfire zone for evening hillside gatherings.",
-    },
-    {
-      label: "Barbecue Setup",
-      icon: "Utensils",
-      description: "BBQ equipment for curated outdoor hillside dining.",
-    },
-    {
-      label: "Fully Functional Kitchen",
-      icon: "Kitchen",
-      description:
-        "Equipped kitchen for guest use or professional chef service.",
-    },
+    { label: "Private Pool", icon: "Waves" },
+    { label: "Airconditioned Interiors", icon: "Wind" },
+    { label: "Outdoor Seating", icon: "Sofa" },
+    { label: "Jacuzzi", icon: "Waves" },
+    { label: "Entertainment Systems", icon: "Music" },
+    { label: "Bonfire Setup", icon: "Flame" },
+    { label: "Barbecue Setup", icon: "Utensils" },
+    { label: "Fully Functional Kitchen", icon: "Kitchen" },
+    { label: "LCD Television", icon: "Tv" },
+    { label: "Tableware & Utensils", icon: "Coffee" },
+    { label: "Power Backup", icon: "Zap" },
+    { label: "Parking", icon: "Car" },
   ],
   propertyDetails: [
     {
       label: "5-Bedroom Glasshouse Villa",
       description:
-        "Spacious glasshouse design accommodating up to 15 guests with premium suites.",
+        "Spacious villa with attached bathrooms accommodating up to 15 guests.",
       icon: "Bed",
     },
     {
-      label: "Equestrian Facilities",
+      label: "Private Pool with Waterfall",
+      description: "Pool overlooking the lawn with scenic hill views.",
+      icon: "Waves",
+    },
+    {
+      label: "Equestrian Setup",
       description:
-        "On-site horse stable and riding arena — a unique feature for equestrian enthusiasts.",
+        "Includes a horse riding arena and stable housing three horses.",
+      icon: "Activity",
+    },
+    {
+      label: "Hill View Location",
+      description: "Panoramic views of the Varlakonda hills from the property.",
       icon: "Mountain",
     },
     {
-      label: "Hilltop Location",
-      description:
-        "Set against the Varlakonda hills with panoramic views and fresh air.",
-      icon: "Trees",
-    },
-    {
-      label: "Private Pool with Waterfall",
-      description:
-        "A signature feature combining leisure with a dramatic water feature.",
-      icon: "Waves",
+      label: "Pet-Friendly Property",
+      description: "Allows pets within the premises.",
+      icon: "Dog",
     },
   ],
   services: [
@@ -130,10 +93,46 @@ export const royalty = {
     },
   ],
   activities: [
-    { title: "Horse Riding", image: "" },
-    { title: "Hill Treks", image: "" },
-    { title: "Poolside Sessions", image: "" },
-    { title: "Sunset Views", image: "" },
+    {
+      title: "Horse Riding Safari",
+      description: "Equestrian trail experience towards scenic sunset points.",
+      image: "/Villa_Retreats/Royalty/Experiences/experiences_01.webp",
+    },
+    {
+      title: "Camping Experiences",
+      description: "Outdoor stay setups with bonfire.",
+      image: "/Villa_Retreats/Royalty/Experiences/experiences_02.webp",
+    },
+    {
+      title: "Barbecue Experiences",
+      description: "Dedicated BBQ setup for outdoor cooking and dining.",
+      image: "/Villa_Retreats/Royalty/Experiences/experiences_03.webp",
+    },
+    {
+      title: "Bonfire Evenings",
+      description: "Outdoor bonfire setups for group gatherings.",
+      image: "/Villa_Retreats/Royalty/Experiences/experiences_04.webp",
+    },
+    {
+      title: "Candle Corner Dining",
+      description: "Dedicated candlelit dining setups within the villa.",
+      image: "/Villa_Retreats/Royalty/Experiences/experiences_05.webp",
+    },
+    {
+      title: "Family Dining Experiences",
+      description: "Group dining setups across indoor and outdoor zones.",
+      image: "/Villa_Retreats/Royalty/Experiences/experiences_06.webp",
+    },
+    {
+      title: "Lounge Experiences",
+      description: "Relaxed indoor lounge setups for social time.",
+      image: "/Villa_Retreats/Royalty/Experiences/experiences_07.webp",
+    },
+    {
+      title: "Cooking Experiences",
+      description: "Interactive cooking-based group experiences.",
+      image: "/Villa_Retreats/Royalty/Experiences/experiences_08.webp",
+    },
   ],
   spaces: [
     { name: "Pool & Waterfall", image: "" },
@@ -143,18 +142,18 @@ export const royalty = {
   ],
   categorizedSpaces: [
     {
-        id: "main-space",
-        title: "Main Space",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: []
-    }
-],
+      id: "main-space",
+      title: "Main Space",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [],
+    },
+  ],
   pricing: {
     stay: {
       title: "Stay Experience",
@@ -210,18 +209,25 @@ export const royalty = {
   },
   faq: [
     {
-      question: "Is horse riding available for guests?",
-      answer:
-        "Yes, Royalty features an on-site horse stable and riding arena. Riding sessions can be arranged on request.",
-    },
-    {
       question: "How many guests can stay overnight?",
-      answer: "Royalty can accommodate up to 15 guests across its 5 bedrooms.",
+      answer: "Up to 25 guests can be accommodated.",
     },
     {
-      question: "Can we host events here?",
+      question: "Is the property suitable for events?",
+      answer: "Yes, suitable for gatherings up to 50 guests.",
+    },
+    {
+      question: "Is the pool private?",
+      answer: "Yes, the rooftop pool is exclusively for guests.",
+    },
+    {
+      question: "Are meals included?",
+      answer: "Meals can be arranged on request.",
+    },
+    {
+      question: "Is this suitable for large parties?",
       answer:
-        "Yes, the property supports gatherings of up to 30 guests with ample outdoor space and equestrian grounds.",
+        "Suitable for small to mid-sized gatherings, not large-scale events.",
     },
   ],
 };

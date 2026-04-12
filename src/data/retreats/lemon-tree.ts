@@ -22,69 +22,25 @@ export const lemonTree = {
   categories: ["Nature Retreats", "Orchard Properties", "Group Escapes"],
   thumbnail: "",
   image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  images: ["", "", "", "", "", ""],
   amenities: [
-    {
-      label: "Rooftop Private Pool",
-      icon: "Waves",
-      description:
-        "An exclusive swimming pool located on the rooftop, offering elevated views of the countryside and complete privacy.",
-    },
-    {
-      label: "3-Acre Orchard",
-      icon: "Trees",
-      description:
-        "The property is set within a massive lemon grove, providing a dense green canopy and a true countryside vibe.",
-    },
-    {
-      label: "Multipurpose Hall",
-      icon: "Home",
-      description:
-        "A large indoor hall combined with a gazebo lounge, ideal for workshops, group activities, or social gatherings.",
-    },
-    {
-      label: "Air-conditioned Interiors",
-      icon: "Wind",
-      description:
-        "All bedrooms are fully air-conditioned, ensuring comfort even in the midst of a nature retreat.",
-    },
-    {
-      label: "Jacuzzi",
-      icon: "Waves",
-      description:
-        "On-site individual jacuzzi available for guest relaxation and hydrotherapy.",
-    },
-    {
-      label: "Outdoor Seating",
-      icon: "Sun",
-      description:
-        "Multiple landscaped seating zones across the orchard and poolside for al fresco experiences.",
-    },
-    {
-      label: "Entertainment Systems",
-      icon: "Music",
-      description:
-        "Full audio-visual setup available for movie nights, meetings, or social gatherings.",
-    },
-    {
-      label: "Fully Functional Kitchen",
-      icon: "Kitchen",
-      description:
-        "Equipped kitchen suitable for self-catering or for use by a private chef on demand.",
-    },
+    { label: "Private Pool", icon: "Waves" },
+    { label: "Airconditioned Interiors", icon: "Wind" },
+    { label: "Outdoor Seating", icon: "Sofa" },
+    { label: "Jacuzzi", icon: "Waves" },
+    { label: "Entertainment Systems", icon: "Music" },
+    { label: "Bonfire Setup", icon: "Flame" },
+    { label: "Barbecue Setup", icon: "Utensils" },
+    { label: "Fully Functional Kitchen", icon: "Kitchen" },
+    { label: "LCD Television", icon: "Tv" },
+    { label: "Tableware & Utensils", icon: "Coffee" },
+    { label: "Power Backup", icon: "Zap" },
+    { label: "Parking", icon: "Car" },
   ],
   propertyDetails: [
     {
       label: "3-Bedroom Villa",
-      description:
-        "A compact and efficient villa layout designed specifically for group stays and family retreats.",
+      description: "A compact villa layout designed for group stays.",
       icon: "Bed",
     },
     {
@@ -95,15 +51,25 @@ export const lemonTree = {
     },
     {
       label: "3-Acre Orchard Property",
-      description:
-        "Set within a large lemon grove with dense greenery and a feeling of total seclusion.",
+      description: "Set within a large lemon grove with dense greenery.",
       icon: "Trees",
     },
     {
-      label: "Countryside Ambience",
+      label: "Multipurpose Hall",
       description:
-        "Offers a quiet, nature-led environment that feels like a getaway while remaining close to the city.",
-      icon: "Mountain",
+        "Convertible indoor space that can function as a dormitory for larger groups.",
+      icon: "Home",
+    },
+    {
+      label: "Group-Friendly Layout",
+      description:
+        "Accommodates up to 25 overnight guests and 50 for social gatherings.",
+      icon: "Users",
+    },
+    {
+      label: "Countryside Setting",
+      description: "Surrounded by scenic views and nature-based environments.",
+      icon: "Map",
     },
   ],
   services: [
@@ -137,10 +103,41 @@ export const lemonTree = {
     },
   ],
   activities: [
-    { title: "Orchard Walks", image: "" },
-    { title: "Rooftop Dips", image: "" },
-    { title: "Team Outings", image: "" },
-    { title: "Nature Stays", image: "" },
+    {
+      title: "Camping Experiences",
+      description: "Outdoor stay setups within the orchard environment.",
+      image: "/Villa_Retreats/Lemon Tree/Experiences/experiences_01.webp",
+    },
+    {
+      title: "Barbecue Experiences",
+      description: "Dedicated BBQ setup for outdoor cooking and dining.",
+      image: "/Villa_Retreats/Lemon Tree/Experiences/experiences_02.webp",
+    },
+    {
+      title: "Bonfire Evenings",
+      description: "Outdoor bonfire setups for group gatherings.",
+      image: "/Villa_Retreats/Lemon Tree/Experiences/experiences_03.webp",
+    },
+    {
+      title: "Candle Corner Dining",
+      description: "Dedicated candlelit dining setups within the villa.",
+      image: "/Villa_Retreats/Lemon Tree/Experiences/experiences_04.webp",
+    },
+    {
+      title: "Family Dining Experiences",
+      description: "Group dining setups across indoor and outdoor zones.",
+      image: "/Villa_Retreats/Lemon Tree/Experiences/experiences_05.webp",
+    },
+    {
+      title: "Lounge Experiences",
+      description: "Relaxed indoor lounge setups for social time.",
+      image: "/Villa_Retreats/Lemon Tree/Experiences/experiences_06.webp",
+    },
+    {
+      title: "Cooking Experiences",
+      description: "Interactive cooking-based group experiences.",
+      image: "/Villa_Retreats/Lemon Tree/Experiences/experiences_07.webp",
+    },
   ],
   spaces: [
     { name: "Courtyard", image: "" },
@@ -150,18 +147,18 @@ export const lemonTree = {
   ],
   categorizedSpaces: [
     {
-        id: "main-space",
-        title: "Main Space",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: []
-    }
-],
+      id: "main-space",
+      title: "Main Space",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [],
+    },
+  ],
   pricing: {
     stay: {
       title: "Stay Experience",
@@ -218,18 +215,24 @@ export const lemonTree = {
   faq: [
     {
       question: "How many guests can stay overnight?",
-      answer:
-        "Lemon Tree can accommodate up to 25 guests for an overnight stay across its 3 bedrooms and common areas.",
+      answer: "Up to 25 guests can be accommodated.",
+    },
+    {
+      question: "Is the property suitable for events?",
+      answer: "Yes, suitable for gatherings up to 50 guests.",
     },
     {
       question: "Is the pool private?",
-      answer:
-        "Yes, the rooftop pool is exclusively for your group's use and offers a high level of privacy.",
+      answer: "Yes, the rooftop pool is exclusively for guests.",
     },
     {
-      question: "Can we book it for small events?",
+      question: "Are meals included?",
+      answer: "Meals can be arranged on request.",
+    },
+    {
+      question: "Is this suitable for large parties?",
       answer:
-        "Absolutely. The multipurpose hall and expansive orchard grounds support gatherings of up to 50 guests.",
+        "Suitable for small to mid-sized gatherings, not large-scale events.",
     },
   ],
 };

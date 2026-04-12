@@ -31,75 +31,51 @@ export const domeVillas = {
     "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_06.webp",
   ],
   amenities: [
-    {
-      label: "Private Pool",
-      icon: "Waves",
-      description:
-        "A shared private plunge pool for exclusive guest use across the estate.",
-    },
-    {
-      label: "Air-conditioned Interiors",
-      icon: "Wind",
-      description:
-        "Each dome villa is fully climate-controlled for year-round comfort.",
-    },
-    {
-      label: "Outdoor Seating",
-      icon: "Sun",
-      description:
-        "Individual sit-out areas for each dome plus communal garden seating.",
-    },
-    {
-      label: "Jacuzzi",
-      icon: "Waves",
-      description: "On-site jacuzzi available for guest relaxation.",
-    },
-    {
-      label: "Entertainment Systems",
-      icon: "Music",
-      description: "Audio-visual systems for group entertainment.",
-    },
-    {
-      label: "Bonfire Setup",
-      icon: "Flame",
-      description:
-        "Central bonfire zone connecting the three domes for evening gatherings.",
-    },
-    {
-      label: "Barbecue Setup",
-      icon: "Utensils",
-      description: "BBQ equipment for curated outdoor dining experiences.",
-    },
-    {
-      label: "Fully Functional Kitchen",
-      icon: "Kitchen",
-      description: "Equipped kitchen for guest use or chef service.",
-    },
+    { label: "Private Pool", icon: "Waves" },
+    { label: "Airconditioned Interiors", icon: "Wind" },
+    { label: "Outdoor Seating", icon: "Sofa" },
+    { label: "Jacuzzi", icon: "Waves" },
+    { label: "Entertainment Systems", icon: "Music" },
+    { label: "Bonfire Setup", icon: "Flame" },
+    { label: "Barbecue Setup", icon: "Utensils" },
+    { label: "Fully Functional Kitchen", icon: "Kitchen" },
+    { label: "LCD Television", icon: "Tv" },
+    { label: "Tableware & Utensils", icon: "Coffee" },
+    { label: "Power Backup", icon: "Zap" },
+    { label: "Parking", icon: "Car" },
   ],
   propertyDetails: [
     {
-      label: "3 Independent Dome Villas",
+      label: "Three Dome Villas (Private Estate)",
       description:
-        "Each dome includes its own bedroom, bathroom, and private sit-out area.",
-      icon: "Home",
+        "Entire property includes three independent villas booked together.",
+      icon: "Building",
     },
     {
-      label: "Hobbit-Themed Design",
+      label: "Distributed Living Layout",
       description:
-        "Unique fantasy architecture inspired by Hobbit-style earthen dwellings.",
-      icon: "Mountain",
+        "Bedrooms and living spaces spread across multiple structures.",
+      icon: "Layout",
     },
     {
-      label: "Exclusive Booking",
-      description:
-        "The entire estate is booked by one group, ensuring absolute privacy.",
-      icon: "Check",
+      label: "Private Plunge Pool",
+      description: "Outdoor pool accessible to all guests within the estate.",
+      icon: "Waves",
     },
     {
-      label: "Shoolagiri Location",
-      description:
-        "Set in the Chinnapathirali countryside, about 45 minutes from Sarjapur.",
-      icon: "MapPin",
+      label: "Landscaped Garden Property",
+      description: "Connected pathways and outdoor zones across the property.",
+      icon: "Trees",
+    },
+    {
+      label: "Multiple Sit-out Areas",
+      description: "Dedicated outdoor seating, swings, and relaxation zones.",
+      icon: "Sofa",
+    },
+    {
+      label: "Exclusive Use Property",
+      description: "Not shared with other guests during the stay.",
+      icon: "Lock",
     },
   ],
   services: [
@@ -130,81 +106,117 @@ export const domeVillas = {
     },
   ],
   activities: [
-    { title: "Nature Trails", image: "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_01.webp" },
-    { title: "Bonfire Nights", image: "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_02.webp" },
-    { title: "Poolside Sessions", image: "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_03.webp" },
-    { title: "Photography", image: "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_04.webp" },
+    {
+      title: "Barbecue Experiences",
+      description: "Self-use grill setups for group cooking.",
+      image:
+        "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_01.webp",
+    },
+    {
+      title: "Bonfire Evenings",
+      description: "Outdoor bonfire for gatherings.",
+      image:
+        "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_02.webp",
+    },
+    {
+      title: "Movie Nights",
+      description: "Projector-based viewing experience.",
+      image:
+        "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_03.webp",
+    },
+    {
+      title: "Horse Ranch Visit",
+      description: "Experiential visit available opposite the property.",
+      image:
+        "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_04.webp",
+    },
+    {
+      title: "Nature Stays",
+      description: "Relaxed time within garden and open spaces.",
+      image:
+        "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_05.webp",
+    },
   ],
   spaces: [
-    { name: "Red Dome", image: "/Villa_Retreats/Dome Villa_s - Red/Spaces/spaces_01.webp" },
-    { name: "Blue Dome", image: "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp" },
-    { name: "Yellow Dome", image: "/Villa_Retreats/Dome Villa_s - Yellow/Spaces/spaces_01.webp" },
-    { name: "Plunge Pool", image: "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp" },
+    {
+      name: "Red Dome",
+      image: "/Villa_Retreats/Dome Villa_s - Red/Spaces/spaces_01.webp",
+    },
+    {
+      name: "Blue Dome",
+      image: "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp",
+    },
+    {
+      name: "Yellow Dome",
+      image: "/Villa_Retreats/Dome Villa_s - Yellow/Spaces/spaces_01.webp",
+    },
+    {
+      name: "Plunge Pool",
+      image: "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp",
+    },
   ],
   categorizedSpaces: [
     {
-        id: "red-dome",
-        title: "Red Dome",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: [
-            "/Villa_Retreats/Dome Villa_s - Red/Spaces/spaces_01.webp",
-            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp",
-            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_02.webp"
-        ]
+      id: "red-dome",
+      title: "Red Dome",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [
+        "/Villa_Retreats/Dome Villa_s - Red/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_02.webp",
+      ],
     },
     {
-        id: "blue-dome",
-        title: "Blue Dome",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: [
-            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp",
-            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_03.webp",
-            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp"
-        ]
+      id: "blue-dome",
+      title: "Blue Dome",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [
+        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_03.webp",
+        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp",
+      ],
     },
     {
-        id: "yellow-dome",
-        title: "Yellow Dome",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: [
-            "/Villa_Retreats/Dome Villa_s - Yellow/Spaces/spaces_01.webp",
-            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_05.webp",
-            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_06.webp"
-        ]
+      id: "yellow-dome",
+      title: "Yellow Dome",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [
+        "/Villa_Retreats/Dome Villa_s - Yellow/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_05.webp",
+        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_06.webp",
+      ],
     },
     {
-        id: "plunge-pool",
-        title: "Plunge Pool",
-        category: "Outdoors",
-        amenities: [
-            "Private pool access",
-            "Garden sit-out",
-            "Bonfire zone",
-            "Barbecue setup"
-        ],
-        images: [
-            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp"
-        ]
-    }
-],
+      id: "plunge-pool",
+      title: "Plunge Pool",
+      category: "Outdoors",
+      amenities: [
+        "Private pool access",
+        "Garden sit-out",
+        "Bonfire zone",
+        "Barbecue setup",
+      ],
+      images: ["/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp"],
+    },
+  ],
   pricing: {
     stay: {
       title: "Stay Experience",
@@ -250,19 +262,25 @@ export const domeVillas = {
   },
   faq: [
     {
-      question: "Are the domes booked separately?",
+      question: "Is the property shared with other guests?",
+      answer: "No, the entire estate is booked exclusively for one group.",
+    },
+    {
+      question: "How many villas are included?",
       answer:
-        "No, the entire estate with all 3 domes is booked exclusively by one group for complete privacy.",
+        "The property includes three dome villas within one private estate.",
     },
     {
       question: "How many guests can stay overnight?",
-      answer:
-        "The estate accommodates up to 18 guests across the three dome villas.",
+      answer: "Up to 18 guests can be accommodated.",
     },
     {
-      question: "Is the pool shared?",
-      answer:
-        "The pool is centrally located and shared across the three domes for exclusive guest use.",
+      question: "Is the pool private?",
+      answer: "Yes, the plunge pool is exclusively accessible to guests.",
+    },
+    {
+      question: "Are meals included?",
+      answer: "Meals can be arranged on request.",
     },
   ],
 };

@@ -21,129 +21,57 @@ export const haven = {
   ],
   categories: ["Luxury Retreats", "Social Gatherings", "Private Events"],
   image: "/Villa_Retreats/Haven/Hero/hero.webp",
-  images: ["/Villa_Retreats/Haven/Spaces/spaces_01.webp", "/Villa_Retreats/Haven/Spaces/spaces_02.webp", "/Villa_Retreats/Haven/Spaces/spaces_03.webp", "/Villa_Retreats/Haven/Spaces/spaces_04.webp", "/Villa_Retreats/Haven/Spaces/spaces_05.webp", "/Villa_Retreats/Haven/Spaces/spaces_06.webp", "/Villa_Retreats/Haven/Spaces/spaces_07.webp", "/Villa_Retreats/Haven/Spaces/spaces_08.webp"],
+  images: [
+    "/Villa_Retreats/Haven/Spaces/spaces_01.webp",
+    "/Villa_Retreats/Haven/Spaces/spaces_02.webp",
+    "/Villa_Retreats/Haven/Spaces/spaces_03.webp",
+    "/Villa_Retreats/Haven/Spaces/spaces_04.webp",
+    "/Villa_Retreats/Haven/Spaces/spaces_05.webp",
+    "/Villa_Retreats/Haven/Spaces/spaces_06.webp",
+    "/Villa_Retreats/Haven/Spaces/spaces_07.webp",
+    "/Villa_Retreats/Haven/Spaces/spaces_08.webp",
+  ],
   amenities: [
+    { label: "Private Pool", icon: "Waves" },
+    { label: "Airconditioned Interiors", icon: "Wind" },
+    { label: "Outdoor Seating", icon: "Sofa" },
+    { label: "Jacuzzi", icon: "Waves" },
+    { label: "Entertainment Systems", icon: "Music" },
+    { label: "Bonfire Setup", icon: "Flame" },
+    { label: "Barbecue Setup", icon: "Utensils" },
+    { label: "Fully Functional Kitchen", icon: "Kitchen" },
+    { label: "LCD Television", icon: "Tv" },
+    { label: "Tableware & Utensils", icon: "Coffee" },
+    { label: "Power Backup", icon: "Zap" },
+    { label: "Parking", icon: "Car" },
+  ],
+  propertyDetails: [
     {
-      label: "Private Pool With Deck",
-      icon: "Waves",
-      description:
-        "A private swimming pool with an adjacent wooden deck, perfect for poolside relaxation and social gatherings.",
+      label: "4-Bedroom Private Villa",
+      description: "Designed for mid-sized groups with shared common spaces.",
+      icon: "Bed",
     },
     {
-      label: "Air-conditioned Interiors",
-      icon: "Wind",
-      description:
-        "All bedrooms and shared indoor spaces are fully air-conditioned for maximum comfort.",
+      label: "Private Standalone Property",
+      description: "Independent villa ensuring privacy for guests.",
+      icon: "Home",
     },
     {
-      label: "Outdoor Seating",
-      icon: "Sun",
-      description:
-        "Lush outdoor lounge areas providing comfortable seating within the garden and poolside.",
+      label: "Modern Interior Design",
+      description: "Clean, contemporary interiors across all spaces.",
+      icon: "Diamond",
     },
     {
-      label: "Jacuzzi",
-      icon: "Waves",
-      description:
-        "On-site individual jacuzzi for a premium relaxation experience.",
+      label: "Expansive Lawn Area",
+      description: "Outdoor space for gatherings and activities.",
+      icon: "Trees",
     },
     {
-      label: "Entertainment Systems",
-      icon: "Music",
-      description:
-        "High-fidelity sound systems throughout the villa for gatherings and entertainment.",
-    },
-    {
-      label: "Bonfire Setup",
-      icon: "Flame",
-      description:
-        "Dedicated bonfire zone for evening gatherings and group activities.",
-    },
-    {
-      label: "Barbecue Setup",
-      icon: "Utensils",
-      description:
-        "Full barbecue facilities available for curated outdoor dining experiences.",
-    },
-    {
-      label: "Fully Functional Kitchen",
-      icon: "Kitchen",
-      description:
-        "Completely equipped kitchen suitable for both self-use and professional catering.",
+      label: "Large Living & Dining Areas",
+      description: "Designed to accommodate group interactions comfortably.",
+      icon: "Sofa",
     },
   ],
-  spaces: [
-    { name: "Courtyard", image: "/Villa_Retreats/Haven/Hero/hero.webp" },
-    { name: "Private Pool", image: "/Villa_Retreats/Haven/Spaces/spaces_01.webp" },
-    { name: "Lawn Area", image: "/Villa_Retreats/Haven/Spaces/spaces_02.webp" },
-    { name: "Modern Interior", image: "/Villa_Retreats/Haven/Spaces/spaces_03.webp" },
-  ],
-  categorizedSpaces: [
-    {
-        id: "courtyard",
-        title: "Courtyard",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: [
-            "/Villa_Retreats/Haven/Hero/hero.webp",
-            "/Villa_Retreats/Haven/Spaces/spaces_01.webp",
-            "/Villa_Retreats/Haven/Spaces/spaces_02.webp"
-        ]
-    },
-    {
-        id: "private-pool",
-        title: "Private Pool",
-        category: "Outdoors",
-        amenities: [
-            "Private pool access",
-            "Garden sit-out",
-            "Bonfire zone",
-            "Barbecue setup"
-        ],
-        images: [
-            "/Villa_Retreats/Haven/Spaces/spaces_01.webp",
-            "/Villa_Retreats/Haven/Spaces/spaces_03.webp",
-            "/Villa_Retreats/Haven/Spaces/spaces_04.webp"
-        ]
-    },
-    {
-        id: "lawn-area",
-        title: "Lawn Area",
-        category: "Outdoors",
-        amenities: [
-            "Private pool access",
-            "Garden sit-out",
-            "Bonfire zone",
-            "Barbecue setup"
-        ],
-        images: [
-            "/Villa_Retreats/Haven/Spaces/spaces_02.webp",
-            "/Villa_Retreats/Haven/Spaces/spaces_05.webp",
-            "/Villa_Retreats/Haven/Spaces/spaces_06.webp"
-        ]
-    },
-    {
-        id: "modern-interior",
-        title: "Modern Interior",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: [
-            "/Villa_Retreats/Haven/Spaces/spaces_03.webp",
-            "/Villa_Retreats/Haven/Spaces/spaces_07.webp",
-            "/Villa_Retreats/Haven/Spaces/spaces_08.webp"
-        ]
-    }
-],
   services: [
     {
       title: "Chef on Call",
@@ -174,30 +102,109 @@ export const haven = {
       icon: "PartyPopper",
     },
   ],
-  propertyDetails: [
+  activities: [
     {
-      label: "4-Bedroom Private Villa",
-      description:
-        "Designed for mid-sized groups with spacious common areas and shared recreational zones.",
-      icon: "Bed",
+      title: "Private Dining Experiences",
+      description: "Indoor and outdoor dining arrangements.",
+      image: "/Villa_Retreats/Haven/Experiences/experiences_01.webp",
     },
     {
-      label: "Private Standalone Property",
-      description:
-        "Independent villa ensuring absolute privacy and an exclusive experience for every group.",
-      icon: "Home",
+      title: "Bonfire Evenings",
+      description: "Outdoor bonfire for gatherings.",
+      image: "/Villa_Retreats/Haven/Experiences/experiences_02.webp",
     },
     {
-      label: "Modern Interior Design",
-      description:
-        "Clean, contemporary aesthetic with premium finishes across all living and sleeping areas.",
-      icon: "Diamond",
+      title: "Outdoor Dining Setups",
+      description: "Dining across lawn and gazebo spaces.",
+      image: "/Villa_Retreats/Haven/Experiences/experiences_03.webp",
     },
     {
-      label: "Private Pool with Deck",
-      description:
-        "A signature feature providing a focal point for leisure and poolside social sessions.",
-      icon: "Waves",
+      title: "Workation Stays",
+      description: "Quiet environment suited for extended stays.",
+      image: "/Villa_Retreats/Haven/Experiences/experiences_04.webp",
+    },
+    {
+      title: "Board Games & Indoor Activities",
+      description: "Group-friendly indoor engagement.",
+      image: "/Villa_Retreats/Haven/Experiences/experiences_05.webp",
+    },
+  ],
+  spaces: [
+    { name: "Courtyard", image: "/Villa_Retreats/Haven/Hero/hero.webp" },
+    {
+      name: "Private Pool",
+      image: "/Villa_Retreats/Haven/Spaces/spaces_01.webp",
+    },
+    { name: "Lawn Area", image: "/Villa_Retreats/Haven/Spaces/spaces_02.webp" },
+    {
+      name: "Modern Interior",
+      image: "/Villa_Retreats/Haven/Spaces/spaces_03.webp",
+    },
+  ],
+  categorizedSpaces: [
+    {
+      id: "courtyard",
+      title: "Courtyard",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [
+        "/Villa_Retreats/Haven/Hero/hero.webp",
+        "/Villa_Retreats/Haven/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Haven/Spaces/spaces_02.webp",
+      ],
+    },
+    {
+      id: "private-pool",
+      title: "Private Pool",
+      category: "Outdoors",
+      amenities: [
+        "Private pool access",
+        "Garden sit-out",
+        "Bonfire zone",
+        "Barbecue setup",
+      ],
+      images: [
+        "/Villa_Retreats/Haven/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Haven/Spaces/spaces_03.webp",
+        "/Villa_Retreats/Haven/Spaces/spaces_04.webp",
+      ],
+    },
+    {
+      id: "lawn-area",
+      title: "Lawn Area",
+      category: "Outdoors",
+      amenities: [
+        "Private pool access",
+        "Garden sit-out",
+        "Bonfire zone",
+        "Barbecue setup",
+      ],
+      images: [
+        "/Villa_Retreats/Haven/Spaces/spaces_02.webp",
+        "/Villa_Retreats/Haven/Spaces/spaces_05.webp",
+        "/Villa_Retreats/Haven/Spaces/spaces_06.webp",
+      ],
+    },
+    {
+      id: "modern-interior",
+      title: "Modern Interior",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [
+        "/Villa_Retreats/Haven/Spaces/spaces_03.webp",
+        "/Villa_Retreats/Haven/Spaces/spaces_07.webp",
+        "/Villa_Retreats/Haven/Spaces/spaces_08.webp",
+      ],
     },
   ],
   pricing: {
@@ -243,12 +250,6 @@ export const haven = {
       { label: "NICE ROAD", distance: "15 km away" },
     ],
   },
-  activities: [
-    { title: "Poolside Relaxation", image: "/Villa_Retreats/Haven/Experiences/experiences_01.webp" },
-    { title: "Social Gatherings", image: "/Villa_Retreats/Haven/Experiences/experiences_02.webp" },
-    { title: "Couple Retreats", image: "/Villa_Retreats/Haven/Experiences/experiences_03.webp" },
-    { title: "Celebrations", image: "/Villa_Retreats/Haven/Experiences/experiences_05.webp" },
-  ],
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=3Aid-re90HE",
     thumbnail: "/Villa_Retreats/Haven/Hero/hero.webp",
@@ -257,28 +258,23 @@ export const haven = {
   faq: [
     {
       question: "How many guests can stay overnight?",
-      answer:
-        "Haven can accommodate up to 20 guests for an overnight stay across its 4 bedrooms.",
+      answer: "Up to 20 guests can be accommodated.",
     },
     {
-      question: "Can we host large events here?",
-      answer:
-        "Yes, the property supports event gatherings for up to 100 guests with ample outdoor and shared spaces.",
+      question: "What is the event capacity?",
+      answer: "Yes, it supports gatherings of up to 100 guests.",
     },
     {
-      question: "Is there a kitchen for our use?",
-      answer:
-        "Absolutely. The villa features a fully functional kitchen equipped for both private use and professional catering support.",
+      question: "Is the pool private?",
+      answer: "Yes, the pool is exclusively accessible to guests.",
     },
     {
-      question: "Are pets allowed?",
-      answer:
-        "Yes, Haven is a pet-friendly property with ample lawn and garden space. We request that pets are supervised at all times.",
+      question: "Are meals included?",
+      answer: "Breakfast is included. Other meals can be arranged.",
     },
     {
-      question: "How far is Haven from the city?",
-      answer:
-        "Haven is located on the Hennur-Bagalur Road, approximately 40 minutes from Hebbal and 20 km from the airport, making it easily accessible while maintaining complete privacy.",
+      question: "Is this suitable for large parties?",
+      answer: "Not designed for large-scale events.",
     },
   ],
 };

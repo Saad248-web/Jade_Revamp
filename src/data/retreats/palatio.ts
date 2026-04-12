@@ -22,84 +22,53 @@ export const palatio = {
   categories: ["Nature Retreats", "Social Events", "Wellness"],
   thumbnail: "",
   image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  images: ["", "", "", "", "", ""],
   amenities: [
-    {
-      label: "Private Pool",
-      icon: "Waves",
-      description:
-        "A private swimming pool set within the landscaped grounds for exclusive guest use.",
-    },
-    {
-      label: "Landscaped Gardens",
-      icon: "Trees",
-      description:
-        "Expansive manicured gardens creating a peaceful outdoor environment.",
-    },
-    {
-      label: "Air-conditioned Interiors",
-      icon: "Wind",
-      description: "Climate-controlled interiors for year-round comfort.",
-    },
-    {
-      label: "Outdoor Seating",
-      icon: "Sun",
-      description:
-        "Multiple seating areas across the property for al fresco relaxation.",
-    },
-    {
-      label: "Entertainment Systems",
-      icon: "Music",
-      description: "Audio-visual systems for entertainment and gatherings.",
-    },
-    {
-      label: "Bonfire Setup",
-      icon: "Flame",
-      description: "Dedicated bonfire zone for evening social sessions.",
-    },
-    {
-      label: "Barbecue Setup",
-      icon: "Utensils",
-      description:
-        "Barbecue equipment available for outdoor dining experiences.",
-    },
-    {
-      label: "Fully Functional Kitchen",
-      icon: "Kitchen",
-      description: "Equipped kitchen for guest and chef use.",
-    },
+    { label: "Private Pool", icon: "Waves" },
+    { label: "Airconditioned Interiors", icon: "Wind" },
+    { label: "Outdoor Seating", icon: "Sofa" },
+    { label: "Jacuzzi", icon: "Waves" },
+    { label: "Entertainment Systems", icon: "Music" },
+    { label: "Bonfire Setup", icon: "Flame" },
+    { label: "Barbecue Setup", icon: "Utensils" },
+    { label: "Fully Functional Kitchen", icon: "Kitchen" },
+    { label: "LCD Television", icon: "Tv" },
+    { label: "Tableware & Utensils", icon: "Coffee" },
+    { label: "Power Backup", icon: "Zap" },
+    { label: "Parking", icon: "Car" },
   ],
   propertyDetails: [
     {
-      label: "2-Bedroom Nature Villa",
-      description:
-        "Traditional layout designed for intimate stays within extensive natural surroundings.",
+      label: "2-Bedroom Private Villa",
+      description: "Designed for small group stays with shared living spaces.",
       icon: "Bed",
     },
     {
-      label: "Private Pooled Courtyard",
+      label: "2-Acre Estate Setting",
+      description: "Standalone property surrounded by greenery and open land.",
+      icon: "Map",
+    },
+    {
+      label: "Stone Architecture Design",
       description:
-        "Central pool area surrounded by greenery and shaded seating zones.",
+        "Rustic stone walls and natural material finishes across spaces.",
+      icon: "Building",
+    },
+    {
+      label: "Inner Courtyard with Glass Roof",
+      description: "Central courtyard bringing in daylight and open-sky views.",
+      icon: "Sun",
+    },
+    {
+      label: "Private Stone Pool",
+      description:
+        "Pool designed with natural stone finish and surrounding deck.",
       icon: "Waves",
     },
     {
-      label: "Traditional Architecture",
-      description:
-        "Rustic charm blended with modern comforts and premium finishes.",
-      icon: "Home",
-    },
-    {
-      label: "Harohalli Location",
-      description:
-        "Conveniently located near Art of Living, opposite Pyramid Valley.",
-      icon: "MapPin",
+      label: "Expansive Lawn Area",
+      description: "Open outdoor space for gatherings and activities.",
+      icon: "Trees",
     },
   ],
   services: [
@@ -130,10 +99,31 @@ export const palatio = {
     },
   ],
   activities: [
-    { title: "Poolside Relaxation", image: "" },
-    { title: "Garden Walks", image: "" },
-    { title: "Bonfire Nights", image: "" },
-    { title: "Intimate Celebrations", image: "" },
+    {
+      title: "Private Dining Experiences",
+      description: "Indoor and outdoor dining arrangements.",
+      image: "/Villa_Retreats/Palatio/Experiences/experiences_01.webp",
+    },
+    {
+      title: "Bonfire Evenings",
+      description: "Outdoor bonfire for gatherings.",
+      image: "/Villa_Retreats/Palatio/Experiences/experiences_02.webp",
+    },
+    {
+      title: "Outdoor Dining Setups",
+      description: "Dining across lawn and gazebo spaces.",
+      image: "/Villa_Retreats/Palatio/Experiences/experiences_03.webp",
+    },
+    {
+      title: "Workation Stays",
+      description: "Quiet environment suited for extended stays.",
+      image: "/Villa_Retreats/Palatio/Experiences/experiences_04.webp",
+    },
+    {
+      title: "Board Games & Indoor Activities",
+      description: "Group-friendly indoor engagement.",
+      image: "/Villa_Retreats/Palatio/Experiences/experiences_05.webp",
+    },
   ],
   spaces: [
     { name: "Pool Courtyard", image: "" },
@@ -143,18 +133,18 @@ export const palatio = {
   ],
   categorizedSpaces: [
     {
-        id: "main-space",
-        title: "Main Space",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: []
-    }
-],
+      id: "main-space",
+      title: "Main Space",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [],
+    },
+  ],
   pricing: {
     stay: {
       title: "Stay Experience",
@@ -201,18 +191,23 @@ export const palatio = {
   faq: [
     {
       question: "How many guests can stay overnight?",
-      answer:
-        "Palatio can accommodate up to 15 guests overnight across its 2 bedrooms and common areas.",
+      answer: "Up to 15 guests can be accommodated.",
+    },
+    {
+      question: "What is the event capacity?",
+      answer: "Yes, it supports gatherings of up to 50-60 guests.",
     },
     {
       question: "Is the pool private?",
-      answer:
-        "Yes, the pool is exclusively for your group's use within the courtyard setting.",
+      answer: "Yes, the pool is exclusively accessible to guests.",
     },
     {
-      question: "Can we host intimate events?",
-      answer:
-        "Yes, Palatio is well-suited for social gatherings of up to 60 guests with ample outdoor space.",
+      question: "Are meals included?",
+      answer: "Breakfast is included. Other meals can be arranged.",
+    },
+    {
+      question: "Is this suitable for large parties?",
+      answer: "Not designed for large-scale events.",
     },
   ],
 };

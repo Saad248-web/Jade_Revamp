@@ -19,65 +19,56 @@ export const wonderland = {
   ],
   categories: ["Treehouse", "Boutique Stay", "Pet Friendly"],
   image: "/Villa_Retreats/Wonderland/Hero/hero.webp",
-  images: ["/Villa_Retreats/Wonderland/Spaces/spaces_01.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_02.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_03.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_04.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_05.webp"],
+  images: [
+    "/Villa_Retreats/Wonderland/Spaces/spaces_01.webp",
+    "/Villa_Retreats/Wonderland/Spaces/spaces_02.webp",
+    "/Villa_Retreats/Wonderland/Spaces/spaces_03.webp",
+    "/Villa_Retreats/Wonderland/Spaces/spaces_04.webp",
+    "/Villa_Retreats/Wonderland/Spaces/spaces_05.webp",
+  ],
   amenities: [
-    {
-      label: "Private Pool",
-      icon: "Waves",
-      description:
-        "A freshwater natural rock pool with baby pool and jacuzzi jets for cooling off in total seclusion.",
-    },
-    {
-      label: "Air-conditioned Interiors",
-      icon: "Wind",
-      description:
-        "Both bedrooms in the treehouse are fully air-conditioned for comfort in any weather.",
-    },
-    {
-      label: "Outdoor Seating",
-      icon: "Sun",
-      description:
-        "Curated seating zones across the garden and treehouse deck for al fresco experiences.",
-    },
-    {
-      label: "Jacuzzi",
-      icon: "Waves",
-      description:
-        "On-site jacuzzi jets integrated into the freshwater pool for a relaxing hydrotherapy soak.",
-    },
-    {
-      label: "Entertainment Systems",
-      icon: "Music",
-      description:
-        "Full audio-visual setup available for movie nights, music, and social gatherings.",
-    },
-    {
-      label: "Bonfire Setup",
-      icon: "Flame",
-      description:
-        "Dedicated bonfire zone for evening social sessions and cozy conversations amidst nature.",
-    },
-    {
-      label: "Barbecue Setup",
-      icon: "Utensils",
-      description:
-        "Full barbecue equipment available for curated outdoor dining experiences.",
-    },
-    {
-      label: "Fully Functional Kitchen",
-      icon: "Kitchen",
-      description:
-        "Equipped kitchen for both private use and professional chef service.",
-    },
+    { label: "Private Pool", icon: "Waves" },
+    { label: "Airconditioned Interiors", icon: "Wind" },
+    { label: "Outdoor Seating", icon: "Sofa" },
+    { label: "Jacuzzi", icon: "Waves" },
+    { label: "Entertainment Systems", icon: "Music" },
+    { label: "Bonfire Setup", icon: "Flame" },
+    { label: "Barbecue Setup", icon: "Utensils" },
+    { label: "Fully Functional Kitchen", icon: "Kitchen" },
+    { label: "LCD Television", icon: "Tv" },
+    { label: "Tableware & Utensils", icon: "Coffee" },
+    { label: "Power Backup", icon: "Zap" },
+    { label: "Parking", icon: "Car" },
   ],
   spaces: [
-    { name: "Treehouse Deck", image: "/Villa_Retreats/Wonderland/Hero/hero.webp" },
-    { name: "Living Area", image: "/Villa_Retreats/Wonderland/Spaces/spaces_01.webp" },
-    { name: "Garden", image: "/Villa_Retreats/Wonderland/Spaces/spaces_02.webp" },
-    { name: "Courtyard", image: "/Villa_Retreats/Wonderland/Spaces/spaces_03.webp" },
-    { name: "Rock Pool", image: "/Villa_Retreats/Wonderland/Spaces/spaces_04.webp" },
-    { name: "Party Deck", image: "/Villa_Retreats/Wonderland/Spaces/spaces_05.webp" },
-    { name: "Dining Area", image: "/Villa_Retreats/Wonderland/Spaces/spaces_06.webp" },
+    {
+      name: "Treehouse Deck",
+      image: "/Villa_Retreats/Wonderland/Hero/hero.webp",
+    },
+    {
+      name: "Living Area",
+      image: "/Villa_Retreats/Wonderland/Spaces/spaces_01.webp",
+    },
+    {
+      name: "Garden",
+      image: "/Villa_Retreats/Wonderland/Spaces/spaces_02.webp",
+    },
+    {
+      name: "Courtyard",
+      image: "/Villa_Retreats/Wonderland/Spaces/spaces_03.webp",
+    },
+    {
+      name: "Rock Pool",
+      image: "/Villa_Retreats/Wonderland/Spaces/spaces_04.webp",
+    },
+    {
+      name: "Party Deck",
+      image: "/Villa_Retreats/Wonderland/Spaces/spaces_05.webp",
+    },
+    {
+      name: "Dining Area",
+      image: "/Villa_Retreats/Wonderland/Spaces/spaces_06.webp",
+    },
   ],
   services: [
     {
@@ -109,27 +100,33 @@ export const wonderland = {
   propertyDetails: [
     {
       label: "2-Bedroom Treehouse Villa",
-      description:
-        "Rustic treehouse charm with modern luxury comforts for intimate stays.",
+      description: "Designed for intimate stays with elevated living spaces.",
       icon: "Bed",
     },
     {
       label: "Nature-led Setting",
-      description:
-        "Elevated living space surrounded by dense greenery and open countryside views.",
+      description: "Surrounded by greenery with open outdoor zones.",
       icon: "Trees",
     },
     {
       label: "Party Deck Space",
-      description:
-        "Accommodates up to 10 guests for social gatherings and small celebrations.",
-      icon: "Maximize",
+      description: "Dedicated deck suitable for small gatherings (up to 10).",
+      icon: "Sun",
     },
     {
-      label: "Shoolagiri Location",
-      description:
-        "Located near Shoolagiri hill range, 45 minutes from Sarjapur, in a quiet natural setting.",
-      icon: "MapPin",
+      label: "Outdoor Dining Under Treehouse",
+      description: "Dining setup located beneath the elevated structure.",
+      icon: "Utensils",
+    },
+    {
+      label: "Natural Freshwater Pool Access",
+      description: "Shared pool with rock-based filtration system.",
+      icon: "Waves",
+    },
+    {
+      label: "Pet-friendly Property",
+      description: "Allows pets within the premises.",
+      icon: "Heart",
     },
   ],
   pricing: {
@@ -173,10 +170,31 @@ export const wonderland = {
     ],
   },
   activities: [
-    { title: "Nature Trails", image: "/Villa_Retreats/Wonderland/Experiences/experiences_01.webp" },
-    { title: "Trekking", image: "/Villa_Retreats/Wonderland/Experiences/experiences_02.webp" },
-    { title: "Candlelight Dining", image: "/Villa_Retreats/Wonderland/Experiences/experiences_03.webp" },
-    { title: "Pool Sessions", image: "/Villa_Retreats/Wonderland/Experiences/experiences_04.webp" },
+    {
+      title: "Barbecue Experiences",
+      description: "Self-use grill setups for group cooking.",
+      image: "/Villa_Retreats/Wonderland/Experiences/experiences_01.webp",
+    },
+    {
+      title: "Bonfire Evenings",
+      description: "Outdoor bonfire for gatherings.",
+      image: "/Villa_Retreats/Wonderland/Experiences/experiences_02.webp",
+    },
+    {
+      title: "Movie Nights",
+      description: "Projector-based viewing experience.",
+      image: "/Villa_Retreats/Wonderland/Experiences/experiences_03.webp",
+    },
+    {
+      title: "Horse Ranch Visit",
+      description: "Experiential visit available opposite the property.",
+      image: "/Villa_Retreats/Wonderland/Experiences/experiences_04.webp",
+    },
+    {
+      title: "Nature Stays",
+      description: "Relaxed time within garden and open spaces.",
+      image: "/Villa_Retreats/Wonderland/Experiences/experiences_05.webp",
+    },
   ],
   categorizedSpaces: [
     {
@@ -184,21 +202,30 @@ export const wonderland = {
       title: "Treehouse Deck",
       category: "Outdoors",
       amenities: ["Deck seating", "Nature views", "Party space"],
-      images: ["/Villa_Retreats/Wonderland/Spaces/spaces_05.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_06.webp"],
+      images: [
+        "/Villa_Retreats/Wonderland/Spaces/spaces_05.webp",
+        "/Villa_Retreats/Wonderland/Spaces/spaces_06.webp",
+      ],
     },
     {
       id: "living-area",
       title: "Living Area",
       category: "Indoors",
       amenities: ["Air conditioning", "Cozy seating", "Nature integration"],
-      images: ["/Villa_Retreats/Wonderland/Spaces/spaces_07.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_08.webp"],
+      images: [
+        "/Villa_Retreats/Wonderland/Spaces/spaces_07.webp",
+        "/Villa_Retreats/Wonderland/Spaces/spaces_08.webp",
+      ],
     },
     {
       id: "rock-pool",
       title: "Natural Rock Pool",
       category: "Outdoors",
       amenities: ["Freshwater pool", "Baby pool", "Jacuzzi jets"],
-      images: ["/Villa_Retreats/Wonderland/Spaces/spaces_09.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_10.webp"],
+      images: [
+        "/Villa_Retreats/Wonderland/Spaces/spaces_09.webp",
+        "/Villa_Retreats/Wonderland/Spaces/spaces_10.webp",
+      ],
     },
   ],
   video: {
@@ -208,17 +235,24 @@ export const wonderland = {
   },
   faq: [
     {
-      question: "What is the extra pax charge?",
-      answer: "₹1,999 per additional guest for stays, ₹1,099 for events.",
-    },
-    {
-      question: "Is there a pool?",
-      answer:
-        "Yes, a common freshwater natural rock pool with a baby pool and jacuzzi jets.",
-    },
-    {
       question: "How many guests can stay overnight?",
-      answer: "Wonderland can accommodate up to 6 guests overnight.",
+      answer: "Up to 6 guests can be accommodated.",
+    },
+    {
+      question: "What is the event capacity?",
+      answer: "Yes, suitable for small gatherings up to 15 guests.",
+    },
+    {
+      question: "Is the pool private?",
+      answer: "The pool is a shared natural freshwater pool.",
+    },
+    {
+      question: "Are meals included?",
+      answer: "Breakfast is included. Other meals can be arranged.",
+    },
+    {
+      question: "Are pets allowed?",
+      answer: "Yes, the property is pet-friendly.",
     },
   ],
 };

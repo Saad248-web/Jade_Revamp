@@ -22,81 +22,55 @@ export const jade735 = {
   categories: ["Boutique Villas", "Luxury Retreats", "Experiential Stays"],
   thumbnail: "/Villa_Retreats/Jade 735/Hero/hero.webp",
   image: "/Villa_Retreats/Jade 735/Hero/hero.webp",
-  images: ["/Villa_Retreats/Jade 735/Spaces/spaces_01.webp", "/Villa_Retreats/Jade 735/Spaces/spaces_02.webp", "/Villa_Retreats/Jade 735/Spaces/spaces_03.webp", "/Villa_Retreats/Jade 735/Spaces/spaces_04.webp", "/Villa_Retreats/Jade 735/Spaces/spaces_05.webp", "/Villa_Retreats/Jade 735/Spaces/spaces_06.webp"],
+  images: [
+    "/Villa_Retreats/Jade 735/Spaces/spaces_01.webp",
+    "/Villa_Retreats/Jade 735/Spaces/spaces_02.webp",
+    "/Villa_Retreats/Jade 735/Spaces/spaces_03.webp",
+    "/Villa_Retreats/Jade 735/Spaces/spaces_04.webp",
+    "/Villa_Retreats/Jade 735/Spaces/spaces_05.webp",
+    "/Villa_Retreats/Jade 735/Spaces/spaces_06.webp",
+  ],
   amenities: [
-    {
-      label: "Waterfall Pool",
-      icon: "Waves",
-      description:
-        "A private swimming pool featuring a signature 10 ft cascading waterfall for a tranquil and aesthetic experience.",
-    },
-    {
-      label: "6-Seater Jacuzzi",
-      icon: "Waves",
-      description:
-        "A premium 6-seater jacuzzi lounge available on request for ultimate relaxation.",
-    },
-    {
-      label: "Private Gazebo Lounge",
-      icon: "Sun",
-      description:
-        "An outdoor gazebo seating area perfect for morning coffees or evening conversations amidst nature.",
-    },
-    {
-      label: "Air-conditioned Interiors",
-      icon: "Wind",
-      description:
-        "Fully climate-controlled 4+1 bedroom setup with modern, curated interior design.",
-    },
-    {
-      label: "Entertainment Systems",
-      icon: "Music",
-      description:
-        "High-fidelity sound and media systems integrated throughout the living and pool areas.",
-    },
-    {
-      label: "Bonfire Setup",
-      icon: "Flame",
-      description:
-        "Dedicated bonfire zone for cozy evening gatherings and group experiences.",
-    },
-    {
-      label: "Barbecue Setup",
-      icon: "Utensils",
-      description:
-        "Professional barbecue equipment available for curated poolside dining.",
-    },
-    {
-      label: "Fully Functional Kitchen",
-      icon: "Kitchen",
-      description:
-        "Modern kitchen equipped with all necessary appliances for catering and guest use.",
-    },
+    { label: "Private Pool", icon: "Waves" },
+    { label: "Airconditioned Interiors", icon: "Wind" },
+    { label: "Outdoor Seating", icon: "Sofa" },
+    { label: "Jacuzzi", icon: "Waves" },
+    { label: "Entertainment Systems", icon: "Music" },
+    { label: "Bonfire Setup", icon: "Flame" },
+    { label: "Barbecue Setup", icon: "Utensils" },
+    { label: "Fully Functional Kitchen", icon: "Kitchen" },
+    { label: "LCD Television", icon: "Tv" },
+    { label: "Tableware & Utensils", icon: "Coffee" },
+    { label: "Power Backup", icon: "Zap" },
+    { label: "Parking", icon: "Car" },
   ],
   propertyDetails: [
     {
       label: "4+1 Bedroom Private Villa",
       description:
-        "A spacious layout featuring four main bedrooms plus a flexible additional suite for larger groups.",
+        "A boutique villa layout designed for group stays and social experiences.",
       icon: "Bed",
     },
     {
-      label: "10 ft Waterfall Feature",
-      description:
-        "An architectural highlight that adds a serene acoustic and visual layer to the pool area.",
+      label: "Private Pool with Waterfall",
+      description: "Features a swimming pool with a 10 ft cascading waterfall.",
       icon: "Waves",
     },
     {
-      label: "Boutique Resort Vibe",
-      description:
-        "Designed to offer the amenities of a resort with the absolute privacy of a standalone villa.",
-      icon: "Diamond",
+      label: "Jacuzzi Lounge",
+      description: "6-seater jacuzzi available on request at additional cost.",
+      icon: "Bath",
     },
     {
-      label: "Multiple Experiential Zones",
+      label: "Piscean Corridor Lounge",
       description:
-        "Diverse spaces including the jacuzzi lounge, sunset gazebo, and expansive pool deck.",
-      icon: "Maximize",
+        "Indoor lounge space designed for relaxation and social use.",
+      icon: "Sofa",
+    },
+    {
+      label: "Exclusive Private Property",
+      description: "Standalone property ensuring privacy for stays and events.",
+      icon: "Lock",
     },
   ],
   services: [
@@ -131,20 +105,59 @@ export const jade735 = {
   ],
   activities: [
     {
-      title: "Poolside Relaxation",
+      title: "Dining by the Gazebo",
+      description: "Curated dining setups in the outdoor gazebo space.",
       image: "/Villa_Retreats/Jade 735/Experiences/experiences_01.webp",
     },
-    { title: "Gazebo Evenings", image: "/Villa_Retreats/Jade 735/Experiences/experiences_02.webp" },
-    { title: "Jacuzzi Sessions", image: "/Villa_Retreats/Jade 735/Experiences/experiences_03.webp" },
-    { title: "Boutique Stays", image: "/Villa_Retreats/Jade 735/Experiences/experiences_04.webp" },
+    {
+      title: "Jacuzzi Lounge Experience",
+      description: "Private relaxation experience within the jacuzzi lounge.",
+      image: "/Villa_Retreats/Jade 735/Experiences/experiences_02.webp",
+    },
+    {
+      title: "Bonfire Evenings",
+      description: "Outdoor bonfire setups for group gatherings.",
+      image: "/Villa_Retreats/Jade 735/Experiences/experiences_03.webp",
+    },
+    {
+      title: "Candle Corner Dining",
+      description: "Dedicated candlelit dining setups within the villa.",
+      image: "/Villa_Retreats/Jade 735/Experiences/experiences_04.webp",
+    },
+    {
+      title: "Family Dining Experiences",
+      description: "Group dining setups across indoor and outdoor zones.",
+      image: "/Villa_Retreats/Jade 735/Experiences/experiences_05.webp",
+    },
+    {
+      title: "Movie Watching",
+      description: "Content screening with plug-and-play setup.",
+      image: "/Villa_Retreats/Jade 735/Experiences/experiences_06.webp",
+    },
+    {
+      title: "Cooking Experiences",
+      description: "Interactive cooking-based group experiences.",
+      image: "/Villa_Retreats/Jade 735/Experiences/experiences_07.webp",
+    },
+    {
+      title: "Barbecue Experiences",
+      description: "Live grill setups for social dining.",
+      image: "/Villa_Retreats/Jade 735/Experiences/experiences_08.webp",
+    },
   ],
   spaces: [
     {
       name: "Waterfall Pool",
       image: "",
     },
-    { name: "Gazebo Lounge", image: "/Villa_Retreats/Jade 735/Spaces/spaces_01.webp" },
-    { name: "Jacuzzi Area", image: "/Villa_Retreats/Jade 735/Spaces/spaces_02.webp" },
+    {
+      name: "Gazebo Lounge",
+      image: "/Villa_Retreats/Jade 735/Spaces/spaces_01.webp",
+    },
+    {
+      name: "Jacuzzi Area",
+      image: "/Villa_Retreats/Jade 735/Spaces/spaces_02.webp",
+    },
     {
       name: "Master Suite",
       image: "",
@@ -152,51 +165,46 @@ export const jade735 = {
   ],
   categorizedSpaces: [
     {
-        id: "gazebo-lounge",
-        title: "Gazebo Lounge",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: [
-            "/Villa_Retreats/Jade 735/Spaces/spaces_01.webp",
-            "/Villa_Retreats/Jade 735/Spaces/spaces_02.webp",
-            "/Villa_Retreats/Jade 735/Spaces/spaces_03.webp"
-        ]
+      id: "gazebo-lounge",
+      title: "Gazebo Lounge",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [
+        "/Villa_Retreats/Jade 735/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Jade 735/Spaces/spaces_02.webp",
+        "/Villa_Retreats/Jade 735/Spaces/spaces_03.webp",
+      ],
     },
     {
-        id: "jacuzzi-area",
-        title: "Jacuzzi Area",
-        category: "Bed & Bath",
-        amenities: [
-            "King bed",
-            "Air conditioning",
-            "Room-darkening blinds",
-            "Wardrobe",
-            "En-suite bathroom"
-        ],
-        images: [
-            "/Villa_Retreats/Jade 735/Spaces/spaces_02.webp",
-            "/Villa_Retreats/Jade 735/Spaces/spaces_04.webp",
-            "/Villa_Retreats/Jade 735/Spaces/spaces_05.webp"
-        ]
+      id: "jacuzzi-area",
+      title: "Jacuzzi Area",
+      category: "Bed & Bath",
+      amenities: [
+        "King bed",
+        "Air conditioning",
+        "Room-darkening blinds",
+        "Wardrobe",
+        "En-suite bathroom",
+      ],
+      images: [
+        "/Villa_Retreats/Jade 735/Spaces/spaces_02.webp",
+        "/Villa_Retreats/Jade 735/Spaces/spaces_04.webp",
+        "/Villa_Retreats/Jade 735/Spaces/spaces_05.webp",
+      ],
     },
     {
-        id: "additional-spaces",
-        title: "Additional Spaces",
-        category: "Outdoors",
-        amenities: [
-            "Expansive views",
-            "Open area"
-        ],
-        images: [
-            "/Villa_Retreats/Jade 735/Spaces/spaces_06.webp"
-        ]
-    }
-],
+      id: "additional-spaces",
+      title: "Additional Spaces",
+      category: "Outdoors",
+      amenities: ["Expansive views", "Open area"],
+      images: ["/Villa_Retreats/Jade 735/Spaces/spaces_06.webp"],
+    },
+  ],
   pricing: {
     stay: {
       title: "Stay Experience",
@@ -256,19 +264,25 @@ export const jade735 = {
   },
   faq: [
     {
-      question: "What is the 4+1 BHK configuration?",
-      answer:
-        "The villa features four main luxury bedrooms and one additional versatile suite that can be used for extra guests or as a separate lounge area.",
+      question: "How many guests can stay overnight?",
+      answer: "Up to 20 guests can be accommodated.",
     },
     {
-      question: "Is the jacuzzi always available?",
+      question: "Is the property suitable for events?",
       answer:
-        "The 6-seater jacuzzi is available on request. Please inform our staff in advance so it can be prepared for your session.",
+        "Yes, suitable for small to mid-sized social gatherings and celebrations.",
     },
     {
-      question: "Can we host pool parties here?",
-      answer:
-        "Yes, the waterfall pool and surrounding deck were designed for social gatherings and celebrations for up to 30 guests.",
+      question: "Is the jacuzzi included?",
+      answer: "Available at an additional cost on request.",
+    },
+    {
+      question: "Are meals included?",
+      answer: "Meals are not included and can be arranged separately.",
+    },
+    {
+      question: "Is decoration allowed?",
+      answer: "Yes, personalised decor can be arranged on request.",
     },
   ],
 };

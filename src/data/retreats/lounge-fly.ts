@@ -22,81 +22,61 @@ export const loungeFly = {
   categories: ["Luxury Suites", "Urban Retreats", "Apartment Stays"],
   thumbnail: "/Villa_Retreats/Lounge Fly/Hero/hero.webp",
   image: "/Villa_Retreats/Lounge Fly/Hero/hero.webp",
-  images: ["/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp", "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp", "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp", "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp", "/Villa_Retreats/Lounge Fly/Spaces/IMG_9299.webp", "/Villa_Retreats/Lounge Fly/Spaces/IMG_9300.webp"],
+  images: [
+    "/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp",
+    "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp",
+    "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp",
+    "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp",
+    "/Villa_Retreats/Lounge Fly/Spaces/IMG_9299.webp",
+    "/Villa_Retreats/Lounge Fly/Spaces/IMG_9300.webp",
+  ],
   amenities: [
-    {
-      label: "Dual Balcony Views",
-      icon: "Sunset",
-      description:
-        "Two private balconies offering panoramic city skyline views and overlooking the Leela Hotel pool area.",
-    },
-    {
-      label: "High-Floor Living",
-      icon: "Maximize",
-      description:
-        "Positioned on an elevated floor, ensuring excellent ventilation and a quiet atmosphere above the city's pulse.",
-    },
-    {
-      label: "Mall & Hotel Access",
-      icon: "Car",
-      description:
-        "Direct proximity and access to Bhartiya Mall and the Leela Hotel for dining, shopping, and entertainment.",
-    },
-    {
-      label: "Air-conditioned Interiors",
-      icon: "Wind",
-      description:
-        "Fully climate-controlled interiors for a seamless and comfortable urban stay experience.",
-    },
-    {
-      label: "Entertainment Systems",
-      icon: "Music",
-      description:
-        "Integrated media and sound systems suited for private entertainment and relaxed evenings.",
-    },
-    {
-      label: "Fully Functional Kitchen",
-      icon: "Kitchen",
-      description:
-        "Modern kitchen setup equipped with essential appliances for light catering and guest convenience.",
-    },
-    {
-      label: "Outdoor Seating",
-      icon: "Sun",
-      description:
-        "Curated seating on the balconies for morning coffee or sunset views over North Bangalore.",
-    },
-    {
-      label: "Premium In-room Dining",
-      icon: "Utensils",
-      description:
-        "Access to a wide range of dining options from nearby fine-dining restaurants and hotel outlets.",
-    },
+    { label: "Private Pool", icon: "Waves" },
+    { label: "Airconditioned Interiors", icon: "Wind" },
+    { label: "Outdoor Seating", icon: "Sofa" },
+    { label: "Jacuzzi", icon: "Waves" },
+    { label: "Entertainment Systems", icon: "Music" },
+    { label: "Bonfire Setup", icon: "Flame" },
+    { label: "Barbecue Setup", icon: "Utensils" },
+    { label: "Fully Functional Kitchen", icon: "Kitchen" },
+    { label: "LCD Television", icon: "Tv" },
+    { label: "Tableware & Utensils", icon: "Coffee" },
+    { label: "Power Backup", icon: "Zap" },
+    { label: "Parking", icon: "Car" },
   ],
   propertyDetails: [
     {
       label: "1-Bedroom Luxury Suite",
-      description:
-        "A compact and stylish apartment layout optimized for solo travelers or small groups of up to 4 guests.",
+      description: "Compact apartment layout designed for up to 4 guests.",
       icon: "Bed",
     },
     {
-      label: "City-Facing Balconies",
+      label: "Dual Balcony Views",
       description:
-        "Direct views of the Leela Hotel pool and the expanding skyline of Bhartiya City.",
-      icon: "Sunset",
+        "Balconies overlooking the Leela Hotel pool and city skyline.",
+      icon: "Sun",
     },
     {
-      label: "Urban Boutique Vibe",
+      label: "High-Floor Living",
       description:
-        "Curated lounge-style interiors that offer a sophisticated alternative to traditional hotel stays.",
-      icon: "Diamond",
+        "Positioned on an elevated floor with open city views and ventilation.",
+      icon: "Home",
     },
     {
-      label: "Direct Connectivity",
-      description:
-        "Located within a massive integrated city with all urban amenities just a walk away.",
+      label: "Connected Location",
+      description: "Panoramic views of the Varlakonda hills from the property.",
       icon: "MapPin",
+    },
+    {
+      label: "Curated Interiors",
+      description:
+        "Backlit panels, lounge-style lighting, and premium finishes.",
+      icon: "Star",
+    },
+    {
+      label: "Fully Functional Kitchen",
+      description: "Equipped kitchen integrated into the living space.",
+      icon: "Kitchen",
     },
   ],
   services: [
@@ -130,81 +110,113 @@ export const loungeFly = {
     },
   ],
   activities: [
-    { title: "In-room Dining", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp" },
-    { title: "City Sunset Views", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp" },
-    { title: "Mall Exploration", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp" },
-    { title: "Boutique Stays", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp" },
+    {
+      title: "Balcony Lounge",
+      description: "Relaxation with dual balcony views.",
+      image: "/Villa_Retreats/Lounge_Fly/Experiences/experiences_01.webp",
+    },
+    {
+      title: "City Stay Experience",
+      description:
+        "Access to shopping, dining, and entertainment within Bhartiya City.",
+      image: "/Villa_Retreats/Lounge_Fly/Experiences/experiences_02.webp",
+    },
+    {
+      title: "Rooftop & Hotel Dining",
+      description: "Dining experiences at Leela Hotel and rooftop venues.",
+      image: "/Villa_Retreats/Lounge_Fly/Experiences/experiences_03.webp",
+    },
+    {
+      title: "Entertainment Access",
+      description: "Movies, breweries, and mall-based entertainment options.",
+      image: "/Villa_Retreats/Lounge_Fly/Experiences/experiences_04.webp",
+    },
+    {
+      title: "Cooking Experiences",
+      description: "Interactive cooking-based group experiences.",
+      image: "/Villa_Retreats/Lounge_Fly/Experiences/experiences_05.webp",
+    },
   ],
   spaces: [
-    { name: "Luxury Lounge", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp" },
-    { name: "Master Suite", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp" },
-    { name: "City Balcony", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp" },
-    { name: "Kitchenette", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp" },
+    {
+      name: "Luxury Lounge",
+      image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp",
+    },
+    {
+      name: "Master Suite",
+      image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp",
+    },
+    {
+      name: "City Balcony",
+      image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp",
+    },
+    {
+      name: "Kitchenette",
+      image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp",
+    },
   ],
   categorizedSpaces: [
     {
-        id: "luxury-lounge",
-        title: "Luxury Lounge",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: [
-            "/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp",
-            "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp",
-            "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp"
-        ]
+      id: "luxury-lounge",
+      title: "Luxury Lounge",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [
+        "/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp",
+        "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp",
+        "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp",
+      ],
     },
     {
-        id: "master-suite",
-        title: "Master Suite",
-        category: "Bed & Bath",
-        amenities: [
-            "King bed",
-            "Air conditioning",
-            "Room-darkening blinds",
-            "Wardrobe",
-            "En-suite bathroom"
-        ],
-        images: [
-            "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp",
-            "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp",
-            "/Villa_Retreats/Lounge Fly/Spaces/IMG_9299.webp"
-        ]
+      id: "master-suite",
+      title: "Master Suite",
+      category: "Bed & Bath",
+      amenities: [
+        "King bed",
+        "Air conditioning",
+        "Room-darkening blinds",
+        "Wardrobe",
+        "En-suite bathroom",
+      ],
+      images: [
+        "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp",
+        "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp",
+        "/Villa_Retreats/Lounge Fly/Spaces/IMG_9299.webp",
+      ],
     },
     {
-        id: "city-balcony",
-        title: "City Balcony",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: [
-            "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp",
-            "/Villa_Retreats/Lounge Fly/Spaces/IMG_9300.webp"
-        ]
+      id: "city-balcony",
+      title: "City Balcony",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [
+        "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp",
+        "/Villa_Retreats/Lounge Fly/Spaces/IMG_9300.webp",
+      ],
     },
     {
-        id: "kitchenette",
-        title: "Kitchenette",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: [
-            "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp"
-        ]
-    }
-],
+      id: "kitchenette",
+      title: "Kitchenette",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: ["/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp"],
+    },
+  ],
   pricing: {
     stay: {
       title: "Stay Experience",
@@ -259,19 +271,24 @@ export const loungeFly = {
   },
   faq: [
     {
-      question: "Is the pool private to the suite?",
-      answer:
-        "The suite overlooks the Leela Hotel pool. Guests may have access to the city's residential pool facilities nearby; please confirm access details during booking.",
+      question: "How many guests can stay?",
+      answer: "Up to 4 guests can be accommodated.",
     },
     {
-      question: "Can we host large parties here?",
-      answer:
-        "Lounge Fly is designed for intimate gatherings of up to 20 guests. For larger events, we recommend our standalone villa properties.",
+      question: "Is this suitable for events?",
+      answer: "No, this is designed for private stays only.",
     },
     {
-      question: "Is there direct access to the mall?",
-      answer:
-        "Yes, Lounge Fly is located within the Bhartiya City integrated development, offering direct and easy access to the Bhartiya Mall for shopping and dining.",
+      question: "Is food included?",
+      answer: "Food is not included but can be ordered or arranged.",
+    },
+    {
+      question: "Does the property have a kitchen?",
+      answer: "Yes, a fully functional kitchen is available.",
+    },
+    {
+      question: "Is parking available?",
+      answer: "Yes, parking is available within the premises.",
     },
   ],
 };

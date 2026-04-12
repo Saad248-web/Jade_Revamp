@@ -22,61 +22,42 @@ export const emerald = {
   ],
   categories: ["Luxury Retreats", "Private Events", "Staycations"],
   image: "/Villa_Retreats/Emerald/Hero/hero.webp",
-  images: ["/Villa_Retreats/Emerald/Spaces/spaces_01.webp", "/Villa_Retreats/Emerald/Spaces/spaces_02.webp", "/Villa_Retreats/Emerald/Spaces/spaces_03.webp", "/Villa_Retreats/Emerald/Spaces/spaces_04.webp", "/Villa_Retreats/Emerald/Spaces/spaces_05.webp", "/Villa_Retreats/Emerald/Spaces/spaces_06.webp", "/Villa_Retreats/Emerald/Spaces/spaces_07.webp"],
+  images: [
+    "/Villa_Retreats/Emerald/Spaces/spaces_01.webp",
+    "/Villa_Retreats/Emerald/Spaces/spaces_02.webp",
+    "/Villa_Retreats/Emerald/Spaces/spaces_03.webp",
+    "/Villa_Retreats/Emerald/Spaces/spaces_04.webp",
+    "/Villa_Retreats/Emerald/Spaces/spaces_05.webp",
+    "/Villa_Retreats/Emerald/Spaces/spaces_06.webp",
+    "/Villa_Retreats/Emerald/Spaces/spaces_07.webp",
+  ],
   amenities: [
-    {
-      label: "8 ft Waterfall Pool",
-      icon: "Waves",
-      description:
-        "A private swimming pool featuring a signature 8-foot cascading waterfall, designed for relaxation and aesthetic appeal.",
-    },
-    {
-      label: "Central Courtyard with Swing",
-      icon: "Sun",
-      description:
-        "A central open-to-sky courtyard with a swing that merges indoor luxury with surrounding natural elements.",
-    },
-    {
-      label: "Air-conditioned Bedrooms",
-      icon: "Wind",
-      description:
-        "Premium air-conditioned bedrooms featuring floor-to-ceiling glass walls.",
-    },
-    {
-      label: "Garden Sit-out",
-      icon: "Leaf",
-      description:
-        "Lush outdoor seating areas perfectly integrated into the property's greenery.",
-    },
-    {
-      label: "Bonfire Setup",
-      icon: "Flame",
-      description: "Dedicated bonfire zone for cozy evening gatherings.",
-    },
-    {
-      label: "Barbecue Setup",
-      icon: "Utensils",
-      description:
-        "Full barbecue equipment available for curated outdoor dining.",
-    },
-    {
-      label: "Entertainment Systems",
-      icon: "Music",
-      description:
-        "High-fidelity sound systems for indoor entertainment and gatherings.",
-    },
-    {
-      label: "Fully Functional Kitchen",
-      icon: "Kitchen",
-      description:
-        "Equipped kitchen for guest use or for professional chef service.",
-    },
+    { label: "Private Pool", icon: "Waves" },
+    { label: "Airconditioned Interiors", icon: "Wind" },
+    { label: "Central Courtyard", icon: "Sun" },
+    { label: "Glasshouse Living Area", icon: "Home" },
+    { label: "Entertainment Systems", icon: "Music" },
+    { label: "Outdoor Seating", icon: "Sofa" },
+    { label: "Barbecue Setup", icon: "Flame" },
+    { label: "Dry Kitchen", icon: "Utensils" },
+    { label: "Ample Parking", icon: "Car" },
+    { label: "Tableware & Utensils", icon: "Coffee" },
+    { label: "First Aid Kit", icon: "Cross" },
   ],
   spaces: [
     { name: "Waterfall Pool", image: "/Villa_Retreats/Emerald/Hero/hero.webp" },
-    { name: "Glass House Interior", image: "/Villa_Retreats/Emerald/Spaces/spaces_01.webp" },
-    { name: "Central Courtyard", image: "/Villa_Retreats/Emerald/Spaces/spaces_02.webp" },
-    { name: "Garden Sit-out", image: "/Villa_Retreats/Emerald/Spaces/spaces_03.webp" },
+    {
+      name: "Glass House Interior",
+      image: "/Villa_Retreats/Emerald/Spaces/spaces_01.webp",
+    },
+    {
+      name: "Central Courtyard",
+      image: "/Villa_Retreats/Emerald/Spaces/spaces_02.webp",
+    },
+    {
+      name: "Garden Sit-out",
+      image: "/Villa_Retreats/Emerald/Spaces/spaces_03.webp",
+    },
   ],
   services: [
     {
@@ -110,28 +91,40 @@ export const emerald = {
   ],
   propertyDetails: [
     {
-      label: "Traditional Glasshouse Design",
+      label: "2-Bedroom Glasshouse Villa",
       description:
-        "Floor-to-ceiling glass walls that seamlessly blend indoor living with the surrounding lush greenery.",
+        "A traditional glasshouse villa built around a central courtyard, designed for small group stays.",
       icon: "Home",
     },
     {
-      label: "Central Courtyard",
+      label: "Private Enclosed Property",
       description:
-        "An open-to-sky courtyard at the heart of the villa, connecting all living spaces through natural light.",
-      icon: "Sun",
+        "Set within a green, gated space offering privacy for stays and small gatherings.",
+      icon: "Lock",
     },
     {
-      label: "8 ft Waterfall Private Pool",
+      label: "Private Pool with Waterfall",
       description:
-        "A private pool with a dramatic 8-foot cascading waterfall — a signature feature of the Emerald retreat.",
+        "Features an aqua-blue pool with an 8 ft cascading waterfall and deck-side access.",
       icon: "Waves",
     },
     {
-      label: "Boutique 2-BHK Villa",
+      label: "Central Courtyard Layout",
       description:
-        "Two spacious bedrooms with premium furnishings, ideal for up to 10 guests.",
-      icon: "Bed",
+        "The villa is organised around a glass-covered courtyard with seating and a swing.",
+      icon: "Sun",
+    },
+    {
+      label: "Garden with Sit-out Areas",
+      description:
+        "Outdoor spaces include low seating zones and landscaped greenery across the property.",
+      icon: "Leaf",
+    },
+    {
+      label: "Stay & Gathering Capacity",
+      description:
+        "Accommodates up to 10 guests for stay and 25-30 guests for small gatherings.",
+      icon: "Users",
     },
   ],
   pricing: {
@@ -178,10 +171,41 @@ export const emerald = {
     ],
   },
   activities: [
-    { title: "Breakfast at Patio", image: "/Villa_Retreats/Emerald/Experiences/experiences_01.webp" },
-    { title: "Bonfire Evening", image: "/Villa_Retreats/Emerald/Experiences/experiences_02.webp" },
-    { title: "High Tea", image: "/Villa_Retreats/Emerald/Experiences/experiences_03.webp" },
-    { title: "Multi-cuisine Dining", image: "/Villa_Retreats/Emerald/Experiences/experiences_04.webp" },
+    {
+      title: "Candlelight Dining",
+      description:
+        "Curated dining setup within the property, suited for intimate meals and occasions.",
+      image: "/Villa_Retreats/Emerald/Experiences/experiences_01.webp",
+    },
+    {
+      title: "Fruit Picking",
+      description:
+        "Access to fruit-bearing trees across the property for a farm-style experience.",
+      image: "/Villa_Retreats/Emerald/Experiences/experiences_02.webp",
+    },
+    {
+      title: "Floating Breakfast",
+      description:
+        "Pool-based breakfast setup experience for those who like to enjoy in the pool",
+      image: "/Villa_Retreats/Emerald/Experiences/experiences_03.webp",
+    },
+    {
+      title: "Board Games",
+      description:
+        "Indoor recreational activities for casual group engagement.",
+      image: "/Villa_Retreats/Emerald/Experiences/experiences_04.webp",
+    },
+    {
+      title: "High-Tea Setup",
+      description:
+        "Light dining experience typically included with event bookings.",
+      image: "/Villa_Retreats/Emerald/Experiences/experiences_05.webp",
+    },
+    {
+      title: "Bonfire & BBQ (on request)",
+      description: "Outdoor evening setups for dining and social time.",
+      image: "/Villa_Retreats/Emerald/Experiences/experiences_06.webp",
+    },
   ],
   categorizedSpaces: [
     {
@@ -196,7 +220,10 @@ export const emerald = {
         "Air conditioning",
         "5 Seater Sofa",
       ],
-      images: ["/Villa_Retreats/Emerald/Spaces/spaces_05.webp", "/Villa_Retreats/Emerald/Spaces/spaces_06.webp"],
+      images: [
+        "/Villa_Retreats/Emerald/Spaces/spaces_05.webp",
+        "/Villa_Retreats/Emerald/Spaces/spaces_06.webp",
+      ],
     },
     {
       id: "guest-bedroom",
@@ -210,7 +237,10 @@ export const emerald = {
         "Air conditioning",
         "5 Seater Sofa",
       ],
-      images: ["/Villa_Retreats/Emerald/Spaces/spaces_07.webp", "/Villa_Retreats/Emerald/Spaces/spaces_08.webp"],
+      images: [
+        "/Villa_Retreats/Emerald/Spaces/spaces_07.webp",
+        "/Villa_Retreats/Emerald/Spaces/spaces_08.webp",
+      ],
     },
     {
       id: "lawn",
@@ -222,7 +252,10 @@ export const emerald = {
         "Bonfire zone",
         "Barbecue setup",
       ],
-      images: ["/Villa_Retreats/Emerald/Spaces/spaces_09.webp", "/Villa_Retreats/Emerald/Spaces/spaces_10.webp"],
+      images: [
+        "/Villa_Retreats/Emerald/Spaces/spaces_09.webp",
+        "/Villa_Retreats/Emerald/Spaces/spaces_10.webp",
+      ],
     },
     {
       id: "living-area",
@@ -234,7 +267,10 @@ export const emerald = {
         "Fully functional kitchen",
         "Lounge seating",
       ],
-      images: ["/Villa_Retreats/Emerald/Spaces/spaces_11.webp", "/Villa_Retreats/Emerald/Spaces/spaces_12.webp"],
+      images: [
+        "/Villa_Retreats/Emerald/Spaces/spaces_11.webp",
+        "/Villa_Retreats/Emerald/Spaces/spaces_12.webp",
+      ],
     },
   ],
   video: {

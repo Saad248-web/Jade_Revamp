@@ -26,196 +26,159 @@ export const diamond = {
   perfectForEvents: ["Weddings", "Corporate Events", "Large Gatherings"],
   categories: ["Weddings", "Corporate Events", "Large Gatherings"],
   image: "/Villa_Retreats/Diamond/Hero/hero.webp",
-  images: ["/Villa_Retreats/Diamond/Spaces/spaces_01.webp", "/Villa_Retreats/Diamond/Spaces/spaces_02.webp", "/Villa_Retreats/Diamond/Spaces/spaces_03.webp", "/Villa_Retreats/Diamond/Spaces/spaces_04.webp", "/Villa_Retreats/Diamond/Spaces/spaces_05.webp", "/Villa_Retreats/Diamond/Spaces/spaces_06.webp", "/Villa_Retreats/Diamond/Spaces/spaces_07.webp", "/Villa_Retreats/Diamond/Spaces/spaces_08.webp"],
+  images: [
+    "/Villa_Retreats/Diamond/Spaces/spaces_01.webp",
+    "/Villa_Retreats/Diamond/Spaces/spaces_02.webp",
+    "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
+    "/Villa_Retreats/Diamond/Spaces/spaces_04.webp",
+    "/Villa_Retreats/Diamond/Spaces/spaces_05.webp",
+    "/Villa_Retreats/Diamond/Spaces/spaces_06.webp",
+    "/Villa_Retreats/Diamond/Spaces/spaces_07.webp",
+    "/Villa_Retreats/Diamond/Spaces/spaces_08.webp",
+  ],
   amenities: [
-    {
-      label: "Private Pool",
-      icon: "Waves",
-      description:
-        "A private swimming pool with poolside deck, perfect for relaxation and leisure during overnight stays.",
-    },
-    {
-      label: "Air-conditioned Interiors",
-      icon: "Wind",
-      description:
-        "All bedrooms and indoor areas are fully air-conditioned for year-round comfort.",
-    },
-    {
-      label: "Outdoor Seating",
-      icon: "Sun",
-      description:
-        "Multiple outdoor lounge and seating arrangements across the lawn and poolside.",
-    },
-    {
-      label: "Jacuzzi",
-      icon: "Waves",
-      description:
-        "On-site jacuzzi facilities for a premium relaxation experience.",
-    },
-    {
-      label: "Entertainment Systems",
-      icon: "Music",
-      description:
-        "High-quality sound and entertainment systems for events and casual listening.",
-    },
-    {
-      label: "Bonfire Setup",
-      icon: "Flame",
-      description:
-        "Dedicated bonfire zone for evening gatherings and group experiences.",
-    },
-    {
-      label: "Barbecue Setup",
-      icon: "Utensils",
-      description:
-        "Full barbecue equipment available for curated outdoor dining.",
-    },
-    {
-      label: "Fully Functional Kitchen",
-      icon: "Kitchen",
-      description:
-        "Equipped kitchen for both private use and professional catering support.",
-    },
-    {
-      label: "LED Television",
-      icon: "Monitor",
-      description:
-        "LED screens available in common areas and bedrooms for entertainment.",
-    },
-    {
-      label: "Tableware & Utensils",
-      icon: "Utensils",
-      description:
-        "Complete tableware and cutlery sets provided for dining and events.",
-    },
-    {
-      label: "Power Backup",
-      icon: "Zap",
-      description: "Full power backup ensures uninterrupted events and stays.",
-    },
-    {
-      label: "Parking",
-      icon: "Car",
-      description: "Dedicated parking space available for over 150 vehicles.",
-    },
+    { label: "Private Pool", icon: "Waves" },
+    { label: "Airconditioned Interiors", icon: "Wind" },
+    { label: "Outdoor Seating", icon: "Sofa" },
+    { label: "Jacuzzi", icon: "Waves" },
+    { label: "Entertainment Systems", icon: "Music" },
+    { label: "Bonfire Setup", icon: "Flame" },
+    { label: "Barbecue Setup", icon: "Utensils" },
+    { label: "Fully Functional Kitchen", icon: "Kitchen" },
+    { label: "LCD Television", icon: "Tv" },
+    { label: "Tableware & Utensils", icon: "Coffee" },
+    { label: "Power Backup", icon: "Zap" },
+    { label: "Parking", icon: "Car" },
   ],
   spaces: [
     { name: "Expansive Lawn", image: "/Villa_Retreats/Diamond/Hero/hero.webp" },
-    { name: "Banquet Hall", image: "/Villa_Retreats/Diamond/Spaces/spaces_01.webp" },
-    { name: "Accommodation Block", image: "/Villa_Retreats/Diamond/Spaces/spaces_02.webp" },
-    { name: "Courtyard", image: "/Villa_Retreats/Diamond/Spaces/spaces_03.webp" },
-    { name: "Pool Deck", image: "/Villa_Retreats/Diamond/Spaces/spaces_04.webp" },
-    { name: "Garden Path", image: "/Villa_Retreats/Diamond/Spaces/spaces_05.webp" },
-    { name: "Entrance Foyer", image: "/Villa_Retreats/Diamond/Spaces/spaces_06.webp" },
+    {
+      name: "Banquet Hall",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_01.webp",
+    },
+    {
+      name: "Accommodation Block",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_02.webp",
+    },
+    {
+      name: "Courtyard",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
+    },
+    {
+      name: "Pool Deck",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_04.webp",
+    },
+    {
+      name: "Garden Path",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_05.webp",
+    },
+    {
+      name: "Entrance Foyer",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_06.webp",
+    },
   ],
   categorizedSpaces: [
     {
-        id: "expansive-lawn",
-        title: "Expansive Lawn",
-        category: "Outdoors",
-        amenities: [
-            "Private pool access",
-            "Garden sit-out",
-            "Bonfire zone",
-            "Barbecue setup"
-        ],
-        images: [
-            "/Villa_Retreats/Diamond/Hero/hero.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_01.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_02.webp"
-        ]
+      id: "expansive-lawn",
+      title: "Expansive Lawn",
+      category: "Outdoors",
+      amenities: [
+        "Private pool access",
+        "Garden sit-out",
+        "Bonfire zone",
+        "Barbecue setup",
+      ],
+      images: [
+        "/Villa_Retreats/Diamond/Hero/hero.webp",
+        "/Villa_Retreats/Diamond/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Diamond/Spaces/spaces_02.webp",
+      ],
     },
     {
-        id: "banquet-hall",
-        title: "Banquet Hall",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: [
-            "/Villa_Retreats/Diamond/Spaces/spaces_01.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_04.webp"
-        ]
+      id: "banquet-hall",
+      title: "Banquet Hall",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [
+        "/Villa_Retreats/Diamond/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
+        "/Villa_Retreats/Diamond/Spaces/spaces_04.webp",
+      ],
     },
     {
-        id: "accommodation-block",
-        title: "Accommodation Block",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: [
-            "/Villa_Retreats/Diamond/Spaces/spaces_02.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_05.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_06.webp"
-        ]
+      id: "accommodation-block",
+      title: "Accommodation Block",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [
+        "/Villa_Retreats/Diamond/Spaces/spaces_02.webp",
+        "/Villa_Retreats/Diamond/Spaces/spaces_05.webp",
+        "/Villa_Retreats/Diamond/Spaces/spaces_06.webp",
+      ],
     },
     {
-        id: "courtyard",
-        title: "Courtyard",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: [
-            "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_07.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_08.webp"
-        ]
+      id: "courtyard",
+      title: "Courtyard",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [
+        "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
+        "/Villa_Retreats/Diamond/Spaces/spaces_07.webp",
+        "/Villa_Retreats/Diamond/Spaces/spaces_08.webp",
+      ],
     },
     {
-        id: "pool-deck",
-        title: "Pool Deck",
-        category: "Outdoors",
-        amenities: [
-            "Private pool access",
-            "Garden sit-out",
-            "Bonfire zone",
-            "Barbecue setup"
-        ],
-        images: [
-            "/Villa_Retreats/Diamond/Spaces/spaces_04.webp"
-        ]
+      id: "pool-deck",
+      title: "Pool Deck",
+      category: "Outdoors",
+      amenities: [
+        "Private pool access",
+        "Garden sit-out",
+        "Bonfire zone",
+        "Barbecue setup",
+      ],
+      images: ["/Villa_Retreats/Diamond/Spaces/spaces_04.webp"],
     },
     {
-        id: "garden-path",
-        title: "Garden Path",
-        category: "Outdoors",
-        amenities: [
-            "Private pool access",
-            "Garden sit-out",
-            "Bonfire zone",
-            "Barbecue setup"
-        ],
-        images: [
-            "/Villa_Retreats/Diamond/Spaces/spaces_05.webp"
-        ]
+      id: "garden-path",
+      title: "Garden Path",
+      category: "Outdoors",
+      amenities: [
+        "Private pool access",
+        "Garden sit-out",
+        "Bonfire zone",
+        "Barbecue setup",
+      ],
+      images: ["/Villa_Retreats/Diamond/Spaces/spaces_05.webp"],
     },
     {
-        id: "entrance-foyer",
-        title: "Entrance Foyer",
-        category: "Outdoors",
-        amenities: [
-            "Private pool access",
-            "Garden sit-out",
-            "Bonfire zone",
-            "Barbecue setup"
-        ],
-        images: [
-            "/Villa_Retreats/Diamond/Spaces/spaces_06.webp"
-        ]
-    }
-],
+      id: "entrance-foyer",
+      title: "Entrance Foyer",
+      category: "Outdoors",
+      amenities: [
+        "Private pool access",
+        "Garden sit-out",
+        "Bonfire zone",
+        "Barbecue setup",
+      ],
+      images: ["/Villa_Retreats/Diamond/Spaces/spaces_06.webp"],
+    },
+  ],
   services: [
     {
       title: "Chef on Call",
@@ -253,7 +216,7 @@ export const diamond = {
     {
       label: "3-Acre Private Venue",
       description: "Large-scale property designed for events and group stays.",
-      icon: "Maximize",
+      icon: "Map",
     },
     {
       label: "50,000 Sq Ft Lawn",
@@ -263,18 +226,18 @@ export const diamond = {
     {
       label: "Semi-open Banquet Hall",
       description: "Dining setup for up to 200 guests.",
-      icon: "Utensils",
+      icon: "Home",
     },
     {
       label: "Multi-purpose Hall",
       description:
         "Convertible space for conferences or dorm-style accommodation.",
-      icon: "Home",
+      icon: "Building",
     },
     {
       label: "Two-deck Gazebo",
       description: "Overlooking the pool and lawn for event setups.",
-      icon: "Mountain",
+      icon: "Tent",
     },
     {
       label: "High-Capacity Parking",
@@ -341,11 +304,6 @@ export const diamond = {
       description: "Birthdays, anniversaries, and private events.",
       image: "/Villa_Retreats/Diamond/Spaces/spaces_05.webp",
     },
-    {
-      title: "Wedding Ceremonies",
-      description: "Large-format wedding setups across lawn and stage areas.",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_06.webp",
-    },
   ],
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=t-VX-VDkXj4",
@@ -364,6 +322,14 @@ export const diamond = {
     {
       question: "Is catering included?",
       answer: "Catering can be arranged separately based on requirements.",
+    },
+    {
+      question: "Is parking available?",
+      answer: "Yes, parking for over 150 vehicles is available.",
+    },
+    {
+      question: "Can the venue host corporate events?",
+      answer: "Yes, suitable for conferences, offsites, and large gatherings.",
     },
   ],
 };

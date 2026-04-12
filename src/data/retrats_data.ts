@@ -324,10 +324,16 @@ export const VILLAS = [
       "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
     ],
     amenities: [
-      { label: "Wifi", icon: "Wifi" },
-      { label: "Parking", icon: "Car" },
-      { label: "Pool", icon: "Waves" },
-      { label: "Lawn", icon: "Trees" },
+      { label: "Private Pool", icon: "Waves" },
+      { label: "Airconditioned Interiors", icon: "Wind" },
+      { label: "Outdoor Seating", icon: "Sofa" },
+      { label: "Glasshouse Living Area", icon: "Home" },
+      { label: "Entertainment Systems", icon: "Music" },
+      { label: "Bonfire Setup", icon: "Flame" },
+      { label: "Barbecue Setup", icon: "Utensils" },
+      { label: "Dry Kitchen", icon: "Kitchen" },
+      { label: "Ample Parking", icon: "Car" },
+      { label: "Tableware & Utensils", icon: "Coffee" },
     ],
     // ADDED STRUCTURE
     spaces: [
@@ -378,19 +384,39 @@ export const VILLAS = [
     ],
     propertyDetails: [
       {
-        title: "Modern 2-BHK Structure",
-        description:
-          "Cozy living spaces designed to overlook the private pool and expansive lawns.",
+        label: "1.5 Acre",
+        description: "Landscaped Lawn",
+        icon: "Trees",
       },
       {
-        title: "1.5 Acre Landscape",
-        description:
-          "Situated on a 1.5-acre plot with landscaped gardens perfect for outdoor gatherings.",
+        label: "Glasshouse",
+        description: "Living Space",
+        icon: "Home",
       },
       {
-        title: "Private Pool",
-        description:
-          "Features a private swimming pool accessible directly from the villa.",
+        label: "Multi-level",
+        description: "Garden Venue",
+        icon: "Layers",
+      },
+      {
+        label: "2 Gazebos",
+        description: "Outdoor Setups",
+        icon: "Tent",
+      },
+      {
+        label: "Kids Play",
+        description: "Area",
+        icon: "Smile",
+      },
+      {
+        label: "Large Pool",
+        description: "With Lawn View",
+        icon: "Waves",
+      },
+      {
+        label: "Outdoor Bar",
+        description: "Counter Setup",
+        icon: "Wine",
       },
     ],
     pricing: {
@@ -436,31 +462,59 @@ export const VILLAS = [
       ],
     },
     activities: [
-      { title: "Weekend Getaways", image: "/X/Tranquil Woods/10.webp" },
-      { title: "Weddings", image: "/X/Magnolia/9.webp" },
-      { title: "Corporate Events", image: "/X/ROR/14.webp" },
       {
-        title: "Photo Shoots",
+        title: "Outdoor Movie Nights",
+        description:
+          "Projector-based screenings under the open sky with seating setups.",
+        image: "/X/Tranquil Woods/10.webp",
+      },
+      {
+        title: "Bonfire Evenings",
+        description:
+          "Outdoor bonfire setups for group gatherings and late evenings.",
+        image: "/X/Magnolia/9.webp",
+      },
+      {
+        title: "Barbecue Experiences",
+        description: "Live grill setups for hosted meals and casual dining.",
+        image: "/X/ROR/14.webp",
+      },
+      {
+        title: "Garden Dining Setups",
+        description:
+          "Custom dining layouts across lawns, gazebos, or poolside areas.",
         image:
           "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+      },
+      {
+        title: "High Tea Setups",
+        description:
+          "Light dining experiences for daytime events and gatherings.",
+        image: "/X/Tranquil Woods/10.webp",
       },
     ],
     video: "/X/Magnolia/9.webp",
     faq: [
       {
-        question: "What is the maximum guest capacity?",
-        answer:
-          "The venue can comfortably accommodate up to 700 guests for floating crowds.",
+        question: "How many guests can stay overnight?",
+        answer: "Up to 10-15 guests can be accommodated.",
       },
       {
-        question: "Can we bring our own caterers?",
+        question: "Is the property suitable for weddings?",
         answer:
-          "Yes, you can bring your own caterers. We have a fully-equipped catering kitchen available for use.",
+          "Yes, the property supports large-format weddings and outdoor events.",
       },
       {
-        question: "What about outdoor events during monsoon?",
-        answer:
-          "We have focused on outdoor landscaping; strictly indoor areas are limited.",
+        question: "What is the event capacity?",
+        answer: "The venue can accommodate approximately 100 to 500 guests.",
+      },
+      {
+        question: "Is the pool private?",
+        answer: "Yes, the pool is exclusively accessible to guests.",
+      },
+      {
+        question: "Is food included?",
+        answer: "Meals can be arranged on request.",
       },
     ],
   },
