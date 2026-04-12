@@ -141,6 +141,20 @@ export const palatio = {
     { name: "Villa Interior", image: "" },
     { name: "Traditional Spaces", image: "" },
   ],
+  categorizedSpaces: [
+    {
+        id: "main-space",
+        title: "Main Space",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: []
+    }
+],
   pricing: {
     stay: {
       title: "Stay Experience",

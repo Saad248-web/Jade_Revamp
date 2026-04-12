@@ -51,12 +51,39 @@ export default function VillaCard({ villa }: VillaCardProps) {
       : `/book?villa=${villa.id}`;
   })();
 
-  // If a villa doesn't have multiple spaces defined yet, we'll create a fallback array
-  // of just its main image so the UI doesn't break.
-  const images =
-    villa.spaces?.length > 0
-      ? villa.spaces
-      : [{ name: "Main", image: villa.image }];
+  // Build a rich carousel: hero image first, then gallery (or spaces fallback)
+  const validImage = (img: string | undefined) => img && img.length > 0;
+  const images: { name: string; image: string }[] = (() => {
+    const list: { name: string; image: string }[] = [];
+
+    // Always start with the hero image if valid
+    if (validImage(villa.image)) {
+      list.push({ name: "Main", image: villa.image as string });
+    }
+
+    // Prefer the images[] gallery array
+    const gallery = (villa.images || [])
+      .filter((img): img is string => validImage(img) === true)
+      .map((img, i) => ({ name: `View ${i + 1}`, image: img }));
+
+    if (gallery.length > 0) {
+      list.push(...gallery);
+      return list;
+    }
+
+    // Fall back to spaces[] entries with valid images
+    const spaceImages = (villa.spaces || [])
+      .filter((s) => validImage(s.image))
+      .map((s) => ({ name: s.name, image: s.image as string }));
+
+    if (spaceImages.length > 0) {
+      list.push(...spaceImages);
+      return list;
+    }
+
+    if (list.length > 0) return list;
+    return [{ name: "Main", image: "" }];
+  })();
 
   const nextImage = () => {
     setDirection(1);
@@ -93,12 +120,21 @@ export default function VillaCard({ villa }: VillaCardProps) {
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="absolute inset-0 w-full h-full"
           >
-            <Image
-              src={currentSpace.image}
-              alt={`${villa.name} - ${currentSpace.name}`}
-              fill
-              className="object-cover"
-            />
+            {validImage(currentSpace?.image) ? (
+              <Image
+                src={currentSpace.image}
+                alt={`${villa.name} - ${currentSpace.name}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 45vw"
+                priority={currentImageIndex === 0}
+                loading={currentImageIndex === 0 ? "eager" : "lazy"}
+              />
+            ) : (
+              <div className="absolute inset-0 bg-white/5 flex items-center justify-center text-white/20 text-xs font-bold uppercase tracking-widest">
+                Image Coming Soon
+              </div>
+            )}
             {/* Dark gradient overlay for bottom text */}
             <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
           </motion.div>

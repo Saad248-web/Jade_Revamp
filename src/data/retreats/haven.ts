@@ -20,17 +20,8 @@ export const haven = {
     "Group Stays",
   ],
   categories: ["Luxury Retreats", "Social Gatherings", "Private Events"],
-  image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  image: "/Villa_Retreats/Haven/Hero/hero.webp",
+  images: ["/Villa_Retreats/Haven/Spaces/spaces_01.webp", "/Villa_Retreats/Haven/Spaces/spaces_02.webp", "/Villa_Retreats/Haven/Spaces/spaces_03.webp", "/Villa_Retreats/Haven/Spaces/spaces_04.webp", "/Villa_Retreats/Haven/Spaces/spaces_05.webp", "/Villa_Retreats/Haven/Spaces/spaces_06.webp", "/Villa_Retreats/Haven/Spaces/spaces_07.webp", "/Villa_Retreats/Haven/Spaces/spaces_08.webp"],
   amenities: [
     {
       label: "Private Pool With Deck",
@@ -82,11 +73,77 @@ export const haven = {
     },
   ],
   spaces: [
-    { name: "Courtyard", image: "" },
-    { name: "Private Pool", image: "" },
-    { name: "Lawn Area", image: "" },
-    { name: "Modern Interior", image: "" },
+    { name: "Courtyard", image: "/Villa_Retreats/Haven/Hero/hero.webp" },
+    { name: "Private Pool", image: "/Villa_Retreats/Haven/Spaces/spaces_01.webp" },
+    { name: "Lawn Area", image: "/Villa_Retreats/Haven/Spaces/spaces_02.webp" },
+    { name: "Modern Interior", image: "/Villa_Retreats/Haven/Spaces/spaces_03.webp" },
   ],
+  categorizedSpaces: [
+    {
+        id: "courtyard",
+        title: "Courtyard",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Haven/Hero/hero.webp",
+            "/Villa_Retreats/Haven/Spaces/spaces_01.webp",
+            "/Villa_Retreats/Haven/Spaces/spaces_02.webp"
+        ]
+    },
+    {
+        id: "private-pool",
+        title: "Private Pool",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Haven/Spaces/spaces_01.webp",
+            "/Villa_Retreats/Haven/Spaces/spaces_03.webp",
+            "/Villa_Retreats/Haven/Spaces/spaces_04.webp"
+        ]
+    },
+    {
+        id: "lawn-area",
+        title: "Lawn Area",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Haven/Spaces/spaces_02.webp",
+            "/Villa_Retreats/Haven/Spaces/spaces_05.webp",
+            "/Villa_Retreats/Haven/Spaces/spaces_06.webp"
+        ]
+    },
+    {
+        id: "modern-interior",
+        title: "Modern Interior",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Haven/Spaces/spaces_03.webp",
+            "/Villa_Retreats/Haven/Spaces/spaces_07.webp",
+            "/Villa_Retreats/Haven/Spaces/spaces_08.webp"
+        ]
+    }
+],
   services: [
     {
       title: "Chef on Call",
@@ -187,14 +244,14 @@ export const haven = {
     ],
   },
   activities: [
-    { title: "Poolside Relaxation", image: "" },
-    { title: "Social Gatherings", image: "" },
-    { title: "Couple Retreats", image: "" },
-    { title: "Celebrations", image: "" },
+    { title: "Poolside Relaxation", image: "/Villa_Retreats/Haven/Experiences/experiences_01.webp" },
+    { title: "Social Gatherings", image: "/Villa_Retreats/Haven/Experiences/experiences_02.webp" },
+    { title: "Couple Retreats", image: "/Villa_Retreats/Haven/Experiences/experiences_03.webp" },
+    { title: "Celebrations", image: "/Villa_Retreats/Haven/Experiences/experiences_05.webp" },
   ],
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=3Aid-re90HE",
-    thumbnail: "",
+    thumbnail: "/Villa_Retreats/Haven/Hero/hero.webp",
     duration: "1:47",
   },
   faq: [

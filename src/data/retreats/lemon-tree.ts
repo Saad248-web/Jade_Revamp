@@ -148,6 +148,20 @@ export const lemonTree = {
     { name: "Multipurpose Hall", image: "" },
     { name: "Lemon Grove", image: "" },
   ],
+  categorizedSpaces: [
+    {
+        id: "main-space",
+        title: "Main Space",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: []
+    }
+],
   pricing: {
     stay: {
       title: "Stay Experience",

@@ -20,15 +20,15 @@ export const domeVillas = {
     "Celebrations",
   ],
   categories: ["Themed Stays", "Nature Retreats", "Boutique Villas"],
-  thumbnail: "",
-  image: "",
+  thumbnail: "/Villa_Retreats/Dome Villa_s - Blue/Hero/hero.webp",
+  image: "/Villa_Retreats/Dome Villa_s - Blue/Hero/hero.webp",
   images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
+    "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp",
+    "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_02.webp",
+    "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_03.webp",
+    "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp",
+    "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_05.webp",
+    "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_06.webp",
   ],
   amenities: [
     {
@@ -130,17 +130,81 @@ export const domeVillas = {
     },
   ],
   activities: [
-    { title: "Nature Trails", image: "" },
-    { title: "Bonfire Nights", image: "" },
-    { title: "Poolside Sessions", image: "" },
-    { title: "Photography", image: "" },
+    { title: "Nature Trails", image: "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_01.webp" },
+    { title: "Bonfire Nights", image: "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_02.webp" },
+    { title: "Poolside Sessions", image: "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_03.webp" },
+    { title: "Photography", image: "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_04.webp" },
   ],
   spaces: [
-    { name: "Red Dome", image: "" },
-    { name: "Blue Dome", image: "" },
-    { name: "Yellow Dome", image: "" },
-    { name: "Plunge Pool", image: "" },
+    { name: "Red Dome", image: "/Villa_Retreats/Dome Villa_s - Red/Spaces/spaces_01.webp" },
+    { name: "Blue Dome", image: "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp" },
+    { name: "Yellow Dome", image: "/Villa_Retreats/Dome Villa_s - Yellow/Spaces/spaces_01.webp" },
+    { name: "Plunge Pool", image: "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp" },
   ],
+  categorizedSpaces: [
+    {
+        id: "red-dome",
+        title: "Red Dome",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Dome Villa_s - Red/Spaces/spaces_01.webp",
+            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp",
+            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_02.webp"
+        ]
+    },
+    {
+        id: "blue-dome",
+        title: "Blue Dome",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp",
+            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_03.webp",
+            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp"
+        ]
+    },
+    {
+        id: "yellow-dome",
+        title: "Yellow Dome",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Dome Villa_s - Yellow/Spaces/spaces_01.webp",
+            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_05.webp",
+            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_06.webp"
+        ]
+    },
+    {
+        id: "plunge-pool",
+        title: "Plunge Pool",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp"
+        ]
+    }
+],
   pricing: {
     stay: {
       title: "Stay Experience",

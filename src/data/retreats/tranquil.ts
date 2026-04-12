@@ -20,21 +20,9 @@ export const tranquil = {
     "Corporate Retreats",
   ],
   categories: ["Wedding Venues", "Luxury Retreats", "Garden Properties"],
-  thumbnail: "",
-  image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  thumbnail: "/Villa_Retreats/Tranquil Woods/Hero/hero.webp",
+  image: "/Villa_Retreats/Tranquil Woods/Hero/hero.webp",
+  images: ["/Villa_Retreats/Tranquil Woods/Spaces/spaces_01.webp", "/Villa_Retreats/Tranquil Woods/Spaces/spaces_02.webp", "/Villa_Retreats/Tranquil Woods/Spaces/spaces_03.webp", "/Villa_Retreats/Tranquil Woods/Spaces/spaces_04.webp", "/Villa_Retreats/Tranquil Woods/Spaces/spaces_05.webp", "/Villa_Retreats/Tranquil Woods/Spaces/spaces_06.webp", "/Villa_Retreats/Tranquil Woods/Spaces/spaces_07.webp", "/Villa_Retreats/Tranquil Woods/Spaces/spaces_08.webp", "/Villa_Retreats/Tranquil Woods/Spaces/spaces_09.webp", "/Villa_Retreats/Tranquil Woods/Spaces/spaces_10.webp", "/Villa_Retreats/Tranquil Woods/Spaces/spaces_11.webp"],
   amenities: [
     {
       label: "Private Pool",
@@ -138,17 +126,96 @@ export const tranquil = {
     },
   ],
   activities: [
-    { title: "Garden Weddings", image: "" },
-    { title: "Candlelight Dining", image: "" },
-    { title: "Weekend Getaways", image: "" },
-    { title: "Poolside Relaxation", image: "" },
+    { title: "Garden Weddings", image: "/Villa_Retreats/Tranquil Woods/Experiences/experiences_01.webp" },
+    { title: "Candlelight Dining", image: "/Villa_Retreats/Tranquil Woods/Experiences/experiences_02.webp" },
+    { title: "Weekend Getaways", image: "/Villa_Retreats/Tranquil Woods/Experiences/experiences_03.webp" },
+    { title: "Poolside Relaxation", image: "/Villa_Retreats/Tranquil Woods/Experiences/experiences_04.webp" },
   ],
   spaces: [
-    { name: "Garden Lawn", image: "" },
-    { name: "Glass Villa Living", image: "" },
-    { name: "Private Pool", image: "" },
-    { name: "Event Grounds", image: "" },
+    { name: "Garden Lawn", image: "/Villa_Retreats/Tranquil Woods/Spaces/spaces_01.webp" },
+    { name: "Glass Villa Living", image: "/Villa_Retreats/Tranquil Woods/Spaces/spaces_02.webp" },
+    { name: "Private Pool", image: "/Villa_Retreats/Tranquil Woods/Spaces/spaces_03.webp" },
+    { name: "Event Grounds", image: "/Villa_Retreats/Tranquil Woods/Spaces/spaces_04.webp" },
   ],
+  categorizedSpaces: [
+    {
+        id: "garden-lawn",
+        title: "Garden Lawn",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_01.webp",
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_02.webp",
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_03.webp"
+        ]
+    },
+    {
+        id: "glass-villa-living",
+        title: "Glass Villa Living",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_02.webp",
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_04.webp",
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_05.webp"
+        ]
+    },
+    {
+        id: "private-pool",
+        title: "Private Pool",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_03.webp",
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_06.webp",
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_07.webp"
+        ]
+    },
+    {
+        id: "event-grounds",
+        title: "Event Grounds",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_04.webp",
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_08.webp",
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_09.webp"
+        ]
+    },
+    {
+        id: "additional-spaces",
+        title: "Additional Spaces",
+        category: "Outdoors",
+        amenities: [
+            "Expansive views",
+            "Open area"
+        ],
+        images: [
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_10.webp",
+            "/Villa_Retreats/Tranquil Woods/Spaces/spaces_11.webp"
+        ]
+    }
+],
   pricing: {
     stay: {
       title: "Stay Experience",
@@ -193,7 +260,7 @@ export const tranquil = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=KHJFdAVRmF8",
-    thumbnail: "",
+    thumbnail: "/Villa_Retreats/Tranquil Woods/Hero/hero.webp",
     duration: "2:51",
   },
   faq: [

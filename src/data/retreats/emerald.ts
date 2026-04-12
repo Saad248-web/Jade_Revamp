@@ -21,8 +21,8 @@ export const emerald = {
     "Small Celebrations",
   ],
   categories: ["Luxury Retreats", "Private Events", "Staycations"],
-  image: "",
-  images: ["", "", "", "", "", "", ""],
+  image: "/Villa_Retreats/Emerald/Hero/hero.webp",
+  images: ["/Villa_Retreats/Emerald/Spaces/spaces_01.webp", "/Villa_Retreats/Emerald/Spaces/spaces_02.webp", "/Villa_Retreats/Emerald/Spaces/spaces_03.webp", "/Villa_Retreats/Emerald/Spaces/spaces_04.webp", "/Villa_Retreats/Emerald/Spaces/spaces_05.webp", "/Villa_Retreats/Emerald/Spaces/spaces_06.webp", "/Villa_Retreats/Emerald/Spaces/spaces_07.webp"],
   amenities: [
     {
       label: "8 ft Waterfall Pool",
@@ -73,10 +73,10 @@ export const emerald = {
     },
   ],
   spaces: [
-    { name: "Waterfall Pool", image: "" },
-    { name: "Glass House Interior", image: "" },
-    { name: "Central Courtyard", image: "" },
-    { name: "Garden Sit-out", image: "" },
+    { name: "Waterfall Pool", image: "/Villa_Retreats/Emerald/Hero/hero.webp" },
+    { name: "Glass House Interior", image: "/Villa_Retreats/Emerald/Spaces/spaces_01.webp" },
+    { name: "Central Courtyard", image: "/Villa_Retreats/Emerald/Spaces/spaces_02.webp" },
+    { name: "Garden Sit-out", image: "/Villa_Retreats/Emerald/Spaces/spaces_03.webp" },
   ],
   services: [
     {
@@ -178,10 +178,10 @@ export const emerald = {
     ],
   },
   activities: [
-    { title: "Breakfast at Patio", image: "" },
-    { title: "Bonfire Evening", image: "" },
-    { title: "High Tea", image: "" },
-    { title: "Multi-cuisine Dining", image: "" },
+    { title: "Breakfast at Patio", image: "/Villa_Retreats/Emerald/Experiences/experiences_01.webp" },
+    { title: "Bonfire Evening", image: "/Villa_Retreats/Emerald/Experiences/experiences_02.webp" },
+    { title: "High Tea", image: "/Villa_Retreats/Emerald/Experiences/experiences_03.webp" },
+    { title: "Multi-cuisine Dining", image: "/Villa_Retreats/Emerald/Experiences/experiences_04.webp" },
   ],
   categorizedSpaces: [
     {
@@ -196,7 +196,7 @@ export const emerald = {
         "Air conditioning",
         "5 Seater Sofa",
       ],
-      images: ["", ""],
+      images: ["/Villa_Retreats/Emerald/Spaces/spaces_05.webp", "/Villa_Retreats/Emerald/Spaces/spaces_06.webp"],
     },
     {
       id: "guest-bedroom",
@@ -210,7 +210,7 @@ export const emerald = {
         "Air conditioning",
         "5 Seater Sofa",
       ],
-      images: ["", ""],
+      images: ["/Villa_Retreats/Emerald/Spaces/spaces_07.webp", "/Villa_Retreats/Emerald/Spaces/spaces_08.webp"],
     },
     {
       id: "lawn",
@@ -222,7 +222,7 @@ export const emerald = {
         "Bonfire zone",
         "Barbecue setup",
       ],
-      images: ["", ""],
+      images: ["/Villa_Retreats/Emerald/Spaces/spaces_09.webp", "/Villa_Retreats/Emerald/Spaces/spaces_10.webp"],
     },
     {
       id: "living-area",
@@ -234,12 +234,12 @@ export const emerald = {
         "Fully functional kitchen",
         "Lounge seating",
       ],
-      images: ["", ""],
+      images: ["/Villa_Retreats/Emerald/Spaces/spaces_11.webp", "/Villa_Retreats/Emerald/Spaces/spaces_12.webp"],
     },
   ],
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=mxoLej0IqmY",
-    thumbnail: "",
+    thumbnail: "/Villa_Retreats/Emerald/Hero/hero.webp",
     duration: "1:18",
   },
   faq: [

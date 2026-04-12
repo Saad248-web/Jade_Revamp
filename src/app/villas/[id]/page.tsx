@@ -165,8 +165,16 @@ export default function VillaDetailsPage() {
     );
   }
 
-  const imagesList =
-    villa.images && villa.images.length > 0 ? villa.images : [villa.image];
+  // Filter out empty strings — "" is truthy in JS so we must check length
+  const validImg = (s: string | undefined) => s && s.length > 0;
+  const imagesList = (() => {
+    const gallery = (villa.images || []).filter(
+      (img): img is string => validImg(img) === true,
+    );
+    if (gallery.length > 0) return gallery;
+    if (validImg(villa.image)) return [villa.image];
+    return [];
+  })();
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) =>
@@ -313,7 +321,7 @@ export default function VillaDetailsPage() {
       <section className="relative h-[60vh] md:h-[80vh] w-full bg-[#1A1C1E]">
         {/* Image (Interactive Carousel) */}
         <div className="absolute inset-0">
-          {imagesList[currentImageIndex] && (
+          {imagesList.length > 0 && imagesList[currentImageIndex] && (
             <Image
               src={imagesList[currentImageIndex]}
               alt={villa.name}
@@ -534,12 +542,18 @@ export default function VillaDetailsPage() {
                 </div>
 
                 <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20">
-                  {(currentSpace.image || villa.image) && (
+                  {(validImg(currentSpace.image) || validImg(villa.image)) && (
                     <Image
-                      src={currentSpace.image || villa.image}
+                      src={
+                        validImg(currentSpace.image)
+                          ? currentSpace.image
+                          : villa.image
+                      }
                       alt={currentSpace.name || "Space"}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 800px"
+                      loading="lazy"
                     />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B2C23]/80 via-transparent to-transparent opacity-90" />
@@ -669,12 +683,19 @@ export default function VillaDetailsPage() {
                 </div>
 
                 <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20 mt-4">
-                  {(currentActivity.image || villa.image) && (
+                  {(validImg(currentActivity.image) ||
+                    validImg(villa.image)) && (
                     <Image
-                      src={currentActivity.image || villa.image}
+                      src={
+                        validImg(currentActivity.image)
+                          ? currentActivity.image
+                          : villa.image
+                      }
                       alt={currentActivity.title}
                       fill
                       className="object-cover transition-transform duration-700 opacity-90 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 800px"
+                      loading="lazy"
                     />
                   )}
                   <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-[#1A1C1E]/95 via-[#1A1C1E]/50 to-transparent z-10" />
@@ -893,6 +914,8 @@ export default function VillaDetailsPage() {
                         alt="Map Location"
                         fill
                         className="object-cover opacity-80"
+                        sizes="100vw"
+                        loading="lazy"
                       />
                     )}
                   </div>
@@ -977,6 +1000,8 @@ export default function VillaDetailsPage() {
                             alt={title}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                            loading="lazy"
                           />
                         )}
                         <div className="absolute inset-0 bg-black/40 z-10 transition-colors group-hover:bg-black/50" />
@@ -1038,6 +1063,8 @@ export default function VillaDetailsPage() {
                         alt="Video Thumbnail"
                         fill
                         className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+                        sizes="(max-width: 768px) 100vw, 800px"
+                        loading="lazy"
                       />
                     )}
                     <div className="absolute inset-0 flex items-center justify-center">

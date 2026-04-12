@@ -20,17 +20,9 @@ export const magnolia = {
     "Aesthetic Shoots",
   ],
   categories: ["Luxury Villas", "Wedding Venues", "Corporate Retreats"],
-  thumbnail: "",
-  image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  thumbnail: "/Villa_Retreats/Magnolia/Hero/hero.webp",
+  image: "/Villa_Retreats/Magnolia/Hero/hero.webp",
+  images: ["/Villa_Retreats/Magnolia/Spaces/spaces_01.webp", "/Villa_Retreats/Magnolia/Spaces/spaces_02.webp", "/Villa_Retreats/Magnolia/Spaces/spaces_03.webp", "/Villa_Retreats/Magnolia/Spaces/spaces_04.webp", "/Villa_Retreats/Magnolia/Spaces/spaces_05.webp", "/Villa_Retreats/Magnolia/Spaces/spaces_06.webp", "/Villa_Retreats/Magnolia/Spaces/spaces_07.webp"],
   amenities: [
     {
       label: "Private Pool",
@@ -138,17 +130,83 @@ export const magnolia = {
     },
   ],
   activities: [
-    { title: "Poolside Cocktails", image: "" },
-    { title: "Garden Weddings", image: "" },
-    { title: "Basketball Matches", image: "" },
-    { title: "Movie Nights", image: "" },
+    { title: "Poolside Cocktails", image: "/Villa_Retreats/Magnolia/Experiences/experiences_01.webp" },
+    { title: "Garden Weddings", image: "/Villa_Retreats/Magnolia/Experiences/experiences_02.webp" },
+    { title: "Basketball Matches", image: "/Villa_Retreats/Magnolia/Experiences/experiences_03.webp" },
+    { title: "Movie Nights", image: "/Villa_Retreats/Magnolia/Experiences/experiences_04.webp" },
   ],
   spaces: [
-    { name: "Glass Living Room", image: "" },
-    { name: "Pool Deck", image: "" },
-    { name: "Main Lawn", image: "" },
-    { name: "Luxury Suite", image: "" },
+    { name: "Glass Living Room", image: "/Villa_Retreats/Magnolia/Spaces/spaces_01.webp" },
+    { name: "Pool Deck", image: "/Villa_Retreats/Magnolia/Spaces/spaces_02.webp" },
+    { name: "Main Lawn", image: "/Villa_Retreats/Magnolia/Spaces/spaces_03.webp" },
+    { name: "Luxury Suite", image: "/Villa_Retreats/Magnolia/Spaces/spaces_04.webp" },
   ],
+  categorizedSpaces: [
+    {
+        id: "glass-living-room",
+        title: "Glass Living Room",
+        category: "Bed & Bath",
+        amenities: [
+            "King bed",
+            "Air conditioning",
+            "Room-darkening blinds",
+            "Wardrobe",
+            "En-suite bathroom"
+        ],
+        images: [
+            "/Villa_Retreats/Magnolia/Spaces/spaces_01.webp",
+            "/Villa_Retreats/Magnolia/Spaces/spaces_02.webp",
+            "/Villa_Retreats/Magnolia/Spaces/spaces_03.webp"
+        ]
+    },
+    {
+        id: "pool-deck",
+        title: "Pool Deck",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Magnolia/Spaces/spaces_02.webp",
+            "/Villa_Retreats/Magnolia/Spaces/spaces_04.webp",
+            "/Villa_Retreats/Magnolia/Spaces/spaces_05.webp"
+        ]
+    },
+    {
+        id: "main-lawn",
+        title: "Main Lawn",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Magnolia/Spaces/spaces_03.webp",
+            "/Villa_Retreats/Magnolia/Spaces/spaces_06.webp",
+            "/Villa_Retreats/Magnolia/Spaces/spaces_07.webp"
+        ]
+    },
+    {
+        id: "luxury-suite",
+        title: "Luxury Suite",
+        category: "Bed & Bath",
+        amenities: [
+            "King bed",
+            "Air conditioning",
+            "Room-darkening blinds",
+            "Wardrobe",
+            "En-suite bathroom"
+        ],
+        images: [
+            "/Villa_Retreats/Magnolia/Spaces/spaces_04.webp"
+        ]
+    }
+],
   pricing: {
     stay: {
       title: "Stay Experience",
@@ -194,7 +252,7 @@ export const magnolia = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=HkWkA_5op30",
-    thumbnail: "",
+    thumbnail: "/Villa_Retreats/Magnolia/Hero/hero.webp",
     duration: "1:41",
   },
   faq: [

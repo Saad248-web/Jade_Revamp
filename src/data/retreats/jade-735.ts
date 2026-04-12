@@ -20,16 +20,9 @@ export const jade735 = {
     "Intimate Gatherings",
   ],
   categories: ["Boutique Villas", "Luxury Retreats", "Experiential Stays"],
-  thumbnail: "",
-  image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  thumbnail: "/Villa_Retreats/Jade 735/Hero/hero.webp",
+  image: "/Villa_Retreats/Jade 735/Hero/hero.webp",
+  images: ["/Villa_Retreats/Jade 735/Spaces/spaces_01.webp", "/Villa_Retreats/Jade 735/Spaces/spaces_02.webp", "/Villa_Retreats/Jade 735/Spaces/spaces_03.webp", "/Villa_Retreats/Jade 735/Spaces/spaces_04.webp", "/Villa_Retreats/Jade 735/Spaces/spaces_05.webp", "/Villa_Retreats/Jade 735/Spaces/spaces_06.webp"],
   amenities: [
     {
       label: "Waterfall Pool",
@@ -139,24 +132,71 @@ export const jade735 = {
   activities: [
     {
       title: "Poolside Relaxation",
-      image: "",
+      image: "/Villa_Retreats/Jade 735/Experiences/experiences_01.webp",
     },
-    { title: "Gazebo Evenings", image: "" },
-    { title: "Jacuzzi Sessions", image: "" },
-    { title: "Boutique Stays", image: "" },
+    { title: "Gazebo Evenings", image: "/Villa_Retreats/Jade 735/Experiences/experiences_02.webp" },
+    { title: "Jacuzzi Sessions", image: "/Villa_Retreats/Jade 735/Experiences/experiences_03.webp" },
+    { title: "Boutique Stays", image: "/Villa_Retreats/Jade 735/Experiences/experiences_04.webp" },
   ],
   spaces: [
     {
       name: "Waterfall Pool",
       image: "",
     },
-    { name: "Gazebo Lounge", image: "" },
-    { name: "Jacuzzi Area", image: "" },
+    { name: "Gazebo Lounge", image: "/Villa_Retreats/Jade 735/Spaces/spaces_01.webp" },
+    { name: "Jacuzzi Area", image: "/Villa_Retreats/Jade 735/Spaces/spaces_02.webp" },
     {
       name: "Master Suite",
       image: "",
     },
   ],
+  categorizedSpaces: [
+    {
+        id: "gazebo-lounge",
+        title: "Gazebo Lounge",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Jade 735/Spaces/spaces_01.webp",
+            "/Villa_Retreats/Jade 735/Spaces/spaces_02.webp",
+            "/Villa_Retreats/Jade 735/Spaces/spaces_03.webp"
+        ]
+    },
+    {
+        id: "jacuzzi-area",
+        title: "Jacuzzi Area",
+        category: "Bed & Bath",
+        amenities: [
+            "King bed",
+            "Air conditioning",
+            "Room-darkening blinds",
+            "Wardrobe",
+            "En-suite bathroom"
+        ],
+        images: [
+            "/Villa_Retreats/Jade 735/Spaces/spaces_02.webp",
+            "/Villa_Retreats/Jade 735/Spaces/spaces_04.webp",
+            "/Villa_Retreats/Jade 735/Spaces/spaces_05.webp"
+        ]
+    },
+    {
+        id: "additional-spaces",
+        title: "Additional Spaces",
+        category: "Outdoors",
+        amenities: [
+            "Expansive views",
+            "Open area"
+        ],
+        images: [
+            "/Villa_Retreats/Jade 735/Spaces/spaces_06.webp"
+        ]
+    }
+],
   pricing: {
     stay: {
       title: "Stay Experience",
@@ -211,7 +251,7 @@ export const jade735 = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=tDHkITeT3HU",
-    thumbnail: "",
+    thumbnail: "/Villa_Retreats/Jade 735/Hero/hero.webp",
     duration: "5:44",
   },
   faq: [

@@ -20,17 +20,9 @@ export const retreatOnTheRidge = {
     "Team Outings",
   ],
   categories: ["Hillside Retreats", "Nature Escapes", "Private Stays"],
-  thumbnail: "",
-  image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  thumbnail: "/Villa_Retreats/Retreat on the ridge/Hero/hero.webp",
+  image: "/Villa_Retreats/Retreat on the ridge/Hero/hero.webp",
+  images: ["/Villa_Retreats/Retreat on the ridge/Spaces/spaces_01.webp", "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_02.webp", "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_03.webp", "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_04.webp", "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_05.webp", "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_06.webp", "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_07.webp"],
   amenities: [
     {
       label: "Private Pool",
@@ -131,17 +123,82 @@ export const retreatOnTheRidge = {
     },
   ],
   activities: [
-    { title: "Sunrise Treks", image: "" },
-    { title: "Poolside Sessions", image: "" },
-    { title: "Nature Photography", image: "" },
-    { title: "Hilltop Dining", image: "" },
+    { title: "Sunrise Treks", image: "/Villa_Retreats/Retreat on the ridge/Experiences/experiences_01.webp" },
+    { title: "Poolside Sessions", image: "/Villa_Retreats/Retreat on the ridge/Experiences/experiences_02.webp" },
+    { title: "Nature Photography", image: "/Villa_Retreats/Retreat on the ridge/Experiences/experiences_03.webp" },
+    { title: "Hilltop Dining", image: "/Villa_Retreats/Retreat on the ridge/Experiences/experiences_04.webp" },
   ],
   spaces: [
-    { name: "Pool Deck", image: "" },
-    { name: "Ridge Terrace", image: "" },
-    { name: "Living Area", image: "" },
-    { name: "Hillside Suite", image: "" },
+    { name: "Pool Deck", image: "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_01.webp" },
+    { name: "Ridge Terrace", image: "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_02.webp" },
+    { name: "Living Area", image: "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_03.webp" },
+    { name: "Hillside Suite", image: "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_04.webp" },
   ],
+  categorizedSpaces: [
+    {
+        id: "pool-deck",
+        title: "Pool Deck",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_01.webp",
+            "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_02.webp",
+            "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_03.webp"
+        ]
+    },
+    {
+        id: "ridge-terrace",
+        title: "Ridge Terrace",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_02.webp",
+            "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_04.webp",
+            "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_05.webp"
+        ]
+    },
+    {
+        id: "living-area",
+        title: "Living Area",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_03.webp",
+            "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_06.webp",
+            "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_07.webp"
+        ]
+    },
+    {
+        id: "hillside-suite",
+        title: "Hillside Suite",
+        category: "Bed & Bath",
+        amenities: [
+            "King bed",
+            "Air conditioning",
+            "Room-darkening blinds",
+            "Wardrobe",
+            "En-suite bathroom"
+        ],
+        images: [
+            "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_04.webp"
+        ]
+    }
+],
   pricing: {
     stay: {
       title: "Stay Experience",
@@ -187,7 +244,7 @@ export const retreatOnTheRidge = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=SiQ_0LH1MDk",
-    thumbnail: "",
+    thumbnail: "/Villa_Retreats/Retreat on the ridge/Hero/hero.webp",
     duration: "1:25",
   },
   faq: [

@@ -87,6 +87,8 @@ export default function VillaSpacesPage() {
                   alt="Video Thumbnail"
                   fill
                   className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, 1200px"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-20 h-20 rounded-full bg-[#EFCD62] flex items-center justify-center text-black group-hover:scale-110 transition-transform">
@@ -127,12 +129,14 @@ export default function VillaSpacesPage() {
                       key={idx}
                       className="relative min-w-[300px] md:min-w-[500px] aspect-[4/3] md:aspect-[16/9] bg-white/5 snap-start overflow-hidden group"
                     >
-                      {img && (
+                      {img && img.length > 0 && (
                         <Image
                           src={img}
                           alt={`${space.title} ${idx + 1}`}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-700"
+                          sizes="(max-width: 768px) 100vw, 500px"
+                          loading="lazy"
                         />
                       )}
                       {!img && (

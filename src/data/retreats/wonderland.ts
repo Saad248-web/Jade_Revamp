@@ -18,8 +18,8 @@ export const wonderland = {
     "Staycations",
   ],
   categories: ["Treehouse", "Boutique Stay", "Pet Friendly"],
-  image: "",
-  images: ["", "", "", "", ""],
+  image: "/Villa_Retreats/Wonderland/Hero/hero.webp",
+  images: ["/Villa_Retreats/Wonderland/Spaces/spaces_01.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_02.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_03.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_04.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_05.webp"],
   amenities: [
     {
       label: "Private Pool",
@@ -71,13 +71,13 @@ export const wonderland = {
     },
   ],
   spaces: [
-    { name: "Treehouse Deck", image: "" },
-    { name: "Living Area", image: "" },
-    { name: "Garden", image: "" },
-    { name: "Courtyard", image: "" },
-    { name: "Rock Pool", image: "" },
-    { name: "Party Deck", image: "" },
-    { name: "Dining Area", image: "" },
+    { name: "Treehouse Deck", image: "/Villa_Retreats/Wonderland/Hero/hero.webp" },
+    { name: "Living Area", image: "/Villa_Retreats/Wonderland/Spaces/spaces_01.webp" },
+    { name: "Garden", image: "/Villa_Retreats/Wonderland/Spaces/spaces_02.webp" },
+    { name: "Courtyard", image: "/Villa_Retreats/Wonderland/Spaces/spaces_03.webp" },
+    { name: "Rock Pool", image: "/Villa_Retreats/Wonderland/Spaces/spaces_04.webp" },
+    { name: "Party Deck", image: "/Villa_Retreats/Wonderland/Spaces/spaces_05.webp" },
+    { name: "Dining Area", image: "/Villa_Retreats/Wonderland/Spaces/spaces_06.webp" },
   ],
   services: [
     {
@@ -173,10 +173,10 @@ export const wonderland = {
     ],
   },
   activities: [
-    { title: "Nature Trails", image: "" },
-    { title: "Trekking", image: "" },
-    { title: "Candlelight Dining", image: "" },
-    { title: "Pool Sessions", image: "" },
+    { title: "Nature Trails", image: "/Villa_Retreats/Wonderland/Experiences/experiences_01.webp" },
+    { title: "Trekking", image: "/Villa_Retreats/Wonderland/Experiences/experiences_02.webp" },
+    { title: "Candlelight Dining", image: "/Villa_Retreats/Wonderland/Experiences/experiences_03.webp" },
+    { title: "Pool Sessions", image: "/Villa_Retreats/Wonderland/Experiences/experiences_04.webp" },
   ],
   categorizedSpaces: [
     {
@@ -184,26 +184,26 @@ export const wonderland = {
       title: "Treehouse Deck",
       category: "Outdoors",
       amenities: ["Deck seating", "Nature views", "Party space"],
-      images: ["", ""],
+      images: ["/Villa_Retreats/Wonderland/Spaces/spaces_05.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_06.webp"],
     },
     {
       id: "living-area",
       title: "Living Area",
       category: "Indoors",
       amenities: ["Air conditioning", "Cozy seating", "Nature integration"],
-      images: ["", ""],
+      images: ["/Villa_Retreats/Wonderland/Spaces/spaces_07.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_08.webp"],
     },
     {
       id: "rock-pool",
       title: "Natural Rock Pool",
       category: "Outdoors",
       amenities: ["Freshwater pool", "Baby pool", "Jacuzzi jets"],
-      images: ["", ""],
+      images: ["/Villa_Retreats/Wonderland/Spaces/spaces_09.webp", "/Villa_Retreats/Wonderland/Spaces/spaces_10.webp"],
     },
   ],
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=OWJ_8WU1-vQ",
-    thumbnail: "",
+    thumbnail: "/Villa_Retreats/Wonderland/Hero/hero.webp",
     duration: "2:14",
   },
   faq: [

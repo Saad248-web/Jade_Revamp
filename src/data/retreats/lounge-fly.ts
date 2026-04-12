@@ -20,16 +20,9 @@ export const loungeFly = {
     "Boutique Stays",
   ],
   categories: ["Luxury Suites", "Urban Retreats", "Apartment Stays"],
-  thumbnail: "",
-  image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  thumbnail: "/Villa_Retreats/Lounge Fly/Hero/hero.webp",
+  image: "/Villa_Retreats/Lounge Fly/Hero/hero.webp",
+  images: ["/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp", "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp", "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp", "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp", "/Villa_Retreats/Lounge Fly/Spaces/IMG_9299.webp", "/Villa_Retreats/Lounge Fly/Spaces/IMG_9300.webp"],
   amenities: [
     {
       label: "Dual Balcony Views",
@@ -137,17 +130,81 @@ export const loungeFly = {
     },
   ],
   activities: [
-    { title: "In-room Dining", image: "" },
-    { title: "City Sunset Views", image: "" },
-    { title: "Mall Exploration", image: "" },
-    { title: "Boutique Stays", image: "" },
+    { title: "In-room Dining", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp" },
+    { title: "City Sunset Views", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp" },
+    { title: "Mall Exploration", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp" },
+    { title: "Boutique Stays", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp" },
   ],
   spaces: [
-    { name: "Luxury Lounge", image: "" },
-    { name: "Master Suite", image: "" },
-    { name: "City Balcony", image: "" },
-    { name: "Kitchenette", image: "" },
+    { name: "Luxury Lounge", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp" },
+    { name: "Master Suite", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp" },
+    { name: "City Balcony", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp" },
+    { name: "Kitchenette", image: "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp" },
   ],
+  categorizedSpaces: [
+    {
+        id: "luxury-lounge",
+        title: "Luxury Lounge",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp",
+            "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp",
+            "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp"
+        ]
+    },
+    {
+        id: "master-suite",
+        title: "Master Suite",
+        category: "Bed & Bath",
+        amenities: [
+            "King bed",
+            "Air conditioning",
+            "Room-darkening blinds",
+            "Wardrobe",
+            "En-suite bathroom"
+        ],
+        images: [
+            "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp",
+            "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp",
+            "/Villa_Retreats/Lounge Fly/Spaces/IMG_9299.webp"
+        ]
+    },
+    {
+        id: "city-balcony",
+        title: "City Balcony",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp",
+            "/Villa_Retreats/Lounge Fly/Spaces/IMG_9300.webp"
+        ]
+    },
+    {
+        id: "kitchenette",
+        title: "Kitchenette",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp"
+        ]
+    }
+],
   pricing: {
     stay: {
       title: "Stay Experience",
@@ -197,7 +254,7 @@ export const loungeFly = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=THDUAhzF_Sg",
-    thumbnail: "",
+    thumbnail: "/Villa_Retreats/Lounge Fly/Hero/hero.webp",
     duration: "1:29",
   },
   faq: [

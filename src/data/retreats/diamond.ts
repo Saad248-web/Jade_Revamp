@@ -25,17 +25,8 @@ export const diamond = {
   ],
   perfectForEvents: ["Weddings", "Corporate Events", "Large Gatherings"],
   categories: ["Weddings", "Corporate Events", "Large Gatherings"],
-  image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  image: "/Villa_Retreats/Diamond/Hero/hero.webp",
+  images: ["/Villa_Retreats/Diamond/Spaces/spaces_01.webp", "/Villa_Retreats/Diamond/Spaces/spaces_02.webp", "/Villa_Retreats/Diamond/Spaces/spaces_03.webp", "/Villa_Retreats/Diamond/Spaces/spaces_04.webp", "/Villa_Retreats/Diamond/Spaces/spaces_05.webp", "/Villa_Retreats/Diamond/Spaces/spaces_06.webp", "/Villa_Retreats/Diamond/Spaces/spaces_07.webp", "/Villa_Retreats/Diamond/Spaces/spaces_08.webp"],
   amenities: [
     {
       label: "Private Pool",
@@ -109,14 +100,122 @@ export const diamond = {
     },
   ],
   spaces: [
-    { name: "Expansive Lawn", image: "" },
-    { name: "Banquet Hall", image: "" },
-    { name: "Accommodation Block", image: "" },
-    { name: "Courtyard", image: "" },
-    { name: "Pool Deck", image: "" },
-    { name: "Garden Path", image: "" },
-    { name: "Entrance Foyer", image: "" },
+    { name: "Expansive Lawn", image: "/Villa_Retreats/Diamond/Hero/hero.webp" },
+    { name: "Banquet Hall", image: "/Villa_Retreats/Diamond/Spaces/spaces_01.webp" },
+    { name: "Accommodation Block", image: "/Villa_Retreats/Diamond/Spaces/spaces_02.webp" },
+    { name: "Courtyard", image: "/Villa_Retreats/Diamond/Spaces/spaces_03.webp" },
+    { name: "Pool Deck", image: "/Villa_Retreats/Diamond/Spaces/spaces_04.webp" },
+    { name: "Garden Path", image: "/Villa_Retreats/Diamond/Spaces/spaces_05.webp" },
+    { name: "Entrance Foyer", image: "/Villa_Retreats/Diamond/Spaces/spaces_06.webp" },
   ],
+  categorizedSpaces: [
+    {
+        id: "expansive-lawn",
+        title: "Expansive Lawn",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Diamond/Hero/hero.webp",
+            "/Villa_Retreats/Diamond/Spaces/spaces_01.webp",
+            "/Villa_Retreats/Diamond/Spaces/spaces_02.webp"
+        ]
+    },
+    {
+        id: "banquet-hall",
+        title: "Banquet Hall",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Diamond/Spaces/spaces_01.webp",
+            "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
+            "/Villa_Retreats/Diamond/Spaces/spaces_04.webp"
+        ]
+    },
+    {
+        id: "accommodation-block",
+        title: "Accommodation Block",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Diamond/Spaces/spaces_02.webp",
+            "/Villa_Retreats/Diamond/Spaces/spaces_05.webp",
+            "/Villa_Retreats/Diamond/Spaces/spaces_06.webp"
+        ]
+    },
+    {
+        id: "courtyard",
+        title: "Courtyard",
+        category: "Indoors",
+        amenities: [
+            "Comfortable seating",
+            "Ambient lighting",
+            "Air conditioning",
+            "Entertainment setup"
+        ],
+        images: [
+            "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
+            "/Villa_Retreats/Diamond/Spaces/spaces_07.webp",
+            "/Villa_Retreats/Diamond/Spaces/spaces_08.webp"
+        ]
+    },
+    {
+        id: "pool-deck",
+        title: "Pool Deck",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Diamond/Spaces/spaces_04.webp"
+        ]
+    },
+    {
+        id: "garden-path",
+        title: "Garden Path",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Diamond/Spaces/spaces_05.webp"
+        ]
+    },
+    {
+        id: "entrance-foyer",
+        title: "Entrance Foyer",
+        category: "Outdoors",
+        amenities: [
+            "Private pool access",
+            "Garden sit-out",
+            "Bonfire zone",
+            "Barbecue setup"
+        ],
+        images: [
+            "/Villa_Retreats/Diamond/Spaces/spaces_06.webp"
+        ]
+    }
+],
   services: [
     {
       title: "Chef on Call",
@@ -220,37 +319,37 @@ export const diamond = {
       title: "Reception Events",
       description:
         "Evening setups with lighting, dining, and stage arrangements.",
-      image: "",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_01.webp",
     },
     {
       title: "Corporate Offsites",
       description: "Team events, conferences, and large group gatherings.",
-      image: "",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_02.webp",
     },
     {
       title: "Poolside Events",
       description: "Smaller social setups around the pool area.",
-      image: "",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
     },
     {
       title: "Banquet Dining Experiences",
       description: "Structured dining within semi-open hall setups.",
-      image: "",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_04.webp",
     },
     {
       title: "Celebration Setups",
       description: "Birthdays, anniversaries, and private events.",
-      image: "",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_05.webp",
     },
     {
       title: "Wedding Ceremonies",
       description: "Large-format wedding setups across lawn and stage areas.",
-      image: "",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_06.webp",
     },
   ],
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=t-VX-VDkXj4",
-    thumbnail: "",
+    thumbnail: "/Villa_Retreats/Diamond/Hero/hero.webp",
     duration: "1:41",
   },
   faq: [
