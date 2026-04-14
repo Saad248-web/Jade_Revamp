@@ -20,9 +20,18 @@ export const royalty = {
     "Nature Stays",
   ],
   categories: ["Equestrian Retreats", "Hill Villas", "Luxury Stays"],
-  thumbnail: "",
-  image: "",
-  images: ["", "", "", "", "", "", "", ""],
+  thumbnail: "/Villa_Retreats/Royalty/1-Hero/IMG_1677.webp",
+  image: "/Villa_Retreats/Royalty/1-Hero/IMG_1677.webp",
+  images: [
+    "/Villa_Retreats/Royalty/2-Spaces/1.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/2.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/3.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/4.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/5.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/6.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/7.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/8.webp",
+  ],
   amenities: [
     { label: "Private Pool", icon: "Waves" },
     { label: "Airconditioned Interiors", icon: "Wind" },
@@ -96,49 +105,66 @@ export const royalty = {
     {
       title: "Horse Riding Safari",
       description: "Equestrian trail experience towards scenic sunset points.",
-      image: "/Villa_Retreats/Royalty/Experiences/experiences_01.webp",
+      image:
+        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.44.01 (2).webp",
     },
     {
       title: "Camping Experiences",
       description: "Outdoor stay setups with bonfire.",
-      image: "/Villa_Retreats/Royalty/Experiences/experiences_02.webp",
+      image:
+        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.44.02 (2).webp",
     },
     {
       title: "Barbecue Experiences",
       description: "Dedicated BBQ setup for outdoor cooking and dining.",
-      image: "/Villa_Retreats/Royalty/Experiences/experiences_03.webp",
+      image:
+        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.45.54 (1).webp",
     },
     {
       title: "Bonfire Evenings",
       description: "Outdoor bonfire setups for group gatherings.",
-      image: "/Villa_Retreats/Royalty/Experiences/experiences_04.webp",
+      image:
+        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.45.54 (2).webp",
     },
     {
       title: "Candle Corner Dining",
       description: "Dedicated candlelit dining setups within the villa.",
-      image: "/Villa_Retreats/Royalty/Experiences/experiences_05.webp",
+      image:
+        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.44.01 (2).webp",
     },
     {
       title: "Family Dining Experiences",
       description: "Group dining setups across indoor and outdoor zones.",
-      image: "/Villa_Retreats/Royalty/Experiences/experiences_06.webp",
+      image:
+        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.44.02 (2).webp",
     },
     {
       title: "Lounge Experiences",
       description: "Relaxed indoor lounge setups for social time.",
-      image: "/Villa_Retreats/Royalty/Experiences/experiences_07.webp",
+      image:
+        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.45.54 (1).webp",
     },
     {
       title: "Cooking Experiences",
       description: "Interactive cooking-based group experiences.",
-      image: "/Villa_Retreats/Royalty/Experiences/experiences_08.webp",
+      image:
+        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.45.54 (2).webp",
     },
   ],
   spaces: [
-    { name: "Pool & Waterfall", image: "" },
-    { name: "Riding Arena", image: "" },
-    { name: "Glasshouse Living", image: "" },
-    { name: "Hill View Terrace", image: "" },
+    {
+      name: "Pool & Waterfall",
+      image: "/Villa_Retreats/Royalty/2-Spaces/9.webp",
+    },
+    { name: "Riding Arena", image: "/Villa_Retreats/Royalty/2-Spaces/10.webp" },
+    {
+      name: "Glasshouse Living",
+      image: "/Villa_Retreats/Royalty/2-Spaces/11.webp",
+    },
+    {
+      name: "Hill View Terrace",
+      image: "/Villa_Retreats/Royalty/2-Spaces/12.webp",
+    },
   ],
   categorizedSpaces: [
     {
@@ -151,7 +177,10 @@ export const royalty = {
         "Air conditioning",
         "Entertainment setup",
       ],
-      images: [],
+      images: [
+        "/Villa_Retreats/Royalty/2-Spaces/13.webp",
+        "/Villa_Retreats/Royalty/2-Spaces/14.webp",
+      ],
     },
   ],
   pricing: {
@@ -192,7 +221,7 @@ export const royalty = {
     },
   },
   locationDetails: {
-    mapImage: "",
+    mapImage: "/Villa_Retreats/Royalty/1-Hero/IMG_1677.webp",
     address: "Gudibanda road, Varlakonda, Chikkaballapur, Karnataka 562104",
     distance: "Approximately 75 minutes from Bangalore City Center",
     nearby: [
@@ -204,7 +233,7 @@ export const royalty = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=VlACTqexHoI",
-    thumbnail: "",
+    thumbnail: "/Villa_Retreats/Royalty/1-Hero/IMG_1677.webp",
     duration: "1:53",
   },
   faq: [

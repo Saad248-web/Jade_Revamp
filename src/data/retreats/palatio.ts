@@ -20,9 +20,16 @@ export const palatio = {
     "Team Outings",
   ],
   categories: ["Nature Retreats", "Social Events", "Wellness"],
-  thumbnail: "",
-  image: "",
-  images: ["", "", "", "", "", ""],
+  thumbnail: "/Villa_Retreats/Palatio/1-Hero/DJI_0162.webp",
+  image: "/Villa_Retreats/Palatio/1-Hero/DJI_0162.webp",
+  images: [
+    "/Villa_Retreats/Palatio/2-Spaces/DJI_0168.webp",
+    "/Villa_Retreats/Palatio/2-Spaces/DJI_0172.webp",
+    "/Villa_Retreats/Palatio/2-Spaces/DJI_0196.webp",
+    "/Villa_Retreats/Palatio/2-Spaces/DSC05686.webp",
+    "/Villa_Retreats/Palatio/2-Spaces/DSC05974.webp",
+    "/Villa_Retreats/Palatio/2-Spaces/DSC06106.webp",
+  ],
   amenities: [
     { label: "Private Pool", icon: "Waves" },
     { label: "Airconditioned Interiors", icon: "Wind" },
@@ -102,34 +109,46 @@ export const palatio = {
     {
       title: "Private Dining Experiences",
       description: "Indoor and outdoor dining arrangements.",
-      image: "/Villa_Retreats/Palatio/Experiences/experiences_01.webp",
+      image: "/Villa_Retreats/Palatio/3-Experiences/1.webp",
     },
     {
       title: "Bonfire Evenings",
       description: "Outdoor bonfire for gatherings.",
-      image: "/Villa_Retreats/Palatio/Experiences/experiences_02.webp",
+      image: "/Villa_Retreats/Palatio/3-Experiences/1.webp",
     },
     {
       title: "Outdoor Dining Setups",
       description: "Dining across lawn and gazebo spaces.",
-      image: "/Villa_Retreats/Palatio/Experiences/experiences_03.webp",
+      image: "/Villa_Retreats/Palatio/3-Experiences/1.webp",
     },
     {
       title: "Workation Stays",
       description: "Quiet environment suited for extended stays.",
-      image: "/Villa_Retreats/Palatio/Experiences/experiences_04.webp",
+      image: "/Villa_Retreats/Palatio/3-Experiences/1.webp",
     },
     {
       title: "Board Games & Indoor Activities",
       description: "Group-friendly indoor engagement.",
-      image: "/Villa_Retreats/Palatio/Experiences/experiences_05.webp",
+      image: "/Villa_Retreats/Palatio/3-Experiences/1.webp",
     },
   ],
   spaces: [
-    { name: "Pool Courtyard", image: "" },
-    { name: "Garden Lawn", image: "" },
-    { name: "Villa Interior", image: "" },
-    { name: "Traditional Spaces", image: "" },
+    {
+      name: "Pool Courtyard",
+      image: "/Villa_Retreats/Palatio/2-Spaces/DSC06056.webp",
+    },
+    {
+      name: "Garden Lawn",
+      image: "/Villa_Retreats/Palatio/2-Spaces/DSC06005 (1).webp",
+    },
+    {
+      name: "Villa Interior",
+      image: "/Villa_Retreats/Palatio/2-Spaces/DSC06182.webp",
+    },
+    {
+      name: "Traditional Spaces",
+      image: "/Villa_Retreats/Palatio/2-Spaces/DSC06272.webp",
+    },
   ],
   categorizedSpaces: [
     {
@@ -142,7 +161,10 @@ export const palatio = {
         "Air conditioning",
         "Entertainment setup",
       ],
-      images: [],
+      images: [
+        "/Villa_Retreats/Palatio/2-Spaces/DJI_0191 long.webp",
+        "/Villa_Retreats/Palatio/2-Spaces/DSC06213.webp",
+      ],
     },
   ],
   pricing: {
@@ -174,7 +196,7 @@ export const palatio = {
     },
   },
   locationDetails: {
-    mapImage: "",
+    mapImage: "/Villa_Retreats/Palatio/1-Hero/DJI_0162.webp",
     address: "Palatio, Harohalli, Near Art of Living, Bangalore — 562112",
     distance: "Approximately 50 minutes from Bangalore City Center",
     nearby: [
@@ -185,7 +207,7 @@ export const palatio = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=NCbxtU_uGhs",
-    thumbnail: "",
+    thumbnail: "/Villa_Retreats/Palatio/1-Hero/DJI_0162.webp",
     duration: "2:25",
   },
   faq: [
