@@ -39,7 +39,14 @@ export default function VillaSpacesPage() {
     };
   }, [id]);
 
-  const categories = ["All", "Outdoors", "Indoors", "Bed & Bath", "Video"];
+  const categories = useMemo(() => {
+    const base = overrideSpaces || villa?.categorizedSpaces || [];
+    const cats = Array.from(new Set(base.map((s: VillaSpaceGroup) => s.category))).filter(
+      (c) => typeof c === "string" && c.length > 0,
+    ) as string[];
+    // Prefer predictable ordering: show "All", then category groups, then Video
+    return ["All", ...cats, "Video"];
+  }, [overrideSpaces, villa?.categorizedSpaces]);
 
   const filteredSpaces = useMemo(() => {
     const base = overrideSpaces || villa?.categorizedSpaces;

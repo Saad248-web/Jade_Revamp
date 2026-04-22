@@ -86,7 +86,7 @@ export interface VillaActivity {
 export interface VillaSpaceGroup {
   id: string;
   title: string;
-  category: "Outdoors" | "Indoors" | "Bed & Bath";
+  category: string;
   amenities: string[];
   images: string[];
 }

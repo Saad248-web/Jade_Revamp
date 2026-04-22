@@ -12,7 +12,7 @@ type MediaResponse = {
   categorizedSpaces: Array<{
     id: string;
     title: string;
-    category: "Outdoors" | "Indoors" | "Bed & Bath";
+    category: string;
     amenities: string[];
     images: string[];
   }>;
@@ -86,98 +86,185 @@ function filenameTitle(url: string) {
   return base.length ? base : "Space";
 }
 
-function detectSpaceCategory(title: string): "Outdoors" | "Indoors" | "Bed & Bath" {
+type AdvancedCategory =
+  | "Bedrooms"
+  | "Bathrooms"
+  | "Living & Dining"
+  | "Kitchen & Bar"
+  | "Pool & Water"
+  | "Outdoors & Lawns"
+  | "Entrances & Paths"
+  | "Views & Exteriors"
+  | "Other";
+
+function detectAdvancedCategory(title: string): AdvancedCategory {
   const t = title.toLowerCase();
   const has = (s: string) => t.includes(s);
 
-  // Bed & Bath first (most specific)
+  // Bathrooms (most specific, prevents jacuzzi shots being treated as outdoors)
   if (
-    has("bed") ||
-    has("bedroom") ||
     has("bath") ||
     has("bathroom") ||
     has("toilet") ||
     has("jacuzzi") ||
     has("tub") ||
-    has("shower") ||
-    has("suite")
+    has("shower")
   )
-    return "Bed & Bath";
+    return "Bathrooms";
 
-  // Indoors indicators
+  // Bedrooms
+  if (has("bed") || has("bedroom") || has("suite") || has("master"))
+    return "Bedrooms";
+
+  // Kitchen / Bar
+  if (has("kitchen") || has("bar") || has("counter") || has("dry kitchen"))
+    return "Kitchen & Bar";
+
+  // Living / Dining
   if (
     has("living") ||
     has("lounge") ||
     has("dining") ||
-    has("kitchen") ||
-    has("bar") ||
+    has("hall") ||
+    has("family") ||
     has("theatre") ||
     has("theater") ||
-    has("room") ||
-    has("hall") ||
-    has("corridor") ||
-    has("stairs") ||
-    has("stair") ||
-    has("artifacts") ||
-    has("unit") ||
+    has("home theatre") ||
     has("tv") ||
-    has("indoor")
+    has("room")
   )
-    return "Indoors";
+    return "Living & Dining";
 
-  // Outdoors indicators
+  // Pool / Water
   if (
     has("pool") ||
+    has("water") ||
+    has("plunge") ||
+    has("jacuzzi") ||
+    has("waterfall")
+  )
+    return "Pool & Water";
+
+  // Outdoors / Lawns
+  if (
     has("lawn") ||
     has("garden") ||
     has("yard") ||
+    has("outdoor") ||
     has("sit out") ||
     has("sitout") ||
-    has("outdoor") ||
-    has("walk") ||
     has("gazebo") ||
-    has("entrance") ||
-    has("court") ||
-    has("patio") ||
+    has("bonfire") ||
     has("bbq") ||
     has("barbeque") ||
-    has("bonfire") ||
-    has("picnic") ||
     has("camp") ||
-    has("villa") // exterior shots often named "villa"
+    has("picnic") ||
+    has("amphitheater") ||
+    has("court yard") ||
+    has("courtyard")
   )
-    return "Outdoors";
+    return "Outdoors & Lawns";
 
-  // Default to Indoors (safer than misclassifying indoors as outdoors)
-  return "Indoors";
+  // Entrances / Paths
+  if (
+    has("entrance") ||
+    has("walk") ||
+    has("walkway") ||
+    has("path") ||
+    has("corridor") ||
+    has("stairs") ||
+    has("stair") ||
+    has("gate")
+  )
+    return "Entrances & Paths";
+
+  // Views / Exteriors
+  if (
+    has("view") ||
+    has("hill") ||
+    has("sunset") ||
+    has("villa") ||
+    has("front") ||
+    has("exterior") ||
+    has("side view")
+  )
+    return "Views & Exteriors";
+
+  return "Other";
 }
 
-function buildCategorizedSpaces(spaceUrls: string[]) {
-  const buckets: Record<"Outdoors" | "Indoors" | "Bed & Bath", string[]> = {
-    Outdoors: [],
-    Indoors: [],
-    "Bed & Bath": [],
-  };
+function metaForCategory(cat: AdvancedCategory): { title: string; amenities: string[] } {
+  switch (cat) {
+    case "Bedrooms":
+      return { title: "Bedrooms", amenities: ["Beds", "Sleep comfort", "Storage", "AC"] };
+    case "Bathrooms":
+      return { title: "Bathrooms", amenities: ["Baths", "Jacuzzi", "Shower", "Toiletries"] };
+    case "Living & Dining":
+      return { title: "Living & Dining", amenities: ["Living spaces", "Dining", "Lounges", "Interiors"] };
+    case "Kitchen & Bar":
+      return { title: "Kitchen & Bar", amenities: ["Kitchen", "Bar counter", "Utilities", "Tableware"] };
+    case "Pool & Water":
+      return { title: "Pool & Water", amenities: ["Pool", "Plunge", "Water features", "Deck"] };
+    case "Outdoors & Lawns":
+      return { title: "Outdoors & Lawns", amenities: ["Lawns", "Garden zones", "Open-air seating", "Activities"] };
+    case "Entrances & Paths":
+      return { title: "Entrances & Paths", amenities: ["Walkways", "Entrances", "Courtyards", "Landscaping"] };
+    case "Views & Exteriors":
+      return { title: "Views & Exteriors", amenities: ["Exterior views", "Property facade", "Scenic views", "Approach"] };
+    default:
+      return { title: "Other", amenities: ["Spaces", "Details", "Ambience", "Highlights"] };
+  }
+}
+
+function buildCategorizedSpaces(spaceUrls: string[], villaId: string) {
+  const buckets: Record<string, string[]> = {};
+
   for (const url of spaceUrls) {
     const title = filenameTitle(url);
-    const cat = detectSpaceCategory(title);
-    buckets[cat].push(url);
+    let cat = detectAdvancedCategory(title);
+
+    // Targeted fixes:
+    // - Wonderland has many indoor shots with garden-ish filenames; treat "Dining" and "Bedroom" explicitly.
+    // - Diamond has many "spaces_##" that are mixed; bias by directory structure when available.
+    const lowerUrl = url.toLowerCase();
+    if (villaId === "wonderland") {
+      if (title.toLowerCase().includes("dining")) cat = "Living & Dining";
+      if (title.toLowerCase().includes("bed")) cat = "Bedrooms";
+      if (title.toLowerCase().includes("jacuzzi")) cat = "Bathrooms";
+    }
+    if (villaId === "diamond") {
+      if (lowerUrl.includes("/spaces/") && title.toLowerCase().includes("pool")) cat = "Pool & Water";
+    }
+
+    const key = cat;
+    buckets[key] = buckets[key] || [];
+    buckets[key].push(url);
   }
 
-  return (Object.keys(buckets) as Array<keyof typeof buckets>)
-    .filter((k) => buckets[k].length > 0)
-    .map((k) => ({
-      id: k.toLowerCase().replace(/[^a-z]+/g, "-"),
-      title: k,
-      category: k,
-      amenities:
-        k === "Outdoors"
-          ? ["Lawns", "Pool", "Open-air seating", "Garden zones"]
-          : k === "Indoors"
-            ? ["Living spaces", "Dining", "Lounges", "Interiors"]
-            : ["Bedrooms", "Bathrooms", "Comfort amenities"],
-      images: buckets[k],
-    }));
+  const order: AdvancedCategory[] = [
+    "Views & Exteriors",
+    "Outdoors & Lawns",
+    "Pool & Water",
+    "Living & Dining",
+    "Kitchen & Bar",
+    "Bedrooms",
+    "Bathrooms",
+    "Entrances & Paths",
+    "Other",
+  ];
+
+  return order
+    .filter((k) => (buckets[k] || []).length > 0)
+    .map((k) => {
+      const meta = metaForCategory(k);
+      return {
+        id: k.toLowerCase().replace(/[^a-z]+/g, "-"),
+        title: meta.title,
+        category: meta.title,
+        amenities: meta.amenities,
+        images: buckets[k],
+      };
+    });
 }
 
 export async function GET(
@@ -221,7 +308,7 @@ export async function GET(
     experiences,
     perfectFor,
     other,
-    categorizedSpaces: buildCategorizedSpaces(spaces),
+    categorizedSpaces: buildCategorizedSpaces(spaces, id),
   };
 
   return NextResponse.json(res);
