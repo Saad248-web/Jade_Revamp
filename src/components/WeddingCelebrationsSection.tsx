@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,14 +8,18 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
+function pick(images: string[], idx: number) {
+  if (!images.length) return "";
+  return images[idx % images.length];
+}
+
 const CELEBRATIONS = [
   {
     id: "mehendi",
     title: "Mehendi & Haldi",
     subtext:
       "Daytime rituals in private lawns and courtyards, with space to gather, move freely, and celebrate without interruption.",
-    image:
-      "https://images.unsplash.com/photo-1544275061-0ae79c456860?q=80&w=2938&auto=format&fit=crop",
+    image: "",
     href: "/weddings",
     cta: "SEE THE RITUALS",
   },
@@ -24,8 +28,7 @@ const CELEBRATIONS = [
     title: "Sangeet Evenings",
     subtext:
       "Evenings shaped for music, performances, and dancing, supported by flexible lighting, sound, and open layouts.",
-    image:
-      "https://images.unsplash.com/photo-1505236858219-8359eb29e329?q=80&w=2082&auto=format&fit=crop",
+    image: "",
     href: "/weddings",
     cta: "EXPLORE THE VIBE",
   },
@@ -34,8 +37,7 @@ const CELEBRATIONS = [
     title: "Bachelor & Bachelorette Parties",
     subtext:
       "Fully private estates for carefree celebrations—poolside moments, music, décor, and late nights with friends.",
-    image:
-      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop",
+    image: "",
     href: "/party-villas",
     cta: "LEARN MORE",
   },
@@ -44,8 +46,7 @@ const CELEBRATIONS = [
     title: "Pre-Wedding Cocktail Nights",
     subtext:
       "Relaxed evening gatherings with custom bar setups, lounge seating, and ambient lighting.",
-    image:
-      "https://images.unsplash.com/photo-1574096079513-d8259312b785?q=80&w=2070&auto=format&fit=crop",
+    image: "",
     href: "/weddings",
     cta: "SEE THE MAGIC",
   },
@@ -54,8 +55,7 @@ const CELEBRATIONS = [
     title: "Pre-Wedding Shoots",
     subtext:
       "Multiple backdrops within one private estate, allowing your shoot to flow naturally from one setting to the next.",
-    image:
-      "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=2069&auto=format&fit=crop",
+    image: "",
     href: "/weddings",
     cta: "VIEW THE LOCATIONS",
   },
@@ -63,6 +63,7 @@ const CELEBRATIONS = [
 
 export default function WeddingCelebrationsSection() {
   const targetRef = useRef<HTMLDivElement>(null);
+  const [preWeddingImages, setPreWeddingImages] = useState<string[]>([]);
   const { scrollYProgress } = useScroll({
     target: targetRef,
   });
@@ -75,6 +76,35 @@ export default function WeddingCelebrationsSection() {
   });
 
   const totalSteps = CELEBRATIONS.length + 1;
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch("/api/experiences/weddings/media");
+        if (!res.ok) return;
+        const data = await res.json();
+        const group = (data?.groups || []).find((g: any) =>
+          String(g.folder || "").toLowerCase().includes("5-pre wedding"),
+        );
+        const images = (group?.images || []).filter(Boolean);
+        if (!cancelled) setPreWeddingImages(images);
+      } catch {
+        // ignore
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const celebrations = useMemo(() => {
+    return CELEBRATIONS.map((c, idx) => ({
+      ...c,
+      image: pick(preWeddingImages, idx),
+    }));
+  }, [preWeddingImages]);
 
   return (
     <section ref={targetRef} className="relative h-[600vh] bg-[#1A1C1E]">
@@ -94,7 +124,7 @@ export default function WeddingCelebrationsSection() {
 
         {/* Panels Interactive Area */}
         <div className="relative w-full flex-1 min-h-0 z-10">
-          {CELEBRATIONS.map((celebration, i) => (
+          {celebrations.map((celebration, i) => (
             <CelebrationPanelSlide
               key={celebration.id}
               data={celebration}
@@ -212,13 +242,18 @@ function CelebrationPanelSlide({
             {/* Image Section */}
             <div className="relative w-full aspect-[4/3] md:aspect-[16/9] max-h-[50vh] lg:max-h-[60vh] overflow-hidden shadow-2xl rounded-none bg-black">
               <div className="w-full h-full relative">
-                <Image
-                  src={data.image}
-                  alt={data.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 600px"
-                />
+                {data.image ? (
+                  <Image
+                    src={data.image}
+                    alt={data.title}
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 1024px) 100vw, 600px"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[#1A1C1E] to-black/80" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               </div>
             </div>

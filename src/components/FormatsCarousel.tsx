@@ -18,34 +18,32 @@ const FORMATS: Format[] = [
     description:
       "Private pool villas with sprawling lawns designed for structured activities, team engagement, and relaxed downtime. Suitable for both intimate groups and larger gatherings.",
     image1:
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
+      "/Experiences/Corporate Retreats/2-Formats/corporate team outings.webp",
     image2:
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
+      "/Experiences/Corporate Retreats/2-Formats/offsite and work....webp",
   },
   {
     title: "Offsites & Workations",
     description:
       "Inspiring workspaces with presentation setups and high-speed Wi-Fi, complemented by customised meals and curated team-building activities.",
-    image1: "/X/Magnolia/16.webp",
-    image2:
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+    image1: "/Experiences/Corporate Retreats/2-Formats/offsite and work....webp",
+    image2: "/Experiences/Corporate Retreats/2-Formats/corporate team outings.webp",
   },
   {
     title: "Conference & Recognition Meets",
     description:
       "Elegant indoor-outdoor setups with LED screens and structured seating, tailored for reward and recognition ceremonies, followed by curated dinners, drinks, and DJ-led evenings.",
     image1:
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
-    image2: "/X/Magnolia/16.webp",
+      "/Experiences/Corporate Retreats/2-Formats/Conference and....webp",
+    image2: "/Experiences/Corporate Retreats/2-Formats/offsite and work....webp",
   },
   {
     title: "Corporate Events & Parties",
     description:
       "Ideal for celebrating milestones, company anniversaries, success parties, and employee appreciation ceremonies in private, well-curated settings.",
-    image1:
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+    image1: "/Experiences/Corporate Retreats/2-Formats/corporate team outings.webp",
     image2:
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
+      "/Experiences/Corporate Retreats/2-Formats/offsite and work....webp",
   },
 ];
 

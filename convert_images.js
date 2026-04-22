@@ -10,15 +10,34 @@ const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 const unlink = promisify(fs.unlink);
 
-const DIRS = [
-  path.join(__dirname, "public", "Villa_Retreats", "Palatio"),
-  path.join(__dirname, "public", "Villa_Retreats", "Royalty"),
-];
+function getDirs() {
+  const dirs = [];
+
+  const villaRoot = path.join(__dirname, "public", "Villa_Retreats");
+  if (fs.existsSync(villaRoot)) {
+    for (const name of fs.readdirSync(villaRoot)) {
+      const full = path.join(villaRoot, name);
+      try {
+        if (fs.statSync(full).isDirectory()) dirs.push(full);
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  const experiences = path.join(__dirname, "public", "Experiences");
+  if (fs.existsSync(experiences)) dirs.push(experiences);
+
+  const awards = path.join(__dirname, "public", "Awards_and_Recognition");
+  if (fs.existsSync(awards)) dirs.push(awards);
+
+  return dirs;
+}
 
 async function convertFile(filePath) {
   const ext = path.extname(filePath).toLowerCase();
 
-  if ([".jpg", ".jpeg", ".png", ".heic", ".JPG"].includes(ext)) {
+  if ([".jpg", ".jpeg", ".png", ".heic"].includes(ext)) {
     const webpPath =
       filePath.substring(0, filePath.length - ext.length) + ".webp";
 
@@ -64,7 +83,8 @@ async function walkAndConvert(dir) {
 }
 
 async function run() {
-  for (const dir of DIRS) {
+  const dirs = getDirs();
+  for (const dir of dirs) {
     if (fs.existsSync(dir)) {
       console.log(`Scanning directory: ${dir}`);
       await walkAndConvert(dir);

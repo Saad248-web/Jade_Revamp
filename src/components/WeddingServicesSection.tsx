@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   motion,
   useScroll,
@@ -11,6 +11,11 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
+function pick(images: string[], idx: number) {
+  if (!images.length) return "";
+  return images[idx % images.length];
+}
+
 const SERVICES_SLIDES = [
   {
     id: 1,
@@ -18,10 +23,8 @@ const SERVICES_SLIDES = [
     heading: ["Décor &", "Styling"],
     subtext:
       "Custom mandaps, stages, floral concepts, lighting, and themed décor designed to adapt to each venue's unique character.",
-    bgImage:
-      "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2940&auto=format&fit=crop", // Elegant ceremony
-    cardImage:
-      "https://images.unsplash.com/photo-1516062423079-7ca13cdc7f5a?q=80&w=2966&auto=format&fit=crop", // Floral
+    bgImage: "",
+    cardImage: "",
   },
   {
     id: 2,
@@ -29,10 +32,8 @@ const SERVICES_SLIDES = [
     heading: ["Catering", "Flexibility"],
     subtext:
       "Diverse catering formats including traditional, regional, and customized menus tailored to your specific taste and heritage.",
-    bgImage:
-      "https://images.unsplash.com/photo-1467003909585-2f8a72700288?q=80&w=2787&auto=format&fit=crop", // Gourmet catering
-    cardImage:
-      "https://images.unsplash.com/photo-1551218808-94e220e0b442?q=80&w=2787&auto=format&fit=crop", // Plated dish
+    bgImage: "",
+    cardImage: "",
   },
   {
     id: 3,
@@ -40,10 +41,8 @@ const SERVICES_SLIDES = [
     heading: ["Photography &", "Videography"],
     subtext:
       "Outdoor and indoor settings, including pre-wedding shoots and full wedding coverage to capture every precious moment.",
-    bgImage:
-      "https://images.unsplash.com/photo-1537633552985-df0486dec661?q=80&w=2940&auto=format&fit=crop", // Wedding photographer in action
-    cardImage:
-      "https://images.unsplash.com/photo-1511285560929-1910243285fe?q=80&w=2940&auto=format&fit=crop", // Couple shot
+    bgImage: "",
+    cardImage: "",
   },
   {
     id: 4,
@@ -51,18 +50,56 @@ const SERVICES_SLIDES = [
     heading: ["Music &", "Entertainment"],
     subtext:
       "DJs, live bands, traditional performances, sound systems, and stage configurations to bring your celebration to life.",
-    bgImage:
-      "https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?q=80&w=2787&auto=format&fit=crop", // Live performance
-    cardImage:
-      "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=2940&auto=format&fit=crop", // Music/Entertainment
+    bgImage: "",
+    cardImage: "",
   },
 ];
 
 export default function WeddingServicesSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const [serviceImages, setServiceImages] = useState<string[]>([]);
+  const [preWeddingImages, setPreWeddingImages] = useState<string[]>([]);
 
-  const currentSlide = SERVICES_SLIDES[currentIndex];
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch("/api/experiences/weddings/media");
+        if (!res.ok) return;
+        const data = await res.json();
+        const servicesGroup = (data?.groups || []).find((g: any) =>
+          String(g.folder || "").toLowerCase().includes("3-additional"),
+        );
+        const preWeddingGroup = (data?.groups || []).find((g: any) =>
+          String(g.folder || "").toLowerCase().includes("5-pre wedding"),
+        );
+        const services = (servicesGroup?.images || []).filter(Boolean);
+        const pre = (preWeddingGroup?.images || []).filter(Boolean);
+        if (!cancelled) {
+          setServiceImages(services);
+          setPreWeddingImages(pre);
+        }
+      } catch {
+        // ignore
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const slides = useMemo(() => {
+    // Use services images for first 3, then pull a “music/cocktail” vibe from pre-wedding set.
+    return SERVICES_SLIDES.map((s, idx) => ({
+      ...s,
+      bgImage: idx < 3 ? pick(serviceImages, idx * 2) : pick(preWeddingImages, 2),
+      cardImage: idx < 3 ? pick(serviceImages, idx * 2 + 1) : pick(preWeddingImages, 3),
+    }));
+  }, [serviceImages, preWeddingImages]);
+
+  const currentSlide = slides[currentIndex] || SERVICES_SLIDES[0];
 
   // Scroll-based parallax
   const { scrollYProgress } = useScroll({
@@ -78,13 +115,13 @@ export default function WeddingServicesSection() {
 
   const handlePrev = () => {
     setCurrentIndex((prev) =>
-      prev === 0 ? SERVICES_SLIDES.length - 1 : prev - 1,
+      prev === 0 ? slides.length - 1 : prev - 1,
     );
   };
 
   const handleNext = () => {
     setCurrentIndex((prev) =>
-      prev === SERVICES_SLIDES.length - 1 ? 0 : prev + 1,
+      prev === slides.length - 1 ? 0 : prev + 1,
     );
   };
 
@@ -109,14 +146,19 @@ export default function WeddingServicesSection() {
               transition={{ duration: 0.8 }}
               className="absolute inset-0 w-full h-full"
             >
-              <Image
-                src={currentSlide.bgImage}
-                alt="Background"
-                fill
-                className="object-cover"
-                sizes="100vw"
-                priority
-              />
+              {currentSlide.bgImage ? (
+                <Image
+                  src={currentSlide.bgImage}
+                  alt="Background"
+                  fill
+                  className="object-cover object-center"
+                  sizes="100vw"
+                  priority
+                  unoptimized
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#25282C] to-[#0D4032]" />
+              )}
               <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-[#25282C]/90" />
             </motion.div>
           </AnimatePresence>
@@ -182,13 +224,18 @@ export default function WeddingServicesSection() {
               transition={{ duration: 0.5 }}
               className="relative w-[220px] aspect-[4/3] rounded-none overflow-hidden shadow-2xl z-30 border-2 border-white/10"
             >
-              <Image
-                src={currentSlide.cardImage}
-                alt="Feature"
-                fill
-                className="object-cover"
-                sizes="220px"
-              />
+              {currentSlide.cardImage ? (
+                <Image
+                  src={currentSlide.cardImage}
+                  alt="Feature"
+                  fill
+                  className="object-cover object-center"
+                  sizes="220px"
+                  unoptimized
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#25282C] to-black/80" />
+              )}
             </motion.div>
 
             {/* Next Arrow */}
@@ -219,14 +266,19 @@ export default function WeddingServicesSection() {
                 className="absolute inset-0 w-full h-full"
               >
                 <div className="relative w-full h-full">
-                  <Image
-                    src={currentSlide.bgImage}
-                    alt="Background"
-                    fill
-                    className="object-cover"
-                    sizes="100vw"
-                    priority
-                  />
+                  {currentSlide.bgImage ? (
+                    <Image
+                      src={currentSlide.bgImage}
+                      alt="Background"
+                      fill
+                      className="object-cover object-center"
+                      sizes="100vw"
+                      priority
+                      unoptimized
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#25282C] to-[#0D4032]" />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-b from-[#25282C]/80 via-transparent to-[#0D4032]/90" />
                 </div>
               </motion.div>
@@ -280,9 +332,10 @@ export default function WeddingServicesSection() {
                   src={currentSlide.cardImage}
                   alt="Feature"
                   fill
-                  className="object-cover"
+                  className="object-cover object-center"
                   sizes="50vw"
                   priority
+                  unoptimized
                 />
               </motion.div>
             </div>

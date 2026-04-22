@@ -1,0 +1,1659 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Jade — Full Image Audit Report</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0f1114;
+        --surface: #161920;
+        --card: #1c1f26;
+        --border: rgba(255, 255, 255, 0.06);
+        --gold: #efcd62;
+        --gold-dim: rgba(239, 205, 98, 0.15);
+        --text: #e8e8e8;
+        --text-2: rgba(255, 255, 255, 0.6);
+        --text-3: rgba(255, 255, 255, 0.35);
+        --red: #ff5c5c;
+        --red-bg: rgba(255, 92, 92, 0.12);
+        --orange: #ffa940;
+        --orange-bg: rgba(255, 169, 64, 0.12);
+        --green: #52c41a;
+        --green-bg: rgba(82, 196, 26, 0.12);
+        --blue: #4da8ff;
+        --blue-bg: rgba(77, 168, 255, 0.12);
+        --radius: 8px;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ─── HERO HEADER ─── */
+      .hero {
+        background: linear-gradient(
+          135deg,
+          #0f1114 0%,
+          #1a2a1f 40%,
+          #0f1114 100%
+        );
+        border-bottom: 1px solid var(--border);
+        padding: 80px 32px 60px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 50% 0%,
+          rgba(239, 205, 98, 0.06) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .hero-badge {
+        display: inline-block;
+        background: var(--gold-dim);
+        color: var(--gold);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        padding: 6px 16px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(239, 205, 98, 0.2);
+      }
+      .hero h1 {
+        font-size: clamp(32px, 5vw, 52px);
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.1;
+        margin-bottom: 12px;
+      }
+      .hero h1 span {
+        color: var(--gold);
+      }
+      .hero .subtitle {
+        font-size: 16px;
+        color: var(--text-2);
+        max-width: 520px;
+        margin: 0 auto 24px;
+      }
+      .hero .date {
+        font-size: 12px;
+        color: var(--text-3);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+
+      /* ─── CONTAINER ─── */
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px;
+      }
+
+      /* ─── STAT GRID ─── */
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+      .stat-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 24px 20px;
+        text-align: center;
+        transition: border-color 0.2s;
+      }
+      .stat-card:hover {
+        border-color: rgba(239, 205, 98, 0.25);
+      }
+      .stat-number {
+        font-size: 40px;
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: 6px;
+      }
+      .stat-number.gold {
+        color: var(--gold);
+      }
+      .stat-number.red {
+        color: var(--red);
+      }
+      .stat-number.green {
+        color: var(--green);
+      }
+      .stat-label {
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--text-3);
+        font-weight: 600;
+      }
+
+      /* ─── ALERT BOX ─── */
+      .alert {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--gold);
+        border-radius: var(--radius);
+        padding: 20px 24px;
+        margin-bottom: 32px;
+        font-size: 14px;
+        color: var(--text-2);
+        line-height: 1.7;
+      }
+      .alert strong {
+        color: var(--gold);
+      }
+      .alert code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        background: rgba(239, 205, 98, 0.1);
+        padding: 2px 6px;
+        border-radius: 3px;
+        color: var(--gold);
+      }
+      .alert.success {
+        border-left-color: var(--green);
+      }
+      .alert.success strong {
+        color: var(--green);
+      }
+      .alert.danger {
+        border-left-color: var(--red);
+      }
+      .alert.danger strong {
+        color: var(--red);
+      }
+
+      /* ─── TOC ─── */
+      .toc {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 28px 32px;
+        margin-bottom: 48px;
+      }
+      .toc h3 {
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 16px;
+        font-weight: 700;
+      }
+      .toc-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 6px 24px;
+      }
+      .toc a {
+        color: var(--text-2);
+        text-decoration: none;
+        font-size: 13px;
+        padding: 4px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.15s;
+      }
+      .toc a:hover {
+        color: var(--gold);
+      }
+      .toc a .num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--text-3);
+        min-width: 22px;
+      }
+
+      /* ─── SECTION HEADERS ─── */
+      .section-header {
+        margin: 56px 0 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .section-header h2 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: 0.02em;
+      }
+      .section-header .file-tag {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        background: var(--gold-dim);
+        color: var(--gold);
+        padding: 4px 10px;
+        border-radius: 4px;
+        border: 1px solid rgba(239, 205, 98, 0.15);
+      }
+      .section-count {
+        margin-left: auto;
+        font-size: 13px;
+        color: var(--text-3);
+      }
+
+      /* ─── BADGES ─── */
+      .badge {
+        display: inline-block;
+        padding: 3px 10px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        border-radius: 3px;
+        white-space: nowrap;
+      }
+      .badge-high {
+        background: var(--red-bg);
+        color: var(--red);
+        border: 1px solid rgba(255, 92, 92, 0.2);
+      }
+      .badge-medium {
+        background: var(--orange-bg);
+        color: var(--orange);
+        border: 1px solid rgba(255, 169, 64, 0.2);
+      }
+      .badge-clean {
+        background: var(--green-bg);
+        color: var(--green);
+        border: 1px solid rgba(82, 196, 26, 0.2);
+      }
+      .badge-info {
+        background: var(--blue-bg);
+        color: var(--blue);
+        border: 1px solid rgba(77, 168, 255, 0.2);
+      }
+
+      /* ─── TABLES ─── */
+      .table-wrap {
+        overflow-x: auto;
+        margin-bottom: 28px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      thead th {
+        background: var(--surface);
+        color: var(--gold);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 14px 16px;
+        text-align: left;
+        white-space: nowrap;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+      tbody td {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-2);
+        vertical-align: top;
+      }
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      tbody tr:hover {
+        background: rgba(239, 205, 98, 0.03);
+      }
+      .mono {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+      }
+      .url-cell {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        color: var(--red);
+        word-break: break-all;
+        max-width: 320px;
+        opacity: 0.8;
+      }
+      .path-cell {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--gold);
+        background: rgba(239, 205, 98, 0.06);
+        padding: 2px 6px;
+        border-radius: 3px;
+        white-space: nowrap;
+      }
+      .line-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--text-3);
+        text-align: center;
+      }
+      .count-cell {
+        font-size: 20px;
+        font-weight: 700;
+        text-align: center;
+        color: #fff;
+      }
+
+      /* ─── DIVIDER ─── */
+      .divider {
+        height: 1px;
+        background: var(--border);
+        margin: 56px 0;
+      }
+
+      /* ─── FOOTER ─── */
+      .footer {
+        text-align: center;
+        padding: 48px 24px;
+        border-top: 1px solid var(--border);
+        margin-top: 60px;
+        color: var(--text-3);
+        font-size: 13px;
+      }
+      .footer span {
+        color: var(--gold);
+      }
+
+      /* ─── RESPONSIVE ─── */
+      @media (max-width: 768px) {
+        .hero {
+          padding: 60px 20px 40px;
+        }
+        .container {
+          padding: 24px 16px;
+        }
+        .stat-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+        }
+        .toc-grid {
+          grid-template-columns: 1fr;
+        }
+        table {
+          font-size: 12px;
+        }
+        thead th,
+        tbody td {
+          padding: 10px 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ╔══════════════════════════════════════════════════════════╗ -->
+    <!-- ║                       HERO HEADER                       ║ -->
+    <!-- ╚══════════════════════════════════════════════════════════╝ -->
+    <header class="hero">
+      <div class="hero-badge">Full Codebase Audit</div>
+      <h1>Image <span>Audit</span> Report</h1>
+      <p class="subtitle">
+        Every external stock image identified, cataloged, and mapped to a local
+        replacement path across the entire Jade Hospitainment codebase.
+      </p>
+      <p class="date">April 21, 2026 · Jade_ReVamp · Next.js 14</p>
+    </header>
+
+    <div class="container">
+      <!-- ═══ EXECUTIVE STATS ═══ -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-number red">60</div>
+          <div class="stat-label">External URLs (Active)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number gold">17</div>
+          <div class="stat-label">Files Affected</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number green">14</div>
+          <div class="stat-label">Villa Files (Clean ✓)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" style="color: var(--text-3)">0</div>
+          <div class="stat-label">Picsum / Placeholder / Flickr</div>
+        </div>
+      </div>
+
+      <!-- ═══ KEY FINDINGS ═══ -->
+      <div class="alert success">
+        <strong>✅ New retreats/ directory is fully clean.</strong> — All 14
+        villa data files in <code>src/data/retreats/</code> use local
+        <code>/Villa_Retreats/</code> paths with zero external dependencies.
+        YouTube embed URLs (intentional) are the only external links.
+      </div>
+
+      <div class="alert danger">
+        <strong>⚠️ Legacy retrats_data.ts is dead code.</strong> — The old
+        <code>src/data/retrats_data.ts</code> (4,623 lines, 300+ Pexels/Unsplash
+        URLs) is no longer imported anywhere. It can be safely deleted.
+      </div>
+
+      <div class="alert">
+        <strong>📌 Remaining work:</strong> 60 external stock URLs across 15
+        component/page files still need replacement. Sources:
+        <code>images.unsplash.com</code> and
+        <code>images.pexels.com</code> only. All replacements should go to
+        <code>/public/images/[section]/filename.webp</code>.
+      </div>
+
+      <!-- ═══ TABLE OF CONTENTS ═══ -->
+      <div class="toc">
+        <h3>Table of Contents</h3>
+        <div class="toc-grid">
+          <a href="#summary"><span class="num">01</span> Summary Table</a>
+          <a href="#retreats-clean"
+            ><span class="num">02</span> Retreats Directory (Clean ✓)</a
+          >
+          <a href="#legacy-data"
+            ><span class="num">03</span> Legacy retrats_data.ts (Dead Code)</a
+          >
+          <a href="#about"><span class="num">04</span> About Page</a>
+          <a href="#corporate"
+            ><span class="num">05</span> Corporate Retreats Page</a
+          >
+          <a href="#featured"><span class="num">06</span> Featured Villas</a>
+          <a href="#wedding-celebrations"
+            ><span class="num">07</span> Wedding Celebrations</a
+          >
+          <a href="#wedding-services"
+            ><span class="num">08</span> Wedding Services</a
+          >
+          <a href="#why-jade"><span class="num">09</span> Why Jade Weddings</a>
+          <a href="#value-prop"
+            ><span class="num">10</span> Value Proposition</a
+          >
+          <a href="#amenities"><span class="num">11</span> Jade Amenities</a>
+          <a href="#formats"><span class="num">12</span> Formats Carousel</a>
+          <a href="#horizontal"
+            ><span class="num">13</span> Horizontal Scroll</a
+          >
+          <a href="#experiences"
+            ><span class="num">14</span> Experiences Scroll</a
+          >
+          <a href="#caravan-usage"><span class="num">15</span> Caravan Usage</a>
+          <a href="#weekend"><span class="num">16</span> Weekend Getaways</a>
+          <a href="#caravans"><span class="num">17</span> Caravans Page</a>
+          <a href="#menu"><span class="num">18</span> Menu Page</a>
+          <a href="#blogs"><span class="num">19</span> Blogs Data</a>
+        </div>
+      </div>
+
+      <!-- ╔══════════════════════════════════════════════════════════╗ -->
+      <!-- ║                    01 · SUMMARY TABLE                    ║ -->
+      <!-- ╚══════════════════════════════════════════════════════════╝ -->
+      <div class="section-header" id="summary">
+        <h2>01 · Summary Table</h2>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Component / Page</th>
+              <th style="text-align: center">Count</th>
+              <th>Source</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="path-cell">retreats/*.ts</span></td>
+              <td>Villa Data (14 files)</td>
+              <td class="count-cell" style="color: var(--green)">0</td>
+              <td>—</td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td><span class="path-cell">FeaturedVillas.tsx</span></td>
+              <td>Featured Villas Scroll</td>
+              <td class="count-cell">8</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-high">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td><span class="path-cell">WeddingServicesSection.tsx</span></td>
+              <td>Wedding Services</td>
+              <td class="count-cell">8</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-high">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="path-cell">WeddingCelebrationsSection.tsx</span>
+              </td>
+              <td>Wedding Celebrations</td>
+              <td class="count-cell">5</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-high">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td><span class="path-cell">menu/page.tsx</span></td>
+              <td>Menu Page</td>
+              <td class="count-cell">5</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-medium">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td><span class="path-cell">FormatsCarousel.tsx</span></td>
+              <td>Corporate Formats</td>
+              <td class="count-cell">4</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-medium">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td><span class="path-cell">about/page.tsx</span></td>
+              <td>About Page</td>
+              <td class="count-cell">4</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-high">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td><span class="path-cell">JadeAmenitiesSection.tsx</span></td>
+              <td>Jade Amenities</td>
+              <td class="count-cell">4</td>
+              <td>Pexels</td>
+              <td><span class="badge badge-high">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="path-cell">ValuePropositionSection.tsx</span>
+              </td>
+              <td>Value Proposition</td>
+              <td class="count-cell">3</td>
+              <td>Pexels</td>
+              <td><span class="badge badge-high">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td><span class="path-cell">blogs.ts</span></td>
+              <td>Blog Posts</td>
+              <td class="count-cell">3</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-medium">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="path-cell">HorizontalScrollSection.tsx</span>
+              </td>
+              <td>Landing Grid</td>
+              <td class="count-cell">2</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-medium">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="path-cell">ExperiencesScrollSection.tsx</span>
+              </td>
+              <td>Experiences</td>
+              <td class="count-cell">2</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-medium">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td><span class="path-cell">CaravanUsageSection.tsx</span></td>
+              <td>Caravan Usage</td>
+              <td class="count-cell">2</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-medium">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="path-cell">corporate-retreats/page.tsx</span>
+              </td>
+              <td>Corporate Retreats Hero</td>
+              <td class="count-cell">1</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-high">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td><span class="path-cell">WhyJadeWeddings.tsx</span></td>
+              <td>Why Jade Weddings</td>
+              <td class="count-cell">1</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-high">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td><span class="path-cell">weekend-getaways/page.tsx</span></td>
+              <td>Weekend Getaways</td>
+              <td class="count-cell">1</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-medium">REPLACE</span></td>
+            </tr>
+            <tr>
+              <td><span class="path-cell">caravans/page.tsx</span></td>
+              <td>Caravans Page</td>
+              <td class="count-cell">1</td>
+              <td>Unsplash</td>
+              <td><span class="badge badge-medium">REPLACE</span></td>
+            </tr>
+            <tr style="background: rgba(255, 92, 92, 0.04)">
+              <td>
+                <span
+                  class="path-cell"
+                  style="color: var(--red); background: var(--red-bg)"
+                  >retrats_data.ts</span
+                >
+              </td>
+              <td>Legacy Villa Data (DEAD CODE)</td>
+              <td class="count-cell" style="color: var(--red)">300+</td>
+              <td>Pexels, Unsplash</td>
+              <td><span class="badge badge-info">DELETE FILE</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ╔══════════════════════════════════════════════════════════╗ -->
+      <!-- ║             02 · RETREATS DIRECTORY (CLEAN)              ║ -->
+      <!-- ╚══════════════════════════════════════════════════════════╝ -->
+      <div class="section-header" id="retreats-clean">
+        <h2>02 · Retreats Directory</h2>
+        <span class="file-tag">src/data/retreats/*.ts</span>
+        <span class="section-count"
+          ><span class="badge badge-clean">ALL CLEAN — 14 FILES</span></span
+        >
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Villa File</th>
+              <th>Villa Name</th>
+              <th>Image Source</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono">magnolia.ts</td>
+              <td>Magnolia</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Magnolia/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">tranquil.ts</td>
+              <td>Tranquil Woods</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Tranquil/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">royalty.ts</td>
+              <td>Royalty</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Royalty/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">dome-villas.ts</td>
+              <td>Dome Villas</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Dome_Villas/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">diamond.ts</td>
+              <td>Diamond</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Diamond/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">vannani.ts</td>
+              <td>Vannani</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Vannani/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">haven.ts</td>
+              <td>Haven</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Haven/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">retreat-on-the-ridge.ts</td>
+              <td>Retreat on the Ridge</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/ROR/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">emerald.ts</td>
+              <td>Emerald</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Emerald/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">wonderland.ts</td>
+              <td>Wonderland</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Wonderland/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">jade-735.ts</td>
+              <td>Jade 735</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Jade_735/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">lemon-tree.ts</td>
+              <td>Lemon Tree</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Lemon_Tree/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">lounge-fly.ts</td>
+              <td>Lounge Fly</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Lounge_Fly/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+            <tr>
+              <td class="mono">palatio.ts</td>
+              <td>Palatio</td>
+              <td class="mono" style="color: var(--green)">
+                /Villa_Retreats/Palatio/
+              </td>
+              <td><span class="badge badge-clean">CLEAN</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ╔══════════════════════════════════════════════════════════╗ -->
+      <!-- ║            03 · LEGACY FILE (SAFE TO DELETE)             ║ -->
+      <!-- ╚══════════════════════════════════════════════════════════╝ -->
+      <div class="section-header" id="legacy-data">
+        <h2>03 · Legacy Data File</h2>
+        <span class="file-tag">src/data/retrats_data.ts</span>
+        <span class="section-count"
+          ><span class="badge badge-info">DEAD CODE — DELETE</span></span
+        >
+      </div>
+
+      <div class="alert danger">
+        <strong>This file is 4,623 lines and not imported anywhere.</strong> It
+        contains 300+ Pexels/Unsplash URLs. The active villa data now comes from
+        <code>src/data/retreats/index.ts</code> which re-exports clean
+        individual files. Safe to delete entirely.
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ╔══════════════════════════════════════════════════════════╗ -->
+      <!-- ║        04–19 · DETAILED PER-FILE AUDIT TABLES            ║ -->
+      <!-- ╚══════════════════════════════════════════════════════════╝ -->
+
+      <!-- 04: ABOUT PAGE -->
+      <div class="section-header" id="about">
+        <h2>04 · About Page</h2>
+        <span class="file-tag">app/about/page.tsx</span>
+        <span class="section-count">4 external URLs</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Image Slot</th>
+              <th>Current URL</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">31</td>
+              <td>Corporate Retreats Offering Card</td>
+              <td class="url-cell">unsplash…1600596542815</td>
+              <td>
+                <span class="path-cell"
+                  >/images/about/corporate-offering.webp</span
+                >
+              </td>
+              <td>Corporate team at Jade villa — outdoor meeting</td>
+            </tr>
+            <tr>
+              <td class="line-num">366</td>
+              <td>Team Member Photo (×4 in loop)</td>
+              <td class="url-cell">unsplash…1600596542815</td>
+              <td>
+                <span class="path-cell">/images/about/team-[name].webp</span>
+              </td>
+              <td>Individual leadership headshots — 4 unique photos</td>
+            </tr>
+            <tr>
+              <td class="line-num">447</td>
+              <td>Media Section Row 3 — Image 1</td>
+              <td class="url-cell">unsplash…1600596542815</td>
+              <td>
+                <span class="path-cell">/images/about/media-award-1.webp</span>
+              </td>
+              <td>Award ceremony or press recognition</td>
+            </tr>
+            <tr>
+              <td class="line-num">455</td>
+              <td>Media Section Row 3 — Image 2</td>
+              <td class="url-cell">unsplash…1600607687920</td>
+              <td>
+                <span class="path-cell">/images/about/media-award-2.webp</span>
+              </td>
+              <td>Second media/press coverage photo</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 05: CORPORATE RETREATS -->
+      <div class="section-header" id="corporate">
+        <h2>05 · Corporate Retreats Page</h2>
+        <span class="file-tag">app/corporate-retreats/page.tsx</span>
+        <span class="section-count">1 external URL</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Image Slot</th>
+              <th>Current URL</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">43</td>
+              <td>Hero Background (ExperienceHero)</td>
+              <td class="url-cell">unsplash…1600596542815</td>
+              <td>
+                <span class="path-cell">/images/corporate/hero.webp</span>
+              </td>
+              <td>
+                Wide shot — Jade villa set up for corporate event, 1920×1080
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 06: FEATURED VILLAS -->
+      <div class="section-header" id="featured">
+        <h2>06 · Featured Villas</h2>
+        <span class="file-tag">components/FeaturedVillas.tsx</span>
+        <span class="section-count"
+          >8 external URLs (4 villas × desktop + mobile)</span
+        >
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Lines</th>
+              <th>Villa</th>
+              <th>Slots</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">19, 21</td>
+              <td>Dome Villa</td>
+              <td>desktop + mobile</td>
+              <td>
+                <span class="path-cell"
+                  >/images/villas/dome-villa-hero.webp</span
+                >
+              </td>
+              <td>Exterior with iconic dome + private pool</td>
+            </tr>
+            <tr>
+              <td class="line-num">31, 33</td>
+              <td>Lemon Tree</td>
+              <td>desktop + mobile</td>
+              <td>
+                <span class="path-cell"
+                  >/images/villas/lemon-tree-hero.webp</span
+                >
+              </td>
+              <td>Farmhouse exterior with rooftop pool</td>
+            </tr>
+            <tr>
+              <td class="line-num">43, 45</td>
+              <td>Retreat on the Ridge</td>
+              <td>desktop + mobile</td>
+              <td>
+                <span class="path-cell">/images/villas/ror-hero.webp</span>
+              </td>
+              <td>Panoramic hill-facing view with pool</td>
+            </tr>
+            <tr>
+              <td class="line-num">55, 57</td>
+              <td>Magnolia</td>
+              <td>desktop + mobile</td>
+              <td>
+                <span class="path-cell">/images/villas/magnolia-hero.webp</span>
+              </td>
+              <td>Glass facade, expansive lawns, pool visible</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 07: WEDDING CELEBRATIONS -->
+      <div class="section-header" id="wedding-celebrations">
+        <h2>07 · Wedding Celebrations</h2>
+        <span class="file-tag">components/WeddingCelebrationsSection.tsx</span>
+        <span class="section-count">5 external URLs</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Celebration Type</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">18</td>
+              <td>Mehendi &amp; Haldi</td>
+              <td>
+                <span class="path-cell"
+                  >/images/weddings/mehendi-haldi.webp</span
+                >
+              </td>
+              <td>Daytime lawn ceremony — colorful traditional decor</td>
+            </tr>
+            <tr>
+              <td class="line-num">28</td>
+              <td>Sangeet Evenings</td>
+              <td>
+                <span class="path-cell">/images/weddings/sangeet.webp</span>
+              </td>
+              <td>Evening dance setup — lighting, music, guests</td>
+            </tr>
+            <tr>
+              <td class="line-num">38</td>
+              <td>Bachelor / Bachelorette</td>
+              <td>
+                <span class="path-cell"
+                  >/images/weddings/bachelor-party.webp</span
+                >
+              </td>
+              <td>Poolside group celebration</td>
+            </tr>
+            <tr>
+              <td class="line-num">48</td>
+              <td>Pre-Wedding Cocktail</td>
+              <td>
+                <span class="path-cell"
+                  >/images/weddings/cocktail-night.webp</span
+                >
+              </td>
+              <td>Elegant lounge setup — ambient lighting, bar</td>
+            </tr>
+            <tr>
+              <td class="line-num">58</td>
+              <td>Pre-Wedding Shoots</td>
+              <td>
+                <span class="path-cell"
+                  >/images/weddings/pre-wedding-shoot.webp</span
+                >
+              </td>
+              <td>Couple at scenic Jade backdrop</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 08: WEDDING SERVICES -->
+      <div class="section-header" id="wedding-services">
+        <h2>08 · Wedding Services</h2>
+        <span class="file-tag">components/WeddingServicesSection.tsx</span>
+        <span class="section-count"
+          >8 external URLs (4 services × bg + card)</span
+        >
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Lines</th>
+              <th>Service</th>
+              <th>Slots</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">22, 24</td>
+              <td>Décor &amp; Styling</td>
+              <td>bg + card</td>
+              <td>
+                <span class="path-cell">/images/weddings/decor-bg.webp</span>,
+                <span class="path-cell">decor-card.webp</span>
+              </td>
+              <td>BG: Wide mandap. Card: Floral close-up</td>
+            </tr>
+            <tr>
+              <td class="line-num">33, 35</td>
+              <td>Catering</td>
+              <td>bg + card</td>
+              <td>
+                <span class="path-cell">/images/weddings/catering-bg.webp</span
+                >, <span class="path-cell">catering-card.webp</span>
+              </td>
+              <td>BG: Buffet setup. Card: Plated dish</td>
+            </tr>
+            <tr>
+              <td class="line-num">44, 46</td>
+              <td>Photography</td>
+              <td>bg + card</td>
+              <td>
+                <span class="path-cell">/images/weddings/photo-bg.webp</span>,
+                <span class="path-cell">photo-card.webp</span>
+              </td>
+              <td>BG: Photographer in action. Card: Couple portrait</td>
+            </tr>
+            <tr>
+              <td class="line-num">55, 57</td>
+              <td>Music &amp; Entertainment</td>
+              <td>bg + card</td>
+              <td>
+                <span class="path-cell">/images/weddings/music-bg.webp</span>,
+                <span class="path-cell">music-card.webp</span>
+              </td>
+              <td>BG: Live band/DJ. Card: Musicians or soundcheck</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 09: WHY JADE WEDDINGS -->
+      <div class="section-header" id="why-jade">
+        <h2>09 · Why Jade Weddings</h2>
+        <span class="file-tag">components/WhyJadeWeddings.tsx</span>
+        <span class="section-count">1 external URL</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Slot</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">43</td>
+              <td>Hero Image</td>
+              <td>
+                <span class="path-cell">/images/weddings/why-jade.webp</span>
+              </td>
+              <td>Panoramic outdoor wedding ceremony at a Jade villa</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 10: VALUE PROPOSITION (NEW) -->
+      <div class="section-header" id="value-prop">
+        <h2>
+          10 · Value Proposition Section
+          <span class="badge badge-info">NEW FIND</span>
+        </h2>
+        <span class="file-tag">components/ValuePropositionSection.tsx</span>
+        <span class="section-count">3 external URLs</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Slide</th>
+              <th>Current URL</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">17</td>
+              <td>Slide 1 — "Private villas around Bangalore"</td>
+              <td class="url-cell">pexels…32870</td>
+              <td>
+                <span class="path-cell">/images/home/value-villas.webp</span>
+              </td>
+              <td>
+                Wide establishing shot of a Jade villa in serene surroundings
+              </td>
+            </tr>
+            <tr>
+              <td class="line-num">26</td>
+              <td>Slide 2 — "Distinctive, themed stays"</td>
+              <td class="url-cell">pexels…1643384</td>
+              <td>
+                <span class="path-cell">/images/home/value-themed.webp</span>
+              </td>
+              <td>Unique villa feature — dome, glass house, or pool shot</td>
+            </tr>
+            <tr>
+              <td class="line-num">35</td>
+              <td>Slide 3 — "Curated experiences"</td>
+              <td class="url-cell">pexels…258154</td>
+              <td>
+                <span class="path-cell"
+                  >/images/home/value-experiences.webp</span
+                >
+              </td>
+              <td>BBQ, bonfire, or private dining experience in action</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 11: JADE AMENITIES (NEW) -->
+      <div class="section-header" id="amenities">
+        <h2>
+          11 · Jade Amenities Section
+          <span class="badge badge-info">NEW FIND</span>
+        </h2>
+        <span class="file-tag">components/JadeAmenitiesSection.tsx</span>
+        <span class="section-count">4 external URLs</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Amenity Slide</th>
+              <th>Current URL</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">17</td>
+              <td>Culinary Experiences</td>
+              <td class="url-cell">pexels…1267320</td>
+              <td>
+                <span class="path-cell"
+                  >/images/home/amenity-culinary.webp</span
+                >
+              </td>
+              <td>Private chef cooking or BBQ grill in action at a villa</td>
+            </tr>
+            <tr>
+              <td class="line-num">26</td>
+              <td>Leisure &amp; Entertainment</td>
+              <td class="url-cell">pexels…189296</td>
+              <td>
+                <span class="path-cell">/images/home/amenity-leisure.webp</span>
+              </td>
+              <td>Pool area or home theatre with guests</td>
+            </tr>
+            <tr>
+              <td class="line-num">35</td>
+              <td>Wellness &amp; Nature</td>
+              <td class="url-cell">pexels…1396122</td>
+              <td>
+                <span class="path-cell"
+                  >/images/home/amenity-wellness.webp</span
+                >
+              </td>
+              <td>Expansive lawn or garden dining setup</td>
+            </tr>
+            <tr>
+              <td class="line-num">43</td>
+              <td>Seamless Hospitality</td>
+              <td class="url-cell">pexels…258154</td>
+              <td>
+                <span class="path-cell"
+                  >/images/home/amenity-hospitality.webp</span
+                >
+              </td>
+              <td>Butler service or concierge interaction</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 12: FORMATS CAROUSEL -->
+      <div class="section-header" id="formats">
+        <h2>12 · Formats Carousel</h2>
+        <span class="file-tag">components/FormatsCarousel.tsx</span>
+        <span class="section-count">4 external URLs</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Format</th>
+              <th>Slot</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">21</td>
+              <td>Corporate Team Outings</td>
+              <td>image1</td>
+              <td>
+                <span class="path-cell"
+                  >/images/corporate/team-outing-1.webp</span
+                >
+              </td>
+              <td>Team outdoor activity on villa lawn</td>
+            </tr>
+            <tr>
+              <td class="line-num">23</td>
+              <td>Corporate Team Outings</td>
+              <td>image2</td>
+              <td>
+                <span class="path-cell"
+                  >/images/corporate/team-outing-2.webp</span
+                >
+              </td>
+              <td>Indoor meeting or collaborative session</td>
+            </tr>
+            <tr>
+              <td class="line-num">38</td>
+              <td>Conference &amp; Recognition</td>
+              <td>image1</td>
+              <td>
+                <span class="path-cell"
+                  >/images/corporate/conference-1.webp</span
+                >
+              </td>
+              <td>Award ceremony with LED screen</td>
+            </tr>
+            <tr>
+              <td class="line-num">48</td>
+              <td>Corporate Events</td>
+              <td>image2</td>
+              <td>
+                <span class="path-cell"
+                  >/images/corporate/events-party.webp</span
+                >
+              </td>
+              <td>Corporate milestone celebration — evening</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 13: HORIZONTAL SCROLL -->
+      <div class="section-header" id="horizontal">
+        <h2>13 · Horizontal Scroll Section</h2>
+        <span class="file-tag">components/HorizontalScrollSection.tsx</span>
+        <span class="section-count">2 external URLs</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Grid Item</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">48</td>
+              <td>Corporate Retreats Card</td>
+              <td>
+                <span class="path-cell">/images/home/corporate-card.webp</span>
+              </td>
+              <td>Team meeting or strategy session at villa</td>
+            </tr>
+            <tr>
+              <td class="line-num">60</td>
+              <td>Casual Stays Card</td>
+              <td>
+                <span class="path-cell"
+                  >/images/home/casual-stays-card.webp</span
+                >
+              </td>
+              <td>Guests relaxing by pool or on lawn</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 14: EXPERIENCES SCROLL -->
+      <div class="section-header" id="experiences">
+        <h2>14 · Experiences Scroll Section</h2>
+        <span class="file-tag">components/ExperiencesScrollSection.tsx</span>
+        <span class="section-count">2 external URLs</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Experience Panel</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">47</td>
+              <td>Corporate Offsites</td>
+              <td>
+                <span class="path-cell"
+                  >/images/experiences/corporate-offsites.webp</span
+                >
+              </td>
+              <td>Team at villa offsite — relaxed meeting</td>
+            </tr>
+            <tr>
+              <td class="line-num">75</td>
+              <td>Private Villas</td>
+              <td>
+                <span class="path-cell"
+                  >/images/experiences/private-villas.webp</span
+                >
+              </td>
+              <td>Beautiful villa exterior — luxury and privacy</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 15: CARAVAN USAGE -->
+      <div class="section-header" id="caravan-usage">
+        <h2>15 · Caravan Usage Section</h2>
+        <span class="file-tag">components/CaravanUsageSection.tsx</span>
+        <span class="section-count">2 external URLs</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Lines</th>
+              <th>Slide</th>
+              <th>Slots</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">59, 61</td>
+              <td>Work on the Move</td>
+              <td>bg + card</td>
+              <td>
+                <span class="path-cell"
+                  >/images/caravans/work-on-move.webp</span
+                >
+              </td>
+              <td>Rathaa caravan interior — laptop, mobile office</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 16: WEEKEND GETAWAYS -->
+      <div class="section-header" id="weekend">
+        <h2>16 · Weekend Getaways Page</h2>
+        <span class="file-tag">app/weekend-getaways/page.tsx</span>
+        <span class="section-count">1 external URL</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Slide</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">97</td>
+              <td>"Private Dinners" carousel slide</td>
+              <td>
+                <span class="path-cell"
+                  >/images/weekend/private-dinner.webp</span
+                >
+              </td>
+              <td>Candlelit outdoor dinner at a Jade villa</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 17: CARAVANS PAGE -->
+      <div class="section-header" id="caravans">
+        <h2>17 · Caravans Page</h2>
+        <span class="file-tag">app/caravans/page.tsx</span>
+        <span class="section-count">1 external URL</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Slide</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">52</td>
+              <td>"Capacity" carousel slide</td>
+              <td>
+                <span class="path-cell">/images/caravans/capacity.webp</span>
+              </td>
+              <td>Rathaa interior showing seating for 6–8 guests</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 18: MENU PAGE -->
+      <div class="section-header" id="menu">
+        <h2>18 · Menu Page</h2>
+        <span class="file-tag">app/menu/page.tsx</span>
+        <span class="section-count">5 external URLs</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Section</th>
+              <th>Slot</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">315</td>
+              <td>Mobile — Celebrations &amp; Parties</td>
+              <td>img1</td>
+              <td>
+                <span class="path-cell">/images/menu/celebrations-1.webp</span>
+              </td>
+              <td>Party scene at Jade villa</td>
+            </tr>
+            <tr>
+              <td class="line-num">316</td>
+              <td>Mobile — Celebrations &amp; Parties</td>
+              <td>img2</td>
+              <td>
+                <span class="path-cell">/images/menu/celebrations-2.webp</span>
+              </td>
+              <td>Pool party or birthday scene</td>
+            </tr>
+            <tr>
+              <td class="line-num">540</td>
+              <td>Desktop — Celebrations &amp; Parties</td>
+              <td>img1</td>
+              <td>
+                <span class="path-cell"
+                  >/images/menu/celebrations-desktop-1.webp</span
+                >
+              </td>
+              <td>Party scene, high-res</td>
+            </tr>
+            <tr>
+              <td class="line-num">541</td>
+              <td>Desktop — Celebrations &amp; Parties</td>
+              <td>img2</td>
+              <td>
+                <span class="path-cell"
+                  >/images/menu/celebrations-desktop-2.webp</span
+                >
+              </td>
+              <td>Different party angle, high-res</td>
+            </tr>
+            <tr>
+              <td class="line-num">552</td>
+              <td>Desktop — Corporate Offsites</td>
+              <td>img1</td>
+              <td>
+                <span class="path-cell"
+                  >/images/menu/corporate-desktop.webp</span
+                >
+              </td>
+              <td>Team meeting at villa</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 19: BLOGS -->
+      <div class="section-header" id="blogs">
+        <h2>19 · Blog Posts</h2>
+        <span class="file-tag">data/blogs.ts</span>
+        <span class="section-count">3 external URLs</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Blog</th>
+              <th>Slot</th>
+              <th>Replace With</th>
+              <th>What to Shoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="line-num">91</td>
+              <td>Corporate Team Outing Guide</td>
+              <td>Hero</td>
+              <td>
+                <span class="path-cell"
+                  >/images/blogs/corporate-guide/hero.webp</span
+                >
+              </td>
+              <td>Corporate team at villa — establishing shot</td>
+            </tr>
+            <tr>
+              <td class="line-num">202</td>
+              <td>Corporate Team Outing Guide</td>
+              <td>Inline</td>
+              <td>
+                <span class="path-cell"
+                  >/images/blogs/corporate-guide/jade-735.webp</span
+                >
+              </td>
+              <td>Jade 735 exterior with pool</td>
+            </tr>
+            <tr>
+              <td class="line-num">268</td>
+              <td>The Art of Slow Living</td>
+              <td>Hero</td>
+              <td>
+                <span class="path-cell"
+                  >/images/blogs/slow-living/hero.webp</span
+                >
+              </td>
+              <td>Peaceful villa scene — hammock, garden</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="footer">
+      <p>
+        <span>Jade Hospitainment</span> · Image Audit Report · April 21, 2026
+      </p>
+      <p style="margin-top: 8px">
+        60 active external URLs to replace · 1 legacy file to delete · 14 clean
+        villa files verified
+      </p>
+    </footer>
+  </body>
+</html>

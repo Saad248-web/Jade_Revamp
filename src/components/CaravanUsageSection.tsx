@@ -55,10 +55,8 @@ const SLIDES = [
     heading: ["Work on", "the Move"],
     subtext:
       "A quiet mobile environment for offsites, brainstorming, or remote work.",
-    bgImage:
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
-    cardImage:
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
+    bgImage: "/Experiences/Caravan/1-Hero/14.webp",
+    cardImage: "/Experiences/Caravan/2-Spaces/1.webp",
   },
 ];
 

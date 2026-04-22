@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 
 const BENEFITS = [
   {
@@ -27,6 +28,32 @@ const BENEFITS = [
 ];
 
 export default function WhyJadeWeddings() {
+  const [whyImages, setWhyImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch("/api/experiences/weddings/media");
+        if (!res.ok) return;
+        const data = await res.json();
+        const group = (data?.groups || []).find((g: any) =>
+          String(g.folder || "").toLowerCase().includes("4-why"),
+        );
+        const images = (group?.images || data?.all || []).filter(Boolean);
+        if (!cancelled) setWhyImages(images);
+      } catch {
+        // ignore
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const hero = useMemo(() => whyImages[0] || "", [whyImages]);
+
   return (
     <section className="bg-[#0D4032] py-24 sm:py-32">
       <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16">
@@ -39,12 +66,16 @@ export default function WhyJadeWeddings() {
             transition={{ duration: 0.8 }}
             className="relative w-full aspect-[16/10] md:aspect-video rounded-sm overflow-hidden shadow-2xl"
           >
-            <Image
-              src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2940&auto=format&fit=crop"
-              alt="Why Jade Wedding Venues"
-              fill
-              className="object-cover"
-            />
+            {hero ? (
+              <Image
+                src={hero}
+                alt="Why Jade Wedding Venues"
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-[#0D4032] to-black/70" />
+            )}
           </motion.div>
 
           {/* CONTENT SECTION */}

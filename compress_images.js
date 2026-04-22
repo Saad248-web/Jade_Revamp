@@ -9,10 +9,29 @@ const rename = promisify(fs.rename);
 const unlink = promisify(fs.unlink);
 const readFile = promisify(fs.readFile);
 
-const DIRS = [
-  path.join(__dirname, "public", "Villa_Retreats", "Palatio"),
-  path.join(__dirname, "public", "Villa_Retreats", "Royalty"),
-];
+function getDirs() {
+  const dirs = [];
+
+  const villaRoot = path.join(__dirname, "public", "Villa_Retreats");
+  if (fs.existsSync(villaRoot)) {
+    for (const name of fs.readdirSync(villaRoot)) {
+      const full = path.join(villaRoot, name);
+      try {
+        if (fs.statSync(full).isDirectory()) dirs.push(full);
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  const experiences = path.join(__dirname, "public", "Experiences");
+  if (fs.existsSync(experiences)) dirs.push(experiences);
+
+  const awards = path.join(__dirname, "public", "Awards_and_Recognition");
+  if (fs.existsSync(awards)) dirs.push(awards);
+
+  return dirs;
+}
 
 async function compressWebp(filePath) {
   if (!filePath.endsWith(".webp") || filePath.endsWith(".tmp.webp")) return;
@@ -68,7 +87,8 @@ async function walkAndCompress(dir) {
 
 async function run() {
   console.log("Starting to compress images...");
-  for (const dir of DIRS) {
+  const dirs = getDirs();
+  for (const dir of dirs) {
     if (fs.existsSync(dir)) {
       console.log(`Scanning directory: ${dir}`);
       await walkAndCompress(dir);

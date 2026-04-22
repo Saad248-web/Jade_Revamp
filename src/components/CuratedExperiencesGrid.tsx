@@ -57,13 +57,17 @@ export default function CuratedExperiencesGrid({
               viewport={{ once: true }}
               className="relative aspect-[4/3] md:aspect-[16/9] overflow-hidden group border border-white/5"
             >
-              <Image
-                src={exp.image}
-                alt={exp.title}
-                fill
-                sizes="(max-width: 768px) 50vw, 33vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
-              />
+              {exp.image ? (
+                <Image
+                  src={exp.image}
+                  alt={exp.title}
+                  fill
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[#141517] to-black/80" />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-center justify-center p-4 text-center">
                 <h3 className="text-white text-gh-scroll font-philosopher leading-tight">
                   {exp.title}

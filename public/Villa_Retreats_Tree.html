@@ -1,0 +1,1778 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Villa Retreats — Folder Tree & Audit</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: #0f0f13;
+        color: #e2e2e8;
+        min-height: 100dvh;
+        padding: 2rem;
+      }
+      h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #c9a84c, #f0d78c);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.25rem;
+      }
+      .subtitle {
+        color: #888;
+        font-size: 0.85rem;
+        margin-bottom: 2rem;
+      }
+      .legend {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+        font-size: 0.8rem;
+      }
+      .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .dot.good {
+        background: #4ade80;
+      }
+      .dot.bad {
+        background: #f87171;
+      }
+      .dot.warn {
+        background: #facc15;
+      }
+      .dot.miss {
+        background: #818cf8;
+      }
+
+      /* Sections */
+      .section {
+        background: #18181f;
+        border: 1px solid #2a2a35;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #c9a84c;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* Tree */
+      .tree {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.78rem;
+        line-height: 1.7;
+      }
+      .tree ul {
+        list-style: none;
+        padding-left: 1.4rem;
+        border-left: 1px solid #2a2a35;
+      }
+      .tree > ul {
+        border-left: none;
+        padding-left: 0;
+      }
+      .tree li {
+        position: relative;
+      }
+      .tree li::before {
+        content: "";
+        position: absolute;
+        left: -1.4rem;
+        top: 0.85em;
+        width: 1rem;
+        height: 1px;
+        background: #2a2a35;
+      }
+      .tree > ul > li::before {
+        display: none;
+      }
+      .folder {
+        color: #c9a84c;
+        font-weight: 600;
+        cursor: pointer;
+        user-select: none;
+      }
+      .folder::before {
+        content: "📁 ";
+      }
+      .file {
+        color: #9ca3af;
+      }
+      .file::before {
+        content: "🖼️ ";
+      }
+      .file.good {
+        color: #4ade80;
+      }
+      .file.bad {
+        color: #f87171;
+      }
+      .missing-tag {
+        background: #818cf8;
+        color: #0f0f13;
+        font-size: 0.65rem;
+        padding: 1px 6px;
+        border-radius: 4px;
+        margin-left: 0.5rem;
+        font-weight: 600;
+        font-family: "Inter", sans-serif;
+      }
+      .villa-name {
+        font-size: 0.95rem;
+        color: #f0d78c;
+      }
+      .count {
+        color: #666;
+        font-size: 0.7rem;
+        margin-left: 0.4rem;
+        font-family: "Inter", sans-serif;
+      }
+
+      /* Tables */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.8rem;
+        margin-top: 0.75rem;
+      }
+      th {
+        text-align: left;
+        color: #c9a84c;
+        border-bottom: 1px solid #2a2a35;
+        padding: 0.5rem 0.75rem;
+        font-weight: 600;
+      }
+      td {
+        padding: 0.45rem 0.75rem;
+        border-bottom: 1px solid #1a1a22;
+      }
+      tr:hover {
+        background: #1e1e28;
+      }
+      .tag {
+        display: inline-block;
+        padding: 1px 8px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+      .tag.yes {
+        background: #065f46;
+        color: #4ade80;
+      }
+      .tag.no {
+        background: #7f1d1d;
+        color: #f87171;
+      }
+      .tag.partial {
+        background: #713f12;
+        color: #facc15;
+      }
+      .tag.empty {
+        background: #3b0764;
+        color: #c084fc;
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .summary-card {
+        background: #1e1e28;
+        border: 1px solid #2a2a35;
+        border-radius: 8px;
+        padding: 1rem;
+      }
+      .summary-card h3 {
+        font-size: 0.9rem;
+        color: #f0d78c;
+        margin-bottom: 0.5rem;
+      }
+      .summary-card ul {
+        padding-left: 1.2rem;
+        font-size: 0.78rem;
+        color: #9ca3af;
+        line-height: 1.8;
+      }
+      .summary-card .missing {
+        color: #818cf8;
+        font-weight: 500;
+      }
+      .stat {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #c9a84c;
+      }
+      .stat-label {
+        font-size: 0.7rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .stats-row {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+      .stats-row > div {
+        text-align: center;
+      }
+      details summary {
+        cursor: pointer;
+        list-style: none;
+      }
+      details summary::-webkit-details-marker {
+        display: none;
+      }
+      details[open] .folder {
+        color: #f0d78c;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🏡 Villa Retreats — Folder Tree & Audit</h1>
+    <p class="subtitle">
+      14 Villas · Generated 21 Apr 2026 · Folder structure, missing folders &
+      file naming analysis
+    </p>
+
+    <div class="legend">
+      <span><span class="dot good"></span> Well-Named File</span>
+      <span><span class="dot bad"></span> Poorly-Named File</span>
+      <span><span class="dot warn"></span> Generic Numbered</span>
+      <span><span class="dot miss"></span> Missing Folder</span>
+    </div>
+
+    <!-- ───── STATS ───── -->
+    <div class="section">
+      <div class="section-title">📊 Overview Stats</div>
+      <div class="stats-row">
+        <div>
+          <div class="stat">14</div>
+          <div class="stat-label">Villas</div>
+        </div>
+        <div>
+          <div class="stat">4</div>
+          <div class="stat-label">Expected Folders</div>
+        </div>
+        <div>
+          <div class="stat">2</div>
+          <div class="stat-label">Fully Complete</div>
+        </div>
+        <div>
+          <div class="stat">12</div>
+          <div class="stat-label">Have Missing Folders</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───── MISSING FOLDER AUDIT ───── -->
+    <div class="section">
+      <div class="section-title">📂 Missing Folder Audit</div>
+      <p style="font-size: 0.8rem; color: #888; margin-bottom: 0.75rem">
+        Expected subfolders per villa:
+        <strong style="color: #e2e2e8">Hero</strong>,
+        <strong style="color: #e2e2e8">Spaces</strong>,
+        <strong style="color: #e2e2e8">Experiences</strong>,
+        <strong style="color: #e2e2e8">Perfect For</strong>
+      </p>
+      <table>
+        <tr>
+          <th>Villa</th>
+          <th>Hero</th>
+          <th>Spaces</th>
+          <th>Experiences</th>
+          <th>Perfect For</th>
+          <th>Notes</th>
+        </tr>
+        <tr>
+          <td>Diamond</td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td style="color: #888; font-size: 0.75rem">Only 2 subfolders</td>
+        </tr>
+        <tr>
+          <td>Dome Villa_s - Blue</td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Dome Villa_s - Red</td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Dome Villa_s - Yellow</td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Emerald</td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Haven</td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Jade 735</td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Lounge Fly</td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td style="color: #888; font-size: 0.75rem">Only 2 subfolders</td>
+        </tr>
+        <tr>
+          <td>Magnolia</td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Palatio</td>
+          <td><span class="tag yes">✓ 1-Hero</span></td>
+          <td><span class="tag yes">✓ 2-Spaces</span></td>
+          <td><span class="tag yes">✓ 3-Experiences</span></td>
+          <td><span class="tag empty">✓ 4-Perfect For (EMPTY)</span></td>
+          <td style="color: #888; font-size: 0.75rem">Numbered prefixes ✓</td>
+        </tr>
+        <tr>
+          <td>Retreat on the ridge</td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Royalty</td>
+          <td><span class="tag yes">✓ 1-Hero</span></td>
+          <td><span class="tag yes">✓ 2-Spaces</span></td>
+          <td><span class="tag yes">✓ 3-Experiences</span></td>
+          <td><span class="tag empty">✓ 4-Perfect For (EMPTY)</span></td>
+          <td style="color: #888; font-size: 0.75rem">Numbered prefixes ✓</td>
+        </tr>
+        <tr>
+          <td>Tranquil Woods</td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Wonderland</td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag yes">✓</span></td>
+          <td><span class="tag no">✗ Missing</span></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ───── NAMING ANALYSIS ───── -->
+    <div class="section">
+      <div class="section-title">🏷️ File Naming Quality Analysis</div>
+      <p style="font-size: 0.8rem; color: #888; margin-bottom: 0.75rem">
+        <strong style="color: #4ade80">Well-Named</strong> = Descriptive (e.g.
+        Bed_Room_1, Pool_View, Dining_Area) ·
+        <strong style="color: #f87171">Poorly-Named</strong> = Camera codes,
+        WhatsApp exports, vague names (e.g. IMG_5560, DJI_0162, 1.webp)
+      </p>
+      <table>
+        <tr>
+          <th>Villa</th>
+          <th>Rating</th>
+          <th>Well-Named Examples</th>
+          <th>Poorly-Named Examples</th>
+        </tr>
+        <tr>
+          <td>Diamond</td>
+          <td><span class="tag partial">⚠ Mixed</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">
+            Double_Occupancy, Pool
+          </td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            spaces_03 → spaces_31 (29 generic files)
+          </td>
+        </tr>
+        <tr>
+          <td>Dome Blue</td>
+          <td><span class="tag yes">✓ Excellent</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">
+            Barbeque, BornFire, Floating_BreakFast, Bed_Room_Hill_View,
+            Blue_Dome
+          </td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            experiences_11 (1 file)
+          </td>
+        </tr>
+        <tr>
+          <td>Dome Red</td>
+          <td><span class="tag partial">⚠ Mixed</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">
+            Bath_Tub, Hobbit_Hole_Window, Semi_Open_Dining_Area, Front_Yard
+          </td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            experiences_01–08, spaces_01–16 in Hero (generic)
+          </td>
+        </tr>
+        <tr>
+          <td>Dome Yellow</td>
+          <td><span class="tag partial">⚠ Mixed</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">
+            Greek_Style_Bath, Master_Bed_Room_Night_View, Corridor_Walk_way
+          </td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            experiences_01–15, spaces_01/19 in Hero (generic)
+          </td>
+        </tr>
+        <tr>
+          <td>Emerald</td>
+          <td><span class="tag partial">⚠ Mixed</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">
+            Pool_With_6ft_Water_Fall, Rustic_Glass_House_Villa, Indoor_Garden,
+            Gazebo
+          </td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            experiences_01–08, Dinning_Area_View_2 (typo)
+          </td>
+        </tr>
+        <tr>
+          <td>Haven</td>
+          <td><span class="tag partial">⚠ Mixed</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">
+            Bath_Room_With_Jacuzzi, Suite_Room_Living_Area, Villa_Entrance
+          </td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            experiences_01–11, Mico_kartopia (typo?), Suite_Room__
+          </td>
+        </tr>
+        <tr>
+          <td>Jade 735</td>
+          <td><span class="tag partial">⚠ Mixed</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">
+            10ft_waterFall+Pool, Pool_Side_Bar_Area, Semi_Swwinging_Bed
+          </td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            experiences_01–10, Semi_Swwinging_Bed (typo), Living_room_,
+            Stair_Way_1_, Walking_
+          </td>
+        </tr>
+        <tr>
+          <td>Lounge Fly</td>
+          <td><span class="tag no">✗ Poor</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">Pool_View (1 file)</td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            IMG_4763, IMG_9296–9304, "Lounge Fly v3_Page_01_Image_0001",
+            spaces_01–19
+          </td>
+        </tr>
+        <tr>
+          <td>Magnolia</td>
+          <td><span class="tag yes">✓ Excellent</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">
+            60inch_TV, Bar_Lounge, Basket_Ball_Court,
+            Floating_BreakFast_In_Pool, Private_Home_Theatre,
+            Movie_Under_the_Stars
+          </td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            Candle_Lit--- (trailing dashes), experiences_01–27 (generic)
+          </td>
+        </tr>
+        <tr>
+          <td>Palatio</td>
+          <td><span class="tag no">✗ Poor</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">
+            Back_Yard, Bed_Room_1, Sky_lit_Inner_Court_Yard, Walk_on_The_Water
+          </td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            DJI_0162, DJI_0172, DSC06031, DSC06213, FullSizeRender, IMG_1677,
+            IMG_5560–5906, HERO 2, Living__, Living___
+          </td>
+        </tr>
+        <tr>
+          <td>Retreat on the ridge</td>
+          <td><span class="tag no">✗ Poor</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">hero (1 file)</td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            All files generic: spaces_01–15, experiences_01–08
+          </td>
+        </tr>
+        <tr>
+          <td>Royalty</td>
+          <td><span class="tag no">✗ Very Poor</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">None</td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            ALL files are numbers: 1.webp–26.webp, WhatsApp Image 2025-11-14
+            at...
+          </td>
+        </tr>
+        <tr>
+          <td>Tranquil Woods</td>
+          <td><span class="tag no">✗ Poor</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">hero (1 file)</td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            All generic: spaces_01–30, experiences_01–05
+          </td>
+        </tr>
+        <tr>
+          <td>Wonderland</td>
+          <td><span class="tag yes">✓ Excellent</span></td>
+          <td style="color: #4ade80; font-size: 0.75rem">
+            6_Seater_Jacuzzi, Bedroom_Entrance, Common_Fresh_water_Pool,
+            High_Tea_Set_UP, Party_Deck, Tree_House_Entrance
+          </td>
+          <td style="color: #f87171; font-size: 0.75rem">
+            spaces_14/21/33/34/42/44 (6 generic in Spaces),
+            spaces_10/13/15/20/24 in Hero
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ───── FULL TREE ───── -->
+    <div class="section">
+      <div class="section-title">🌳 Full Folder Tree</div>
+      <div class="tree">
+        <ul>
+          <li>
+            <span class="folder villa-name">Villa_Retreats</span
+            ><span class="count">(14 villas)</span>
+            <ul>
+              <!-- DIAMOND -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Diamond</span
+                    ><span class="count">(32 files)</span
+                    ><span class="missing-tag"
+                      >Missing: Experiences, Perfect For</span
+                    >
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Hero</span
+                          ><span class="count">(1)</span>
+                        </summary>
+                        <ul>
+                          <li><span class="file good">hero.webp</span></li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Spaces</span
+                          ><span class="count">(31)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file good">Double_Occupancy.webp</span>
+                          </li>
+                          <li><span class="file good">Pool.webp</span></li>
+                          <li>
+                            <span class="file bad"
+                              >spaces_03.webp → spaces_31.webp</span
+                            ><span class="count">(29 generic)</span>
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- DOME BLUE -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Dome Villa_s - Blue</span
+                    ><span class="count">(31 files)</span
+                    ><span class="missing-tag">Missing: Perfect For</span>
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Experiences</span
+                          ><span class="count">(10)</span>
+                        </summary>
+                        <ul>
+                          <li><span class="file good">Barbeque.webp</span></li>
+                          <li><span class="file good">BornFire.webp</span></li>
+                          <li>
+                            <span class="file good">Candle_Lit_Area.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Floating_BreakFast.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good">Living_Area.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >OutDoor_Activities.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Outdoor_SitOut_area.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good">Picnic_Setup.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good">Zen_Garden.webp</span>
+                          </li>
+                          <li>
+                            <span class="file bad">experiences_11.webp</span>
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Hero</span
+                          ><span class="count">(5)</span>
+                        </summary>
+                        <ul>
+                          <li><span class="file good">Hero 1.webp</span></li>
+                          <li><span class="file good">Hero 2.webp</span></li>
+                          <li><span class="file good">Hero 3.webp</span></li>
+                          <li><span class="file good">Hero 4.webp</span></li>
+                          <li><span class="file good">Hero 5.webp</span></li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Spaces</span
+                          ><span class="count">(16)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file good"
+                              >1st_Floor_sit_out.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good">Bed-Room_1.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good">Bed_Room_2.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good">Bed_Room_3.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Bed_Room_Hill_View.webp</span
+                            >
+                          </li>
+                          <li><span class="file good">Blue_Dome.webp</span></li>
+                          <li>
+                            <span class="file good"
+                              >Candle_lit_Dining.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good">Dome_Side_View.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Glamping_Experince.webp</span
+                            >
+                          </li>
+                          <li><span class="file good">Hill_View.webp</span></li>
+                          <li><span class="file good">Lawn_Area.webp</span></li>
+                          <li>
+                            <span class="file good">Living_Area.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Movie_under_the_Stars.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good">OutDoor_Sit_Out.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Private_Plunge_Pool.webp</span
+                            >
+                          </li>
+                          <li><span class="file good">Walk_way.webp</span></li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- DOME RED -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Dome Villa_s - Red</span
+                    ><span class="count">(33 files)</span
+                    ><span class="missing-tag">Missing: Perfect For</span>
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Experiences</span
+                          ><span class="count">(7)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >experiences_01–08.webp (generic numbered)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Hero</span
+                          ><span class="count">(8)</span>
+                        </summary>
+                        <ul>
+                          <li><span class="file good">hero.webp</span></li>
+                          <li>
+                            <span class="file bad"
+                              >spaces_01, 03, 05, 07, 09, 10, 16.webp (wrong
+                              folder)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Spaces</span
+                          ><span class="count">(18)</span>
+                        </summary>
+                        <ul>
+                          <li><span class="file good">Bath_Tub.webp</span></li>
+                          <li>
+                            <span class="file good">Bed_Room_1–3.webp</span>
+                          </li>
+                          <li><span class="file good">Entrance.webp</span></li>
+                          <li><span class="file good">Exit.webp</span></li>
+                          <li>
+                            <span class="file good">Front_Yard.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Hobbit_Hole_Window.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Hobbit_Hole_entrance.webp</span
+                            >
+                          </li>
+                          <li><span class="file good">Kids_Pool.webp</span></li>
+                          <li><span class="file good">Lawn_area.webp</span></li>
+                          <li>
+                            <span class="file good">Living_Area.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good">OutDoor_Sit_Out.webp</span>
+                          </li>
+                          <li><span class="file good">Pool.webp</span></li>
+                          <li>
+                            <span class="file good"
+                              >Pool_Side_Sit_Out.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Pool_with_Hill_View.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Semi_Open_Dining_Area.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Wall_Unit_Artifacts.webp</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- DOME YELLOW -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Dome Villa_s - Yellow</span
+                    ><span class="count">(34 files)</span
+                    ><span class="missing-tag">Missing: Perfect For</span>
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Experiences</span
+                          ><span class="count">(15)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >experiences_01–15.webp (all generic)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Hero</span
+                          ><span class="count">(4)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file good"
+                              >Hero_evening_View.webp</span
+                            >
+                          </li>
+                          <li><span class="file good">hero.webp</span></li>
+                          <li>
+                            <span class="file bad"
+                              >spaces_01, 19.webp (wrong folder)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Spaces</span
+                          ><span class="count">(15)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file good"
+                              >Bed_Room_1.webp, Bed_Room_2.webp,
+                              Bed_Room_.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Corridor_Walk_way.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good">Dining_Area.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good">Greek_Style_Bath.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Inner_Court_Yard_Entrance.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Living_Area.webp, Living_Area_Hobbit_Hole.webp,
+                              Living_Area_entrance.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good"
+                              >Master_Bed_Room.webp,
+                              Master_Bed_Room_Night_View.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file good">Patio_Sit_Out.webp</span>
+                          </li>
+                          <li>
+                            <span class="file good">Picnic_Setup.webp</span>
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- EMERALD -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Emerald</span
+                    ><span class="count">(30 files)</span
+                    ><span class="missing-tag">Missing: Perfect For</span>
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Experiences</span
+                          ><span class="count">(8)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >experiences_01–08.webp (generic)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Hero</span
+                          ><span class="count">(1)</span>
+                        </summary>
+                        <ul>
+                          <li><span class="file good">hero.webp</span></li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Spaces</span
+                          ><span class="count">(21)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file good"
+                              >Barbeque, Bed_Room_1–2, Camping_Area, Court_Yard,
+                              Dining_Area, Dry_Kitchen, Gazebo, Indoor_Garden,
+                              Living_Area, Lounge_Area, Picnic_Setup_Day/Night,
+                              Pool, Pool_at_Night, Pool_With_6ft_Water_Fall,
+                              Rustic_Glass_House_Villa, Traditional_Artifacts,
+                              Villa</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >Dinning_Area_View_2 (typo: "Dinning"),
+                              Kitchen&Dining_Area (special char)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- HAVEN -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Haven</span
+                    ><span class="count">(27 files)</span
+                    ><span class="missing-tag">Missing: Perfect For</span>
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Experiences</span
+                          ><span class="count">(10)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >experiences_01–11.webp (generic)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Hero</span
+                          ><span class="count">(1)</span>
+                        </summary>
+                        <ul>
+                          <li><span class="file good">hero.webp</span></li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Spaces</span
+                          ><span class="count">(16)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file good"
+                              >Bath_Room_With_Jacuzzi, Bed_Room_1–3,
+                              Dining_Area, Family_Room, Lawn_area, Living_area,
+                              Living_area_2, Lounge_Area, Pool, Pool_Table,
+                              Suite_Room_Living_Area, Villa_Entrance</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >Mico_kartopia (typo?), Suite_Room__ (trailing
+                              underscores)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- JADE 735 -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Jade 735</span
+                    ><span class="count">(29 files)</span
+                    ><span class="missing-tag">Missing: Perfect For</span>
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Experiences</span
+                          ><span class="count">(9)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >experiences_01–10.webp (generic)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Hero</span
+                          ><span class="count">(2)</span>
+                        </summary>
+                        <ul>
+                          <li><span class="file good">Villa.webp</span></li>
+                          <li><span class="file good">hero.webp</span></li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Spaces</span
+                          ><span class="count">(18)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file good"
+                              >10ft_waterFall+Pool, Bar_Counter, Bed_Room_1–3,
+                              Dining_Area, First_Floor_view, Master_Bed_Room,
+                              Pool_Side_Bar_Area, Pool_day_View,
+                              Pool_side_Gazibo, Semi_Open_SitOut</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >Dining&Kitchen_Area (special char),
+                              Semi_Swwinging_Bed (typo), Living_room_ /
+                              Stair_Way_1_ / Walking_ (trailing underscores),
+                              Stairs_Way (inconsistent)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- LOUNGE FLY -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Lounge Fly</span
+                    ><span class="count">(33 files)</span
+                    ><span class="missing-tag"
+                      >Missing: Experiences, Perfect For</span
+                    >
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Hero</span
+                          ><span class="count">(1)</span>
+                        </summary>
+                        <ul>
+                          <li><span class="file good">hero.webp</span></li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Spaces</span
+                          ><span class="count">(32)</span>
+                        </summary>
+                        <ul>
+                          <li><span class="file good">Pool_View.webp</span></li>
+                          <li>
+                            <span class="file bad"
+                              >IMG_4763, IMG_4789, IMG_9296–9304 (camera
+                              codes)</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >Lounge Fly v3_Page_01_Image_0001... (PDF extract
+                              names)</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >spaces_01–19.webp (19 generic)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- MAGNOLIA -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Magnolia</span
+                    ><span class="count">(60 files)</span
+                    ><span class="missing-tag">Missing: Perfect For</span>
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Experiences</span
+                          ><span class="count">(27)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >experiences_01–27.webp (all generic)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Hero</span
+                          ><span class="count">(6)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file good"
+                              >hero.webp, Villa_Night_View.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >spaces_18, 33, 34, 36.webp (wrong folder)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Spaces</span
+                          ><span class="count">(27)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file good"
+                              >60inch TV, Bar_Lounge, Basket_Ball_Court,
+                              Bed_Room_1–3, BornFire, Candle_Lit_Dining_Exp,
+                              Dining, Dining_Area, Dry_Kitchen, Family_Room,
+                              Floating_BreakFast_In_Pool, Lawn_Area,
+                              Living_Area, Lounger_Sofa, Lounge_Area,
+                              Movie_Under_the_Stars, Pool, Pool_Side_SitOut_1–2,
+                              Private_Home_Theatre, Villa</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >Candle_Lit---.webp (trailing dashes),
+                              Living_area_.webp (trailing underscore),
+                              Pool_.webp (trailing underscore), Picnic_SetUpExp
+                              (unclear)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- PALATIO -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Palatio</span
+                    ><span class="count">(35 files)</span>
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">1-Hero</span
+                          ><span class="count">(8)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >DJI_0162, DJI_0172, DJI_0191 long, DJI_0196
+                              (drone codes)</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >DSC06031, DSC06213, DSC0621555 (camera
+                              codes)</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad">HERO 2.webp (vague)</span>
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">2-Spaces</span
+                          ><span class="count">(23)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file good"
+                              >Back_Yard, Bed_Room_1–2, Dining_Area,
+                              Living_Area, Living_Day, Lounge_Area,
+                              Out_Door_sitout, Pool_SitOut, Pool_SitOut_1,
+                              Private_Pool, Sky_lit_Inner_Court_Yard, Swing,
+                              Villa, Villa_Entrance, Walk_on_The_Water</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >Back_yard__ (trailing underscores), Living__ /
+                              Living___ (meaningless), Swing-- (trailing
+                              dashes), Walk_on_the.jpg (incomplete name)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">3-Experiences</span
+                          ><span class="count">(9)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >FullSizeRender, IMG_1677, IMG_5560, IMG_5574,
+                              IMG_5583, IMG_5594, IMG_5738, IMG_5895, IMG_5906
+                              (ALL camera/phone codes)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <span class="folder">4-Perfect For</span
+                      ><span class="count">(0 — EMPTY)</span>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- RETREAT ON THE RIDGE -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Retreat on the ridge</span
+                    ><span class="count">(24 files)</span
+                    ><span class="missing-tag">Missing: Perfect For</span>
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Experiences</span
+                          ><span class="count">(8)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >experiences_01–08.webp (all generic)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Hero</span
+                          ><span class="count">(1)</span>
+                        </summary>
+                        <ul>
+                          <li><span class="file good">hero.webp</span></li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Spaces</span
+                          ><span class="count">(15)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >spaces_01–15.webp (all generic)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- ROYALTY -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Royalty</span
+                    ><span class="count">(31 files)</span>
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">1-Hero</span
+                          ><span class="count">(1)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad">1.webp (just a number)</span>
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">2-Spaces</span
+                          ><span class="count">(26)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >1.webp – 26.webp (ALL just numbers, zero
+                              descriptive names)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">3-Experiences</span
+                          ><span class="count">(4)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >WhatsApp Image 2025-11-14 at 11.44.01
+                              (2).webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >WhatsApp Image 2025-11-14 at 11.44.02
+                              (2).webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >WhatsApp Image 2025-11-14 at 11.45.54
+                              (1).webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >WhatsApp Image 2025-11-14 at 11.45.54
+                              (2).webp</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <span class="folder">4- Perfect For</span
+                      ><span class="count">(0 — EMPTY)</span>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- TRANQUIL WOODS -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Tranquil Woods</span
+                    ><span class="count">(36 files)</span
+                    ><span class="missing-tag">Missing: Perfect For</span>
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Experiences</span
+                          ><span class="count">(5)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >experiences_01–05.webp (generic)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Hero</span
+                          ><span class="count">(1)</span>
+                        </summary>
+                        <ul>
+                          <li><span class="file good">hero.webp</span></li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Spaces</span
+                          ><span class="count">(30)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >spaces_01–30.webp (ALL generic)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <!-- WONDERLAND -->
+              <li>
+                <details>
+                  <summary>
+                    <span class="folder">Wonderland</span
+                    ><span class="count">(32 files)</span
+                    ><span class="missing-tag">Missing: Perfect For</span>
+                  </summary>
+                  <ul>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Experiences</span
+                          ><span class="count">(4)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file bad"
+                              >experiences_01–04.webp (generic)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Hero</span
+                          ><span class="count">(8)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file good"
+                              >hero.webp, Hero3.webp, Hero_2.webp</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >spaces_10, 13, 15, 20, 24.webp (wrong
+                              folder)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>
+                          <span class="folder">Spaces</span
+                          ><span class="count">(20)</span>
+                        </summary>
+                        <ul>
+                          <li>
+                            <span class="file good"
+                              >6_Seater_Jacuzzi, Bedroom_Entrance, Bed_Room_1–3,
+                              Common_Fresh_water_Pool, Dining, Garden_walk-way,
+                              High_Tea_Set_UP, Party_Deck, Picnic_SetUp,
+                              Stair_way, Tree_House_Entrance, Walk_way</span
+                            >
+                          </li>
+                          <li>
+                            <span class="file bad"
+                              >spaces_14, 21, 33, 34, 42, 44.webp (6
+                              generic)</span
+                            >
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ───── KEY ISSUES ───── -->
+    <div class="section">
+      <div class="section-title">🚨 Key Issues Summary</div>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <h3>❌ "Perfect For" Missing in 12/14 Villas</h3>
+          <ul>
+            <li>
+              Only <strong>Palatio</strong> & <strong>Royalty</strong> have it
+              (both EMPTY)
+            </li>
+            <li class="missing">
+              All other 12 villas need this folder created
+            </li>
+          </ul>
+        </div>
+        <div class="summary-card">
+          <h3>❌ "Experiences" Missing in 2 Villas</h3>
+          <ul>
+            <li class="missing">Diamond — no Experiences folder</li>
+            <li class="missing">Lounge Fly — no Experiences folder</li>
+          </ul>
+        </div>
+        <div class="summary-card">
+          <h3>🏷️ Worst Named Villas</h3>
+          <ul>
+            <li>
+              <strong style="color: #f87171">Royalty</strong> — 100% numbered
+              files (1.webp–26.webp + WhatsApp exports)
+            </li>
+            <li>
+              <strong style="color: #f87171">Retreat on the ridge</strong> —
+              100% generic (spaces_XX, experiences_XX)
+            </li>
+            <li>
+              <strong style="color: #f87171">Tranquil Woods</strong> — 100%
+              generic
+            </li>
+            <li>
+              <strong style="color: #f87171">Lounge Fly</strong> — IMG codes +
+              PDF extracts
+            </li>
+            <li>
+              <strong style="color: #f87171">Palatio</strong> — Hero/Experiences
+              all camera codes
+            </li>
+          </ul>
+        </div>
+        <div class="summary-card">
+          <h3>✅ Best Named Villas</h3>
+          <ul>
+            <li>
+              <strong style="color: #4ade80">Dome Blue</strong> — Nearly perfect
+              descriptive naming
+            </li>
+            <li>
+              <strong style="color: #4ade80">Magnolia (Spaces)</strong> — Rich
+              descriptive names
+            </li>
+            <li>
+              <strong style="color: #4ade80">Wonderland (Spaces)</strong> —
+              Creative descriptive names
+            </li>
+            <li>
+              <strong style="color: #4ade80">Dome Red (Spaces)</strong> — All
+              descriptive
+            </li>
+          </ul>
+        </div>
+        <div class="summary-card">
+          <h3>⚠️ Typos & Issues Found</h3>
+          <ul>
+            <li>
+              <strong>Dinning</strong>_Area_View_2 → should be
+              <em>Dining</em> (Emerald)
+            </li>
+            <li><strong>Mico_kartopia</strong> → unclear meaning (Haven)</li>
+            <li>
+              <strong>Semi_Swwinging</strong>_Bed → should be
+              <em>Swinging</em> (Jade 735)
+            </li>
+            <li>
+              <strong>Glamping_Experince</strong> → should be
+              <em>Experience</em> (Dome Blue)
+            </li>
+            <li>
+              Trailing underscores: Living__, Suite_Room__, Back_yard__,
+              Living_room_, Pool_
+            </li>
+            <li>Trailing dashes: Candle_Lit---, Swing--</li>
+            <li>Files in wrong folders: spaces_XX files inside Hero folders</li>
+            <li>
+              Inconsistent prefix: "4- Perfect For" (Royalty) vs "4-Perfect For"
+              (Palatio)
+            </li>
+          </ul>
+        </div>
+        <div class="summary-card">
+          <h3>📐 Folder Naming Inconsistency</h3>
+          <ul>
+            <li>
+              <strong>Palatio & Royalty</strong> use numbered prefixes: 1-Hero,
+              2-Spaces, 3-Experiences, 4-Perfect For
+            </li>
+            <li>
+              <strong>All other 12 villas</strong> use plain names: Hero,
+              Spaces, Experiences
+            </li>
+            <li>Pick ONE convention and apply it everywhere</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p
+      style="
+        text-align: center;
+        color: #444;
+        font-size: 0.7rem;
+        margin-top: 2rem;
+      "
+    >
+      Generated by Antigravity · Villa Retreats Audit
+    </p>
+  </body>
+</html>

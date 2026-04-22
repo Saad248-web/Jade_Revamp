@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft, Headphones, Play } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { VILLAS } from "@/lib/mockData";
 import { Villa, VillaSpaceGroup } from "@/lib/types";
 
@@ -14,17 +14,42 @@ export default function VillaSpacesPage() {
   const villa = VILLAS.find((v) => v.id === id) as Villa | undefined;
 
   const [activeCategory, setActiveCategory] = useState("All");
+  const [overrideSpaces, setOverrideSpaces] = useState<VillaSpaceGroup[] | null>(
+    null,
+  );
+
+  // Load full media-derived categorized spaces (uses all images in public folder)
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch(`/api/villas/${id}/media`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled && Array.isArray(data?.categorizedSpaces)) {
+          setOverrideSpaces(data.categorizedSpaces);
+        }
+      } catch {
+        // ignore
+      }
+    }
+    if (id) load();
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
 
   const categories = ["All", "Outdoors", "Indoors", "Bed & Bath", "Video"];
 
   const filteredSpaces = useMemo(() => {
-    if (!villa?.categorizedSpaces) return [];
-    if (activeCategory === "All") return villa.categorizedSpaces;
+    const base = overrideSpaces || villa?.categorizedSpaces;
+    if (!base) return [];
+    if (activeCategory === "All") return base;
     if (activeCategory === "Video") return []; // Special case
-    return villa.categorizedSpaces.filter(
+    return base.filter(
       (s: VillaSpaceGroup) => s.category === activeCategory,
     );
-  }, [villa, activeCategory]);
+  }, [villa, activeCategory, overrideSpaces]);
 
   if (!villa) {
     return (

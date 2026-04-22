@@ -19,30 +19,28 @@ const OFFERINGS = [
     title: "Weekend Getaways",
     description:
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone's wishlist.",
-    image:
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+    image: "/Awards_and_Recognition/764.webp",
     link: "/weekend-getaways",
   },
   {
     title: "Corporate Retreats",
     description:
       "Private venues designed for focused sessions, team alignment, and meaningful downtime.",
-    image:
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
+    image: "/Awards_and_Recognition/ds.webp",
     link: "/corporate-retreats",
   },
   {
     title: "Weddings",
     description:
       "Bespoke celebrations in curated settings that make your special day truly unforgettable.",
-    image: "/X/HAVEN/pool new.webp",
+    image: "/Awards_and_Recognition/dsas.webp",
     link: "/weddings",
   },
   {
     title: "Party Villas",
     description:
       "Host birthdays, pool parties, reunions or milestone celebrations in exclusive Jade villas.",
-    image: "/X/HAVEN/pool new.webp",
+    image: "/Awards_and_Recognition/msa.webp",
     link: "/party-villas",
   },
 ];
@@ -363,7 +361,14 @@ export default function AboutPage() {
               >
                 <div className="relative w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden border-2 border-[#EFCD62]/20 mb-8">
                   <Image
-                    src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600"
+                    src={
+                      [
+                        "/Awards_and_Recognition/764.webp",
+                        "/Awards_and_Recognition/ds.webp",
+                        "/Awards_and_Recognition/dsas.webp",
+                        "/Awards_and_Recognition/msa.webp",
+                      ][(i - 1) % 4]
+                    }
                     alt="Team Member"
                     fill
                     className="object-cover grayscale"
@@ -401,7 +406,7 @@ export default function AboutPage() {
             {/* Row 1 */}
             <div className="relative aspect-square md:aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
               <Image
-                src="/X/Dome Villas/Red Dome/1.webp"
+                src="/Awards_and_Recognition/764.webp"
                 alt="Media"
                 fill
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
@@ -417,7 +422,7 @@ export default function AboutPage() {
             </div>
             <div className="relative hidden lg:block aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
               <Image
-                src="/X/Magnolia/14.webp"
+                src="/Awards_and_Recognition/ds.webp"
                 alt="Media"
                 fill
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
@@ -428,7 +433,7 @@ export default function AboutPage() {
             <div className="col-span-2 lg:col-span-3 pb-4">
               <div className="relative aspect-video w-full bg-white/5 border border-white/10 rounded-none overflow-hidden group">
                 <Image
-                  src="/X/Magnolia/16.webp"
+                  src="/Awards_and_Recognition/dsas.webp"
                   alt="Media Item"
                   fill
                   className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
@@ -444,7 +449,7 @@ export default function AboutPage() {
             {/* Row 3 */}
             <div className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
               <Image
-                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600"
+                src="/Awards_and_Recognition/764.webp"
                 alt="Media"
                 fill
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
@@ -452,7 +457,7 @@ export default function AboutPage() {
             </div>
             <div className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
               <Image
-                src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80"
+                src="/Awards_and_Recognition/msa.webp"
                 alt="Media"
                 fill
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
@@ -460,7 +465,7 @@ export default function AboutPage() {
             </div>
             <div className="relative col-span-2 lg:col-span-1 aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
               <Image
-                src="/X/Magnolia/VILLA.webp"
+                src="/Awards_and_Recognition/msa.webp"
                 alt="Media"
                 fill
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"

@@ -16,7 +16,7 @@ const PANELS = [
     cta: "SEE WHAT A GETAWAY LOOKS LIKE",
     href: "/weekend-getaways",
     image:
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+      "/Experiences/Weddings/1-Hero/2 (1).webp",
   },
   {
     id: "celebrations",
@@ -43,8 +43,7 @@ const PANELS = [
       "Unwinding and ice-breaking sessions with colleagues, away from cubicles and glass walls, in private farmhouses ideal for offsites or workations.",
     cta: "SEE HOW TEAMS GATHER",
     href: "/corporate-retreats",
-    image:
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
+    image: "/Experiences/Corporate Retreats/1-Hero/xhero.webp",
   },
   {
     id: "wellness",
@@ -62,7 +61,7 @@ const PANELS = [
       "Luxury motor caravans carry the idea of private retreat onto the road, offering comfort and privacy for glamping, pilgrimages or any evolving journeys.",
     cta: "SEE HOW THE JOURNEY UNFOLDS",
     href: "/caravans",
-    image: "/X/Magnolia/14.webp",
+    image: "/Experiences/Caravan/1-Hero/6.webp",
   },
   {
     id: "private-villas",
@@ -71,8 +70,7 @@ const PANELS = [
       "A curated collection of fully private farmhouses, suited for everything from quiet stays to vibrant celebrations and bespoke experiences.",
     cta: "SEE THE VILLAS THAT HOST IT ALL",
     href: "/villas",
-    image:
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
+    image: "/Villa_Retreats/Magnolia/Hero/hero.webp",
   },
 ];
 

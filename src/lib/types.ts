@@ -103,6 +103,7 @@ export interface Villa {
   location: string;
   description: string;
   image: string;
+  images?: string[];
   stats: VillaStats;
   perfectFor: string[];
   categories: string[];

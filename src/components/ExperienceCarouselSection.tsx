@@ -84,13 +84,17 @@ export default function ExperienceCarouselSection({
                 transition={{ duration: 0.8 }}
                 className="absolute inset-0"
               >
-                <Image
-                  src={slides[activeSlide].image}
-                  alt={slides[activeSlide].title}
-                  fill
-                  sizes="100vw"
-                  className="object-cover opacity-75"
-                />
+                {slides[activeSlide]?.image ? (
+                  <Image
+                    src={slides[activeSlide].image}
+                    alt={slides[activeSlide].title}
+                    fill
+                    sizes="100vw"
+                    className="object-cover opacity-75"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[#121417] to-black/80" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent flex flex-col items-center justify-end pb-12 md:pb-20 px-8 text-center">
                   <h3 className="text-gh-scroll font-philosopher text-white mb-2">
                     {slides[activeSlide].title}

@@ -1,12 +1,37 @@
 "use client";
 
 import { Home, Download } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ExperienceHero, { HeroButton } from "./ExperienceHero";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
 export default function WeddingHero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [heroImages, setHeroImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch("/api/experiences/weddings/media");
+        if (!res.ok) return;
+        const data = await res.json();
+        const group = (data?.groups || []).find(
+          (g: any) => g.folder?.toLowerCase?.() === "1-hero",
+        );
+        const images = (group?.images || data?.all || []).filter(Boolean);
+        if (!cancelled) setHeroImages(images);
+      } catch {
+        // ignore
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const heroBg = useMemo(() => heroImages[0] || "", [heroImages]);
 
   const heroButtons: [HeroButton, HeroButton] = [
     {
@@ -31,7 +56,7 @@ export default function WeddingHero() {
   return (
     <ExperienceHero
       ref={sectionRef}
-      backgroundImage="/X/Magnolia/9.webp"
+      backgroundImage={heroBg}
       backgroundAlt="Boutique Weddings"
       heading={
         <>

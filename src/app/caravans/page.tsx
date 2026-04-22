@@ -17,39 +17,32 @@ import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import TravelGuidelinesSection from "@/components/TravelGuidelinesSection";
 import { Info, Calendar } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
+import { useEffect, useMemo, useState } from "react";
 
-const caravanSlides = [
+const DEFAULT_SLIDES = [
   {
-    title: "Private Lounge",
-    desc: "A spacious lounge area designed for relaxing, dining, and spending time together while on the move.",
-    image: "/X/Magnolia/14.webp", // Using available assets fitting the caravan theme
+    title: "Inside Rathaa",
+    desc: "A private lounge designed for relaxed journeys.",
   },
   {
-    title: "Convertible Sleeping Spaces",
-    desc: "Flexible sleeping arrangements that comfortably accommodate small groups and families.",
-    image:
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_05_Image_0003.webp",
+    title: "Comfort On The Road",
+    desc: "Convertible sleeping and lounge configurations for small groups.",
   },
   {
-    title: "Entertainment System",
-    desc: "Dual screens, music system, and plug-and-play connectivity for entertainment during the journey.",
-    image: "/X/HAVEN/meco.webp",
+    title: "Entertainment",
+    desc: "Dual screens, music, and plug-and-play connectivity.",
   },
   {
-    title: "Kitchenette & Refreshments",
-    desc: "Refrigerator, water dispenser, and essential utilities to keep you refreshed throughout the trip.",
-    image: "/X/Magnolia/18.webp",
+    title: "Kitchenette",
+    desc: "Refreshments and essential utilities throughout the trip.",
   },
   {
     title: "Climate-Controlled Interiors",
-    desc: "Fully air-conditioned interiors designed for comfortable travel in all seasons.",
-    image: "/X/Magnolia/16.webp",
+    desc: "Air-conditioned comfort across seasons.",
   },
   {
     title: "Capacity",
     desc: "Ideal for 6–8 guests travelling together.",
-    image:
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
   },
 ];
 
@@ -68,6 +61,61 @@ const animatedSlides: ScrollSlide[] = [
 
 export default function CaravansPage() {
   const { setRathaaOverlayOpen } = useAnimation();
+  const [allImages, setAllImages] = useState<string[]>([]);
+  const [heroImages, setHeroImages] = useState<string[]>([]);
+  const [spaceImages, setSpaceImages] = useState<string[]>([]);
+  const [heroIndex, setHeroIndex] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch("/api/experiences/caravans/media");
+        if (!res.ok) return;
+        const data = await res.json();
+        const groups = data?.groups || [];
+        const hero = (groups.find((g: any) => String(g.folder).toLowerCase() === "1-hero")?.images ||
+          []) as string[];
+        const spaces = (groups.find((g: any) => String(g.folder).toLowerCase() === "2-spaces")?.images ||
+          []) as string[];
+        const all = (data?.all || []) as string[];
+        if (!cancelled) {
+          setHeroImages(hero);
+          setSpaceImages(spaces);
+          setAllImages(all);
+        }
+      } catch {
+        // ignore
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const caravanSlides = useMemo(() => {
+    const imgs = spaceImages.length ? spaceImages : allImages;
+    return DEFAULT_SLIDES.map((s, idx) => ({
+      ...s,
+      image: imgs[idx % Math.max(imgs.length, 1)] || "",
+    }));
+  }, [spaceImages, allImages]);
+
+  const heroBg = useMemo(() => heroImages[0] || allImages[0] || "", [heroImages, allImages]);
+
+  useEffect(() => {
+    if (heroImages.length <= 1) return;
+    const id = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % heroImages.length);
+    }, 4500);
+    return () => clearInterval(id);
+  }, [heroImages]);
+
+  const heroSlide = useMemo(() => {
+    if (heroImages.length) return heroImages[heroIndex % heroImages.length] || "";
+    return heroBg;
+  }, [heroImages, heroIndex, heroBg]);
 
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
@@ -76,7 +124,8 @@ export default function CaravansPage() {
 
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
-        backgroundImage="/X/Magnolia/14.webp"
+        key={heroSlide}
+        backgroundImage={heroSlide}
         backgroundAlt="Caravans"
         heading={
           <>
@@ -127,17 +176,10 @@ export default function CaravansPage() {
         title="Enhance Your Stay"
         ctaText="ENQUIRE"
         onCtaClick={() => window.open("/contact", "_blank")}
-        experiences={[
-          { title: "Bonfire Experience", image: "/X/HAVEN/BONFIRE.webp" },
-          { title: "BBQ & Outdoor Dining", image: "/X/Tranquil Woods/9.webp" },
-          { title: "Camping & Tent Kits", image: "/X/Tranquil Woods/1.webp" },
-          { title: "Activity Kits", image: "/X/HAVEN/POOL TABLE1.webp" },
-          { title: "Butler Service", image: "/X/HAVEN/dining 1.webp" },
-          {
-            title: "Custom Celebration Setups",
-            image: "/X/HAVEN/pool new.webp",
-          },
-        ]}
+        experiences={caravanSlides.slice(0, 6).map((s) => ({
+          title: s.title,
+          image: s.image,
+        }))}
       />
 
       <PremiumFeaturesSection

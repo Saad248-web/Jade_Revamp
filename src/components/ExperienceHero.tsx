@@ -19,7 +19,7 @@ export interface HeroStat {
 
 interface ExperienceHeroProps {
   /** Background image path */
-  backgroundImage: string;
+  backgroundImage?: string;
   /** Alt text for the background image */
   backgroundAlt: string;
   /** Main heading - supports line breaks via \n or ReactNode */
@@ -54,15 +54,21 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
       >
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
-          <Image
-            src={backgroundImage}
-            alt={backgroundAlt}
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-black/40" />
+          {backgroundImage ? (
+            <>
+              <Image
+                src={backgroundImage}
+                alt={backgroundAlt}
+                fill
+                className="object-cover"
+                priority
+                sizes="100vw"
+              />
+              <div className="absolute inset-0 bg-black/40" />
+            </>
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#1A1C1E] to-[#0D4032]" />
+          )}
         </div>
 
         {/* Content - Grouped at the Bottom */}

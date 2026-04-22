@@ -4,7 +4,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -56,8 +56,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DetailsDrawer from "@/components/DetailsDrawer";
 import MobileBottomNav from "@/components/MobileBottomNav";
-import { useState } from "react";
 import { VILLAS } from "@/lib/mockData";
+import type { Villa } from "@/lib/types";
 
 // Icon mapping helper
 const getIcon = (iconName?: string, title?: string) => {
@@ -133,7 +133,14 @@ export default function VillaDetailsPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const id = params?.id as string;
-  const villa = VILLAS.find((v) => v.id === id);
+  const villa = VILLAS.find((v) => v.id === id) as Villa | undefined;
+
+  const [media, setMedia] = useState<{
+    hero: string[];
+    spaces: string[];
+    experiences: string[];
+    categorizedSpaces: any[];
+  } | null>(null);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [drawerData, setDrawerData] = useState({
@@ -149,6 +156,9 @@ export default function VillaDetailsPage() {
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
   >({});
+  const [activeDomeVideo, setActiveDomeVideo] = useState<
+    "red" | "blue" | "yellow"
+  >("red");
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections((prev) => ({ ...prev, [sectionId]: !prev[sectionId] }));
@@ -156,6 +166,24 @@ export default function VillaDetailsPage() {
 
   const scrollFrameRef = useRef<number>();
   const isAutoScrolling = useRef(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch(`/api/villas/${id}/media`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) setMedia(data);
+      } catch {
+        // ignore
+      }
+    }
+    if (id) load();
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
 
   if (!villa) {
     return (
@@ -165,63 +193,93 @@ export default function VillaDetailsPage() {
     );
   }
 
+  const heroImages = media?.hero?.length ? media.hero : [];
+  const spaceImages = media?.spaces?.length ? media.spaces : [];
+  const experienceImages = media?.experiences?.length ? media.experiences : [];
+
+  const derivedSpaces = useMemo(() => {
+    const list = spaceImages.length
+      ? spaceImages
+      : (villa.spaces || []).map((s) => s.image);
+    return list.map((img) => ({
+      name: decodeURIComponent(img.split("/").pop() || "")
+        .replace(/\.webp$/i, "")
+        .replace(/[_-]+/g, " ")
+        .trim(),
+      image: img,
+    }));
+  }, [spaceImages, villa.spaces]);
+
+  const derivedActivities = useMemo(() => {
+    const list = experienceImages.length
+      ? experienceImages
+      : (villa.activities || []).map((a) => a.image);
+    return list.map((img) => ({
+      title: decodeURIComponent(img.split("/").pop() || "")
+        .replace(/\.webp$/i, "")
+        .replace(/[_-]+/g, " ")
+        .trim(),
+      image: img,
+    }));
+  }, [experienceImages, villa.activities]);
+
   // Filter out empty strings — "" is truthy in JS so we must check length
   const validImg = (s: string | undefined) => s && s.length > 0;
   const imagesList = (() => {
-    const gallery = (villa.images || []).filter(
-      (img): img is string => validImg(img) === true,
-    );
-    if (gallery.length > 0) return gallery;
+    const gallery = heroImages.filter((img) => validImg(img) === true);
+    if (gallery.length > 0) return gallery; // hero only, as requested
     if (validImg(villa.image)) return [villa.image];
     return [];
   })();
 
   const handlePrevImage = () => {
+    if (imagesList.length <= 1) return;
     setCurrentImageIndex((prev) =>
       prev === 0 ? imagesList.length - 1 : prev - 1,
     );
   };
 
   const handleNextImage = () => {
+    if (imagesList.length <= 1) return;
     setCurrentImageIndex((prev) => (prev + 1) % imagesList.length);
   };
 
   const handlePrevSpace = () => {
-    if (villa.spaces && villa.spaces.length > 0) {
+    if (derivedSpaces && derivedSpaces.length > 0) {
       setCurrentSpaceIndex((prev) =>
-        prev === 0 ? villa.spaces!.length - 1 : prev - 1,
+        prev === 0 ? derivedSpaces.length - 1 : prev - 1,
       );
     }
   };
 
   const handleNextSpace = () => {
-    if (villa.spaces && villa.spaces.length > 0) {
-      setCurrentSpaceIndex((prev) => (prev + 1) % villa.spaces!.length);
+    if (derivedSpaces && derivedSpaces.length > 0) {
+      setCurrentSpaceIndex((prev) => (prev + 1) % derivedSpaces.length);
     }
   };
 
   const handlePrevActivity = () => {
-    if (villa.activities && villa.activities.length > 0) {
+    if (derivedActivities && derivedActivities.length > 0) {
       setCurrentActivityIndex((prev) =>
-        prev === 0 ? villa.activities!.length - 1 : prev - 1,
+        prev === 0 ? derivedActivities.length - 1 : prev - 1,
       );
     }
   };
 
   const handleNextActivity = () => {
-    if (villa.activities && villa.activities.length > 0) {
-      setCurrentActivityIndex((prev) => (prev + 1) % villa.activities!.length);
+    if (derivedActivities && derivedActivities.length > 0) {
+      setCurrentActivityIndex((prev) => (prev + 1) % derivedActivities.length);
     }
   };
 
   const currentSpace =
-    villa.spaces && villa.spaces.length > 0
-      ? villa.spaces[currentSpaceIndex]
+    derivedSpaces && derivedSpaces.length > 0
+      ? derivedSpaces[currentSpaceIndex % derivedSpaces.length]
       : null;
 
   const currentActivity =
-    villa.activities && villa.activities.length > 0
-      ? villa.activities[currentActivityIndex]
+    derivedActivities && derivedActivities.length > 0
+      ? derivedActivities[currentActivityIndex % derivedActivities.length]
       : null;
 
   const openDrawer = (title: string, items: any[]) => {
@@ -299,6 +357,29 @@ export default function VillaDetailsPage() {
     };
   }, [searchParams]);
 
+  const getYouTubeId = (url: string) => {
+    try {
+      // supports:
+      // - https://youtu.be/<id>?...
+      // - https://www.youtube.com/watch?v=<id>&...
+      // - https://www.youtube.com/embed/<id>
+      const u = new URL(url);
+      const host = u.hostname.replace(/^www\./, "");
+      if (host === "youtu.be") return u.pathname.replace("/", "");
+      if (u.pathname.startsWith("/embed/")) return u.pathname.split("/")[2] || "";
+      if (u.pathname === "/watch") return u.searchParams.get("v") || "";
+      return "";
+    } catch {
+      return "";
+    }
+  };
+
+  const domeVideoUrls = {
+    red: "https://youtu.be/k0-1rTGdowk?si=hVmn5sCIcMwn_deE",
+    blue: "https://youtu.be/qcstdzAh1ck?si=8Op3MUQu_Je_8cFk",
+    yellow: "https://youtu.be/1FnJXIa7LDg?si=z1TjKQ6TEN8SAbzQ",
+  } as const;
+
   return (
     <main className="bg-[#1A1C1E] min-h-screen relative">
       {/* Top Navigation - Scrolls away with page */}
@@ -326,10 +407,11 @@ export default function VillaDetailsPage() {
               src={imagesList[currentImageIndex]}
               alt={villa.name}
               fill
-              className="object-cover"
+              className="object-cover object-center"
               priority
               sizes="100vw"
               quality={75}
+              unoptimized
             />
           )}
           <div className="absolute inset-0 bg-black/20" />
@@ -523,16 +605,18 @@ export default function VillaDetailsPage() {
                   <h3 className="text-gh-h1 font-philosopher text-white">
                     Spaces
                   </h3>
-                  {villa.spaces && villa.spaces.length > 1 && (
+                  {derivedSpaces && derivedSpaces.length > 1 && (
                     <div className="flex gap-2">
                       <button
                         onClick={handlePrevSpace}
+                        disabled={derivedSpaces.length <= 1}
                         className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"
                       >
                         <ArrowLeft className="w-4 h-4" />
                       </button>
                       <button
                         onClick={handleNextSpace}
+                        disabled={derivedSpaces.length <= 1}
                         className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"
                       >
                         <ArrowRight className="w-4 h-4" />
@@ -551,9 +635,10 @@ export default function VillaDetailsPage() {
                       }
                       alt={currentSpace.name || "Space"}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, 800px"
                       loading="lazy"
+                      unoptimized
                     />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B2C23]/80 via-transparent to-transparent opacity-90" />
@@ -561,12 +646,12 @@ export default function VillaDetailsPage() {
                     <h4 className="text-white text-sm md:text-base uppercase tracking-[0.2em] font-bold mb-4 font-manrope">
                       {currentSpace.name || "Lawn"}
                     </h4>
-                    {villa.spaces && villa.spaces.length > 1 && (
+                    {derivedSpaces && derivedSpaces.length > 1 && (
                       <div className="flex items-center justify-center gap-3 text-white text-gh-label font-bold tracking-widest">
                         <span>{currentSpaceIndex + 1}</span>
                         <div className="w-12 h-[1px] bg-white/60" />
                         <span className="text-white/60">
-                          {villa.spaces.length}
+                          {derivedSpaces.length}
                         </span>
                       </div>
                     )}
@@ -664,16 +749,18 @@ export default function VillaDetailsPage() {
                   <h3 className="text-gh-h1 font-philosopher text-white">
                     Experiences
                   </h3>
-                  {villa.activities && villa.activities.length > 1 && (
+                  {derivedActivities && derivedActivities.length > 1 && (
                     <div className="flex gap-2">
                       <button
                         onClick={handlePrevActivity}
+                        disabled={derivedActivities.length <= 1}
                         className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"
                       >
                         <ArrowLeft className="w-4 h-4" />
                       </button>
                       <button
                         onClick={handleNextActivity}
+                        disabled={derivedActivities.length <= 1}
                         className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"
                       >
                         <ArrowRight className="w-4 h-4" />
@@ -693,9 +780,10 @@ export default function VillaDetailsPage() {
                       }
                       alt={currentActivity.title}
                       fill
-                      className="object-cover transition-transform duration-700 opacity-90 group-hover:scale-105"
+                      className="object-cover object-center transition-transform duration-700 opacity-90 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, 800px"
                       loading="lazy"
+                      unoptimized
                     />
                   )}
                   <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-[#1A1C1E]/95 via-[#1A1C1E]/50 to-transparent z-10" />
@@ -1036,13 +1124,70 @@ export default function VillaDetailsPage() {
                 id="video-walkthrough"
                 className="py-12 border-t border-white/5"
               >
-                <h3 className="text-gh-h1 font-philosopher text-white mb-8">
-                  Video Walkthrough
-                </h3>
-                {typeof villa.video === "object" && villa.video.youtubeUrl ? (
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                  <h3 className="text-gh-h1 font-philosopher text-white">
+                    Video Walkthrough
+                  </h3>
+
+                  {villa.id === "dome-villas" && (
+                    <div className="flex items-center gap-2">
+                      {(
+                        [
+                          { id: "red", label: "Red Dome" },
+                          { id: "blue", label: "Blue Dome" },
+                          { id: "yellow", label: "Yellow Dome" },
+                        ] as const
+                      ).map((t) => {
+                        const isActive = activeDomeVideo === t.id;
+                        return (
+                          <button
+                            key={t.id}
+                            onClick={() => setActiveDomeVideo(t.id)}
+                            className={`px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${
+                              isActive
+                                ? "bg-[#EFCD62] text-black border-[#EFCD62]"
+                                : "bg-white/5 text-white/70 border-white/10 hover:text-white hover:bg-white/10"
+                            }`}
+                          >
+                            {t.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {(() => {
+                  const chosenUrl =
+                    villa.id === "dome-villas"
+                      ? domeVideoUrls[activeDomeVideo]
+                      : typeof villa.video === "object"
+                        ? villa.video.youtubeUrl
+                        : "";
+                  const ytId = chosenUrl ? getYouTubeId(chosenUrl) : "";
+                  return ytId ? (
+                    <div className="relative aspect-video w-full bg-gray-900 overflow-hidden border border-white/10">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${ytId}`}
+                        title={`${villa.name} Walkthrough`}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="absolute inset-0 w-full h-full"
+                      />
+                    </div>
+                  ) : null;
+                })() ? (
                   <div className="relative aspect-video w-full bg-gray-900 overflow-hidden border border-white/10">
                     <iframe
-                      src={`https://www.youtube.com/embed/${villa.video.youtubeUrl.split("v=")[1]}`}
+                      src={`https://www.youtube.com/embed/${
+                        villa.id === "dome-villas"
+                          ? getYouTubeId(domeVideoUrls[activeDomeVideo])
+                          : getYouTubeId(
+                              typeof villa.video === "object"
+                                ? villa.video.youtubeUrl
+                                : "",
+                            )
+                      }`}
                       title={`${villa.name} Walkthrough`}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen

@@ -40,7 +40,7 @@ export default function CorporateRetreatsPage() {
 
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
-        backgroundImage="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600"
+        backgroundImage="/Experiences/Corporate Retreats/1-Hero/xhero.webp"
         backgroundAlt="Corporate Retreats"
         heading={
           <>
