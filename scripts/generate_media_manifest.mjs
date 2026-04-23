@@ -45,9 +45,18 @@ function classifyVilla(url) {
   const u = url.toLowerCase();
   if (u.includes("/1-hero/") || u.includes("/hero/")) return "hero";
   if (u.includes("/2-spaces/") || u.includes("/spaces/")) return "spaces";
-  if (u.includes("/3-experiences") || u.includes("/experiences/"))
+  // Accept common variations like:
+  // - /3-Experiences/
+  // - /3-Experience/ or /3-Experienceee/
+  // - /Experiences/
+  if (u.includes("/3-experiences") || u.includes("/3-experience") || u.includes("/experiences/"))
     return "experiences";
-  if (u.includes("/4-perfect")) return "perfectFor";
+  // Accept common variations like:
+  // - /4-Perfect For/
+  // - /Perfect For/
+  // - /perfect-for/
+  if (u.includes("/4-perfect") || u.includes("/perfect for/") || u.includes("/perfect-for/"))
+    return "perfectFor";
   return "other";
 }
 

@@ -71,9 +71,19 @@ export async function GET(
 
   const hero = uniq(media.hero);
   const spaces = uniq(media.spaces);
-  const experiences = uniq(media.experiences);
-  const perfectFor = uniq(media.perfectFor);
+  let experiences = uniq(media.experiences);
+  let perfectFor = uniq(media.perfectFor);
   const other = uniq(media.other);
+
+  // Dome Villas: only use the newly provided folders for Experiences/Perfect For.
+  if (id === "dome-villas") {
+    experiences = experiences.filter((u) =>
+      u.startsWith("/Villa_Retreats/Dome/3-Experienceee/"),
+    );
+    perfectFor = perfectFor.filter((u) =>
+      u.startsWith("/Villa_Retreats/Dome/Perfect For/"),
+    );
+  }
 
   const res: MediaResponse = {
     hero,

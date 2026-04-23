@@ -106,7 +106,7 @@ export default function CorporateRetreatsPage() {
             </div>
             {/* Logo 4: IBM */}
             <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <span className="text-white font-mono text-gh-h2 font-bold tracking-tighter opacity-60 group-hover:opacity-100 transition-opacity">
+              <span className="text-white font-manrope text-gh-h2 font-bold tracking-tighter opacity-60 group-hover:opacity-100 transition-opacity">
                 IBM
               </span>
             </div>
@@ -173,20 +173,18 @@ export default function CorporateRetreatsPage() {
       />
       {/* SECTION 6: SELECTED VILLAS FOR CORPORET RETREATS */}
       <section className="py-24 bg-[#1A1C1E] border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16 px-8">
-            <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4 font-manrope">
-              FEATURED VENUES
-            </p>
-            <h2 className="text-gh-h1 font-philosopher text-white mb-8">
-              Explore Our Private
-              <br />
-              Corporate Retreats
-            </h2>
-          </div>
-
-          <CorporateVillasCarousel />
+        <div className="text-center mb-16 px-8">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4 font-manrope">
+            FEATURED VENUES
+          </p>
+          <h2 className="text-gh-h1 font-philosopher text-white mb-8">
+            Explore Our Private
+            <br />
+            Corporate Retreats
+          </h2>
         </div>
+
+        <CorporateVillasCarousel />
       </section>
       <Footer />
     </main>

@@ -38,7 +38,9 @@ export default function WhyJadeWeddings() {
         if (!res.ok) return;
         const data = await res.json();
         const group = (data?.groups || []).find((g: any) =>
-          String(g.folder || "").toLowerCase().includes("4-why"),
+          String(g.folder || "")
+            .toLowerCase()
+            .includes("4-why"),
         );
         const images = (group?.images || data?.all || []).filter(Boolean);
         if (!cancelled) setWhyImages(images);
@@ -85,7 +87,8 @@ export default function WhyJadeWeddings() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="font-philosopher text-gh-h1 text-white mb-16"
+              className="font-philosopher text-gh-h1 text-white"
+              style={{ marginBottom: "clamp(32px, 6vw, 64px)" }}
             >
               Why Jade Wedding Venues
             </motion.h2>

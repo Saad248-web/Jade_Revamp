@@ -32,7 +32,11 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const { toggleWishlist, isWishlisted } = useWishlist();
   const [serverMedia, setServerMedia] = useState<{
     hero: string[];
-    categorizedSpaces?: Array<{ title?: string; category?: string; images?: string[] }>;
+    categorizedSpaces?: Array<{
+      title?: string;
+      category?: string;
+      images?: string[];
+    }>;
   } | null>(null);
 
   const wishlisted = isWishlisted(villa.id);
@@ -62,7 +66,9 @@ export default function VillaCard({ villa }: VillaCardProps) {
     let cancelled = false;
     async function load() {
       try {
-        const res = await fetch(`/api/villas/${villa.id}/media`, { cache: "force-cache" });
+        const res = await fetch(`/api/villas/${villa.id}/media`, {
+          cache: "force-cache",
+        });
         if (!res.ok) return;
         const data = await res.json();
         if (!cancelled) setServerMedia(data);
@@ -99,7 +105,11 @@ export default function VillaCard({ villa }: VillaCardProps) {
     if (cat.length > 0) {
       list.push(...cat);
       return list.map((x) => ({
-        name: prettyMediaLabel({ url: x.image, fallback: x.name, kind: "space" }),
+        name: prettyMediaLabel({
+          url: x.image,
+          fallback: x.name,
+          kind: "space",
+        }),
         image: x.image,
       }));
     }
@@ -108,7 +118,11 @@ export default function VillaCard({ villa }: VillaCardProps) {
     const gallery = (villa.images || [])
       .filter((img): img is string => validImage(img) === true)
       .map((img, i) => ({
-        name: prettyMediaLabel({ url: img, fallback: `View ${i + 1}`, kind: "generic" }),
+        name: prettyMediaLabel({
+          url: img,
+          fallback: `View ${i + 1}`,
+          kind: "generic",
+        }),
         image: img,
       }));
     if (gallery.length > 0) return list.concat(gallery);
@@ -117,7 +131,11 @@ export default function VillaCard({ villa }: VillaCardProps) {
     const spaceImages = (villa.spaces || [])
       .filter((s) => validImage(s.image))
       .map((s) => ({
-        name: prettyMediaLabel({ url: s.image as string, fallback: s.name, kind: "space" }),
+        name: prettyMediaLabel({
+          url: s.image as string,
+          fallback: s.name,
+          kind: "space",
+        }),
         image: s.image as string,
       }));
     if (spaceImages.length > 0) return list.concat(spaceImages);
@@ -233,18 +251,30 @@ export default function VillaCard({ villa }: VillaCardProps) {
 
       {/* DETAILS CONTAINER */}
       <div className="flex flex-col text-left flex-1 md:py-2">
-        <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-4">
+        <span
+          className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase"
+          style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
+        >
           {villa.type}
         </span>
-        <h2 className="font-philosopher text-gh-h2 text-white mb-2">
+        <h2
+          className="font-philosopher text-gh-h2 text-white leading-snug"
+          style={{ marginBottom: "clamp(4px, 0.8vw, 8px)" }}
+        >
           {villa.name}
         </h2>
-        <div className="flex items-center gap-2 text-white/60 mb-4">
+        <div
+          className="flex items-center gap-2 text-white/60"
+          style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+        >
           <MapPin className="w-4 h-4" />
           <span className="font-manrope text-gh-body">{villa.location}</span>
         </div>
 
-        <p className="font-manrope text-white/70 leading-relaxed text-gh-desc mb-4 line-clamp-2 lg:line-clamp-none">
+        <p
+          className="font-manrope text-white/70 leading-relaxed text-gh-desc line-clamp-2 lg:line-clamp-none"
+          style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+        >
           {villa.description}
         </p>
 
@@ -279,14 +309,17 @@ export default function VillaCard({ villa }: VillaCardProps) {
           <span className="shrink-0 text-white/40 text-gh-label font-manrope font-bold uppercase tracking-wider mr-1">
             Perfect for:
           </span>
-          {villa.perfectFor.map((tag) => (
-            <span
-              key={tag}
-              className="shrink-0 whitespace-nowrap bg-white/5 border border-white/10 text-white/80 text-gh-label px-2.5 py-1 rounded-sm font-manrope"
-            >
-              {tag}
-            </span>
-          ))}
+          {villa.perfectFor.map((tag, idx) => {
+            const title = typeof tag === "string" ? tag : tag.title;
+            return (
+              <span
+                key={`${title}-${idx}`}
+                className="shrink-0 whitespace-nowrap bg-white/5 border border-white/10 text-white/80 text-gh-label px-2.5 py-1 rounded-sm font-manrope"
+              >
+                {title}
+              </span>
+            );
+          })}
         </div>
 
         {/* Action Row */}

@@ -20,8 +20,8 @@ export const royalty = {
     "Nature Stays",
   ],
   categories: ["Equestrian Retreats", "Hill Villas", "Luxury Stays"],
-  thumbnail: "/Villa_Retreats/Royalty/1-Hero/IMG_1677.webp",
-  image: "/Villa_Retreats/Royalty/1-Hero/IMG_1677.webp",
+  thumbnail: "/Villa_Retreats/Royalty/1-Hero/1.webp",
+  image: "/Villa_Retreats/Royalty/1-Hero/1.webp",
   images: [
     "/Villa_Retreats/Royalty/2-Spaces/1.webp",
     "/Villa_Retreats/Royalty/2-Spaces/2.webp",
@@ -221,7 +221,7 @@ export const royalty = {
     },
   },
   locationDetails: {
-    mapImage: "/Villa_Retreats/Royalty/1-Hero/IMG_1677.webp",
+    mapImage: "/Villa_Retreats/Royalty/1-Hero/1.webp",
     address: "Gudibanda road, Varlakonda, Chikkaballapur, Karnataka 562104",
     distance: "Approximately 75 minutes from Bangalore City Center",
     nearby: [
@@ -233,7 +233,7 @@ export const royalty = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=VlACTqexHoI",
-    thumbnail: "/Villa_Retreats/Royalty/1-Hero/IMG_1677.webp",
+    thumbnail: "/Villa_Retreats/Royalty/1-Hero/1.webp",
     duration: "1:53",
   },
   faq: [

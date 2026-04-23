@@ -143,7 +143,7 @@ export default function AboutPage() {
             </div>
             {/* Logo 4: IBM */}
             <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <span className="text-white font-mono text-gh-h2 font-bold tracking-tighter opacity-60 group-hover:opacity-100 transition-opacity">
+              <span className="text-white font-manrope text-gh-h2 font-bold tracking-tighter opacity-60 group-hover:opacity-100 transition-opacity">
                 IBM
               </span>
             </div>

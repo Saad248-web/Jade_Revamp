@@ -113,10 +113,16 @@ export default function WeddingVenuesCarousel() {
               <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase">
                 {currentVilla.type}
               </span>
-              <h2 className="font-philosopher text-gh-h1 text-white mb-2">
+              <h2
+                className="font-philosopher text-gh-h1 text-white"
+                style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
+              >
                 {currentVilla.name}
               </h2>
-              <div className="flex items-center gap-2 text-white/60 mb-6">
+              <div
+                className="flex items-center gap-2 text-white/60"
+                style={{ marginBottom: "clamp(12px, 2.5vw, 24px)" }}
+              >
                 <MapPin className="w-4 h-4" />
                 <span className="font-manrope text-gh-label">
                   {currentVilla.location}

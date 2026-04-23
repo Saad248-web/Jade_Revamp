@@ -54,7 +54,7 @@ export default function MobileBottomNav() {
           }}
           className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-xl border-t border-white/10 pb-safe shadow-2xl safe-area-bottom"
         >
-          <div className="flex items-center justify-around py-4 pb-safe-offset">
+          <div className="flex items-center justify-around py-2 pb-safe-offset">
             {navItems.map((item) => {
               const isActive =
                 item.href === pathname ||
@@ -66,7 +66,7 @@ export default function MobileBottomNav() {
                   <Link
                     key={item.label}
                     href={item.href}
-                    className={`flex flex-col items-center gap-1.5 w-16 ${colorClass}`}
+                    className={`flex flex-col items-center justify-center min-h-[44px] p-2 gap-1.5 w-16 ${colorClass}`}
                   >
                     <div
                       className={`relative w-5 h-5 ${isActive ? "" : "opacity-50 grayscale"}`}

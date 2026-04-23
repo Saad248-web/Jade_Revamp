@@ -70,7 +70,10 @@ export default function HospitainmentDefinition() {
         variants={containerReveal}
       >
         {/* Main Definition Heading */}
-        <h2 className="font-philosopher text-gh-h1 leading-[1.1] md:leading-[1.1] text-white/90 mb-12">
+        <h2
+          className="font-philosopher text-gh-h1 leading-[1.1] md:leading-[1.1] text-white/90"
+          style={{ marginBottom: "clamp(24px, 5vw, 48px)" }}
+        >
           {/* Split into lines for animation */}
           <div className="overflow-hidden">
             <motion.div variants={lineReveal}>

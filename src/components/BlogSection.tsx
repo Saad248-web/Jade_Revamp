@@ -28,7 +28,7 @@ const BlogCard = ({ post }: { post: any }) => {
 
       <div className="flex flex-col pr-4">
         {/* Title - Systematic size and clamping */}
-        <h3 className="font-philosopher text-[1.1rem] sm:text-[1.2rem] lg:text-[1.4rem] text-white group-hover:text-[#EFCD62] transition-colors mb-3 line-clamp-2 leading-tight min-h-[2.8em]">
+        <h3 className="font-philosopher text-[1.1rem] sm:text-[1.2rem] lg:text-[1.4rem] text-white group-hover:text-[#EFCD62] transition-colors mb-3 line-clamp-2 leading-normal">
           {post.title}
         </h3>
         <p className="font-manrope text-white/60 text-[0.85rem] sm:text-[0.9rem] leading-relaxed line-clamp-2 mb-5 min-h-[3em]">
@@ -64,10 +64,16 @@ export default function BlogSection() {
         {/* Header Area */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 lg:mb-12 gap-4 md:gap-8">
           <div className="max-w-2xl">
-            <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-2">
+            <p
+              className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]"
+              style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
+            >
               BLOG
             </p>
-            <h2 className="font-philosopher text-gh-h2 sm:text-gh-h1 text-white mb-4 lg:mb-5">
+            <h2
+              className="font-philosopher text-gh-h2 sm:text-gh-h1 text-white"
+              style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+            >
               From the Journal
             </h2>
             <p className="font-manrope text-white/60 text-[0.9rem] sm:text-gh-body leading-relaxed max-w-md">

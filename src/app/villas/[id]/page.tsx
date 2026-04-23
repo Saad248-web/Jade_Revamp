@@ -365,7 +365,8 @@ export default function VillaDetailsPage() {
       const u = new URL(url);
       const host = u.hostname.replace(/^www\./, "");
       if (host === "youtu.be") return u.pathname.replace("/", "");
-      if (u.pathname.startsWith("/embed/")) return u.pathname.split("/")[2] || "";
+      if (u.pathname.startsWith("/embed/"))
+        return u.pathname.split("/")[2] || "";
       if (u.pathname === "/watch") return u.searchParams.get("v") || "";
       return "";
     } catch {
@@ -904,7 +905,7 @@ export default function VillaDetailsPage() {
                                   </div>
                                 )}
                               </div>
-                              <div className="text-jade-gold font-mono text-gh-body font-bold text-right shrink-0">
+                              <div className="text-jade-gold font-manrope text-gh-body font-bold text-right shrink-0">
                                 {pkg.price}
                               </div>
                             </div>
@@ -954,7 +955,7 @@ export default function VillaDetailsPage() {
                                   </div>
                                 )}
                               </div>
-                              <div className="text-jade-gold font-mono text-gh-body font-bold text-right shrink-0">
+                              <div className="text-jade-gold font-manrope text-gh-body font-bold text-right shrink-0">
                                 {pkg.price}
                               </div>
                             </div>
@@ -1093,7 +1094,7 @@ export default function VillaDetailsPage() {
                         )}
                         <div className="absolute inset-0 bg-black/40 z-10 transition-colors group-hover:bg-black/50" />
                         <div className="absolute inset-0 flex items-center justify-center z-20 p-4">
-                          <h4 className="text-white font-manrope font-medium text-sm md:text-base text-center">
+                          <h4 className="text-white font-philosopher text-base md:text-lg text-center leading-tight">
                             {title}
                           </h4>
                         </div>

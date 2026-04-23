@@ -82,11 +82,12 @@ export default function ValuePropositionSection() {
           key={`label-${currentIndex}`}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="font-manrope text-gh-label font-bold tracking-[0.3em] uppercase text-[#EFCD62] mb-3"
+          className="font-manrope text-gh-label font-bold tracking-[0.3em] uppercase text-[#EFCD62]"
+          style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
         >
           {currentSlide.label}
         </motion.p>
-        <div className="mb-3">
+        <div style={{ marginBottom: "clamp(6px, 1.5vw, 12px)" }}>
           <h2 className="font-philosopher text-gh-h1 text-white leading-tight lg:whitespace-nowrap">
             {currentSlide.heading.join(" ")}
           </h2>

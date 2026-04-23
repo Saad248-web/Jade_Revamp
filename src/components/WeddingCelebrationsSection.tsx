@@ -19,7 +19,7 @@ const CELEBRATIONS = [
     title: "Mehendi & Haldi",
     subtext:
       "Daytime rituals in private lawns and courtyards, with space to gather, move freely, and celebrate without interruption.",
-    image: "",
+    image: "/Experiences/Weddings/5-Pre Wedding/Haldi.webp",
     href: "/weddings",
     cta: "SEE THE RITUALS",
   },
@@ -28,7 +28,7 @@ const CELEBRATIONS = [
     title: "Sangeet Evenings",
     subtext:
       "Evenings shaped for music, performances, and dancing, supported by flexible lighting, sound, and open layouts.",
-    image: "",
+    image: "/Experiences/Weddings/5-Pre Wedding/Sangeeth.webp",
     href: "/weddings",
     cta: "EXPLORE THE VIBE",
   },
@@ -37,7 +37,7 @@ const CELEBRATIONS = [
     title: "Bachelor & Bachelorette Parties",
     subtext:
       "Fully private estates for carefree celebrations—poolside moments, music, décor, and late nights with friends.",
-    image: "",
+    image: "/Experiences/Weddings/5-Pre Wedding/Bachelorette.webp",
     href: "/party-villas",
     cta: "LEARN MORE",
   },
@@ -46,7 +46,7 @@ const CELEBRATIONS = [
     title: "Pre-Wedding Cocktail Nights",
     subtext:
       "Relaxed evening gatherings with custom bar setups, lounge seating, and ambient lighting.",
-    image: "",
+    image: "/Experiences/Weddings/5-Pre Wedding/cocktail...webp",
     href: "/weddings",
     cta: "SEE THE MAGIC",
   },
@@ -55,7 +55,7 @@ const CELEBRATIONS = [
     title: "Pre-Wedding Shoots",
     subtext:
       "Multiple backdrops within one private estate, allowing your shoot to flow naturally from one setting to the next.",
-    image: "",
+    image: "/Experiences/Weddings/5-Pre Wedding/Bridal Shoots.webp",
     href: "/weddings",
     cta: "VIEW THE LOCATIONS",
   },
@@ -63,7 +63,6 @@ const CELEBRATIONS = [
 
 export default function WeddingCelebrationsSection() {
   const targetRef = useRef<HTMLDivElement>(null);
-  const [preWeddingImages, setPreWeddingImages] = useState<string[]>([]);
   const { scrollYProgress } = useScroll({
     target: targetRef,
   });
@@ -77,34 +76,7 @@ export default function WeddingCelebrationsSection() {
 
   const totalSteps = CELEBRATIONS.length + 1;
 
-  useEffect(() => {
-    let cancelled = false;
-    async function load() {
-      try {
-        const res = await fetch("/api/experiences/weddings/media");
-        if (!res.ok) return;
-        const data = await res.json();
-        const group = (data?.groups || []).find((g: any) =>
-          String(g.folder || "").toLowerCase().includes("5-pre wedding"),
-        );
-        const images = (group?.images || []).filter(Boolean);
-        if (!cancelled) setPreWeddingImages(images);
-      } catch {
-        // ignore
-      }
-    }
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const celebrations = useMemo(() => {
-    return CELEBRATIONS.map((c, idx) => ({
-      ...c,
-      image: pick(preWeddingImages, idx),
-    }));
-  }, [preWeddingImages]);
+  const celebrations = CELEBRATIONS;
 
   return (
     <section ref={targetRef} className="relative h-[600vh] bg-[#1A1C1E]">
@@ -112,7 +84,10 @@ export default function WeddingCelebrationsSection() {
         {/* Top Label & Counter - Global */}
         <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-20 md:pt-24 pb-[16px] md:pb-[24px]">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/90 to-transparent -z-10" />
-          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-4 md:mb-6 font-semibold text-[#EFCD62] drop-shadow-lg block">
+          <span
+            className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-[#EFCD62] drop-shadow-lg block"
+            style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+          >
             PRE WEDDING CELEBRATIONS
           </span>
           <GlobalCounter
@@ -239,8 +214,7 @@ function CelebrationPanelSlide({
           className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-24"
         >
           <div className="relative w-full h-full max-w-xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
-            {/* Image Section */}
-            <div className="relative w-full aspect-[4/3] md:aspect-[16/9] max-h-[50vh] lg:max-h-[60vh] overflow-hidden shadow-2xl rounded-none bg-black">
+            <div className="relative w-full h-[55vh] md:aspect-[16/9] lg:h-[65vh] overflow-hidden shadow-2xl rounded-none bg-black">
               <div className="w-full h-full relative">
                 {data.image ? (
                   <Image
@@ -264,7 +238,8 @@ function CelebrationPanelSlide({
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="font-philosopher text-gh-h2 text-white leading-none mb-4"
+                className="font-philosopher text-gh-h2 text-white leading-none"
+                style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
               >
                 {data.title}
               </motion.h2>
@@ -272,7 +247,8 @@ function CelebrationPanelSlide({
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="font-manrope text-gh-body text-white/80 leading-relaxed mb-6 lg:mb-8 line-clamp-3 max-w-lg"
+                className="font-manrope text-gh-body text-white/80 leading-relaxed line-clamp-3 max-w-lg"
+                style={{ marginBottom: "clamp(12px, 3vw, 24px)" }}
               >
                 {data.subtext}
               </motion.p>

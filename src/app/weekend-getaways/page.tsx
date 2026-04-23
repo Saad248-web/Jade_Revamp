@@ -29,6 +29,7 @@ import ScrollSectionComposer, {
 } from "@/components/ScrollSectionComposer";
 import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
 import VillasCarouselSection from "@/components/VillasCarouselSection";
+import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
 
 // Per request: remove all image links from this page (text-first).
 
@@ -44,6 +45,84 @@ const animatedSlides: ScrollSlide[] = [
       "retreat is designed to let you slow",
       "down and enjoy the moment.",
     ],
+  },
+];
+
+const weekendSlides = [
+  {
+    title: "Poolside Mornings",
+    desc: "Slow mornings by the pool with coffee, sunlight, and nowhere else to be.",
+    image: "/Experiences/Weddings/Bachelorette.webp",
+  },
+  {
+    title: "Evenings Under the Stars",
+    desc: "Bonfires, music, and long conversations that stretch late into the night.",
+    image: "/Villa_Retreats/Palatio/1-Hero/Facade_Day.jpg",
+  },
+  {
+    title: "Outdoor Dining",
+    desc: "Freshly grilled meals, laughter around the table, and food shared with friends.",
+    image: "/Villa_Retreats/Palatio/3-Experiences/Pool_Breakfast.jpg",
+  },
+  {
+    title: "Nature & Nearby Escapes",
+    desc: "Morning treks, quiet lakes, and scenic walks just minutes from your villa.",
+    image: "/Experiences/Weddings/Bachelorette.webp",
+  },
+];
+
+const weekendExperiences = [
+  { title: "Bonfire Nights", image: "/Experiences/Weddings/Bachelorette.webp" },
+  {
+    title: "BBQ Evenings",
+    image: "/Villa_Retreats/Palatio/3-Experiences/Pool_Breakfast.jpg",
+  },
+  {
+    title: "Movie Under the Stars",
+    image: "/Villa_Retreats/Palatio/1-Hero/Facade_Day.jpg",
+  },
+  {
+    title: "Candlelight Dinner",
+    image: "/Experiences/Weddings/Bachelorette.webp",
+  },
+  {
+    title: "Outdoor Games",
+    image: "/Villa_Retreats/Palatio/3-Experiences/Pool_Breakfast.jpg",
+  },
+  {
+    title: "Live Music / DJ",
+    image: "/Villa_Retreats/Palatio/1-Hero/Facade_Day.jpg",
+  },
+  {
+    title: "Private Chef Experience",
+    image: "/Experiences/Weddings/Bachelorette.webp",
+  },
+  {
+    title: "Poolside Celebrations",
+    image: "/Villa_Retreats/Palatio/3-Experiences/Pool_Breakfast.jpg",
+  },
+];
+
+const weekendVillas = [
+  {
+    name: "Dome Villa",
+    tag: "HOBBIT-INSPIRED PRIVATE RETREAT",
+    image: "/Villa_Retreats/Palatio/1-Hero/Facade_Day.jpg",
+  },
+  {
+    name: "Magnolia",
+    tag: "CONTEMPORARY GLASS FARM VILLA",
+    image: "/Villa_Retreats/Palatio/3-Experiences/Pool_Breakfast.jpg",
+  },
+  {
+    name: "Haven",
+    tag: "BOUTIQUE LUXURY VILLA",
+    image: "/Experiences/Weddings/Bachelorette.webp",
+  },
+  {
+    name: "Tranquil Woods",
+    tag: "FOREST RETREAT",
+    image: "/Villa_Retreats/Palatio/1-Hero/Facade_Day.jpg",
   },
 ];
 
@@ -86,8 +165,41 @@ export default function WeekendGetawaysPage() {
       {/* SECTION 2: ANIMATED TEXT SECTION */}
       <ScrollSectionComposer slides={animatedSlides} height="250vh" />
 
-      {/* SECTION 3: WHY CHOOSE JADE */}
+      {/* SECTION 3: WEEKEND TYPES CAROUSEL */}
+      <ExperienceCarouselSection
+        label="WHAT WEEKENDS AT JADE LOOK LIKE"
+        title="Jade Weekends"
+        slides={weekendSlides}
+        ctaText="BOOK JADE WEEKEND"
+        ctaLink="/contact"
+      />
+
+      {/* SECTION 4: CURATED EXPERIENCES */}
+      <CuratedExperiencesGrid
+        label="CURATED EXPERIENCES"
+        title="Enhance Your Stay"
+        experiences={weekendExperiences}
+        ctaText="VIEW ALL EXPERIENCES"
+        ctaLink="/contact"
+      />
+
+      {/* SECTION 5: WHY CHOOSE JADE */}
       <WhyChooseJadeSection />
+
+      {/* SECTION 6: OUR VILLAS CAROUSEL */}
+      <VillasCarouselSection
+        label="OUR VILLAS"
+        title={
+          <>
+            Themed Villas
+            <br />
+            By Jade
+          </>
+        }
+        villas={weekendVillas}
+        ctaText="VIEW ALL VILLA RETREATS"
+        ctaLink="/villas"
+      />
 
       {/* SECTION 4: CTA */}
       <section className="py-24 bg-[#141517] border-t border-white/5">
@@ -99,8 +211,8 @@ export default function WeekendGetawaysPage() {
             Want a curated weekend escape?
           </h2>
           <p className="text-white/60 font-manrope text-gh-body leading-relaxed mb-10">
-            Reach out and we&apos;ll suggest the best villas for your group size,
-            occasion, and preferred vibe.
+            Reach out and we&apos;ll suggest the best villas for your group
+            size, occasion, and preferred vibe.
           </p>
           <PrimaryButton href="/contact" className="w-full max-w-md mx-auto">
             ENQUIRE

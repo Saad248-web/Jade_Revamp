@@ -159,26 +159,31 @@ export default function SplashScreen() {
               </motion.p>
             </div>
 
-            {/* Spacing 16px Base */}
-            <div style={{ height: "16px" }} />
+            {/* Spacing — subtitle ↔ brand name: generous gap to separate groups */}
+            <div style={{ height: "clamp(12px, 3vw, 20px)" }} />
 
-            {/* 2. Main Title Group */}
-            <div className="flex flex-col items-center">
+            {/* 2. Main Title Group — Proximity: zero gap = one visual unit */}
+            <div className="flex flex-col items-center" style={{ gap: 0 }}>
               <div className="overflow-hidden">
                 <motion.h1
                   variants={textItemVars}
-                  style={{ fontSize: "clamp(32px, 8.5vw, 54px)" }}
-                  className="font-philosopher text-white text-center leading-tight"
+                  style={{
+                    fontSize: "clamp(32px, 8.5vw, 54px)",
+                    lineHeight: 1.05,
+                    marginBottom: "clamp(-2px, -0.3vw, -4px)",
+                  }}
+                  className="font-philosopher text-white text-center"
                 >
                   Jade
                 </motion.h1>
               </div>
-              {/* Spacing 8px Base */}
-              <div style={{ height: "8px" }} />
               <div className="overflow-hidden">
                 <motion.h2
                   variants={textItemVars}
-                  style={{ fontSize: "clamp(32px, 8.5vw, 54px)" }}
+                  style={{
+                    fontSize: "clamp(32px, 8.5vw, 54px)",
+                    lineHeight: 1.05,
+                  }}
                   className="font-philosopher text-white/90 text-center"
                 >
                   Hospitainment
@@ -186,11 +191,11 @@ export default function SplashScreen() {
               </div>
             </div>
 
-            {/* Spacing 24px Base */}
-            <div style={{ height: "24px" }} />
+            {/* Spacing — brand name ↔ logo: wider gap to separate groups */}
+            <div style={{ height: "clamp(20px, 4vw, 32px)" }} />
 
             {/* 3. Logo Icon */}
-            <div className="overflow-hidden pt-4">
+            <div className="overflow-hidden">
               <motion.div
                 variants={textItemVars}
                 className="relative"

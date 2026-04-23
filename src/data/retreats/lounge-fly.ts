@@ -20,8 +20,8 @@ export const loungeFly = {
     "Boutique Stays",
   ],
   categories: ["Luxury Suites", "Urban Retreats", "Apartment Stays"],
-  thumbnail: "/Villa_Retreats/Lounge Fly/Hero/hero.webp",
-  image: "/Villa_Retreats/Lounge Fly/Hero/hero.webp",
+  thumbnail: "/Villa_Retreats/Lounge Fly/1-Hero/2.webp",
+  image: "/Villa_Retreats/Lounge Fly/1-Hero/2.webp",
   images: [
     "/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp",
     "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp",
@@ -266,7 +266,7 @@ export const loungeFly = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=THDUAhzF_Sg",
-    thumbnail: "/Villa_Retreats/Lounge Fly/Hero/hero.webp",
+    thumbnail: "/Villa_Retreats/Lounge Fly/1-Hero/2.webp",
     duration: "1:29",
   },
   faq: [

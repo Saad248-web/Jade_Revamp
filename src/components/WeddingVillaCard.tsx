@@ -64,7 +64,7 @@ export default function WeddingVillaCard({
         : "₹75,000";
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 w-full pb-8 lg:py-8 border-b border-white/5 last:border-b-0 bg-[#25282C] min-h-[calc(100vh-80px)] lg:min-h-0">
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 w-full pb-8 lg:py-8 border-b border-white/5 last:border-b-0 bg-[#25282C]">
       {/* IMAGE SECTION */}
       <div className="relative w-full lg:w-1/2 h-[45vh] lg:h-auto overflow-hidden bg-white/5 flex-shrink-0">
         <AnimatePresence initial={false} custom={direction}>
@@ -122,47 +122,52 @@ export default function WeddingVillaCard({
       </div>
 
       {/* CONTENT SECTION */}
-      <div className="flex flex-col flex-1 px-4 lg:px-0 pt-6 lg:pt-0 lg:max-w-2xl justify-start">
-        <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase mb-4">
+      <div className="flex flex-col flex-1 px-6 md:px-8 lg:px-0 pt-6 lg:pt-0 lg:max-w-2xl justify-start">
+        <span
+          className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase"
+          style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
+        >
           {villa.type}
         </span>
 
-        <h2 className="font-philosopher text-gh-h3 text-white mb-2 leading-tight">
+        <h2
+          className="font-philosopher text-gh-h3 text-white leading-tight"
+          style={{ marginBottom: "clamp(4px, 0.8vw, 8px)" }}
+        >
           {villa.name}
         </h2>
 
-        <div className="flex items-center gap-2 text-white/50 mb-2">
+        <div
+          className="flex items-center gap-2 text-white/50"
+          style={{ marginBottom: "clamp(4px, 0.8vw, 8px)" }}
+        >
           <MapPin className="w-5 h-5 text-[#EFCD62]" />
           <span className="font-manrope text-gh-body tracking-wide">
             {villa.location}
           </span>
         </div>
 
-        <p className="font-manrope text-white/50 leading-relaxed mb-4 text-gh-desc line-clamp-2 md:line-clamp-none">
+        <p
+          className="font-manrope text-white/50 leading-relaxed text-gh-desc line-clamp-2 md:line-clamp-none"
+          style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+        >
           {villa.description.split(".")[0]}. Ideal for{" "}
           <span className="text-white/80 font-bold">intimate weddings</span> and
           pre-wedding ceremonies.
         </p>
 
         {/* Stats Grid */}
-        <div className="flex items-center gap-1 mb-6">
+        <div className="grid grid-cols-3 gap-3 mb-4">
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className="flex flex-col items-center justify-between w-[104px] h-[99px] text-center py-4 px-2"
-              style={{
-                background: "rgba(255, 255, 255, 0.08)",
-                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-                backdropFilter: "blur(10px)",
-                WebkitBackdropFilter: "blur(10px)",
-                border: "1px solid rgba(255, 255, 255, 0.37)",
-              }}
+              className="flex flex-col items-center justify-center py-4 border border-white/10 text-center hover:border-[#EFCD62]/30 transition-colors"
             >
-              <stat.icon className="w-4 h-4 text-white/40" />
-              <span className="text-white font-manrope text-[14px] font-bold leading-none">
+              <stat.icon className="w-4 h-4 text-white/30 mb-2" />
+              <span className="text-white font-philosopher text-gh-scroll md:text-gh-h3 mb-1 truncate w-full px-2">
                 {stat.value}
               </span>
-              <span className="text-white/50 font-manrope text-[12px] leading-none">
+              <span className="text-[#EFCD62]/80 uppercase font-bold tracking-[0.2em] font-manrope text-gh-label">
                 {stat.label}
               </span>
             </div>

@@ -216,10 +216,10 @@ function PanelSlide({
     >
       <div className="pointer-events-auto flex items-center justify-center w-full h-full">
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
-        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-24">
-          <div className="relative w-full h-full max-w-xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
-            {/* Image Section */}
-            <div className="relative w-full aspect-[4/3] md:aspect-[16/9] max-h-[45vh] lg:max-h-[50vh] overflow-hidden shadow-2xl rounded-none bg-black">
+        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-start px-6 md:px-24 pt-[max(12vh,80px)]">
+          <div className="relative w-full max-w-xl mx-auto flex flex-col items-stretch gap-4 lg:gap-6">
+            {/* Image Section - unified 16:9 aspect, no max-h clamp so every card is the same size */}
+            <div className="relative w-full aspect-[16/9] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
               <div className="w-full h-full relative">
                 <Image
                   src={data.image}
@@ -232,8 +232,8 @@ function PanelSlide({
               </div>
             </div>
 
-            {/* Text Section */}
-            <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 pb-4">
+            {/* Text Section - fixed height so every card's title, description, and CTA align identically */}
+            <div className="relative w-full flex flex-col items-start text-left mt-2 h-[220px] lg:h-[260px] shrink-0 pb-4">
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}

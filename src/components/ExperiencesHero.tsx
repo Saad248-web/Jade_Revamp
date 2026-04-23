@@ -27,7 +27,8 @@ export default function ExperiencesHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase mb-8"
+          className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase"
+          style={{ marginBottom: "clamp(6px, 1.5vw, 12px)" }}
         >
           EXPERIENCES
         </motion.span>
@@ -37,7 +38,8 @@ export default function ExperiencesHero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="font-philosopher text-gh-h1 text-white mb-8 leading-tight tracking-tight"
+          className="font-philosopher text-gh-h1 text-white leading-tight tracking-tight"
+          style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
         >
           Moments <br className="hidden md:block" /> Thoughtfully Hosted
         </motion.h1>
@@ -64,7 +66,7 @@ export default function ExperiencesHero() {
             behavior: "smooth",
           });
         }}
-        className="absolute bottom-24 md:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-20 cursor-pointer hover:opacity-80 transition-opacity"
+        className="absolute bottom-8 md:bottom-12 inset-x-0 mx-auto w-fit flex flex-col items-center gap-4 z-20 cursor-pointer hover:opacity-80 transition-opacity"
       >
         <div className="w-[1px] h-12 bg-white/20" />
         <span className="text-gh-label text-white/40 font-manrope tracking-[0.2em] uppercase">

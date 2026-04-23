@@ -80,7 +80,10 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
             className="mb-0 flex flex-col items-center w-full"
           >
             {/* Logo */}
-            <div className="relative mb-4 w-[45px] h-[45px]">
+            <div
+              className="relative w-[45px] h-[45px]"
+              style={{ marginBottom: "clamp(6px, 1.5vw, 10px)" }}
+            >
               <Image
                 src="/assets/White_Logo.png"
                 alt="Jade Logo"
@@ -91,12 +94,18 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
             </div>
 
             {/* Heading */}
-            <h1 className="font-philosopher text-white mb-2 text-gh-h1 leading-tight">
+            <h1
+              className="font-philosopher text-white text-gh-h1 leading-tight"
+              style={{ marginBottom: "clamp(6px, 1.5vw, 12px)" }}
+            >
               {heading}
             </h1>
 
             {/* Description */}
-            <p className="font-manrope text-white/90 text-gh-body max-w-2xl leading-relaxed mb-4">
+            <p
+              className="font-manrope text-white/90 text-gh-body max-w-2xl leading-relaxed"
+              style={{ marginBottom: "clamp(12px, 2.5vw, 20px)" }}
+            >
               {description}
             </p>
           </motion.div>

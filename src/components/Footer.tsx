@@ -180,7 +180,10 @@ export default function Footer() {
             <div className="lg:col-span-6 flex flex-col gap-16">
               {/* Heading */}
               <div>
-                <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]/70 mb-4">
+                <p
+                  className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]/70"
+                  style={{ marginBottom: "clamp(8px, 1.5vw, 16px)" }}
+                >
                   Get In Touch
                 </p>
                 <h2 className="font-philosopher text-gh-h1 text-white leading-tight">

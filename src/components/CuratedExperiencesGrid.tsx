@@ -33,19 +33,29 @@ export default function CuratedExperiencesGrid({
     <section className="py-24" style={{ backgroundColor: background }}>
       <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
         {/* Header */}
-        <div className="text-center mb-10">
-          {" "}
-          {/* 40px spacing (mb-10 is exactly 40px in tailwind) */}
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-[14px] font-manrope">
+        <div
+          className="text-center"
+          style={{ marginBottom: "clamp(32px, 6vw, 64px)" }}
+        >
+          <p
+            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope"
+            style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+          >
             {label}
           </p>
-          <h2 className="text-gh-h1 font-philosopher text-white leading-tight">
+          <h2 className="text-gh-h2 font-philosopher text-white leading-tight">
             {title}
           </h2>
         </div>
 
         {/* Grid Section */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-10">
+        <div
+          className="grid grid-cols-2 md:grid-cols-3"
+          style={{
+            gap: "clamp(8px, 2vw, 24px)",
+            marginBottom: "clamp(32px, 6vw, 64px)",
+          }}
+        >
           {" "}
           {/* 40px spacing between grid and button */}
           {experiences.map((exp, idx) => (

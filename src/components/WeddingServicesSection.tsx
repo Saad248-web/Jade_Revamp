@@ -69,10 +69,14 @@ export default function WeddingServicesSection() {
         if (!res.ok) return;
         const data = await res.json();
         const servicesGroup = (data?.groups || []).find((g: any) =>
-          String(g.folder || "").toLowerCase().includes("3-additional"),
+          String(g.folder || "")
+            .toLowerCase()
+            .includes("3-additional"),
         );
         const preWeddingGroup = (data?.groups || []).find((g: any) =>
-          String(g.folder || "").toLowerCase().includes("5-pre wedding"),
+          String(g.folder || "")
+            .toLowerCase()
+            .includes("5-pre wedding"),
         );
         const services = (servicesGroup?.images || []).filter(Boolean);
         const pre = (preWeddingGroup?.images || []).filter(Boolean);
@@ -94,35 +98,21 @@ export default function WeddingServicesSection() {
     // Use services images for first 3, then pull a “music/cocktail” vibe from pre-wedding set.
     return SERVICES_SLIDES.map((s, idx) => ({
       ...s,
-      bgImage: idx < 3 ? pick(serviceImages, idx * 2) : pick(preWeddingImages, 2),
-      cardImage: idx < 3 ? pick(serviceImages, idx * 2 + 1) : pick(preWeddingImages, 3),
+      bgImage:
+        idx < 3 ? pick(serviceImages, idx * 2) : pick(preWeddingImages, 2),
+      cardImage:
+        idx < 3 ? pick(serviceImages, idx * 2 + 1) : pick(preWeddingImages, 3),
     }));
   }, [serviceImages, preWeddingImages]);
 
   const currentSlide = slides[currentIndex] || SERVICES_SLIDES[0];
 
-  // Scroll-based parallax
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Background parallax (Desktop only)
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-
-  // Feature image parallax
-  const imageY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
-
   const handlePrev = () => {
-    setCurrentIndex((prev) =>
-      prev === 0 ? slides.length - 1 : prev - 1,
-    );
+    setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) =>
-      prev === slides.length - 1 ? 0 : prev + 1,
-    );
+    setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   };
 
   return (
@@ -134,7 +124,7 @@ export default function WeddingServicesSection() {
       {/* 
         MOBILE LAYOUT (< 1024px) 
       */}
-      <div className="lg:hidden relative min-h-[92vh] flex flex-col">
+      <div className="lg:hidden relative h-[100dvh] flex flex-col">
         {/* Background Layer */}
         <div className="absolute inset-0 h-full w-full z-0">
           <AnimatePresence mode="wait">
@@ -170,11 +160,12 @@ export default function WeddingServicesSection() {
             key={`label-${currentIndex}`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-manrope text-gh-label font-bold tracking-[0.3em] uppercase text-[#EFCD62] mb-4"
+            className="font-manrope text-gh-label font-bold tracking-[0.3em] uppercase text-[#EFCD62]"
+            style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
           >
             {currentSlide.label}
           </motion.p>
-          <div className="mb-4">
+          <div style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}>
             {currentSlide.heading.map((line, index) => (
               <motion.h2
                 key={`head-${currentIndex}-${index}`}
@@ -252,10 +243,10 @@ export default function WeddingServicesSection() {
       {/* 
         DESKTOP LAYOUT (>= 1024px) 
       */}
-      <div className="hidden lg:block relative min-h-screen overflow-hidden">
-        {/* Background Image with Parallax */}
+      <div className="hidden lg:block relative h-[100dvh] overflow-hidden">
+        {/* Background Image without Parallax */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
-          <motion.div className="w-full h-[120%]" style={{ y: bgY }}>
+          <div className="w-full h-full">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
@@ -283,7 +274,7 @@ export default function WeddingServicesSection() {
                 </div>
               </motion.div>
             </AnimatePresence>
-          </motion.div>
+          </div>
         </div>
 
         {/* Desktop Content */}
@@ -298,12 +289,15 @@ export default function WeddingServicesSection() {
               transition={{ duration: 0.8 }}
             >
               <p
-                className="font-manrope text-gh-label tracking-[0.4em] uppercase mb-8"
-                style={{ color: "#EFCD62" }}
+                className="font-manrope text-gh-label tracking-[0.4em] uppercase"
+                style={{
+                  color: "#EFCD62",
+                  marginBottom: "clamp(6px, 1.5vw, 12px)",
+                }}
               >
                 {currentSlide.label}
               </p>
-              <div className="mb-8">
+              <div style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}>
                 {currentSlide.heading.map((line, index) => (
                   <h2
                     key={index}
@@ -323,7 +317,6 @@ export default function WeddingServicesSection() {
               <motion.div
                 key={`img-desk-${currentIndex}`}
                 className="relative w-full aspect-[16/9] rounded-none overflow-hidden shadow-2xl border border-white/10"
-                style={{ y: imageY }}
                 initial={{ opacity: 0, scale: 0.95, x: 20 }}
                 animate={{ opacity: 1, scale: 1, x: 0 }}
                 transition={{ duration: 0.8 }}

@@ -77,7 +77,7 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center gap-8 flex-1">
             <Link
               href="/menu"
-              className="flex items-center gap-2.5 text-white/60 hover:text-jade-gold transition-colors group"
+              className="flex items-center gap-2.5 text-white/60 hover:text-jade-gold transition-colors group p-2 min-h-[44px]"
             >
               <div className="relative w-5 h-5 flex items-center justify-center">
                 <span className="flex flex-col gap-[5px] w-5">
@@ -104,7 +104,7 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-gh-label font-manrope tracking-[0.18em] uppercase transition-colors ${
+                  className={`text-gh-label font-manrope tracking-[0.18em] uppercase transition-colors p-2 min-h-[44px] flex items-center ${
                     pathname === item.href
                       ? "text-jade-gold"
                       : "text-white/55 hover:text-white"
@@ -161,7 +161,7 @@ export default function Navbar() {
             {isDetailPage ? (
               <Link
                 href="/contact"
-                className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px]"
+                className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center min-h-[44px]"
               >
                 CONTACT US
               </Link>
@@ -169,7 +169,7 @@ export default function Navbar() {
               <div className="flex items-center gap-2">
                 <Link
                   href="/contact"
-                  className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center w-[35px] h-[35px] md:w-[38px] md:h-[38px] rounded-none border border-white/20 transition-all duration-300 group shrink-0"
+                  className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] min-h-[44px] rounded-none border border-white/20 transition-all duration-300 group shrink-0"
                   aria-label="Contact Us"
                 >
                   <svg
@@ -195,7 +195,7 @@ export default function Navbar() {
                 {/* Wishlist icon with badge */}
                 <Link
                   href="/wishlist"
-                  className="relative bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center w-[35px] h-[35px] md:w-[38px] md:h-[38px] rounded-none border border-white/20 transition-all duration-300 shrink-0"
+                  className="relative bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] min-h-[44px] rounded-none border border-white/20 transition-all duration-300 shrink-0"
                   aria-label="Wishlist"
                 >
                   <Heart className="w-[18px] h-[18px]" strokeWidth={1.25} />
@@ -208,14 +208,14 @@ export default function Navbar() {
                 {pathname?.startsWith("/experiences") ? (
                   <button
                     onClick={() => setPartnerOverlayOpen(true)}
-                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px] whitespace-nowrap"
+                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center min-h-[44px] whitespace-nowrap"
                   >
                     ENQUIRE NOW
                   </button>
                 ) : (
                   <Link
                     href="/book"
-                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-[35px] md:h-[38px] whitespace-nowrap"
+                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center min-h-[44px] whitespace-nowrap"
                   >
                     BOOK NOW
                   </Link>

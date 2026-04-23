@@ -234,12 +234,12 @@ function StackedPanel({
           theme={isGrid ? "golden" : "white"}
           sectionRef={panelRef}
         />
-        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24">
-          {/* Layout Container */}
-          <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg xl:max-w-xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
-            {/* Image/Grid Section */}
+        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-start px-4 sm:px-8 md:px-16 xl:px-24 pt-[max(12vh,80px)]">
+          {/* Layout Container - fixed top alignment so every card lines up identically */}
+          <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg xl:max-w-xl mx-auto flex flex-col items-stretch gap-4 lg:gap-6">
+            {/* Image/Grid Section - single consistent aspect ratio, no max-h to avoid clipping */}
             <div
-              className={`relative w-full aspect-[4/3] md:aspect-[16/9] max-h-[45vh] md:max-h-[52vh] lg:max-h-[58vh] overflow-hidden shadow-2xl rounded-none ${isGrid ? "bg-transparent" : "bg-black"}`}
+              className={`relative w-full aspect-[16/9] overflow-hidden shadow-2xl rounded-none shrink-0 ${isGrid ? "bg-transparent" : "bg-black"}`}
             >
               <div className="w-full h-full relative">
                 {!isGrid ? (
@@ -280,8 +280,8 @@ function StackedPanel({
               </div>
             </div>
 
-            {/* Text Section */}
-            <div className="relative w-full flex flex-col items-start text-left mt-2 h-[220px] lg:h-[260px]">
+            {/* Text Section - fixed height so title / body / CTA line up across every card */}
+            <div className="relative w-full flex flex-col items-start text-left mt-2 h-[220px] lg:h-[260px] shrink-0">
               {!isGrid ? (
                 <>
                   <motion.h2

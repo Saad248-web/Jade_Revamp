@@ -20,8 +20,8 @@ export const tranquil = {
     "Corporate Retreats",
   ],
   categories: ["Wedding Venues", "Luxury Retreats", "Garden Properties"],
-  thumbnail: "/Villa_Retreats/Tranquil Woods/Hero/hero.webp",
-  image: "/Villa_Retreats/Tranquil Woods/Hero/hero.webp",
+  thumbnail: "/Villa_Retreats/Tranquil Woods/1-Hero/hero.webp",
+  image: "/Villa_Retreats/Tranquil Woods/1-Hero/hero.webp",
   images: [
     "/Villa_Retreats/Tranquil Woods/Spaces/spaces_01.webp",
     "/Villa_Retreats/Tranquil Woods/Spaces/spaces_02.webp",
@@ -281,7 +281,7 @@ export const tranquil = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=KHJFdAVRmF8",
-    thumbnail: "/Villa_Retreats/Tranquil Woods/Hero/hero.webp",
+    thumbnail: "/Villa_Retreats/Tranquil Woods/1-Hero/hero.webp",
     duration: "2:51",
   },
   faq: [

@@ -13,22 +13,33 @@ export const domeVillas = {
   description:
     "Dome Villas is a private estate with three independent dome-shaped villas, booked exclusively by one group. The Hobbit-themed design features distributed living spaces, landscaped pathways connecting each dome, and a private plunge pool. Each dome has its own bedroom, bath, and sit-out area, offering a unique blend of fantasy architecture and nature immersion suited for small groups and intimate celebrations.",
   perfectFor: [
-    "Unique Stays",
-    "Small Groups",
-    "Nature Stays",
-    "Couple Retreats",
-    "Celebrations",
+    {
+      title: "Pool Parties",
+      image: "/Villa_Retreats/Dome/Perfect For/Pool Parties.webp",
+    },
+    {
+      title: "Group Getaways",
+      image: "/Villa_Retreats/Dome/Perfect For/Group Getaways.webp",
+    },
+    {
+      title: "Nature Stays",
+      image: "/Villa_Retreats/Dome/Perfect For/Nature Stays.webp",
+    },
+    {
+      title: "Intimate Weddings",
+      image: "/Villa_Retreats/Dome/Perfect For/Intimate Weddings.webp",
+    },
   ],
   categories: ["Themed Stays", "Nature Retreats", "Boutique Villas"],
-  thumbnail: "/Villa_Retreats/Dome Villa_s - Blue/Hero/hero.webp",
-  image: "/Villa_Retreats/Dome Villa_s - Blue/Hero/hero.webp",
+  thumbnail: "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp",
+  image: "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp",
   images: [
-    "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp",
-    "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_02.webp",
-    "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_03.webp",
-    "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp",
-    "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_05.webp",
-    "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_06.webp",
+    "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_01.webp",
+    "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_02.webp",
+    "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_03.webp",
+    "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_04.webp",
+    "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_05.webp",
+    "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_06.webp",
   ],
   amenities: [
     { label: "Private Pool", icon: "Waves" },
@@ -109,50 +120,70 @@ export const domeVillas = {
     {
       title: "Barbecue Experiences",
       description: "Self-use grill setups for group cooking.",
-      image:
-        "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_01.webp",
+      image: "/Villa_Retreats/Dome/3-Experienceee/barbeque.webp",
     },
     {
       title: "Bonfire Evenings",
       description: "Outdoor bonfire for gatherings.",
-      image:
-        "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_02.webp",
+      image: "/Villa_Retreats/Dome/3-Experienceee/Bonfire.webp",
     },
     {
       title: "Movie Nights",
       description: "Projector-based viewing experience.",
-      image:
-        "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_03.webp",
+      image: "/Villa_Retreats/Dome/3-Experienceee/Movie Under The Stars.webp",
     },
     {
-      title: "Horse Ranch Visit",
-      description: "Experiential visit available opposite the property.",
-      image:
-        "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_04.webp",
+      title: "Candlelit Dining",
+      description: "A private dining setup under warm lights.",
+      image: "/Villa_Retreats/Dome/3-Experienceee/Candlelit Dining.webp",
     },
     {
-      title: "Nature Stays",
-      description: "Relaxed time within garden and open spaces.",
-      image:
-        "/Villa_Retreats/Dome Villa_s - Blue/Experiences/experiences_05.webp",
+      title: "Picnic Setup",
+      description: "Curated picnic moments in the garden.",
+      image: "/Villa_Retreats/Dome/3-Experienceee/Picnic Setup.webp",
+    },
+    {
+      title: "Floating Breakfast",
+      description: "Breakfast served in the pool for a relaxed start.",
+      image: "/Villa_Retreats/Dome/3-Experienceee/Floating Breakfast.webp",
+    },
+    {
+      title: "Outdoor Activities",
+      description: "Open-air games and group-friendly activities.",
+      image: "/Villa_Retreats/Dome/3-Experienceee/Outdoor Activities.webp",
+    },
+    {
+      title: "Indoor Games",
+      description: "Board games and indoor entertainment for groups.",
+      image: "/Villa_Retreats/Dome/3-Experienceee/Indoor Games.webp",
+    },
+    {
+      title: "High Tea",
+      description: "Evening tea with light bites in a cozy setting.",
+      image: "/Villa_Retreats/Dome/3-Experienceee/High Tea.webp",
+    },
+    {
+      title: "Zen Garden",
+      description: "Quiet outdoor corners for slow, peaceful time.",
+      image: "/Villa_Retreats/Dome/3-Experienceee/Zen Garden.webp",
     },
   ],
   spaces: [
     {
       name: "Red Dome",
-      image: "/Villa_Retreats/Dome Villa_s - Red/Spaces/spaces_01.webp",
+      image: "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/spaces_01.webp",
     },
     {
       name: "Blue Dome",
-      image: "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp",
+      image: "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_01.webp",
     },
     {
       name: "Yellow Dome",
-      image: "/Villa_Retreats/Dome Villa_s - Yellow/Spaces/spaces_01.webp",
+      image: "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/spaces_01.webp",
     },
     {
       name: "Plunge Pool",
-      image: "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp",
+      image: "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_04.webp",
     },
   ],
   categorizedSpaces: [
@@ -167,9 +198,9 @@ export const domeVillas = {
         "Entertainment setup",
       ],
       images: [
-        "/Villa_Retreats/Dome Villa_s - Red/Spaces/spaces_01.webp",
-        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp",
-        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_02.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_02.webp",
       ],
     },
     {
@@ -183,9 +214,9 @@ export const domeVillas = {
         "Entertainment setup",
       ],
       images: [
-        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_01.webp",
-        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_03.webp",
-        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_03.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_04.webp",
       ],
     },
     {
@@ -199,9 +230,9 @@ export const domeVillas = {
         "Entertainment setup",
       ],
       images: [
-        "/Villa_Retreats/Dome Villa_s - Yellow/Spaces/spaces_01.webp",
-        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_05.webp",
-        "/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_06.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/spaces_01.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_05.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_06.webp",
       ],
     },
     {
@@ -214,7 +245,7 @@ export const domeVillas = {
         "Bonfire zone",
         "Barbecue setup",
       ],
-      images: ["/Villa_Retreats/Dome Villa_s - Blue/Spaces/spaces_04.webp"],
+      images: ["/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/spaces_04.webp"],
     },
   ],
   pricing: {

@@ -20,8 +20,8 @@ export const retreatOnTheRidge = {
     "Team Outings",
   ],
   categories: ["Hillside Retreats", "Nature Escapes", "Private Stays"],
-  thumbnail: "/Villa_Retreats/Retreat on the ridge/Hero/hero.webp",
-  image: "/Villa_Retreats/Retreat on the ridge/Hero/hero.webp",
+  thumbnail: "/Villa_Retreats/Retreat on the ridge/1-Hero/3-2.webp",
+  image: "/Villa_Retreats/Retreat on the ridge/1-Hero/3-2.webp",
   images: [
     "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_01.webp",
     "/Villa_Retreats/Retreat on the ridge/Spaces/spaces_02.webp",
@@ -263,7 +263,7 @@ export const retreatOnTheRidge = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=SiQ_0LH1MDk",
-    thumbnail: "/Villa_Retreats/Retreat on the ridge/Hero/hero.webp",
+    thumbnail: "/Villa_Retreats/Retreat on the ridge/1-Hero/3-2.webp",
     duration: "1:25",
   },
   faq: [

@@ -64,7 +64,7 @@ export default function CorporateVillaCard({
   const price = "₹75,000"; // Default corporate starting price
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 w-full pb-8 lg:py-8 border-b border-white/5 last:border-b-0 bg-[#1A1C1E] min-h-[calc(100vh-80px)] lg:min-h-0">
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 w-full pb-8 lg:py-8 border-b border-white/5 last:border-b-0 bg-[#1A1C1E]">
       {/* IMAGE SECTION */}
       <div className="relative w-full lg:w-1/2 h-[45vh] lg:h-auto overflow-hidden bg-white/5 flex-shrink-0">
         <AnimatePresence initial={false} custom={direction}>
@@ -122,23 +122,35 @@ export default function CorporateVillaCard({
       </div>
 
       {/* CONTENT SECTION */}
-      <div className="flex flex-col flex-1 px-4 lg:px-0 pt-6 lg:pt-0 lg:max-w-2xl justify-start">
-        <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase mb-4">
+      <div className="flex flex-col flex-1 px-6 md:px-8 lg:px-0 pt-6 lg:pt-0 lg:max-w-2xl justify-start">
+        <span
+          className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase"
+          style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
+        >
           {villa.type}
         </span>
 
-        <h2 className="font-philosopher text-gh-h3 text-white mb-2 leading-tight">
+        <h2
+          className="font-philosopher text-gh-h3 text-white leading-tight"
+          style={{ marginBottom: "clamp(4px, 0.8vw, 8px)" }}
+        >
           {villa.name}
         </h2>
 
-        <div className="flex items-center gap-2 text-white/50 mb-2">
+        <div
+          className="flex items-center gap-2 text-white/50"
+          style={{ marginBottom: "clamp(4px, 0.8vw, 8px)" }}
+        >
           <MapPin className="w-5 h-5 text-[#EFCD62]" />
           <span className="font-manrope text-gh-body tracking-wide">
             {villa.location}
           </span>
         </div>
 
-        <p className="font-manrope text-white/50 leading-relaxed mb-4 text-gh-desc line-clamp-2 md:line-clamp-none">
+        <p
+          className="font-manrope text-white/50 leading-relaxed text-gh-desc line-clamp-2 md:line-clamp-none"
+          style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+        >
           {villa.description.split(".")[0]}. Designed for{" "}
           <span className="text-white/80 font-bold">
             focused corporate retreats
