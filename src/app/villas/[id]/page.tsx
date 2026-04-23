@@ -58,6 +58,7 @@ import DetailsDrawer from "@/components/DetailsDrawer";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { VILLAS } from "@/lib/mockData";
 import type { Villa } from "@/lib/types";
+import { prettyMediaLabel } from "@/lib/mediaLabels";
 
 // Icon mapping helper
 const getIcon = (iconName?: string, title?: string) => {
@@ -202,10 +203,7 @@ export default function VillaDetailsPage() {
       ? spaceImages
       : (villa.spaces || []).map((s) => s.image);
     return list.map((img) => ({
-      name: decodeURIComponent(img.split("/").pop() || "")
-        .replace(/\.webp$/i, "")
-        .replace(/[_-]+/g, " ")
-        .trim(),
+      name: prettyMediaLabel({ url: img, fallback: "Space", kind: "space" }),
       image: img,
     }));
   }, [spaceImages, villa.spaces]);
@@ -215,10 +213,11 @@ export default function VillaDetailsPage() {
       ? experienceImages
       : (villa.activities || []).map((a) => a.image);
     return list.map((img) => ({
-      title: decodeURIComponent(img.split("/").pop() || "")
-        .replace(/\.webp$/i, "")
-        .replace(/[_-]+/g, " ")
-        .trim(),
+      title: prettyMediaLabel({
+        url: img,
+        fallback: "Experience",
+        kind: "experience",
+      }),
       image: img,
     }));
   }, [experienceImages, villa.activities]);

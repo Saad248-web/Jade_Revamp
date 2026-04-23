@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -18,6 +18,7 @@ import { VILLAS } from "@/lib/mockData";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useBooking } from "@/context/BookingContext";
 import { useWishlist } from "@/context/WishlistContext";
+import { prettyMediaLabel } from "@/lib/mediaLabels";
 
 interface VillaCardProps {
   villa: (typeof VILLAS)[0];
@@ -29,6 +30,10 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const router = useRouter();
   const { dateRange, guests } = useBooking();
   const { toggleWishlist, isWishlisted } = useWishlist();
+  const [serverMedia, setServerMedia] = useState<{
+    hero: string[];
+    categorizedSpaces?: Array<{ title?: string; category?: string; images?: string[] }>;
+  } | null>(null);
 
   const wishlisted = isWishlisted(villa.id);
 
@@ -53,37 +58,73 @@ export default function VillaCard({ villa }: VillaCardProps) {
 
   // Build a rich carousel: hero image first, then gallery (or spaces fallback)
   const validImage = (img: string | undefined) => img && img.length > 0;
-  const images: { name: string; image: string }[] = (() => {
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch(`/api/villas/${villa.id}/media`, { cache: "force-cache" });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) setServerMedia(data);
+      } catch {
+        // ignore
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [villa.id]);
+
+  const images: { name: string; image: string }[] = useMemo(() => {
     const list: { name: string; image: string }[] = [];
 
-    // Always start with the hero image if valid
-    if (validImage(villa.image)) {
-      list.push({ name: "Main", image: villa.image as string });
+    const heroFromApi = serverMedia?.hero?.[0];
+    const hero = validImage(heroFromApi) ? heroFromApi : villa.image;
+    if (validImage(hero)) list.push({ name: "Main", image: hero as string });
+
+    // Prefer API categorized spaces: pick one representative per category
+    const cat = (serverMedia?.categorizedSpaces || [])
+      .map((g) => {
+        const img = g.images?.find((x) => validImage(x));
+        if (!img) return null;
+        const title = g.title || g.category || "Space";
+        return {
+          name: title,
+          image: img,
+        };
+      })
+      .filter(Boolean) as { name: string; image: string }[];
+
+    if (cat.length > 0) {
+      list.push(...cat);
+      return list.map((x) => ({
+        name: prettyMediaLabel({ url: x.image, fallback: x.name, kind: "space" }),
+        image: x.image,
+      }));
     }
 
-    // Prefer the images[] gallery array
+    // Fall back to the images[] gallery array
     const gallery = (villa.images || [])
       .filter((img): img is string => validImage(img) === true)
-      .map((img, i) => ({ name: `View ${i + 1}`, image: img }));
-
-    if (gallery.length > 0) {
-      list.push(...gallery);
-      return list;
-    }
+      .map((img, i) => ({
+        name: prettyMediaLabel({ url: img, fallback: `View ${i + 1}`, kind: "generic" }),
+        image: img,
+      }));
+    if (gallery.length > 0) return list.concat(gallery);
 
     // Fall back to spaces[] entries with valid images
     const spaceImages = (villa.spaces || [])
       .filter((s) => validImage(s.image))
-      .map((s) => ({ name: s.name, image: s.image as string }));
-
-    if (spaceImages.length > 0) {
-      list.push(...spaceImages);
-      return list;
-    }
+      .map((s) => ({
+        name: prettyMediaLabel({ url: s.image as string, fallback: s.name, kind: "space" }),
+        image: s.image as string,
+      }));
+    if (spaceImages.length > 0) return list.concat(spaceImages);
 
     if (list.length > 0) return list;
     return [{ name: "Main", image: "" }];
-  })();
+  }, [serverMedia, villa.image, villa.images, villa.spaces]);
 
   const nextImage = () => {
     setDirection(1);
@@ -125,10 +166,11 @@ export default function VillaCard({ villa }: VillaCardProps) {
                 src={currentSpace.image}
                 alt={`${villa.name} - ${currentSpace.name}`}
                 fill
-                className="object-cover"
+                className="object-cover object-center"
                 sizes="(max-width: 768px) 100vw, 45vw"
                 priority={currentImageIndex === 0}
                 loading={currentImageIndex === 0 ? "eager" : "lazy"}
+                unoptimized
               />
             ) : (
               <div className="absolute inset-0 bg-white/5 flex items-center justify-center text-white/20 text-xs font-bold uppercase tracking-widest">

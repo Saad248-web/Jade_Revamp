@@ -2,15 +2,12 @@
 
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Play, ArrowRight, ArrowLeft } from "lucide-react";
-import PrimaryButton from "@/components/PrimaryButton";
 import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import LiveBackground from "@/components/LiveBackground";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
-import { useAnimation } from "@/context/AnimationContext";
 import GlassStatsBanner from "@/components/GlassStatsBanner";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -19,35 +16,36 @@ const OFFERINGS = [
     title: "Weekend Getaways",
     description:
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone's wishlist.",
-    image: "/Awards_and_Recognition/764.webp",
-    link: "/weekend-getaways",
   },
   {
     title: "Corporate Retreats",
     description:
       "Private venues designed for focused sessions, team alignment, and meaningful downtime.",
-    image: "/Awards_and_Recognition/ds.webp",
-    link: "/corporate-retreats",
   },
   {
     title: "Weddings",
     description:
       "Bespoke celebrations in curated settings that make your special day truly unforgettable.",
-    image: "/Awards_and_Recognition/dsas.webp",
-    link: "/weddings",
   },
   {
     title: "Party Villas",
     description:
       "Host birthdays, pool parties, reunions or milestone celebrations in exclusive Jade villas.",
-    image: "/Awards_and_Recognition/msa.webp",
-    link: "/party-villas",
   },
 ];
 
+const TEAM_PLACEHOLDERS = [
+  { initials: "AK", name: "Aakansh Kundi", role: "Director" },
+  { initials: "JK", name: "Leadership", role: "Operations" },
+  { initials: "JH", name: "Leadership", role: "Hospitality" },
+  { initials: "JD", name: "Leadership", role: "Experiences" },
+] as const;
+
 export default function AboutPage() {
-  const { setPartnerOverlayOpen } = useAnimation();
   const [currentOffering, setCurrentOffering] = React.useState(0);
+  const [hoverPreviewSrc, setHoverPreviewSrc] = React.useState<string | null>(
+    null,
+  );
 
   const nextOffering = () =>
     setCurrentOffering((prev) => (prev + 1) % OFFERINGS.length);
@@ -280,21 +278,11 @@ export default function AboutPage() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="absolute inset-0 w-full h-full"
+                className="absolute inset-0 w-full h-full border border-white/10 bg-gradient-to-br from-white/[0.06] via-[#1A1C1E] to-[#0B2C23]/80"
               >
-                <Image
-                  src={offering.image}
-                  alt={offering.title}
-                  fill
-                  className="object-cover"
-                  sizes="100vw"
-                  priority
-                />
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                <div className="absolute inset-0 opacity-[0.07] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:18px_18px]" />
 
-                {/* Content Overlay (Matching Image 2) */}
-                <div className="absolute inset-0 flex flex-col items-center justify-end p-8 md:p-16 text-center max-w-4xl mx-auto pb-12 md:pb-20">
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-8 md:p-16 text-center max-w-3xl mx-auto">
                   <motion.h3
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -307,23 +295,10 @@ export default function AboutPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="text-white/70 max-w-xl mb-8 md:mb-12 font-manrope text-gh-body leading-relaxed text-center"
+                    className="text-white/70 max-w-xl font-manrope text-gh-body leading-relaxed text-center"
                   >
                     {offering.description}
                   </motion.p>
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    <Link
-                      href={offering.link}
-                      className="inline-flex w-fit border border-white/30 bg-white/5 backdrop-blur-sm text-white px-8 py-4 uppercase tracking-widest text-gh-label font-bold hover:bg-white hover:text-black transition-all items-center gap-3"
-                    >
-                      SEE WHAT A {offering.title.toUpperCase().split(" ")[0]}{" "}
-                      LOOKS LIKE <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </motion.div>
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -354,31 +329,19 @@ export default function AboutPage() {
         {/* Full-width Slider Bleeding to Right */}
         <div className="relative z-10 pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]">
           <div className="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x snap-mandatory pr-12 md:pr-24 lg:pr-[30vw]">
-            {[1, 2, 3, 4].map((i) => (
+            {TEAM_PLACEHOLDERS.map((member, i) => (
               <div
                 key={i}
                 className="flex-shrink-0 w-[240px] xs:w-[280px] md:w-[350px] bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 flex flex-col items-center text-center rounded-none snap-center"
               >
-                <div className="relative w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden border-2 border-[#EFCD62]/20 mb-8">
-                  <Image
-                    src={
-                      [
-                        "/Awards_and_Recognition/764.webp",
-                        "/Awards_and_Recognition/ds.webp",
-                        "/Awards_and_Recognition/dsas.webp",
-                        "/Awards_and_Recognition/msa.webp",
-                      ][(i - 1) % 4]
-                    }
-                    alt="Team Member"
-                    fill
-                    className="object-cover grayscale"
-                  />
+                <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border-2 border-[#EFCD62]/30 mb-8 flex items-center justify-center bg-gradient-to-br from-white/10 to-white/[0.02] text-[#EFCD62] font-philosopher text-3xl md:text-4xl tracking-wide">
+                  {member.initials}
                 </div>
                 <h4 className="text-white text-gh-body font-bold font-manrope mb-2">
-                  Aakansh Kundi
+                  {member.name}
                 </h4>
                 <p className="text-white/40 uppercase tracking-widest text-gh-desc">
-                  Director
+                  {member.role}
                 </p>
               </div>
             ))}
@@ -404,7 +367,13 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {/* Row 1 */}
-            <div className="relative aspect-square md:aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
+            <div
+              className="relative aspect-square md:aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-zoom-in"
+              onMouseEnter={() =>
+                setHoverPreviewSrc("/Awards_and_Recognition/764.webp")
+              }
+              onMouseLeave={() => setHoverPreviewSrc(null)}
+            >
               <Image
                 src="/Awards_and_Recognition/764.webp"
                 alt="Media"
@@ -420,7 +389,13 @@ export default function AboutPage() {
                 className="object-contain p-12 opacity-80 group-hover:scale-110 transition-transform duration-700"
               />
             </div>
-            <div className="relative hidden lg:block aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
+            <div
+              className="relative hidden lg:block aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-zoom-in"
+              onMouseEnter={() =>
+                setHoverPreviewSrc("/Awards_and_Recognition/ds.webp")
+              }
+              onMouseLeave={() => setHoverPreviewSrc(null)}
+            >
               <Image
                 src="/Awards_and_Recognition/ds.webp"
                 alt="Media"
@@ -431,7 +406,13 @@ export default function AboutPage() {
 
             {/* Row 2 (Featured Wide) */}
             <div className="col-span-2 lg:col-span-3 pb-4">
-              <div className="relative aspect-video w-full bg-white/5 border border-white/10 rounded-none overflow-hidden group">
+              <div
+                className="relative aspect-video w-full bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-zoom-in"
+                onMouseEnter={() =>
+                  setHoverPreviewSrc("/Awards_and_Recognition/dsas.webp")
+                }
+                onMouseLeave={() => setHoverPreviewSrc(null)}
+              >
                 <Image
                   src="/Awards_and_Recognition/dsas.webp"
                   alt="Media Item"
@@ -447,7 +428,13 @@ export default function AboutPage() {
             </div>
 
             {/* Row 3 */}
-            <div className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
+            <div
+              className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-zoom-in"
+              onMouseEnter={() =>
+                setHoverPreviewSrc("/Awards_and_Recognition/764.webp")
+              }
+              onMouseLeave={() => setHoverPreviewSrc(null)}
+            >
               <Image
                 src="/Awards_and_Recognition/764.webp"
                 alt="Media"
@@ -455,7 +442,13 @@ export default function AboutPage() {
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
               />
             </div>
-            <div className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
+            <div
+              className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-zoom-in"
+              onMouseEnter={() =>
+                setHoverPreviewSrc("/Awards_and_Recognition/msa.webp")
+              }
+              onMouseLeave={() => setHoverPreviewSrc(null)}
+            >
               <Image
                 src="/Awards_and_Recognition/msa.webp"
                 alt="Media"
@@ -463,7 +456,13 @@ export default function AboutPage() {
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
               />
             </div>
-            <div className="relative col-span-2 lg:col-span-1 aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
+            <div
+              className="relative col-span-2 lg:col-span-1 aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-zoom-in"
+              onMouseEnter={() =>
+                setHoverPreviewSrc("/Awards_and_Recognition/msa.webp")
+              }
+              onMouseLeave={() => setHoverPreviewSrc(null)}
+            >
               <Image
                 src="/Awards_and_Recognition/msa.webp"
                 alt="Media"
@@ -474,6 +473,37 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* Hover full-image preview (no linking) */}
+      <AnimatePresence>
+        {hoverPreviewSrc && (
+          <motion.div
+            key={hoverPreviewSrc}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="fixed inset-0 z-[80] pointer-events-none flex items-center justify-center bg-black/60 backdrop-blur-[2px]"
+          >
+            <motion.div
+              initial={{ scale: 0.98, y: 6 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.98, y: 6 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              className="relative w-[92vw] max-w-5xl aspect-video md:aspect-[16/9] border border-white/15 bg-black/40 overflow-hidden"
+            >
+              <Image
+                src={hoverPreviewSrc}
+                alt="Preview"
+                fill
+                className="object-contain"
+                sizes="92vw"
+                unoptimized
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </main>
