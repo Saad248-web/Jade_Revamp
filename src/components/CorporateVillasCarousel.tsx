@@ -29,9 +29,12 @@ export default function CorporateVillasCarousel() {
   };
 
   return (
-    <section id="featured-venues" className="relative bg-[#1A1C1E] py-fluid-lg md:py-fluid-xl">
-      <div className="max-w-[1920px] mx-auto px-0 md:px-8 lg:px-16 w-full overflow-hidden">
-        <div className="flex flex-col gap-10">
+    <section
+      id="featured-venues"
+      className="relative bg-[#1A1C1E] pt-fluid-lg pb-10 md:pt-fluid-xl md:pb-10"
+    >
+      <div className="max-w-5xl mx-auto px-6 w-full overflow-hidden">
+        <div className="flex flex-col gap-14">
           {CORPORATE_VILLAS.map((villa) => (
             <CorporateVillaCard
               key={villa.id}

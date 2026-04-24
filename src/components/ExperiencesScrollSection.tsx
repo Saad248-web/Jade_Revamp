@@ -15,8 +15,7 @@ const PANELS = [
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone’s wishlist.",
     cta: "SEE WHAT A GETAWAY LOOKS LIKE",
     href: "/weekend-getaways",
-    image:
-      "/Experiences/Weddings/1-Hero/2 (1).webp",
+    image: "/Experiences/Weddings/1-Hero/2 (1).webp",
   },
   {
     id: "celebrations",
@@ -225,7 +224,7 @@ function PanelSlide({
     >
       <div className="pointer-events-auto flex items-center justify-center w-full h-full">
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
-        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 py-4">
+        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 pt-4 pb-10">
           <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg xl:max-w-xl mx-auto flex flex-col items-stretch gap-3 lg:gap-5">
             {/* Image Section — zoom-safe max height so CTA stays above the fold */}
             <div className="relative w-full aspect-[16/9] max-h-[clamp(180px,38vh,360px)] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">

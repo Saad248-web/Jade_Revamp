@@ -175,9 +175,10 @@ export default function Footer() {
 
         {/* ── FORM SECTION ─────────────────────────────────────────────── */}
         <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pt-10 lg:pt-20 pb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-stretch">
             {/* LEFT: Heading + (Desktop) Links + Contact */}
-            <div className="lg:col-span-6 flex flex-col gap-16">
+            {/* LEFT: Heading + Contact Form */}
+            <div className="lg:col-span-7 flex flex-col gap-12 lg:pr-12">
               {/* Heading */}
               <div>
                 <p
@@ -192,145 +193,55 @@ export default function Footer() {
                 </h2>
               </div>
 
-              {/* Desktop: Links + Contact */}
-              <div className="hidden lg:flex flex-col gap-12">
-                {/* Links Grid */}
-                <div className="grid grid-cols-2 gap-x-12 gap-y-3 max-w-md">
-                  <div className="flex flex-col gap-3">
-                    {LINKS_COLUMN_1.map((link) => (
-                      <Link
-                        key={link.label}
-                        href={link.href}
-                        className="group font-manrope text-gh-label text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
-                      >
-                        <span className="inline-block transition-transform duration-300 group-hover:translate-x-1 text-gh-label">
-                          ▶
-                        </span>
-                        {link.label}
-                      </Link>
-                    ))}
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    {LINKS_COLUMN_2.map((link) => (
-                      <Link
-                        key={link.label}
-                        href={link.href}
-                        className="group font-manrope text-gh-label text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
-                      >
-                        <span className="inline-block transition-transform duration-300 group-hover:translate-x-1 text-gh-label">
-                          ▶
-                        </span>
-                        {link.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Logo + Contact Info */}
-                <div className="flex flex-col gap-6">
-                  <div className="w-14 h-14 relative">
-                    <Image
-                      src="/assets/Golden_Logo.png"
-                      alt="Jade Logo"
-                      fill
-                      sizes="56px"
-                      className="object-contain"
+              {/* Form Content */}
+              <form className="space-y-6" onSubmit={handleFormSubmit}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Name */}
+                  <div className="group relative">
+                    <input
+                      type="text"
+                      id="fullName"
+                      value={formData.fullName}
+                      onChange={(e) =>
+                        setFormData({ ...formData, fullName: e.target.value })
+                      }
+                      placeholder=" "
+                      className="peer w-full bg-white/[0.04] border border-white/10 px-4 py-4 text-white focus:border-[#EFCD62]/50 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
                     />
-                  </div>
-                  <div className="flex flex-col gap-3 text-white/60 font-manrope text-gh-body">
-                    <div className="flex items-start gap-3">
-                      <MapPin className="w-4 h-4 text-[#EFCD62] shrink-0 mt-0.5" />
-                      <span>
-                        76, phase II, Royal Enclave, Srirampura, Bengaluru - 64
-                      </span>
-                    </div>
-                    <a
-                      href="tel:08970663366"
-                      className="flex items-center gap-3 hover:text-white transition-colors"
+                    <label
+                      htmlFor="fullName"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/40 transition-all duration-300 pointer-events-none px-2 
+                        peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-[#EFCD62] peer-focus:bg-[#2E3034] 
+                        peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
                     >
-                      <Phone className="w-4 h-4 text-[#EFCD62] shrink-0" />
-                      <span>0897 066 3366</span>
-                    </a>
-                    <div className="flex items-center gap-3">
-                      <Mail className="w-4 h-4 text-[#EFCD62] shrink-0" />
-                      <span>Info@jadehospitainment.com</span>
-                    </div>
+                      Full Name
+                    </label>
                   </div>
-                  <div className="flex gap-3">
-                    {[
-                      {
-                        Icon: Facebook,
-                        href: "https://www.facebook.com/jadehospitainment/",
-                      },
-                      {
-                        Icon: Instagram,
-                        href: "https://www.instagram.com/jadehospitainment/?hl=en",
-                      },
-                      {
-                        Icon: Youtube,
-                        href: "https://www.youtube.com/@jade_hospitainment",
-                      },
-                    ].map(({ Icon, href }, i) => (
-                      <a
-                        key={i}
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-9 h-9 border border-white/15 flex items-center justify-center hover:bg-[#EFCD62] hover:border-[#EFCD62] group transition-all duration-300 cursor-pointer"
-                      >
-                        <Icon className="w-4 h-4 text-white/70 group-hover:text-black transition-colors" />
-                      </a>
-                    ))}
+
+                  {/* Phone */}
+                  <div className="group relative">
+                    <input
+                      type="tel"
+                      id="phoneNumber"
+                      value={formData.phoneNumber}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          phoneNumber: e.target.value,
+                        })
+                      }
+                      placeholder=" "
+                      className="peer w-full bg-white/[0.04] border border-white/10 px-4 py-4 text-white focus:border-[#EFCD62]/50 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
+                    />
+                    <label
+                      htmlFor="phoneNumber"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/40 transition-all duration-300 pointer-events-none px-2 
+                        peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-[#EFCD62] peer-focus:bg-[#2E3034] 
+                        peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
+                    >
+                      Phone Number
+                    </label>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT: Contact Form */}
-            <div className="lg:col-span-6 lg:pl-12 pt-0 lg:pt-16">
-              <form className="space-y-5" onSubmit={handleFormSubmit}>
-                {/* Name */}
-                <div className="group relative">
-                  <input
-                    type="text"
-                    id="fullName"
-                    value={formData.fullName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, fullName: e.target.value })
-                    }
-                    placeholder=" "
-                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-white focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
-                  />
-                  <label
-                    htmlFor="fullName"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/50 transition-all duration-300 pointer-events-none px-2 
-                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white peer-focus:bg-[#2E3034] 
-                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
-                  >
-                    Full Name
-                  </label>
-                </div>
-
-                {/* Phone */}
-                <div className="group relative">
-                  <input
-                    type="tel"
-                    id="phoneNumber"
-                    value={formData.phoneNumber}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phoneNumber: e.target.value })
-                    }
-                    placeholder=" "
-                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-white focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
-                  />
-                  <label
-                    htmlFor="phoneNumber"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/50 transition-all duration-300 pointer-events-none px-2 
-                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white peer-focus:bg-[#2E3034] 
-                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
-                  >
-                    Phone Number
-                  </label>
                 </div>
 
                 {/* Subject */}
@@ -343,49 +254,45 @@ export default function Footer() {
                       setFormData({ ...formData, subject: e.target.value })
                     }
                     placeholder=" "
-                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-white focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
+                    className="peer w-full bg-white/[0.04] border border-white/10 px-4 py-4 text-white focus:border-[#EFCD62]/50 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
                   />
                   <label
                     htmlFor="subject"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/50 transition-all duration-300 pointer-events-none px-2 
-                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white peer-focus:bg-[#2E3034] 
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/40 transition-all duration-300 pointer-events-none px-2 
+                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-[#EFCD62] peer-focus:bg-[#2E3034] 
                       peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
                   >
                     Subject
                   </label>
                 </div>
 
-                {/* Date – calendar trigger */}
+                {/* Date */}
                 <div className="relative" ref={calendarRef}>
-                  {/* Trigger button */}
                   <button
                     type="button"
                     onClick={() => setShowCalendar((v) => !v)}
                     className={`w-full h-14 bg-white/[0.04] border px-4 text-left transition-colors rounded-none flex items-center justify-between ${
-                      showCalendar ? "border-[#EFCD62]" : "border-white/15"
+                      showCalendar ? "border-[#EFCD62]" : "border-white/10"
                     }`}
                   >
                     <span
                       className={`font-manrope text-gh-label ${
-                        dateLabel ? "text-white" : "text-white/40"
+                        dateLabel ? "text-white" : "text-white/30"
                       }`}
                     >
                       {dateLabel || "Check-In & Out Date"}
                     </span>
                     <CalendarDays
                       className={`w-4 h-4 shrink-0 transition-colors ${
-                        showCalendar ? "text-[#EFCD62]" : "text-white/30"
+                        showCalendar ? "text-[#EFCD62]" : "text-white/20"
                       }`}
                     />
                   </button>
-
-                  {/* Floating label when date selected */}
                   {dateLabel && (
                     <span className="absolute left-4 -top-2.5 text-gh-label text-[#EFCD62] bg-[#2E3034] px-2 pointer-events-none">
-                      Check-In &amp; Out Date
+                      Dates
                     </span>
                   )}
-
                   {/* Calendar overlay */}
                   <AnimatePresence>
                     {showCalendar && (
@@ -506,7 +413,7 @@ export default function Footer() {
                         </div>
 
                         {/* Footer hint */}
-                        <div className="mt-4 pt-4 border-t border-white/8 flex items-center justify-between">
+                        <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
                           <p className="font-manrope text-gh-label text-white/30">
                             {!checkIn
                               ? "Select check-in date"
@@ -536,144 +443,189 @@ export default function Footer() {
                 <div className="group relative">
                   <textarea
                     id="queries"
-                    rows={4}
+                    rows={3}
                     value={formData.queries}
                     onChange={(e) =>
                       setFormData({ ...formData, queries: e.target.value })
                     }
                     placeholder=" "
-                    className="peer w-full bg-white/[0.04] border border-white/15 px-4 py-4 text-white focus:border-white focus:outline-none transition-all duration-300 rounded-none resize-none placeholder-transparent"
+                    className="peer w-full bg-white/[0.04] border border-white/10 px-4 py-4 text-white focus:border-[#EFCD62]/50 focus:outline-none transition-all duration-300 rounded-none resize-none placeholder-transparent"
                   />
                   <label
                     htmlFor="queries"
-                    className="absolute left-4 top-8 text-gh-label text-white/50 transition-all duration-300 pointer-events-none px-2 
-                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white peer-focus:bg-[#2E3034] 
+                    className="absolute left-4 top-6 text-gh-label text-white/40 transition-all duration-300 pointer-events-none px-2 
+                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-[#EFCD62] peer-focus:bg-[#2E3034] 
                       peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
                   >
-                    Queries
+                    Your Queries
                   </label>
                 </div>
 
-                {/* Submit */}
                 <button
                   type="submit"
                   disabled={!isFormValid}
-                  className={`w-full py-4 mt-6 font-manrope tracking-[0.25em] text-gh-label transition-all duration-300 uppercase border ${
+                  className={`w-full py-4 mt-4 font-manrope tracking-[0.25em] text-gh-label transition-all duration-300 uppercase border ${
                     isFormValid
-                      ? "bg-transparent border-[#EFCD62]/50 text-[#EFCD62] hover:bg-[#EFCD62] hover:text-black hover:border-[#EFCD62]"
-                      : "bg-white/[0.03] border-white/10 text-white/20 cursor-not-allowed"
+                      ? "bg-transparent border-[#EFCD62]/40 text-[#EFCD62] hover:bg-[#EFCD62] hover:text-black hover:border-[#EFCD62]"
+                      : "bg-white/[0.02] border-white/10 text-white/10 cursor-not-allowed"
                   }`}
                 >
-                  SUBMIT
+                  SUBMIT INQUIRY
                 </button>
               </form>
             </div>
-          </div>
 
-          {/* ── MOBILE ONLY: Links + Contact ─────── */}
-          <div className="lg:hidden mt-14 flex flex-col gap-10">
-            <div className="w-full h-[1px] bg-white/10" />
-
-            {/* Links Grid */}
-            <div className="grid grid-cols-2 gap-x-6 gap-y-5">
-              <div className="flex flex-col gap-4">
-                {LINKS_COLUMN_1.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="group font-manrope text-gh-label text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
-                  >
-                    <span className="text-gh-label inline-block transition-transform duration-300 group-hover:translate-x-0.5">
-                      ▶
-                    </span>
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-              <div className="flex flex-col gap-4">
-                {LINKS_COLUMN_2.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="group font-manrope text-gh-label text-[#EFCD62] tracking-widest uppercase flex items-center gap-2 hover:text-white transition-colors duration-300"
-                  >
-                    <span className="text-gh-label inline-block transition-transform duration-300 group-hover:translate-x-0.5">
-                      ▶
-                    </span>
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Logo + Contact */}
-            <div className="flex flex-col gap-6">
-              <div className="w-10 h-10 relative">
-                <Image
-                  src="/assets/Golden_Logo.png"
-                  alt="Jade Logo"
-                  fill
-                  sizes="40px"
-                  className="object-contain"
-                />
-              </div>
-
-              <div className="flex flex-col gap-3 text-white/55 font-manrope text-gh-desc">
-                <div className="flex items-start gap-2.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#EFCD62] shrink-0 mt-0.5" />
-                  <span>
-                    76, phase II, Royal Enclave, Srirampura, Bengaluru - 64
-                  </span>
+            <div className="lg:col-start-8 lg:col-span-5 flex flex-col gap-12 pt-10 lg:pt-0">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12 lg:gap-y-16">
+                {/* Exploration Column */}
+                <div className="flex flex-col gap-8">
+                  <p className="font-philosopher text-white text-lg tracking-wider border-b border-white/10 pb-4 w-full block">
+                    Explorations
+                  </p>
+                  <div className="flex flex-col gap-4">
+                    {LINKS_COLUMN_1.slice(0, 7).map((link) => (
+                      <Link
+                        key={link.label}
+                        href={link.href}
+                        className="group flex items-center gap-3 font-manrope text-gh-label text-white/60 tracking-widest uppercase hover:text-[#EFCD62] transition-all duration-500"
+                      >
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#EFCD62]/30 group-hover:bg-[#EFCD62] group-hover:scale-125 transition-all duration-500" />
+                        <span className="relative overflow-hidden">
+                          {link.label}
+                          <span className="absolute bottom-0 left-0 w-0 h-px bg-[#EFCD62] transition-all duration-500 group-hover:w-full" />
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-                <a
-                  href="tel:08970663366"
-                  className="flex items-center gap-2.5 hover:text-white transition-colors"
-                >
-                  <Phone className="w-3.5 h-3.5 text-[#EFCD62] shrink-0" />
-                  <span>0897 066 3366</span>
-                </a>
-                <div className="flex items-center gap-2.5">
-                  <Mail className="w-3.5 h-3.5 text-[#EFCD62] shrink-0" />
-                  <span>Info@jadehospitainment.com</span>
+
+                {/* Company & Legal Column */}
+                <div className="flex flex-col gap-16">
+                  {/* Experience */}
+                  <div className="flex flex-col gap-8">
+                    <p className="font-philosopher text-white text-lg tracking-wider border-b border-white/10 pb-4 w-full block">
+                      Experience
+                    </p>
+                    <div className="flex flex-col gap-4">
+                      {LINKS_COLUMN_1.slice(7).map((link) => (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          className="group flex items-center gap-3 font-manrope text-gh-label text-white/60 tracking-widest uppercase hover:text-[#EFCD62] transition-all duration-500"
+                        >
+                          <div className="w-1.5 h-1.5 rounded-full bg-[#EFCD62]/30 group-hover:bg-[#EFCD62] group-hover:scale-125 transition-all duration-500" />
+                          <span className="relative overflow-hidden">
+                            {link.label}
+                            <span className="absolute bottom-0 left-0 w-0 h-px bg-[#EFCD62] transition-all duration-500 group-hover:w-full" />
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Legal */}
+                  <div className="flex flex-col gap-8">
+                    <p className="font-philosopher text-white text-lg tracking-wider border-b border-white/10 pb-4 w-full block">
+                      Legal
+                    </p>
+                    <div className="flex flex-col gap-4">
+                      {LINKS_COLUMN_2.map((link) => (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          className="group flex items-center gap-3 font-manrope text-gh-label text-white/60 tracking-widest uppercase hover:text-[#EFCD62] transition-all duration-500"
+                        >
+                          <div className="w-1.5 h-1.5 rounded-full bg-[#EFCD62]/30 group-hover:bg-[#EFCD62] group-hover:scale-125 transition-all duration-500" />
+                          <span className="relative overflow-hidden">
+                            {link.label}
+                            <span className="absolute bottom-0 left-0 w-0 h-px bg-[#EFCD62] transition-all duration-500 group-hover:w-full" />
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex gap-3">
-                {[
-                  {
-                    Icon: Facebook,
-                    href: "https://www.facebook.com/jadehospitainment/",
-                  },
-                  {
-                    Icon: Instagram,
-                    href: "https://www.instagram.com/jadehospitainment/?hl=en",
-                  },
-                  {
-                    Icon: Youtube,
-                    href: "https://www.youtube.com/@jade_hospitainment",
-                  },
-                ].map(({ Icon, href }, i) => (
-                  <a
-                    key={i}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-9 h-9 border border-white/15 flex items-center justify-center hover:bg-[#EFCD62] hover:border-[#EFCD62] group transition-all duration-300 cursor-pointer"
-                  >
-                    <Icon className="w-4 h-4 text-white/70 group-hover:text-black transition-colors" />
-                  </a>
-                ))}
+              {/* Contact Info Anchor */}
+              <div className="mt-auto pt-12 border-t border-white/10">
+                <div className="flex flex-col gap-8">
+                  <div className="w-12 h-12 relative opacity-50 contrast-125">
+                    <Image
+                      src="/assets/Golden_Logo.png"
+                      alt="Jade Logo"
+                      fill
+                      sizes="48px"
+                      className="object-contain"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-white/50 font-manrope text-gh-label tracking-wide uppercase">
+                    <div className="flex items-start gap-4">
+                      <MapPin className="w-4 h-4 text-[#EFCD62] shrink-0 mt-0.5" />
+                      <span className="leading-relaxed">
+                        76, phase II, Royal Enclave, Srirampura, Bengaluru - 64
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-4">
+                      <a
+                        href="tel:08970663366"
+                        className="flex items-center gap-4 hover:text-[#EFCD62] transition-colors"
+                      >
+                        <Phone className="w-4 h-4 text-[#EFCD62] shrink-0" />
+                        <span>0897 066 3366</span>
+                      </a>
+                      <a
+                        href="mailto:Info@jadehospitainment.com"
+                        className="flex items-center gap-4 hover:text-[#EFCD62] transition-colors"
+                      >
+                        <Mail className="w-4 h-4 text-[#EFCD62] shrink-0" />
+                        <span className="lowercase">
+                          Info@jadehospitainment.com
+                        </span>
+                      </a>
+                      <div className="flex gap-1 mt-2 -ml-2">
+                        {[
+                          {
+                            Icon: Facebook,
+                            size: "w-[18px] h-[18px]",
+                            href: "https://www.facebook.com/jadehospitainment/",
+                          },
+                          {
+                            Icon: Instagram,
+                            size: "w-[20px] h-[20px]",
+                            href: "https://www.instagram.com/jadehospitainment/?hl=en",
+                          },
+                          {
+                            Icon: Youtube,
+                            size: "w-[22px] h-[22px]",
+                            href: "https://www.youtube.com/@jade_hospitainment",
+                          },
+                        ].map(({ Icon, size, href }, i) => (
+                          <a
+                            key={i}
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-10 h-10 flex items-center justify-center text-white/30 hover:text-[#EFCD62] transition-all duration-300 cursor-pointer group"
+                          >
+                            <Icon
+                              className={`${size} transition-transform group-hover:scale-110`}
+                            />
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           {/* ── BOTTOM COPYRIGHT BAR ─────────────────────────────────────── */}
-          <div className="border-t border-white/8 mt-14 pt-7 flex flex-col md:flex-row items-center justify-between gap-3">
+          <div className="border-t border-white/10 mt-14 pt-7 flex flex-col md:flex-row items-center justify-between gap-3">
             <p className="font-manrope text-gh-label text-white/35 tracking-widest uppercase">
               © {currentYear} Jade Hospitainment — All Rights Reserved
-            </p>
-            <p className="font-manrope text-gh-label text-white/25 tracking-wide">
-              Crafted with excellence
             </p>
           </div>
         </div>

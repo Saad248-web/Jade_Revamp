@@ -31,7 +31,7 @@ export default function ExperienceCarouselSection({
   ctaText,
   ctaLink,
   onCtaClick,
-  aspectClass = "aspect-[4/5] md:aspect-[16/9] lg:h-[70vh]",
+  aspectClass = "aspect-[4/5] md:aspect-[16/9] lg:h-[50vh] lg:max-h-[550px]",
   buttonClassName = "w-full text-gh-label",
   buttonContainerClassName = "",
 }: ExperienceCarouselSectionProps) {
@@ -42,8 +42,8 @@ export default function ExperienceCarouselSection({
     setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
   return (
-    <section className="pt-fluid-lg pb-fluid-xl bg-[#141517]">
-      <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
+    <section className="pt-fluid-lg pb-10 bg-[#141517]">
+      <div className="max-w-[1920px] mx-auto px-6 md:px-24 lg:px-48 xl:px-64">
         <div className="relative">
           {/* Header Area */}
           <div

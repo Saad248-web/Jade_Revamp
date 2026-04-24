@@ -139,7 +139,7 @@ export default function ScrollSectionComposer({
     <div ref={containerRef} className="relative" style={{ height }}>
       <NavbarThemeTrigger theme={theme} sectionRef={containerRef} />
 
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+      <div className="sticky top-0 min-h-screen w-full overflow-hidden pb-10">
         {background}
 
         {/* Floating Icons - Only if showNavigation is true */}

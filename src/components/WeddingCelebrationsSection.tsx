@@ -82,7 +82,7 @@ export default function WeddingCelebrationsSection() {
     <section ref={targetRef} className="relative h-[600vh] bg-[#1A1C1E]">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#1A1C1E]">
         {/* Top Label & Counter - Global */}
-        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(48px,6vh,80px)] pb-[clamp(8px,1.5vh,18px)]">
+        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(48px,6vh,80px)] pb-10">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/90 to-transparent -z-10" />
           <span
             className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-[#EFCD62] drop-shadow-lg block"

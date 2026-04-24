@@ -245,7 +245,7 @@ function StackedPanel({
           theme={isGrid ? "golden" : "white"}
           sectionRef={panelRef}
         />
-        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 py-4">
+        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 pt-4 pb-10">
           {/* Layout Container - vertically centered in the available space so it adapts to any viewport (incl. 125-150% Windows scaling) */}
           <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg xl:max-w-xl mx-auto flex flex-col items-stretch gap-3 lg:gap-5">
             {/* Image/Grid Section - adaptive max-height so the CTA button stays visible at high Windows scaling */}

@@ -67,9 +67,9 @@ export default function PartyVillaCard({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 w-full pb-8 lg:py-8 border-b border-white/5 last:border-b-0 bg-[#25282C]">
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-16 w-full pb-8 lg:py-10 border-b border-white/5 last:border-b-0 bg-[#25282C]">
       {/* IMAGE SECTION */}
-      <div className="relative w-full lg:w-1/2 h-[45vh] lg:h-auto overflow-hidden bg-white/5 flex-shrink-0">
+      <div className="relative w-full lg:w-[45%] h-[38vh] lg:h-[360px] xl:h-[420px] overflow-hidden bg-white/5 flex-shrink-0">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={`${villa.id}-${currentImageIndex}`}

@@ -107,7 +107,7 @@ export default function InstagramCarousel() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-jade-charcoal pt-fluid-lg md:pt-fluid-xl pb-fluid-lg md:pb-fluid-xl overflow-hidden"
+      className="relative bg-jade-charcoal pt-fluid-lg md:pt-fluid-xl pb-10 overflow-hidden"
     >
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       <div className="max-w-[1920px] mx-auto">
@@ -203,7 +203,7 @@ export default function InstagramCarousel() {
         </div>
 
         {/* CTA Button */}
-        <div className="flex justify-center mt-8 mb-8 px-6">
+        <div className="flex justify-center mt-8 px-6">
           <PrimaryButton
             href="https://www.instagram.com/jadehospitainment"
             target="_blank"

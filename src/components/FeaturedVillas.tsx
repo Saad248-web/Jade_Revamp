@@ -167,7 +167,8 @@ function VillaSlide({
   useEffect(() => {
     const computeOffset = () => {
       const w = window.innerWidth;
-      const panelWidth = w >= 1280 ? 576 : w >= 768 ? 512 : w >= 640 ? 448 : 384;
+      const panelWidth =
+        w >= 1280 ? 576 : w >= 768 ? 512 : w >= 640 ? 448 : 384;
       const cappedPanel = Math.min(panelWidth, w - 48);
       const visibleGap = 56;
       return Math.ceil(w / 2 + cappedPanel / 2 + visibleGap);
@@ -203,18 +204,18 @@ function VillaSlide({
       style={{ x, zIndex: index * 10 }}
       className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none bg-transparent"
     >
-      <div className="pointer-events-auto relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-24">
+      <div className="pointer-events-auto relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-20 lg:px-32 xl:px-48">
         {/* Layout Container: Stacked universally on all screen sizes */}
-        <div className="relative w-full max-w-xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
+        <div className="relative w-full max-w-3xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
           {/* Image Section */}
-          <div className="relative w-full h-[45vh] lg:h-[55vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
+          <div className="relative w-full aspect-[16/9] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
             <div className="w-full h-full relative">
               <Image
                 src={data.desktopImage}
                 alt={data.title}
                 fill
                 className="object-cover"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 600px"
+                sizes="(max-width: 640px) 100vw, (max-width: 1280px) 95vw, 1400px"
                 unoptimized={data.title === "Retreat on the Ridge"}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent lg:hidden" />
@@ -233,7 +234,7 @@ function VillaSlide({
           </div>
 
           {/* Text Section */}
-          <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 pb-4">
+          <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 pb-10">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -254,7 +255,7 @@ function VillaSlide({
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="font-manrope text-gh-body text-white/80 leading-relaxed mb-6 lg:mb-8 line-clamp-3 max-w-lg"
+              className="font-manrope text-gh-body text-white/80 leading-relaxed mb-6 lg:mb-8 line-clamp-3"
             >
               {data.description}
             </motion.p>

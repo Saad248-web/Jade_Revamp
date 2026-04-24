@@ -29,8 +29,8 @@ export default function VillasCarouselSection({
   onCtaClick,
 }: VillasCarouselSectionProps) {
   return (
-    <section className="py-fluid-lg md:py-fluid-xl bg-[#141517] border-t border-white/5">
-      <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
+    <section className="pt-fluid-lg pb-10 md:pt-fluid-xl md:pb-10 bg-[#141517] border-t border-white/5">
+      <div className="max-w-[1920px] mx-auto px-6 md:px-24 lg:px-48 xl:px-64">
         {/* Header */}
         <div
           className="text-center"
@@ -48,7 +48,7 @@ export default function VillasCarouselSection({
         </div>
 
         {/* Scrollable List */}
-        <div className="relative mb-0 -mx-6 md:-mx-12 lg:-mx-24 px-6 md:px-12 lg:px-24">
+        <div className="relative mb-0 -mx-6 md:-mx-24 lg:-mx-48 xl:-mx-64 px-6 md:px-24 lg:px-48 xl:px-64">
           <div
             className="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory"
             style={{ gap: "clamp(16px, 3vw, 32px)" }}

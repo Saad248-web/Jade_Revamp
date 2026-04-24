@@ -32,11 +32,11 @@ export default function WeddingVenuesCarousel() {
   const currentVilla = WEDDING_VENUES[currentIndex];
 
   return (
-    <section className="relative bg-[#1A1C1E] py-fluid-lg md:py-fluid-xl">
-      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full">
+    <section className="relative bg-[#1A1C1E] pt-fluid-lg pb-10 md:pt-fluid-xl md:pb-10">
+      <div className="max-w-3xl mx-auto px-6 w-full">
         <div className="flex flex-col gap-12">
           {/* IMAGE SECTION - NAVIGATION INSIDE FRAME */}
-          <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden rounded-sm bg-white/5 group">
+          <div className="relative w-full aspect-[16/9] md:aspect-[2.4/1] lg:h-[48vh] lg:max-h-[520px] overflow-hidden rounded-sm bg-white/5 group">
             <AnimatePresence initial={false} custom={direction}>
               <motion.div
                 key={currentVilla.id}
@@ -128,7 +128,7 @@ export default function WeddingVenuesCarousel() {
                   {currentVilla.location}
                 </span>
               </div>
-              <p className="font-manrope text-white/70 leading-relaxed text-gh-body max-w-2xl">
+              <p className="font-manrope text-white/70 leading-relaxed text-gh-body">
                 {currentVilla.description.split(".")[0]}.{" "}
                 {currentVilla.description.split(".")[1] || ""}. Built to support
                 high-guest-count weddings and grand celebrations.
