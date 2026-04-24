@@ -101,7 +101,7 @@ export default function BlogsPage() {
       <div className="w-full h-[1px] bg-white/10" />
 
       {/* Blog Grid */}
-      <section className="py-16 md:py-24 px-6 md:px-12 lg:px-24">
+      <section className="py-fluid-lg md:py-fluid-xl px-6 md:px-12 lg:px-24">
         <div className="max-w-[1920px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
             {BLOG_POSTS.map((post, idx) => (
@@ -112,7 +112,7 @@ export default function BlogsPage() {
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-24 bg-[#1E2023] border-t border-white/5">
+      <section className="py-fluid-lg md:py-fluid-xl bg-[#1E2023] border-t border-white/5">
         <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
           <div className="bg-[#EFCD62] p-12 md:p-20 flex flex-col md:flex-row items-center justify-between gap-12 rounded-none">
             <div className="max-w-xl text-black">

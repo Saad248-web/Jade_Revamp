@@ -83,7 +83,7 @@ const CaravanJourneySection = () => {
 
   const [activeCard, setActiveCard] = React.useState<number | null>(null);
   return (
-    <section className="bg-[#0D4032] py-20 px-6 md:px-12 lg:px-24">
+    <section className="bg-[#0D4032] py-fluid-lg md:py-fluid-xl px-6 md:px-12 lg:px-24">
       <div className="max-w-6xl mx-auto">
         {/* Header with Icons */}
         <div className="flex items-center justify-between mb-8">

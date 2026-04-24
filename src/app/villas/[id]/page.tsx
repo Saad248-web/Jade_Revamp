@@ -59,6 +59,7 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import { VILLAS } from "@/lib/mockData";
 import type { Villa } from "@/lib/types";
 import { prettyMediaLabel } from "@/lib/mediaLabels";
+import { DOME_VIDEO_URLS, getYouTubeId } from "@/lib/videoUtils";
 
 // Icon mapping helper
 const getIcon = (iconName?: string, title?: string) => {
@@ -159,7 +160,10 @@ export default function VillaDetailsPage() {
   >({});
   const [activeDomeVideo, setActiveDomeVideo] = useState<
     "red" | "blue" | "yellow"
-  >("red");
+  >("blue");
+  const [activeDomeSpaceTab, setActiveDomeSpaceTab] = useState<
+    "blue" | "red" | "yellow"
+  >("blue");
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections((prev) => ({ ...prev, [sectionId]: !prev[sectionId] }));
@@ -198,15 +202,36 @@ export default function VillaDetailsPage() {
   const spaceImages = media?.spaces?.length ? media.spaces : [];
   const experienceImages = media?.experiences?.length ? media.experiences : [];
 
+  const isDomeVillas = villa.id === "dome-villas";
+
+  // For Dome Villas, only show the spaces belonging to the active dome tab.
+  const domeSpaceFilter = useMemo(() => {
+    if (!isDomeVillas) return null;
+    const label =
+      activeDomeSpaceTab === "blue"
+        ? "Blue"
+        : activeDomeSpaceTab === "red"
+          ? "Red"
+          : "Yellow";
+    return `/Villa_Retreats/Dome/Dome Villa_s - ${label}/`;
+  }, [isDomeVillas, activeDomeSpaceTab]);
+
   const derivedSpaces = useMemo(() => {
-    const list = spaceImages.length
+    let list = spaceImages.length
       ? spaceImages
       : (villa.spaces || []).map((s) => s.image);
+    if (domeSpaceFilter) {
+      list = list.filter((img) => img && img.includes(domeSpaceFilter));
+    }
     return list.map((img) => ({
       name: prettyMediaLabel({ url: img, fallback: "Space", kind: "space" }),
       image: img,
     }));
-  }, [spaceImages, villa.spaces]);
+  }, [spaceImages, villa.spaces, domeSpaceFilter]);
+
+  useEffect(() => {
+    setCurrentSpaceIndex(0);
+  }, [activeDomeSpaceTab]);
 
   const derivedActivities = useMemo(() => {
     const list = experienceImages.length
@@ -356,29 +381,7 @@ export default function VillaDetailsPage() {
     };
   }, [searchParams]);
 
-  const getYouTubeId = (url: string) => {
-    try {
-      // supports:
-      // - https://youtu.be/<id>?...
-      // - https://www.youtube.com/watch?v=<id>&...
-      // - https://www.youtube.com/embed/<id>
-      const u = new URL(url);
-      const host = u.hostname.replace(/^www\./, "");
-      if (host === "youtu.be") return u.pathname.replace("/", "");
-      if (u.pathname.startsWith("/embed/"))
-        return u.pathname.split("/")[2] || "";
-      if (u.pathname === "/watch") return u.searchParams.get("v") || "";
-      return "";
-    } catch {
-      return "";
-    }
-  };
-
-  const domeVideoUrls = {
-    red: "https://youtu.be/k0-1rTGdowk?si=hVmn5sCIcMwn_deE",
-    blue: "https://youtu.be/qcstdzAh1ck?si=8Op3MUQu_Je_8cFk",
-    yellow: "https://youtu.be/1FnJXIa7LDg?si=z1TjKQ6TEN8SAbzQ",
-  } as const;
+  const domeVideoUrls = DOME_VIDEO_URLS;
 
   return (
     <main className="bg-[#1A1C1E] min-h-screen relative">
@@ -599,12 +602,44 @@ export default function VillaDetailsPage() {
           {/* CONTENT AREA */}
           <div className="flex flex-col gap-16 md:gap-24 max-w-4xl mx-auto">
             {/* SPACES SECTION */}
-            {currentSpace && (
+            {(isDomeVillas || currentSpace) && (
               <section id="spaces">
-                <div className="flex justify-between items-center mb-8">
-                  <h3 className="text-gh-h1 font-philosopher text-white">
-                    Spaces
-                  </h3>
+                <div className="flex flex-wrap justify-between items-center gap-4 mb-8">
+                  <div className="flex flex-wrap items-center gap-3 md:gap-5">
+                    <h3 className="text-gh-h1 font-philosopher text-white">
+                      Spaces
+                    </h3>
+                    {isDomeVillas && (
+                      <div className="flex flex-wrap items-center gap-2">
+                        {(
+                          [
+                            { id: "blue", label: "Blue Dome", dot: "#3b82f6" },
+                            { id: "red", label: "Red Dome", dot: "#ef4444" },
+                            { id: "yellow", label: "Yellow Dome", dot: "#eab308" },
+                          ] as const
+                        ).map((t) => {
+                          const isActive = activeDomeSpaceTab === t.id;
+                          return (
+                            <button
+                              key={t.id}
+                              onClick={() => setActiveDomeSpaceTab(t.id)}
+                              className={`flex items-center gap-2 px-3 md:px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${
+                                isActive
+                                  ? "bg-[#EFCD62] text-black border-[#EFCD62]"
+                                  : "bg-white/5 text-white/70 border-white/10 hover:text-white hover:bg-white/10"
+                              }`}
+                            >
+                              <span
+                                className="inline-block w-2.5 h-2.5 rounded-full border border-white/30"
+                                style={{ backgroundColor: t.dot }}
+                              />
+                              {t.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                   {derivedSpaces && derivedSpaces.length > 1 && (
                     <div className="flex gap-2">
                       <button
@@ -625,38 +660,44 @@ export default function VillaDetailsPage() {
                   )}
                 </div>
 
-                <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20">
-                  {(validImg(currentSpace.image) || validImg(villa.image)) && (
-                    <Image
-                      src={
-                        validImg(currentSpace.image)
-                          ? currentSpace.image
-                          : villa.image
-                      }
-                      alt={currentSpace.name || "Space"}
-                      fill
-                      className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 800px"
-                      loading="lazy"
-                      unoptimized
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B2C23]/80 via-transparent to-transparent opacity-90" />
-                  <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
-                    <h4 className="text-white text-sm md:text-base uppercase tracking-[0.2em] font-bold mb-4 font-manrope">
-                      {currentSpace.name || "Lawn"}
-                    </h4>
-                    {derivedSpaces && derivedSpaces.length > 1 && (
-                      <div className="flex items-center justify-center gap-3 text-white text-gh-label font-bold tracking-widest">
-                        <span>{currentSpaceIndex + 1}</span>
-                        <div className="w-12 h-[1px] bg-white/60" />
-                        <span className="text-white/60">
-                          {derivedSpaces.length}
-                        </span>
-                      </div>
+                {currentSpace ? (
+                  <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20">
+                    {(validImg(currentSpace.image) || validImg(villa.image)) && (
+                      <Image
+                        src={
+                          validImg(currentSpace.image)
+                            ? currentSpace.image
+                            : villa.image
+                        }
+                        alt={currentSpace.name || "Space"}
+                        fill
+                        className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 800px"
+                        loading="lazy"
+                        unoptimized
+                      />
                     )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B2C23]/80 via-transparent to-transparent opacity-90" />
+                    <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
+                      <h4 className="text-white text-sm md:text-base uppercase tracking-[0.2em] font-bold mb-4 font-manrope">
+                        {currentSpace.name || "Lawn"}
+                      </h4>
+                      {derivedSpaces && derivedSpaces.length > 1 && (
+                        <div className="flex items-center justify-center gap-3 text-white text-gh-label font-bold tracking-widest">
+                          <span>{currentSpaceIndex + 1}</span>
+                          <div className="w-12 h-[1px] bg-white/60" />
+                          <span className="text-white/60">
+                            {derivedSpaces.length}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden bg-emerald-900/20 flex items-center justify-center text-white/40 italic">
+                    Loading spaces…
+                  </div>
+                )}
                 <Link
                   href={`/villas/${id}/spaces`}
                   className="mt-8 w-full border border-white/20 bg-white/5 py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2"
@@ -1133,9 +1174,9 @@ export default function VillaDetailsPage() {
                     <div className="flex items-center gap-2">
                       {(
                         [
-                          { id: "red", label: "Red Dome" },
-                          { id: "blue", label: "Blue Dome" },
-                          { id: "yellow", label: "Yellow Dome" },
+                          { id: "blue", label: "Blue Dome", dot: "#3b82f6" },
+                          { id: "red", label: "Red Dome", dot: "#ef4444" },
+                          { id: "yellow", label: "Yellow Dome", dot: "#eab308" },
                         ] as const
                       ).map((t) => {
                         const isActive = activeDomeVideo === t.id;
@@ -1143,12 +1184,16 @@ export default function VillaDetailsPage() {
                           <button
                             key={t.id}
                             onClick={() => setActiveDomeVideo(t.id)}
-                            className={`px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${
+                            className={`flex items-center gap-2 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${
                               isActive
                                 ? "bg-[#EFCD62] text-black border-[#EFCD62]"
                                 : "bg-white/5 text-white/70 border-white/10 hover:text-white hover:bg-white/10"
                             }`}
                           >
+                            <span
+                              className="inline-block w-2.5 h-2.5 rounded-full border border-white/30"
+                              style={{ backgroundColor: t.dot }}
+                            />
                             {t.label}
                           </button>
                         );

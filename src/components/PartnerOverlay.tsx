@@ -139,7 +139,7 @@ export default function PartnerOverlay() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className={`relative w-full md:w-[600px] bg-[#0E3A2F] flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 ${view === "success" ? "h-[80vh] md:h-[650px]" : "max-h-[calc(100vh-8rem)]"}`}
+              className={`relative w-full md:w-[600px] bg-[#0E3A2F] flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 ${view === "success" ? "h-[80vh] md:h-[650px]" : "max-h-[calc(100dvh-8rem)]"}`}
             >
               {/* Header */}
               {view === "form" && (

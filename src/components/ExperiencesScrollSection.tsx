@@ -93,8 +93,8 @@ export default function ExperiencesScrollSection() {
     <section ref={targetRef} className="relative h-[800vh] bg-[#0D4032]">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#0D4032]">
         {/* Top Label & Counter - Global */}
-        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-12 md:pt-16 pb-[16px] md:pb-[24px]">
-          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-2 md:mb-4 font-semibold text-jade-gold drop-shadow-lg block">
+        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(48px,6vh,80px)] pb-[clamp(8px,1.5vh,18px)]">
+          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-2 md:mb-3 font-semibold text-jade-gold drop-shadow-lg block">
             WAYS JADE IS EXPERIENCED
           </span>
           <GlobalCounter
@@ -195,11 +195,20 @@ function PanelSlide({
   totalSteps: number;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
+  // Zoom-safe offset: half-viewport + half-panel + small visible gap.
+  // Keeps exactly ONE panel centered at any zoom level (100/125/140/150%).
   const [offsetPx, setOffsetPx] = useState(1000);
 
   useEffect(() => {
-    const handleResize = () =>
-      setOffsetPx(window.innerWidth >= 1024 ? 672 : window.innerWidth);
+    const computeOffset = () => {
+      const vw = window.innerWidth;
+      const panelWidth =
+        vw >= 1280 ? 576 : vw >= 768 ? 512 : vw >= 640 ? 448 : 384;
+      const cappedPanel = Math.min(panelWidth, vw - 48);
+      const visibleGap = 56;
+      return Math.ceil(vw / 2 + cappedPanel / 2 + visibleGap);
+    };
+    const handleResize = () => setOffsetPx(computeOffset());
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -216,10 +225,10 @@ function PanelSlide({
     >
       <div className="pointer-events-auto flex items-center justify-center w-full h-full">
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
-        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-start px-6 md:px-24 pt-[max(12vh,80px)]">
-          <div className="relative w-full max-w-xl mx-auto flex flex-col items-stretch gap-4 lg:gap-6">
-            {/* Image Section - unified 16:9 aspect, no max-h clamp so every card is the same size */}
-            <div className="relative w-full aspect-[16/9] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
+        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 py-4">
+          <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg xl:max-w-xl mx-auto flex flex-col items-stretch gap-3 lg:gap-5">
+            {/* Image Section — zoom-safe max height so CTA stays above the fold */}
+            <div className="relative w-full aspect-[16/9] max-h-[clamp(180px,38vh,360px)] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
               <div className="w-full h-full relative">
                 <Image
                   src={data.image}
@@ -232,13 +241,13 @@ function PanelSlide({
               </div>
             </div>
 
-            {/* Text Section - fixed height so every card's title, description, and CTA align identically */}
-            <div className="relative w-full flex flex-col items-start text-left mt-2 h-[220px] lg:h-[260px] shrink-0 pb-4">
+            {/* Text Section — adaptive (no fixed height) so title + body + CTA always fit */}
+            <div className="relative w-full flex flex-col items-start text-left mt-1 shrink-0">
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="font-philosopher text-gh-h2 text-white leading-none mb-4"
+                className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-3"
               >
                 {data.title}
               </motion.h2>
@@ -246,7 +255,7 @@ function PanelSlide({
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="font-manrope text-gh-body text-white/80 leading-relaxed mb-6 lg:mb-8 line-clamp-3 max-w-lg"
+                className="font-manrope text-gh-body text-white/80 leading-relaxed mb-3 lg:mb-5 line-clamp-3 max-w-lg"
               >
                 {data.subtext}
               </motion.p>

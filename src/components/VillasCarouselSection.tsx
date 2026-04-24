@@ -29,7 +29,7 @@ export default function VillasCarouselSection({
   onCtaClick,
 }: VillasCarouselSectionProps) {
   return (
-    <section className="py-24 bg-[#141517] border-t border-white/5">
+    <section className="py-fluid-lg md:py-fluid-xl bg-[#141517] border-t border-white/5">
       <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
         {/* Header */}
         <div

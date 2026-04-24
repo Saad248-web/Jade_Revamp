@@ -32,7 +32,7 @@ export default function WeddingVenuesCarousel() {
   const currentVilla = WEDDING_VENUES[currentIndex];
 
   return (
-    <section className="relative bg-[#1A1C1E] py-24 sm:py-32">
+    <section className="relative bg-[#1A1C1E] py-fluid-lg md:py-fluid-xl">
       <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full">
         <div className="flex flex-col gap-12">
           {/* IMAGE SECTION - NAVIGATION INSIDE FRAME */}

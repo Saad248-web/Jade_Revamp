@@ -159,12 +159,21 @@ function VillaSlide({
   globalProgress: any;
   totalSteps: number;
 }) {
-  const [offsetPx, setOffsetPx] = useState(1000); // 1000px fallback
+  // Zoom-safe offset: half-viewport + half-panel + 56px off-screen gap.
+  // Ensures exactly one panel is visible at any zoom level (100/125/140/150%).
+  const [offsetPx, setOffsetPx] = useState(1000);
   const [vw, setVw] = useState(1920);
 
   useEffect(() => {
+    const computeOffset = () => {
+      const w = window.innerWidth;
+      const panelWidth = w >= 1280 ? 576 : w >= 768 ? 512 : w >= 640 ? 448 : 384;
+      const cappedPanel = Math.min(panelWidth, w - 48);
+      const visibleGap = 56;
+      return Math.ceil(w / 2 + cappedPanel / 2 + visibleGap);
+    };
     const handleResize = () => {
-      setOffsetPx(window.innerWidth >= 1024 ? 672 : window.innerWidth);
+      setOffsetPx(computeOffset());
       setVw(window.innerWidth);
     };
     handleResize();

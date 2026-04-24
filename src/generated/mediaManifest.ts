@@ -3,7 +3,7 @@
 // Do not edit manually.
 
 export const MEDIA_MANIFEST = {
-  "generatedAt": "2026-04-23T13:37:26.054Z",
+  "generatedAt": "2026-04-24T05:47:17.375Z",
   "villasByFolder": {
     "Diamond": {
       "hero": [
@@ -183,42 +183,7 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Dome/3-Experienceee/Outdoor Activities.webp",
         "/Villa_Retreats/Dome/3-Experienceee/Picnic Setup.webp",
         "/Villa_Retreats/Dome/3-Experienceee/Zen Garden.webp",
-        "/Villa_Retreats/Dome/3-Experienceee/barbeque.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Experiences/Barbeque.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Experiences/BornFire.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Experiences/Candle_Lit_Area.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Experiences/Candle_lit_Dining.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Experiences/Floating_BreakFast.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Experiences/Living_Area.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Experiences/Movie_under_the_Stars.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Experiences/OutDoor_Activities.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Experiences/Outdoor_SitOut_area.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Experiences/Picnic_Setup.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Experiences/Zen_Garden.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Blue/Experiences/experiences_11.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Experiences/Barbeque.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Experiences/Camping_Exp....webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Experiences/Floating_.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Experiences/Movies_under_the_Star.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Experiences/Picinic_Exp...webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Experiences/Picnic_Exp_.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Experiences/Walk_.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Barbeque.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Cmaping.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Dining_Exp...webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Floating_Exp_,.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Floating_Exp_.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Floating_Exp__.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Floating_exp...webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Movies_Under the Star.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Patio_SitOut_exp_.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Patio_Sitout_Exp....webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Picinic_Exp.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Picnic_Setup_Hill_View_Exp.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Picnic___.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Picnic_exp...webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/Pool_exp.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Experiences/experiences_09.webp"
+        "/Villa_Retreats/Dome/3-Experienceee/barbeque.webp"
       ],
       "perfectFor": [
         "/Villa_Retreats/Dome/Perfect For/Group Getaways.webp",

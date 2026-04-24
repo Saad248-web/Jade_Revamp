@@ -56,7 +56,7 @@ export default function BlogSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[60vh] lg:h-screen flex flex-col justify-center overflow-hidden py-8 lg:py-10"
+      className="relative flex flex-col justify-center py-fluid-lg lg:py-fluid-xl"
       style={{ backgroundColor: "#25282C" }}
     >
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />

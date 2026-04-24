@@ -27,7 +27,7 @@ export default function PremiumFeaturesSection({
   onCtaClick,
 }: PremiumFeaturesSectionProps) {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center py-24 bg-[#1A1C1E]">
+    <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
       <div className="max-w-7xl mx-auto px-4 w-full flex flex-col items-center">
         <div className="text-center mb-[40px]">
           <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-[14px] font-manrope">

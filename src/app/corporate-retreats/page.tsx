@@ -74,7 +74,7 @@ export default function CorporateRetreatsPage() {
       />
 
       {/* SECTION 2: TRUSTED BY SECTION */}
-      <section className="min-h-screen flex flex-col items-center justify-center py-24 bg-[#1A1C1E]">
+      <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
         <div className="max-w-4xl mx-auto px-8 text-center w-full">
           <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
             TRUSTED BY
@@ -172,7 +172,7 @@ export default function CorporateRetreatsPage() {
         ctaLink="/contact"
       />
       {/* SECTION 6: SELECTED VILLAS FOR CORPORET RETREATS */}
-      <section className="py-24 bg-[#1A1C1E] border-t border-white/5">
+      <section className="py-fluid-lg md:py-fluid-xl bg-[#1A1C1E] border-t border-white/5">
         <div className="text-center mb-16 px-8">
           <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4 font-manrope">
             FEATURED VENUES

@@ -22,7 +22,7 @@ export default function TravelGuidelinesSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section className="bg-[#0D4032] py-20 px-6 md:px-12 lg:px-24">
+    <section className="bg-[#0D4032] py-fluid-lg md:py-fluid-xl px-6 md:px-12 lg:px-24">
       <div className="max-w-[1920px] mx-auto">
         {/* Banner Image */}
         <div className="relative w-full aspect-[16/9] md:aspect-[21/9] mb-12 overflow-hidden">

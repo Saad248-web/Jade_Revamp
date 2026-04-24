@@ -30,7 +30,7 @@ export default function CuratedExperiencesGrid({
   background = "#141517",
 }: CuratedExperiencesGridProps) {
   return (
-    <section className="py-24" style={{ backgroundColor: background }}>
+    <section className="py-fluid-lg md:py-fluid-xl" style={{ backgroundColor: background }}>
       <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
         {/* Header */}
         <div

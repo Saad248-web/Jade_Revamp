@@ -202,7 +202,7 @@ export default function WeekendGetawaysPage() {
       />
 
       {/* SECTION 4: CTA */}
-      <section className="py-24 bg-[#141517] border-t border-white/5">
+      <section className="py-fluid-lg md:py-fluid-xl bg-[#141517] border-t border-white/5">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-6">
             PLAN YOUR WEEKEND

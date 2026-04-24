@@ -30,7 +30,7 @@ export default function PartyVillasCarousel() {
   };
 
   return (
-    <section id="party-villas-section" className="relative bg-[#25282C] py-10">
+    <section id="party-villas-section" className="relative bg-[#25282C] py-fluid-lg md:py-fluid-xl">
       <div className="max-w-[1920px] mx-auto px-0 md:px-8 lg:px-16 w-full overflow-hidden">
         <div className="flex flex-col gap-10">
           {PARTY_VILLAS.map((villa) => (

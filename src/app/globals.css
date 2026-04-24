@@ -7,54 +7,28 @@
     --font-philosopher: "Philosopher", sans-serif;
     --font-manrope: "Manrope", sans-serif;
 
-    /* Global Typography Scale - Mobile First */
-    --fs-h1: 32px;
-    --fs-h2: 28px;
-    --fs-h3: 26px;
-    --fs-scroll: clamp(20px, 4vw, 32px);
-    --fs-body: 14px;
-    --fs-desc: 12px;
-    --fs-label: 10px;
-    --fs-carousel-sub: 13px;
-  }
+    /* ============================================================
+       ZOOM-SAFE FLUID TYPOGRAPHY
+       Tokens scale smoothly with viewport instead of jumping at
+       breakpoints, so Windows scaling at 125%/140%/150% (which
+       shrinks the effective CSS viewport) never causes overflow.
+       Formula: clamp(minPx, Avw + Bpx, maxPx)
+       ============================================================ */
+    --fs-h1: clamp(26px, 1.6vw + 12px, 40px);
+    --fs-h2: clamp(22px, 1.2vw + 12px, 32px);
+    --fs-h3: clamp(20px, 1vw + 12px, 28px);
+    --fs-scroll: clamp(18px, 1.5vw + 8px, 32px);
+    --fs-body: clamp(14px, 0.4vw + 11px, 18px);
+    --fs-desc: clamp(12px, 0.25vw + 10px, 14px);
+    --fs-label: clamp(10px, 0.15vw + 8.5px, 12px);
+    --fs-carousel-sub: clamp(12px, 0.3vw + 10px, 16px);
 
-  @media (min-width: 768px) {
-    :root {
-      --fs-h1: 32px;
-      --fs-h2: 28px;
-      --fs-h3: 26px;
-      --fs-scroll: clamp(20px, 4vw, 32px);
-      --fs-body: 16px;
-      --fs-desc: 13px;
-      --fs-label: 12px;
-      --fs-carousel-sub: 14px;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    :root {
-      --fs-h1: 38px;
-      --fs-h2: 32px;
-      --fs-h3: 28px;
-      --fs-scroll: clamp(20px, 4vw, 32px);
-      --fs-body: 18px;
-      --fs-desc: 14px;
-      --fs-label: 12px;
-      --fs-carousel-sub: 16px;
-    }
-  }
-
-  @media (min-width: 1440px) {
-    :root {
-      --fs-h1: 40px;
-      --fs-h2: 32px;
-      --fs-h3: 28px;
-      --fs-scroll: clamp(20px, 4vw, 32px);
-      --fs-body: 18px;
-      --fs-desc: 14px;
-      --fs-label: 12px;
-      --fs-carousel-sub: 16px;
-    }
+    /* Fluid spacing tokens (usable directly via var() if needed) */
+    --space-fluid-xs: clamp(4px, 0.5vw, 8px);
+    --space-fluid-sm: clamp(8px, 1vw, 16px);
+    --space-fluid-md: clamp(16px, 2vw, 32px);
+    --space-fluid-lg: clamp(32px, 4vw, 64px);
+    --space-fluid-xl: clamp(48px, 6vw, 96px);
   }
 }
 
@@ -159,4 +133,69 @@ body {
 .shutter-open {
   clip-path: inset(0 0 0 0);
   transition: clip-path 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+/* ============================================================
+   ZOOM-SAFE VIEWPORT OVERRIDES
+   Convert h-screen / min-h-screen / max-h-screen to use `dvh`
+   (dynamic viewport) which correctly tracks mobile browser
+   chrome AND Windows display scaling. One change = every
+   `h-screen` in the codebase becomes zoom-safe.
+   ============================================================ */
+@supports (height: 100dvh) {
+  .h-screen {
+    height: 100dvh;
+  }
+  .min-h-screen {
+    min-height: 100dvh;
+  }
+  .max-h-screen {
+    max-height: 100dvh;
+  }
+}
+
+/* ============================================================
+   ZOOM-SAFE LAYOUT HELPERS
+   Drop-in classes that make sticky / full-screen sections
+   impossible to clip at 125–150% Windows scaling.
+
+   .zoom-safe-screen      — full-viewport flex column container
+   .zoom-safe-stack       — vertically centers children with fluid gap
+   .zoom-safe-fit         — prevents fixed children from overflowing
+   .zoom-safe-media       — cap media height so CTAs stay visible
+   ============================================================ */
+.zoom-safe-screen {
+  min-height: 100dvh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.zoom-safe-stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: var(--space-fluid-md);
+}
+
+.zoom-safe-fit {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.zoom-safe-media {
+  max-height: clamp(180px, 38vh, 360px);
+  width: 100%;
+}
+
+/* Fluid section padding utilities (replacement for fixed pt-24/pb-20 etc.) */
+.zoom-safe-section {
+  padding-top: var(--space-fluid-lg);
+  padding-bottom: var(--space-fluid-lg);
+  padding-left: var(--space-fluid-md);
+  padding-right: var(--space-fluid-md);
 }

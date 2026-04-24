@@ -57,7 +57,7 @@ export default function WhyJadeWeddings() {
   const hero = useMemo(() => whyImages[0] || "", [whyImages]);
 
   return (
-    <section className="bg-[#0D4032] py-24 sm:py-32">
+    <section className="bg-[#0D4032] py-fluid-lg md:py-fluid-xl">
       <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
           {/* IMAGE SECTION */}

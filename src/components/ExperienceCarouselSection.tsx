@@ -42,7 +42,7 @@ export default function ExperienceCarouselSection({
     setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
   return (
-    <section className="pt-20 pb-24 bg-[#141517]">
+    <section className="pt-fluid-lg pb-fluid-xl bg-[#141517]">
       <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
         <div className="relative">
           {/* Header Area */}

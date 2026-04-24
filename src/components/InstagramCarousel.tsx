@@ -107,7 +107,7 @@ export default function InstagramCarousel() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-jade-charcoal pt-16 md:pt-24 pb-0 overflow-hidden"
+      className="relative bg-jade-charcoal pt-fluid-lg md:pt-fluid-xl pb-fluid-lg md:pb-fluid-xl overflow-hidden"
     >
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       <div className="max-w-[1920px] mx-auto">

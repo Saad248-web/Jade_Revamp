@@ -55,7 +55,7 @@ export default function ExperiencesSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-[#0A0A0A] py-24 md:py-32"
+      className="relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] py-fluid-lg md:py-fluid-xl"
     >
       {/* Background Layer (Live) */}
       <LiveBackground />

@@ -111,7 +111,7 @@ export default function AboutPage() {
       </section>
 
       {/* 2. TRUSTED BY SECTION */}
-      <section className="min-h-screen flex flex-col items-center justify-center py-24 bg-[#1A1C1E]">
+      <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
         <div className="max-w-4xl mx-auto px-8 text-center w-full">
           <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
             TRUSTED BY
@@ -164,7 +164,7 @@ export default function AboutPage() {
       </section>
 
       {/* 3. OUR STORY SECTION */}
-      <section className="py-24 bg-[#0D4032] relative overflow-hidden">
+      <section className="py-fluid-lg md:py-fluid-xl bg-[#0D4032] relative overflow-hidden">
         {/* Background Pattern Overlay (Optional subtle texture) */}
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]" />
 
@@ -307,7 +307,7 @@ export default function AboutPage() {
       </section>
 
       {/* 6. MEET THE TEAM SECTION */}
-      <section className="py-24 bg-[#1A1C1E] relative overflow-hidden">
+      <section className="py-fluid-lg md:py-fluid-xl bg-[#1A1C1E] relative overflow-hidden">
         {/* Background Animation (Vibrant) */}
         <div className="absolute inset-0 z-0 opacity-100">
           <LiveBackground />
@@ -350,7 +350,7 @@ export default function AboutPage() {
       </section>
 
       {/* 7. MEDIA SECTION */}
-      <section className="py-24 bg-[#1A1C1E]">
+      <section className="py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">

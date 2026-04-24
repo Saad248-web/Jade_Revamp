@@ -2,10 +2,15 @@
 
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, Headphones, Play } from "lucide-react";
+import { ArrowLeft, Headphones } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { VILLAS } from "@/lib/mockData";
 import { Villa, VillaSpaceGroup } from "@/lib/types";
+import {
+  DOME_VIDEO_URLS,
+  type DomeVideoKey,
+  getYouTubeId,
+} from "@/lib/videoUtils";
 
 export default function VillaSpacesPage() {
   const params = useParams();
@@ -13,7 +18,12 @@ export default function VillaSpacesPage() {
   const id = params?.id as string;
   const villa = VILLAS.find((v) => v.id === id) as Villa | undefined;
 
-  const [activeCategory, setActiveCategory] = useState("All");
+  const isDomeVillas = id === "dome-villas";
+
+  const [activeCategory, setActiveCategory] = useState(
+    isDomeVillas ? "Blue Dome" : "All",
+  );
+  const [activeDomeVideo, setActiveDomeVideo] = useState<DomeVideoKey>("blue");
   const [overrideSpaces, setOverrideSpaces] = useState<VillaSpaceGroup[] | null>(
     null,
   );
@@ -44,9 +54,11 @@ export default function VillaSpacesPage() {
     const cats = Array.from(new Set(base.map((s: VillaSpaceGroup) => s.category))).filter(
       (c) => typeof c === "string" && c.length > 0,
     ) as string[];
+    // Dome Villas: no "All" — only the three dome color tabs plus Video.
+    if (isDomeVillas) return [...cats, "Video"];
     // Prefer predictable ordering: show "All", then category groups, then Video
     return ["All", ...cats, "Video"];
-  }, [overrideSpaces, villa?.categorizedSpaces]);
+  }, [overrideSpaces, villa?.categorizedSpaces, isDomeVillas]);
 
   const filteredSpaces = useMemo(() => {
     const base = overrideSpaces || villa?.categorizedSpaces;
@@ -109,33 +121,101 @@ export default function VillaSpacesPage() {
       <div className="p-6 md:p-12 max-w-7xl mx-auto flex flex-col gap-16">
         {activeCategory === "Video" ? (
           <section className="flex flex-col gap-8">
-            <h2 className="text-white font-philosopher text-3xl md:text-4xl">
-              Video Walkthrough
-            </h2>
-            {villa.video ? (
-              <div className="relative aspect-video w-full group overflow-hidden">
-                <Image
-                  src={villa.video.thumbnail || villa.image || ""}
-                  alt="Video Thumbnail"
-                  fill
-                  className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
-                  sizes="(max-width: 768px) 100vw, 1200px"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 rounded-full bg-[#EFCD62] flex items-center justify-center text-black group-hover:scale-110 transition-transform">
-                    <Play className="w-8 h-8 fill-black ml-1" />
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <h2 className="text-white font-philosopher text-3xl md:text-4xl">
+                Video Walkthrough
+              </h2>
+
+              {isDomeVillas && (
+                <div className="flex flex-wrap items-center gap-2">
+                  {(
+                    [
+                      { id: "blue", label: "Blue Dome", dot: "#3b82f6" },
+                      { id: "red", label: "Red Dome", dot: "#ef4444" },
+                      { id: "yellow", label: "Yellow Dome", dot: "#eab308" },
+                    ] as const
+                  ).map((t) => {
+                    const isActive = activeDomeVideo === t.id;
+                    return (
+                      <button
+                        key={t.id}
+                        onClick={() => setActiveDomeVideo(t.id)}
+                        className={`flex items-center gap-2 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${
+                          isActive
+                            ? "bg-[#EFCD62] text-black border-[#EFCD62]"
+                            : "bg-white/5 text-white/70 border-white/10 hover:text-white hover:bg-white/10"
+                        }`}
+                      >
+                        <span
+                          className="inline-block w-2.5 h-2.5 rounded-full border border-white/30"
+                          style={{ backgroundColor: t.dot }}
+                        />
+                        {t.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {(() => {
+              const chosenUrl = isDomeVillas
+                ? DOME_VIDEO_URLS[activeDomeVideo]
+                : villa.video?.youtubeUrl ?? "";
+              const ytId = getYouTubeId(chosenUrl);
+
+              if (ytId) {
+                return (
+                  <div className="relative aspect-video w-full bg-gray-900 overflow-hidden border border-white/10">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${ytId}`}
+                      title={`${villa.name} Walkthrough`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="absolute inset-0 w-full h-full"
+                    />
+                    {villa.video?.duration && !isDomeVillas && (
+                      <div className="absolute bottom-4 right-4 bg-black/60 px-2 py-1 text-[10px] text-white font-bold pointer-events-none">
+                        {villa.video.duration}
+                      </div>
+                    )}
                   </div>
+                );
+              }
+
+              if (villa.video) {
+                return (
+                  <div className="relative aspect-video w-full group overflow-hidden border border-white/10">
+                    {(villa.video.thumbnail || villa.image) && (
+                      <Image
+                        src={villa.video.thumbnail || villa.image || ""}
+                        alt="Video Thumbnail"
+                        fill
+                        className="object-cover opacity-60"
+                        sizes="(max-width: 768px) 100vw, 1200px"
+                        loading="lazy"
+                      />
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center shadow-2xl">
+                        <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                      </div>
+                    </div>
+                    {villa.video.duration && (
+                      <div className="absolute bottom-4 right-4 bg-black/60 px-2 py-1 text-[10px] text-white font-bold">
+                        {villa.video.duration}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              return (
+                <div className="h-64 border border-white/10 flex items-center justify-center text-white/40 italic">
+                  Video not available for this retreat.
                 </div>
-                <div className="absolute bottom-4 right-4 bg-black/60 px-2 py-1 text-[10px] text-white font-bold">
-                  {villa.video.duration}
-                </div>
-              </div>
-            ) : (
-              <div className="h-64 border border-white/10 flex items-center justify-center text-white/40 italic">
-                Video not available for this retreat.
-              </div>
-            )}
+              );
+            })()}
           </section>
         ) : filteredSpaces.length > 0 ? (
           filteredSpaces.map((space: VillaSpaceGroup) => (

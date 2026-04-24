@@ -65,7 +65,7 @@ export default function TravelGuidelinesModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-2xl max-h-[calc(100vh-8rem)] mt-12 flex flex-col pointer-events-auto"
+              className="relative w-full max-w-2xl max-h-[calc(100dvh-8rem)] mt-12 flex flex-col pointer-events-auto"
             >
               {/* Floating Close Button */}
               <button

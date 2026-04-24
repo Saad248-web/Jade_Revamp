@@ -49,7 +49,7 @@ export default function SplashScreen() {
     },
     full: {
       width: "100vw",
-      height: "100vh",
+      height: "100dvh",
       transition: { duration: 1.8, ease: "easeInOut" },
     },
   };

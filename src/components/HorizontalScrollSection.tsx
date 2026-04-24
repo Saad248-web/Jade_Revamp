@@ -84,8 +84,8 @@ export default function HorizontalScrollSection() {
     <section ref={targetRef} className="relative h-[400vh] bg-[#0D4032]">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#0D4032]">
         {/* Top Label & Counter - Global */}
-        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-16 md:pt-20 pb-[20px] md:pb-[28px]">
-          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-3 md:mb-5 font-semibold text-jade-gold drop-shadow-lg block">
+        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(48px,6vh,80px)] pb-[clamp(8px,1.5vh,18px)]">
+          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-2 md:mb-3 font-semibold text-jade-gold drop-shadow-lg block">
             WAYS JADE IS EXPERIENCED
           </span>
           <GlobalCounter
@@ -204,13 +204,24 @@ function StackedPanel({
   const exitStart = index * step;
   const exitEnd = (index + 1) * step;
 
-  // Responsive scroll distance to tighten gap on desktop to exactly 96px
-  // Content max-w is 576px (max-w-xl). Gap is 96px. Total = 672px.
-  const [offsetPx, setOffsetPx] = useState(1000); // 1000px fallback
+  // Offset between adjacent panels, computed so that EXACTLY one panel is visible
+  // at rest, with a consistent visual gap before the next panel peeks in.
+  // Formula: offset = halfViewport + halfPanel + visibleGap
+  // -> when panel N is centered, panel N+1's left edge sits exactly `visibleGap`
+  //    pixels past the right viewport edge (zoom-safe at 100%, 125%, 140%, 150%).
+  const [offsetPx, setOffsetPx] = useState(1000);
 
   useEffect(() => {
-    const handleResize = () =>
-      setOffsetPx(window.innerWidth >= 1024 ? 672 : window.innerWidth);
+    const computeOffset = () => {
+      const vw = window.innerWidth;
+      // Match Tailwind max-w-{sm|md|lg|xl} breakpoints used in the panel
+      const panelWidth =
+        vw >= 1280 ? 576 : vw >= 768 ? 512 : vw >= 640 ? 448 : 384;
+      const cappedPanel = Math.min(panelWidth, vw - 48); // account for side padding
+      const visibleGap = 56; // balanced UI/UX gap between slides
+      return Math.ceil(vw / 2 + cappedPanel / 2 + visibleGap);
+    };
+    const handleResize = () => setOffsetPx(computeOffset());
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -234,12 +245,12 @@ function StackedPanel({
           theme={isGrid ? "golden" : "white"}
           sectionRef={panelRef}
         />
-        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-start px-4 sm:px-8 md:px-16 xl:px-24 pt-[max(12vh,80px)]">
-          {/* Layout Container - fixed top alignment so every card lines up identically */}
-          <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg xl:max-w-xl mx-auto flex flex-col items-stretch gap-4 lg:gap-6">
-            {/* Image/Grid Section - single consistent aspect ratio, no max-h to avoid clipping */}
+        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 py-4">
+          {/* Layout Container - vertically centered in the available space so it adapts to any viewport (incl. 125-150% Windows scaling) */}
+          <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg xl:max-w-xl mx-auto flex flex-col items-stretch gap-3 lg:gap-5">
+            {/* Image/Grid Section - adaptive max-height so the CTA button stays visible at high Windows scaling */}
             <div
-              className={`relative w-full aspect-[16/9] overflow-hidden shadow-2xl rounded-none shrink-0 ${isGrid ? "bg-transparent" : "bg-black"}`}
+              className={`relative w-full aspect-[16/9] max-h-[clamp(180px,38vh,360px)] overflow-hidden shadow-2xl rounded-none shrink-0 ${isGrid ? "bg-transparent" : "bg-black"}`}
             >
               <div className="w-full h-full relative">
                 {!isGrid ? (
@@ -280,15 +291,15 @@ function StackedPanel({
               </div>
             </div>
 
-            {/* Text Section - fixed height so title / body / CTA line up across every card */}
-            <div className="relative w-full flex flex-col items-start text-left mt-2 h-[220px] lg:h-[260px] shrink-0">
+            {/* Text Section - adaptive height so title / body / CTA always fit above the fold */}
+            <div className="relative w-full flex flex-col items-start text-left mt-1 shrink-0">
               {!isGrid ? (
                 <>
                   <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="font-philosopher text-gh-h2 text-white leading-none mb-4"
+                    className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-3"
                   >
                     {data.title}
                   </motion.h2>
@@ -296,7 +307,7 @@ function StackedPanel({
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="font-manrope text-gh-body text-white/80 leading-relaxed mb-6 lg:mb-8 line-clamp-3 max-w-lg"
+                    className="font-manrope text-gh-body text-white/80 leading-relaxed mb-3 lg:mb-5 line-clamp-3 max-w-lg"
                   >
                     {data.subtext}
                   </motion.p>
@@ -321,7 +332,7 @@ function StackedPanel({
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="font-philosopher text-gh-h2 text-white leading-none mb-4"
+                    className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-3"
                   >
                     More Experiences
                   </motion.h2>
@@ -329,7 +340,7 @@ function StackedPanel({
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="font-manrope text-gh-body text-white/80 leading-relaxed mb-6 lg:mb-8 line-clamp-3 max-w-lg"
+                    className="font-manrope text-gh-body text-white/80 leading-relaxed mb-3 lg:mb-5 line-clamp-3 max-w-lg"
                   >
                     Discover the diverse range of retreats, journeys, and stays
                     curated intentionally for your specific needs.

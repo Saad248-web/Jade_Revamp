@@ -82,7 +82,7 @@ export default function WeddingCelebrationsSection() {
     <section ref={targetRef} className="relative h-[600vh] bg-[#1A1C1E]">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#1A1C1E]">
         {/* Top Label & Counter - Global */}
-        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-20 md:pt-24 pb-[16px] md:pb-[24px]">
+        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(48px,6vh,80px)] pb-[clamp(8px,1.5vh,18px)]">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/90 to-transparent -z-10" />
           <span
             className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-[#EFCD62] drop-shadow-lg block"
@@ -188,11 +188,19 @@ function CelebrationPanelSlide({
   totalSteps: number;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
+  // Zoom-safe offset — keeps exactly one panel centered at 100/125/140/150%.
   const [offsetPx, setOffsetPx] = useState(1000);
 
   useEffect(() => {
-    const handleResize = () =>
-      setOffsetPx(window.innerWidth >= 1024 ? 672 : window.innerWidth);
+    const computeOffset = () => {
+      const vw = window.innerWidth;
+      const panelWidth =
+        vw >= 1280 ? 576 : vw >= 768 ? 512 : vw >= 640 ? 448 : 384;
+      const cappedPanel = Math.min(panelWidth, vw - 48);
+      const visibleGap = 56;
+      return Math.ceil(vw / 2 + cappedPanel / 2 + visibleGap);
+    };
+    const handleResize = () => setOffsetPx(computeOffset());
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -214,7 +222,7 @@ function CelebrationPanelSlide({
           className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-24"
         >
           <div className="relative w-full h-full max-w-xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
-            <div className="relative w-full h-[55vh] md:aspect-[16/9] lg:h-[65vh] overflow-hidden shadow-2xl rounded-none bg-black">
+            <div className="relative w-full aspect-[16/9] max-h-[clamp(180px,38vh,360px)] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
               <div className="w-full h-full relative">
                 {data.image ? (
                   <Image
@@ -232,8 +240,8 @@ function CelebrationPanelSlide({
               </div>
             </div>
 
-            {/* Text Section */}
-            <div className="relative w-full flex flex-col items-start text-left mt-2 h-[220px] lg:h-[260px]">
+            {/* Text Section — adaptive so CTA never drops below the fold */}
+            <div className="relative w-full flex flex-col items-start text-left mt-1 shrink-0">
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}

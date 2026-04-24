@@ -45,5 +45,11 @@ const slides: ScrollSlide[] = [
 ];
 
 export default function UnifiedScrollSection() {
-  return <ScrollSectionComposer slides={slides} height="400vh" />;
+  return (
+    <ScrollSectionComposer
+      slides={slides}
+      height="400vh"
+      showScrollIndicator={false}
+    />
+  );
 }
