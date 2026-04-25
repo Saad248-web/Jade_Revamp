@@ -109,7 +109,7 @@ export const domeVillas = {
       image: "/Villa_Retreats/Dome/Perfect For/Intimate Weddings.webp",
     },
   ],
-  categories: ["Themed Stays", "Nature Retreats", "Boutique Villas"],
+  categories: ["Nature Retreats", "Weekend Getaways", "Luxury Stays"],
   thumbnail: "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp",
   image: "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp",
   images: [...BLUE_DOME_IMAGES, ...RED_DOME_IMAGES, ...YELLOW_DOME_IMAGES],

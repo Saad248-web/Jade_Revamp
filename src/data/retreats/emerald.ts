@@ -20,16 +20,15 @@ export const emerald = {
     "Workations",
     "Small Celebrations",
   ],
-  categories: ["Luxury Retreats", "Private Events", "Staycations"],
+  categories: ["Luxury Stays", "Party Venues", "Weekend Getaways"],
   image: "/Villa_Retreats/Emerald/Hero/hero.webp",
   images: [
-    "/Villa_Retreats/Emerald/Spaces/spaces_01.webp",
-    "/Villa_Retreats/Emerald/Spaces/spaces_02.webp",
-    "/Villa_Retreats/Emerald/Spaces/spaces_03.webp",
-    "/Villa_Retreats/Emerald/Spaces/spaces_04.webp",
-    "/Villa_Retreats/Emerald/Spaces/spaces_05.webp",
-    "/Villa_Retreats/Emerald/Spaces/spaces_06.webp",
-    "/Villa_Retreats/Emerald/Spaces/spaces_07.webp",
+    "/Villa_Retreats/Emerald/Spaces/Villa.webp",
+    "/Villa_Retreats/Emerald/Spaces/Pool.webp",
+    "/Villa_Retreats/Emerald/Spaces/Living_Area.webp",
+    "/Villa_Retreats/Emerald/Spaces/Bed_Room_1.webp",
+    "/Villa_Retreats/Emerald/Spaces/Dining_Area.webp",
+    "/Villa_Retreats/Emerald/Spaces/Gazebo.webp",
   ],
   amenities: [
     { label: "Private Pool", icon: "Waves" },
@@ -172,39 +171,29 @@ export const emerald = {
   },
   activities: [
     {
-      title: "Candlelight Dining",
-      description:
-        "Curated dining setup within the property, suited for intimate meals and occasions.",
-      image: "/Villa_Retreats/Emerald/Experiences/experiences_01.webp",
+      title: "Glass House Dining",
+      description: "Indoor dining experience within the glass villa.",
+      image: "/Villa_Retreats/Emerald/Spaces/Dining_Area.webp",
     },
     {
-      title: "Fruit Picking",
-      description:
-        "Access to fruit-bearing trees across the property for a farm-style experience.",
-      image: "/Villa_Retreats/Emerald/Experiences/experiences_02.webp",
+      title: "Poolside Evenings",
+      description: "Leisure time and social events by the private pool.",
+      image: "/Villa_Retreats/Emerald/Spaces/Pool.webp",
     },
     {
-      title: "Floating Breakfast",
-      description:
-        "Pool-based breakfast setup experience for those who like to enjoy in the pool",
-      image: "/Villa_Retreats/Emerald/Experiences/experiences_03.webp",
+      title: "Garden Gazebo",
+      description: "Relaxed outdoor seating within the private garden.",
+      image: "/Villa_Retreats/Emerald/Spaces/Gazebo.webp",
     },
     {
-      title: "Board Games",
-      description:
-        "Indoor recreational activities for casual group engagement.",
-      image: "/Villa_Retreats/Emerald/Experiences/experiences_04.webp",
+      title: "Campfire Nights",
+      description: "Organized campfire experiences in the lawn zones.",
+      image: "/Villa_Retreats/Emerald/Spaces/Camping_Area.webp",
     },
     {
-      title: "High-Tea Setup",
-      description:
-        "Light dining experience typically included with event bookings.",
-      image: "/Villa_Retreats/Emerald/Experiences/experiences_05.webp",
-    },
-    {
-      title: "Bonfire & BBQ (on request)",
-      description: "Outdoor evening setups for dining and social time.",
-      image: "/Villa_Retreats/Emerald/Experiences/experiences_06.webp",
+      title: "Work from Nature",
+      description: "Quiet and aesthetic environment for extended work stays.",
+      image: "/Villa_Retreats/Emerald/Spaces/Lounge_Area.webp",
     },
   ],
   categorizedSpaces: [

@@ -22,6 +22,7 @@
     --fs-desc: clamp(12px, 0.25vw + 10px, 14px);
     --fs-label: clamp(10px, 0.15vw + 8.5px, 12px);
     --fs-carousel-sub: clamp(12px, 0.3vw + 10px, 16px);
+    --fs-sl: clamp(15px, 0.4vw + 12px, 19px); /* Services Subheading */
 
     /* Fluid spacing tokens (usable directly via var() if needed) */
     --space-fluid-xs: clamp(4px, 0.5vw, 8px);
@@ -102,6 +103,9 @@
   }
   .text-gh-carousel-sub {
     font-size: var(--fs-carousel-sub) !important;
+  }
+  .text-gh-sl {
+    font-size: var(--fs-sl) !important;
   }
 }
 

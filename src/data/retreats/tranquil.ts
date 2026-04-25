@@ -19,21 +19,16 @@ export const tranquil = {
     "Staycations",
     "Corporate Retreats",
   ],
-  categories: ["Wedding Venues", "Luxury Retreats", "Garden Properties"],
+  categories: ["Weddings", "Pre-wedding", "Luxury Stays", "Nature Retreats"],
   thumbnail: "/Villa_Retreats/Tranquil Woods/1-Hero/hero.webp",
   image: "/Villa_Retreats/Tranquil Woods/1-Hero/hero.webp",
   images: [
-    "/Villa_Retreats/Tranquil Woods/Spaces/spaces_01.webp",
-    "/Villa_Retreats/Tranquil Woods/Spaces/spaces_02.webp",
-    "/Villa_Retreats/Tranquil Woods/Spaces/spaces_03.webp",
-    "/Villa_Retreats/Tranquil Woods/Spaces/spaces_04.webp",
-    "/Villa_Retreats/Tranquil Woods/Spaces/spaces_05.webp",
-    "/Villa_Retreats/Tranquil Woods/Spaces/spaces_06.webp",
-    "/Villa_Retreats/Tranquil Woods/Spaces/spaces_07.webp",
-    "/Villa_Retreats/Tranquil Woods/Spaces/spaces_08.webp",
-    "/Villa_Retreats/Tranquil Woods/Spaces/spaces_09.webp",
-    "/Villa_Retreats/Tranquil Woods/Spaces/spaces_10.webp",
-    "/Villa_Retreats/Tranquil Woods/Spaces/spaces_11.webp",
+    "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa 1 Entrance 2.webp",
+    "/Villa_Retreats/Tranquil Woods/2-Spaces/Private Pool Villa.webp",
+    "/Villa_Retreats/Tranquil Woods/2-Spaces/Amphitheater.webp",
+    "/Villa_Retreats/Tranquil Woods/2-Spaces/walkway.webp",
+    "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa Bedroom 1.webp",
+    "/Villa_Retreats/Tranquil Woods/2-Spaces/lawn area.webp",
   ],
   amenities: [
     { label: "Private Pool", icon: "Waves" },
@@ -114,33 +109,32 @@ export const tranquil = {
   ],
   activities: [
     {
-      title: "Outdoor Movie Nights",
+      title: "Amphitheater Events",
       description:
-        "Projector-based screenings under the open sky with seating setups.",
-      image: "/Villa_Retreats/Tranquil Woods/Experiences/experiences_01.webp",
+        "Host private events and gatherings in the open-air theater.",
+      image: "/Villa_Retreats/Tranquil Woods/2-Spaces/Amphitheater.webp",
     },
     {
-      title: "Bonfire Evenings",
-      description:
-        "Outdoor bonfire setups for group gatherings and late evenings.",
-      image: "/Villa_Retreats/Tranquil Woods/Experiences/experiences_02.webp",
+      title: "Poolside Parties",
+      description: "Leisure time and social events by the private pool.",
+      image: "/Villa_Retreats/Tranquil Woods/2-Spaces/Private Pool Villa.webp",
     },
     {
-      title: "Barbecue Experiences",
-      description: "Live grill setups for hosted meals and casual dining.",
-      image: "/Villa_Retreats/Tranquil Woods/Experiences/experiences_03.webp",
+      title: "Garden Walks",
+      description:
+        "Extensive landscaped gardens and walkways for peaceful strolls.",
+      image: "/Villa_Retreats/Tranquil Woods/2-Spaces/walkway.webp",
     },
     {
-      title: "Garden Dining Setups",
-      description:
-        "Custom dining layouts across lawns, gazebos, or poolside areas.",
-      image: "/Villa_Retreats/Tranquil Woods/Experiences/experiences_04.webp",
+      title: "Multi-leveled Lawn Activities",
+      description: "Landscaped lawns across multiple levels for group use.",
+      image: "/Villa_Retreats/Tranquil Woods/2-Spaces/multileveled lawn.webp",
     },
     {
-      title: "High Tea Setups",
-      description:
-        "Light dining experiences for daytime events and gatherings.",
-      image: "/Villa_Retreats/Tranquil Woods/Experiences/experiences_01.webp",
+      title: "Party Hall Celebrations",
+      description: "Spacious party halls for indoor celebrations and banquets.",
+      image:
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Party Hall interiors.webp",
     },
   ],
   spaces: [

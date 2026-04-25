@@ -25,7 +25,12 @@ function uniq<T>(arr: T[]) {
 
 function extractRetreatFoldersFromPath(url: string) {
   const m = url.match(/^\/Villa_Retreats\/([^/]+)\//);
-  return m?.[1] ? [m[1]] : [];
+  if (!m?.[1]) return [];
+  try {
+    return [decodeURIComponent(m[1])];
+  } catch {
+    return [m[1]];
+  }
 }
 
 function collectCandidateFolders(villa: any) {
@@ -167,7 +172,10 @@ const DOMES: Array<{ id: string; label: string; needle: string }> = [
 ];
 
 function slugify(s: string) {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 function buildDomeCategorizedSpaces(allImages: string[]): CategorizedSpace[] {
@@ -211,10 +219,13 @@ export async function GET(
   }
 
   const retreatFolders = collectCandidateFolders(villa);
-  const media = { hero: [], spaces: [], experiences: [], perfectFor: [], other: [] } as Omit<
-    MediaResponse,
-    "categorizedSpaces"
-  >;
+  const media = {
+    hero: [],
+    spaces: [],
+    experiences: [],
+    perfectFor: [],
+    other: [],
+  } as Omit<MediaResponse, "categorizedSpaces">;
 
   for (const folder of retreatFolders) {
     const entry = (MEDIA_MANIFEST as any).villasByFolder?.[folder];
@@ -245,7 +256,9 @@ export async function GET(
     // Spaces pool = Hero + Spaces subfolders under each dome color
     // (everything except Experience and Perfect For folders).
     spaces = uniq([
-      ...hero.filter((u) => u.startsWith("/Villa_Retreats/Dome/Dome Villa_s - ")),
+      ...hero.filter((u) =>
+        u.startsWith("/Villa_Retreats/Dome/Dome Villa_s - "),
+      ),
       ...spaces.filter((u) =>
         u.startsWith("/Villa_Retreats/Dome/Dome Villa_s - "),
       ),
@@ -264,7 +277,9 @@ export async function GET(
       }
       // Use the manifest’s pre-built categories when we only have one folder.
       if (retreatFolders.length === 1) {
-        const entry = (MEDIA_MANIFEST as any).villasByFolder?.[retreatFolders[0]];
+        const entry = (MEDIA_MANIFEST as any).villasByFolder?.[
+          retreatFolders[0]
+        ];
         if (entry?.categorizedSpaces?.length) return entry.categorizedSpaces;
       }
       return [

@@ -19,18 +19,21 @@ export const royalty = {
     "Staycations",
     "Nature Stays",
   ],
-  categories: ["Equestrian Retreats", "Hill Villas", "Luxury Stays"],
-  thumbnail: "/Villa_Retreats/Royalty/1-Hero/1.webp",
-  image: "/Villa_Retreats/Royalty/1-Hero/1.webp",
+  categories: [
+    "Luxury Stays",
+    "Weekend Getaways",
+    "Nature Retreats",
+    "Pre-wedding",
+  ],
+  thumbnail: "/Villa_Retreats/Royalty/1-Hero/hero.webp",
+  image: "/Villa_Retreats/Royalty/1-Hero/hero.webp",
   images: [
-    "/Villa_Retreats/Royalty/2-Spaces/1.webp",
-    "/Villa_Retreats/Royalty/2-Spaces/2.webp",
-    "/Villa_Retreats/Royalty/2-Spaces/3.webp",
-    "/Villa_Retreats/Royalty/2-Spaces/4.webp",
-    "/Villa_Retreats/Royalty/2-Spaces/5.webp",
-    "/Villa_Retreats/Royalty/2-Spaces/6.webp",
-    "/Villa_Retreats/Royalty/2-Spaces/7.webp",
-    "/Villa_Retreats/Royalty/2-Spaces/8.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/Villa Entrance.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/7 foot waterfall pool.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/Hill View.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/living room.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/Bedroom 1.webp",
+    "/Villa_Retreats/Royalty/2-Spaces/Dining area.webp",
   ],
   amenities: [
     { label: "Private Pool", icon: "Waves" },
@@ -103,52 +106,31 @@ export const royalty = {
   ],
   activities: [
     {
+      title: "Private Pool Experience",
+      description: "Enjoy the massive 7-foot waterfall pool with ridge views.",
+      image: "/Villa_Retreats/Royalty/2-Spaces/7 foot waterfall pool.webp",
+    },
+    {
+      title: "Movie Under The Stars",
+      description: "Outdoor cinema experience within the villa grounds.",
+      image:
+        "/Villa_Retreats/Royalty/2-Spaces/experience movie under the stars.webp",
+    },
+    {
       title: "Horse Riding Safari",
-      description: "Equestrian trail experience towards scenic sunset points.",
+      description: "Guided riding experiences at the on-site arena.",
       image:
-        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.44.01 (2).webp",
+        "/Villa_Retreats/Royalty/2-Spaces/experience_horse riding safari.webp",
     },
     {
-      title: "Camping Experiences",
-      description: "Outdoor stay setups with bonfire.",
-      image:
-        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.44.02 (2).webp",
+      title: "Hill View Dining",
+      description: "Dining setups overlooking the surrounding mountain ridges.",
+      image: "/Villa_Retreats/Royalty/2-Spaces/Hill View.webp",
     },
     {
-      title: "Barbecue Experiences",
-      description: "Dedicated BBQ setup for outdoor cooking and dining.",
-      image:
-        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.45.54 (1).webp",
-    },
-    {
-      title: "Bonfire Evenings",
-      description: "Outdoor bonfire setups for group gatherings.",
-      image:
-        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.45.54 (2).webp",
-    },
-    {
-      title: "Candle Corner Dining",
-      description: "Dedicated candlelit dining setups within the villa.",
-      image:
-        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.44.01 (2).webp",
-    },
-    {
-      title: "Family Dining Experiences",
-      description: "Group dining setups across indoor and outdoor zones.",
-      image:
-        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.44.02 (2).webp",
-    },
-    {
-      title: "Lounge Experiences",
-      description: "Relaxed indoor lounge setups for social time.",
-      image:
-        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.45.54 (1).webp",
-    },
-    {
-      title: "Cooking Experiences",
-      description: "Interactive cooking-based group experiences.",
-      image:
-        "/Villa_Retreats/Royalty/3-Experiences/WhatsApp Image 2025-11-14 at 11.45.54 (2).webp",
+      title: "Lounge Relaxation",
+      description: "Spacious indoor and outdoor lounge areas for social time.",
+      image: "/Villa_Retreats/Royalty/2-Spaces/Lounge Area.webp",
     },
   ],
   spaces: [

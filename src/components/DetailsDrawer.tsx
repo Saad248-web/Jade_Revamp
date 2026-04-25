@@ -23,6 +23,20 @@ import {
   Info,
   Projector,
   Diamond,
+  Bed,
+  Maximize,
+  MapPin,
+  Layers,
+  Tent,
+  Smile,
+  Sofa,
+  Flame,
+  Utensils,
+  Wine,
+  Activity,
+  Dog,
+  Tv,
+  GlassWater,
 } from "lucide-react";
 
 interface DetailItem {
@@ -61,6 +75,20 @@ const getIcon = (iconName: string) => {
     Zap,
     Projector,
     Diamond,
+    Bed,
+    Maximize,
+    MapPin,
+    Layers,
+    Tent,
+    Smile,
+    Sofa,
+    Flame,
+    Utensils,
+    Wine,
+    Activity,
+    Dog,
+    Tv,
+    GlassWater,
   };
   return icons[iconName] || Info;
 };
@@ -144,7 +172,7 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
                     return (
                       <div key={idx} className="flex gap-4 items-start group">
                         {Icon && (
-                          <div className="shrink-0 w-10 h-10 flex items-center justify-center border border-white/10 rounded-sm bg-white/5 transition-colors group-hover:bg-white/10">
+                          <div className="shrink-0 w-10 h-10 flex items-center justify-center border border-white/10 rounded-sm bg-white/5 transition-colors">
                             <Icon className="w-4 h-4 text-[#EFCD62]" />
                           </div>
                         )}

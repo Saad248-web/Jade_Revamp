@@ -18,7 +18,7 @@ import {
   Headset,
 } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
-import { VILLAS } from "@/lib/mockData";
+import { VILLAS, CATEGORIES } from "@/lib/mockData";
 
 /* ─────────────────────────────────────────────────────────────────────
    Types
@@ -88,7 +88,6 @@ const ADD_ONS = [
 
 const BASE_PRICE = 99000;
 const NIGHT_TAX = 99000;
-const FILTERS = ["All", "Pet friendly", "Corporate Retreats", "Weddings"];
 
 /* ─────────────────────────────────────────────────────────────────────
    Helpers
@@ -508,7 +507,11 @@ function StepVillas({
     () =>
       activeFilter === "All"
         ? VILLAS
-        : VILLAS.filter((v) => v.categories?.includes(activeFilter)),
+        : VILLAS.filter((v) =>
+            v.categories?.some(
+              (c: string) => c.toLowerCase() === activeFilter.toLowerCase(),
+            ),
+          ),
     [activeFilter],
   );
 
@@ -533,21 +536,42 @@ function StepVillas({
         </button>
       </div>
 
-      {/* Filter chips */}
-      <div className="flex gap-2 px-5 py-3 overflow-x-auto scrollbar-hide shrink-0">
-        {FILTERS.map((f) => (
-          <button
-            key={f}
-            onClick={() => setActiveFilter(f)}
-            className={`shrink-0 px-4 py-1.5 text-gh-label font-manrope font-semibold tracking-wide rounded-full transition-all ${
-              activeFilter === f
-                ? "bg-[#EFCD62] text-[#0D4032]"
-                : "bg-white/10 text-white/60 hover:bg-white/20"
-            }`}
-          >
-            {f}
-          </button>
-        ))}
+      {/* Filter chips — edge-to-edge scroll */}
+      <div className="flex gap-2 py-3 overflow-x-auto scrollbar-hide shrink-0">
+        <div className="shrink-0 w-3" aria-hidden="true" />
+        {CATEGORIES.map((f) => {
+          const count =
+            f === "All"
+              ? VILLAS.length
+              : VILLAS.filter((v) =>
+                  v.categories?.some(
+                    (c: string) => c.toLowerCase() === f.toLowerCase(),
+                  ),
+                ).length;
+          return (
+            <button
+              key={f}
+              onClick={() => setActiveFilter(f)}
+              className={`shrink-0 px-4 py-1.5 text-gh-label font-manrope font-semibold tracking-wide rounded-sm transition-all flex items-center gap-2 border ${
+                activeFilter === f
+                  ? "bg-[#EFCD62] text-[#0D4032] border-[#EFCD62]"
+                  : "bg-white/5 text-white/60 hover:bg-white/10 border-white/10"
+              }`}
+            >
+              {f}
+              <span
+                className={`text-[9px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full ${
+                  activeFilter === f
+                    ? "bg-[#0D4032]/20 text-[#0D4032]"
+                    : "bg-white/10 text-white/40"
+                }`}
+              >
+                {count}
+              </span>
+            </button>
+          );
+        })}
+        {/* no trailing spacer — chips touch right edge */}
       </div>
 
       {/* Villa cards */}
@@ -1173,7 +1197,7 @@ export default function GlobalBookingOverlay() {
 
           {/* Centering wrapper */}
           <div
-            className="fixed inset-0 z-[201] flex flex-col items-center justify-end md:justify-center px-4 md:px-0"
+            className="fixed inset-0 z-[201] flex flex-col items-center justify-end md:justify-center md:px-0"
             onWheel={(e) => e.stopPropagation()}
           >
             {/* Floating close button */}

@@ -19,10 +19,24 @@ export const magnolia = {
     "Private Celebrations",
     "Aesthetic Shoots",
   ],
-  categories: ["Luxury Villas", "Wedding Venues", "Corporate Retreats"],
+  categories: [
+    "Weddings",
+    "Corporate Retreats",
+    "Luxury Stays",
+    "Party Venues",
+    "Pre-wedding",
+  ],
   thumbnail: "/Villa_Retreats/Magnolia/Hero/hero.webp",
   image: "/Villa_Retreats/Magnolia/Hero/hero.webp",
-  images: ["/Villa_Retreats/Magnolia/Spaces/spaces_01.webp", "/Villa_Retreats/Magnolia/Spaces/spaces_02.webp", "/Villa_Retreats/Magnolia/Spaces/spaces_03.webp", "/Villa_Retreats/Magnolia/Spaces/spaces_04.webp", "/Villa_Retreats/Magnolia/Spaces/spaces_05.webp", "/Villa_Retreats/Magnolia/Spaces/spaces_06.webp", "/Villa_Retreats/Magnolia/Spaces/spaces_07.webp"],
+  images: [
+    "/Villa_Retreats/Magnolia/Spaces/Villa.webp",
+    "/Villa_Retreats/Magnolia/Spaces/Pool.webp",
+    "/Villa_Retreats/Magnolia/Spaces/Living_Area.webp",
+    "/Villa_Retreats/Magnolia/Spaces/Bed_Room_1.webp",
+    "/Villa_Retreats/Magnolia/Spaces/Dining_Area.webp",
+    "/Villa_Retreats/Magnolia/Spaces/Lawn_Area.webp",
+    "/Villa_Retreats/Magnolia/Spaces/Private_Home_Theatre.webp",
+  ],
   amenities: [
     {
       label: "Private Pool",
@@ -130,83 +144,107 @@ export const magnolia = {
     },
   ],
   activities: [
-    { title: "Poolside Cocktails", image: "/Villa_Retreats/Magnolia/Experiences/experiences_01.webp" },
-    { title: "Garden Weddings", image: "/Villa_Retreats/Magnolia/Experiences/experiences_02.webp" },
-    { title: "Basketball Matches", image: "/Villa_Retreats/Magnolia/Experiences/experiences_03.webp" },
-    { title: "Movie Nights", image: "/Villa_Retreats/Magnolia/Experiences/experiences_04.webp" },
+    {
+      title: "Poolside Cocktails",
+      image: "/Villa_Retreats/Magnolia/Spaces/Bar_Lounge.webp",
+    },
+    {
+      title: "Garden Weddings",
+      image: "/Villa_Retreats/Magnolia/Spaces/Lawn_Area.webp",
+    },
+    {
+      title: "Basketball Matches",
+      image: "/Villa_Retreats/Magnolia/Spaces/Basket_Ball_Court.webp",
+    },
+    {
+      title: "Movie Nights",
+      image: "/Villa_Retreats/Magnolia/Spaces/Private_Home_Theatre.webp",
+    },
   ],
   spaces: [
-    { name: "Glass Living Room", image: "/Villa_Retreats/Magnolia/Spaces/spaces_01.webp" },
-    { name: "Pool Deck", image: "/Villa_Retreats/Magnolia/Spaces/spaces_02.webp" },
-    { name: "Main Lawn", image: "/Villa_Retreats/Magnolia/Spaces/spaces_03.webp" },
-    { name: "Luxury Suite", image: "/Villa_Retreats/Magnolia/Spaces/spaces_04.webp" },
+    {
+      name: "Glass Living Room",
+      image: "/Villa_Retreats/Magnolia/Spaces/Living_Area.webp",
+    },
+    {
+      name: "Pool Deck",
+      image: "/Villa_Retreats/Magnolia/Spaces/Pool.webp",
+    },
+    {
+      name: "Main Lawn",
+      image: "/Villa_Retreats/Magnolia/Spaces/Lawn_Area.webp",
+    },
+    {
+      name: "Luxury Suite",
+      image: "/Villa_Retreats/Magnolia/Spaces/Bed_Room_1.webp",
+    },
   ],
   categorizedSpaces: [
     {
-        id: "glass-living-room",
-        title: "Glass Living Room",
-        category: "Bed & Bath",
-        amenities: [
-            "King bed",
-            "Air conditioning",
-            "Room-darkening blinds",
-            "Wardrobe",
-            "En-suite bathroom"
-        ],
-        images: [
-            "/Villa_Retreats/Magnolia/Spaces/spaces_01.webp",
-            "/Villa_Retreats/Magnolia/Spaces/spaces_02.webp",
-            "/Villa_Retreats/Magnolia/Spaces/spaces_03.webp"
-        ]
+      id: "glass-living-room",
+      title: "Glass Living Room",
+      category: "Indoors",
+      amenities: [
+        "Lounge seating",
+        "Air conditioning",
+        "Natural lighting",
+        "Garden views",
+      ],
+      images: [
+        "/Villa_Retreats/Magnolia/Spaces/Living_Area.webp",
+        "/Villa_Retreats/Magnolia/Spaces/Dining_Area.webp",
+        "/Villa_Retreats/Magnolia/Spaces/Family_Room.webp",
+      ],
     },
     {
-        id: "pool-deck",
-        title: "Pool Deck",
-        category: "Outdoors",
-        amenities: [
-            "Private pool access",
-            "Garden sit-out",
-            "Bonfire zone",
-            "Barbecue setup"
-        ],
-        images: [
-            "/Villa_Retreats/Magnolia/Spaces/spaces_02.webp",
-            "/Villa_Retreats/Magnolia/Spaces/spaces_04.webp",
-            "/Villa_Retreats/Magnolia/Spaces/spaces_05.webp"
-        ]
+      id: "pool-deck",
+      title: "Pool Deck",
+      category: "Outdoors",
+      amenities: [
+        "Private pool",
+        "Poolside bar",
+        "Sun loungers",
+        "Outdoor shower",
+      ],
+      images: [
+        "/Villa_Retreats/Magnolia/Spaces/Pool.webp",
+        "/Villa_Retreats/Magnolia/Spaces/Bar_Lounge.webp",
+        "/Villa_Retreats/Magnolia/Spaces/Pool_Side_SitOut_1.webp",
+      ],
     },
     {
-        id: "main-lawn",
-        title: "Main Lawn",
-        category: "Outdoors",
-        amenities: [
-            "Private pool access",
-            "Garden sit-out",
-            "Bonfire zone",
-            "Barbecue setup"
-        ],
-        images: [
-            "/Villa_Retreats/Magnolia/Spaces/spaces_03.webp",
-            "/Villa_Retreats/Magnolia/Spaces/spaces_06.webp",
-            "/Villa_Retreats/Magnolia/Spaces/spaces_07.webp"
-        ]
+      id: "main-lawn",
+      title: "Main Lawn",
+      category: "Outdoors",
+      amenities: [
+        "Large lawn",
+        "Basketball court",
+        "Event space",
+        "Outdoor seating",
+      ],
+      images: [
+        "/Villa_Retreats/Magnolia/Spaces/Lawn_Area.webp",
+        "/Villa_Retreats/Magnolia/Spaces/Basket_Ball_Court.webp",
+        "/Villa_Retreats/Magnolia/Spaces/Pool_Side_SitOut_2.webp",
+      ],
     },
     {
-        id: "luxury-suite",
-        title: "Luxury Suite",
-        category: "Bed & Bath",
-        amenities: [
-            "King bed",
-            "Air conditioning",
-            "Room-darkening blinds",
-            "Wardrobe",
-            "En-suite bathroom"
-        ],
-        images: [
-            "/Villa_Retreats/Magnolia/Spaces/spaces_04.webp"
-        ]
-    }
-],
+      id: "luxury-suites",
+      title: "Luxury Suites",
+      category: "Bed & Bath",
+      amenities: [
+        "King bed",
+        "Air conditioning",
+        "En-suite bathroom",
+        "Walk-in wardrobe",
+      ],
+      images: [
+        "/Villa_Retreats/Magnolia/Spaces/Bed_Room_1.webp",
+        "/Villa_Retreats/Magnolia/Spaces/Bed_Room_2.webp",
+        "/Villa_Retreats/Magnolia/Spaces/Bed_Room_3.webp",
+      ],
+    },
+  ],
   pricing: {
     stay: {
       title: "Stay Experience",

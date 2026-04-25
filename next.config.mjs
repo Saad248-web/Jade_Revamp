@@ -18,6 +18,7 @@ const nextConfig = {
       { protocol: "https", hostname: "i.pravatar.cc" },
       { protocol: "https", hostname: "i.pinimg.com" },
       { protocol: "https", hostname: "jadehospitainment.com" },
+      { protocol: "https", hostname: "img.youtube.com" },
     ],
   },
 

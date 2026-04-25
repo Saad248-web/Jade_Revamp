@@ -26,7 +26,9 @@ export async function getVillas(filters?: {
     return VILLAS as unknown as Villa[];
   }
   return VILLAS.filter((v) =>
-    v.categories?.includes(filters.category!),
+    v.categories?.some(
+      (c: string) => c.toLowerCase() === filters.category!.toLowerCase(),
+    ),
   ) as unknown as Villa[];
 }
 

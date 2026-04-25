@@ -19,17 +19,10 @@ export const vannani = {
     "Private Celebrations",
     "Staycations",
   ],
-  categories: ["Farmhouse Retreats", "Group Stays", "Nature Escapes"],
+  categories: ["Nature Retreats", "Weekend Getaways", "Pet Friendly"],
   thumbnail: "",
   image: "",
-  images: [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ],
+  images: ["", "", "", "", "", ""],
   amenities: [
     {
       label: "Private Pool",
@@ -143,18 +136,18 @@ export const vannani = {
   ],
   categorizedSpaces: [
     {
-        id: "main-space",
-        title: "Main Space",
-        category: "Indoors",
-        amenities: [
-            "Comfortable seating",
-            "Ambient lighting",
-            "Air conditioning",
-            "Entertainment setup"
-        ],
-        images: []
-    }
-],
+      id: "main-space",
+      title: "Main Space",
+      category: "Indoors",
+      amenities: [
+        "Comfortable seating",
+        "Ambient lighting",
+        "Air conditioning",
+        "Entertainment setup",
+      ],
+      images: [],
+    },
+  ],
   pricing: {
     stay: {
       title: "Stay Experience",

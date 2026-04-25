@@ -19,16 +19,15 @@ export const loungeFly = {
     "Solo Travelers",
     "Boutique Stays",
   ],
-  categories: ["Luxury Suites", "Urban Retreats", "Apartment Stays"],
+  categories: ["Luxury Stays", "Weekend Getaways", "Corporate Retreats"],
   thumbnail: "/Villa_Retreats/Lounge Fly/1-Hero/2.webp",
   image: "/Villa_Retreats/Lounge Fly/1-Hero/2.webp",
   images: [
-    "/Villa_Retreats/Lounge Fly/Spaces/IMG_4560.webp",
-    "/Villa_Retreats/Lounge Fly/Spaces/IMG_4763.webp",
-    "/Villa_Retreats/Lounge Fly/Spaces/IMG_4789.webp",
-    "/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp",
-    "/Villa_Retreats/Lounge Fly/Spaces/IMG_9299.webp",
-    "/Villa_Retreats/Lounge Fly/Spaces/IMG_9300.webp",
+    "/Villa_Retreats/Lounge Fly/2-Spaces/Pool Villa.webp",
+    "/Villa_Retreats/Lounge Fly/2-Spaces/living area day.webp",
+    "/Villa_Retreats/Lounge Fly/2-Spaces/Bedroom day.webp",
+    "/Villa_Retreats/Lounge Fly/2-Spaces/garden view.webp",
+    "/Villa_Retreats/Lounge Fly/2-Spaces/luxury decor.webp",
   ],
   amenities: [
     { label: "Private Pool", icon: "Waves" },
@@ -111,30 +110,31 @@ export const loungeFly = {
   ],
   activities: [
     {
-      title: "Balcony Lounge",
-      description: "Relaxation with dual balcony views.",
-      image: "/Villa_Retreats/Lounge_Fly/Experiences/experiences_01.webp",
+      title: "Poolside Evenings",
+      description: "Relax by the private pool overlooking the garden area.",
+      image: "/Villa_Retreats/Lounge Fly/2-Spaces/Pool Villa.webp",
     },
     {
-      title: "City Stay Experience",
+      title: "Outdoor Barbecue",
+      description: "Dedicated bonfire and BBQ setups for social gatherings.",
+      image: "/Villa_Retreats/Lounge Fly/2-Spaces/Bar Coubnter.webp",
+    },
+    {
+      title: "Lounge Relaxation",
       description:
-        "Access to shopping, dining, and entertainment within Bhartiya City.",
-      image: "/Villa_Retreats/Lounge_Fly/Experiences/experiences_02.webp",
+        "Spend time in the aesthetic living and outdoor lounge areas.",
+      image: "/Villa_Retreats/Lounge Fly/2-Spaces/Sofa Loungers.webp",
     },
     {
-      title: "Rooftop & Hotel Dining",
-      description: "Dining experiences at Leela Hotel and rooftop venues.",
-      image: "/Villa_Retreats/Lounge_Fly/Experiences/experiences_03.webp",
+      title: "Candlelight Dining",
+      description: "Curated private dining setups within the villa interiors.",
+      image: "/Villa_Retreats/Lounge Fly/2-Spaces/luxury decor.webp",
     },
     {
-      title: "Entertainment Access",
-      description: "Movies, breweries, and mall-based entertainment options.",
-      image: "/Villa_Retreats/Lounge_Fly/Experiences/experiences_04.webp",
-    },
-    {
-      title: "Cooking Experiences",
-      description: "Interactive cooking-based group experiences.",
-      image: "/Villa_Retreats/Lounge_Fly/Experiences/experiences_05.webp",
+      title: "Work from Nature",
+      description:
+        "Quiet and aesthetic environment for focused extended stays.",
+      image: "/Villa_Retreats/Lounge Fly/2-Spaces/Bedroom Lounger.webp",
     },
   ],
   spaces: [

@@ -24,17 +24,15 @@ export const diamond = {
     "Team Outings",
   ],
   perfectForEvents: ["Weddings", "Corporate Events", "Large Gatherings"],
-  categories: ["Weddings", "Corporate Events", "Large Gatherings"],
+  categories: ["Weddings", "Corporate Retreats", "Party Venues", "Pre-wedding"],
   image: "/Villa_Retreats/Diamond/Hero/hero.webp",
   images: [
-    "/Villa_Retreats/Diamond/Spaces/spaces_01.webp",
-    "/Villa_Retreats/Diamond/Spaces/spaces_02.webp",
-    "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
-    "/Villa_Retreats/Diamond/Spaces/spaces_04.webp",
-    "/Villa_Retreats/Diamond/Spaces/spaces_05.webp",
-    "/Villa_Retreats/Diamond/Spaces/spaces_06.webp",
-    "/Villa_Retreats/Diamond/Spaces/spaces_07.webp",
+    "/Villa_Retreats/Diamond/Spaces/Pool.webp",
+    "/Villa_Retreats/Diamond/Spaces/Double_Occupancy.webp",
     "/Villa_Retreats/Diamond/Spaces/spaces_08.webp",
+    "/Villa_Retreats/Diamond/Spaces/spaces_17.webp",
+    "/Villa_Retreats/Diamond/Spaces/spaces_18.webp",
+    "/Villa_Retreats/Diamond/Spaces/spaces_23.webp",
   ],
   amenities: [
     { label: "Private Pool", icon: "Waves" },
@@ -51,30 +49,21 @@ export const diamond = {
     { label: "Parking", icon: "Car" },
   ],
   spaces: [
-    { name: "Expansive Lawn", image: "/Villa_Retreats/Diamond/Hero/hero.webp" },
     {
-      name: "Banquet Hall",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_01.webp",
+      name: "Private Pool",
+      image: "/Villa_Retreats/Diamond/Spaces/Pool.webp",
     },
     {
-      name: "Accommodation Block",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_02.webp",
+      name: "Lounge Area",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_08.webp",
     },
     {
-      name: "Courtyard",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
+      name: "Modern Suites",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_17.webp",
     },
     {
-      name: "Pool Deck",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_04.webp",
-    },
-    {
-      name: "Garden Path",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_05.webp",
-    },
-    {
-      name: "Entrance Foyer",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_06.webp",
+      name: "Villa Exterior",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_18.webp",
     },
   ],
   categorizedSpaces: [
@@ -282,27 +271,27 @@ export const diamond = {
       title: "Reception Events",
       description:
         "Evening setups with lighting, dining, and stage arrangements.",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_01.webp",
+      image: "/Villa_Retreats/Diamond/Spaces/Pool.webp",
     },
     {
       title: "Corporate Offsites",
       description: "Team events, conferences, and large group gatherings.",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_02.webp",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_08.webp",
     },
     {
       title: "Poolside Events",
       description: "Smaller social setups around the pool area.",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_17.webp",
     },
     {
       title: "Banquet Dining Experiences",
       description: "Structured dining within semi-open hall setups.",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_04.webp",
+      image: "/Villa_Retreats/Diamond/Spaces/spaces_18.webp",
     },
     {
       title: "Celebration Setups",
       description: "Birthdays, anniversaries, and private events.",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_05.webp",
+      image: "/Villa_Retreats/Diamond/Spaces/Double_Occupancy.webp",
     },
   ],
   video: {

@@ -97,7 +97,10 @@ export default function VillasCarousel() {
 
   const filteredVillas = VILLAS.filter(
     (villa) =>
-      activeCategory === "All" || villa.categories.includes(activeCategory),
+      activeCategory === "All" ||
+      villa.categories?.some(
+        (c: string) => c.toLowerCase() === activeCategory.toLowerCase(),
+      ),
   );
 
   const handleCategoryChange = (category: string) => {
@@ -145,8 +148,8 @@ export default function VillasCarousel() {
               <BookingBanner onSearch={handleSearch} />
             </div>
 
-            {/* CATEGORIES - Right Side on Desktop (Scrollable) */}
-            <div className="order-2 lg:order-2 flex-1 min-w-0 flex overflow-x-auto items-center gap-2 md:gap-3 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+            {/* CATEGORIES - Right Side on Desktop (Scrollable, edge-to-edge) */}
+            <div className="order-2 lg:order-2 flex-1 min-w-0 flex overflow-x-auto items-center gap-2 md:gap-3 pb-1 -mr-2 md:-mr-8 lg:-mr-16 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
               {CATEGORIES.map((category) => (
                 <button
                   key={category}

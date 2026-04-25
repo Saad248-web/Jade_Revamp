@@ -164,6 +164,7 @@ export default function VillaDetailsPage() {
   const [activeDomeSpaceTab, setActiveDomeSpaceTab] = useState<
     "blue" | "red" | "yellow"
   >("blue");
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections((prev) => ({ ...prev, [sectionId]: !prev[sectionId] }));
@@ -327,6 +328,60 @@ export default function VillaDetailsPage() {
     }
   };
 
+  // Scroll-Spy Effect for Navigation Tabs
+  const visibleSections = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    const sectionIds = [
+      "spaces",
+      "amenities",
+      "services",
+      "experiences",
+      "details",
+      "pricing",
+      "location",
+      "perfect-for",
+      "video-walkthrough",
+      "faq",
+    ];
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -35% 0px",
+      threshold: 0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          visibleSections.current.add(entry.target.id);
+        } else {
+          visibleSections.current.delete(entry.target.id);
+        }
+      });
+
+      // Pick the topmost visible section (earliest in DOM order)
+      for (const id of sectionIds) {
+        if (visibleSections.current.has(id)) {
+          setActiveTab(id);
+          break;
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     // Only start auto-scroll if the URL parameter is present
     const shouldAutoScroll = searchParams.get("autoScroll") === "true";
@@ -472,36 +527,49 @@ export default function VillaDetailsPage() {
           <h1 className="text-[28px] md:text-[32px] font-philosopher text-white mb-1 leading-tight">
             {villa.name}
           </h1>
-          <div className="flex items-center gap-2 text-white/80">
-            <MapPin className="w-4 h-4 text-white/60" />
-            <span className="font-manrope text-[12px] md:text-[14px]">
+          <div className="flex items-center gap-2.5 text-white/90 mt-2">
+            <MapPin className="w-5 h-5 text-white/70" />
+            <span className="font-manrope text-[15px] md:text-[18px]">
               {villa.location}
             </span>
           </div>
         </div>
 
         {/* AMENITY SUMMARY LINE */}
-        <div className="flex flex-wrap gap-4 items-center text-white/90 mb-10 text-[11px] md:text-[12px] font-semibold font-manrope tracking-wide">
-          <div className="flex items-center gap-2">
-            <Bed className="w-4 h-4 text-[#EFCD62]" strokeWidth={1.5} />
+        <div className="flex flex-nowrap overflow-x-auto scrollbar-none gap-x-4 items-center text-white/90 mb-10 text-[10px] md:text-[12px] lg:text-[14px] font-normal font-manrope tracking-wide pb-2 -mr-6 pr-6 md:-mr-12 md:pr-12">
+          <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+            <Bed
+              className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]"
+              strokeWidth={1.5}
+            />
             <span>
               {villa.stats.stay.toLowerCase().includes("stay")
                 ? villa.stats.stay
                 : `${villa.stats.stay} Stay`}
             </span>
           </div>
-          <div className="text-white/30 text-xs mt-[1px]">•</div>
-          <div className="flex items-center gap-2">
-            <Users className="w-4 h-4 text-[#EFCD62]" strokeWidth={1.5} />
+
+          <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
+
+          <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+            <Users
+              className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]"
+              strokeWidth={1.5}
+            />
             <span>
               {villa.stats.events.toLowerCase().includes("event")
                 ? villa.stats.events
                 : `${villa.stats.events} Event`}
             </span>
           </div>
-          <div className="text-white/30 text-xs mt-[1px]">•</div>
-          <div className="flex items-center gap-2">
-            <Home className="w-4 h-4 text-[#EFCD62]" strokeWidth={1.5} />
+
+          <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
+
+          <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+            <Home
+              className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]"
+              strokeWidth={1.5}
+            />
             <span>{villa.stats.bhk}</span>
           </div>
         </div>
@@ -522,27 +590,27 @@ export default function VillaDetailsPage() {
             return (
               <div
                 key={idx}
-                className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] p-[1px] rounded-none snap-start group flex-shrink-0 cursor-pointer"
+                className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] bg-white/10 backdrop-blur-[12px] flex flex-col items-center justify-between text-center px-4 py-5 rounded-none snap-start group flex-shrink-0"
                 style={{
-                  background:
-                    "linear-gradient(to bottom right, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0) 65%, rgba(255,255,255,0.54) 100%)",
+                  border: "1px solid",
+                  borderImageSource:
+                    "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.2) 100%)",
+                  borderImageSlice: 1,
                 }}
               >
-                <div className="w-full h-full bg-gradient-to-b from-white/[0.08] to-transparent backdrop-blur-[70px] flex flex-col items-center justify-center text-center px-4 py-4 hover:bg-white/10 transition-colors">
-                  <Icon
-                    className="w-[24px] h-[24px] text-white/90 group-hover:text-[#EFCD62] transition-colors mb-3"
-                    strokeWidth={1.2}
-                  />
-                  <div className="flex flex-col items-center w-full">
-                    <span className="text-white font-manrope font-bold text-[12px] md:text-[14px] leading-snug text-center break-words w-full">
-                      {label}
+                <Icon
+                  className="w-[26px] h-[26px] text-white/80 transition-colors mt-1"
+                  strokeWidth={1}
+                />
+                <div className="flex flex-col items-center w-full">
+                  <span className="text-white font-manrope font-medium text-[15px] leading-tight text-center break-words w-full">
+                    {label}
+                  </span>
+                  {sublabel && (
+                    <span className="text-white/60 font-manrope text-[13px] leading-tight mt-1 text-center break-words w-full">
+                      {sublabel}
                     </span>
-                    {sublabel && (
-                      <span className="text-white/60 font-manrope font-medium text-[10px] md:text-[12px] leading-snug mt-1 text-center break-words w-full">
-                        {sublabel}
-                      </span>
-                    )}
-                  </div>
+                  )}
                 </div>
               </div>
             );
@@ -564,11 +632,10 @@ export default function VillaDetailsPage() {
           </a>
         </div>
       </div>
-      {/* EMERALD GREEN SECTION: SPACES, AMENITIES, SERVICES, ETC. */}
-      <section className="relative w-full bg-[#0B2C23] py-12 text-white">
-        <div className="relative z-10 px-6 py-8 md:px-12 max-w-7xl mx-auto">
-          {/* TABS NAVIGATION - STICKY */}
-          <div className="sticky top-0 z-40 bg-[#0B2C23] border-b border-white/10 mb-8 flex gap-6 md:gap-10 overflow-x-auto pb-0 scrollbar-none -mr-6 md:-mr-12 pr-6 md:pr-12">
+      {/* TABS NAVIGATION - FULL WIDTH STICKY */}
+      <div className="sticky top-0 z-50 bg-[#0B2C23] border-b border-white/10 w-full shadow-2xl">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="flex gap-8 md:gap-12 overflow-x-auto pb-0 scrollbar-none">
             {[
               "Spaces",
               "Amenities",
@@ -587,7 +654,7 @@ export default function VillaDetailsPage() {
                 <button
                   key={tab}
                   onClick={() => scrollToSection(sectionId)}
-                  className={`py-4 text-[11px] uppercase tracking-widest font-bold transition-colors whitespace-nowrap border-b-2 ${
+                  className={`py-4 px-1 text-[11px] uppercase tracking-widest font-bold transition-colors whitespace-nowrap border-b-2 ${
                     isActive
                       ? "border-[#EFCD62] text-[#EFCD62]"
                       : "border-transparent text-white/60 hover:text-white"
@@ -598,12 +665,16 @@ export default function VillaDetailsPage() {
               );
             })}
           </div>
-
+        </div>
+      </div>
+      {/* EMERALD GREEN SECTION: SPACES, AMENITIES, SERVICES, ETC. */}
+      <section className="relative w-full bg-[#0B2C23] pb-12 text-white">
+        <div className="relative z-10 px-6 md:px-12 max-w-7xl mx-auto pt-8 md:pt-12">
           {/* CONTENT AREA */}
-          <div className="flex flex-col gap-16 md:gap-24 max-w-4xl mx-auto">
+          <div className="flex flex-col max-w-4xl mx-auto">
             {/* SPACES SECTION */}
             {(isDomeVillas || currentSpace) && (
-              <section id="spaces">
+              <section id="spaces" className="pb-10 md:pb-16 w-full">
                 <div className="flex flex-wrap justify-between items-center gap-4 mb-8">
                   <div className="flex flex-wrap items-center gap-3 md:gap-5">
                     <h3 className="text-gh-h1 font-philosopher text-white">
@@ -615,7 +686,11 @@ export default function VillaDetailsPage() {
                           [
                             { id: "blue", label: "Blue Dome", dot: "#3b82f6" },
                             { id: "red", label: "Red Dome", dot: "#ef4444" },
-                            { id: "yellow", label: "Yellow Dome", dot: "#eab308" },
+                            {
+                              id: "yellow",
+                              label: "Yellow Dome",
+                              dot: "#eab308",
+                            },
                           ] as const
                         ).map((t) => {
                           const isActive = activeDomeSpaceTab === t.id;
@@ -662,7 +737,8 @@ export default function VillaDetailsPage() {
 
                 {currentSpace ? (
                   <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20">
-                    {(validImg(currentSpace.image) || validImg(villa.image)) && (
+                    {(validImg(currentSpace.image) ||
+                      validImg(villa.image)) && (
                       <Image
                         src={
                           validImg(currentSpace.image)
@@ -708,7 +784,10 @@ export default function VillaDetailsPage() {
             )}
 
             {/* AMENITIES */}
-            <section id="amenities">
+            <section
+              id="amenities"
+              className="py-10 md:py-16 border-t border-white/5 w-full"
+            >
               <h3 className="text-gh-h2 font-philosopher text-white mb-8">
                 Amenities
               </h3>
@@ -718,10 +797,10 @@ export default function VillaDetailsPage() {
                   return (
                     <div
                       key={idx}
-                      className="flex flex-col items-center gap-3 p-6 bg-[#0B2C23] border border-white/5 hover:border-jade-gold/30 transition-all group"
+                      className="flex flex-col items-center gap-3 p-6 bg-[#0B2C23] border border-white/5 transition-all group"
                     >
                       <Icon
-                        className="w-8 h-8 text-jade-gold transition-transform group-hover:scale-110"
+                        className="w-8 h-8 text-jade-gold transition-transform"
                         strokeWidth={1}
                       />
                       <span className="text-white/80 font-bold uppercase tracking-widest text-[9px] text-center">
@@ -746,7 +825,10 @@ export default function VillaDetailsPage() {
             </section>
 
             {/* SERVICES SECTION */}
-            <section id="services">
+            <section
+              id="services"
+              className="py-10 md:py-16 border-t border-white/5 w-full"
+            >
               <h3 className="text-gh-h2 font-philosopher text-white mb-8">
                 Services
               </h3>
@@ -762,7 +844,7 @@ export default function VillaDetailsPage() {
                         />
                       </div>
                       <div>
-                        <h4 className="text-xl md:text-2xl font-bold font-manrope text-white mb-1 transition-colors group-hover:text-[#EFCD62]">
+                        <h4 className="text-gh-sl font-semibold font-manrope text-white mb-1 transition-colors">
                           {service.title}
                         </h4>
                         <p className="text-white/70 text-gh-body mb-2 leading-relaxed">
@@ -785,7 +867,10 @@ export default function VillaDetailsPage() {
 
             {/* EXPERIENCES SECTION */}
             {currentActivity && (
-              <section id="experiences">
+              <section
+                id="experiences"
+                className="py-10 md:py-16 border-t border-white/5 w-full"
+              >
                 <div className="flex justify-between items-end mb-8">
                   <h3 className="text-gh-h1 font-philosopher text-white">
                     Experiences
@@ -843,7 +928,7 @@ export default function VillaDetailsPage() {
             )}
 
             {/* WHY JADE WEDDING VENUES */}
-            <section className="py-12 border-t border-white/5">
+            <section className="py-10 md:py-16 border-t border-white/5 w-full">
               <h3 className="text-gh-h1 font-philosopher text-white mb-12">
                 Why Jade Wedding Venues
               </h3>
@@ -882,7 +967,10 @@ export default function VillaDetailsPage() {
             </section>
 
             {/* PROPERTY DETAILS SECTION */}
-            <section id="details">
+            <section
+              id="details"
+              className="py-10 md:py-16 border-t border-white/5 w-full"
+            >
               <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                 Property Details
               </h3>
@@ -915,7 +1003,10 @@ export default function VillaDetailsPage() {
 
             {/* PRICING SECTION */}
             {villa.pricing && (
-              <section id="pricing">
+              <section
+                id="pricing"
+                className="py-10 md:py-16 border-t border-white/5 w-full"
+              >
                 <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                   Pricing
                 </h3>
@@ -1028,15 +1119,20 @@ export default function VillaDetailsPage() {
                 </p>
               </section>
             )}
-
-            {/* LOCATION SECTION */}
+          </div>
+        </div>
+      </section>
+      {/* DARK ONYX SECTION: LOCATION, PERFECT FOR, VIDEO, FAQ */}
+      <section className="relative w-full bg-[#1A1C1E] text-white border-t border-white/5 pt-10 md:pt-16">
+        <div className="relative z-10 px-6 md:px-12 max-w-7xl mx-auto">
+          <div className="flex flex-col max-w-4xl mx-auto">
             {villa.locationDetails && (
-              <section id="location">
+              <section id="location" className="pb-10 md:pb-16 w-full">
                 <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                   Location
                 </h3>
                 <div className="bg-[#1A1C1E] rounded-none overflow-hidden mb-8 border border-white/10">
-                  <div className="relative w-full h-64 md:h-80 bg-gray-800">
+                  <div className="relative w-full h-64 md:h-80">
                     {(villa.locationDetails.mapImage || villa.image) && (
                       <Image
                         src={villa.locationDetails.mapImage || villa.image}
@@ -1048,51 +1144,50 @@ export default function VillaDetailsPage() {
                       />
                     )}
                   </div>
-                  <div className="p-6 md:p-8 bg-[#0B2C23] border-t border-white/10">
-                    <div className="flex items-start gap-4 mb-8">
-                      <MapPin className="w-6 h-6 text-jade-gold mt-1 shrink-0" />
-                      <div>
-                        <p className="text-white text-gh-body font-manrope font-medium leading-relaxed mb-4">
-                          {villa.locationDetails.address}
-                        </p>
-                        <div className="bg-white/5 inline-block px-4 py-2 rounded-none border border-white/10">
-                          <p className="text-jade-gold text-gh-label font-bold tracking-widest uppercase">
-                            {villa.locationDetails.distance}
-                          </p>
-                        </div>
-                      </div>
+                  <div className="p-5 md:p-6 bg-[#1A1C1E] border-t border-white/10">
+                    <div className="flex items-start gap-4">
+                      <MapPin className="w-5 h-5 text-jade-gold mt-1 shrink-0" />
+                      <p className="text-white text-gh-body font-manrope font-medium leading-relaxed">
+                        {villa.locationDetails.address}
+                      </p>
                     </div>
-                    {/* What's Nearby */}
-                    {villa.locationDetails.nearby &&
-                      villa.locationDetails.nearby.length > 0 && (
-                        <div className="mt-6">
-                          <h4 className="text-jade-gold text-gh-label font-bold tracking-widest uppercase mb-4 font-manrope">
-                            What&apos;s nearby:
-                          </h4>
-                          <div className="flex flex-col gap-3">
-                            {villa.locationDetails.nearby.map(
-                              (item: any, idx: number) => (
-                                <div
-                                  key={idx}
-                                  className="flex justify-between items-center"
-                                >
-                                  <div className="flex items-center gap-3">
-                                    <div className="w-2 h-2 rotate-45 bg-jade-gold" />
-                                    <span className="text-white font-manrope text-gh-body font-bold uppercase tracking-wider">
-                                      {item.label}
-                                    </span>
-                                  </div>
-                                  <span className="text-white/60 text-gh-body font-manrope">
-                                    {item.distance}
-                                  </span>
-                                </div>
-                              ),
-                            )}
-                          </div>
-                        </div>
-                      )}
+                    <div className="w-full bg-white/[0.03] border border-white/5 px-4 py-3 rounded-sm mt-6">
+                      <p className="text-white/60 text-[12px] md:text-[13px] font-manrope">
+                        {villa.locationDetails.distance}
+                      </p>
+                    </div>
                   </div>
                 </div>
+
+                {/* What's Nearby - Outside the Frame */}
+                {villa.locationDetails.nearby &&
+                  villa.locationDetails.nearby.length > 0 && (
+                    <div className="mt-12">
+                      <h4 className="text-jade-gold text-gh-label font-medium tracking-widest uppercase mb-6 font-manrope">
+                        Whats nearby:
+                      </h4>
+                      <div className="flex flex-col gap-4">
+                        {villa.locationDetails.nearby.map(
+                          (item: any, idx: number) => (
+                            <div
+                              key={idx}
+                              className="flex justify-between items-center border-b border-white/5 pb-3"
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-1.5 h-1.5 rotate-45 bg-jade-gold" />
+                                <span className="text-white font-manrope text-gh-desc font-medium uppercase tracking-wider">
+                                  {item.label}
+                                </span>
+                              </div>
+                              <span className="text-white/60 text-gh-desc font-manrope">
+                                {item.distance}
+                              </span>
+                            </div>
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  )}
               </section>
             )}
 
@@ -1100,7 +1195,7 @@ export default function VillaDetailsPage() {
             {villa.perfectFor && villa.perfectFor.length > 0 && (
               <section
                 id="perfect-for"
-                className="py-12 border-t border-white/5"
+                className="py-10 md:py-16 border-t border-white/5 w-full"
               >
                 <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                   Perfect for
@@ -1163,7 +1258,7 @@ export default function VillaDetailsPage() {
             {villa.video && (
               <section
                 id="video-walkthrough"
-                className="py-12 border-t border-white/5"
+                className="py-10 md:py-16 border-t border-white/5 w-full"
               >
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
                   <h3 className="text-gh-h1 font-philosopher text-white">
@@ -1176,7 +1271,11 @@ export default function VillaDetailsPage() {
                         [
                           { id: "blue", label: "Blue Dome", dot: "#3b82f6" },
                           { id: "red", label: "Red Dome", dot: "#ef4444" },
-                          { id: "yellow", label: "Yellow Dome", dot: "#eab308" },
+                          {
+                            id: "yellow",
+                            label: "Yellow Dome",
+                            dot: "#eab308",
+                          },
                         ] as const
                       ).map((t) => {
                         const isActive = activeDomeVideo === t.id;
@@ -1210,65 +1309,52 @@ export default function VillaDetailsPage() {
                         ? villa.video.youtubeUrl
                         : "";
                   const ytId = chosenUrl ? getYouTubeId(chosenUrl) : "";
-                  return ytId ? (
-                    <div className="relative aspect-video w-full bg-gray-900 overflow-hidden border border-white/10">
-                      <iframe
-                        src={`https://www.youtube.com/embed/${ytId}`}
-                        title={`${villa.name} Walkthrough`}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        className="absolute inset-0 w-full h-full"
-                      />
-                    </div>
-                  ) : null;
-                })() ? (
-                  <div className="relative aspect-video w-full bg-gray-900 overflow-hidden border border-white/10">
-                    <iframe
-                      src={`https://www.youtube.com/embed/${
-                        villa.id === "dome-villas"
-                          ? getYouTubeId(domeVideoUrls[activeDomeVideo])
-                          : getYouTubeId(
-                              typeof villa.video === "object"
-                                ? villa.video.youtubeUrl
-                                : "",
-                            )
-                      }`}
-                      title={`${villa.name} Walkthrough`}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="absolute inset-0 w-full h-full"
-                    />
-                  </div>
-                ) : (
-                  <div className="relative aspect-video w-full bg-gray-900 overflow-hidden group border border-white/10">
-                    {(typeof villa.video === "string"
-                      ? villa.video
-                      : villa.image) && (
+
+                  if (!ytId) return null;
+
+                  if (isPlayingVideo) {
+                    return (
+                      <div className="relative aspect-video w-full bg-gray-900 overflow-hidden border border-white/10">
+                        <iframe
+                          src={`https://www.youtube.com/embed/${ytId}?autoplay=1`}
+                          title={`${villa.name} Walkthrough`}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          className="absolute inset-0 w-full h-full"
+                        />
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div
+                      className="relative aspect-video w-full bg-gray-900 overflow-hidden group border border-white/10 cursor-pointer"
+                      onClick={() => setIsPlayingVideo(true)}
+                    >
                       <Image
-                        src={
-                          typeof villa.video === "string"
-                            ? villa.video
-                            : villa.image
-                        }
-                        alt="Video Thumbnail"
+                        src={`https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`}
+                        alt={`${villa.name} Video Walkthrough`}
                         fill
                         className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
                         sizes="(max-width: 768px) 100vw, 800px"
-                        loading="lazy"
+                        priority={false}
                       />
-                    )}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hover:bg-white/30 transition-all cursor-pointer group shadow-2xl">
-                        <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hover:bg-white/30 transition-all group shadow-2xl">
+                          <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
               </section>
             )}
 
             {/* FAQ SECTION */}
-            <section id="faq" className="py-12 border-t border-white/5 mb-20">
+            <section
+              id="faq"
+              className="py-10 md:py-16 border-t border-white/5 mb-20 w-full"
+            >
               <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                 FAQ
               </h3>
@@ -1278,7 +1364,7 @@ export default function VillaDetailsPage() {
                   return (
                     <div
                       key={idx}
-                      className="bg-[#0B2C23] border border-white/5 p-6 md:p-8"
+                      className="bg-[#1A1C1E] border border-white/10 p-6 md:p-8"
                     >
                       <div
                         className="flex justify-between items-center gap-4 cursor-pointer group"

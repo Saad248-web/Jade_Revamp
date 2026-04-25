@@ -19,7 +19,7 @@ export const lemonTree = {
     "Staycations",
     "Team Outings",
   ],
-  categories: ["Nature Retreats", "Orchard Properties", "Group Escapes"],
+  categories: ["Nature Retreats", "Weekend Getaways", "Pet Friendly"],
   thumbnail: "",
   image: "",
   images: ["", "", "", "", "", ""],

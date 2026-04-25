@@ -32,8 +32,12 @@ export const VILLAS = [
 
 export const CATEGORIES = [
   "All",
-  "Pet friendly",
-  "Corporate Retreats",
+  "Pet Friendly",
   "Weddings",
   "Pre-wedding",
+  "Corporate Retreats",
+  "Weekend Getaways",
+  "Luxury Stays",
+  "Nature Retreats",
+  "Party Venues",
 ];

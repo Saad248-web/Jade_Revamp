@@ -36,7 +36,10 @@ function uniq(arr) {
 
 function collectWebps(absDir) {
   return walk(absDir)
-    .filter((f) => f.toLowerCase().endsWith(".webp"))
+    .filter((f) => {
+      const base = path.basename(f).toLowerCase();
+      return base.endsWith(".webp") && base !== ".webp";
+    })
     .map(toPublicUrl)
     .sort();
 }
@@ -49,13 +52,21 @@ function classifyVilla(url) {
   // - /3-Experiences/
   // - /3-Experience/ or /3-Experienceee/
   // - /Experiences/
-  if (u.includes("/3-experiences") || u.includes("/3-experience") || u.includes("/experiences/"))
+  if (
+    u.includes("/3-experiences") ||
+    u.includes("/3-experience") ||
+    u.includes("/experiences/")
+  )
     return "experiences";
   // Accept common variations like:
   // - /4-Perfect For/
   // - /Perfect For/
   // - /perfect-for/
-  if (u.includes("/4-perfect") || u.includes("/perfect for/") || u.includes("/perfect-for/"))
+  if (
+    u.includes("/4-perfect") ||
+    u.includes("/perfect for/") ||
+    u.includes("/perfect-for/")
+  )
     return "perfectFor";
   return "other";
 }
@@ -153,23 +164,55 @@ function detectAdvancedCategory(title) {
 function metaForCategory(cat) {
   switch (cat) {
     case "Bedrooms":
-      return { title: "Bedrooms", amenities: ["Beds", "Sleep comfort", "Storage", "AC"] };
+      return {
+        title: "Bedrooms",
+        amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
+      };
     case "Bathrooms":
-      return { title: "Bathrooms", amenities: ["Baths", "Jacuzzi", "Shower", "Toiletries"] };
+      return {
+        title: "Bathrooms",
+        amenities: ["Baths", "Jacuzzi", "Shower", "Toiletries"],
+      };
     case "Living & Dining":
-      return { title: "Living & Dining", amenities: ["Living spaces", "Dining", "Lounges", "Interiors"] };
+      return {
+        title: "Living & Dining",
+        amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
+      };
     case "Kitchen & Bar":
-      return { title: "Kitchen & Bar", amenities: ["Kitchen", "Bar counter", "Utilities", "Tableware"] };
+      return {
+        title: "Kitchen & Bar",
+        amenities: ["Kitchen", "Bar counter", "Utilities", "Tableware"],
+      };
     case "Pool & Water":
-      return { title: "Pool & Water", amenities: ["Pool", "Plunge", "Water features", "Deck"] };
+      return {
+        title: "Pool & Water",
+        amenities: ["Pool", "Plunge", "Water features", "Deck"],
+      };
     case "Outdoors & Lawns":
-      return { title: "Outdoors & Lawns", amenities: ["Lawns", "Garden zones", "Open-air seating", "Activities"] };
+      return {
+        title: "Outdoors & Lawns",
+        amenities: ["Lawns", "Garden zones", "Open-air seating", "Activities"],
+      };
     case "Entrances & Paths":
-      return { title: "Entrances & Paths", amenities: ["Walkways", "Entrances", "Courtyards", "Landscaping"] };
+      return {
+        title: "Entrances & Paths",
+        amenities: ["Walkways", "Entrances", "Courtyards", "Landscaping"],
+      };
     case "Views & Exteriors":
-      return { title: "Views & Exteriors", amenities: ["Exterior views", "Property facade", "Scenic views", "Approach"] };
+      return {
+        title: "Views & Exteriors",
+        amenities: [
+          "Exterior views",
+          "Property facade",
+          "Scenic views",
+          "Approach",
+        ],
+      };
     default:
-      return { title: "Other", amenities: ["Spaces", "Details", "Ambience", "Highlights"] };
+      return {
+        title: "Other",
+        amenities: ["Spaces", "Details", "Ambience", "Highlights"],
+      };
   }
 }
 
@@ -224,7 +267,13 @@ function buildVillasManifest() {
     const abs = path.join(VILLA_ROOT, villaFolder);
     const files = collectWebps(abs);
 
-    const media = { hero: [], spaces: [], experiences: [], perfectFor: [], other: [] };
+    const media = {
+      hero: [],
+      spaces: [],
+      experiences: [],
+      perfectFor: [],
+      other: [],
+    };
     for (const url of files) {
       media[classifyVilla(url)].push(url);
     }
@@ -304,4 +353,3 @@ function main() {
 }
 
 main();
-
