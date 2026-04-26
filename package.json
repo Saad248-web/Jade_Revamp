@@ -7,7 +7,12 @@
     "prebuild": "node scripts/generate_media_manifest.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "optimize-ridge": "node scripts/optimize_ridge_images.js",
+    "optimize-emerald": "node scripts/optimize_emerald_images.js",
+    "optimize-wonderland": "node scripts/optimize_wonderland_images.js",
+    "optimize-jade735": "node scripts/optimize_jade735_images.js",
+    "optimize-palatio": "node scripts/optimize_palatio_images.js"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

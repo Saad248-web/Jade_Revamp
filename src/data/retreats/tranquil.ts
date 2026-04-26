@@ -13,11 +13,24 @@ export const tranquil = {
   description:
     "Tranquil Woods is a 2-bedroom private pool villa within an expansive multi-layered garden layout. Close to the Art of Living International Centre, the property features glass-walled living areas and undulating lawns. Designed for both overnight luxury stays and large-format weddings and events, it holds capacity for up to 500 guests in its outdoor event spaces while offering intimate villa living for smaller groups.",
   perfectFor: [
-    "Grand Weddings",
-    "Private Celebrations",
-    "Weekend Getaways",
-    "Staycations",
-    "Corporate Retreats",
+    {
+      title: "Grand Weddings",
+      image: "/Villa_Retreats/Tranquil Woods/4-Perfect For/Grand Weddings.webp",
+    },
+    {
+      title: "Private Celebrations",
+      image:
+        "/Villa_Retreats/Tranquil Woods/4-Perfect For/Private Celebrations.webp",
+    },
+    {
+      title: "Weekend Getaways",
+      image:
+        "/Villa_Retreats/Tranquil Woods/4-Perfect For/Weekend Getaways.webp",
+    },
+    {
+      title: "Staycations",
+      image: "/Villa_Retreats/Tranquil Woods/4-Perfect For/Staycations.webp",
+    },
   ],
   categories: ["Weddings", "Pre-wedding", "Luxury Stays", "Nature Retreats"],
   thumbnail: "/Villa_Retreats/Tranquil Woods/1-Hero/hero.webp",
@@ -109,32 +122,29 @@ export const tranquil = {
   ],
   activities: [
     {
-      title: "Amphitheater Events",
-      description:
-        "Host private events and gatherings in the open-air theater.",
-      image: "/Villa_Retreats/Tranquil Woods/2-Spaces/Amphitheater.webp",
+      title: "Bonfire",
+      image: "/Villa_Retreats/Tranquil Woods/3-Experiences/Bonfire.webp",
     },
     {
-      title: "Poolside Parties",
-      description: "Leisure time and social events by the private pool.",
-      image: "/Villa_Retreats/Tranquil Woods/2-Spaces/Private Pool Villa.webp",
+      title: "High Tea",
+      image: "/Villa_Retreats/Tranquil Woods/3-Experiences/High Tea.webp",
     },
     {
-      title: "Garden Walks",
-      description:
-        "Extensive landscaped gardens and walkways for peaceful strolls.",
-      image: "/Villa_Retreats/Tranquil Woods/2-Spaces/walkway.webp",
+      title: "Picnic Setup",
+      image: "/Villa_Retreats/Tranquil Woods/3-Experiences/Picnic Setup.webp",
     },
     {
-      title: "Multi-leveled Lawn Activities",
-      description: "Landscaped lawns across multiple levels for group use.",
-      image: "/Villa_Retreats/Tranquil Woods/2-Spaces/multileveled lawn.webp",
+      title: "Barbeque",
+      image: "/Villa_Retreats/Tranquil Woods/3-Experiences/bbbbq.webp",
     },
     {
-      title: "Party Hall Celebrations",
-      description: "Spacious party halls for indoor celebrations and banquets.",
+      title: "Movie Under The Stars",
       image:
-        "/Villa_Retreats/Tranquil Woods/2-Spaces/Party Hall interiors.webp",
+        "/Villa_Retreats/Tranquil Woods/3-Experiences/movie under the stars.webp",
+    },
+    {
+      title: "Floating Breakfast",
+      image: "/Villa_Retreats/Tranquil Woods/3-Experiences/floatinbf.webp",
     },
   ],
   spaces: [

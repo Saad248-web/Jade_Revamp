@@ -13,11 +13,22 @@ export const magnolia = {
   description:
     "Magnolia is a contemporary private luxury villa designed for immersive stays and large-scale gatherings. This modern three-bedroom glass villa brings together luxury, scale, and ambience, making it ideal for weekend getaways, private parties, corporate outings, and wedding celebrations. Featuring a massive private pool, bar and lounge, personal home theatre, conference hall, and a basketball court, it offers a rare balance of accessibility and complete privacy.",
   perfectFor: [
-    "Grand Weddings",
-    "Staycations",
-    "Corporate Retreats",
-    "Private Celebrations",
-    "Aesthetic Shoots",
+    {
+      title: "Private Celebrations",
+      image: "/Villa_Retreats/Magnolia/Perfect For/Private Celebrations.webp",
+    },
+    {
+      title: "Weddings",
+      image: "/Villa_Retreats/Magnolia/Perfect For/Weddings.webp",
+    },
+    {
+      title: "Corporate Outings",
+      image: "/Villa_Retreats/Magnolia/Perfect For/corporate outings.webp",
+    },
+    {
+      title: "Staycations",
+      image: "/Villa_Retreats/Magnolia/Perfect For/stayctions.webp",
+    },
   ],
   categories: [
     "Weddings",
@@ -145,20 +156,32 @@ export const magnolia = {
   ],
   activities: [
     {
-      title: "Poolside Cocktails",
-      image: "/Villa_Retreats/Magnolia/Spaces/Bar_Lounge.webp",
+      title: "Bonfire",
+      image: "/Villa_Retreats/Magnolia/Experiences/Bonfire.webp",
     },
     {
-      title: "Garden Weddings",
-      image: "/Villa_Retreats/Magnolia/Spaces/Lawn_Area.webp",
+      title: "Floating Breakfast",
+      image: "/Villa_Retreats/Magnolia/Experiences/Floating Breakfast.webp",
     },
     {
-      title: "Basketball Matches",
-      image: "/Villa_Retreats/Magnolia/Spaces/Basket_Ball_Court.webp",
+      title: "Gazebo By The Pool",
+      image: "/Villa_Retreats/Magnolia/Experiences/Gazebo By The Pool.webp",
     },
     {
-      title: "Movie Nights",
-      image: "/Villa_Retreats/Magnolia/Spaces/Private_Home_Theatre.webp",
+      title: "High Tea",
+      image: "/Villa_Retreats/Magnolia/Experiences/High tea.webp",
+    },
+    {
+      title: "Barbeque",
+      image: "/Villa_Retreats/Magnolia/Experiences/barbeque.webp",
+    },
+    {
+      title: "Candlelit Dining",
+      image: "/Villa_Retreats/Magnolia/Experiences/candlelit dining.webp",
+    },
+    {
+      title: "Diamond",
+      image: "/Villa_Retreats/Magnolia/Experiences/diamond.webp",
     },
   ],
   spaces: [

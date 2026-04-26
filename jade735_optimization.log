@@ -1,0 +1,39 @@
+[2026-04-26T21:14:01.854Z] === Jade 735 Villa — Image Optimization ===
+[2026-04-26T21:14:01.983Z] sharp loaded OK
+[2026-04-26T21:14:02.150Z] heic-convert loaded OK
+[2026-04-26T21:14:02.153Z] 
+--- Folder: 3-Experience ---
+[2026-04-26T21:14:02.157Z] SKIP (already WebP): bbq.webp
+[2026-04-26T21:14:02.161Z] Converting: Bonfire.png  →  Bonfire.webp
+[2026-04-26T21:14:02.331Z]   ✓ Created: Bonfire.webp
+[2026-04-26T21:14:02.334Z]   ✓ Deleted: Bonfire.png
+[2026-04-26T21:14:02.339Z] Renamed .HEIC to .jpg -> candlelit Dining.jpg
+[2026-04-26T21:14:02.345Z] Converting: candlelit Dining.jpg  →  candlelit Dining.webp
+[2026-04-26T21:14:02.383Z]   ✗ ERROR on candlelit Dining.jpg: source: bad seek to 1407111
+source: bad seek to 1407089
+source: bad seek to 1407083
+source: bad seek to 1407080
+heif: Error while loading plugin: Support for this compression format has not been built in (11.6003)
+[2026-04-26T21:14:02.385Z] Converting: Floating breakfast.jpg  →  Floating breakfast.webp
+[2026-04-26T21:14:12.078Z]   ✓ Created: Floating breakfast.webp
+[2026-04-26T21:14:12.083Z]   ✓ Deleted: Floating breakfast.jpg
+[2026-04-26T21:14:12.085Z] SKIP (already WebP): highh tea.jpg.webp
+[2026-04-26T21:14:12.087Z] Converting: Submerged Dining.jpg  →  Submerged Dining.webp
+[2026-04-26T21:14:12.918Z]   ✓ Created: Submerged Dining.webp
+[2026-04-26T21:14:12.920Z]   ✓ Deleted: Submerged Dining.jpg
+[2026-04-26T21:14:12.921Z] 
+--- Folder: 4-Perfect for ---
+[2026-04-26T21:14:12.922Z] Converting: Boutique Stays.jpg  →  Boutique Stays.webp
+[2026-04-26T21:14:14.294Z]   ✓ Created: Boutique Stays.webp
+[2026-04-26T21:14:14.299Z]   ✓ Deleted: Boutique Stays.jpg
+[2026-04-26T21:14:14.301Z] Converting: Family Gatherings.JPG  →  Family Gatherings.webp
+[2026-04-26T21:14:22.677Z]   ✓ Created: Family Gatherings.webp
+[2026-04-26T21:14:22.681Z]   ✓ Deleted: Family Gatherings.JPG
+[2026-04-26T21:14:22.684Z] Converting: Social Stays.jpg  →  Social Stays.webp
+[2026-04-26T21:14:32.552Z]   ✓ Created: Social Stays.webp
+[2026-04-26T21:14:32.554Z]   ✓ Deleted: Social Stays.jpg
+[2026-04-26T21:14:32.556Z] Converting: Staycations.jpg  →  Staycations.webp
+[2026-04-26T21:14:34.001Z]   ✓ Created: Staycations.webp
+[2026-04-26T21:14:34.004Z]   ✓ Deleted: Staycations.jpg
+[2026-04-26T21:14:34.007Z] 
+=== Done ===

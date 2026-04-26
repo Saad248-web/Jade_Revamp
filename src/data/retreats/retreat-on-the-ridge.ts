@@ -13,11 +13,26 @@ export const retreatOnTheRidge = {
   description:
     "Retreat on the Ridge is a hillside villa at the foothills of Nandi Hills with panoramic ridge views. The 4-bedroom property combines semi-open living spaces with mountain-side experiences, designed for those seeking a mix of nature immersion and luxury living. With private pool, hillside terraces, and landscaped zones, it supports intimate stays and small gatherings.",
   perfectFor: [
-    "Hillside Getaways",
-    "Nature Photography",
-    "Small Family Gatherings",
-    "Couple Retreats",
-    "Team Outings",
+    {
+      title: "Hillside Getaways",
+      image:
+        "/Villa_Retreats/Retreat on the ridge/4-Perfect for/Hillside Getaways.webp",
+    },
+    {
+      title: "Personal Celebrations",
+      image:
+        "/Villa_Retreats/Retreat on the ridge/4-Perfect for/Personal Celebrations.webp",
+    },
+    {
+      title: "Staycations",
+      image:
+        "/Villa_Retreats/Retreat on the ridge/4-Perfect for/Staycations.webp",
+    },
+    {
+      title: "Weekend Getaways",
+      image:
+        "/Villa_Retreats/Retreat on the ridge/4-Perfect for/Weekend Getaways.webp",
+    },
   ],
   categories: ["Nature Retreats", "Weekend Getaways", "Pre-wedding"],
   thumbnail: "/Villa_Retreats/Retreat on the ridge/1-Hero/3-2.webp",
@@ -106,30 +121,27 @@ export const retreatOnTheRidge = {
   ],
   activities: [
     {
-      title: "Private Pool Experience",
-      description: "Relaxation and leisure activities by the private pool.",
-      image: "/Villa_Retreats/Retreat on the ridge/2-Spaces/Private Pool.webp",
+      title: "Bonfire",
+      image: "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Bonfire.webp",
     },
     {
-      title: "Gazebo Evenings",
-      description: "Outdoor engagement within the gazebo lounge.",
-      image: "/Villa_Retreats/Retreat on the ridge/2-Spaces/Gazebo.webp",
-    },
-    {
-      title: "Hill View Dining",
-      description: "Dining setups overlooking the surrounding landscape.",
-      image: "/Villa_Retreats/Retreat on the ridge/2-Spaces/Hill View.webp",
-    },
-    {
-      title: "Bonfire Nights",
-      description: "Outdoor bonfire setups for social group use.",
+      title: "Floating Breakfast",
       image:
-        "/Villa_Retreats/Retreat on the ridge/2-Spaces/Pool Area - Night.webp",
+        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Floating breakfast.webp",
     },
     {
-      title: "Group Stays",
-      description: "Multi-bedroom setup suited for group retreats.",
-      image: "/Villa_Retreats/Retreat on the ridge/2-Spaces/Villa.webp",
+      title: "High Tea",
+      image:
+        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/High Tea.webp",
+    },
+    {
+      title: "Movie Under The Stars",
+      image:
+        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Movie under the stars.webp",
+    },
+    {
+      title: "BBQ",
+      image: "/Villa_Retreats/Retreat on the ridge/3-Experiences_/bbq.webp",
     },
   ],
   spaces: [

@@ -66,7 +66,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
     let cancelled = false;
     async function load() {
       try {
-        const res = await fetch(`/api/villas/${villa.id}/media`, {
+        const res = await fetch(`/api/villas/${villa.id}/media?v=2`, {
           cache: "force-cache",
         });
         if (!res.ok) return;

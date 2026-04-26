@@ -13,11 +13,23 @@ export const haven = {
   description:
     "Haven is a contemporary 4-bedroom private villa offering modern design and residential comfort. Ideal for family stays and medium-scale gatherings, it features clean architectural style with emphasis on natural light. With a private pool, jacuzzi, terrace space, and large shared areas, the villa supports both relaxed stays and larger gatherings in a controlled, private setting.",
   perfectFor: [
-    "Family Gatherings",
-    "Intimate Weddings",
-    "Small Scale Celebrations",
-    "Staycations",
-    "Group Stays",
+    {
+      title: "Family Gatherings",
+      image: "/Villa_Retreats/Haven/4-Perfect for/Family Gatherings.webp",
+    },
+    {
+      title: "Staycation",
+      image: "/Villa_Retreats/Haven/4-Perfect for/Staycation.webp",
+    },
+    {
+      title: "Small Scale Celebrations",
+      image:
+        "/Villa_Retreats/Haven/4-Perfect for/small scale celebrations.webp",
+    },
+    {
+      title: "Weddings",
+      image: "/Villa_Retreats/Haven/4-Perfect for/weddings.webp",
+    },
   ],
   categories: ["Luxury Stays", "Party Venues", "Weekend Getaways", "Weddings"],
   image: "/Villa_Retreats/Haven/Hero/hero.webp",
@@ -102,29 +114,32 @@ export const haven = {
   ],
   activities: [
     {
-      title: "Poolside Relaxation",
-      description: "Spend time by the private pool and deck.",
-      image: "/Villa_Retreats/Haven/Spaces/Pool.webp",
+      title: "BBQ",
+      image: "/Villa_Retreats/Haven/3-Experiences/BARBEQUE.webp",
     },
     {
-      title: "Indoor Pool Games",
-      description: "Pool table matches for social engagement.",
-      image: "/Villa_Retreats/Haven/Spaces/Pool_Table.webp",
+      title: "Bonfire",
+      image: "/Villa_Retreats/Haven/3-Experiences/BssONFIRE.webp",
     },
     {
-      title: "Lawn Experiences",
-      description: "Outdoor activities and relaxation on the lawn.",
-      image: "/Villa_Retreats/Haven/Spaces/Lawn_area.webp",
+      title: "Candlelit Dining",
+      image: "/Villa_Retreats/Haven/3-Experiences/Candlelit dining.webp",
     },
     {
-      title: "Jacuzzi Bath",
-      description: "Relaxing bath experience with the en-suite jacuzzi.",
-      image: "/Villa_Retreats/Haven/Spaces/Bath_Room_With_Jacuzzi.webp",
+      title: "High Tea",
+      image: "/Villa_Retreats/Haven/3-Experiences/High Tea.webp",
     },
     {
-      title: "Group Stays",
-      description: "Ideal multi-bedroom setup for social retreats.",
-      image: "/Villa_Retreats/Haven/Spaces/Villa_Entrance.webp",
+      title: "Indoor Games",
+      image: "/Villa_Retreats/Haven/3-Experiences/Indoor Games.webp",
+    },
+    {
+      title: "Floating Breakfast",
+      image: "/Villa_Retreats/Haven/3-Experiences/floating breakfast.webp",
+    },
+    {
+      title: "Movie Under The Stars",
+      image: "/Villa_Retreats/Haven/3-Experiences/movie under the stars.webp",
     },
   ],
   spaces: [

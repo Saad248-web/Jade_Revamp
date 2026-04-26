@@ -179,7 +179,7 @@ export default function VillaDetailsPage() {
     let cancelled = false;
     async function load() {
       try {
-        const res = await fetch(`/api/villas/${id}/media`);
+        const res = await fetch(`/api/villas/${id}/media?v=2`);
         if (!res.ok) return;
         const data = await res.json();
         if (!cancelled) setMedia(data);

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"; // API cache busted for image optimizations
 import { VILLAS } from "@/lib/mockData";
 import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
 

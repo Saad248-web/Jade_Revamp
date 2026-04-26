@@ -1,0 +1,42 @@
+[2026-04-26T20:38:01.134Z] === Emerald Villa — Image Optimization ===
+[2026-04-26T20:38:01.209Z] sharp loaded OK
+[2026-04-26T20:38:01.300Z] heic-convert loaded OK
+[2026-04-26T20:38:01.302Z] 
+--- Folder: 3-Experiences ---
+[2026-04-26T20:38:01.304Z] Converting: BBQ.jpg  →  BBQ.webp
+[2026-04-26T20:38:01.598Z]   ✓ Created: BBQ.webp
+[2026-04-26T20:38:01.599Z]   ✓ Deleted: BBQ.jpg
+[2026-04-26T20:38:01.599Z] Converting: Bonfire.png  →  Bonfire.webp
+[2026-04-26T20:38:01.659Z]   ✓ Created: Bonfire.webp
+[2026-04-26T20:38:01.661Z]   ✓ Deleted: Bonfire.png
+[2026-04-26T20:38:01.662Z] Converting: Candlelit Dining.jpg  →  Candlelit Dining.webp
+[2026-04-26T20:38:05.211Z]   ✓ Created: Candlelit Dining.webp
+[2026-04-26T20:38:05.217Z]   ✓ Deleted: Candlelit Dining.jpg
+[2026-04-26T20:38:05.217Z] Converting: Floating Breakfast.JPG  →  Floating Breakfast.webp
+[2026-04-26T20:38:07.331Z]   ✓ Created: Floating Breakfast.webp
+[2026-04-26T20:38:07.333Z]   ✓ Deleted: Floating Breakfast.JPG
+[2026-04-26T20:38:07.334Z] Converting: High Tea.JPG  →  High Tea.webp
+[2026-04-26T20:38:11.490Z]   ✓ Created: High Tea.webp
+[2026-04-26T20:38:11.492Z]   ✓ Deleted: High Tea.JPG
+[2026-04-26T20:38:11.493Z] Converting: movie under the stars.jpg  →  movie under the stars.webp
+[2026-04-26T20:38:14.111Z]   ✓ Created: movie under the stars.webp
+[2026-04-26T20:38:14.113Z]   ✓ Deleted: movie under the stars.jpg
+[2026-04-26T20:38:14.114Z] Converting: Picnic Setup.JPG  →  Picnic Setup.webp
+[2026-04-26T20:38:41.850Z]   ✓ Created: Picnic Setup.webp
+[2026-04-26T20:38:41.852Z]   ✓ Deleted: Picnic Setup.JPG
+[2026-04-26T20:38:41.853Z] 
+--- Folder: 4-Perfect for ---
+[2026-04-26T20:38:41.855Z] Converting: Couple Retreats.jpg  →  Couple Retreats.webp
+[2026-04-26T20:38:52.074Z]   ✓ Created: Couple Retreats.webp
+[2026-04-26T20:38:52.075Z]   ✓ Deleted: Couple Retreats.jpg
+[2026-04-26T20:38:52.076Z] Converting: Friends & Family.JPG  →  Friends & Family.webp
+[2026-04-26T20:38:58.184Z]   ✓ Created: Friends & Family.webp
+[2026-04-26T20:38:58.186Z]   ✓ Deleted: Friends & Family.JPG
+[2026-04-26T20:38:58.187Z] Converting: Staycations.JPG  →  Staycations.webp
+[2026-04-26T20:39:04.585Z]   ✓ Created: Staycations.webp
+[2026-04-26T20:39:04.586Z]   ✓ Deleted: Staycations.JPG
+[2026-04-26T20:39:04.587Z] Converting: Weekend getaways.jpeg  →  Weekend getaways.webp
+[2026-04-26T20:39:06.675Z]   ✓ Created: Weekend getaways.webp
+[2026-04-26T20:39:06.676Z]   ✓ Deleted: Weekend getaways.jpeg
+[2026-04-26T20:39:06.677Z] 
+=== Done ===

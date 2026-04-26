@@ -13,12 +13,22 @@ export const emerald = {
   description:
     "Emerald is a private pool villa designed as a traditional glasshouse around a central courtyard. This 2-bedroom villa combines indoor transparency with lush greenery, creating a setting suited for small group stays, intimate gatherings, and weekend getaways near Bangalore. With a private pool featuring an 8 ft waterfall, garden sit-outs, and courtyard living, the villa balances built space with open areas. Located 5 minutes from Embassy Riding School and 35 minutes from Hebbal, it offers accessibility with complete privacy.",
   perfectFor: [
-    "Private Gatherings",
-    "Weekend Getaways",
-    "Couple Retreats",
-    "Staycations",
-    "Workations",
-    "Small Celebrations",
+    {
+      title: "Couple Retreats",
+      image: "/Villa_Retreats/Emerald/4-Perfect for/Couple Retreats.webp",
+    },
+    {
+      title: "Friends & Family",
+      image: "/Villa_Retreats/Emerald/4-Perfect for/Friends & Family.webp",
+    },
+    {
+      title: "Staycations",
+      image: "/Villa_Retreats/Emerald/4-Perfect for/Staycations.webp",
+    },
+    {
+      title: "Weekend Getaways",
+      image: "/Villa_Retreats/Emerald/4-Perfect for/Weekend getaways.webp",
+    },
   ],
   categories: ["Luxury Stays", "Party Venues", "Weekend Getaways"],
   image: "/Villa_Retreats/Emerald/Hero/hero.webp",
@@ -171,29 +181,32 @@ export const emerald = {
   },
   activities: [
     {
-      title: "Glass House Dining",
-      description: "Indoor dining experience within the glass villa.",
-      image: "/Villa_Retreats/Emerald/Spaces/Dining_Area.webp",
+      title: "BBQ",
+      image: "/Villa_Retreats/Emerald/3-Experiences/BBQ.webp",
     },
     {
-      title: "Poolside Evenings",
-      description: "Leisure time and social events by the private pool.",
-      image: "/Villa_Retreats/Emerald/Spaces/Pool.webp",
+      title: "Bonfire",
+      image: "/Villa_Retreats/Emerald/3-Experiences/Bonfire.webp",
     },
     {
-      title: "Garden Gazebo",
-      description: "Relaxed outdoor seating within the private garden.",
-      image: "/Villa_Retreats/Emerald/Spaces/Gazebo.webp",
+      title: "Candlelit Dining",
+      image: "/Villa_Retreats/Emerald/3-Experiences/Candlelit Dining.webp",
     },
     {
-      title: "Campfire Nights",
-      description: "Organized campfire experiences in the lawn zones.",
-      image: "/Villa_Retreats/Emerald/Spaces/Camping_Area.webp",
+      title: "Floating Breakfast",
+      image: "/Villa_Retreats/Emerald/3-Experiences/Floating Breakfast.webp",
     },
     {
-      title: "Work from Nature",
-      description: "Quiet and aesthetic environment for extended work stays.",
-      image: "/Villa_Retreats/Emerald/Spaces/Lounge_Area.webp",
+      title: "High Tea",
+      image: "/Villa_Retreats/Emerald/3-Experiences/High Tea.webp",
+    },
+    {
+      title: "Movie under the stars",
+      image: "/Villa_Retreats/Emerald/3-Experiences/movie under the stars.webp",
+    },
+    {
+      title: "Picnic Setup",
+      image: "/Villa_Retreats/Emerald/3-Experiences/Picnic Setup.webp",
     },
   ],
   categorizedSpaces: [

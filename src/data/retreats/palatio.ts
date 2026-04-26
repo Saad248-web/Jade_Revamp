@@ -13,11 +13,23 @@ export const palatio = {
   description:
     "Palatio is a sprawling nature retreat set within large landscaped grounds in Harohalli. The 2-bedroom villa combines rustic charm with traditional architecture, providing a serene environment removed from the city. With a private pool, open lawns, and dedicated event spaces, it offers a balanced experience for both peaceful stays and intimate social gatherings.",
   perfectFor: [
-    "Nature Getaways",
-    "Wellness Retreats",
-    "Intimate Social Events",
-    "Staycations",
-    "Team Outings",
+    {
+      title: "Staycations",
+      image: "/Villa_Retreats/Palatio/4-Perfect For/Staycations.webp",
+    },
+    {
+      title: "Weekend Getaways",
+      image: "/Villa_Retreats/Palatio/4-Perfect For/Weekend Getaways.webp",
+    },
+    {
+      title: "Workation",
+      image: "/Villa_Retreats/Palatio/4-Perfect For/Workation.webp",
+    },
+    {
+      title: "Intimate Social Events",
+      image:
+        "/Villa_Retreats/Palatio/4-Perfect For/intimate Social Events.webp",
+    },
   ],
   categories: [
     "Nature Retreats",
@@ -113,29 +125,20 @@ export const palatio = {
   ],
   activities: [
     {
-      title: "Private Dining Experiences",
-      description: "Indoor and outdoor dining arrangements.",
-      image: "/Villa_Retreats/Palatio/2-Spaces/Dining_Area.webp",
+      title: "Bonfire",
+      image: "/Villa_Retreats/Palatio/3-Experiences/Bonfire.webp",
     },
     {
-      title: "Bonfire Evenings",
-      description: "Outdoor bonfire for gatherings.",
-      image: "/Villa_Retreats/Palatio/2-Spaces/Back_Yard.webp",
+      title: "High Tea",
+      image: "/Villa_Retreats/Palatio/3-Experiences/High Tea.webp",
     },
     {
-      title: "Outdoor Dining Setups",
-      description: "Dining across lawn and gazebo spaces.",
-      image: "/Villa_Retreats/Palatio/2-Spaces/Out_Door_sitout.webp",
+      title: "BBQ",
+      image: "/Villa_Retreats/Palatio/3-Experiences/bbbq.webp",
     },
     {
-      title: "Workation Stays",
-      description: "Quiet environment suited for extended stays.",
-      image: "/Villa_Retreats/Palatio/2-Spaces/Lounge_Area.webp",
-    },
-    {
-      title: "Board Games & Indoor Activities",
-      description: "Group-friendly indoor engagement.",
-      image: "/Villa_Retreats/Palatio/2-Spaces/Swing.webp",
+      title: "Floating Breakfast",
+      image: "/Villa_Retreats/Palatio/3-Experiences/floating breakfast.webp",
     },
   ],
   spaces: [

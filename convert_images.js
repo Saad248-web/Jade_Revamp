@@ -83,7 +83,9 @@ async function walkAndConvert(dir) {
 }
 
 async function run() {
-  const dirs = getDirs();
+  const args = process.argv.slice(2);
+  const dirs = args.length > 0 ? args : getDirs();
+
   for (const dir of dirs) {
     if (fs.existsSync(dir)) {
       console.log(`Scanning directory: ${dir}`);

@@ -13,11 +13,22 @@ export const jade735 = {
   description:
     "Jade 735 is a private boutique villa designed as a personal retreat within a resort-like setting. The 4+1 bedroom layout combines curated interiors with multiple experiential zones, creating a space suited for both stays and hosted gatherings. Featuring a private pool with a 10 ft waterfall, jacuzzi lounge, gazebo seating, and multiple indoor-outdoor zones, the property offers a layered experience across spaces.",
   perfectFor: [
-    "Private Celebrations",
-    "Boutique Retreats",
-    "Social Stays",
-    "Staycations",
-    "Intimate Gatherings",
+    {
+      title: "Boutique Stays",
+      image: "/Villa_Retreats/Jade 735/4-Perfect for/Boutique Stays.webp",
+    },
+    {
+      title: "Family Gatherings",
+      image: "/Villa_Retreats/Jade 735/4-Perfect for/Family Gatherings.webp",
+    },
+    {
+      title: "Social Stays",
+      image: "/Villa_Retreats/Jade 735/4-Perfect for/Social Stays.webp",
+    },
+    {
+      title: "Staycations",
+      image: "/Villa_Retreats/Jade 735/4-Perfect for/Staycations.webp",
+    },
   ],
   categories: ["Luxury Stays", "Weekend Getaways", "Corporate Retreats"],
   thumbnail: "/Villa_Retreats/Jade%20735/Hero/hero.webp",
@@ -105,44 +116,28 @@ export const jade735 = {
   ],
   activities: [
     {
-      title: "Dining by the Gazebo",
-      description: "Curated dining setups in the outdoor gazebo space.",
-      image: "/Villa_Retreats/Jade 735/Experiences/Dining_exp.webp",
+      title: "Bonfire",
+      image: "/Villa_Retreats/Jade 735/3-Experience/Bonfire.webp",
     },
     {
-      title: "Jacuzzi Lounge Experience",
-      description: "Private relaxation experience within the jacuzzi lounge.",
-      image: "/Villa_Retreats/Jade 735/Experiences/Pool_Side_SitOut.webp",
+      title: "Floating Breakfast",
+      image: "/Villa_Retreats/Jade 735/3-Experience/Floating breakfast.webp",
     },
     {
-      title: "Bonfire Evenings",
-      description: "Outdoor bonfire setups for group gatherings.",
-      image: "/Villa_Retreats/Jade 735/Experiences/Night_Dine_Out.webp",
+      title: "Submerged Dining",
+      image: "/Villa_Retreats/Jade 735/3-Experience/Submerged Dining.webp",
     },
     {
-      title: "Candle Corner Dining",
-      description: "Dedicated candlelit dining setups within the villa.",
-      image: "/Villa_Retreats/Jade 735/Experiences/Dining_exp.webp",
+      title: "BBQ",
+      image: "/Villa_Retreats/Jade 735/3-Experience/bbq.webp",
     },
     {
-      title: "Family Dining Experiences",
-      description: "Group dining setups across indoor and outdoor zones.",
-      image: "/Villa_Retreats/Jade 735/Experiences/Semi_Open_Dining_exp.webp",
+      title: "Candlelit Dining",
+      image: "/Villa_Retreats/Jade 735/3-Experience/candlelit Dining.webp",
     },
     {
-      title: "Movie Watching",
-      description: "Content screening with plug-and-play setup.",
-      image: "/Villa_Retreats/Jade 735/Experiences/Expp.webp",
-    },
-    {
-      title: "Cooking Experiences",
-      description: "Interactive cooking-based group experiences.",
-      image: "/Villa_Retreats/Jade 735/Experiences/Arts_Exp.webp",
-    },
-    {
-      title: "Barbecue Experiences",
-      description: "Live grill setups for social dining.",
-      image: "/Villa_Retreats/Jade 735/Experiences/Celebration_Exp.webp",
+      title: "High Tea",
+      image: "/Villa_Retreats/Jade 735/3-Experience/highh tea.jpg.webp",
     },
   ],
   spaces: [
@@ -267,7 +262,7 @@ export const jade735 = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=tDHkITeT3HU",
-    thumbnail: "/Villa_Retreats/Jade 735/Hero/hero.webp",
+    thumbnail: "/Villa_Retreats/Jade%20735/Hero/hero.webp",
     duration: "5:44",
   },
   faq: [

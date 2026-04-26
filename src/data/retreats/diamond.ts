@@ -16,12 +16,22 @@ export const diamond = {
   description:
     "Diamond by Jade is a large-scale private event venue set across a 3-acre property surrounded by coconut groves. Designed for weddings, corporate events, and large gatherings, it combines expansive outdoor spaces with structured indoor facilities.\n\nWith a 50,000 sq ft lawn, banquet hall, multiple accommodation blocks, and event-ready infrastructure, the property supports both high-capacity events and group stays. The layout enables simultaneous setups across zones.",
   perfectFor: [
-    "Group Getaways",
-    "Family Retreats",
-    "Nature Stays",
-    "Staycations",
-    "Small Celebrations",
-    "Team Outings",
+    {
+      title: "Events & Celebrations",
+      image: "/Villa_Retreats/Diamond/4-Perfect For/Events & Celebrations.webp",
+    },
+    {
+      title: "Grand Weddings",
+      image: "/Villa_Retreats/Diamond/4-Perfect For/Grand Weddings.webp",
+    },
+    {
+      title: "Group Getaways",
+      image: "/Villa_Retreats/Diamond/4-Perfect For/Group Getaways.webp",
+    },
+    {
+      title: "Weekend Getaways",
+      image: "/Villa_Retreats/Diamond/4-Perfect For/Weekend Getaways.webp",
+    },
   ],
   perfectForEvents: ["Weddings", "Corporate Events", "Large Gatherings"],
   categories: ["Weddings", "Corporate Retreats", "Party Venues", "Pre-wedding"],
@@ -268,30 +278,29 @@ export const diamond = {
   },
   activities: [
     {
-      title: "Reception Events",
-      description:
-        "Evening setups with lighting, dining, and stage arrangements.",
-      image: "/Villa_Retreats/Diamond/Spaces/Pool.webp",
+      title: "BBQ",
+      image: "/Villa_Retreats/Diamond/3-Experiences/bbq.webp",
     },
     {
-      title: "Corporate Offsites",
-      description: "Team events, conferences, and large group gatherings.",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_08.webp",
+      title: "Bonfire",
+      image: "/Villa_Retreats/Diamond/3-Experiences/Bonfire.webp",
     },
     {
-      title: "Poolside Events",
-      description: "Smaller social setups around the pool area.",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_17.webp",
+      title: "Floating Breakfast",
+      image: "/Villa_Retreats/Diamond/3-Experiences/floatinbf.webp",
     },
     {
-      title: "Banquet Dining Experiences",
-      description: "Structured dining within semi-open hall setups.",
-      image: "/Villa_Retreats/Diamond/Spaces/spaces_18.webp",
+      title: "High Tea",
+      image: "/Villa_Retreats/Diamond/3-Experiences/High Tea.webp",
     },
     {
-      title: "Celebration Setups",
-      description: "Birthdays, anniversaries, and private events.",
-      image: "/Villa_Retreats/Diamond/Spaces/Double_Occupancy.webp",
+      title: "Indoor & Outdoor Games",
+      image:
+        "/Villa_Retreats/Diamond/3-Experiences/Indoor & Outdoor Games.webp",
+    },
+    {
+      title: "Movie Under The Stars",
+      image: "/Villa_Retreats/Diamond/3-Experiences/Movie Under The Stars.webp",
     },
   ],
   video: {

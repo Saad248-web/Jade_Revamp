@@ -13,11 +13,23 @@ export const royalty = {
   description:
     "Royalty is a private equestrian 5-bedroom glasshouse villa set against the Varlakonda hills. The property features indoor living with expansive outdoor spaces, including a private pool with a waterfall, a riding arena, and a horse stable. The property combines rustic hillside experiences with modern comforts, creating a unique retreat experience.",
   perfectFor: [
-    "Equestrian Enthusiasts",
-    "Family Reunions",
-    "Premium Hill Stays",
-    "Staycations",
-    "Nature Stays",
+    {
+      title: "Equestrian Enthusiasts",
+      image:
+        "/Villa_Retreats/Royalty/4- Perfect For/Equestrian Enthusiasts.webp",
+    },
+    {
+      title: "Family Reunions",
+      image: "/Villa_Retreats/Royalty/4- Perfect For/Family Reunions.webp",
+    },
+    {
+      title: "Premium Hill Stays",
+      image: "/Villa_Retreats/Royalty/4- Perfect For/Premium Hill Stays.webp",
+    },
+    {
+      title: "Staycations",
+      image: "/Villa_Retreats/Royalty/4- Perfect For/Staycations.webp",
+    },
   ],
   categories: [
     "Luxury Stays",
@@ -106,31 +118,33 @@ export const royalty = {
   ],
   activities: [
     {
-      title: "Private Pool Experience",
-      description: "Enjoy the massive 7-foot waterfall pool with ridge views.",
-      image: "/Villa_Retreats/Royalty/2-Spaces/7 foot waterfall pool.webp",
+      title: "BBQ",
+      image: "/Villa_Retreats/Royalty/3-Experiences/BBq.webp",
     },
     {
-      title: "Movie Under The Stars",
-      description: "Outdoor cinema experience within the villa grounds.",
-      image:
-        "/Villa_Retreats/Royalty/2-Spaces/experience movie under the stars.webp",
+      title: "Candlelit Dining",
+      image: "/Villa_Retreats/Royalty/3-Experiences/Candlelit dining.webp",
+    },
+    {
+      title: "High Tea",
+      image: "/Villa_Retreats/Royalty/3-Experiences/High eta.webp",
+    },
+    {
+      title: "Bonfire",
+      image: "/Villa_Retreats/Royalty/3-Experiences/bonfire.webp",
     },
     {
       title: "Horse Riding Safari",
-      description: "Guided riding experiences at the on-site arena.",
       image:
-        "/Villa_Retreats/Royalty/2-Spaces/experience_horse riding safari.webp",
+        "/Villa_Retreats/Royalty/3-Experiences/experience_horse riding safari.webp",
     },
     {
-      title: "Hill View Dining",
-      description: "Dining setups overlooking the surrounding mountain ridges.",
-      image: "/Villa_Retreats/Royalty/2-Spaces/Hill View.webp",
+      title: "Movie Under The Stars",
+      image: "/Villa_Retreats/Royalty/3-Experiences/movie under the stars.webp",
     },
     {
-      title: "Lounge Relaxation",
-      description: "Spacious indoor and outdoor lounge areas for social time.",
-      image: "/Villa_Retreats/Royalty/2-Spaces/Lounge Area.webp",
+      title: "Floating Breakfast",
+      image: "/Villa_Retreats/Royalty/3-Experiences/floatinbf.webp",
     },
   ],
   spaces: [

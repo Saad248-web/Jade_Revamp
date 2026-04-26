@@ -12,10 +12,22 @@ export const wonderland = {
   description:
     "Wonderland is a 2-bedroom treehouse villa designed for intimate stays surrounded by greenery. Built as an elevated living space, it offers a nature-led experience with open views and outdoor-focused living. With a party deck, outdoor dining under the treehouse, and access to a natural freshwater pool, the property is suited for small groups, quiet getaways, and private celebrations.",
   perfectFor: [
-    "Weekend Getaways",
-    "Couple Retreats",
-    "Nature Stays",
-    "Staycations",
+    {
+      title: "Family Getaways",
+      image: "/Villa_Retreats/Wonderland/Perfect For/Family Getaways.webp",
+    },
+    {
+      title: "Nature Stays",
+      image: "/Villa_Retreats/Wonderland/Perfect For/Nature Stays.webp",
+    },
+    {
+      title: "Staycations",
+      image: "/Villa_Retreats/Wonderland/Perfect For/Staycations.webp",
+    },
+    {
+      title: "Weekend Getaways",
+      image: "/Villa_Retreats/Wonderland/Perfect For/Weekend Getaways.webp",
+    },
   ],
   categories: ["Pet Friendly", "Weekend Getaways", "Nature Retreats"],
   image: "/Villa_Retreats/Wonderland/Hero/hero.webp",
@@ -171,29 +183,20 @@ export const wonderland = {
   },
   activities: [
     {
-      title: "Tree House Experiences",
-      description: "Stay or spend time in specialized wood-themed tree houses.",
-      image: "/Villa_Retreats/Wonderland/Spaces/Tree_House_Entrance.webp",
+      title: "BBQ",
+      image: "/Villa_Retreats/Wonderland/Experiences/bbq.webp",
     },
     {
-      title: "Jacuzzi Sessions",
-      description: "Relax in a private 6-seater jacuzzi setup.",
-      image: "/Villa_Retreats/Wonderland/Spaces/6_Seater_Jacuzzi.webp",
+      title: "Bonfire",
+      image: "/Villa_Retreats/Wonderland/Experiences/Bonfire.webp",
     },
     {
-      title: "Poolside Parties",
-      description: "Events and social gatherings by the common pool.",
-      image: "/Villa_Retreats/Wonderland/Spaces/Common_Fresh_water_Pool.webp",
+      title: "High Tea",
+      image: "/Villa_Retreats/Wonderland/Experiences/high tea.webp",
     },
     {
-      title: "Garden Walks",
-      description: "Peaceful walks across the meticulously landscaped garden.",
-      image: "/Villa_Retreats/Wonderland/Spaces/Garden_walk-way.webp",
-    },
-    {
-      title: "Nature Stays",
-      description: "Relaxed time within garden and open spaces.",
-      image: "/Villa_Retreats/Wonderland/Spaces/Walk_way.webp",
+      title: "Horse Riding",
+      image: "/Villa_Retreats/Wonderland/Experiences/Horse Riding.webp",
     },
   ],
   categorizedSpaces: [

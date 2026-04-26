@@ -24,16 +24,16 @@ export default function VillaSpacesPage() {
     isDomeVillas ? "Blue Dome" : "All",
   );
   const [activeDomeVideo, setActiveDomeVideo] = useState<DomeVideoKey>("blue");
-  const [overrideSpaces, setOverrideSpaces] = useState<VillaSpaceGroup[] | null>(
-    null,
-  );
+  const [overrideSpaces, setOverrideSpaces] = useState<
+    VillaSpaceGroup[] | null
+  >(null);
 
   // Load full media-derived categorized spaces (uses all images in public folder)
   useEffect(() => {
     let cancelled = false;
     async function load() {
       try {
-        const res = await fetch(`/api/villas/${id}/media`);
+        const res = await fetch(`/api/villas/${id}/media?v=2`);
         if (!res.ok) return;
         const data = await res.json();
         if (!cancelled && Array.isArray(data?.categorizedSpaces)) {
@@ -51,9 +51,9 @@ export default function VillaSpacesPage() {
 
   const categories = useMemo(() => {
     const base = overrideSpaces || villa?.categorizedSpaces || [];
-    const cats = Array.from(new Set(base.map((s: VillaSpaceGroup) => s.category))).filter(
-      (c) => typeof c === "string" && c.length > 0,
-    ) as string[];
+    const cats = Array.from(
+      new Set(base.map((s: VillaSpaceGroup) => s.category)),
+    ).filter((c) => typeof c === "string" && c.length > 0) as string[];
     // Dome Villas: no "All" — only the three dome color tabs plus Video.
     if (isDomeVillas) return [...cats, "Video"];
     // Prefer predictable ordering: show "All", then category groups, then Video
@@ -65,9 +65,7 @@ export default function VillaSpacesPage() {
     if (!base) return [];
     if (activeCategory === "All") return base;
     if (activeCategory === "Video") return []; // Special case
-    return base.filter(
-      (s: VillaSpaceGroup) => s.category === activeCategory,
-    );
+    return base.filter((s: VillaSpaceGroup) => s.category === activeCategory);
   }, [villa, activeCategory, overrideSpaces]);
 
   if (!villa) {
@@ -161,7 +159,7 @@ export default function VillaSpacesPage() {
             {(() => {
               const chosenUrl = isDomeVillas
                 ? DOME_VIDEO_URLS[activeDomeVideo]
-                : villa.video?.youtubeUrl ?? "";
+                : (villa.video?.youtubeUrl ?? "");
               const ytId = getYouTubeId(chosenUrl);
 
               if (ytId) {

@@ -3,7 +3,7 @@
 // Do not edit manually.
 
 export const MEDIA_MANIFEST = {
-  "generatedAt": "2026-04-26T10:15:13.451Z",
+  "generatedAt": "2026-04-26T22:32:41.524Z",
   "villasByFolder": {
     "Diamond": {
       "hero": [
@@ -42,8 +42,19 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Diamond/Spaces/spaces_30.webp",
         "/Villa_Retreats/Diamond/Spaces/spaces_31.webp"
       ],
-      "experiences": [],
-      "perfectFor": [],
+      "experiences": [
+        "/Villa_Retreats/Diamond/3-Experiences/Bonfire.webp",
+        "/Villa_Retreats/Diamond/3-Experiences/High Tea.webp",
+        "/Villa_Retreats/Diamond/3-Experiences/Indoor & Outdoor Games.webp",
+        "/Villa_Retreats/Diamond/3-Experiences/Movie Under The Stars.webp",
+        "/Villa_Retreats/Diamond/3-Experiences/bbq.webp"
+      ],
+      "perfectFor": [
+        "/Villa_Retreats/Diamond/4-Perfect For/Events & Celebrations.webp",
+        "/Villa_Retreats/Diamond/4-Perfect For/Grand Weddings.webp",
+        "/Villa_Retreats/Diamond/4-Perfect For/Group Getaways.webp",
+        "/Villa_Retreats/Diamond/4-Perfect For/Weekend Getaways.webp"
+      ],
       "other": [],
       "categorizedSpaces": [
         {
@@ -370,16 +381,21 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Emerald/Spaces/Villa.webp"
       ],
       "experiences": [
-        "/Villa_Retreats/Emerald/Experiences/Barbeque.webp",
-        "/Villa_Retreats/Emerald/Experiences/Floating_BreakFast_exp.webp",
-        "/Villa_Retreats/Emerald/Experiences/High_Tea.webp",
-        "/Villa_Retreats/Emerald/Experiences/Picnic__.webp"
+        "/Villa_Retreats/Emerald/3-Experiences/BBQ.webp",
+        "/Villa_Retreats/Emerald/3-Experiences/Bonfire.webp",
+        "/Villa_Retreats/Emerald/3-Experiences/Candlelit Dining.webp",
+        "/Villa_Retreats/Emerald/3-Experiences/Floating Breakfast.webp",
+        "/Villa_Retreats/Emerald/3-Experiences/High Tea.webp",
+        "/Villa_Retreats/Emerald/3-Experiences/Picnic Setup.webp",
+        "/Villa_Retreats/Emerald/3-Experiences/movie under the stars.webp"
       ],
-      "perfectFor": [],
-      "other": [
-        "/Villa_Retreats/Emerald/Perfect_For/Perfect.webp",
-        "/Villa_Retreats/Emerald/Perfect_For/Pool_Exp.webp"
+      "perfectFor": [
+        "/Villa_Retreats/Emerald/4-Perfect for/Couple Retreats.webp",
+        "/Villa_Retreats/Emerald/4-Perfect for/Friends & Family.webp",
+        "/Villa_Retreats/Emerald/4-Perfect for/Staycations.webp",
+        "/Villa_Retreats/Emerald/4-Perfect for/Weekend getaways.webp"
       ],
+      "other": [],
       "categorizedSpaces": [
         {
           "id": "views-exteriors",
@@ -515,20 +531,21 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Haven/Spaces/Villa_Entrance.webp"
       ],
       "experiences": [
-        "/Villa_Retreats/Haven/Experiences/Floating.webp",
-        "/Villa_Retreats/Haven/Experiences/Floating_BreakFast.webp",
-        "/Villa_Retreats/Haven/Experiences/Luxury_Dining_exp.webp",
-        "/Villa_Retreats/Haven/Experiences/Picnic.webp",
-        "/Villa_Retreats/Haven/Experiences/Picnic_Exp_.webp",
-        "/Villa_Retreats/Haven/Experiences/Picnic_Set.webp",
-        "/Villa_Retreats/Haven/Experiences/Picnic__.webp",
-        "/Villa_Retreats/Haven/Experiences/Snooker_Exp...webp",
-        "/Villa_Retreats/Haven/Experiences/experiences_03.webp"
+        "/Villa_Retreats/Haven/3-Experiences/BARBEQUE.webp",
+        "/Villa_Retreats/Haven/3-Experiences/BssONFIRE.webp",
+        "/Villa_Retreats/Haven/3-Experiences/Candlelit dining.webp",
+        "/Villa_Retreats/Haven/3-Experiences/High Tea.webp",
+        "/Villa_Retreats/Haven/3-Experiences/Indoor Games.webp",
+        "/Villa_Retreats/Haven/3-Experiences/floating breakfast.webp",
+        "/Villa_Retreats/Haven/3-Experiences/movie under the stars.webp"
       ],
-      "perfectFor": [],
-      "other": [
-        "/Villa_Retreats/Haven/Perfect_For/Camping_exp...webp"
+      "perfectFor": [
+        "/Villa_Retreats/Haven/4-Perfect for/Family Gatherings.webp",
+        "/Villa_Retreats/Haven/4-Perfect for/Staycation.webp",
+        "/Villa_Retreats/Haven/4-Perfect for/small scale celebrations.webp",
+        "/Villa_Retreats/Haven/4-Perfect for/weddings.webp"
       ],
+      "other": [],
       "categorizedSpaces": [
         {
           "id": "outdoors-lawns",
@@ -665,17 +682,19 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Jade 735/Spaces/Walking_.webp"
       ],
       "experiences": [
-        "/Villa_Retreats/Jade 735/Experiences/Arts_Exp.webp",
-        "/Villa_Retreats/Jade 735/Experiences/Celebration_Exp.webp",
-        "/Villa_Retreats/Jade 735/Experiences/Celebration_Exp_.webp",
-        "/Villa_Retreats/Jade 735/Experiences/Dining_exp.webp",
-        "/Villa_Retreats/Jade 735/Experiences/Expp.webp",
-        "/Villa_Retreats/Jade 735/Experiences/Night_Dine_Out.webp",
-        "/Villa_Retreats/Jade 735/Experiences/Pool_Side_SitOut.webp",
-        "/Villa_Retreats/Jade 735/Experiences/Semi_Open_Dining_exp.webp",
-        "/Villa_Retreats/Jade 735/Experiences/Swinging_exp.webp"
+        "/Villa_Retreats/Jade 735/3-Experience/Bonfire.webp",
+        "/Villa_Retreats/Jade 735/3-Experience/Floating breakfast.webp",
+        "/Villa_Retreats/Jade 735/3-Experience/Submerged Dining.webp",
+        "/Villa_Retreats/Jade 735/3-Experience/bbq.webp",
+        "/Villa_Retreats/Jade 735/3-Experience/candlelit Dining.webp",
+        "/Villa_Retreats/Jade 735/3-Experience/highh tea.jpg.webp"
       ],
-      "perfectFor": [],
+      "perfectFor": [
+        "/Villa_Retreats/Jade 735/4-Perfect for/Boutique Stays.webp",
+        "/Villa_Retreats/Jade 735/4-Perfect for/Family Gatherings.webp",
+        "/Villa_Retreats/Jade 735/4-Perfect for/Social Stays.webp",
+        "/Villa_Retreats/Jade 735/4-Perfect for/Staycations.webp"
+      ],
       "other": [],
       "categorizedSpaces": [
         {
@@ -954,41 +973,13 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Magnolia/Spaces/Private_Home_Theatre.webp",
         "/Villa_Retreats/Magnolia/Spaces/Villa.webp"
       ],
-      "experiences": [
-        "/Villa_Retreats/Magnolia/Experiences/BornFire.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Candle_Lit---.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Candle_Lit_Dining_Exp.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Celebration_exp,,.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Floating.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Floating_Exp...webp",
-        "/Villa_Retreats/Magnolia/Experiences/Floating__.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Moments.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Movie_Under_the_Stars.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Open_DinOut_exp__.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Open_Dinout_exp.webp",
-        "/Villa_Retreats/Magnolia/Experiences/PoolSide_SitOur_exp...webp",
-        "/Villa_Retreats/Magnolia/Experiences/Pool_SideSitout_Exp.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Pool_Side_.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Pool_Side_Exp.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Pool_Side_SitOut.webp",
-        "/Villa_Retreats/Magnolia/Experiences/Semi_Open_Dining_exp.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_02.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_03.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_04.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_05.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_06.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_07.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_08.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_09.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_10.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_11.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_12.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_13.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_14.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_15.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_16.webp"
+      "experiences": [],
+      "perfectFor": [
+        "/Villa_Retreats/Magnolia/Perfect For/Private Celebrations.webp",
+        "/Villa_Retreats/Magnolia/Perfect For/Weddings.webp",
+        "/Villa_Retreats/Magnolia/Perfect For/corporate outings.webp",
+        "/Villa_Retreats/Magnolia/Perfect For/stayctions.webp"
       ],
-      "perfectFor": [],
       "other": [],
       "categorizedSpaces": [
         {
@@ -1141,17 +1132,17 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Palatio/2-Spaces/Walk_on_the.webp"
       ],
       "experiences": [
-        "/Villa_Retreats/Palatio/3-Experiences/Camping_.webp",
-        "/Villa_Retreats/Palatio/3-Experiences/Celebration_Exp.webp",
-        "/Villa_Retreats/Palatio/3-Experiences/IMG_5560.webp",
-        "/Villa_Retreats/Palatio/3-Experiences/IMG_5594.webp",
-        "/Villa_Retreats/Palatio/3-Experiences/Pool_Side_SitOut.webp",
-        "/Villa_Retreats/Palatio/3-Experiences/Sky_Lit_inner_exp...webp",
-        "/Villa_Retreats/Palatio/3-Experiences/Sky_Lit_inner_exp_.webp",
-        "/Villa_Retreats/Palatio/3-Experiences/Swinging_Exp_.webp",
-        "/Villa_Retreats/Palatio/3-Experiences/Swinging_exp.webp"
+        "/Villa_Retreats/Palatio/3-Experiences/Bonfire.webp",
+        "/Villa_Retreats/Palatio/3-Experiences/High Tea.webp",
+        "/Villa_Retreats/Palatio/3-Experiences/bbbq.webp",
+        "/Villa_Retreats/Palatio/3-Experiences/floating breakfast.webp"
       ],
-      "perfectFor": [],
+      "perfectFor": [
+        "/Villa_Retreats/Palatio/4-Perfect For/Staycations.webp",
+        "/Villa_Retreats/Palatio/4-Perfect For/Weekend Getaways.webp",
+        "/Villa_Retreats/Palatio/4-Perfect For/Workation.webp",
+        "/Villa_Retreats/Palatio/4-Perfect For/intimate Social Events.webp"
+      ],
       "other": [],
       "categorizedSpaces": [
         {
@@ -1292,14 +1283,17 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Retreat on the ridge/2-Spaces/Villa.webp"
       ],
       "experiences": [
-        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Camp_Party_Exp.webp",
-        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Camp_exp.webp",
-        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Floating_exp...webp",
-        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Picnic-Exp.webp",
-        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Picnic_exp_.webp"
+        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Bonfire.webp",
+        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Floating breakfast.webp",
+        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/High Tea.webp",
+        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Movie under the stars.webp",
+        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/bbq.webp"
       ],
       "perfectFor": [
-        "/Villa_Retreats/Retreat on the ridge/4-Perfect for/16.webp"
+        "/Villa_Retreats/Retreat on the ridge/4-Perfect for/Hillside Getaways.webp",
+        "/Villa_Retreats/Retreat on the ridge/4-Perfect for/Personal Celebrations.webp",
+        "/Villa_Retreats/Retreat on the ridge/4-Perfect for/Staycations.webp",
+        "/Villa_Retreats/Retreat on the ridge/4-Perfect for/Weekend Getaways.webp"
       ],
       "other": [],
       "categorizedSpaces": [
@@ -1416,13 +1410,20 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Royalty/2-Spaces/living room.webp"
       ],
       "experiences": [
-        "/Villa_Retreats/Royalty/3-Experiences/Animal_Interaction_exp.webp",
-        "/Villa_Retreats/Royalty/3-Experiences/Luxury_Dining_Exp.webp",
-        "/Villa_Retreats/Royalty/3-Experiences/Open_DinOut_Exp.webp",
-        "/Villa_Retreats/Royalty/3-Experiences/Pool_exp.webp"
+        "/Villa_Retreats/Royalty/3-Experiences/BBq.webp",
+        "/Villa_Retreats/Royalty/3-Experiences/Candlelit dining.webp",
+        "/Villa_Retreats/Royalty/3-Experiences/High eta.webp",
+        "/Villa_Retreats/Royalty/3-Experiences/bonfire.webp",
+        "/Villa_Retreats/Royalty/3-Experiences/experience_horse riding safari.webp",
+        "/Villa_Retreats/Royalty/3-Experiences/movie under the stars.webp"
       ],
       "perfectFor": [],
-      "other": [],
+      "other": [
+        "/Villa_Retreats/Royalty/4- Perfect For/Equestrian Enthusiasts.webp",
+        "/Villa_Retreats/Royalty/4- Perfect For/Family Reunions.webp",
+        "/Villa_Retreats/Royalty/4- Perfect For/Premium Hill Stays.webp",
+        "/Villa_Retreats/Royalty/4- Perfect For/Staycations.webp"
+      ],
       "categorizedSpaces": [
         {
           "id": "views-exteriors",
@@ -1586,11 +1587,17 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Tranquil Woods/2-Spaces/walkway.webp"
       ],
       "experiences": [
-        "/Villa_Retreats/Tranquil Woods/3-Experiences/Better_Clean_Nature_exp...webp",
-        "/Villa_Retreats/Tranquil Woods/3-Experiences/Nature+Pool_exp.webp"
+        "/Villa_Retreats/Tranquil Woods/3-Experiences/Bonfire.webp",
+        "/Villa_Retreats/Tranquil Woods/3-Experiences/High Tea.webp",
+        "/Villa_Retreats/Tranquil Woods/3-Experiences/Picnic Setup.webp",
+        "/Villa_Retreats/Tranquil Woods/3-Experiences/bbbbq.webp",
+        "/Villa_Retreats/Tranquil Woods/3-Experiences/movie under the stars.webp"
       ],
       "perfectFor": [
-        "/Villa_Retreats/Tranquil Woods/4-Perfect For/weddingg.webp"
+        "/Villa_Retreats/Tranquil Woods/4-Perfect For/Grand Weddings.webp",
+        "/Villa_Retreats/Tranquil Woods/4-Perfect For/Private Celebrations.webp",
+        "/Villa_Retreats/Tranquil Woods/4-Perfect For/Staycations.webp",
+        "/Villa_Retreats/Tranquil Woods/4-Perfect For/Weekend Getaways.webp"
       ],
       "other": [],
       "categorizedSpaces": [
@@ -1731,13 +1738,17 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Wonderland/Spaces/spaces_44.webp"
       ],
       "experiences": [
-        "/Villa_Retreats/Wonderland/Experiences/Barbeque_exp.webp",
-        "/Villa_Retreats/Wonderland/Experiences/Horse_riding_exp.webp",
-        "/Villa_Retreats/Wonderland/Experiences/Picnic_Exp.webp",
-        "/Villa_Retreats/Wonderland/Experiences/Picnic_SetUp.webp",
-        "/Villa_Retreats/Wonderland/Experiences/Picnic_exp__.webp"
+        "/Villa_Retreats/Wonderland/Experiences/Bonfire.webp",
+        "/Villa_Retreats/Wonderland/Experiences/Horse Riding.webp",
+        "/Villa_Retreats/Wonderland/Experiences/bbq.webp",
+        "/Villa_Retreats/Wonderland/Experiences/high tea.webp"
       ],
-      "perfectFor": [],
+      "perfectFor": [
+        "/Villa_Retreats/Wonderland/Perfect For/Family Getaways.webp",
+        "/Villa_Retreats/Wonderland/Perfect For/Nature Stays.webp",
+        "/Villa_Retreats/Wonderland/Perfect For/Staycations.webp",
+        "/Villa_Retreats/Wonderland/Perfect For/Weekend Getaways.webp"
+      ],
       "other": [],
       "categorizedSpaces": [
         {
