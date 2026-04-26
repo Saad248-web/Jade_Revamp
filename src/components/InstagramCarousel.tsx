@@ -1,85 +1,26 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import Image from "next/image";
-import { Heart, MessageCircle, Instagram } from "lucide-react";
+import { Instagram } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import PrimaryButton from "./PrimaryButton";
 
 const INSTAGRAM_POSTS = [
-  {
-    id: 1,
-    username: "@jadehospitainment",
-    userLabel: "Instagram",
-    userAvatar: "https://i.pravatar.cc/150?img=1",
-    image:
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
-    likes: "2.4k",
-    comments: "89",
-    caption: "Paradise found @jade 🌺🌸",
-  },
-  {
-    id: 2,
-    username: "@jadehospitainment",
-    userLabel: "Instagram",
-    userAvatar: "https://i.pravatar.cc/150?img=1",
-    image: "/X/Magnolia/9.webp",
-    likes: "3.2k",
-    comments: "124",
-    caption: "Amazing celebrations ✨",
-  },
-  {
-    id: 3,
-    username: "@jadehospitainment",
-    userLabel: "Instagram",
-    userAvatar: "https://i.pravatar.cc/150?img=2",
-    image: "/X/ROR/14.webp",
-    likes: "2.8k",
-    comments: "95",
-    caption: "Weekend vibes 🌴",
-  },
-  {
-    id: 4,
-    username: "@jadehospitainment",
-    userLabel: "Instagram",
-    userAvatar: "https://i.pravatar.cc/150?img=3",
-    image:
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
-    likes: "4.1k",
-    comments: "156",
-    caption: "Perfect venue for unforgettable moments 💫",
-  },
-  {
-    id: 5,
-    username: "@jadehospitainment",
-    userLabel: "Instagram",
-    userAvatar: "https://i.pravatar.cc/150?img=4",
-    image: "/X/Magnolia/9.webp",
-    likes: "5.3k",
-    comments: "203",
-    caption: "Dream weddings come alive @jade 💍✨",
-  },
-  {
-    id: 6,
-    username: "@jadehospitainment",
-    userLabel: "Instagram",
-    userAvatar: "https://i.pravatar.cc/150?img=5",
-    image: "/X/ROR/14.webp",
-    likes: "3.7k",
-    comments: "142",
-    caption: "Summer pool parties done right 🏊‍♀️☀️",
-  },
-  {
-    id: 7,
-    username: "@jadehospitainment",
-    userLabel: "Instagram",
-    userAvatar: "https://i.pravatar.cc/150?img=1",
-    image:
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
-    likes: "4.5k",
-    comments: "178",
-    caption: "Escape to luxury and tranquility 🌅",
-  },
+  { id: "DCRJKQozm9F", type: "p" },
+  { id: "DBrM8YMy1UC", type: "p" },
+  { id: "DOJYFnEAWz4", type: "p" },
+  { id: "DPNzH4ACZnp", type: "p" },
+  { id: "C_aq1_qya_e", type: "reel" },
+  { id: "C_N0gQJhTp4", type: "reel" },
+  { id: "C681aInK5jn", type: "reel" },
+  { id: "C5KsbqBvNLf", type: "reel" },
+  { id: "CzIjR_3Lj_H", type: "reel" },
+  { id: "Cxp7fnkvZm9", type: "reel" },
+  { id: "DHYKpZqSn1V", type: "reel" },
+  { id: "DL9BbyaSEHV", type: "reel" },
+  { id: "DL97zvLzxUb", type: "reel" },
+  { id: "DMKlWXLSr6a", type: "reel" },
+  { id: "DRZBNuzEbnA", type: "reel" },
 ];
 
 export default function InstagramCarousel() {
@@ -107,7 +48,7 @@ export default function InstagramCarousel() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-jade-charcoal pt-fluid-lg md:pt-fluid-xl pb-10 overflow-hidden"
+      className="relative bg-jade-charcoal pt-fluid-lg md:pt-fluid-xl pb-12 overflow-hidden"
     >
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       <div className="max-w-[1920px] mx-auto">
@@ -124,86 +65,38 @@ export default function InstagramCarousel() {
           </h2>
         </div>
 
-        {/* Horizontal Scroll Container */}
         <div
           ref={scrollContainerRef}
-          className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide px-6 md:px-12 snap-x snap-mandatory scroll-smooth"
+          className="flex gap-8 md:gap-12 overflow-x-auto scrollbar-hide px-8 md:px-20 snap-x snap-mandatory scroll-smooth"
           style={{
             scrollbarWidth: "none",
             msOverflowStyle: "none",
           }}
         >
-          {INSTAGRAM_POSTS.map((post, index) => (
+          {INSTAGRAM_POSTS.map((post) => (
             <div
               key={post.id}
-              className="flex-shrink-0 w-[280px] md:w-[320px] snap-center h-full py-4"
+              className="flex-shrink-0 w-[300px] md:w-[380px] snap-center py-8"
             >
-              {/* Instagram Post Card */}
-              <div className="w-full h-full flex flex-col bg-[#FAFAFA]/[0.04] backdrop-blur-xl rounded-[20px] overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-500 border border-[#FAFAFA]/[0.12] group">
-                {/* Header */}
-                <div className="flex items-center justify-between p-5 bg-transparent">
-                  <div className="flex items-center gap-4 min-w-0">
-                    <div className="relative w-11 h-11 rounded-full overflow-hidden border-[1px] border-white/20 shrink-0">
-                      <Image
-                        src={post.userAvatar}
-                        alt="Profile"
-                        fill
-                        className="object-cover"
-                        sizes="44px"
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="font-manrope text-gh-body font-semibold text-[#FAFAFA] truncate">
-                        {post.username}
-                      </p>
-                      <p className="font-manrope text-gh-label text-[#FAFAFA]/60">
-                        {post.userLabel}
-                      </p>
-                    </div>
-                  </div>
-                  <Instagram className="w-5 h-5 text-jade-gold shrink-0 opacity-70" />
-                </div>
+              {/* Instagram Post Card - Standardized Height & Premium Dark Theme */}
+              <div className="w-full h-[640px] bg-[#050505] backdrop-blur-2xl rounded-[12px] overflow-hidden hover:scale-[1.02] transition-all duration-700 border border-white/10 group flex flex-col relative">
+                {/* Subtle Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-jade-gold/5 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
 
-                {/* Image */}
-                <div className="relative w-full aspect-square bg-black overflow-hidden">
-                  <Image
-                    src={post.image}
-                    alt="Post"
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    sizes="(max-width: 768px) 300px, 380px"
-                  />
-                </div>
-
-                {/* Footer */}
-                <div className="p-5 bg-transparent shrink-0 flex flex-col">
-                  <div className="flex items-center gap-5 mb-4">
-                    <div className="flex items-center gap-1.5 text-[#FAFAFA]/90">
-                      <Heart className="w-5 h-5" />
-                      <span className="font-manrope text-gh-label font-bold">
-                        {post.likes}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-white/90">
-                      <MessageCircle className="w-5 h-5" />
-                      <span className="font-manrope text-gh-label font-bold">
-                        {post.comments}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="min-h-[3rem] lg:min-h-[3.5rem]">
-                    <p className="font-manrope text-gh-body text-[#FAFAFA]/80 line-clamp-2 leading-relaxed">
-                      {post.caption}
-                    </p>
-                  </div>
-                </div>
+                <iframe
+                  src={`https://www.instagram.com/${post.type}/${post.id}/embed`}
+                  className="w-full h-full border-0 relative z-10"
+                  scrolling="no"
+                  allowTransparency={true}
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                />
               </div>
             </div>
           ))}
         </div>
 
         {/* CTA Button */}
-        <div className="flex justify-center mt-8 px-6">
+        <div className="flex justify-center mt-4 px-6">
           <PrimaryButton
             href="https://www.instagram.com/jadehospitainment"
             target="_blank"

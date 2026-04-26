@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
+import { useAnimation } from "@/context/AnimationContext";
 
 interface FloatingBottomActionProps {
   price: string;
@@ -14,6 +15,8 @@ export default function FloatingBottomAction({
   linkHref,
   linkLabel,
 }: FloatingBottomActionProps) {
+  const { setEnquireOverlayOpen } = useAnimation();
+
   return (
     <div className="fixed bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 p-3 md:p-4 md:px-8 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center gap-2">
@@ -21,12 +24,12 @@ export default function FloatingBottomAction({
           {price}
         </p>
         <div className="flex items-center gap-2 md:gap-4">
-          <Link
-            href="/contact"
+          <button
+            onClick={() => setEnquireOverlayOpen(true)}
             className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase px-2 py-2 md:px-4 md:py-3 hover:text-white transition-colors border border-white/10 rounded-sm"
           >
             ENQUIRE
-          </Link>
+          </button>
           <PrimaryButton href={linkHref} withArrow={false}>
             {linkLabel}
           </PrimaryButton>

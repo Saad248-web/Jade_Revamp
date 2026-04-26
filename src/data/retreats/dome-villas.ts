@@ -92,22 +92,10 @@ export const domeVillas = {
   description:
     "Dome Villas is a private estate with three independent dome-shaped villas, booked exclusively by one group. The Hobbit-themed design features distributed living spaces, landscaped pathways connecting each dome, and a private plunge pool. Each dome has its own bedroom, bath, and sit-out area, offering a unique blend of fantasy architecture and nature immersion suited for small groups and intimate celebrations.",
   perfectFor: [
-    {
-      title: "Pool Parties",
-      image: "/Villa_Retreats/Dome/Perfect For/Pool Parties.webp",
-    },
-    {
-      title: "Group Getaways",
-      image: "/Villa_Retreats/Dome/Perfect For/Group Getaways.webp",
-    },
-    {
-      title: "Nature Stays",
-      image: "/Villa_Retreats/Dome/Perfect For/Nature Stays.webp",
-    },
-    {
-      title: "Intimate Weddings",
-      image: "/Villa_Retreats/Dome/Perfect For/Intimate Weddings.webp",
-    },
+    "Pool Parties",
+    "Group Getaways",
+    "Nature Stays",
+    "Intimate Weddings",
   ],
   categories: ["Nature Retreats", "Weekend Getaways", "Luxury Stays"],
   thumbnail: "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp",

@@ -18,6 +18,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { BlogPost, BLOG_POSTS } from "@/data/blogs";
+import { useAnimation } from "@/context/AnimationContext";
 
 interface PostContentProps {
   post: BlogPost;
@@ -25,6 +26,7 @@ interface PostContentProps {
 }
 
 export default function PostContent({ post, relatedPosts }: PostContentProps) {
+  const { setEnquireOverlayOpen } = useAnimation();
   return (
     <main className="relative min-h-screen bg-[#25282C] text-white">
       <Navbar />
@@ -251,19 +253,27 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
                 case "cta":
                   return (
                     <div key={idx} className="flex flex-wrap gap-6 my-12">
-                      {section.ctas?.map((cta, i) => (
-                        <Link
-                          key={i}
-                          href={cta.link}
-                          className={`inline-flex items-center justify-center px-8 py-4 font-manrope font-bold tracking-[0.2em] uppercase text-[10px] transition-all duration-300 ${
-                            cta.variant === "primary"
-                              ? "bg-[#EFCD62] text-black hover:bg-[#EFCD62]/90 shadow-[inset_0_0_0_1px_rgba(172,136,49,1)]"
-                              : "bg-transparent text-[#EFCD62] border border-[#EFCD62] hover:bg-[#EFCD62]/10"
-                          }`}
-                        >
-                          {cta.label}
-                        </Link>
-                      ))}
+                      {section.ctas?.map((cta, i) => {
+                        const isEnquire = cta.link === "/contact";
+                        const Component = isEnquire ? "button" : Link;
+                        const props = isEnquire
+                          ? { onClick: () => setEnquireOverlayOpen(true) }
+                          : { href: cta.link };
+
+                        return (
+                          <Component
+                            key={i}
+                            {...(props as any)}
+                            className={`inline-flex items-center justify-center px-8 py-4 font-manrope font-bold tracking-[0.2em] uppercase text-[10px] transition-all duration-300 ${
+                              cta.variant === "primary"
+                                ? "bg-[#EFCD62] text-black hover:bg-[#EFCD62]/90 shadow-[inset_0_0_0_1px_rgba(172,136,49,1)]"
+                                : "bg-transparent text-[#EFCD62] border border-[#EFCD62] hover:bg-[#EFCD62]/10"
+                            }`}
+                          >
+                            {cta.label}
+                          </Component>
+                        );
+                      })}
                     </div>
                   );
                 default:

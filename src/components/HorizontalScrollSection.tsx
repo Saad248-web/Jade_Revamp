@@ -25,7 +25,7 @@ const PANELS = [
     subtext:
       "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
-    href: "/party-villas",
+    href: "/party-villas#spaces-for-celebrations",
     image: "/X/ROR/14.webp",
     type: "full",
   },

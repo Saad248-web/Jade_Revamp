@@ -60,7 +60,7 @@ const animatedSlides: ScrollSlide[] = [
 ];
 
 export default function CaravansPage() {
-  const { setRathaaOverlayOpen } = useAnimation();
+  const { setRathaaOverlayOpen, setEnquireOverlayOpen } = useAnimation();
   const [allImages, setAllImages] = useState<string[]>([]);
   const [heroImages, setHeroImages] = useState<string[]>([]);
   const [spaceImages, setSpaceImages] = useState<string[]>([]);
@@ -74,10 +74,12 @@ export default function CaravansPage() {
         if (!res.ok) return;
         const data = await res.json();
         const groups = data?.groups || [];
-        const hero = (groups.find((g: any) => String(g.folder).toLowerCase() === "1-hero")?.images ||
-          []) as string[];
-        const spaces = (groups.find((g: any) => String(g.folder).toLowerCase() === "2-spaces")?.images ||
-          []) as string[];
+        const hero = (groups.find(
+          (g: any) => String(g.folder).toLowerCase() === "1-hero",
+        )?.images || []) as string[];
+        const spaces = (groups.find(
+          (g: any) => String(g.folder).toLowerCase() === "2-spaces",
+        )?.images || []) as string[];
         const all = (data?.all || []) as string[];
         if (!cancelled) {
           setHeroImages(hero);
@@ -102,7 +104,10 @@ export default function CaravansPage() {
     }));
   }, [spaceImages, allImages]);
 
-  const heroBg = useMemo(() => heroImages[0] || allImages[0] || "", [heroImages, allImages]);
+  const heroBg = useMemo(
+    () => heroImages[0] || allImages[0] || "",
+    [heroImages, allImages],
+  );
 
   useEffect(() => {
     if (heroImages.length <= 1) return;
@@ -113,7 +118,8 @@ export default function CaravansPage() {
   }, [heroImages]);
 
   const heroSlide = useMemo(() => {
-    if (heroImages.length) return heroImages[heroIndex % heroImages.length] || "";
+    if (heroImages.length)
+      return heroImages[heroIndex % heroImages.length] || "";
     return heroBg;
   }, [heroImages, heroIndex, heroBg]);
 
@@ -148,7 +154,7 @@ export default function CaravansPage() {
           {
             icon: <Calendar className="w-5 h-5" />,
             label: "PLAN JOURNEY",
-            onClick: () => window.open("/contact", "_blank"),
+            onClick: () => setRathaaOverlayOpen(true),
           },
         ]}
       />
@@ -163,7 +169,6 @@ export default function CaravansPage() {
           title="The Caravan"
           slides={caravanSlides}
           ctaText="BOOK CARAVAN"
-          aspectClass="aspect-[343/240] md:aspect-[21/9]"
           buttonContainerClassName="h-[54px]"
         />
       </div>
@@ -175,7 +180,7 @@ export default function CaravansPage() {
         label="CURATED EXPERIENCES"
         title="Enhance Your Stay"
         ctaText="ENQUIRE"
-        onCtaClick={() => window.open("/contact", "_blank")}
+        onCtaClick={() => setEnquireOverlayOpen(true)}
         experiences={caravanSlides.slice(0, 6).map((s) => ({
           title: s.title,
           image: s.image,
@@ -210,6 +215,8 @@ export default function CaravansPage() {
         footerText="Rathaa turns every road into an experience for those who travel beyond the ordinary."
         ctaText="PLAN YOUR JOURNEY"
         onCtaClick={() => setRathaaOverlayOpen(true)}
+        cardClassName="bg-[#363A45]"
+        alternateGold={true}
       />
 
       <TravelGuidelinesSection />

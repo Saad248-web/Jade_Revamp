@@ -13,10 +13,12 @@ import CorporateVillasCarousel from "@/components/CorporateVillasCarousel";
 import { VILLAS } from "@/lib/mockData";
 import Footer from "@/components/Footer";
 import ExperienceHero from "@/components/ExperienceHero";
+import TrustedBySection from "@/components/TrustedBySection";
 import ScrollSectionComposer, {
   ScrollSlide,
 } from "@/components/ScrollSectionComposer";
 import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
+import { useAnimation } from "@/context/AnimationContext";
 
 const animatedSlides: ScrollSlide[] = [
   {
@@ -33,6 +35,8 @@ const animatedSlides: ScrollSlide[] = [
 ];
 
 export default function CorporateRetreatsPage() {
+  const { setEnquireOverlayOpen } = useAnimation();
+
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
       <CorporateHeader />
@@ -74,57 +78,7 @@ export default function CorporateRetreatsPage() {
       />
 
       {/* SECTION 2: TRUSTED BY SECTION */}
-      <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
-        <div className="max-w-4xl mx-auto px-8 text-center w-full">
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
-            TRUSTED BY
-          </p>
-          <h2 className="text-gh-h1 font-philosopher text-white mb-20 leading-tight">
-            World-Class <br /> Organizations
-          </h2>
-
-          <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6">
-            {/* Logo 1: Google */}
-            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <span className="text-white font-manrope text-gh-h3 font-bold opacity-60 group-hover:opacity-100 transition-opacity">
-                Google
-              </span>
-            </div>
-            {/* Logo 2: Microsoft */}
-            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <span className="text-white font-manrope text-gh-h3 font-bold opacity-60 group-hover:opacity-100 transition-opacity">
-                Microsoft
-              </span>
-            </div>
-            {/* Logo 3: L&T */}
-            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <div className="w-16 h-16 rounded-full border-2 border-white/40 flex items-center justify-center opacity-60 group-hover:opacity-100 transition-opacity">
-                <span className="text-white font-manrope text-gh-h3 font-bold italic">
-                  L&T
-                </span>
-              </div>
-            </div>
-            {/* Logo 4: IBM */}
-            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <span className="text-white font-manrope text-gh-h2 font-bold tracking-tighter opacity-60 group-hover:opacity-100 transition-opacity">
-                IBM
-              </span>
-            </div>
-            {/* Logo 5: Capgemini */}
-            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <span className="text-white font-manrope text-gh-h3 font-bold opacity-60 group-hover:opacity-100 transition-opacity">
-                Capgemini
-              </span>
-            </div>
-            {/* Logo 6: Mercedes-Benz */}
-            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <span className="text-white font-philosopher text-gh-h3 opacity-60 group-hover:opacity-100 transition-opacity">
-                Mercedes-Benz
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <TrustedBySection />
       {/* SECTION 3: ANIMATED TEXT SECTION */}
       <ScrollSectionComposer slides={animatedSlides} height="250vh" />
 
@@ -169,7 +123,8 @@ export default function CorporateRetreatsPage() {
         ]}
         footerText='"Structured spaces and curated experiences brought together under one standard of corporate hospitality."'
         ctaText="SPEAK WITH OUR TEAM"
-        ctaLink="/contact"
+        onCtaClick={() => setEnquireOverlayOpen(true)}
+        alternateGold={true}
       />
       {/* SECTION 6: SELECTED VILLAS FOR CORPORET RETREATS */}
       <section className="py-fluid-lg md:py-fluid-xl bg-[#1A1C1E] border-t border-white/5">

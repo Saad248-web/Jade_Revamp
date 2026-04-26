@@ -7,15 +7,17 @@ import { ArrowLeft, ArrowRight, MapPin, Users, Car, Home } from "lucide-react";
 import Link from "next/link";
 import { VILLAS } from "@/lib/mockData";
 import VenueOverlay from "./VenueOverlay";
+import { useAnimation } from "@/context/AnimationContext";
 
 // Filter villas to specifically show Set 2: Tranquil Woods, Magnolia, Diamond
-const SET2_IDS = ["tranquil-woods", "magnolia", "diamond"];
+const SET2_IDS = ["tranquil", "magnolia", "diamond"];
 const WEDDING_VENUES = VILLAS.filter((villa) => SET2_IDS.includes(villa.id));
 
 export default function WeddingVenuesCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const { setEnquireOverlayOpen } = useAnimation();
 
   const nextSlide = () => {
     setDirection(1);
@@ -68,12 +70,12 @@ export default function WeddingVenuesCarousel() {
               </Link>
             </div>
             <div className="absolute top-6 right-6 z-20">
-              <Link
-                href="/contact"
+              <button
+                onClick={() => setEnquireOverlayOpen(true)}
                 className="bg-black/40 backdrop-blur-md hover:bg-white hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-6 py-3 border border-white/20 transition-all duration-300"
               >
-                Contact Us
-              </Link>
+                Enquire Now
+              </button>
             </div>
 
             {/* Edge Navigation Arrows */}

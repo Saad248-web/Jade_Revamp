@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { VILLAS, CATEGORIES } from "@/lib/mockData";
 import ReservationOverlay from "./ReservationOverlay";
 import VillaCard from "./VillaCard";
@@ -36,6 +37,33 @@ const NEXT_AVAILABLE = [
 export default function VillasCarousel() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [navbarVisible, setNavbarVisible] = useState(true);
+  const searchParams = useSearchParams();
+
+  // Read category from URL on mount
+  useEffect(() => {
+    const categoryParam = searchParams.get("category");
+    if (categoryParam) {
+      // Check if it's a valid category
+      const validCategory = CATEGORIES.find(
+        (c) => c.toLowerCase() === categoryParam.toLowerCase(),
+      );
+      if (validCategory) {
+        setActiveCategory(validCategory);
+        // Scroll to the carousel when a category is specified
+        setTimeout(() => {
+          const el = document.getElementById("villas-carousel");
+          if (el) {
+            const y =
+              el.getBoundingClientRect().top +
+              window.scrollY -
+              NAVBAR_HEIGHT -
+              20;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
+        }, 500);
+      }
+    }
+  }, [searchParams]);
 
   // Overlay states
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);

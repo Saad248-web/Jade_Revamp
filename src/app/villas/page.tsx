@@ -4,6 +4,7 @@ import VillasHero from "@/components/VillasHero";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import JsonLd from "@/components/seo/JsonLd";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
 const VillasCarousel = dynamic(() => import("@/components/VillasCarousel"), {
   ssr: false,
@@ -64,7 +65,9 @@ export default function VillasPage() {
       <JsonLd schema={lodgingSchema} />
       <Navbar />
       <VillasHero />
-      <VillasCarousel />
+      <Suspense fallback={<div className="h-screen bg-[#1A1C1E]" />}>
+        <VillasCarousel />
+      </Suspense>
       <Footer />
       <div className="h-24 md:hidden" /> {/* Spacer for Mobile Bottom Nav */}
       <MobileBottomNav />

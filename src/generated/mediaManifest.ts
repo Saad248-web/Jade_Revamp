@@ -3,11 +3,13 @@
 // Do not edit manually.
 
 export const MEDIA_MANIFEST = {
-  generatedAt: "2026-04-25T12:27:32.852Z",
-  villasByFolder: {
-    Diamond: {
-      hero: ["/Villa_Retreats/Diamond/Hero/hero.webp"],
-      spaces: [
+  "generatedAt": "2026-04-26T10:15:13.451Z",
+  "villasByFolder": {
+    "Diamond": {
+      "hero": [
+        "/Villa_Retreats/Diamond/Hero/hero.webp"
+      ],
+      "spaces": [
         "/Villa_Retreats/Diamond/Spaces/Double_Occupancy.webp",
         "/Villa_Retreats/Diamond/Spaces/Pool.webp",
         "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
@@ -38,25 +40,37 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Diamond/Spaces/spaces_28.webp",
         "/Villa_Retreats/Diamond/Spaces/spaces_29.webp",
         "/Villa_Retreats/Diamond/Spaces/spaces_30.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_31.webp",
+        "/Villa_Retreats/Diamond/Spaces/spaces_31.webp"
       ],
-      experiences: [],
-      perfectFor: [],
-      other: [],
-      categorizedSpaces: [
+      "experiences": [],
+      "perfectFor": [],
+      "other": [],
+      "categorizedSpaces": [
         {
-          id: "pool-water",
-          title: "Pool & Water",
-          category: "Pool & Water",
-          amenities: ["Pool", "Plunge", "Water features", "Deck"],
-          images: ["/Villa_Retreats/Diamond/Spaces/Pool.webp"],
+          "id": "pool-water",
+          "title": "Pool & Water",
+          "category": "Pool & Water",
+          "amenities": [
+            "Pool",
+            "Plunge",
+            "Water features",
+            "Deck"
+          ],
+          "images": [
+            "/Villa_Retreats/Diamond/Spaces/Pool.webp"
+          ]
         },
         {
-          id: "other",
-          title: "Other",
-          category: "Other",
-          amenities: ["Spaces", "Details", "Ambience", "Highlights"],
-          images: [
+          "id": "other",
+          "title": "Other",
+          "category": "Other",
+          "amenities": [
+            "Spaces",
+            "Details",
+            "Ambience",
+            "Highlights"
+          ],
+          "images": [
             "/Villa_Retreats/Diamond/Spaces/Double_Occupancy.webp",
             "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
             "/Villa_Retreats/Diamond/Spaces/spaces_04.webp",
@@ -86,13 +100,13 @@ export const MEDIA_MANIFEST = {
             "/Villa_Retreats/Diamond/Spaces/spaces_28.webp",
             "/Villa_Retreats/Diamond/Spaces/spaces_29.webp",
             "/Villa_Retreats/Diamond/Spaces/spaces_30.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_31.webp",
-          ],
-        },
-      ],
+            "/Villa_Retreats/Diamond/Spaces/spaces_31.webp"
+          ]
+        }
+      ]
     },
-    Dome: {
-      hero: [
+    "Dome": {
+      "hero": [
         "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp",
         "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 2.webp",
         "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 3.webp",
@@ -109,9 +123,9 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/Hero_evening_View.webp",
         "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/hero.webp",
         "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/spaces_01.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/spaces_19.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/spaces_19.webp"
       ],
-      spaces: [
+      "spaces": [
         "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/1st_Floor_sit_out.webp",
         "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Bed-Room_1.webp",
         "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Bed_Room_2.webp",
@@ -157,9 +171,9 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Living_Area_entrance.webp",
         "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Master_Bed_Room.webp",
         "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Master_Bed_Room_Night_View.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Patio_Sit_Out.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Patio_Sit_Out.webp"
       ],
-      experiences: [
+      "experiences": [
         "/Villa_Retreats/Dome/3-Experienceee/Bonfire.webp",
         "/Villa_Retreats/Dome/3-Experienceee/Candlelit Dining.webp",
         "/Villa_Retreats/Dome/3-Experienceee/Floating Breakfast.webp",
@@ -169,42 +183,42 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Dome/3-Experienceee/Outdoor Activities.webp",
         "/Villa_Retreats/Dome/3-Experienceee/Picnic Setup.webp",
         "/Villa_Retreats/Dome/3-Experienceee/Zen Garden.webp",
-        "/Villa_Retreats/Dome/3-Experienceee/barbeque.webp",
+        "/Villa_Retreats/Dome/3-Experienceee/barbeque.webp"
       ],
-      perfectFor: [
+      "perfectFor": [
         "/Villa_Retreats/Dome/Perfect For/Group Getaways.webp",
         "/Villa_Retreats/Dome/Perfect For/Intimate Weddings.webp",
         "/Villa_Retreats/Dome/Perfect For/Nature Stays.webp",
-        "/Villa_Retreats/Dome/Perfect For/Pool Parties.webp",
+        "/Villa_Retreats/Dome/Perfect For/Pool Parties.webp"
       ],
-      other: [],
-      categorizedSpaces: [
+      "other": [],
+      "categorizedSpaces": [
         {
-          id: "views-exteriors",
-          title: "Views & Exteriors",
-          category: "Views & Exteriors",
-          amenities: [
+          "id": "views-exteriors",
+          "title": "Views & Exteriors",
+          "category": "Views & Exteriors",
+          "amenities": [
             "Exterior views",
             "Property facade",
             "Scenic views",
-            "Approach",
+            "Approach"
           ],
-          images: [
+          "images": [
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Dome_Side_View.webp",
-            "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Hill_View.webp",
-          ],
+            "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Hill_View.webp"
+          ]
         },
         {
-          id: "outdoors-lawns",
-          title: "Outdoors & Lawns",
-          category: "Outdoors & Lawns",
-          amenities: [
+          "id": "outdoors-lawns",
+          "title": "Outdoors & Lawns",
+          "category": "Outdoors & Lawns",
+          "amenities": [
             "Lawns",
             "Garden zones",
             "Open-air seating",
-            "Activities",
+            "Activities"
           ],
-          images: [
+          "images": [
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/1st_Floor_sit_out.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Lawn_Area.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/OutDoor_Sit_Out.webp",
@@ -213,43 +227,58 @@ export const MEDIA_MANIFEST = {
             "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/OutDoor_Sit_Out.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Inner_Court_Yard_Entrance.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Inner_Court_Yard_Entrance_2.webp",
-            "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Patio_Sit_Out.webp",
-          ],
+            "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Patio_Sit_Out.webp"
+          ]
         },
         {
-          id: "pool-water",
-          title: "Pool & Water",
-          category: "Pool & Water",
-          amenities: ["Pool", "Plunge", "Water features", "Deck"],
-          images: [
+          "id": "pool-water",
+          "title": "Pool & Water",
+          "category": "Pool & Water",
+          "amenities": [
+            "Pool",
+            "Plunge",
+            "Water features",
+            "Deck"
+          ],
+          "images": [
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Private_Plunge_Pool.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Kids_Pool.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Pool.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Pool_Side_Sit_Out.webp",
-            "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Pool_with_Hill_View.webp",
-          ],
+            "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Pool_with_Hill_View.webp"
+          ]
         },
         {
-          id: "living-dining",
-          title: "Living & Dining",
-          category: "Living & Dining",
-          amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
-          images: [
+          "id": "living-dining",
+          "title": "Living & Dining",
+          "category": "Living & Dining",
+          "amenities": [
+            "Living spaces",
+            "Dining",
+            "Lounges",
+            "Interiors"
+          ],
+          "images": [
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Living_Area.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Living_Area.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Semi_Open_Dining_Area.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Dining_Area.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Living_Area.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Living_Area_Hobbit_Hole.webp",
-            "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Living_Area_entrance.webp",
-          ],
+            "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Living_Area_entrance.webp"
+          ]
         },
         {
-          id: "bedrooms",
-          title: "Bedrooms",
-          category: "Bedrooms",
-          amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
-          images: [
+          "id": "bedrooms",
+          "title": "Bedrooms",
+          "category": "Bedrooms",
+          "amenities": [
+            "Beds",
+            "Sleep comfort",
+            "Storage",
+            "AC"
+          ],
+          "images": [
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Bed-Room_1.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Bed_Room_2.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Bed_Room_3.webp",
@@ -261,49 +290,66 @@ export const MEDIA_MANIFEST = {
             "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Bed_Room_1.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Bed_Room_2.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Master_Bed_Room.webp",
-            "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Master_Bed_Room_Night_View.webp",
-          ],
+            "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Master_Bed_Room_Night_View.webp"
+          ]
         },
         {
-          id: "bathrooms",
-          title: "Bathrooms",
-          category: "Bathrooms",
-          amenities: ["Baths", "Jacuzzi", "Shower", "Toiletries"],
-          images: [
+          "id": "bathrooms",
+          "title": "Bathrooms",
+          "category": "Bathrooms",
+          "amenities": [
+            "Baths",
+            "Jacuzzi",
+            "Shower",
+            "Toiletries"
+          ],
+          "images": [
             "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Bath_Tub.webp",
-            "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Greek_Style_Bath.webp",
-          ],
+            "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Greek_Style_Bath.webp"
+          ]
         },
         {
-          id: "entrances-paths",
-          title: "Entrances & Paths",
-          category: "Entrances & Paths",
-          amenities: ["Walkways", "Entrances", "Courtyards", "Landscaping"],
-          images: [
+          "id": "entrances-paths",
+          "title": "Entrances & Paths",
+          "category": "Entrances & Paths",
+          "amenities": [
+            "Walkways",
+            "Entrances",
+            "Courtyards",
+            "Landscaping"
+          ],
+          "images": [
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Walk_way.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Entrance.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Hobbit_Hole_entrance.webp",
-            "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Corridor_Walk_way.webp",
-          ],
+            "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Corridor_Walk_way.webp"
+          ]
         },
         {
-          id: "other",
-          title: "Other",
-          category: "Other",
-          amenities: ["Spaces", "Details", "Ambience", "Highlights"],
-          images: [
+          "id": "other",
+          "title": "Other",
+          "category": "Other",
+          "amenities": [
+            "Spaces",
+            "Details",
+            "Ambience",
+            "Highlights"
+          ],
+          "images": [
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Blue_Dome.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Glamping_Experince.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Exit.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Hobbit_Hole_Window.webp",
-            "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Wall_Unit_Artifacts.webp",
-          ],
-        },
-      ],
+            "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Wall_Unit_Artifacts.webp"
+          ]
+        }
+      ]
     },
-    Emerald: {
-      hero: ["/Villa_Retreats/Emerald/Hero/hero.webp"],
-      spaces: [
+    "Emerald": {
+      "hero": [
+        "/Villa_Retreats/Emerald/Hero/hero.webp"
+      ],
+      "spaces": [
         "/Villa_Retreats/Emerald/Spaces/Bed_Room_1.webp",
         "/Villa_Retreats/Emerald/Spaces/Bed_Room_2.webp",
         "/Villa_Retreats/Emerald/Spaces/Camping_Area.webp",
@@ -321,107 +367,136 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Emerald/Spaces/Pool_at_Night.webp",
         "/Villa_Retreats/Emerald/Spaces/Rustic_Glass_House_Villa.webp",
         "/Villa_Retreats/Emerald/Spaces/Traditional_Artifacts.webp",
-        "/Villa_Retreats/Emerald/Spaces/Villa.webp",
+        "/Villa_Retreats/Emerald/Spaces/Villa.webp"
       ],
-      experiences: [
+      "experiences": [
         "/Villa_Retreats/Emerald/Experiences/Barbeque.webp",
         "/Villa_Retreats/Emerald/Experiences/Floating_BreakFast_exp.webp",
         "/Villa_Retreats/Emerald/Experiences/High_Tea.webp",
-        "/Villa_Retreats/Emerald/Experiences/Picnic__.webp",
+        "/Villa_Retreats/Emerald/Experiences/Picnic__.webp"
       ],
-      perfectFor: [],
-      other: [
+      "perfectFor": [],
+      "other": [
         "/Villa_Retreats/Emerald/Perfect_For/Perfect.webp",
-        "/Villa_Retreats/Emerald/Perfect_For/Pool_Exp.webp",
+        "/Villa_Retreats/Emerald/Perfect_For/Pool_Exp.webp"
       ],
-      categorizedSpaces: [
+      "categorizedSpaces": [
         {
-          id: "views-exteriors",
-          title: "Views & Exteriors",
-          category: "Views & Exteriors",
-          amenities: [
+          "id": "views-exteriors",
+          "title": "Views & Exteriors",
+          "category": "Views & Exteriors",
+          "amenities": [
             "Exterior views",
             "Property facade",
             "Scenic views",
-            "Approach",
+            "Approach"
           ],
-          images: [
+          "images": [
             "/Villa_Retreats/Emerald/Spaces/Dinning_Area_View_2.webp",
             "/Villa_Retreats/Emerald/Spaces/Rustic_Glass_House_Villa.webp",
-            "/Villa_Retreats/Emerald/Spaces/Villa.webp",
-          ],
+            "/Villa_Retreats/Emerald/Spaces/Villa.webp"
+          ]
         },
         {
-          id: "outdoors-lawns",
-          title: "Outdoors & Lawns",
-          category: "Outdoors & Lawns",
-          amenities: [
+          "id": "outdoors-lawns",
+          "title": "Outdoors & Lawns",
+          "category": "Outdoors & Lawns",
+          "amenities": [
             "Lawns",
             "Garden zones",
             "Open-air seating",
-            "Activities",
+            "Activities"
           ],
-          images: [
+          "images": [
             "/Villa_Retreats/Emerald/Spaces/Camping_Area.webp",
             "/Villa_Retreats/Emerald/Spaces/Court_Yard.webp",
             "/Villa_Retreats/Emerald/Spaces/Gazebo.webp",
-            "/Villa_Retreats/Emerald/Spaces/Indoor_Garden.webp",
-          ],
+            "/Villa_Retreats/Emerald/Spaces/Indoor_Garden.webp"
+          ]
         },
         {
-          id: "pool-water",
-          title: "Pool & Water",
-          category: "Pool & Water",
-          amenities: ["Pool", "Plunge", "Water features", "Deck"],
-          images: [
+          "id": "pool-water",
+          "title": "Pool & Water",
+          "category": "Pool & Water",
+          "amenities": [
+            "Pool",
+            "Plunge",
+            "Water features",
+            "Deck"
+          ],
+          "images": [
             "/Villa_Retreats/Emerald/Spaces/Pool.webp",
             "/Villa_Retreats/Emerald/Spaces/Pool_With_6ft_Water_Fall.webp",
-            "/Villa_Retreats/Emerald/Spaces/Pool_at_Night.webp",
-          ],
+            "/Villa_Retreats/Emerald/Spaces/Pool_at_Night.webp"
+          ]
         },
         {
-          id: "living-dining",
-          title: "Living & Dining",
-          category: "Living & Dining",
-          amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
-          images: [
+          "id": "living-dining",
+          "title": "Living & Dining",
+          "category": "Living & Dining",
+          "amenities": [
+            "Living spaces",
+            "Dining",
+            "Lounges",
+            "Interiors"
+          ],
+          "images": [
             "/Villa_Retreats/Emerald/Spaces/Dining_Area.webp",
             "/Villa_Retreats/Emerald/Spaces/Living_Area.webp",
-            "/Villa_Retreats/Emerald/Spaces/Lounge_Area.webp",
-          ],
+            "/Villa_Retreats/Emerald/Spaces/Lounge_Area.webp"
+          ]
         },
         {
-          id: "kitchen-bar",
-          title: "Kitchen & Bar",
-          category: "Kitchen & Bar",
-          amenities: ["Kitchen", "Bar counter", "Utilities", "Tableware"],
-          images: [
+          "id": "kitchen-bar",
+          "title": "Kitchen & Bar",
+          "category": "Kitchen & Bar",
+          "amenities": [
+            "Kitchen",
+            "Bar counter",
+            "Utilities",
+            "Tableware"
+          ],
+          "images": [
             "/Villa_Retreats/Emerald/Spaces/Dry_Kitchen.webp",
-            "/Villa_Retreats/Emerald/Spaces/Kitchen&Dining_Area.webp",
-          ],
+            "/Villa_Retreats/Emerald/Spaces/Kitchen&Dining_Area.webp"
+          ]
         },
         {
-          id: "bedrooms",
-          title: "Bedrooms",
-          category: "Bedrooms",
-          amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
-          images: [
+          "id": "bedrooms",
+          "title": "Bedrooms",
+          "category": "Bedrooms",
+          "amenities": [
+            "Beds",
+            "Sleep comfort",
+            "Storage",
+            "AC"
+          ],
+          "images": [
             "/Villa_Retreats/Emerald/Spaces/Bed_Room_1.webp",
-            "/Villa_Retreats/Emerald/Spaces/Bed_Room_2.webp",
-          ],
+            "/Villa_Retreats/Emerald/Spaces/Bed_Room_2.webp"
+          ]
         },
         {
-          id: "other",
-          title: "Other",
-          category: "Other",
-          amenities: ["Spaces", "Details", "Ambience", "Highlights"],
-          images: ["/Villa_Retreats/Emerald/Spaces/Traditional_Artifacts.webp"],
-        },
-      ],
+          "id": "other",
+          "title": "Other",
+          "category": "Other",
+          "amenities": [
+            "Spaces",
+            "Details",
+            "Ambience",
+            "Highlights"
+          ],
+          "images": [
+            "/Villa_Retreats/Emerald/Spaces/Traditional_Artifacts.webp"
+          ]
+        }
+      ]
     },
-    Haven: {
-      hero: ["/Villa_Retreats/Haven/Hero/hero.webp"],
-      spaces: [
+    "Haven": {
+      "hero": [
+        "/Villa_Retreats/Haven/Hero/hero.webp"
+      ],
+      "spaces": [
         "/Villa_Retreats/Haven/Spaces/Bath_Room_With_Jacuzzi.webp",
         "/Villa_Retreats/Haven/Spaces/Bed_Room_1.webp",
         "/Villa_Retreats/Haven/Spaces/Bed_Room_2.webp",
@@ -437,9 +512,9 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Haven/Spaces/Pool_Table.webp",
         "/Villa_Retreats/Haven/Spaces/Suite_Room_Living_Area.webp",
         "/Villa_Retreats/Haven/Spaces/Suite_Room__.webp",
-        "/Villa_Retreats/Haven/Spaces/Villa_Entrance.webp",
+        "/Villa_Retreats/Haven/Spaces/Villa_Entrance.webp"
       ],
-      experiences: [
+      "experiences": [
         "/Villa_Retreats/Haven/Experiences/Floating.webp",
         "/Villa_Retreats/Haven/Experiences/Floating_BreakFast.webp",
         "/Villa_Retreats/Haven/Experiences/Luxury_Dining_exp.webp",
@@ -448,88 +523,128 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Haven/Experiences/Picnic_Set.webp",
         "/Villa_Retreats/Haven/Experiences/Picnic__.webp",
         "/Villa_Retreats/Haven/Experiences/Snooker_Exp...webp",
-        "/Villa_Retreats/Haven/Experiences/experiences_03.webp",
+        "/Villa_Retreats/Haven/Experiences/experiences_03.webp"
       ],
-      perfectFor: [],
-      other: ["/Villa_Retreats/Haven/Perfect_For/Camping_exp...webp"],
-      categorizedSpaces: [
+      "perfectFor": [],
+      "other": [
+        "/Villa_Retreats/Haven/Perfect_For/Camping_exp...webp"
+      ],
+      "categorizedSpaces": [
         {
-          id: "outdoors-lawns",
-          title: "Outdoors & Lawns",
-          category: "Outdoors & Lawns",
-          amenities: [
+          "id": "outdoors-lawns",
+          "title": "Outdoors & Lawns",
+          "category": "Outdoors & Lawns",
+          "amenities": [
             "Lawns",
             "Garden zones",
             "Open-air seating",
-            "Activities",
+            "Activities"
           ],
-          images: ["/Villa_Retreats/Haven/Spaces/Lawn_area.webp"],
+          "images": [
+            "/Villa_Retreats/Haven/Spaces/Lawn_area.webp"
+          ]
         },
         {
-          id: "pool-water",
-          title: "Pool & Water",
-          category: "Pool & Water",
-          amenities: ["Pool", "Plunge", "Water features", "Deck"],
-          images: [
+          "id": "pool-water",
+          "title": "Pool & Water",
+          "category": "Pool & Water",
+          "amenities": [
+            "Pool",
+            "Plunge",
+            "Water features",
+            "Deck"
+          ],
+          "images": [
             "/Villa_Retreats/Haven/Spaces/Pool.webp",
-            "/Villa_Retreats/Haven/Spaces/Pool_Table.webp",
-          ],
+            "/Villa_Retreats/Haven/Spaces/Pool_Table.webp"
+          ]
         },
         {
-          id: "living-dining",
-          title: "Living & Dining",
-          category: "Living & Dining",
-          amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
-          images: [
+          "id": "living-dining",
+          "title": "Living & Dining",
+          "category": "Living & Dining",
+          "amenities": [
+            "Living spaces",
+            "Dining",
+            "Lounges",
+            "Interiors"
+          ],
+          "images": [
             "/Villa_Retreats/Haven/Spaces/Dining_Area.webp",
             "/Villa_Retreats/Haven/Spaces/Family_Room.webp",
             "/Villa_Retreats/Haven/Spaces/Living_area.webp",
             "/Villa_Retreats/Haven/Spaces/Living_area_2.webp",
-            "/Villa_Retreats/Haven/Spaces/Lounge_Area.webp",
-          ],
+            "/Villa_Retreats/Haven/Spaces/Lounge_Area.webp"
+          ]
         },
         {
-          id: "bedrooms",
-          title: "Bedrooms",
-          category: "Bedrooms",
-          amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
-          images: [
+          "id": "bedrooms",
+          "title": "Bedrooms",
+          "category": "Bedrooms",
+          "amenities": [
+            "Beds",
+            "Sleep comfort",
+            "Storage",
+            "AC"
+          ],
+          "images": [
             "/Villa_Retreats/Haven/Spaces/Bed_Room_1.webp",
             "/Villa_Retreats/Haven/Spaces/Bed_Room_2.webp",
             "/Villa_Retreats/Haven/Spaces/Bed_Room_3.webp",
             "/Villa_Retreats/Haven/Spaces/Suite_Room_Living_Area.webp",
-            "/Villa_Retreats/Haven/Spaces/Suite_Room__.webp",
+            "/Villa_Retreats/Haven/Spaces/Suite_Room__.webp"
+          ]
+        },
+        {
+          "id": "bathrooms",
+          "title": "Bathrooms",
+          "category": "Bathrooms",
+          "amenities": [
+            "Baths",
+            "Jacuzzi",
+            "Shower",
+            "Toiletries"
           ],
+          "images": [
+            "/Villa_Retreats/Haven/Spaces/Bath_Room_With_Jacuzzi.webp"
+          ]
         },
         {
-          id: "bathrooms",
-          title: "Bathrooms",
-          category: "Bathrooms",
-          amenities: ["Baths", "Jacuzzi", "Shower", "Toiletries"],
-          images: ["/Villa_Retreats/Haven/Spaces/Bath_Room_With_Jacuzzi.webp"],
+          "id": "entrances-paths",
+          "title": "Entrances & Paths",
+          "category": "Entrances & Paths",
+          "amenities": [
+            "Walkways",
+            "Entrances",
+            "Courtyards",
+            "Landscaping"
+          ],
+          "images": [
+            "/Villa_Retreats/Haven/Spaces/Villa_Entrance.webp"
+          ]
         },
         {
-          id: "entrances-paths",
-          title: "Entrances & Paths",
-          category: "Entrances & Paths",
-          amenities: ["Walkways", "Entrances", "Courtyards", "Landscaping"],
-          images: ["/Villa_Retreats/Haven/Spaces/Villa_Entrance.webp"],
-        },
-        {
-          id: "other",
-          title: "Other",
-          category: "Other",
-          amenities: ["Spaces", "Details", "Ambience", "Highlights"],
-          images: ["/Villa_Retreats/Haven/Spaces/Mico_kartopia.webp"],
-        },
-      ],
+          "id": "other",
+          "title": "Other",
+          "category": "Other",
+          "amenities": [
+            "Spaces",
+            "Details",
+            "Ambience",
+            "Highlights"
+          ],
+          "images": [
+            "/Villa_Retreats/Haven/Spaces/Mico_kartopia.webp"
+          ]
+        }
+      ]
     },
     "Jade 735": {
-      hero: [
-        "/Villa_Retreats/Jade%20735/Hero/hero.webp",
-        "/Villa_Retreats/Jade%20735/Hero/Villa.webp",
+      "hero": [
+        "/Villa_Retreats/Jade 735/Hero/Villa.webp",
+        "/Villa_Retreats/Jade 735/Hero/hero.webp"
       ],
-      spaces: [
+      "spaces": [
         "/Villa_Retreats/Jade 735/Spaces/10ft_waterFall+Pool.webp",
         "/Villa_Retreats/Jade 735/Spaces/Bar_Counter.webp",
         "/Villa_Retreats/Jade 735/Spaces/Bed_Room_1.webp",
@@ -547,9 +662,9 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Jade 735/Spaces/Semi_Swwinging_Bed.webp",
         "/Villa_Retreats/Jade 735/Spaces/Stair_Way_1_.webp",
         "/Villa_Retreats/Jade 735/Spaces/Stairs_Way.webp",
-        "/Villa_Retreats/Jade 735/Spaces/Walking_.webp",
+        "/Villa_Retreats/Jade 735/Spaces/Walking_.webp"
       ],
-      experiences: [
+      "experiences": [
         "/Villa_Retreats/Jade 735/Experiences/Arts_Exp.webp",
         "/Villa_Retreats/Jade 735/Experiences/Celebration_Exp.webp",
         "/Villa_Retreats/Jade 735/Experiences/Celebration_Exp_.webp",
@@ -558,96 +673,127 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Jade 735/Experiences/Night_Dine_Out.webp",
         "/Villa_Retreats/Jade 735/Experiences/Pool_Side_SitOut.webp",
         "/Villa_Retreats/Jade 735/Experiences/Semi_Open_Dining_exp.webp",
-        "/Villa_Retreats/Jade 735/Experiences/Swinging_exp.webp",
+        "/Villa_Retreats/Jade 735/Experiences/Swinging_exp.webp"
       ],
-      perfectFor: [],
-      other: [],
-      categorizedSpaces: [
+      "perfectFor": [],
+      "other": [],
+      "categorizedSpaces": [
         {
-          id: "views-exteriors",
-          title: "Views & Exteriors",
-          category: "Views & Exteriors",
-          amenities: [
+          "id": "views-exteriors",
+          "title": "Views & Exteriors",
+          "category": "Views & Exteriors",
+          "amenities": [
             "Exterior views",
             "Property facade",
             "Scenic views",
-            "Approach",
+            "Approach"
           ],
-          images: ["/Villa_Retreats/Jade 735/Spaces/First_Floor_view.webp"],
+          "images": [
+            "/Villa_Retreats/Jade 735/Spaces/First_Floor_view.webp"
+          ]
         },
         {
-          id: "outdoors-lawns",
-          title: "Outdoors & Lawns",
-          category: "Outdoors & Lawns",
-          amenities: [
+          "id": "outdoors-lawns",
+          "title": "Outdoors & Lawns",
+          "category": "Outdoors & Lawns",
+          "amenities": [
             "Lawns",
             "Garden zones",
             "Open-air seating",
-            "Activities",
+            "Activities"
           ],
-          images: ["/Villa_Retreats/Jade 735/Spaces/Semi_Open_SitOut.webp"],
+          "images": [
+            "/Villa_Retreats/Jade 735/Spaces/Semi_Open_SitOut.webp"
+          ]
         },
         {
-          id: "pool-water",
-          title: "Pool & Water",
-          category: "Pool & Water",
-          amenities: ["Pool", "Plunge", "Water features", "Deck"],
-          images: [
+          "id": "pool-water",
+          "title": "Pool & Water",
+          "category": "Pool & Water",
+          "amenities": [
+            "Pool",
+            "Plunge",
+            "Water features",
+            "Deck"
+          ],
+          "images": [
             "/Villa_Retreats/Jade 735/Spaces/10ft_waterFall+Pool.webp",
             "/Villa_Retreats/Jade 735/Spaces/Pool_day_View.webp",
-            "/Villa_Retreats/Jade 735/Spaces/Pool_side_Gazibo.webp",
-          ],
+            "/Villa_Retreats/Jade 735/Spaces/Pool_side_Gazibo.webp"
+          ]
         },
         {
-          id: "living-dining",
-          title: "Living & Dining",
-          category: "Living & Dining",
-          amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
-          images: [
+          "id": "living-dining",
+          "title": "Living & Dining",
+          "category": "Living & Dining",
+          "amenities": [
+            "Living spaces",
+            "Dining",
+            "Lounges",
+            "Interiors"
+          ],
+          "images": [
             "/Villa_Retreats/Jade 735/Spaces/Dining_Area.webp",
-            "/Villa_Retreats/Jade 735/Spaces/Living_room_.webp",
-          ],
+            "/Villa_Retreats/Jade 735/Spaces/Living_room_.webp"
+          ]
         },
         {
-          id: "kitchen-bar",
-          title: "Kitchen & Bar",
-          category: "Kitchen & Bar",
-          amenities: ["Kitchen", "Bar counter", "Utilities", "Tableware"],
-          images: [
+          "id": "kitchen-bar",
+          "title": "Kitchen & Bar",
+          "category": "Kitchen & Bar",
+          "amenities": [
+            "Kitchen",
+            "Bar counter",
+            "Utilities",
+            "Tableware"
+          ],
+          "images": [
             "/Villa_Retreats/Jade 735/Spaces/Bar_Counter.webp",
             "/Villa_Retreats/Jade 735/Spaces/Dining&Kitchen_Area.webp",
-            "/Villa_Retreats/Jade 735/Spaces/Pool_Side_Bar_Area.webp",
-          ],
+            "/Villa_Retreats/Jade 735/Spaces/Pool_Side_Bar_Area.webp"
+          ]
         },
         {
-          id: "bedrooms",
-          title: "Bedrooms",
-          category: "Bedrooms",
-          amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
-          images: [
+          "id": "bedrooms",
+          "title": "Bedrooms",
+          "category": "Bedrooms",
+          "amenities": [
+            "Beds",
+            "Sleep comfort",
+            "Storage",
+            "AC"
+          ],
+          "images": [
             "/Villa_Retreats/Jade 735/Spaces/Bed_Room_1.webp",
             "/Villa_Retreats/Jade 735/Spaces/Bed_Room_2.webp",
             "/Villa_Retreats/Jade 735/Spaces/Bed_Room_3.webp",
             "/Villa_Retreats/Jade 735/Spaces/Master_Bed_Room.webp",
-            "/Villa_Retreats/Jade 735/Spaces/Semi_Swwinging_Bed.webp",
-          ],
+            "/Villa_Retreats/Jade 735/Spaces/Semi_Swwinging_Bed.webp"
+          ]
         },
         {
-          id: "entrances-paths",
-          title: "Entrances & Paths",
-          category: "Entrances & Paths",
-          amenities: ["Walkways", "Entrances", "Courtyards", "Landscaping"],
-          images: [
+          "id": "entrances-paths",
+          "title": "Entrances & Paths",
+          "category": "Entrances & Paths",
+          "amenities": [
+            "Walkways",
+            "Entrances",
+            "Courtyards",
+            "Landscaping"
+          ],
+          "images": [
             "/Villa_Retreats/Jade 735/Spaces/Stair_Way_1_.webp",
             "/Villa_Retreats/Jade 735/Spaces/Stairs_Way.webp",
-            "/Villa_Retreats/Jade 735/Spaces/Walking_.webp",
-          ],
-        },
-      ],
+            "/Villa_Retreats/Jade 735/Spaces/Walking_.webp"
+          ]
+        }
+      ]
     },
     "Lounge Fly": {
-      hero: ["/Villa_Retreats/Lounge Fly/1-Hero/2.webp"],
-      spaces: [
+      "hero": [
+        "/Villa_Retreats/Lounge Fly/1-Hero/2.webp"
+      ],
+      "spaces": [
         "/Villa_Retreats/Lounge Fly/2-Spaces/4.webp",
         "/Villa_Retreats/Lounge Fly/2-Spaces/Bar Coubnter.webp",
         "/Villa_Retreats/Lounge Fly/2-Spaces/Bar Counter(1).webp",
@@ -662,94 +808,130 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Lounge Fly/2-Spaces/Sofa Loungers.webp",
         "/Villa_Retreats/Lounge Fly/2-Spaces/garden view.webp",
         "/Villa_Retreats/Lounge Fly/2-Spaces/living area day.webp",
-        "/Villa_Retreats/Lounge Fly/2-Spaces/luxury decor.webp",
+        "/Villa_Retreats/Lounge Fly/2-Spaces/luxury decor.webp"
       ],
-      experiences: [],
-      perfectFor: [],
-      other: [],
-      categorizedSpaces: [
+      "experiences": [],
+      "perfectFor": [],
+      "other": [],
+      "categorizedSpaces": [
         {
-          id: "outdoors-lawns",
-          title: "Outdoors & Lawns",
-          category: "Outdoors & Lawns",
-          amenities: [
+          "id": "outdoors-lawns",
+          "title": "Outdoors & Lawns",
+          "category": "Outdoors & Lawns",
+          "amenities": [
             "Lawns",
             "Garden zones",
             "Open-air seating",
-            "Activities",
+            "Activities"
           ],
-          images: ["/Villa_Retreats/Lounge Fly/2-Spaces/garden view.webp"],
+          "images": [
+            "/Villa_Retreats/Lounge Fly/2-Spaces/garden view.webp"
+          ]
         },
         {
-          id: "pool-water",
-          title: "Pool & Water",
-          category: "Pool & Water",
-          amenities: ["Pool", "Plunge", "Water features", "Deck"],
-          images: ["/Villa_Retreats/Lounge Fly/2-Spaces/Pool Villa.webp"],
+          "id": "pool-water",
+          "title": "Pool & Water",
+          "category": "Pool & Water",
+          "amenities": [
+            "Pool",
+            "Plunge",
+            "Water features",
+            "Deck"
+          ],
+          "images": [
+            "/Villa_Retreats/Lounge Fly/2-Spaces/Pool Villa.webp"
+          ]
         },
         {
-          id: "living-dining",
-          title: "Living & Dining",
-          category: "Living & Dining",
-          amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
-          images: [
+          "id": "living-dining",
+          "title": "Living & Dining",
+          "category": "Living & Dining",
+          "amenities": [
+            "Living spaces",
+            "Dining",
+            "Lounges",
+            "Interiors"
+          ],
+          "images": [
             "/Villa_Retreats/Lounge Fly/2-Spaces/Sofa Loungers.webp",
-            "/Villa_Retreats/Lounge Fly/2-Spaces/living area day.webp",
-          ],
+            "/Villa_Retreats/Lounge Fly/2-Spaces/living area day.webp"
+          ]
         },
         {
-          id: "kitchen-bar",
-          title: "Kitchen & Bar",
-          category: "Kitchen & Bar",
-          amenities: ["Kitchen", "Bar counter", "Utilities", "Tableware"],
-          images: [
+          "id": "kitchen-bar",
+          "title": "Kitchen & Bar",
+          "category": "Kitchen & Bar",
+          "amenities": [
+            "Kitchen",
+            "Bar counter",
+            "Utilities",
+            "Tableware"
+          ],
+          "images": [
             "/Villa_Retreats/Lounge Fly/2-Spaces/Bar Coubnter.webp",
             "/Villa_Retreats/Lounge Fly/2-Spaces/Bar Counter(1).webp",
-            "/Villa_Retreats/Lounge Fly/2-Spaces/Bar Counter.webp",
-          ],
+            "/Villa_Retreats/Lounge Fly/2-Spaces/Bar Counter.webp"
+          ]
         },
         {
-          id: "bedrooms",
-          title: "Bedrooms",
-          category: "Bedrooms",
-          amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
-          images: [
+          "id": "bedrooms",
+          "title": "Bedrooms",
+          "category": "Bedrooms",
+          "amenities": [
+            "Beds",
+            "Sleep comfort",
+            "Storage",
+            "AC"
+          ],
+          "images": [
             "/Villa_Retreats/Lounge Fly/2-Spaces/Bedroom Lounger.webp",
             "/Villa_Retreats/Lounge Fly/2-Spaces/Bedroom day.webp",
             "/Villa_Retreats/Lounge Fly/2-Spaces/Bedroom night.webp",
-            "/Villa_Retreats/Lounge Fly/2-Spaces/Bedroom view.webp",
+            "/Villa_Retreats/Lounge Fly/2-Spaces/Bedroom view.webp"
+          ]
+        },
+        {
+          "id": "bathrooms",
+          "title": "Bathrooms",
+          "category": "Bathrooms",
+          "amenities": [
+            "Baths",
+            "Jacuzzi",
+            "Shower",
+            "Toiletries"
           ],
+          "images": [
+            "/Villa_Retreats/Lounge Fly/2-Spaces/Bathroom.webp"
+          ]
         },
         {
-          id: "bathrooms",
-          title: "Bathrooms",
-          category: "Bathrooms",
-          amenities: ["Baths", "Jacuzzi", "Shower", "Toiletries"],
-          images: ["/Villa_Retreats/Lounge Fly/2-Spaces/Bathroom.webp"],
-        },
-        {
-          id: "other",
-          title: "Other",
-          category: "Other",
-          amenities: ["Spaces", "Details", "Ambience", "Highlights"],
-          images: [
+          "id": "other",
+          "title": "Other",
+          "category": "Other",
+          "amenities": [
+            "Spaces",
+            "Details",
+            "Ambience",
+            "Highlights"
+          ],
+          "images": [
             "/Villa_Retreats/Lounge Fly/2-Spaces/4.webp",
             "/Villa_Retreats/Lounge Fly/2-Spaces/IMG_4789.webp",
-            "/Villa_Retreats/Lounge Fly/2-Spaces/luxury decor.webp",
-          ],
-        },
-      ],
+            "/Villa_Retreats/Lounge Fly/2-Spaces/luxury decor.webp"
+          ]
+        }
+      ]
     },
-    Magnolia: {
-      hero: [
+    "Magnolia": {
+      "hero": [
         "/Villa_Retreats/Magnolia/Hero/Villa_Night_View.webp",
         "/Villa_Retreats/Magnolia/Hero/hero.webp",
         "/Villa_Retreats/Magnolia/Hero/spaces_18.webp",
         "/Villa_Retreats/Magnolia/Hero/spaces_33.webp",
         "/Villa_Retreats/Magnolia/Hero/spaces_34.webp",
-        "/Villa_Retreats/Magnolia/Hero/spaces_36.webp",
+        "/Villa_Retreats/Magnolia/Hero/spaces_36.webp"
       ],
-      spaces: [
+      "spaces": [
         "/Villa_Retreats/Magnolia/Spaces/60inch TV.webp",
         "/Villa_Retreats/Magnolia/Spaces/Bar_Lounge.webp",
         "/Villa_Retreats/Magnolia/Spaces/Basket_Ball_Court.webp",
@@ -770,9 +952,9 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Magnolia/Spaces/Pool_Side_SitOut_1.webp",
         "/Villa_Retreats/Magnolia/Spaces/Pool_Side_SitOut_2.webp",
         "/Villa_Retreats/Magnolia/Spaces/Private_Home_Theatre.webp",
-        "/Villa_Retreats/Magnolia/Spaces/Villa.webp",
+        "/Villa_Retreats/Magnolia/Spaces/Villa.webp"
       ],
-      experiences: [
+      "experiences": [
         "/Villa_Retreats/Magnolia/Experiences/BornFire.webp",
         "/Villa_Retreats/Magnolia/Experiences/Candle_Lit---.webp",
         "/Villa_Retreats/Magnolia/Experiences/Candle_Lit_Dining_Exp.webp",
@@ -804,53 +986,67 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Magnolia/Experiences/experiences_13.webp",
         "/Villa_Retreats/Magnolia/Experiences/experiences_14.webp",
         "/Villa_Retreats/Magnolia/Experiences/experiences_15.webp",
-        "/Villa_Retreats/Magnolia/Experiences/experiences_16.webp",
+        "/Villa_Retreats/Magnolia/Experiences/experiences_16.webp"
       ],
-      perfectFor: [],
-      other: [],
-      categorizedSpaces: [
+      "perfectFor": [],
+      "other": [],
+      "categorizedSpaces": [
         {
-          id: "views-exteriors",
-          title: "Views & Exteriors",
-          category: "Views & Exteriors",
-          amenities: [
+          "id": "views-exteriors",
+          "title": "Views & Exteriors",
+          "category": "Views & Exteriors",
+          "amenities": [
             "Exterior views",
             "Property facade",
             "Scenic views",
-            "Approach",
+            "Approach"
           ],
-          images: ["/Villa_Retreats/Magnolia/Spaces/Villa.webp"],
+          "images": [
+            "/Villa_Retreats/Magnolia/Spaces/Villa.webp"
+          ]
         },
         {
-          id: "outdoors-lawns",
-          title: "Outdoors & Lawns",
-          category: "Outdoors & Lawns",
-          amenities: [
+          "id": "outdoors-lawns",
+          "title": "Outdoors & Lawns",
+          "category": "Outdoors & Lawns",
+          "amenities": [
             "Lawns",
             "Garden zones",
             "Open-air seating",
-            "Activities",
+            "Activities"
           ],
-          images: ["/Villa_Retreats/Magnolia/Spaces/Lawn_Area.webp"],
+          "images": [
+            "/Villa_Retreats/Magnolia/Spaces/Lawn_Area.webp"
+          ]
         },
         {
-          id: "pool-water",
-          title: "Pool & Water",
-          category: "Pool & Water",
-          amenities: ["Pool", "Plunge", "Water features", "Deck"],
-          images: [
+          "id": "pool-water",
+          "title": "Pool & Water",
+          "category": "Pool & Water",
+          "amenities": [
+            "Pool",
+            "Plunge",
+            "Water features",
+            "Deck"
+          ],
+          "images": [
             "/Villa_Retreats/Magnolia/Spaces/Pool.webp",
             "/Villa_Retreats/Magnolia/Spaces/Pool_.webp",
             "/Villa_Retreats/Magnolia/Spaces/Pool_Side_SitOut_1.webp",
-            "/Villa_Retreats/Magnolia/Spaces/Pool_Side_SitOut_2.webp",
-          ],
+            "/Villa_Retreats/Magnolia/Spaces/Pool_Side_SitOut_2.webp"
+          ]
         },
         {
-          id: "living-dining",
-          title: "Living & Dining",
-          category: "Living & Dining",
-          amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
-          images: [
+          "id": "living-dining",
+          "title": "Living & Dining",
+          "category": "Living & Dining",
+          "amenities": [
+            "Living spaces",
+            "Dining",
+            "Lounges",
+            "Interiors"
+          ],
+          "images": [
             "/Villa_Retreats/Magnolia/Spaces/60inch TV.webp",
             "/Villa_Retreats/Magnolia/Spaces/Dining.webp",
             "/Villa_Retreats/Magnolia/Spaces/Dining_Area.webp",
@@ -859,41 +1055,58 @@ export const MEDIA_MANIFEST = {
             "/Villa_Retreats/Magnolia/Spaces/Living_area_.webp",
             "/Villa_Retreats/Magnolia/Spaces/Lounge_Area.webp",
             "/Villa_Retreats/Magnolia/Spaces/Lounger_Sofa.webp",
-            "/Villa_Retreats/Magnolia/Spaces/Private_Home_Theatre.webp",
-          ],
+            "/Villa_Retreats/Magnolia/Spaces/Private_Home_Theatre.webp"
+          ]
         },
         {
-          id: "kitchen-bar",
-          title: "Kitchen & Bar",
-          category: "Kitchen & Bar",
-          amenities: ["Kitchen", "Bar counter", "Utilities", "Tableware"],
-          images: [
+          "id": "kitchen-bar",
+          "title": "Kitchen & Bar",
+          "category": "Kitchen & Bar",
+          "amenities": [
+            "Kitchen",
+            "Bar counter",
+            "Utilities",
+            "Tableware"
+          ],
+          "images": [
             "/Villa_Retreats/Magnolia/Spaces/Bar_Lounge.webp",
-            "/Villa_Retreats/Magnolia/Spaces/Dry_Kitchen.webp",
-          ],
+            "/Villa_Retreats/Magnolia/Spaces/Dry_Kitchen.webp"
+          ]
         },
         {
-          id: "bedrooms",
-          title: "Bedrooms",
-          category: "Bedrooms",
-          amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
-          images: [
+          "id": "bedrooms",
+          "title": "Bedrooms",
+          "category": "Bedrooms",
+          "amenities": [
+            "Beds",
+            "Sleep comfort",
+            "Storage",
+            "AC"
+          ],
+          "images": [
             "/Villa_Retreats/Magnolia/Spaces/Bed_Room_1.webp",
             "/Villa_Retreats/Magnolia/Spaces/Bed_Room_2.webp",
-            "/Villa_Retreats/Magnolia/Spaces/Bed_Room_3.webp",
-          ],
+            "/Villa_Retreats/Magnolia/Spaces/Bed_Room_3.webp"
+          ]
         },
         {
-          id: "other",
-          title: "Other",
-          category: "Other",
-          amenities: ["Spaces", "Details", "Ambience", "Highlights"],
-          images: ["/Villa_Retreats/Magnolia/Spaces/Basket_Ball_Court.webp"],
-        },
-      ],
+          "id": "other",
+          "title": "Other",
+          "category": "Other",
+          "amenities": [
+            "Spaces",
+            "Details",
+            "Ambience",
+            "Highlights"
+          ],
+          "images": [
+            "/Villa_Retreats/Magnolia/Spaces/Basket_Ball_Court.webp"
+          ]
+        }
+      ]
     },
-    Palatio: {
-      hero: [
+    "Palatio": {
+      "hero": [
         "/Villa_Retreats/Palatio/1-Hero/DJI_0162.webp",
         "/Villa_Retreats/Palatio/1-Hero/DJI_0172.webp",
         "/Villa_Retreats/Palatio/1-Hero/DJI_0191 long.webp",
@@ -901,9 +1114,9 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Palatio/1-Hero/DSC06031.webp",
         "/Villa_Retreats/Palatio/1-Hero/DSC06213.webp",
         "/Villa_Retreats/Palatio/1-Hero/DSC0621555.webp",
-        "/Villa_Retreats/Palatio/1-Hero/HERO 2.webp",
+        "/Villa_Retreats/Palatio/1-Hero/HERO 2.webp"
       ],
-      spaces: [
+      "spaces": [
         "/Villa_Retreats/Palatio/2-Spaces/Back_Yard.webp",
         "/Villa_Retreats/Palatio/2-Spaces/Back_yard__.webp",
         "/Villa_Retreats/Palatio/2-Spaces/Bed_Room_1.webp",
@@ -925,9 +1138,9 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Palatio/2-Spaces/Villa.webp",
         "/Villa_Retreats/Palatio/2-Spaces/Villa_Entrance.webp",
         "/Villa_Retreats/Palatio/2-Spaces/Walk_on_The_Water.webp",
-        "/Villa_Retreats/Palatio/2-Spaces/Walk_on_the.webp",
+        "/Villa_Retreats/Palatio/2-Spaces/Walk_on_the.webp"
       ],
-      experiences: [
+      "experiences": [
         "/Villa_Retreats/Palatio/3-Experiences/Camping_.webp",
         "/Villa_Retreats/Palatio/3-Experiences/Celebration_Exp.webp",
         "/Villa_Retreats/Palatio/3-Experiences/IMG_5560.webp",
@@ -936,102 +1149,131 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Palatio/3-Experiences/Sky_Lit_inner_exp...webp",
         "/Villa_Retreats/Palatio/3-Experiences/Sky_Lit_inner_exp_.webp",
         "/Villa_Retreats/Palatio/3-Experiences/Swinging_Exp_.webp",
-        "/Villa_Retreats/Palatio/3-Experiences/Swinging_exp.webp",
+        "/Villa_Retreats/Palatio/3-Experiences/Swinging_exp.webp"
       ],
-      perfectFor: [],
-      other: [],
-      categorizedSpaces: [
+      "perfectFor": [],
+      "other": [],
+      "categorizedSpaces": [
         {
-          id: "views-exteriors",
-          title: "Views & Exteriors",
-          category: "Views & Exteriors",
-          amenities: [
+          "id": "views-exteriors",
+          "title": "Views & Exteriors",
+          "category": "Views & Exteriors",
+          "amenities": [
             "Exterior views",
             "Property facade",
             "Scenic views",
-            "Approach",
+            "Approach"
           ],
-          images: ["/Villa_Retreats/Palatio/2-Spaces/Villa.webp"],
+          "images": [
+            "/Villa_Retreats/Palatio/2-Spaces/Villa.webp"
+          ]
         },
         {
-          id: "outdoors-lawns",
-          title: "Outdoors & Lawns",
-          category: "Outdoors & Lawns",
-          amenities: [
+          "id": "outdoors-lawns",
+          "title": "Outdoors & Lawns",
+          "category": "Outdoors & Lawns",
+          "amenities": [
             "Lawns",
             "Garden zones",
             "Open-air seating",
-            "Activities",
+            "Activities"
           ],
-          images: [
+          "images": [
             "/Villa_Retreats/Palatio/2-Spaces/Back_Yard.webp",
             "/Villa_Retreats/Palatio/2-Spaces/Back_yard__.webp",
             "/Villa_Retreats/Palatio/2-Spaces/Out_Door_sitout.webp",
             "/Villa_Retreats/Palatio/2-Spaces/Sky_lit_Inner_Court_Yard.webp",
-            "/Villa_Retreats/Palatio/2-Spaces/Sky_lit_Inner_Court_Yard_.webp",
-          ],
+            "/Villa_Retreats/Palatio/2-Spaces/Sky_lit_Inner_Court_Yard_.webp"
+          ]
         },
         {
-          id: "pool-water",
-          title: "Pool & Water",
-          category: "Pool & Water",
-          amenities: ["Pool", "Plunge", "Water features", "Deck"],
-          images: [
+          "id": "pool-water",
+          "title": "Pool & Water",
+          "category": "Pool & Water",
+          "amenities": [
+            "Pool",
+            "Plunge",
+            "Water features",
+            "Deck"
+          ],
+          "images": [
             "/Villa_Retreats/Palatio/2-Spaces/Pool_SitOut.webp",
             "/Villa_Retreats/Palatio/2-Spaces/Pool_SitOut_1.webp",
             "/Villa_Retreats/Palatio/2-Spaces/Private_Pool.webp",
-            "/Villa_Retreats/Palatio/2-Spaces/Walk_on_The_Water.webp",
-          ],
+            "/Villa_Retreats/Palatio/2-Spaces/Walk_on_The_Water.webp"
+          ]
         },
         {
-          id: "living-dining",
-          title: "Living & Dining",
-          category: "Living & Dining",
-          amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
-          images: [
+          "id": "living-dining",
+          "title": "Living & Dining",
+          "category": "Living & Dining",
+          "amenities": [
+            "Living spaces",
+            "Dining",
+            "Lounges",
+            "Interiors"
+          ],
+          "images": [
             "/Villa_Retreats/Palatio/2-Spaces/Dining_Area.webp",
             "/Villa_Retreats/Palatio/2-Spaces/Living_Area.webp",
             "/Villa_Retreats/Palatio/2-Spaces/Living_Day.webp",
             "/Villa_Retreats/Palatio/2-Spaces/Living__.webp",
             "/Villa_Retreats/Palatio/2-Spaces/Living___.webp",
-            "/Villa_Retreats/Palatio/2-Spaces/Lounge_Area.webp",
-          ],
+            "/Villa_Retreats/Palatio/2-Spaces/Lounge_Area.webp"
+          ]
         },
         {
-          id: "bedrooms",
-          title: "Bedrooms",
-          category: "Bedrooms",
-          amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
-          images: [
+          "id": "bedrooms",
+          "title": "Bedrooms",
+          "category": "Bedrooms",
+          "amenities": [
+            "Beds",
+            "Sleep comfort",
+            "Storage",
+            "AC"
+          ],
+          "images": [
             "/Villa_Retreats/Palatio/2-Spaces/Bed_Room_1.webp",
-            "/Villa_Retreats/Palatio/2-Spaces/Bed_Room_2.webp",
-          ],
+            "/Villa_Retreats/Palatio/2-Spaces/Bed_Room_2.webp"
+          ]
         },
         {
-          id: "entrances-paths",
-          title: "Entrances & Paths",
-          category: "Entrances & Paths",
-          amenities: ["Walkways", "Entrances", "Courtyards", "Landscaping"],
-          images: [
+          "id": "entrances-paths",
+          "title": "Entrances & Paths",
+          "category": "Entrances & Paths",
+          "amenities": [
+            "Walkways",
+            "Entrances",
+            "Courtyards",
+            "Landscaping"
+          ],
+          "images": [
             "/Villa_Retreats/Palatio/2-Spaces/Villa_Entrance.webp",
-            "/Villa_Retreats/Palatio/2-Spaces/Walk_on_the.webp",
-          ],
+            "/Villa_Retreats/Palatio/2-Spaces/Walk_on_the.webp"
+          ]
         },
         {
-          id: "other",
-          title: "Other",
-          category: "Other",
-          amenities: ["Spaces", "Details", "Ambience", "Highlights"],
-          images: [
-            "/Villa_Retreats/Palatio/2-Spaces/Swing--.webp",
-            "/Villa_Retreats/Palatio/2-Spaces/Swing.webp",
+          "id": "other",
+          "title": "Other",
+          "category": "Other",
+          "amenities": [
+            "Spaces",
+            "Details",
+            "Ambience",
+            "Highlights"
           ],
-        },
-      ],
+          "images": [
+            "/Villa_Retreats/Palatio/2-Spaces/Swing--.webp",
+            "/Villa_Retreats/Palatio/2-Spaces/Swing.webp"
+          ]
+        }
+      ]
     },
     "Retreat on the ridge": {
-      hero: ["/Villa_Retreats/Retreat on the ridge/1-Hero/3-2.webp"],
-      spaces: [
+      "hero": [
+        "/Villa_Retreats/Retreat on the ridge/1-Hero/3-2.webp"
+      ],
+      "spaces": [
         "/Villa_Retreats/Retreat on the ridge/2-Spaces/Bedroom 1.webp",
         "/Villa_Retreats/Retreat on the ridge/2-Spaces/Bedroom 3.webp",
         "/Villa_Retreats/Retreat on the ridge/2-Spaces/Bedroom 4.webp",
@@ -1047,89 +1289,108 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Retreat on the ridge/2-Spaces/Poolside Sitout 2.webp",
         "/Villa_Retreats/Retreat on the ridge/2-Spaces/Poolside sit out 1.webp",
         "/Villa_Retreats/Retreat on the ridge/2-Spaces/Private Pool.webp",
-        "/Villa_Retreats/Retreat on the ridge/2-Spaces/Villa.webp",
+        "/Villa_Retreats/Retreat on the ridge/2-Spaces/Villa.webp"
       ],
-      experiences: [
+      "experiences": [
         "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Camp_Party_Exp.webp",
         "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Camp_exp.webp",
         "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Floating_exp...webp",
         "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Picnic-Exp.webp",
-        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Picnic_exp_.webp",
+        "/Villa_Retreats/Retreat on the ridge/3-Experiences_/Picnic_exp_.webp"
       ],
-      perfectFor: [
-        "/Villa_Retreats/Retreat on the ridge/4-Perfect for/16.webp",
+      "perfectFor": [
+        "/Villa_Retreats/Retreat on the ridge/4-Perfect for/16.webp"
       ],
-      other: [],
-      categorizedSpaces: [
+      "other": [],
+      "categorizedSpaces": [
         {
-          id: "views-exteriors",
-          title: "Views & Exteriors",
-          category: "Views & Exteriors",
-          amenities: [
+          "id": "views-exteriors",
+          "title": "Views & Exteriors",
+          "category": "Views & Exteriors",
+          "amenities": [
             "Exterior views",
             "Property facade",
             "Scenic views",
-            "Approach",
+            "Approach"
           ],
-          images: [
+          "images": [
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Hill View.webp",
-            "/Villa_Retreats/Retreat on the ridge/2-Spaces/Villa.webp",
-          ],
+            "/Villa_Retreats/Retreat on the ridge/2-Spaces/Villa.webp"
+          ]
         },
         {
-          id: "outdoors-lawns",
-          title: "Outdoors & Lawns",
-          category: "Outdoors & Lawns",
-          amenities: [
+          "id": "outdoors-lawns",
+          "title": "Outdoors & Lawns",
+          "category": "Outdoors & Lawns",
+          "amenities": [
             "Lawns",
             "Garden zones",
             "Open-air seating",
-            "Activities",
+            "Activities"
           ],
-          images: ["/Villa_Retreats/Retreat on the ridge/2-Spaces/Gazebo.webp"],
+          "images": [
+            "/Villa_Retreats/Retreat on the ridge/2-Spaces/Gazebo.webp"
+          ]
         },
         {
-          id: "pool-water",
-          title: "Pool & Water",
-          category: "Pool & Water",
-          amenities: ["Pool", "Plunge", "Water features", "Deck"],
-          images: [
+          "id": "pool-water",
+          "title": "Pool & Water",
+          "category": "Pool & Water",
+          "amenities": [
+            "Pool",
+            "Plunge",
+            "Water features",
+            "Deck"
+          ],
+          "images": [
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Pool Area - Day.webp",
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Pool Area - Night.webp",
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Poolside Lawn.webp",
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Poolside Sitout 2.webp",
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Poolside sit out 1.webp",
-            "/Villa_Retreats/Retreat on the ridge/2-Spaces/Private Pool.webp",
-          ],
+            "/Villa_Retreats/Retreat on the ridge/2-Spaces/Private Pool.webp"
+          ]
         },
         {
-          id: "living-dining",
-          title: "Living & Dining",
-          category: "Living & Dining",
-          amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
-          images: [
+          "id": "living-dining",
+          "title": "Living & Dining",
+          "category": "Living & Dining",
+          "amenities": [
+            "Living spaces",
+            "Dining",
+            "Lounges",
+            "Interiors"
+          ],
+          "images": [
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Dining Area.webp",
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Living & Dining Area.webp",
-            "/Villa_Retreats/Retreat on the ridge/2-Spaces/Living Area.webp",
-          ],
+            "/Villa_Retreats/Retreat on the ridge/2-Spaces/Living Area.webp"
+          ]
         },
         {
-          id: "bedrooms",
-          title: "Bedrooms",
-          category: "Bedrooms",
-          amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
-          images: [
+          "id": "bedrooms",
+          "title": "Bedrooms",
+          "category": "Bedrooms",
+          "amenities": [
+            "Beds",
+            "Sleep comfort",
+            "Storage",
+            "AC"
+          ],
+          "images": [
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Bedroom 1.webp",
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Bedroom 3.webp",
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Bedroom 4.webp",
-            "/Villa_Retreats/Retreat on the ridge/2-Spaces/Bedroom2.webp",
-          ],
-        },
-      ],
+            "/Villa_Retreats/Retreat on the ridge/2-Spaces/Bedroom2.webp"
+          ]
+        }
+      ]
     },
-    Royalty: {
-      hero: ["/Villa_Retreats/Royalty/1-Hero/1.webp"],
-      spaces: [
+    "Royalty": {
+      "hero": [
+        "/Villa_Retreats/Royalty/1-Hero/1.webp"
+      ],
+      "spaces": [
         "/Villa_Retreats/Royalty/2-Spaces/7 foot waterfall pool.webp",
         "/Villa_Retreats/Royalty/2-Spaces/Bedroom 1.webp",
         "/Villa_Retreats/Royalty/2-Spaces/Bedroom 2.webp",
@@ -1152,94 +1413,132 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Royalty/2-Spaces/hero.webp",
         "/Villa_Retreats/Royalty/2-Spaces/hero2.webp",
         "/Villa_Retreats/Royalty/2-Spaces/horse riding arena.webp",
-        "/Villa_Retreats/Royalty/2-Spaces/living room.webp",
+        "/Villa_Retreats/Royalty/2-Spaces/living room.webp"
       ],
-      experiences: [
+      "experiences": [
         "/Villa_Retreats/Royalty/3-Experiences/Animal_Interaction_exp.webp",
         "/Villa_Retreats/Royalty/3-Experiences/Luxury_Dining_Exp.webp",
         "/Villa_Retreats/Royalty/3-Experiences/Open_DinOut_Exp.webp",
-        "/Villa_Retreats/Royalty/3-Experiences/Pool_exp.webp",
+        "/Villa_Retreats/Royalty/3-Experiences/Pool_exp.webp"
       ],
-      perfectFor: [],
-      other: [],
-      categorizedSpaces: [
+      "perfectFor": [],
+      "other": [],
+      "categorizedSpaces": [
         {
-          id: "views-exteriors",
-          title: "Views & Exteriors",
-          category: "Views & Exteriors",
-          amenities: [
+          "id": "views-exteriors",
+          "title": "Views & Exteriors",
+          "category": "Views & Exteriors",
+          "amenities": [
             "Exterior views",
             "Property facade",
             "Scenic views",
-            "Approach",
+            "Approach"
           ],
-          images: ["/Villa_Retreats/Royalty/2-Spaces/Hill View.webp"],
+          "images": [
+            "/Villa_Retreats/Royalty/2-Spaces/Hill View.webp"
+          ]
         },
         {
-          id: "outdoors-lawns",
-          title: "Outdoors & Lawns",
-          category: "Outdoors & Lawns",
-          amenities: [
+          "id": "outdoors-lawns",
+          "title": "Outdoors & Lawns",
+          "category": "Outdoors & Lawns",
+          "amenities": [
             "Lawns",
             "Garden zones",
             "Open-air seating",
-            "Activities",
+            "Activities"
           ],
-          images: ["/Villa_Retreats/Royalty/2-Spaces/Outdoor sit out.webp"],
+          "images": [
+            "/Villa_Retreats/Royalty/2-Spaces/Outdoor sit out.webp"
+          ]
         },
         {
-          id: "pool-water",
-          title: "Pool & Water",
-          category: "Pool & Water",
-          amenities: ["Pool", "Plunge", "Water features", "Deck"],
-          images: [
-            "/Villa_Retreats/Royalty/2-Spaces/7 foot waterfall pool.webp",
+          "id": "pool-water",
+          "title": "Pool & Water",
+          "category": "Pool & Water",
+          "amenities": [
+            "Pool",
+            "Plunge",
+            "Water features",
+            "Deck"
           ],
+          "images": [
+            "/Villa_Retreats/Royalty/2-Spaces/7 foot waterfall pool.webp"
+          ]
         },
         {
-          id: "living-dining",
-          title: "Living & Dining",
-          category: "Living & Dining",
-          amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
-          images: [
+          "id": "living-dining",
+          "title": "Living & Dining",
+          "category": "Living & Dining",
+          "amenities": [
+            "Living spaces",
+            "Dining",
+            "Lounges",
+            "Interiors"
+          ],
+          "images": [
             "/Villa_Retreats/Royalty/2-Spaces/Dining area.webp",
             "/Villa_Retreats/Royalty/2-Spaces/Lounge Area.webp",
-            "/Villa_Retreats/Royalty/2-Spaces/living room.webp",
+            "/Villa_Retreats/Royalty/2-Spaces/living room.webp"
+          ]
+        },
+        {
+          "id": "kitchen-bar",
+          "title": "Kitchen & Bar",
+          "category": "Kitchen & Bar",
+          "amenities": [
+            "Kitchen",
+            "Bar counter",
+            "Utilities",
+            "Tableware"
           ],
+          "images": [
+            "/Villa_Retreats/Royalty/2-Spaces/Dining & Kitchen.webp"
+          ]
         },
         {
-          id: "kitchen-bar",
-          title: "Kitchen & Bar",
-          category: "Kitchen & Bar",
-          amenities: ["Kitchen", "Bar counter", "Utilities", "Tableware"],
-          images: ["/Villa_Retreats/Royalty/2-Spaces/Dining & Kitchen.webp"],
-        },
-        {
-          id: "bedrooms",
-          title: "Bedrooms",
-          category: "Bedrooms",
-          amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
-          images: [
+          "id": "bedrooms",
+          "title": "Bedrooms",
+          "category": "Bedrooms",
+          "amenities": [
+            "Beds",
+            "Sleep comfort",
+            "Storage",
+            "AC"
+          ],
+          "images": [
             "/Villa_Retreats/Royalty/2-Spaces/Bedroom 1.webp",
             "/Villa_Retreats/Royalty/2-Spaces/Bedroom 2.webp",
             "/Villa_Retreats/Royalty/2-Spaces/Bedroom 3.webp",
             "/Villa_Retreats/Royalty/2-Spaces/Bedroom 4.webp",
-            "/Villa_Retreats/Royalty/2-Spaces/Bedroom 5.webp",
+            "/Villa_Retreats/Royalty/2-Spaces/Bedroom 5.webp"
+          ]
+        },
+        {
+          "id": "entrances-paths",
+          "title": "Entrances & Paths",
+          "category": "Entrances & Paths",
+          "amenities": [
+            "Walkways",
+            "Entrances",
+            "Courtyards",
+            "Landscaping"
           ],
+          "images": [
+            "/Villa_Retreats/Royalty/2-Spaces/Villa Entrance.webp"
+          ]
         },
         {
-          id: "entrances-paths",
-          title: "Entrances & Paths",
-          category: "Entrances & Paths",
-          amenities: ["Walkways", "Entrances", "Courtyards", "Landscaping"],
-          images: ["/Villa_Retreats/Royalty/2-Spaces/Villa Entrance.webp"],
-        },
-        {
-          id: "other",
-          title: "Other",
-          category: "Other",
-          amenities: ["Spaces", "Details", "Ambience", "Highlights"],
-          images: [
+          "id": "other",
+          "title": "Other",
+          "category": "Other",
+          "amenities": [
+            "Spaces",
+            "Details",
+            "Ambience",
+            "Highlights"
+          ],
+          "images": [
             "/Villa_Retreats/Royalty/2-Spaces/Experience.webp",
             "/Villa_Retreats/Royalty/2-Spaces/Pooside.webp",
             "/Villa_Retreats/Royalty/2-Spaces/exper.webp",
@@ -1249,18 +1548,18 @@ export const MEDIA_MANIFEST = {
             "/Villa_Retreats/Royalty/2-Spaces/hero 5.webp",
             "/Villa_Retreats/Royalty/2-Spaces/hero.webp",
             "/Villa_Retreats/Royalty/2-Spaces/hero2.webp",
-            "/Villa_Retreats/Royalty/2-Spaces/horse riding arena.webp",
-          ],
-        },
-      ],
+            "/Villa_Retreats/Royalty/2-Spaces/horse riding arena.webp"
+          ]
+        }
+      ]
     },
     "Tranquil Woods": {
-      hero: [
+      "hero": [
         "/Villa_Retreats/Tranquil Woods/1-Hero/2-3.webp",
         "/Villa_Retreats/Tranquil Woods/1-Hero/hero(1).webp",
-        "/Villa_Retreats/Tranquil Woods/1-Hero/hero.webp",
+        "/Villa_Retreats/Tranquil Woods/1-Hero/hero.webp"
       ],
-      spaces: [
+      "spaces": [
         "/Villa_Retreats/Tranquil Woods/2-Spaces/31.webp",
         "/Villa_Retreats/Tranquil Woods/2-Spaces/32.webp",
         "/Villa_Retreats/Tranquil Woods/2-Spaces/Amphitheater.webp",
@@ -1284,60 +1583,75 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa Bedroom 2.webp",
         "/Villa_Retreats/Tranquil Woods/2-Spaces/lawn area.webp",
         "/Villa_Retreats/Tranquil Woods/2-Spaces/multileveled lawn.webp",
-        "/Villa_Retreats/Tranquil Woods/2-Spaces/walkway.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/walkway.webp"
       ],
-      experiences: [
+      "experiences": [
         "/Villa_Retreats/Tranquil Woods/3-Experiences/Better_Clean_Nature_exp...webp",
-        "/Villa_Retreats/Tranquil Woods/3-Experiences/Nature+Pool_exp.webp",
+        "/Villa_Retreats/Tranquil Woods/3-Experiences/Nature+Pool_exp.webp"
       ],
-      perfectFor: [
-        "/Villa_Retreats/Tranquil Woods/4-Perfect For/weddingg.webp",
+      "perfectFor": [
+        "/Villa_Retreats/Tranquil Woods/4-Perfect For/weddingg.webp"
       ],
-      other: [],
-      categorizedSpaces: [
+      "other": [],
+      "categorizedSpaces": [
         {
-          id: "outdoors-lawns",
-          title: "Outdoors & Lawns",
-          category: "Outdoors & Lawns",
-          amenities: [
+          "id": "outdoors-lawns",
+          "title": "Outdoors & Lawns",
+          "category": "Outdoors & Lawns",
+          "amenities": [
             "Lawns",
             "Garden zones",
             "Open-air seating",
-            "Activities",
+            "Activities"
           ],
-          images: [
+          "images": [
             "/Villa_Retreats/Tranquil Woods/2-Spaces/lawn area.webp",
-            "/Villa_Retreats/Tranquil Woods/2-Spaces/multileveled lawn.webp",
-          ],
+            "/Villa_Retreats/Tranquil Woods/2-Spaces/multileveled lawn.webp"
+          ]
         },
         {
-          id: "pool-water",
-          title: "Pool & Water",
-          category: "Pool & Water",
-          amenities: ["Pool", "Plunge", "Water features", "Deck"],
-          images: [
-            "/Villa_Retreats/Tranquil Woods/2-Spaces/Private Pool Villa.webp",
+          "id": "pool-water",
+          "title": "Pool & Water",
+          "category": "Pool & Water",
+          "amenities": [
+            "Pool",
+            "Plunge",
+            "Water features",
+            "Deck"
           ],
+          "images": [
+            "/Villa_Retreats/Tranquil Woods/2-Spaces/Private Pool Villa.webp"
+          ]
         },
         {
-          id: "living-dining",
-          title: "Living & Dining",
-          category: "Living & Dining",
-          amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
-          images: [
+          "id": "living-dining",
+          "title": "Living & Dining",
+          "category": "Living & Dining",
+          "amenities": [
+            "Living spaces",
+            "Dining",
+            "Lounges",
+            "Interiors"
+          ],
+          "images": [
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Amphitheater.webp",
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Living Area.webp",
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Open to lawn Party hall.webp",
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Party Hall interiors.webp",
-            "/Villa_Retreats/Tranquil Woods/2-Spaces/Semi Open Party Hall.webp",
-          ],
+            "/Villa_Retreats/Tranquil Woods/2-Spaces/Semi Open Party Hall.webp"
+          ]
         },
         {
-          id: "bedrooms",
-          title: "Bedrooms",
-          category: "Bedrooms",
-          amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
-          images: [
+          "id": "bedrooms",
+          "title": "Bedrooms",
+          "category": "Bedrooms",
+          "amenities": [
+            "Beds",
+            "Sleep comfort",
+            "Storage",
+            "AC"
+          ],
+          "images": [
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden Suite - Lawn Area.webp",
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden Suite 1.webp",
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden Suite 2.webp",
@@ -1346,36 +1660,46 @@ export const MEDIA_MANIFEST = {
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden SuiteTerrace view.webp",
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden View Suite.webp",
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa Bedroom 1.webp",
-            "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa Bedroom 2.webp",
-          ],
+            "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa Bedroom 2.webp"
+          ]
         },
         {
-          id: "entrances-paths",
-          title: "Entrances & Paths",
-          category: "Entrances & Paths",
-          amenities: ["Walkways", "Entrances", "Courtyards", "Landscaping"],
-          images: [
+          "id": "entrances-paths",
+          "title": "Entrances & Paths",
+          "category": "Entrances & Paths",
+          "amenities": [
+            "Walkways",
+            "Entrances",
+            "Courtyards",
+            "Landscaping"
+          ],
+          "images": [
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa 1 Entrance 2.webp",
-            "/Villa_Retreats/Tranquil Woods/2-Spaces/walkway.webp",
-          ],
+            "/Villa_Retreats/Tranquil Woods/2-Spaces/walkway.webp"
+          ]
         },
         {
-          id: "other",
-          title: "Other",
-          category: "Other",
-          amenities: ["Spaces", "Details", "Ambience", "Highlights"],
-          images: [
+          "id": "other",
+          "title": "Other",
+          "category": "Other",
+          "amenities": [
+            "Spaces",
+            "Details",
+            "Ambience",
+            "Highlights"
+          ],
+          "images": [
             "/Villa_Retreats/Tranquil Woods/2-Spaces/31.webp",
             "/Villa_Retreats/Tranquil Woods/2-Spaces/32.webp",
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Artificial pond.webp",
             "/Villa_Retreats/Tranquil Woods/2-Spaces/Kid_s Play Area.webp",
-            "/Villa_Retreats/Tranquil Woods/2-Spaces/Swing.webp",
-          ],
-        },
-      ],
+            "/Villa_Retreats/Tranquil Woods/2-Spaces/Swing.webp"
+          ]
+        }
+      ]
     },
-    Wonderland: {
-      hero: [
+    "Wonderland": {
+      "hero": [
         "/Villa_Retreats/Wonderland/Hero/Hero3.webp",
         "/Villa_Retreats/Wonderland/Hero/Hero_2.webp",
         "/Villa_Retreats/Wonderland/Hero/hero.webp",
@@ -1383,9 +1707,9 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Wonderland/Hero/spaces_13.webp",
         "/Villa_Retreats/Wonderland/Hero/spaces_15.webp",
         "/Villa_Retreats/Wonderland/Hero/spaces_20.webp",
-        "/Villa_Retreats/Wonderland/Hero/spaces_24.webp",
+        "/Villa_Retreats/Wonderland/Hero/spaces_24.webp"
       ],
-      spaces: [
+      "spaces": [
         "/Villa_Retreats/Wonderland/Spaces/6_Seater_Jacuzzi.webp",
         "/Villa_Retreats/Wonderland/Spaces/Bed_Room_1.webp",
         "/Villa_Retreats/Wonderland/Spaces/Bed_Room_2.webp",
@@ -1404,82 +1728,118 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Wonderland/Spaces/spaces_33.webp",
         "/Villa_Retreats/Wonderland/Spaces/spaces_34.webp",
         "/Villa_Retreats/Wonderland/Spaces/spaces_42.webp",
-        "/Villa_Retreats/Wonderland/Spaces/spaces_44.webp",
+        "/Villa_Retreats/Wonderland/Spaces/spaces_44.webp"
       ],
-      experiences: [
+      "experiences": [
         "/Villa_Retreats/Wonderland/Experiences/Barbeque_exp.webp",
         "/Villa_Retreats/Wonderland/Experiences/Horse_riding_exp.webp",
         "/Villa_Retreats/Wonderland/Experiences/Picnic_Exp.webp",
         "/Villa_Retreats/Wonderland/Experiences/Picnic_SetUp.webp",
-        "/Villa_Retreats/Wonderland/Experiences/Picnic_exp__.webp",
+        "/Villa_Retreats/Wonderland/Experiences/Picnic_exp__.webp"
       ],
-      perfectFor: [],
-      other: [],
-      categorizedSpaces: [
+      "perfectFor": [],
+      "other": [],
+      "categorizedSpaces": [
         {
-          id: "outdoors-lawns",
-          title: "Outdoors & Lawns",
-          category: "Outdoors & Lawns",
-          amenities: [
+          "id": "outdoors-lawns",
+          "title": "Outdoors & Lawns",
+          "category": "Outdoors & Lawns",
+          "amenities": [
             "Lawns",
             "Garden zones",
             "Open-air seating",
-            "Activities",
+            "Activities"
           ],
-          images: ["/Villa_Retreats/Wonderland/Spaces/Garden_walk-way.webp"],
+          "images": [
+            "/Villa_Retreats/Wonderland/Spaces/Garden_walk-way.webp"
+          ]
         },
         {
-          id: "pool-water",
-          title: "Pool & Water",
-          category: "Pool & Water",
-          amenities: ["Pool", "Plunge", "Water features", "Deck"],
-          images: [
-            "/Villa_Retreats/Wonderland/Spaces/Common_Fresh_water_Pool.webp",
+          "id": "pool-water",
+          "title": "Pool & Water",
+          "category": "Pool & Water",
+          "amenities": [
+            "Pool",
+            "Plunge",
+            "Water features",
+            "Deck"
           ],
+          "images": [
+            "/Villa_Retreats/Wonderland/Spaces/Common_Fresh_water_Pool.webp"
+          ]
         },
         {
-          id: "living-dining",
-          title: "Living & Dining",
-          category: "Living & Dining",
-          amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
-          images: ["/Villa_Retreats/Wonderland/Spaces/Dining.webp"],
+          "id": "living-dining",
+          "title": "Living & Dining",
+          "category": "Living & Dining",
+          "amenities": [
+            "Living spaces",
+            "Dining",
+            "Lounges",
+            "Interiors"
+          ],
+          "images": [
+            "/Villa_Retreats/Wonderland/Spaces/Dining.webp"
+          ]
         },
         {
-          id: "bedrooms",
-          title: "Bedrooms",
-          category: "Bedrooms",
-          amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
-          images: [
+          "id": "bedrooms",
+          "title": "Bedrooms",
+          "category": "Bedrooms",
+          "amenities": [
+            "Beds",
+            "Sleep comfort",
+            "Storage",
+            "AC"
+          ],
+          "images": [
             "/Villa_Retreats/Wonderland/Spaces/Bed_Room_1.webp",
             "/Villa_Retreats/Wonderland/Spaces/Bed_Room_2.webp",
             "/Villa_Retreats/Wonderland/Spaces/Bed_Room_3.webp",
-            "/Villa_Retreats/Wonderland/Spaces/Bedroom_Entrance.webp",
+            "/Villa_Retreats/Wonderland/Spaces/Bedroom_Entrance.webp"
+          ]
+        },
+        {
+          "id": "bathrooms",
+          "title": "Bathrooms",
+          "category": "Bathrooms",
+          "amenities": [
+            "Baths",
+            "Jacuzzi",
+            "Shower",
+            "Toiletries"
           ],
+          "images": [
+            "/Villa_Retreats/Wonderland/Spaces/6_Seater_Jacuzzi.webp"
+          ]
         },
         {
-          id: "bathrooms",
-          title: "Bathrooms",
-          category: "Bathrooms",
-          amenities: ["Baths", "Jacuzzi", "Shower", "Toiletries"],
-          images: ["/Villa_Retreats/Wonderland/Spaces/6_Seater_Jacuzzi.webp"],
-        },
-        {
-          id: "entrances-paths",
-          title: "Entrances & Paths",
-          category: "Entrances & Paths",
-          amenities: ["Walkways", "Entrances", "Courtyards", "Landscaping"],
-          images: [
+          "id": "entrances-paths",
+          "title": "Entrances & Paths",
+          "category": "Entrances & Paths",
+          "amenities": [
+            "Walkways",
+            "Entrances",
+            "Courtyards",
+            "Landscaping"
+          ],
+          "images": [
             "/Villa_Retreats/Wonderland/Spaces/Stair_way.webp",
             "/Villa_Retreats/Wonderland/Spaces/Tree_House_Entrance.webp",
-            "/Villa_Retreats/Wonderland/Spaces/Walk_way.webp",
-          ],
+            "/Villa_Retreats/Wonderland/Spaces/Walk_way.webp"
+          ]
         },
         {
-          id: "other",
-          title: "Other",
-          category: "Other",
-          amenities: ["Spaces", "Details", "Ambience", "Highlights"],
-          images: [
+          "id": "other",
+          "title": "Other",
+          "category": "Other",
+          "amenities": [
+            "Spaces",
+            "Details",
+            "Ambience",
+            "Highlights"
+          ],
+          "images": [
             "/Villa_Retreats/Wonderland/Spaces/High_Tea_Set_UP.webp",
             "/Villa_Retreats/Wonderland/Spaces/Party_Deck.webp",
             "/Villa_Retreats/Wonderland/Spaces/spaces_14.webp",
@@ -1487,16 +1847,16 @@ export const MEDIA_MANIFEST = {
             "/Villa_Retreats/Wonderland/Spaces/spaces_33.webp",
             "/Villa_Retreats/Wonderland/Spaces/spaces_34.webp",
             "/Villa_Retreats/Wonderland/Spaces/spaces_42.webp",
-            "/Villa_Retreats/Wonderland/Spaces/spaces_44.webp",
-          ],
-        },
-      ],
-    },
+            "/Villa_Retreats/Wonderland/Spaces/spaces_44.webp"
+          ]
+        }
+      ]
+    }
   },
-  experiencesByFolder: {
-    Caravan: {
-      root: "/Experiences/Caravan",
-      all: [
+  "experiencesByFolder": {
+    "Caravan": {
+      "root": "/Experiences/Caravan",
+      "all": [
         "/Experiences/Caravan/1-Hero/14.webp",
         "/Experiences/Caravan/1-Hero/19.webp",
         "/Experiences/Caravan/1-Hero/28.webp",
@@ -1529,21 +1889,21 @@ export const MEDIA_MANIFEST = {
         "/Experiences/Caravan/2-Spaces/6.webp",
         "/Experiences/Caravan/2-Spaces/7.webp",
         "/Experiences/Caravan/2-Spaces/8.webp",
-        "/Experiences/Caravan/2-Spaces/9.webp",
+        "/Experiences/Caravan/2-Spaces/9.webp"
       ],
-      groups: [
+      "groups": [
         {
-          folder: "1-Hero",
-          images: [
+          "folder": "1-Hero",
+          "images": [
             "/Experiences/Caravan/1-Hero/14.webp",
             "/Experiences/Caravan/1-Hero/19.webp",
             "/Experiences/Caravan/1-Hero/28.webp",
-            "/Experiences/Caravan/1-Hero/6.webp",
-          ],
+            "/Experiences/Caravan/1-Hero/6.webp"
+          ]
         },
         {
-          folder: "2-Spaces",
-          images: [
+          "folder": "2-Spaces",
+          "images": [
             "/Experiences/Caravan/2-Spaces/1.webp",
             "/Experiences/Caravan/2-Spaces/10.webp",
             "/Experiences/Caravan/2-Spaces/11.webp",
@@ -1572,42 +1932,44 @@ export const MEDIA_MANIFEST = {
             "/Experiences/Caravan/2-Spaces/6.webp",
             "/Experiences/Caravan/2-Spaces/7.webp",
             "/Experiences/Caravan/2-Spaces/8.webp",
-            "/Experiences/Caravan/2-Spaces/9.webp",
-          ],
-        },
-      ],
+            "/Experiences/Caravan/2-Spaces/9.webp"
+          ]
+        }
+      ]
     },
     "Corporate Retreats": {
-      root: "/Experiences/Corporate Retreats",
-      all: [
+      "root": "/Experiences/Corporate Retreats",
+      "all": [
         "/Experiences/Corporate Retreats/1-Hero/xhero.webp",
         "/Experiences/Corporate Retreats/2-Formats/Conference and....webp",
         "/Experiences/Corporate Retreats/2-Formats/corporate team outings.webp",
-        "/Experiences/Corporate Retreats/2-Formats/offsite and work....webp",
+        "/Experiences/Corporate Retreats/2-Formats/offsite and work....webp"
       ],
-      groups: [
+      "groups": [
         {
-          folder: "1-Hero",
-          images: ["/Experiences/Corporate Retreats/1-Hero/xhero.webp"],
+          "folder": "1-Hero",
+          "images": [
+            "/Experiences/Corporate Retreats/1-Hero/xhero.webp"
+          ]
         },
         {
-          folder: "2-Formats",
-          images: [
+          "folder": "2-Formats",
+          "images": [
             "/Experiences/Corporate Retreats/2-Formats/Conference and....webp",
             "/Experiences/Corporate Retreats/2-Formats/corporate team outings.webp",
-            "/Experiences/Corporate Retreats/2-Formats/offsite and work....webp",
-          ],
-        },
-      ],
+            "/Experiences/Corporate Retreats/2-Formats/offsite and work....webp"
+          ]
+        }
+      ]
     },
     "Party Villas": {
-      root: "/Experiences/Party Villas",
-      all: [],
-      groups: [],
+      "root": "/Experiences/Party Villas",
+      "all": [],
+      "groups": []
     },
-    Weddings: {
-      root: "/Experiences/Weddings",
-      all: [
+    "Weddings": {
+      "root": "/Experiences/Weddings",
+      "all": [
         "/Experiences/Weddings/1-Hero/2 (1).webp",
         "/Experiences/Weddings/1-Hero/3.webp",
         "/Experiences/Weddings/2-Venue Images/DIAMOND/1.webp",
@@ -1761,19 +2123,19 @@ export const MEDIA_MANIFEST = {
         "/Experiences/Weddings/5-Pre Wedding/Haldi.webp",
         "/Experiences/Weddings/5-Pre Wedding/Mehendi.webp",
         "/Experiences/Weddings/5-Pre Wedding/Sangeeth.webp",
-        "/Experiences/Weddings/5-Pre Wedding/cocktail...webp",
+        "/Experiences/Weddings/5-Pre Wedding/cocktail...webp"
       ],
-      groups: [
+      "groups": [
         {
-          folder: "1-Hero",
-          images: [
+          "folder": "1-Hero",
+          "images": [
             "/Experiences/Weddings/1-Hero/2 (1).webp",
-            "/Experiences/Weddings/1-Hero/3.webp",
-          ],
+            "/Experiences/Weddings/1-Hero/3.webp"
+          ]
         },
         {
-          folder: "2-Venue Images",
-          images: [
+          "folder": "2-Venue Images",
+          "images": [
             "/Experiences/Weddings/2-Venue Images/DIAMOND/1.webp",
             "/Experiences/Weddings/2-Venue Images/DIAMOND/10.webp",
             "/Experiences/Weddings/2-Venue Images/DIAMOND/11.webp",
@@ -1915,38 +2277,40 @@ export const MEDIA_MANIFEST = {
             "/Experiences/Weddings/2-Venue Images/TRANQUIL WOODS/_DSC3807.webp",
             "/Experiences/Weddings/2-Venue Images/TRANQUIL WOODS/_DSC3819.webp",
             "/Experiences/Weddings/2-Venue Images/TRANQUIL WOODS/_DSC5564-Edit.webp",
-            "/Experiences/Weddings/2-Venue Images/TRANQUIL WOODS/vass.webp",
-          ],
+            "/Experiences/Weddings/2-Venue Images/TRANQUIL WOODS/vass.webp"
+          ]
         },
         {
-          folder: "3-Additional Services",
-          images: [
+          "folder": "3-Additional Services",
+          "images": [
             "/Experiences/Weddings/3-Additional Services/Catering.webp",
             "/Experiences/Weddings/3-Additional Services/Decor.webp",
-            "/Experiences/Weddings/3-Additional Services/PHOTOGRAPHY.webp",
-          ],
+            "/Experiences/Weddings/3-Additional Services/PHOTOGRAPHY.webp"
+          ]
         },
         {
-          folder: "4-Why Jade",
-          images: ["/Experiences/Weddings/4-Why Jade/A1 _4_ (1).webp"],
+          "folder": "4-Why Jade",
+          "images": [
+            "/Experiences/Weddings/4-Why Jade/A1 _4_ (1).webp"
+          ]
         },
         {
-          folder: "5-Pre Wedding",
-          images: [
+          "folder": "5-Pre Wedding",
+          "images": [
             "/Experiences/Weddings/5-Pre Wedding/Bachelorette.webp",
             "/Experiences/Weddings/5-Pre Wedding/Bridal Shoots.webp",
             "/Experiences/Weddings/5-Pre Wedding/Haldi.webp",
             "/Experiences/Weddings/5-Pre Wedding/Mehendi.webp",
             "/Experiences/Weddings/5-Pre Wedding/Sangeeth.webp",
-            "/Experiences/Weddings/5-Pre Wedding/cocktail...webp",
-          ],
-        },
-      ],
+            "/Experiences/Weddings/5-Pre Wedding/cocktail...webp"
+          ]
+        }
+      ]
     },
     "Weekend Getaways": {
-      root: "/Experiences/Weekend Getaways",
-      all: [],
-      groups: [],
-    },
-  },
+      "root": "/Experiences/Weekend Getaways",
+      "all": [],
+      "groups": []
+    }
+  }
 } as const;

@@ -60,6 +60,7 @@ import { VILLAS } from "@/lib/mockData";
 import type { Villa } from "@/lib/types";
 import { prettyMediaLabel } from "@/lib/mediaLabels";
 import { DOME_VIDEO_URLS, getYouTubeId } from "@/lib/videoUtils";
+import { useAnimation } from "@/context/AnimationContext";
 
 // Icon mapping helper
 const getIcon = (iconName?: string, title?: string) => {
@@ -136,6 +137,7 @@ export default function VillaDetailsPage() {
   const searchParams = useSearchParams();
   const id = params?.id as string;
   const villa = VILLAS.find((v) => v.id === id) as Villa | undefined;
+  const { setEnquireOverlayOpen } = useAnimation();
 
   const [media, setMedia] = useState<{
     hero: string[];
@@ -449,12 +451,12 @@ export default function VillaDetailsPage() {
         >
           <ArrowLeft className="w-8 h-8 md:w-10 md:h-10" strokeWidth={1} />
         </button>
-        <Link
-          href="/contact"
+        <button
+          onClick={() => setEnquireOverlayOpen(true)}
           className="pointer-events-auto px-[20px] py-[12px] bg-black/40 backdrop-blur-md border border-white/10 text-white text-[9px] md:text-[11px] font-bold tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all flex items-center justify-center w-fit h-fit gap-[8px]"
         >
-          CONTACT US
-        </Link>
+          ENQUIRE NOW
+        </button>
       </div>
       {/* HERO / CAROUSEL SECTION */}
       <section className="relative h-[60vh] md:h-[80vh] w-full bg-[#1A1C1E]">
@@ -1404,12 +1406,12 @@ export default function VillaDetailsPage() {
                 : "Contact for pricing"}
           </p>
           <div className="flex items-center gap-4 md:gap-6">
-            <Link
-              href="/contact"
+            <button
+              onClick={() => setEnquireOverlayOpen(true)}
               className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap"
             >
               ENQUIRE
-            </Link>
+            </button>
             <PrimaryButton
               href={`/book?villa=${villa.id}`}
               withArrow={false}

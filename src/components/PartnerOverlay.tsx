@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -21,6 +21,10 @@ import Link from "next/link";
 export default function PartnerOverlay() {
   const { isPartnerOverlayOpen, setPartnerOverlayOpen } = useAnimation();
   const [view, setView] = useState<"form" | "success">("form");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedImages, setSelectedImages] = useState<
+    { file: File; preview: string }[]
+  >([]);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -53,6 +57,7 @@ export default function PartnerOverlay() {
     // Reset view back to form after animation completes
     setTimeout(() => {
       setView("form");
+      setSelectedImages([]); // Clear previews on close
       setFormData({
         fullName: "",
         phoneNumber: "",
@@ -83,6 +88,27 @@ export default function PartnerOverlay() {
 
   const handleSubmit = () => {
     setView("success");
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      const newImages = filesArray.map((file) => ({
+        file,
+        preview: URL.createObjectURL(file),
+      }));
+
+      setSelectedImages((prev) => [...prev, ...newImages].slice(0, 6)); // Limit to 6 for UI stability
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setSelectedImages((prev) => {
+      const newImages = [...prev];
+      URL.revokeObjectURL(newImages[index].preview);
+      newImages.splice(index, 1);
+      return newImages;
+    });
   };
 
   const togglePartnership = (key: keyof typeof formData.partnershipType) => {
@@ -389,29 +415,47 @@ export default function PartnerOverlay() {
 
                       {/* Image Upload Area */}
                       <div className="mt-6 flex flex-col items-center">
-                        <button className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase mb-6 hover:text-white transition-colors">
+                        <input
+                          type="file"
+                          ref={fileInputRef}
+                          onChange={handleFileChange}
+                          multiple
+                          accept="image/*"
+                          className="hidden"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase mb-6 hover:text-white transition-colors"
+                        >
                           UPLOAD IMAGES
                           <Upload className="w-4 h-4" />
                         </button>
 
-                        <div className="grid grid-cols-3 gap-2 w-full mb-2">
-                          {[1, 2, 3].map((i) => (
-                            <div
-                              key={i}
-                              className="relative aspect-square w-full bg-white/5 border border-white/10 rounded-sm overflow-hidden"
-                            >
-                              <Image
-                                src="/X/Dome Villas/Red Dome/1.webp"
-                                alt={`Upload ${i}`}
-                                fill
-                                className="object-cover"
-                              />
-                              <button className="absolute top-1.5 right-1.5 w-5 h-5 bg-[#EFEFEF]/80 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors z-10">
-                                <X className="w-3 h-3 text-black stroke-[3]" />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
+                        {selectedImages.length > 0 && (
+                          <div className="grid grid-cols-3 gap-2 w-full mb-2">
+                            {selectedImages.map((img, i) => (
+                              <div
+                                key={i}
+                                className="relative aspect-square w-full bg-white/5 border border-white/10 rounded-sm overflow-hidden group/thumb"
+                              >
+                                <Image
+                                  src={img.preview}
+                                  alt={`Upload ${i}`}
+                                  fill
+                                  className="object-cover"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => removeImage(i)}
+                                  className="absolute top-1.5 right-1.5 w-6 h-6 bg-black/60 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-red-500 transition-colors z-20"
+                                >
+                                  <X className="w-3.5 h-3.5 text-white stroke-[3]" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
                       <PrimaryButton

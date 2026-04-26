@@ -2,25 +2,19 @@
 
 import { useState } from "react";
 import { VILLAS } from "@/lib/mockData";
-import PartyVillaCard from "./PartyVillaCard";
-import PartyVenueOverlay from "./PartyVenueOverlay";
+import WeekendVillaCard from "./WeekendVillaCard";
+import VenueOverlay from "./VenueOverlay";
 import { AnimatePresence } from "framer-motion";
 
-// Filter villas for Party page: Dome, Emerald, Magnolia, Tranquil Woods, Wonderland Treehouse, Vannani
-const PARTY_VILLA_IDS = [
-  "dome-villas",
-  "emerald",
-  "magnolia",
-  "tranquil-woods",
-  "wonderland-treehouse",
-  "vannani",
-];
+// Filter villas to specifically show Weekend related venues
+// Using IDs that were present in the weekend-getaways page
+const WEEKEND_VILLA_IDS = ["dome-villas", "magnolia", "haven", "tranquil"];
 
-const PARTY_VILLAS = VILLAS.filter((villa) =>
-  PARTY_VILLA_IDS.includes(villa.id),
-).sort((a, b) => PARTY_VILLA_IDS.indexOf(a.id) - PARTY_VILLA_IDS.indexOf(b.id));
+const WEEKEND_VILLAS = VILLAS.filter((villa) =>
+  WEEKEND_VILLA_IDS.includes(villa.id),
+);
 
-export default function PartyVillasCarousel() {
+export default function WeekendVillasCarousel() {
   const [selectedVilla, setSelectedVilla] = useState<any>(null);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
@@ -30,14 +24,11 @@ export default function PartyVillasCarousel() {
   };
 
   return (
-    <section
-      id="party-villas-section"
-      className="relative bg-[#25282C] pt-fluid-lg pb-10 md:pt-fluid-xl md:pb-10"
-    >
+    <section className="relative bg-[#25282C] pt-fluid-lg pb-10 md:pt-fluid-xl md:pb-10">
       <div className="max-w-7xl mx-auto px-6 w-full overflow-hidden">
         <div className="flex flex-col gap-14">
-          {PARTY_VILLAS.map((villa) => (
-            <PartyVillaCard
+          {WEEKEND_VILLAS.map((villa) => (
+            <WeekendVillaCard
               key={villa.id}
               villa={villa}
               onKnowMore={() => handleKnowMore(villa)}
@@ -48,7 +39,7 @@ export default function PartyVillasCarousel() {
 
       <AnimatePresence>
         {isOverlayOpen && (
-          <PartyVenueOverlay
+          <VenueOverlay
             isOpen={isOverlayOpen}
             onClose={() => setIsOverlayOpen(false)}
             villa={selectedVilla}

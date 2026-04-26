@@ -21,6 +21,7 @@ export const palatio = {
   ],
   categories: [
     "Nature Retreats",
+    "Wellness Retreats",
     "Party Venues",
     "Weekend Getaways",
     "Weddings",

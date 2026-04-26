@@ -22,50 +22,57 @@ export default function TravelGuidelinesSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section className="bg-[#0D4032] py-fluid-lg md:py-fluid-xl px-6 md:px-12 lg:px-24">
-      <div className="max-w-[1920px] mx-auto">
-        {/* Banner Image */}
-        <div className="relative w-full aspect-[16/9] md:aspect-[21/9] mb-12 overflow-hidden">
+    <section className="bg-[#0D4032] lg:h-[100dvh] min-h-[600px] flex flex-col lg:flex-row overflow-hidden relative">
+      <div className="max-w-[1920px] mx-auto w-full h-full flex flex-col lg:flex-row">
+        {/* Left Side: Image Banner */}
+        <div className="relative w-full lg:w-1/2 h-[50dvh] lg:h-full overflow-hidden">
           <Image
-            src="/X/Magnolia/14.webp"
-            alt="Rathaa Caravan"
+            src="/Experiences/Caravan/2-Spaces/19.webp"
+            alt="Rathaa Caravan Interior"
             fill
             className="object-cover"
-            sizes="100vw"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            priority
           />
+          {/* Subtle gradient overlay to blend into the dark green base */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent lg:hidden" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0D4032]/40 lg:hidden" />
         </div>
 
-        {/* Content */}
-        <div className="max-w-4xl">
-          <h2 className="text-gh-h1 font-philosopher text-white leading-tight mb-12">
-            Important Travel Guidelines
-          </h2>
+        {/* Right Side: Content */}
+        <div className="w-full lg:w-1/2 h-full flex flex-col justify-center px-8 md:px-16 lg:px-24 py-16 lg:py-0 relative z-10">
+          <div className="max-w-xl">
+            <h2 className="text-gh-h2 md:text-gh-h1 font-philosopher text-white leading-tight mb-12">
+              Important <br />
+              Travel Guidelines
+            </h2>
 
-          <div className="space-y-12 mb-16">
-            {GUIDELINES.map((item, idx) => (
-              <div key={idx} className="flex items-start gap-4">
-                <div className="mt-1.5">
-                  <div className="w-2.5 h-2.5 bg-[#EFCD62] rotate-45" />
+            <div className="space-y-10 mb-14">
+              {GUIDELINES.map((item, idx) => (
+                <div key={idx} className="flex items-start gap-5 group">
+                  <div className="mt-1.5 flex-shrink-0">
+                    <div className="w-3 h-3 bg-[#EFCD62] rotate-45 transition-transform duration-500 group-hover:rotate-[225deg]" />
+                  </div>
+                  <div>
+                    <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope mb-2.5">
+                      {item.title}
+                    </h3>
+                    <p className="text-white/80 text-gh-body leading-relaxed font-manrope">
+                      {item.desc}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-white/80 text-gh-body leading-relaxed font-manrope max-w-2xl">
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            <button
+              className="flex items-center gap-3 text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope group bg-white/5 hover:bg-white/10 border border-[#EFCD62]/30 px-6 py-4 transition-all duration-300"
+              onClick={() => setIsModalOpen(true)}
+            >
+              SEE ALL GUIDELINES
+              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+            </button>
           </div>
-
-          <button
-            className="flex items-center gap-3 text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope group"
-            onClick={() => setIsModalOpen(true)}
-          >
-            SEE ALL
-            <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
-          </button>
         </div>
       </div>
 

@@ -63,9 +63,6 @@ const GlassStatsBanner = ({
                 {stat.label}
               </span>
             </div>
-            {index < stats.length - 1 && (
-              <div className="h-[30px] md:h-[40px] lg:h-[48px] w-[1px] bg-white opacity-20 relative z-10" />
-            )}
           </React.Fragment>
         ))}
       </div>

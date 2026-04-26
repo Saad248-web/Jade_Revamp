@@ -16,8 +16,12 @@ import { useWishlist } from "@/context/WishlistContext";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { isSplashComplete, setPartnerOverlayOpen, navbarTheme } =
-    useAnimation();
+  const {
+    isSplashComplete,
+    setPartnerOverlayOpen,
+    navbarTheme,
+    setEnquireOverlayOpen,
+  } = useAnimation();
   const { count: wishlistCount } = useWishlist();
   const { scrollY } = useScroll();
   const [isHidden, setIsHidden] = useState(false);
@@ -159,18 +163,18 @@ export default function Navbar() {
           {/* ── RIGHT: Contact CTA ── */}
           <div className="flex items-center justify-end flex-1 gap-4">
             {isDetailPage ? (
-              <Link
-                href="/contact"
+              <button
+                onClick={() => setEnquireOverlayOpen(true)}
                 className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center min-h-[44px]"
               >
-                CONTACT US
-              </Link>
+                ENQUIRE NOW
+              </button>
             ) : (
               <div className="flex items-center gap-2">
-                <Link
-                  href="/contact"
+                <button
+                  onClick={() => setEnquireOverlayOpen(true)}
                   className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] min-h-[44px] rounded-none border border-white/20 transition-all duration-300 group shrink-0"
-                  aria-label="Contact Us"
+                  aria-label="Enquire Now"
                 >
                   <svg
                     width="18"
@@ -190,7 +194,7 @@ export default function Navbar() {
                     <path d="M9 10h6v4H9z" />
                     <path d="M10 12h.01M12 12h.01M14 12h.01" />
                   </svg>
-                </Link>
+                </button>
 
                 {/* Wishlist icon with badge */}
                 <Link
@@ -213,12 +217,12 @@ export default function Navbar() {
                     ENQUIRE NOW
                   </button>
                 ) : (
-                  <Link
-                    href="/book"
+                  <button
+                    onClick={() => setEnquireOverlayOpen(true)}
                     className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center min-h-[44px] whitespace-nowrap"
                   >
-                    BOOK NOW
-                  </Link>
+                    ENQUIRE
+                  </button>
                 )}
               </div>
             )}

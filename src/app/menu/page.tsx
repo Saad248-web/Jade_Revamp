@@ -305,40 +305,43 @@ export default function MenuPage() {
                   {[
                     {
                       title: "Weekend Getaways",
+                      href: "/weekend-getaways",
                       desc: "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone's wishlist.",
                       img1: "/X/Magnolia/16.webp",
                       img2: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
                     },
                     {
                       title: "Celebrations & Parties",
+                      href: "/party-villas",
                       desc: "Birthdays, pool or bachelor parties unfold across private farmhouse villas with pools, open lawns and entertainment-ready spaces.",
                       img1: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
                       img2: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
                     },
                     {
                       title: "Wedding Celebrations",
+                      href: "/weddings",
                       desc: "Say 'I do' under the stars in sprawling lawns or intimate poolside setups designed just for you.",
                       img1: "/X/Magnolia/9.webp",
                       img2: "/X/ROR/14.webp",
                     },
                   ].map((exp, idx) => (
-                    <Link
-                      key={idx}
-                      href="/experiences"
-                      className="flex flex-col cursor-pointer group"
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <h3
-                          style={{ fontWeight: 200 }}
-                          className="text-gh-scroll font-manrope text-white group-hover:text-[#EFCD62] transition-colors tracking-wide"
-                        >
-                          {exp.title}
-                        </h3>
-                        <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
-                      </div>
-                      <p className="text-white/50 text-gh-label font-manrope mb-3 leading-relaxed pr-4">
-                        {exp.desc}
-                      </p>
+                    <div key={idx} className="flex flex-col group">
+                      <Link href={exp.href} className="cursor-pointer">
+                        <div className="flex items-center justify-between mb-1">
+                          <h3
+                            style={{ fontWeight: 200 }}
+                            className="text-gh-scroll font-manrope text-white group-hover:text-[#EFCD62] transition-colors tracking-wide"
+                          >
+                            {exp.title}
+                          </h3>
+                          <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
+                        </div>
+                      </Link>
+                      <Link href={exp.href} className="cursor-pointer">
+                        <p className="text-white/50 text-gh-label font-manrope mb-3 leading-relaxed pr-4 group-hover:text-[#EFCD62]/70 transition-colors">
+                          {exp.desc}
+                        </p>
+                      </Link>
                       <div className="flex gap-2">
                         <div className="relative h-28 flex-1 aspect-[4/3]">
                           <Image
@@ -359,7 +362,7 @@ export default function MenuPage() {
                           />
                         </div>
                       </div>
-                    </Link>
+                    </div>
                   ))}
                 </div>
               </motion.div>
@@ -531,36 +534,42 @@ export default function MenuPage() {
                     {
                       title: "Weekend Getaways",
                       type: "JOURNEY OF WELLNESS",
+                      href: "/weekend-getaways",
                       img1: "/X/Magnolia/16.webp",
                       img2: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
                     },
                     {
                       title: "Celebrations & Parties",
                       type: "LUXURY PRIVATE STAYS",
+                      href: "/party-villas",
                       img1: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
                       img2: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
                     },
                     {
                       title: "Wedding Celebrations",
                       type: "UNFORGETTABLE MOMENTS",
+                      href: "/weddings",
                       img1: "/X/Magnolia/9.webp",
                       img2: "/X/ROR/14.webp",
                     },
                     {
                       title: "Corporate Offsites",
                       type: "JOURNEY OF TEAMWORK",
+                      href: "/corporate-retreats",
                       img1: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
                       img2: "/X/ROR/14.webp",
                     },
                     {
                       title: "Wellness Retreats",
                       type: "PURE REJUVENATION",
+                      href: "/corporate-retreats", // Fallback to corporate-retreats
                       img1: "/X/Magnolia/16.webp",
                       img2: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
                     },
                     {
                       title: "Journeys in Caravans",
                       type: "LUXURY ON ROAD",
+                      href: "/caravans",
                       img1: "/X/Magnolia/14.webp",
                       img2: "/X/Dome Villas/Red Dome/1.webp",
                     },
@@ -574,26 +583,29 @@ export default function MenuPage() {
                     >
                       <div className="flex justify-between items-start mb-6 pr-2">
                         <Link
-                          href="/experiences"
+                          href={exp.href}
                           className="flex flex-col cursor-pointer"
                         >
-                          <p className="text-white/40 text-gh-label uppercase font-manrope font-bold tracking-[0.2em] mb-1.5">
+                          <p className="text-white/40 text-gh-label uppercase font-manrope font-bold tracking-[0.2em] mb-1.5 group-hover:text-[#EFCD62]/60 transition-colors">
                             {exp.type}
                           </p>
                           <div className="flex items-center gap-2 group/title">
                             <h3
                               style={{ fontWeight: 200 }}
-                              className="text-gh-scroll lg:text-gh-h2 font-manrope text-white transition-colors tracking-wide"
+                              className="text-gh-scroll lg:text-gh-h2 font-manrope text-white group-hover:text-[#EFCD62] transition-colors tracking-wide"
                             >
                               {exp.title}
                             </h3>
-                            <ChevronRight className="w-5 h-5 text-white/50 group-hover/title:text-[#EFCD62] transition-colors" />
+                            <ChevronRight className="w-5 h-5 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
                           </div>
                         </Link>
                       </div>
 
                       <div className="flex gap-4">
-                        <div className="relative h-[280px] flex-1 aspect-[4/3] cursor-grab active:cursor-grabbing overflow-hidden group/img">
+                        <Link
+                          href={exp.href}
+                          className="relative h-[280px] flex-1 aspect-[4/3] cursor-pointer overflow-hidden group/img"
+                        >
                           <Image
                             src={exp.img1}
                             alt={exp.title}
@@ -601,8 +613,11 @@ export default function MenuPage() {
                             className="object-cover group-hover/img:scale-105 transition-transform duration-700"
                             sizes="30vw"
                           />
-                        </div>
-                        <div className="relative h-[280px] flex-1 aspect-[4/3] cursor-grab active:cursor-grabbing overflow-hidden group/img">
+                        </Link>
+                        <Link
+                          href={exp.href}
+                          className="relative h-[280px] flex-1 aspect-[4/3] cursor-pointer overflow-hidden group/img"
+                        >
                           <Image
                             src={exp.img2}
                             alt="experience"
@@ -610,7 +625,7 @@ export default function MenuPage() {
                             className="object-cover group-hover/img:scale-105 transition-transform duration-700"
                             sizes="30vw"
                           />
-                        </div>
+                        </Link>
                       </div>
                     </motion.div>
                   ))}

@@ -2,21 +2,13 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  X,
-  Headset,
-  Check,
-  Facebook,
-  Instagram,
-  Youtube,
-  Calendar,
-} from "lucide-react";
+import { X, Check, Facebook, Instagram, Youtube, Calendar } from "lucide-react";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useAnimation } from "@/context/AnimationContext";
 
-export default function RathaaOverlay() {
-  const { isRathaaOverlayOpen, setRathaaOverlayOpen } = useAnimation();
+export default function EnquireOverlay() {
+  const { isEnquireOverlayOpen, setEnquireOverlayOpen } = useAnimation();
   const [view, setView] = useState<"form" | "success">("form");
 
   const [formData, setFormData] = useState({
@@ -26,15 +18,15 @@ export default function RathaaOverlay() {
     guests: "",
     preferredDate: "",
     travelFormat: {
-      oneDay: false,
-      overnight: false,
-      multiDay: false,
+      weekendGetaway: false,
+      corporateRetreat: false,
+      celebrationEvents: false,
     },
     occasion: "",
   });
 
   const handleClose = () => {
-    setRathaaOverlayOpen(false);
+    setEnquireOverlayOpen(false);
     setTimeout(() => {
       setView("form");
       setFormData({
@@ -44,9 +36,9 @@ export default function RathaaOverlay() {
         guests: "",
         preferredDate: "",
         travelFormat: {
-          oneDay: false,
-          overnight: false,
-          multiDay: false,
+          weekendGetaway: false,
+          corporateRetreat: false,
+          celebrationEvents: false,
         },
         occasion: "",
       });
@@ -64,7 +56,9 @@ export default function RathaaOverlay() {
       occasion,
     } = formData;
     const hasFormat =
-      travelFormat.oneDay || travelFormat.overnight || travelFormat.multiDay;
+      travelFormat.weekendGetaway ||
+      travelFormat.corporateRetreat ||
+      travelFormat.celebrationEvents;
     return (
       fullName.trim() !== "" &&
       phoneNumber.trim() !== "" &&
@@ -93,11 +87,11 @@ export default function RathaaOverlay() {
     }));
   };
 
-  if (!isRathaaOverlayOpen) return null;
+  if (!isEnquireOverlayOpen) return null;
 
   return (
     <AnimatePresence>
-      {isRathaaOverlayOpen && (
+      {isEnquireOverlayOpen && (
         <>
           {/* Backdrop */}
           <motion.div
@@ -135,21 +129,17 @@ export default function RathaaOverlay() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
               {/* CONTENT AREA */}
               <div
-                className="flex-1 overflow-y-auto scrollbar-hide px-6 pt-6 pb-10"
+                className="flex-1 overflow-y-auto scrollbar-hide px-6 pt-6 pb-8"
                 data-lenis-prevent
               >
                 {view === "form" ? (
-                  <form
-                    onSubmit={handleSubmit}
-                    className="flex flex-col h-full"
-                  >
+                  <form onSubmit={handleSubmit} className="flex flex-col">
                     <h2 className="text-white text-[32px] leading-tight md:text-gh-h2 font-philosopher mb-3">
-                      Plan Your Rathaa Journey
+                      Enquire Now
                     </h2>
                     <p className="text-white/80 text-gh-body mb-8">
-                      Tell us your preferred dates, group size, and destination.
-                      Our team will help you design a curated caravan
-                      experience.
+                      Tell us your preferred dates, group size, and occasion.
+                      Our team will help you design a curated luxury experience.
                     </p>
 
                     <div className="flex flex-col gap-5 flex-1">
@@ -223,21 +213,21 @@ export default function RathaaOverlay() {
                       {/* Travel Format Checkboxes */}
                       <div className="mt-2 text-white">
                         <h3 className="text-white text-gh-body mb-4">
-                          Travel Format:
+                          Interest:
                         </h3>
                         <div className="flex flex-col gap-3">
                           {[
                             {
-                              key: "oneDay",
-                              label: "One-Day Caravan Experience",
+                              key: "weekendGetaway",
+                              label: "Weekend Getaway",
                             },
                             {
-                              key: "overnight",
-                              label: "Overnight Caravan Retreat",
+                              key: "corporateRetreat",
+                              label: "Corporate Retreat",
                             },
                             {
-                              key: "multiDay",
-                              label: "Multi-Day Curated Journeys",
+                              key: "celebrationEvents",
+                              label: "Celebrations & Events",
                             },
                           ].map((item) => (
                             <label

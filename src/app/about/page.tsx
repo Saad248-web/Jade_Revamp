@@ -9,7 +9,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import GlassStatsBanner from "@/components/GlassStatsBanner";
+import TrustedBySection from "@/components/TrustedBySection";
 import { AnimatePresence, motion } from "framer-motion";
+import { useAnimation } from "@/context/AnimationContext";
 
 const OFFERINGS = [
   {
@@ -42,6 +44,7 @@ const TEAM_PLACEHOLDERS = [
 ] as const;
 
 export default function AboutPage() {
+  const { setEnquireOverlayOpen } = useAnimation();
   const [currentOffering, setCurrentOffering] = React.useState(0);
   const [hoverPreviewSrc, setHoverPreviewSrc] = React.useState<string | null>(
     null,
@@ -73,7 +76,7 @@ export default function AboutPage() {
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto">
           {/* Logo */}
-          <div className="mb-10 relative w-24 h-24 md:w-32 md:h-32">
+          <div className="mb-10 relative w-16 h-16 md:w-24 md:h-24">
             <Image
               src="/assets/Golden_Logo.png"
               alt="Jade Logo"
@@ -111,57 +114,7 @@ export default function AboutPage() {
       </section>
 
       {/* 2. TRUSTED BY SECTION */}
-      <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
-        <div className="max-w-4xl mx-auto px-8 text-center w-full">
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
-            TRUSTED BY
-          </p>
-          <h2 className="text-gh-h1 font-philosopher text-white mb-20 leading-tight">
-            World-Class <br /> Organizations
-          </h2>
-
-          <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6">
-            {/* Logo 1: Google */}
-            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <span className="text-white font-manrope text-gh-h3 font-bold opacity-60 group-hover:opacity-100 transition-opacity">
-                Google
-              </span>
-            </div>
-            {/* Logo 2: Microsoft */}
-            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <span className="text-white font-manrope text-gh-h3 font-bold opacity-60 group-hover:opacity-100 transition-opacity">
-                Microsoft
-              </span>
-            </div>
-            {/* Logo 3: L&T */}
-            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <div className="w-16 h-16 rounded-full border-2 border-white/40 flex items-center justify-center opacity-60 group-hover:opacity-100 transition-opacity">
-                <span className="text-white font-manrope text-gh-h3 font-bold italic">
-                  L&T
-                </span>
-              </div>
-            </div>
-            {/* Logo 4: IBM */}
-            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <span className="text-white font-manrope text-gh-h2 font-bold tracking-tighter opacity-60 group-hover:opacity-100 transition-opacity">
-                IBM
-              </span>
-            </div>
-            {/* Logo 5: Capgemini */}
-            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <span className="text-white font-manrope text-gh-h3 font-bold opacity-60 group-hover:opacity-100 transition-opacity">
-                Capgemini
-              </span>
-            </div>
-            {/* Logo 6: Mercedes-Benz */}
-            <div className="bg-[#1E2023] aspect-square flex items-center justify-center p-8 group border border-white/5 rounded-sm">
-              <span className="text-white font-philosopher text-gh-h3 opacity-60 group-hover:opacity-100 transition-opacity">
-                Mercedes-Benz
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <TrustedBySection />
 
       {/* 3. OUR STORY SECTION */}
       <section className="py-fluid-lg md:py-fluid-xl bg-[#0D4032] relative overflow-hidden">
@@ -191,7 +144,7 @@ export default function AboutPage() {
 
             {/* Logo/Play Button Center */}
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-              <div className="relative w-24 h-24 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+              <div className="relative w-20 h-20 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
                 <Image
                   src="/assets/Golden_Logo.png"
                   alt="Jade Logo"
@@ -226,18 +179,24 @@ export default function AboutPage() {
           },
           {
             tag: "curate",
-            title: "THE CANVAS",
-            desc: "Each space is selected and shaped to host specific moments — from intimate getaways to large-scale celebrations — with the infrastructure and aesthetic to match.",
+            title: "THROUGH CARE",
+            desc: "Each property and experience is carefully curated based on its character, setting & suitability, ensuring the right fit for every occasion.",
           },
           {
-            tag: "deliver",
-            title: "THE EXPERIENCE",
-            desc: "End-to-end operations ensure every detail is managed — from booking to checkout — so guests experience seamless, premium hospitality at every touchpoint.",
+            tag: "guide",
+            title: "WITH CLARITY",
+            desc: "From selecting the right villa to shaping the overall experience, Jade provides clear guidance so every stay or gathering unfolds smoothly.",
+          },
+          {
+            tag: "host",
+            title: "IN RESPONSIBILITY",
+            desc: "Spaces are managed with long-term care in mind, balancing guest experience with respect for the property, its surroundings, and its people.",
           },
         ]}
         footerText="Bringing unique villas and curated experiences together under one standard of hospitality."
         ctaText="PARTNER WITH JADE"
-        ctaLink="/contact"
+        onCtaClick={() => setEnquireOverlayOpen(true)}
+        alternateGold={true}
       />
 
       {/* 5. WHAT WE DO SECTION (Offering Carousel) */}
@@ -368,11 +327,10 @@ export default function AboutPage() {
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {/* Row 1 */}
             <div
-              className="relative aspect-square md:aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-zoom-in"
-              onMouseEnter={() =>
+              className="relative aspect-square md:aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
+              onClick={() =>
                 setHoverPreviewSrc("/Awards_and_Recognition/764.webp")
               }
-              onMouseLeave={() => setHoverPreviewSrc(null)}
             >
               <Image
                 src="/Awards_and_Recognition/764.webp"
@@ -390,11 +348,10 @@ export default function AboutPage() {
               />
             </div>
             <div
-              className="relative hidden lg:block aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-zoom-in"
-              onMouseEnter={() =>
+              className="relative hidden lg:block aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
+              onClick={() =>
                 setHoverPreviewSrc("/Awards_and_Recognition/ds.webp")
               }
-              onMouseLeave={() => setHoverPreviewSrc(null)}
             >
               <Image
                 src="/Awards_and_Recognition/ds.webp"
@@ -407,11 +364,10 @@ export default function AboutPage() {
             {/* Row 2 (Featured Wide) */}
             <div className="col-span-2 lg:col-span-3 pb-4">
               <div
-                className="relative aspect-video w-full bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-zoom-in"
-                onMouseEnter={() =>
+                className="relative aspect-video w-full bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
+                onClick={() =>
                   setHoverPreviewSrc("/Awards_and_Recognition/dsas.webp")
                 }
-                onMouseLeave={() => setHoverPreviewSrc(null)}
               >
                 <Image
                   src="/Awards_and_Recognition/dsas.webp"
@@ -429,11 +385,10 @@ export default function AboutPage() {
 
             {/* Row 3 */}
             <div
-              className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-zoom-in"
-              onMouseEnter={() =>
+              className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
+              onClick={() =>
                 setHoverPreviewSrc("/Awards_and_Recognition/764.webp")
               }
-              onMouseLeave={() => setHoverPreviewSrc(null)}
             >
               <Image
                 src="/Awards_and_Recognition/764.webp"
@@ -443,11 +398,10 @@ export default function AboutPage() {
               />
             </div>
             <div
-              className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-zoom-in"
-              onMouseEnter={() =>
+              className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
+              onClick={() =>
                 setHoverPreviewSrc("/Awards_and_Recognition/msa.webp")
               }
-              onMouseLeave={() => setHoverPreviewSrc(null)}
             >
               <Image
                 src="/Awards_and_Recognition/msa.webp"
@@ -457,11 +411,10 @@ export default function AboutPage() {
               />
             </div>
             <div
-              className="relative col-span-2 lg:col-span-1 aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-zoom-in"
-              onMouseEnter={() =>
+              className="relative col-span-2 lg:col-span-1 aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
+              onClick={() =>
                 setHoverPreviewSrc("/Awards_and_Recognition/msa.webp")
               }
-              onMouseLeave={() => setHoverPreviewSrc(null)}
             >
               <Image
                 src="/Awards_and_Recognition/msa.webp"
@@ -483,7 +436,8 @@ export default function AboutPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="fixed inset-0 z-[80] pointer-events-none flex items-center justify-center bg-black/60 backdrop-blur-[2px]"
+            className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 backdrop-blur-[2px] cursor-pointer"
+            onClick={() => setHoverPreviewSrc(null)}
           >
             <motion.div
               initial={{ scale: 0.98, y: 6 }}

@@ -21,6 +21,7 @@ import {
   ChevronRight,
   Download,
 } from "lucide-react";
+import { useAnimation } from "@/context/AnimationContext";
 import LiveBackground from "@/components/LiveBackground";
 import Footer from "@/components/Footer";
 import ExperienceHero from "@/components/ExperienceHero";
@@ -30,6 +31,7 @@ import ScrollSectionComposer, {
 import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
 import VillasCarouselSection from "@/components/VillasCarouselSection";
 import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
+import WeekendVillasCarousel from "@/components/WeekendVillasCarousel";
 
 // Per request: remove all image links from this page (text-first).
 
@@ -52,22 +54,22 @@ const weekendSlides = [
   {
     title: "Poolside Mornings",
     desc: "Slow mornings by the pool with coffee, sunlight, and nowhere else to be.",
-    image: "/Experiences/Weddings/Bachelorette.webp",
+    image: "/Villa_Retreats/Palatio/3-Experiences/Pool_Breakfast.jpg",
   },
   {
     title: "Evenings Under the Stars",
     desc: "Bonfires, music, and long conversations that stretch late into the night.",
-    image: "/Villa_Retreats/Palatio/1-Hero/Facade_Day.jpg",
+    image: "/Villa_Retreats/Jade 735/Spaces/Pool_Side_Bar_Area.webp",
   },
   {
     title: "Outdoor Dining",
     desc: "Freshly grilled meals, laughter around the table, and food shared with friends.",
-    image: "/Villa_Retreats/Palatio/3-Experiences/Pool_Breakfast.jpg",
+    image: "/Villa_Retreats/Palatio/2-Spaces/Pool_SitOut.webp",
   },
   {
     title: "Nature & Nearby Escapes",
     desc: "Morning treks, quiet lakes, and scenic walks just minutes from your villa.",
-    image: "/Experiences/Weddings/Bachelorette.webp",
+    image: "/Villa_Retreats/Tranquil Woods/3-Experiences/Nature+Pool_exp.webp",
   },
 ];
 
@@ -127,6 +129,8 @@ const weekendVillas = [
 ];
 
 export default function WeekendGetawaysPage() {
+  const { setEnquireOverlayOpen } = useAnimation();
+
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
       <CorporateHeader />
@@ -171,7 +175,7 @@ export default function WeekendGetawaysPage() {
         title="Jade Weekends"
         slides={weekendSlides}
         ctaText="BOOK JADE WEEKEND"
-        ctaLink="/contact"
+        onCtaClick={() => setEnquireOverlayOpen(true)}
       />
 
       {/* SECTION 4: CURATED EXPERIENCES */}
@@ -180,26 +184,16 @@ export default function WeekendGetawaysPage() {
         title="Enhance Your Stay"
         experiences={weekendExperiences}
         ctaText="VIEW ALL EXPERIENCES"
-        ctaLink="/contact"
+        onCtaClick={() => setEnquireOverlayOpen(true)}
       />
 
       {/* SECTION 5: WHY CHOOSE JADE */}
       <WhyChooseJadeSection />
 
       {/* SECTION 6: OUR VILLAS CAROUSEL */}
-      <VillasCarouselSection
-        label="OUR VILLAS"
-        title={
-          <>
-            Themed Villas
-            <br />
-            By Jade
-          </>
-        }
-        villas={weekendVillas}
-        ctaText="VIEW ALL VILLA RETREATS"
-        ctaLink="/villas"
-      />
+      <div id="themed-villas">
+        <WeekendVillasCarousel />
+      </div>
 
       {/* SECTION 4: CTA */}
       <section className="py-fluid-lg md:py-fluid-xl bg-[#141517] border-t border-white/5">
@@ -214,7 +208,10 @@ export default function WeekendGetawaysPage() {
             Reach out and we&apos;ll suggest the best villas for your group
             size, occasion, and preferred vibe.
           </p>
-          <PrimaryButton href="/contact" className="w-full max-w-md mx-auto">
+          <PrimaryButton
+            onClick={() => setEnquireOverlayOpen(true)}
+            className="w-full max-w-md mx-auto"
+          >
             ENQUIRE
           </PrimaryButton>
         </div>
@@ -226,6 +223,8 @@ export default function WeekendGetawaysPage() {
 }
 
 function WhyChooseJadeSection() {
+  const { setEnquireOverlayOpen } = useAnimation();
+
   return (
     <PremiumFeaturesSection
       subheading="WHY CHOOSE JADE"
@@ -254,7 +253,9 @@ function WhyChooseJadeSection() {
       ]}
       footerText="Private villas and curated experiences designed to make every weekend feel like an escape."
       ctaText="PLAN YOUR WEEKEND ESCAPE"
-      ctaLink="/contact"
+      onCtaClick={() => setEnquireOverlayOpen(true)}
+      cardClassName="bg-[#363A45]"
+      alternateGold={true}
     />
   );
 }

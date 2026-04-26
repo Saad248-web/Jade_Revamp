@@ -15,6 +15,8 @@ interface PremiumFeaturesSectionProps {
   ctaText: string;
   ctaLink?: string;
   onCtaClick?: () => void;
+  cardClassName?: string;
+  alternateGold?: boolean;
 }
 
 export default function PremiumFeaturesSection({
@@ -25,6 +27,8 @@ export default function PremiumFeaturesSection({
   ctaText,
   ctaLink,
   onCtaClick,
+  cardClassName = "bg-[#121417]",
+  alternateGold = false,
 }: PremiumFeaturesSectionProps) {
   return (
     <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
@@ -38,17 +42,32 @@ export default function PremiumFeaturesSection({
           </h2>
         </div>
 
-        <div className="flex overflow-x-auto scrollbar-hide gap-[14px] mb-[40px] pb-4 snap-x snap-mandatory w-full justify-start px-4 md:px-8 xl:px-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[14px] mb-[40px] w-full px-4 md:px-8">
           {cards.map((card, idx) => (
             <div
               key={idx}
-              className="group relative flex-shrink-0 w-[269px] h-[375px] lg:w-[20vw] lg:h-auto lg:aspect-[269/375] bg-[#121417] border border-white/[0.05] p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 hover:border-[#EFCD62]/30 snap-center"
+              className={`group relative w-full h-[375px] border border-white/[0.05] p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 hover:border-[#EFCD62]/30 ${cardClassName}`}
             >
-              {/* Layer 1: Exact Figma Linear Gradient */}
+              {/* Layer 1: Refined Linear Fill with Accurate Shiny Accents */}
               <div className="absolute inset-0 z-0 overflow-hidden">
-                <div className="absolute inset-0 bg-[linear-gradient(to_top_right,#615646_0%,#484549_38%,#4A4C55_100%)] opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
-                {/* Subtle hover accent */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_100%,#EFCD6215_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                {/* Base Gradient - Always present for the Premium "Glass/Shine" effect */}
+                <div className="absolute inset-0 bg-[linear-gradient(135deg,#363A45_0%,#121417_100%)]" />
+
+                {/* Alternating Shiny Champagne/Golden Accents - Always present if alternateGold is true */}
+                {alternateGold && (
+                  <>
+                    {idx % 2 === 0 ? (
+                      /* Top Left Accent */
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(239,205,98,0.25)_0%,rgba(239,205,98,0.05)_40%,transparent_70%)]" />
+                    ) : (
+                      /* Bottom Right Accent */
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_85%,rgba(239,205,98,0.25)_0%,rgba(239,205,98,0.05)_40%,transparent_70%)]" />
+                    )}
+                  </>
+                )}
+
+                {/* Ambient Center Glow for "Shine" */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(239,205,98,0.03)_0%,transparent_80%)]" />
               </div>
 
               {/* Layer 2: Geometric & Starry Texture (Figma Replicated) */}
