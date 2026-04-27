@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import {
   X,
@@ -793,6 +794,17 @@ function StepDetails({
           onChange={(e) => setDetails({ ...details, notes: e.target.value })}
           className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors resize-none font-manrope"
         />
+
+        <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
+          By proceeding, you agree to our{" "}
+          <Link
+            href="/privacy-policy"
+            className="text-[#EFCD62] hover:underline"
+            onClick={onClose}
+          >
+            Privacy Policy
+          </Link>
+        </p>
       </div>
 
       {/* Footer */}
@@ -1082,9 +1094,13 @@ function StepReview({
             <span className="underline cursor-pointer hover:text-white/60 transition-colors">
               Cancel within 24 hours for refund
             </span>
-            <span className="underline cursor-pointer hover:text-white/60 transition-colors">
+            <Link
+              href="/privacy-policy"
+              className="underline cursor-pointer hover:text-white/60 transition-colors"
+              onClick={onClose}
+            >
               Full Policy
-            </span>
+            </Link>
           </div>
         </div>
       </div>

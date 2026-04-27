@@ -14,7 +14,9 @@ const AMENITIES = [
       "From private chef dinners to starlit barbecues crafted in your villa.",
     tags: ["Private Chef", "Barbecue Setup", "Custom Menus"],
     bgImage:
-      "https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "/Home Page/What Comes With Staying At Jade/culinary experiences.webp",
+    cardImage:
+      "/Home Page/What Comes With Staying At Jade/culinary experiences 2.webp",
   },
   {
     title: "WHAT COMES WITH STAYING AT JADE",
@@ -23,7 +25,8 @@ const AMENITIES = [
       "Immersive games, private pools, and home theatre screening rooms.",
     tags: ["Private Pools", "Home Theatre", "Indoor Games"],
     bgImage:
-      "https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "/Home Page/What Comes With Staying At Jade/leisure & enterta....webp",
+    cardImage: "/Home Page/What Comes With Staying At Jade/leisure & ....webp",
   },
   {
     title: "WHAT COMES WITH STAYING AT JADE",
@@ -32,15 +35,17 @@ const AMENITIES = [
       "Alfresco dining, lush lawns, and open-air decks in serene surroundings.",
     tags: ["Expansive Lawns", "Alfresco Dining", "Open Decks"],
     bgImage:
-      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "/Home Page/What Comes With Staying At Jade/Wellness & Nature.webp",
+    cardImage:
+      "/Home Page/What Comes With Staying At Jade/Wellness & Naturee.webp",
   },
   {
     title: "WHAT COMES WITH STAYING AT JADE",
     heading: ["Seamless", "Hospitality"],
     subtext: "Round-the-clock concierge support and premium housekeeping.",
     tags: ["24/7 Support", "Housekeeping", "Butler Service"],
-    bgImage:
-      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    bgImage: "/Experiences/Corporate Retreats/1-Hero/xhero.webp",
+    cardImage: "/Experiences/Weekend Getaways/1-Hero/casual stays.webp",
   },
 ];
 
@@ -145,7 +150,7 @@ export default function JadeAmenitiesSection() {
           className="w-full h-full relative"
         >
           <Image
-            src={currentSlide.bgImage}
+            src={currentSlide.cardImage}
             alt="Feature"
             fill
             className="object-cover"

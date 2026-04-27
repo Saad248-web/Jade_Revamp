@@ -1,7 +1,13 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  AnimatePresence,
+} from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, ArrowRight } from "lucide-react";
@@ -15,46 +21,37 @@ const VILLAS = [
     title: "Dome Villa",
     description:
       "A hobbit-home inspired retreat set amidst rolling hills, defined by its iconic dome architecture, private pool and immersive connection to nature. Ideal for intimate getaways and quiet celebrations.",
-    desktopImage:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop",
-    mobileImage:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop",
+    images: [
+      "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/1-4.webp",
+      "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/Dome Villas by Jade - Blue v3_Page_01_Image_0001.webp",
+      "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/domeye.webp",
+    ],
     link: "/villas/dome-villa",
   },
   {
     id: 2,
-    category: "GARDEN FARM VILLA",
-    title: "Lemon Tree",
-    description:
-      "A farmhouse retreat nestled within a lemon grove, featuring a rooftop pool and a flexible indoor hall—well suited for relaxed getaways, intimate celebrations, and countryside offsites.",
-    desktopImage:
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2940&auto=format&fit=crop",
-    mobileImage:
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2940&auto=format&fit=crop",
-    link: "/villas/lemon-tree",
-  },
-  {
-    id: 3,
     category: "HILL VIEW VILLA",
     title: "Retreat on the Ridge",
     description:
       "A hill-facing private villa known for panoramic views, sunset backdrops, and a serene pool setting—designed for group getaways, nature-led retreats, and slow weekends away from the city.",
-    desktopImage:
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2950&auto=format&fit=crop",
-    mobileImage:
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2950&auto=format&fit=crop",
+    images: [
+      "/Home Page/Featured Villas/HILL VIEW VILLA/1.webp",
+      "/Home Page/Featured Villas/HILL VIEW VILLA/2.webp",
+      "/Home Page/Featured Villas/HILL VIEW VILLA/3.webp",
+    ],
     link: "/villas/retreat-on-ridge",
   },
   {
-    id: 4,
+    id: 3,
     category: "CONTEMPORARY GLASS VILLA",
     title: "Magnolia",
     description:
       "A modern glass-walled estate with expansive lawns, a private pool, and an in-house theatre—crafted for vibrant celebrations, social gatherings, and large-format experiences with complete privacy.",
-    desktopImage:
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2940&auto=format&fit=crop",
-    mobileImage:
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2940&auto=format&fit=crop",
+    images: [
+      "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/1.webp",
+      "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/2.webp",
+      "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/3.webp",
+    ],
     link: "/villas/magnolia",
   },
 ];
@@ -125,8 +122,8 @@ function IntroPanel({
 
   return (
     <motion.div
-      style={{ x, opacity, zIndex: 50 }}
-      className="absolute inset-0 w-full h-full flex flex-col items-center justify-center px-6 md:px-24"
+      style={{ x, opacity, zIndex: 5 }}
+      className="absolute inset-0 w-full h-full flex flex-col items-center justify-center px-6 md:px-24 pointer-events-none"
     >
       <div className="relative w-full max-w-4xl mx-auto flex flex-col items-center text-center">
         <motion.div style={{ y: textY }} className="z-10 relative">
@@ -159,6 +156,22 @@ function VillaSlide({
   globalProgress: any;
   totalSteps: number;
 }) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) =>
+      prev === data.images.length - 1 ? 0 : prev + 1,
+    );
+  };
+
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? data.images.length - 1 : prev - 1,
+    );
+  };
+
   // Zoom-safe offset: half-viewport + half-panel + 56px off-screen gap.
   // Ensures exactly one panel is visible at any zoom level (100/125/140/150%).
   const [offsetPx, setOffsetPx] = useState(1000);
@@ -204,29 +217,48 @@ function VillaSlide({
       style={{ x, zIndex: index * 10 }}
       className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none bg-transparent"
     >
-      <div className="pointer-events-auto relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-20 lg:px-32 xl:px-48">
+      <div className="pointer-events-none relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-20 lg:px-32 xl:px-48">
         {/* Layout Container: Stacked universally on all screen sizes */}
-        <div className="relative w-full max-w-3xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
+        <div className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
           {/* Image Section */}
           <div className="relative w-full aspect-[16/9] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
             <div className="w-full h-full relative">
-              <Image
-                src={data.desktopImage}
-                alt={data.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 100vw, (max-width: 1280px) 95vw, 1400px"
-                unoptimized={data.title === "Retreat on the Ridge"}
-              />
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentImageIndex}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="absolute inset-0 w-full h-full"
+                >
+                  <Image
+                    src={data.images[currentImageIndex]}
+                    alt={data.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1280px) 95vw, 1400px"
+                    priority
+                  />
+                </motion.div>
+              </AnimatePresence>
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent lg:hidden" />
-              {/* Navigation Arrows (Visual) */}
-              <div className="absolute bottom-0 left-0 z-20">
-                <button className="p-4 bg-black/40 backdrop-blur-md text-white hover:bg-[#EFCD62] hover:text-black transition-colors rounded-none border-t border-r border-white/10">
+              {/* Navigation Arrows */}
+              <div className="absolute bottom-0 left-0 z-[100]">
+                <button
+                  type="button"
+                  onClick={handlePrevImage}
+                  className="p-4 bg-black/40 backdrop-blur-md text-white hover:bg-[#EFCD62] hover:text-black transition-colors rounded-none border-t border-r border-white/10 pointer-events-auto cursor-pointer"
+                >
                   <ChevronRight className="w-6 h-6 rotate-180" />
                 </button>
               </div>
-              <div className="absolute bottom-0 right-0 z-20">
-                <button className="p-4 bg-black/40 backdrop-blur-md text-white hover:bg-[#EFCD62] hover:text-black transition-colors rounded-none border-t border-l border-white/10">
+              <div className="absolute bottom-0 right-0 z-[100]">
+                <button
+                  type="button"
+                  onClick={handleNextImage}
+                  className="p-4 bg-black/40 backdrop-blur-md text-white hover:bg-[#EFCD62] hover:text-black transition-colors rounded-none border-t border-l border-white/10 pointer-events-auto cursor-pointer"
+                >
                   <ChevronRight className="w-6 h-6" />
                 </button>
               </div>
@@ -282,15 +314,21 @@ function EndButton({ globalProgress }: { globalProgress: any }) {
   const opacity = useTransform(globalProgress, [0.85, 1.0], [0, 1]);
   const scale = useTransform(globalProgress, [0.85, 1.0], [0.8, 1]);
   const y = useTransform(globalProgress, [0.85, 1.0], [60, 0]);
+  const pointerEvents = useTransform(
+    globalProgress,
+    [0.85, 0.9],
+    ["none", "auto"],
+  );
 
   return (
     <motion.div
-      style={{ opacity, scale, y, zIndex: 100 }}
+      style={{ opacity, scale, y, zIndex: 110 }}
       className="absolute inset-0 flex items-center justify-center pointer-events-none"
     >
       <Link
         href="/villas"
-        className="pointer-events-auto relative overflow-hidden flex items-center justify-center gap-4 px-10 py-5 md:px-14 md:py-6 rounded-full bg-[#EFCD62] text-[#0D4032] font-philosopher text-xl md:text-2xl shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:bg-[#F3DA85] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-all duration-500 group hover:scale-105"
+        style={{ pointerEvents: pointerEvents as any }}
+        className="relative overflow-hidden flex items-center justify-center gap-4 px-10 py-5 md:px-14 md:py-6 rounded-full bg-[#EFCD62] text-[#0D4032] font-philosopher text-xl md:text-2xl shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:bg-[#F3DA85] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-all duration-500 group hover:scale-105"
       >
         {/* Subtle metallic glare for premium finish */}
         <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/10 to-white/40 pointer-events-none" />

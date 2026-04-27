@@ -15,8 +15,7 @@ const PANELS = [
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone’s wishlist.",
     cta: "SEE WHAT A GETAWAY LOOKS LIKE",
     href: "/weekend-getaways",
-    image:
-      "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
+    image: "/Home Page/2-Experiences/weekend getaways.webp",
     type: "full",
   },
   {
@@ -26,7 +25,7 @@ const PANELS = [
       "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
     href: "/party-villas#spaces-for-celebrations",
-    image: "/X/ROR/14.webp",
+    image: "/Home Page/2-Experiences/celebrations & parties.webp",
     type: "full",
   },
   {
@@ -36,7 +35,7 @@ const PANELS = [
       "Intimate ceremonies to grand, multi-day wedding celebrations, set amid private gardens, sprawling lawns, and luxury rooms.",
     cta: "SEE HOW WEDDINGS UNFOLD",
     href: "/weddings",
-    image: "/X/Magnolia/9.webp",
+    image: "/Home Page/2-Experiences/Weddings.webp",
     type: "full",
   },
   {
@@ -45,19 +44,19 @@ const PANELS = [
     items: [
       {
         title: "Corporate Retreats",
-        img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
+        img: "/Experiences/Corporate Retreats/1-Hero/xhero.webp",
       },
       {
         title: "Wellness Retreats",
-        img: "/X/Magnolia/16.webp",
+        img: "/Home Page/2-Experiences/Wellness.webp",
       },
       {
         title: "Caravan Journeys",
-        img: "/X/Magnolia/14.webp",
+        img: "/Experiences/Caravan/1-Hero/14.webp",
       },
       {
         title: "Casual Stays",
-        img: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
+        img: "/Home Page/2-Experiences/casual stays.webp",
       },
     ],
     cta: "SEE ALL EXPERIENCES",

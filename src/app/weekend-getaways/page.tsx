@@ -54,54 +54,59 @@ const weekendSlides = [
   {
     title: "Poolside Mornings",
     desc: "Slow mornings by the pool with coffee, sunlight, and nowhere else to be.",
-    image: "/Villa_Retreats/Palatio/3-Experiences/Pool_Breakfast.jpg",
+    image:
+      "/Experiences/Weekend Getaways/2-What Weekends Look like/Poolside Mornings.webp",
   },
   {
     title: "Evenings Under the Stars",
     desc: "Bonfires, music, and long conversations that stretch late into the night.",
-    image: "/Villa_Retreats/Jade 735/Spaces/Pool_Side_Bar_Area.webp",
+    image:
+      "/Experiences/Weekend Getaways/2-What Weekends Look like/Evenings Under the Stars.webp",
   },
   {
     title: "Outdoor Dining",
     desc: "Freshly grilled meals, laughter around the table, and food shared with friends.",
-    image: "/Villa_Retreats/Palatio/2-Spaces/Pool_SitOut.webp",
+    image:
+      "/Experiences/Weekend Getaways/2-What Weekends Look like/Outdoor dining.webp",
   },
   {
     title: "Nature & Nearby Escapes",
     desc: "Morning treks, quiet lakes, and scenic walks just minutes from your villa.",
-    image: "/Villa_Retreats/Tranquil Woods/3-Experiences/Nature+Pool_exp.webp",
+    image:
+      "/Experiences/Weekend Getaways/2-What Weekends Look like/Nature & Nearby Escapes.webp",
   },
 ];
 
 const weekendExperiences = [
-  { title: "Bonfire Nights", image: "/Experiences/Weddings/Bachelorette.webp" },
+  {
+    title: "Bonfire Nights",
+    image: "/Experiences/Weekend Getaways/3-Addons/Bonfire Nights.webp",
+  },
   {
     title: "BBQ Evenings",
-    image: "/Villa_Retreats/Palatio/3-Experiences/Pool_Breakfast.jpg",
+    image: "/Experiences/Weekend Getaways/3-Addons/BBQ Evenings.webp",
   },
   {
     title: "Movie Under the Stars",
-    image: "/Villa_Retreats/Palatio/1-Hero/Facade_Day.jpg",
+    image:
+      "/Experiences/Weekend Getaways/3-Addons/Movie Under The Stars-2.webp",
   },
   {
     title: "Candlelight Dinner",
-    image: "/Experiences/Weddings/Bachelorette.webp",
+    image: "/Experiences/Weekend Getaways/3-Addons/Candlelight Dinner.webp",
   },
   {
     title: "Outdoor Games",
-    image: "/Villa_Retreats/Palatio/3-Experiences/Pool_Breakfast.jpg",
+    image: "/Experiences/Weekend Getaways/3-Addons/outdoor games.webp",
   },
   {
     title: "Live Music / DJ",
-    image: "/Villa_Retreats/Palatio/1-Hero/Facade_Day.jpg",
+    image: "/Experiences/Weekend Getaways/3-Addons/Live Music _ DJ.webp",
   },
   {
     title: "Private Chef Experience",
-    image: "/Experiences/Weddings/Bachelorette.webp",
-  },
-  {
-    title: "Poolside Celebrations",
-    image: "/Villa_Retreats/Palatio/3-Experiences/Pool_Breakfast.jpg",
+    image:
+      "/Experiences/Weekend Getaways/3-Addons/Private Chef Experience.webp",
   },
 ];
 
@@ -138,7 +143,7 @@ export default function WeekendGetawaysPage() {
 
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
-        backgroundImage=""
+        backgroundImage="/Experiences/Weekend Getaways/1-Hero/casual stays.webp"
         backgroundAlt="Weekend Getaways"
         heading={
           <>

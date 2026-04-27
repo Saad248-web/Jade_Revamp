@@ -458,6 +458,17 @@ export default function PartnerOverlay() {
                         )}
                       </div>
 
+                      <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
+                        By proceeding, you agree to our{" "}
+                        <Link
+                          href="/privacy-policy"
+                          className="text-[#EFCD62] hover:underline"
+                          onClick={handleClose}
+                        >
+                          Privacy Policy
+                        </Link>
+                      </p>
+
                       <PrimaryButton
                         className="w-full mt-2"
                         onClick={handleSubmit}

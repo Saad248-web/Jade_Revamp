@@ -20,6 +20,7 @@ import {
   Instagram,
   Youtube,
 } from "lucide-react";
+import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 
 interface CorporateVenueOverlayProps {
@@ -698,6 +699,17 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors"
                         />
                       </div>
+
+                      <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
+                        By proceeding, you agree to our{" "}
+                        <Link
+                          href="/privacy-policy"
+                          className="text-[#EFCD62] hover:underline"
+                          onClick={onClose}
+                        >
+                          Privacy Policy
+                        </Link>
+                      </p>
 
                       <button
                         type="submit"

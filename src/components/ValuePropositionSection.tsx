@@ -14,7 +14,9 @@ const SLIDES = [
     subtext:
       "Located in serene yet accessible pockets around Bangalore, offering privacy without disconnect.",
     bgImage:
-      "https://images.pexels.com/photos/32870/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1600",
+      "/Home Page/The Value Jade Provides/Private Villas aroundBangalore 1.webp",
+    cardImage:
+      "/Home Page/The Value Jade Provides/Private Villas around Bangalore 2.webp",
   },
   {
     id: 2,
@@ -23,7 +25,9 @@ const SLIDES = [
     subtext:
       "From luxury pool villas and glass homes to landscaped farm estates — each space chosen for its character and versatility.",
     bgImage:
-      "https://images.pexels.com/photos/1643384/pexels-photo-1643384.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "/Home Page/The Value Jade Provides/Distinctive Themed Villas 1.webp",
+    cardImage:
+      "/Home Page/The Value Jade Provides/Distinctive Themed Villas 2.webp",
   },
   {
     id: 3,
@@ -31,8 +35,8 @@ const SLIDES = [
     heading: ["Curated", "experiences"],
     subtext:
       "More than just a stay — from private chef dining and starlit barbecues to curated recreational setups tailored precisely for you.",
-    bgImage:
-      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    bgImage: "/Home Page/The Value Jade Provides/curated exp 1.webp",
+    cardImage: "/Home Page/The Value Jade Provides/curated exp2.webp",
   },
 ];
 
@@ -138,7 +142,7 @@ export default function ValuePropositionSection() {
           className="w-full h-full relative"
         >
           <Image
-            src={currentSlide.bgImage}
+            src={currentSlide.cardImage}
             alt="Feature"
             fill
             className="object-cover"

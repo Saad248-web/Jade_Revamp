@@ -3,44 +3,37 @@
 // Do not edit manually.
 
 export const MEDIA_MANIFEST = {
-  "generatedAt": "2026-04-26T22:32:41.524Z",
+  "generatedAt": "2026-04-27T11:52:49.640Z",
   "villasByFolder": {
     "Diamond": {
       "hero": [
         "/Villa_Retreats/Diamond/Hero/hero.webp"
       ],
       "spaces": [
-        "/Villa_Retreats/Diamond/Spaces/Double_Occupancy.webp",
-        "/Villa_Retreats/Diamond/Spaces/Pool.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_04.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_05.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_06.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_07.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_08.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_09.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_10.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_11.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_12.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_13.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_14.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_15.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_16.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_17.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_18.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_19.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_20.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_21.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_22.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_23.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_24.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_25.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_26.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_27.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_28.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_29.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_30.webp",
-        "/Villa_Retreats/Diamond/Spaces/spaces_31.webp"
+        "/Villa_Retreats/Diamond/Spaces/75 inch Smart Tv .webp",
+        "/Villa_Retreats/Diamond/Spaces/Carrom Board.webp",
+        "/Villa_Retreats/Diamond/Spaces/Entertainment & Lounge Area.webp",
+        "/Villa_Retreats/Diamond/Spaces/Foosball Table.webp",
+        "/Villa_Retreats/Diamond/Spaces/Gazebo - Lower Deck.webp",
+        "/Villa_Retreats/Diamond/Spaces/Lounge Area.webp",
+        "/Villa_Retreats/Diamond/Spaces/Lounger Sofa.webp",
+        "/Villa_Retreats/Diamond/Spaces/Multipurpose Hall.webp",
+        "/Villa_Retreats/Diamond/Spaces/Nine bedroom Villa.webp",
+        "/Villa_Retreats/Diamond/Spaces/Pool Area With Loungers.webp",
+        "/Villa_Retreats/Diamond/Spaces/Private Pool.webp",
+        "/Villa_Retreats/Diamond/Spaces/Quadruple Occupancy Room.webp",
+        "/Villa_Retreats/Diamond/Spaces/Semi Open Dining Hall.webp",
+        "/Villa_Retreats/Diamond/Spaces/Semi Open Hall.webp",
+        "/Villa_Retreats/Diamond/Spaces/Snooker Table.webp",
+        "/Villa_Retreats/Diamond/Spaces/Table Tennis Table.webp",
+        "/Villa_Retreats/Diamond/Spaces/The Stage.webp",
+        "/Villa_Retreats/Diamond/Spaces/Triple Occupancy Room.webp",
+        "/Villa_Retreats/Diamond/Spaces/Two Deck Gazebo.webp",
+        "/Villa_Retreats/Diamond/Spaces/double Occupancy Room.webp",
+        "/Villa_Retreats/Diamond/Spaces/hero(1).webp",
+        "/Villa_Retreats/Diamond/Spaces/hero(2).webp",
+        "/Villa_Retreats/Diamond/Spaces/hero(3).webp",
+        "/Villa_Retreats/Diamond/Spaces/hero.webp"
       ],
       "experiences": [
         "/Villa_Retreats/Diamond/3-Experiences/Bonfire.webp",
@@ -58,6 +51,21 @@ export const MEDIA_MANIFEST = {
       "other": [],
       "categorizedSpaces": [
         {
+          "id": "outdoors-lawns",
+          "title": "Outdoors & Lawns",
+          "category": "Outdoors & Lawns",
+          "amenities": [
+            "Lawns",
+            "Garden zones",
+            "Open-air seating",
+            "Activities"
+          ],
+          "images": [
+            "/Villa_Retreats/Diamond/Spaces/Gazebo - Lower Deck.webp",
+            "/Villa_Retreats/Diamond/Spaces/Two Deck Gazebo.webp"
+          ]
+        },
+        {
           "id": "pool-water",
           "title": "Pool & Water",
           "category": "Pool & Water",
@@ -68,7 +76,45 @@ export const MEDIA_MANIFEST = {
             "Deck"
           ],
           "images": [
-            "/Villa_Retreats/Diamond/Spaces/Pool.webp"
+            "/Villa_Retreats/Diamond/Spaces/Pool Area With Loungers.webp",
+            "/Villa_Retreats/Diamond/Spaces/Private Pool.webp"
+          ]
+        },
+        {
+          "id": "living-dining",
+          "title": "Living & Dining",
+          "category": "Living & Dining",
+          "amenities": [
+            "Living spaces",
+            "Dining",
+            "Lounges",
+            "Interiors"
+          ],
+          "images": [
+            "/Villa_Retreats/Diamond/Spaces/75 inch Smart Tv .webp",
+            "/Villa_Retreats/Diamond/Spaces/Entertainment & Lounge Area.webp",
+            "/Villa_Retreats/Diamond/Spaces/Lounge Area.webp",
+            "/Villa_Retreats/Diamond/Spaces/Lounger Sofa.webp",
+            "/Villa_Retreats/Diamond/Spaces/Multipurpose Hall.webp",
+            "/Villa_Retreats/Diamond/Spaces/Semi Open Dining Hall.webp",
+            "/Villa_Retreats/Diamond/Spaces/Semi Open Hall.webp"
+          ]
+        },
+        {
+          "id": "bedrooms",
+          "title": "Bedrooms",
+          "category": "Bedrooms",
+          "amenities": [
+            "Beds",
+            "Sleep comfort",
+            "Storage",
+            "AC"
+          ],
+          "images": [
+            "/Villa_Retreats/Diamond/Spaces/Nine bedroom Villa.webp",
+            "/Villa_Retreats/Diamond/Spaces/Quadruple Occupancy Room.webp",
+            "/Villa_Retreats/Diamond/Spaces/Triple Occupancy Room.webp",
+            "/Villa_Retreats/Diamond/Spaces/double Occupancy Room.webp"
           ]
         },
         {
@@ -82,36 +128,15 @@ export const MEDIA_MANIFEST = {
             "Highlights"
           ],
           "images": [
-            "/Villa_Retreats/Diamond/Spaces/Double_Occupancy.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_03.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_04.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_05.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_06.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_07.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_08.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_09.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_10.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_11.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_12.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_13.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_14.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_15.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_16.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_17.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_18.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_19.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_20.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_21.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_22.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_23.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_24.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_25.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_26.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_27.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_28.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_29.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_30.webp",
-            "/Villa_Retreats/Diamond/Spaces/spaces_31.webp"
+            "/Villa_Retreats/Diamond/Spaces/Carrom Board.webp",
+            "/Villa_Retreats/Diamond/Spaces/Foosball Table.webp",
+            "/Villa_Retreats/Diamond/Spaces/Snooker Table.webp",
+            "/Villa_Retreats/Diamond/Spaces/Table Tennis Table.webp",
+            "/Villa_Retreats/Diamond/Spaces/The Stage.webp",
+            "/Villa_Retreats/Diamond/Spaces/hero(1).webp",
+            "/Villa_Retreats/Diamond/Spaces/hero(2).webp",
+            "/Villa_Retreats/Diamond/Spaces/hero(3).webp",
+            "/Villa_Retreats/Diamond/Spaces/hero.webp"
           ]
         }
       ]
@@ -1975,8 +2000,47 @@ export const MEDIA_MANIFEST = {
     },
     "Party Villas": {
       "root": "/Experiences/Party Villas",
-      "all": [],
-      "groups": []
+      "all": [
+        "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
+        "/Experiences/Party Villas/2-Party Type/Bachelor_Bachelorette Parties.webp",
+        "/Experiences/Party Villas/2-Party Type/Birthdays & Anniversaries.webp",
+        "/Experiences/Party Villas/2-Party Type/Pool Parties.webp",
+        "/Experiences/Party Villas/2-Party Type/Reunions & Graduation Parties.webp",
+        "/Experiences/Party Villas/3-Addons/BBQ & Live Grills.webp",
+        "/Experiences/Party Villas/3-Addons/Bonfire Nights.webp",
+        "/Experiences/Party Villas/3-Addons/Cocktail Bar Setup.webp",
+        "/Experiences/Party Villas/3-Addons/DJ & Music Setup.webp",
+        "/Experiences/Party Villas/3-Addons/Movie Under The Stars-2.webp",
+        "/Experiences/Party Villas/3-Addons/Themed Decor and Styling.webp"
+      ],
+      "groups": [
+        {
+          "folder": "1-Hero",
+          "images": [
+            "/Experiences/Party Villas/1-Hero/Pool Parties.webp"
+          ]
+        },
+        {
+          "folder": "2-Party Type",
+          "images": [
+            "/Experiences/Party Villas/2-Party Type/Bachelor_Bachelorette Parties.webp",
+            "/Experiences/Party Villas/2-Party Type/Birthdays & Anniversaries.webp",
+            "/Experiences/Party Villas/2-Party Type/Pool Parties.webp",
+            "/Experiences/Party Villas/2-Party Type/Reunions & Graduation Parties.webp"
+          ]
+        },
+        {
+          "folder": "3-Addons",
+          "images": [
+            "/Experiences/Party Villas/3-Addons/BBQ & Live Grills.webp",
+            "/Experiences/Party Villas/3-Addons/Bonfire Nights.webp",
+            "/Experiences/Party Villas/3-Addons/Cocktail Bar Setup.webp",
+            "/Experiences/Party Villas/3-Addons/DJ & Music Setup.webp",
+            "/Experiences/Party Villas/3-Addons/Movie Under The Stars-2.webp",
+            "/Experiences/Party Villas/3-Addons/Themed Decor and Styling.webp"
+          ]
+        }
+      ]
     },
     "Weddings": {
       "root": "/Experiences/Weddings",
@@ -2320,8 +2384,49 @@ export const MEDIA_MANIFEST = {
     },
     "Weekend Getaways": {
       "root": "/Experiences/Weekend Getaways",
-      "all": [],
-      "groups": []
+      "all": [
+        "/Experiences/Weekend Getaways/1-Hero/casual stays.webp",
+        "/Experiences/Weekend Getaways/2-What Weekends Look like/Evenings Under the Stars.webp",
+        "/Experiences/Weekend Getaways/2-What Weekends Look like/Nature & Nearby Escapes.webp",
+        "/Experiences/Weekend Getaways/2-What Weekends Look like/Outdoor dining.webp",
+        "/Experiences/Weekend Getaways/2-What Weekends Look like/Poolside Mornings.webp",
+        "/Experiences/Weekend Getaways/3-Addons/BBQ Evenings.webp",
+        "/Experiences/Weekend Getaways/3-Addons/Bonfire Nights.webp",
+        "/Experiences/Weekend Getaways/3-Addons/Candlelight Dinner.webp",
+        "/Experiences/Weekend Getaways/3-Addons/Live Music _ DJ.webp",
+        "/Experiences/Weekend Getaways/3-Addons/Movie Under The Stars-2.webp",
+        "/Experiences/Weekend Getaways/3-Addons/Private Chef Experience.webp",
+        "/Experiences/Weekend Getaways/3-Addons/outdoor games.webp"
+      ],
+      "groups": [
+        {
+          "folder": "1-Hero",
+          "images": [
+            "/Experiences/Weekend Getaways/1-Hero/casual stays.webp"
+          ]
+        },
+        {
+          "folder": "2-What Weekends Look like",
+          "images": [
+            "/Experiences/Weekend Getaways/2-What Weekends Look like/Evenings Under the Stars.webp",
+            "/Experiences/Weekend Getaways/2-What Weekends Look like/Nature & Nearby Escapes.webp",
+            "/Experiences/Weekend Getaways/2-What Weekends Look like/Outdoor dining.webp",
+            "/Experiences/Weekend Getaways/2-What Weekends Look like/Poolside Mornings.webp"
+          ]
+        },
+        {
+          "folder": "3-Addons",
+          "images": [
+            "/Experiences/Weekend Getaways/3-Addons/BBQ Evenings.webp",
+            "/Experiences/Weekend Getaways/3-Addons/Bonfire Nights.webp",
+            "/Experiences/Weekend Getaways/3-Addons/Candlelight Dinner.webp",
+            "/Experiences/Weekend Getaways/3-Addons/Live Music _ DJ.webp",
+            "/Experiences/Weekend Getaways/3-Addons/Movie Under The Stars-2.webp",
+            "/Experiences/Weekend Getaways/3-Addons/Private Chef Experience.webp",
+            "/Experiences/Weekend Getaways/3-Addons/outdoor games.webp"
+          ]
+        }
+      ]
     }
   }
 } as const;

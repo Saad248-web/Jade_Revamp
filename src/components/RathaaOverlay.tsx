@@ -11,6 +11,7 @@ import {
   Youtube,
   Calendar,
 } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useAnimation } from "@/context/AnimationContext";
@@ -287,6 +288,16 @@ export default function RathaaOverlay() {
                     </div>
 
                     <div className="mt-8 border-t border-white/10 pt-6">
+                      <p className="text-[11px] text-white/30 pb-4 text-center font-manrope">
+                        By proceeding, you agree to our{" "}
+                        <Link
+                          href="/privacy-policy"
+                          className="text-[#EFCD62] hover:underline"
+                          onClick={handleClose}
+                        >
+                          Privacy Policy
+                        </Link>
+                      </p>
                       <button
                         type="submit"
                         disabled={!isFormValid()}

@@ -19,6 +19,7 @@ import {
   Instagram,
   Youtube,
 } from "lucide-react";
+import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 
 interface PartyVenueOverlayProps {
@@ -609,6 +610,17 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                           <option>Other</option>
                         </select>
                       </div>
+
+                      <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
+                        By proceeding, you agree to our{" "}
+                        <Link
+                          href="/privacy-policy"
+                          className="text-[#EFCD62] hover:underline"
+                          onClick={() => onClose()}
+                        >
+                          Privacy Policy
+                        </Link>
+                      </p>
 
                       <button
                         type="submit"

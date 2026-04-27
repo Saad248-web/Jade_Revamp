@@ -93,7 +93,14 @@ function detectAdvancedCategory(title) {
   )
     return "Bathrooms";
 
-  if (has("bed") || has("bedroom") || has("suite") || has("master"))
+  if (
+    has("bed") ||
+    has("bedroom") ||
+    has("suite") ||
+    has("master") ||
+    has("occupancy") ||
+    has("stay")
+  )
     return "Bedrooms";
 
   if (has("kitchen") || has("bar") || has("counter") || has("dry kitchen"))
@@ -108,8 +115,7 @@ function detectAdvancedCategory(title) {
     has("theatre") ||
     has("theater") ||
     has("home theatre") ||
-    has("tv") ||
-    has("room")
+    has("tv")
   )
     return "Living & Dining";
 

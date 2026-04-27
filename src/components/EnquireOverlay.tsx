@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Check, Facebook, Instagram, Youtube, Calendar } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useAnimation } from "@/context/AnimationContext";
 
@@ -277,6 +278,16 @@ export default function EnquireOverlay() {
                     </div>
 
                     <div className="mt-8 border-t border-white/10 pt-6">
+                      <p className="text-[11px] text-white/40 mb-4 text-center font-manrope">
+                        By sending an inquiry, you agree to our{" "}
+                        <Link
+                          href="/privacy-policy"
+                          className="text-[#EFCD62] hover:underline"
+                          onClick={() => setEnquireOverlayOpen(false)}
+                        >
+                          Privacy Policy
+                        </Link>
+                      </p>
                       <button
                         type="submit"
                         disabled={!isFormValid()}

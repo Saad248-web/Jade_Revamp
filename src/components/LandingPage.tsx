@@ -95,14 +95,12 @@ export default function LandingPage() {
   };
 
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const videoSources = [
-    "https://assets.mixkit.co/videos/51532/51532-720.mp4", // Villa Party - Elegant Toast
-    "https://assets.mixkit.co/videos/36167/36167-720.mp4", // Pool Party - Azure Water
-    "https://assets.mixkit.co/videos/49555/49555-720.mp4", // Resort - Premium Architecture
-  ];
+  const videoSources = ["/Hero_Video/Hero Video.mp4"];
 
   const handleVideoEnd = () => {
-    setCurrentVideoIndex((prev: number) => (prev + 1) % videoSources.length);
+    if (videoSources.length > 1) {
+      setCurrentVideoIndex((prev: number) => (prev + 1) % videoSources.length);
+    }
   };
 
   return (
@@ -135,6 +133,7 @@ export default function LandingPage() {
               autoPlay
               muted
               playsInline
+              loop={videoSources.length === 1}
               onEnded={handleVideoEnd}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -142,6 +141,10 @@ export default function LandingPage() {
               transition={{ duration: 1 }}
               className="absolute inset-0 w-full h-full object-cover"
             >
+              <source
+                src={videoSources[currentVideoIndex].replace(".mp4", ".webm")}
+                type="video/webm"
+              />
               <source src={videoSources[currentVideoIndex]} type="video/mp4" />
             </motion.video>
           </AnimatePresence>

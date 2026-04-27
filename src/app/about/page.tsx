@@ -18,21 +18,25 @@ const OFFERINGS = [
     title: "Weekend Getaways",
     description:
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone's wishlist.",
+    image: "/Experiences/Weekend Getaways/1-Hero/casual stays.webp",
   },
   {
     title: "Corporate Retreats",
     description:
       "Private venues designed for focused sessions, team alignment, and meaningful downtime.",
+    image: "/Experiences/Corporate Retreats/1-Hero/xhero.webp",
   },
   {
     title: "Weddings",
     description:
       "Bespoke celebrations in curated settings that make your special day truly unforgettable.",
+    image: "/Experiences/Weddings/1-Hero/2 (1).webp",
   },
   {
     title: "Party Villas",
     description:
       "Host birthdays, pool parties, reunions or milestone celebrations in exclusive Jade villas.",
+    image: "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
   },
 ];
 
@@ -237,11 +241,22 @@ export default function AboutPage() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="absolute inset-0 w-full h-full border border-white/10 bg-gradient-to-br from-white/[0.06] via-[#1A1C1E] to-[#0B2C23]/80"
+                className="absolute inset-0 w-full h-full border border-white/10"
               >
-                <div className="absolute inset-0 opacity-[0.07] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:18px_18px]" />
+                {/* Background Image with Overlay */}
+                <div className="absolute inset-0">
+                  <Image
+                    src={offering.image}
+                    alt={offering.title}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute inset-0 opacity-[0.07] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:18px_18px]" />
+                </div>
 
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-8 md:p-16 text-center max-w-3xl mx-auto">
+                <div className="absolute inset-0 flex flex-col items-start justify-center p-8 md:p-16 lg:p-24 text-left max-w-4xl">
                   <motion.h3
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -254,7 +269,7 @@ export default function AboutPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="text-white/70 max-w-xl font-manrope text-gh-body leading-relaxed text-center"
+                    className="text-white/80 max-w-xl font-manrope text-gh-body leading-relaxed"
                   >
                     {offering.description}
                   </motion.p>
@@ -265,9 +280,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 6. MEET THE TEAM SECTION */}
+      {/* 6. MEET THE TEAM SECTION (Hidden for now)
       <section className="py-fluid-lg md:py-fluid-xl bg-[#1A1C1E] relative overflow-hidden">
-        {/* Background Animation (Vibrant) */}
         <div className="absolute inset-0 z-0 opacity-100">
           <LiveBackground />
         </div>
@@ -285,7 +299,6 @@ export default function AboutPage() {
           </p>
         </div>
 
-        {/* Full-width Slider Bleeding to Right */}
         <div className="relative z-10 pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]">
           <div className="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x snap-mandatory pr-12 md:pr-24 lg:pr-[30vw]">
             {TEAM_PLACEHOLDERS.map((member, i) => (
@@ -307,6 +320,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+      */}
 
       {/* 7. MEDIA SECTION */}
       <section className="py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
@@ -324,10 +338,10 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {/* Row 1 */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Unique Media Items */}
             <div
-              className="relative aspect-square md:aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
+              className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
               onClick={() =>
                 setHoverPreviewSrc("/Awards_and_Recognition/764.webp")
               }
@@ -339,16 +353,8 @@ export default function AboutPage() {
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
               />
             </div>
-            <div className="relative aspect-square lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group">
-              <Image
-                src="/assets/White_Logo.png"
-                alt="Media"
-                fill
-                className="object-contain p-12 opacity-80 group-hover:scale-110 transition-transform duration-700"
-              />
-            </div>
             <div
-              className="relative hidden lg:block aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
+              className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
               onClick={() =>
                 setHoverPreviewSrc("/Awards_and_Recognition/ds.webp")
               }
@@ -360,9 +366,22 @@ export default function AboutPage() {
                 className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
               />
             </div>
+            <div
+              className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
+              onClick={() =>
+                setHoverPreviewSrc("/Awards_and_Recognition/msa.webp")
+              }
+            >
+              <Image
+                src="/Awards_and_Recognition/msa.webp"
+                alt="Media"
+                fill
+                className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
+              />
+            </div>
 
-            {/* Row 2 (Featured Wide) */}
-            <div className="col-span-2 lg:col-span-3 pb-4">
+            {/* Featured Wide Media */}
+            <div className="col-span-1 md:col-span-3 pt-4">
               <div
                 className="relative aspect-video w-full bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
                 onClick={() =>
@@ -381,47 +400,6 @@ export default function AboutPage() {
                   </p>
                 </div>
               </div>
-            </div>
-
-            {/* Row 3 */}
-            <div
-              className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
-              onClick={() =>
-                setHoverPreviewSrc("/Awards_and_Recognition/764.webp")
-              }
-            >
-              <Image
-                src="/Awards_and_Recognition/764.webp"
-                alt="Media"
-                fill
-                className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
-              />
-            </div>
-            <div
-              className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
-              onClick={() =>
-                setHoverPreviewSrc("/Awards_and_Recognition/msa.webp")
-              }
-            >
-              <Image
-                src="/Awards_and_Recognition/msa.webp"
-                alt="Media"
-                fill
-                className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
-              />
-            </div>
-            <div
-              className="relative col-span-2 lg:col-span-1 aspect-video lg:aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
-              onClick={() =>
-                setHoverPreviewSrc("/Awards_and_Recognition/msa.webp")
-              }
-            >
-              <Image
-                src="/Awards_and_Recognition/msa.webp"
-                alt="Media"
-                fill
-                className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
-              />
             </div>
           </div>
         </div>
