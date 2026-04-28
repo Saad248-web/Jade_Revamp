@@ -33,9 +33,11 @@ export const tranquil = {
     },
   ],
   categories: ["Weddings", "Pre-wedding", "Luxury Stays", "Nature Retreats"],
-  thumbnail: "/Villa_Retreats/Tranquil Woods/1-Hero/hero.webp",
-  image: "/Villa_Retreats/Tranquil Woods/1-Hero/hero.webp",
+  thumbnail: "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
+  image: "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
   images: [
+    "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
+    "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 2.webp",
     "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa 1 Entrance 2.webp",
     "/Villa_Retreats/Tranquil Woods/2-Spaces/Private Pool Villa.webp",
     "/Villa_Retreats/Tranquil Woods/2-Spaces/Amphitheater.webp",
@@ -285,7 +287,7 @@ export const tranquil = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=KHJFdAVRmF8",
-    thumbnail: "/Villa_Retreats/Tranquil Woods/1-Hero/hero.webp",
+    thumbnail: "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
     duration: "2:51",
   },
   faq: [

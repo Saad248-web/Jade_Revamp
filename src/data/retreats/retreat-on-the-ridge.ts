@@ -35,9 +35,10 @@ export const retreatOnTheRidge = {
     },
   ],
   categories: ["Nature Retreats", "Weekend Getaways", "Pre-wedding"],
-  thumbnail: "/Villa_Retreats/Retreat on the ridge/1-Hero/3-2.webp",
-  image: "/Villa_Retreats/Retreat on the ridge/1-Hero/3-2.webp",
+  thumbnail: "/Villa_Retreats/Retreat on the ridge/1-Hero/Hero.webp",
+  image: "/Villa_Retreats/Retreat on the ridge/1-Hero/Hero.webp",
   images: [
+    "/Villa_Retreats/Retreat on the ridge/1-Hero/Hero.webp",
     "/Villa_Retreats/Retreat on the ridge/2-Spaces/Villa.webp",
     "/Villa_Retreats/Retreat on the ridge/2-Spaces/Private Pool.webp",
     "/Villa_Retreats/Retreat on the ridge/2-Spaces/Hill View.webp",
@@ -260,7 +261,7 @@ export const retreatOnTheRidge = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=SiQ_0LH1MDk",
-    thumbnail: "/Villa_Retreats/Retreat on the ridge/1-Hero/3-2.webp",
+    thumbnail: "/Villa_Retreats/Retreat on the ridge/1-Hero/Hero.webp",
     duration: "1:25",
   },
   faq: [

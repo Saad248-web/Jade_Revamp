@@ -35,12 +35,12 @@ export const diamond = {
   ],
   perfectForEvents: ["Weddings", "Corporate Events", "Large Gatherings"],
   categories: ["Weddings", "Corporate Retreats", "Party Venues", "Pre-wedding"],
-  image: "/Villa_Retreats/Diamond/Hero/hero.webp",
+  image: "/Villa_Retreats/Diamond/Hero/Hero 1.webp",
   images: [
-    "/Villa_Retreats/Diamond/Spaces/hero.webp",
-    "/Villa_Retreats/Diamond/Spaces/hero(1).webp",
-    "/Villa_Retreats/Diamond/Spaces/hero(2).webp",
-    "/Villa_Retreats/Diamond/Spaces/hero(3).webp",
+    "/Villa_Retreats/Diamond/Hero/Hero 1.webp",
+    "/Villa_Retreats/Diamond/Hero/Hero 2.webp",
+    "/Villa_Retreats/Diamond/Hero/Hero 3.webp",
+    "/Villa_Retreats/Diamond/Hero/Hero 4.webp",
     "/Villa_Retreats/Diamond/Spaces/Private Pool.webp",
     "/Villa_Retreats/Diamond/Spaces/Pool Area With Loungers.webp",
     "/Villa_Retreats/Diamond/Spaces/Gazebo - Lower Deck.webp",
@@ -101,9 +101,9 @@ export const diamond = {
       category: "Outdoors",
       amenities: ["Grand entry foyer", "Property facade", "Peripheral views"],
       images: [
-        "/Villa_Retreats/Diamond/Spaces/hero.webp",
+        "/Villa_Retreats/Diamond/Hero/Hero 1.webp",
         "/Villa_Retreats/Diamond/Spaces/Nine bedroom Villa.webp",
-        "/Villa_Retreats/Diamond/Spaces/hero(1).webp",
+        "/Villa_Retreats/Diamond/Hero/Hero 2.webp",
       ],
     },
     {
@@ -118,7 +118,7 @@ export const diamond = {
       images: [
         "/Villa_Retreats/Diamond/Spaces/Pool Area With Loungers.webp",
         "/Villa_Retreats/Diamond/Spaces/Private Pool.webp",
-        "/Villa_Retreats/Diamond/Spaces/hero(2).webp",
+        "/Villa_Retreats/Diamond/Hero/Hero 3.webp",
       ],
     },
     {
@@ -172,7 +172,7 @@ export const diamond = {
       images: [
         "/Villa_Retreats/Diamond/Spaces/Two Deck Gazebo.webp",
         "/Villa_Retreats/Diamond/Spaces/Gazebo - Lower Deck.webp",
-        "/Villa_Retreats/Diamond/Spaces/hero(3).webp",
+        "/Villa_Retreats/Diamond/Hero/Hero 4.webp",
       ],
     },
     {
@@ -315,7 +315,7 @@ export const diamond = {
   ],
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=t-VX-VDkXj4",
-    thumbnail: "/Villa_Retreats/Diamond/Hero/hero.webp",
+    thumbnail: "/Villa_Retreats/Diamond/Hero/Hero 1.webp",
     duration: "1:41",
   },
   faq: [

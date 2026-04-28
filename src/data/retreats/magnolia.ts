@@ -37,9 +37,14 @@ export const magnolia = {
     "Party Venues",
     "Pre-wedding",
   ],
-  thumbnail: "/Villa_Retreats/Magnolia/Hero/hero.webp",
-  image: "/Villa_Retreats/Magnolia/Hero/hero.webp",
+  thumbnail: "/Villa_Retreats/Magnolia/Hero/Hero 1.webp",
+  image: "/Villa_Retreats/Magnolia/Hero/Hero 1.webp",
   images: [
+    "/Villa_Retreats/Magnolia/Hero/Hero 1.webp",
+    "/Villa_Retreats/Magnolia/Hero/Hero 2.webp",
+    "/Villa_Retreats/Magnolia/Hero/Hero 3.webp",
+    "/Villa_Retreats/Magnolia/Hero/Hero 4.webp",
+    "/Villa_Retreats/Magnolia/Hero/Hero 5.webp",
     "/Villa_Retreats/Magnolia/Spaces/Villa.webp",
     "/Villa_Retreats/Magnolia/Spaces/Pool.webp",
     "/Villa_Retreats/Magnolia/Spaces/Living_Area.webp",
@@ -313,7 +318,7 @@ export const magnolia = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=HkWkA_5op30",
-    thumbnail: "/Villa_Retreats/Magnolia/Hero/hero.webp",
+    thumbnail: "/Villa_Retreats/Magnolia/Hero/Hero 1.webp",
     duration: "1:41",
   },
   faq: [

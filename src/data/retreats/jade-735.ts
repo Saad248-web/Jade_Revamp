@@ -31,9 +31,10 @@ export const jade735 = {
     },
   ],
   categories: ["Luxury Stays", "Weekend Getaways", "Corporate Retreats"],
-  thumbnail: "/Villa_Retreats/Jade%20735/Hero/hero.webp",
-  image: "/Villa_Retreats/Jade%20735/Hero/hero.webp",
+  thumbnail: "/Villa_Retreats/Jade%20735/Hero/Hero 1.webp",
+  image: "/Villa_Retreats/Jade%20735/Hero/Hero 1.webp",
   images: [
+    "/Villa_Retreats/Jade%20735/Hero/Hero 1.webp",
     "/Villa_Retreats/Jade%20735/Spaces/Pool_day_View.webp",
     "/Villa_Retreats/Jade%20735/Spaces/10ft_waterFall+Pool.webp",
     "/Villa_Retreats/Jade%20735/Spaces/Living_room_.webp",
@@ -262,7 +263,7 @@ export const jade735 = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=tDHkITeT3HU",
-    thumbnail: "/Villa_Retreats/Jade%20735/Hero/hero.webp",
+    thumbnail: "/Villa_Retreats/Jade%20735/Hero/Hero 1.webp",
     duration: "5:44",
   },
   faq: [

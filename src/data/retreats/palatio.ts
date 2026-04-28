@@ -38,9 +38,17 @@ export const palatio = {
     "Weekend Getaways",
     "Weddings",
   ],
-  thumbnail: "/Villa_Retreats/Palatio/1-Hero/HERO 2.webp",
-  image: "/Villa_Retreats/Palatio/1-Hero/HERO 2.webp",
+  thumbnail: "/Villa_Retreats/Palatio/1-Hero/Hero 1.webp",
+  image: "/Villa_Retreats/Palatio/1-Hero/Hero 1.webp",
   images: [
+    "/Villa_Retreats/Palatio/1-Hero/Hero 1.webp",
+    "/Villa_Retreats/Palatio/1-Hero/Hero 2.webp",
+    "/Villa_Retreats/Palatio/1-Hero/Hero 3.webp",
+    "/Villa_Retreats/Palatio/1-Hero/Hero 4.webp",
+    "/Villa_Retreats/Palatio/1-Hero/Hero 5.webp",
+    "/Villa_Retreats/Palatio/1-Hero/Hero 6.webp",
+    "/Villa_Retreats/Palatio/1-Hero/Hero 7.webp",
+    "/Villa_Retreats/Palatio/1-Hero/Hero 8.webp",
     "/Villa_Retreats/Palatio/2-Spaces/Villa.webp",
     "/Villa_Retreats/Palatio/2-Spaces/Private_Pool.webp",
     "/Villa_Retreats/Palatio/2-Spaces/Walk_on_The_Water.webp",
@@ -237,7 +245,7 @@ export const palatio = {
     },
   },
   locationDetails: {
-    mapImage: "/Villa_Retreats/Palatio/1-Hero/DJI_0162.webp",
+    mapImage: "/Villa_Retreats/Palatio/1-Hero/Hero 1.webp",
     address: "Palatio, Harohalli, Near Art of Living, Bangalore — 562112",
     distance: "Approximately 50 minutes from Bangalore City Center",
     nearby: [
@@ -248,7 +256,7 @@ export const palatio = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=NCbxtU_uGhs",
-    thumbnail: "/Villa_Retreats/Palatio/1-Hero/DJI_0162.webp",
+    thumbnail: "/Villa_Retreats/Palatio/1-Hero/Hero 1.webp",
     duration: "2:25",
   },
   faq: [

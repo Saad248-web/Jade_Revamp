@@ -37,9 +37,12 @@ export const royalty = {
     "Nature Retreats",
     "Pre-wedding",
   ],
-  thumbnail: "/Villa_Retreats/Royalty/1-Hero/hero.webp",
-  image: "/Villa_Retreats/Royalty/1-Hero/hero.webp",
+  thumbnail: "/Villa_Retreats/Royalty/1-Hero/Hero 1.webp",
+  image: "/Villa_Retreats/Royalty/1-Hero/Hero 1.webp",
   images: [
+    "/Villa_Retreats/Royalty/1-Hero/Hero 1.webp",
+    "/Villa_Retreats/Royalty/1-Hero/hero 2.webp",
+    "/Villa_Retreats/Royalty/1-Hero/Hero 3.webp",
     "/Villa_Retreats/Royalty/2-Spaces/Villa Entrance.webp",
     "/Villa_Retreats/Royalty/2-Spaces/7 foot waterfall pool.webp",
     "/Villa_Retreats/Royalty/2-Spaces/Hill View.webp",
@@ -217,7 +220,7 @@ export const royalty = {
     },
   },
   locationDetails: {
-    mapImage: "/Villa_Retreats/Royalty/1-Hero/1.webp",
+    mapImage: "/Villa_Retreats/Royalty/1-Hero/Hero 1.webp",
     address: "Gudibanda road, Varlakonda, Chikkaballapur, Karnataka 562104",
     distance: "Approximately 75 minutes from Bangalore City Center",
     nearby: [
@@ -229,7 +232,7 @@ export const royalty = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=VlACTqexHoI",
-    thumbnail: "/Villa_Retreats/Royalty/1-Hero/1.webp",
+    thumbnail: "/Villa_Retreats/Royalty/1-Hero/Hero 1.webp",
     duration: "1:53",
   },
   faq: [

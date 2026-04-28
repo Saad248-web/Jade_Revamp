@@ -21,14 +21,12 @@ const BLUE_DOME_IMAGES = [
 ];
 
 const RED_DOME_IMAGES = [
-  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/hero.webp",
-  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_01.webp",
-  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_03.webp",
-  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_05.webp",
-  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_07.webp",
-  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_09.webp",
-  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_10.webp",
-  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_16.webp",
+  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 1.webp",
+  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 2.webp",
+  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 3.webp",
+  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 4.webp",
+  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 5.webp",
+  "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 6.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Bath_Tub.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Bed_Room_1.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Bed_Room_2.webp",
@@ -52,8 +50,6 @@ const RED_DOME_IMAGES = [
 const YELLOW_DOME_IMAGES = [
   "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/Hero_evening_View.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/hero.webp",
-  "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/spaces_01.webp",
-  "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/spaces_19.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Bed_Room_.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Bed_Room_1.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Bed_Room_2.webp",
@@ -110,9 +106,15 @@ export const domeVillas = {
     },
   ],
   categories: ["Nature Retreats", "Weekend Getaways", "Luxury Stays"],
-  thumbnail: "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp",
-  image: "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp",
-  images: [...BLUE_DOME_IMAGES, ...RED_DOME_IMAGES, ...YELLOW_DOME_IMAGES],
+  thumbnail: "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
+  image: "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
+  images: [
+    "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
+    "/Villa_Retreats/Dome/Hero Main/Hero 2.webp",
+    ...BLUE_DOME_IMAGES,
+    ...RED_DOME_IMAGES,
+    ...YELLOW_DOME_IMAGES,
+  ],
   amenities: [
     { label: "Private Pool", icon: "Waves" },
     { label: "Airconditioned Interiors", icon: "Wind" },
