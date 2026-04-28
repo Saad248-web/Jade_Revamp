@@ -3,11 +3,14 @@
 // Do not edit manually.
 
 export const MEDIA_MANIFEST = {
-  "generatedAt": "2026-04-27T11:52:49.640Z",
+  "generatedAt": "2026-04-28T09:16:19.946Z",
   "villasByFolder": {
     "Diamond": {
       "hero": [
-        "/Villa_Retreats/Diamond/Hero/hero.webp"
+        "/Villa_Retreats/Diamond/Hero/Hero 1.webp",
+        "/Villa_Retreats/Diamond/Hero/Hero 2.webp",
+        "/Villa_Retreats/Diamond/Hero/Hero 3.webp",
+        "/Villa_Retreats/Diamond/Hero/Hero 4.webp"
       ],
       "spaces": [
         "/Villa_Retreats/Diamond/Spaces/75 inch Smart Tv .webp",
@@ -29,11 +32,7 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Diamond/Spaces/The Stage.webp",
         "/Villa_Retreats/Diamond/Spaces/Triple Occupancy Room.webp",
         "/Villa_Retreats/Diamond/Spaces/Two Deck Gazebo.webp",
-        "/Villa_Retreats/Diamond/Spaces/double Occupancy Room.webp",
-        "/Villa_Retreats/Diamond/Spaces/hero(1).webp",
-        "/Villa_Retreats/Diamond/Spaces/hero(2).webp",
-        "/Villa_Retreats/Diamond/Spaces/hero(3).webp",
-        "/Villa_Retreats/Diamond/Spaces/hero.webp"
+        "/Villa_Retreats/Diamond/Spaces/double Occupancy Room.webp"
       ],
       "experiences": [
         "/Villa_Retreats/Diamond/3-Experiences/Bonfire.webp",
@@ -132,11 +131,7 @@ export const MEDIA_MANIFEST = {
             "/Villa_Retreats/Diamond/Spaces/Foosball Table.webp",
             "/Villa_Retreats/Diamond/Spaces/Snooker Table.webp",
             "/Villa_Retreats/Diamond/Spaces/Table Tennis Table.webp",
-            "/Villa_Retreats/Diamond/Spaces/The Stage.webp",
-            "/Villa_Retreats/Diamond/Spaces/hero(1).webp",
-            "/Villa_Retreats/Diamond/Spaces/hero(2).webp",
-            "/Villa_Retreats/Diamond/Spaces/hero(3).webp",
-            "/Villa_Retreats/Diamond/Spaces/hero.webp"
+            "/Villa_Retreats/Diamond/Spaces/The Stage.webp"
           ]
         }
       ]
@@ -148,18 +143,15 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 3.webp",
         "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 4.webp",
         "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 5.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 1.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 2.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 3.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 4.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 5.webp",
+        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 6.webp",
         "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/hero.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_01.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_03.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_05.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_07.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_09.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_10.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/spaces_16.webp",
         "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/Hero_evening_View.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/hero.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/spaces_01.webp",
-        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/spaces_19.webp"
+        "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/hero.webp"
       ],
       "spaces": [
         "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/1st_Floor_sit_out.webp",
@@ -227,7 +219,10 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Dome/Perfect For/Nature Stays.webp",
         "/Villa_Retreats/Dome/Perfect For/Pool Parties.webp"
       ],
-      "other": [],
+      "other": [
+        "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
+        "/Villa_Retreats/Dome/Hero Main/Hero 2.webp"
+      ],
       "categorizedSpaces": [
         {
           "id": "views-exteriors",
@@ -683,7 +678,7 @@ export const MEDIA_MANIFEST = {
     },
     "Jade 735": {
       "hero": [
-        "/Villa_Retreats/Jade 735/Hero/Villa.webp",
+        "/Villa_Retreats/Jade 735/Hero/Hero 1.webp",
         "/Villa_Retreats/Jade 735/Hero/hero.webp"
       ],
       "spaces": [
@@ -835,7 +830,7 @@ export const MEDIA_MANIFEST = {
     },
     "Lounge Fly": {
       "hero": [
-        "/Villa_Retreats/Lounge Fly/1-Hero/2.webp"
+        "/Villa_Retreats/Lounge Fly/1-Hero/Hero.webp"
       ],
       "spaces": [
         "/Villa_Retreats/Lounge Fly/2-Spaces/4.webp",
@@ -968,12 +963,12 @@ export const MEDIA_MANIFEST = {
     },
     "Magnolia": {
       "hero": [
-        "/Villa_Retreats/Magnolia/Hero/Villa_Night_View.webp",
-        "/Villa_Retreats/Magnolia/Hero/hero.webp",
-        "/Villa_Retreats/Magnolia/Hero/spaces_18.webp",
-        "/Villa_Retreats/Magnolia/Hero/spaces_33.webp",
-        "/Villa_Retreats/Magnolia/Hero/spaces_34.webp",
-        "/Villa_Retreats/Magnolia/Hero/spaces_36.webp"
+        "/Villa_Retreats/Magnolia/Hero/Hero 1.webp",
+        "/Villa_Retreats/Magnolia/Hero/Hero 2.webp",
+        "/Villa_Retreats/Magnolia/Hero/Hero 3.webp",
+        "/Villa_Retreats/Magnolia/Hero/Hero 4.webp",
+        "/Villa_Retreats/Magnolia/Hero/Hero 5.webp",
+        "/Villa_Retreats/Magnolia/Hero/hero.webp"
       ],
       "spaces": [
         "/Villa_Retreats/Magnolia/Spaces/60inch TV.webp",
@@ -1123,14 +1118,14 @@ export const MEDIA_MANIFEST = {
     },
     "Palatio": {
       "hero": [
-        "/Villa_Retreats/Palatio/1-Hero/DJI_0162.webp",
-        "/Villa_Retreats/Palatio/1-Hero/DJI_0172.webp",
-        "/Villa_Retreats/Palatio/1-Hero/DJI_0191 long.webp",
-        "/Villa_Retreats/Palatio/1-Hero/DJI_0196.webp",
-        "/Villa_Retreats/Palatio/1-Hero/DSC06031.webp",
-        "/Villa_Retreats/Palatio/1-Hero/DSC06213.webp",
-        "/Villa_Retreats/Palatio/1-Hero/DSC0621555.webp",
-        "/Villa_Retreats/Palatio/1-Hero/HERO 2.webp"
+        "/Villa_Retreats/Palatio/1-Hero/Hero 1.webp",
+        "/Villa_Retreats/Palatio/1-Hero/Hero 2.webp",
+        "/Villa_Retreats/Palatio/1-Hero/Hero 3.webp",
+        "/Villa_Retreats/Palatio/1-Hero/Hero 4.webp",
+        "/Villa_Retreats/Palatio/1-Hero/Hero 5.webp",
+        "/Villa_Retreats/Palatio/1-Hero/Hero 6.webp",
+        "/Villa_Retreats/Palatio/1-Hero/Hero 7.webp",
+        "/Villa_Retreats/Palatio/1-Hero/Hero 8.webp"
       ],
       "spaces": [
         "/Villa_Retreats/Palatio/2-Spaces/Back_Yard.webp",
@@ -1287,7 +1282,7 @@ export const MEDIA_MANIFEST = {
     },
     "Retreat on the ridge": {
       "hero": [
-        "/Villa_Retreats/Retreat on the ridge/1-Hero/3-2.webp"
+        "/Villa_Retreats/Retreat on the ridge/1-Hero/Hero.webp"
       ],
       "spaces": [
         "/Villa_Retreats/Retreat on the ridge/2-Spaces/Bedroom 1.webp",
@@ -1407,7 +1402,9 @@ export const MEDIA_MANIFEST = {
     },
     "Royalty": {
       "hero": [
-        "/Villa_Retreats/Royalty/1-Hero/1.webp"
+        "/Villa_Retreats/Royalty/1-Hero/Hero 1.webp",
+        "/Villa_Retreats/Royalty/1-Hero/Hero 3.webp",
+        "/Villa_Retreats/Royalty/1-Hero/hero 2.webp"
       ],
       "spaces": [
         "/Villa_Retreats/Royalty/2-Spaces/7 foot waterfall pool.webp",
@@ -1427,10 +1424,6 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Royalty/2-Spaces/exper.webp",
         "/Villa_Retreats/Royalty/2-Spaces/experience movie under the stars.webp",
         "/Villa_Retreats/Royalty/2-Spaces/experience_horse riding safari.webp",
-        "/Villa_Retreats/Royalty/2-Spaces/hero 3.webp",
-        "/Villa_Retreats/Royalty/2-Spaces/hero 5.webp",
-        "/Villa_Retreats/Royalty/2-Spaces/hero.webp",
-        "/Villa_Retreats/Royalty/2-Spaces/hero2.webp",
         "/Villa_Retreats/Royalty/2-Spaces/horse riding arena.webp",
         "/Villa_Retreats/Royalty/2-Spaces/living room.webp"
       ],
@@ -1570,10 +1563,6 @@ export const MEDIA_MANIFEST = {
             "/Villa_Retreats/Royalty/2-Spaces/exper.webp",
             "/Villa_Retreats/Royalty/2-Spaces/experience movie under the stars.webp",
             "/Villa_Retreats/Royalty/2-Spaces/experience_horse riding safari.webp",
-            "/Villa_Retreats/Royalty/2-Spaces/hero 3.webp",
-            "/Villa_Retreats/Royalty/2-Spaces/hero 5.webp",
-            "/Villa_Retreats/Royalty/2-Spaces/hero.webp",
-            "/Villa_Retreats/Royalty/2-Spaces/hero2.webp",
             "/Villa_Retreats/Royalty/2-Spaces/horse riding arena.webp"
           ]
         }
@@ -1581,9 +1570,8 @@ export const MEDIA_MANIFEST = {
     },
     "Tranquil Woods": {
       "hero": [
-        "/Villa_Retreats/Tranquil Woods/1-Hero/2-3.webp",
-        "/Villa_Retreats/Tranquil Woods/1-Hero/hero(1).webp",
-        "/Villa_Retreats/Tranquil Woods/1-Hero/hero.webp"
+        "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
+        "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 2.webp"
       ],
       "spaces": [
         "/Villa_Retreats/Tranquil Woods/2-Spaces/31.webp",
@@ -1732,14 +1720,14 @@ export const MEDIA_MANIFEST = {
     },
     "Wonderland": {
       "hero": [
-        "/Villa_Retreats/Wonderland/Hero/Hero3.webp",
+        "/Villa_Retreats/Wonderland/Hero/Hero 3.webp",
+        "/Villa_Retreats/Wonderland/Hero/Hero 4.webp",
+        "/Villa_Retreats/Wonderland/Hero/Hero 5.webp",
+        "/Villa_Retreats/Wonderland/Hero/Hero 6.webp",
+        "/Villa_Retreats/Wonderland/Hero/Hero 7.webp",
         "/Villa_Retreats/Wonderland/Hero/Hero_2.webp",
-        "/Villa_Retreats/Wonderland/Hero/hero.webp",
-        "/Villa_Retreats/Wonderland/Hero/spaces_10.webp",
-        "/Villa_Retreats/Wonderland/Hero/spaces_13.webp",
-        "/Villa_Retreats/Wonderland/Hero/spaces_15.webp",
-        "/Villa_Retreats/Wonderland/Hero/spaces_20.webp",
-        "/Villa_Retreats/Wonderland/Hero/spaces_24.webp"
+        "/Villa_Retreats/Wonderland/Hero/Hero__.webp",
+        "/Villa_Retreats/Wonderland/Hero/hero.webp"
       ],
       "spaces": [
         "/Villa_Retreats/Wonderland/Spaces/6_Seater_Jacuzzi.webp",
