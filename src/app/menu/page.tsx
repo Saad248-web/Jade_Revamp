@@ -647,9 +647,9 @@ export default function MenuPage() {
                   {/* Links Section */}
                   <div className="flex-[1.2] flex flex-col gap-10">
                     {[
-                      { name: "Privacy Policy", href: "/privacy" },
-                      { name: "Terms & Conditions", href: "/terms" },
-                      { name: "Refund Policy", href: "/refund" },
+                      { name: "Privacy Policy", href: "/privacy-policy" },
+                      { name: "Terms & Conditions", href: "/terms-conditions" },
+                      { name: "Refund Policy", href: "/refund-policy" },
                     ].map((policy, idx) => (
                       <Link
                         key={idx}

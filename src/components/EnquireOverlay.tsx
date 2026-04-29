@@ -287,6 +287,22 @@ export default function EnquireOverlay() {
                         >
                           Privacy Policy
                         </Link>
+                        ,{" "}
+                        <Link
+                          href="/terms-conditions"
+                          className="text-[#EFCD62] hover:underline"
+                          onClick={() => setEnquireOverlayOpen(false)}
+                        >
+                          Terms & Conditions
+                        </Link>{" "}
+                        and{" "}
+                        <Link
+                          href="/refund-policy"
+                          className="text-[#EFCD62] hover:underline"
+                          onClick={() => setEnquireOverlayOpen(false)}
+                        >
+                          Refund Policy
+                        </Link>
                       </p>
                       <button
                         type="submit"

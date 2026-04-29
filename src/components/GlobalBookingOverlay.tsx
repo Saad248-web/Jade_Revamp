@@ -804,6 +804,22 @@ function StepDetails({
           >
             Privacy Policy
           </Link>
+          ,{" "}
+          <Link
+            href="/terms-conditions"
+            className="text-[#EFCD62] hover:underline"
+            onClick={onClose}
+          >
+            Terms & Conditions
+          </Link>{" "}
+          and{" "}
+          <Link
+            href="/refund-policy"
+            className="text-[#EFCD62] hover:underline"
+            onClick={onClose}
+          >
+            Refund Policy
+          </Link>
         </p>
       </div>
 
@@ -1090,16 +1106,27 @@ function StepReview({
               {formatRupees(NIGHT_TAX)}
             </span>
           </div>
-          <div className="flex items-center gap-3 text-white/30 text-gh-label font-manrope mt-1">
-            <span className="underline cursor-pointer hover:text-white/60 transition-colors">
-              Cancel within 24 hours for refund
-            </span>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-white/30 text-gh-label font-manrope mt-1">
             <Link
               href="/privacy-policy"
               className="underline cursor-pointer hover:text-white/60 transition-colors"
               onClick={onClose}
             >
-              Full Policy
+              Privacy Policy
+            </Link>
+            <Link
+              href="/terms-conditions"
+              className="underline cursor-pointer hover:text-white/60 transition-colors"
+              onClick={onClose}
+            >
+              Terms
+            </Link>
+            <Link
+              href="/refund-policy"
+              className="underline cursor-pointer hover:text-white/60 transition-colors"
+              onClick={onClose}
+            >
+              Refunds
             </Link>
           </div>
         </div>

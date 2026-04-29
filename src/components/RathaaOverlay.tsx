@@ -297,6 +297,22 @@ export default function RathaaOverlay() {
                         >
                           Privacy Policy
                         </Link>
+                        ,{" "}
+                        <Link
+                          href="/terms-conditions"
+                          className="text-[#EFCD62] hover:underline"
+                          onClick={handleClose}
+                        >
+                          Terms & Conditions
+                        </Link>{" "}
+                        and{" "}
+                        <Link
+                          href="/refund-policy"
+                          className="text-[#EFCD62] hover:underline"
+                          onClick={handleClose}
+                        >
+                          Refund Policy
+                        </Link>
                       </p>
                       <button
                         type="submit"
