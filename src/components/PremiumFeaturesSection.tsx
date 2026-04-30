@@ -188,7 +188,7 @@ export default function PremiumFeaturesSection({
             {footerText}
           </p>
 
-          <div className="w-full max-w-4xl mx-auto">
+          <div className="w-full max-w-3xl mx-auto">
             <PrimaryButton
               href={ctaLink}
               onClick={onCtaClick}

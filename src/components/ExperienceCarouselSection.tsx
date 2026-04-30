@@ -22,6 +22,8 @@ interface ExperienceCarouselSectionProps {
   aspectClass?: string;
   buttonClassName?: string;
   buttonContainerClassName?: string;
+  containerClassName?: string;
+  innerClassName?: string;
 }
 
 export default function ExperienceCarouselSection({
@@ -31,9 +33,11 @@ export default function ExperienceCarouselSection({
   ctaText,
   ctaLink,
   onCtaClick,
-  aspectClass = "flex-1 relative w-full",
+  aspectClass = "flex-1 min-h-[440px] sm:min-h-[480px] md:min-h-[560px] lg:min-h-[620px] relative w-full",
   buttonClassName = "w-full text-gh-label",
   buttonContainerClassName = "mt-auto",
+  containerClassName = "h-screen min-h-[700px] md:min-h-[760px] bg-[#141517] overflow-hidden",
+  innerClassName = "h-full max-w-[1920px] mx-auto px-6 md:px-24 lg:px-48 xl:px-64 flex flex-col py-12 md:py-20 lg:py-24",
 }: ExperienceCarouselSectionProps) {
   const [activeSlide, setActiveSlide] = React.useState(0);
 
@@ -42,8 +46,8 @@ export default function ExperienceCarouselSection({
     setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
   return (
-    <section className="h-screen min-h-[600px] bg-[#141517] overflow-hidden">
-      <div className="h-full max-w-[1920px] mx-auto px-6 md:px-24 lg:px-48 xl:px-64 flex flex-col py-12 md:py-20 lg:py-24">
+    <section className={containerClassName}>
+      <div className={innerClassName}>
         {/* Header Area */}
         <div
           className="relative z-10 shrink-0"

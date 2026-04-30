@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
+import { buildVillaGalleryItems } from "@/lib/villaGallery";
 
 interface CorporateVenueOverlayProps {
   isOpen: boolean;
@@ -56,10 +57,19 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
     };
   }, [isOpen]);
 
-  const images =
-    villa?.spaces?.length > 0
-      ? villa.spaces
-      : [{ name: "Main", image: villa?.image }];
+  useEffect(() => {
+    if (!isOpen) return;
+    setCurrentImageIndex(0);
+    setDirection(0);
+    setView("form");
+  }, [isOpen, villa?.id]);
+
+  const images = (() => {
+    const gallery = buildVillaGalleryItems(villa, 8);
+    if (gallery.length > 0) return gallery;
+    if (villa?.spaces?.length > 0) return villa.spaces;
+    return [{ name: "Main", image: villa?.image }];
+  })();
 
   const nextImage = () => {
     setDirection(1);
@@ -159,7 +169,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
         {/* CONTENT (CENTERED LIKE BOOK PAGE) */}
         <div className="max-w-5xl mx-auto w-full pb-10 px-4 sm:px-6 md:px-8">
             {/* HERO IMAGE SECTION */}
-            <div className="relative w-full h-[clamp(240px,45vh,520px)] overflow-hidden rounded-none group">
+            <div className="relative w-full h-[clamp(260px,50vh,600px)] overflow-hidden rounded-none group">
               <AnimatePresence initial={false} custom={direction}>
                 <MotionDiv
                   key={currentImageIndex}
@@ -182,11 +192,11 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
               {/* Numerical Pagination */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/5">
-                <span className="text-white font-philosopher text-gh-scroll leading-none">
+                <span className="text-white font-philosopher text-[14px] sm:text-[15px] md:text-[16px] leading-none">
                   {currentImageIndex + 1}
                 </span>
                 <div className="w-8 h-[1px] bg-white/40" />
-                <span className="text-white/40 font-philosopher text-gh-scroll leading-none">
+                <span className="text-white/40 font-philosopher text-[14px] sm:text-[15px] md:text-[16px] leading-none">
                   {images.length}
                 </span>
               </div>
@@ -212,7 +222,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
             {/* SPACE NAME */}
             <div className="mt-6 px-4 text-center">
-              <span className="text-white/40 font-manrope text-gh-label font-bold tracking-[0.4em] uppercase">
+              <span className="text-white/50 font-manrope text-gh-label font-bold tracking-[0.12em]">
                 {images[currentImageIndex].name || "Property"}
               </span>
             </div>
@@ -253,9 +263,24 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
               {/* QUICK STATS */}
               <div className="grid grid-cols-3 gap-4 mb-12">
                 {[
-                  { label: "Capacity", value: "200", icon: Users },
-                  { label: "Property", value: "1.5 Acre", icon: Calendar },
-                  { label: "Stay", value: "30", icon: Home },
+                  {
+                    label: "Offsite Cap.",
+                    value: villa.stats?.events?.split(" ")[0] || "500",
+                    icon: Users,
+                  },
+                  {
+                    label: "Meeting Space",
+                    value:
+                      villa.stats?.lawn ||
+                      villa.stats?.villaArea ||
+                      "Lawn",
+                    icon: Calendar,
+                  },
+                  {
+                    label: "Stay Cap.",
+                    value: villa.stats?.stay?.split(" ")[0] || "20",
+                    icon: Home,
+                  },
                 ].map((stat, idx) => (
                   <div
                     key={idx}
@@ -390,7 +415,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                                       {item.sublabel || item.head}
                                     </span>
                                   </div>
-                                  <div className="text-white font-bold text-gh-scroll md:text-gh-h3 uppercase tracking-tighter text-right">
+                                  <div className="text-white font-bold text-[15px] sm:text-[16px] md:text-[18px] leading-tight uppercase tracking-wide text-right">
                                     {item.price}
                                   </div>
                                 </div>
@@ -809,8 +834,13 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
       {/* BOTTOM PRICE BAR (SAME AS VILLA DETAIL PAGE) */}
       <div className="fixed bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 py-4 z-[150] transition-all flex justify-center">
         <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-4 px-4 md:px-12">
-          <p className="text-white text-[12px] md:text-[14px] lg:text-base font-bold font-manrope whitespace-nowrap">
-            Starting from ₹1,50,000
+          <p className="font-manrope whitespace-nowrap leading-tight">
+            <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold">
+              Starting from
+            </span>{" "}
+            <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold">
+              ₹75,000
+            </span>
           </p>
           <div className="flex items-center gap-4 md:gap-6">
             <button

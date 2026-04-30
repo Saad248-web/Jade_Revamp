@@ -43,6 +43,7 @@ export default function WeekendVillasCarousel() {
             isOpen={isOverlayOpen}
             onClose={() => setIsOverlayOpen(false)}
             villa={selectedVilla}
+            context="weekend"
           />
         )}
       </AnimatePresence>

@@ -25,17 +25,20 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
+import { buildVillaGalleryItems } from "@/lib/villaGallery";
 
 interface VenueOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   villa: any;
+  context?: "wedding" | "weekend";
 }
 
 const VenueOverlay: React.FC<VenueOverlayProps> = ({
   isOpen,
   onClose,
   villa,
+  context,
 }) => {
   const MotionDiv = motion.div;
   const MotionButton = motion.button;
@@ -58,10 +61,19 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
     };
   }, [isOpen]);
 
-  const images =
-    villa?.spaces?.length > 0
-      ? villa.spaces
-      : [{ name: "Main", image: villa?.image }];
+  useEffect(() => {
+    if (!isOpen) return;
+    setCurrentImageIndex(0);
+    setDirection(0);
+    setView("form");
+  }, [isOpen, villa?.id]);
+
+  const images = (() => {
+    const gallery = buildVillaGalleryItems(villa, 8);
+    if (gallery.length > 0) return gallery;
+    if (villa?.spaces?.length > 0) return villa.spaces;
+    return [{ name: "Main", image: villa?.image }];
+  })();
 
   const nextImage = () => {
     setDirection(1);
@@ -132,7 +144,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
   const getPrice = () => {
     if (!villa) return "";
-    if (villa.id === "tranquil-woods") return "₹65,000";
+    if (villa.id === "tranquil" || villa.id === "tranquil-woods") return "₹65,000";
     if (villa.id === "magnolia" || villa.id === "diamond") return "₹99,000";
     return "₹75,000";
   };
@@ -165,7 +177,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
         {/* CONTENT (CENTERED LIKE BOOK PAGE) */}
         <div className="max-w-5xl mx-auto w-full pb-10 px-4 sm:px-6 md:px-8">
             {/* IMAGE CAROUSEL */}
-            <div className="relative w-full h-[clamp(240px,45vh,520px)] overflow-hidden bg-black/20 group rounded-none">
+            <div className="relative w-full h-[clamp(260px,50vh,600px)] overflow-hidden bg-black/20 group rounded-none">
               <AnimatePresence initial={false} custom={direction}>
                 <MotionDiv
                   key={currentImageIndex}
@@ -188,11 +200,11 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
               {/* Numerical Pagination */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4 bg-black/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/5">
-                <span className="text-white font-philosopher text-gh-scroll leading-none">
+                <span className="text-white font-philosopher text-[14px] sm:text-[15px] md:text-[16px] leading-none">
                   {currentImageIndex + 1}
                 </span>
                 <div className="w-8 h-[1px] bg-white/40" />
-                <span className="text-white/40 font-philosopher text-gh-scroll leading-none">
+                <span className="text-white/40 font-philosopher text-[14px] sm:text-[15px] md:text-[16px] leading-none">
                   {images.length}
                 </span>
               </div>
@@ -218,7 +230,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
             {/* SPACE NAME - ELEVATED FOR FLOATING FEEL */}
             <div className="mt-6 px-4 text-center">
-              <span className="text-white/40 font-manrope text-gh-label font-bold tracking-[0.4em] uppercase">
+              <span className="text-white/50 font-manrope text-gh-label font-bold tracking-[0.12em]">
                 {images[currentImageIndex].name || "SPACE"}
               </span>
             </div>
@@ -261,14 +273,22 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                   {
                     label: "Guests",
                     value:
-                      villa.stats.events.split("-")[1]?.split(" ")[0] || "600",
+                      villa.stats?.events?.split("-")[1]?.split(" ")[0] ||
+                      villa.stats?.events?.split(" ")[0] ||
+                      (context === "weekend" ? "15+" : "600"),
                     icon: Users,
                   },
-                  { label: "Parking", value: "80", icon: Car },
+                  {
+                    label: "Parking",
+                    value: context === "weekend" ? "20+" : "80",
+                    icon: Car,
+                  },
                   {
                     label: "Stay",
                     value:
-                      villa.stats.stay.split("-")[1]?.split(" ")[0] || "20",
+                      villa.stats?.stay?.split("-")[1]?.split(" ")[0] ||
+                      villa.stats?.stay?.split(" ")[0] ||
+                      (context === "weekend" ? "6-12" : "20"),
                     icon: Home,
                   },
                 ].map((stat, idx) => (
@@ -426,7 +446,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                                       {item.sublabel || item.head}
                                     </span>
                                   </div>
-                                  <div className="text-white font-bold text-gh-scroll md:text-gh-h3 uppercase tracking-tighter text-right">
+                                  <div className="text-white font-bold text-[15px] sm:text-[16px] md:text-[18px] leading-tight uppercase tracking-wide text-right">
                                     {item.price}
                                   </div>
                                 </div>
@@ -870,8 +890,13 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
       {/* BOTTOM PRICE BAR (SAME AS VILLA DETAIL PAGE) */}
       <div className="fixed bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 py-4 z-[150] transition-all flex justify-center">
         <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-4 px-4 md:px-12">
-          <p className="text-white text-[12px] md:text-[14px] lg:text-base font-bold font-manrope whitespace-nowrap">
-            Starting from {price}
+          <p className="font-manrope whitespace-nowrap leading-tight">
+            <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold">
+              Starting from
+            </span>{" "}
+            <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold">
+              {price}
+            </span>
           </p>
           <div className="flex items-center gap-4 md:gap-6">
             <button

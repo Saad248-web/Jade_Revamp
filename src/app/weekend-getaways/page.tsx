@@ -181,6 +181,8 @@ export default function WeekendGetawaysPage() {
         slides={weekendSlides}
         ctaText="BOOK JADE WEEKEND"
         onCtaClick={() => setEnquireOverlayOpen(true)}
+        innerClassName="h-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col py-12 md:py-16 lg:py-20"
+        buttonContainerClassName="mt-8"
       />
 
       {/* SECTION 4: CURATED EXPERIENCES */}
@@ -190,6 +192,8 @@ export default function WeekendGetawaysPage() {
         experiences={weekendExperiences}
         ctaText="VIEW ALL EXPERIENCES"
         onCtaClick={() => setEnquireOverlayOpen(true)}
+        innerClassName="max-w-6xl mx-auto px-4 sm:px-6 md:px-8"
+        ctaContainerClassName="max-w-2xl mx-auto"
       />
 
       {/* SECTION 5: WHY CHOOSE JADE */}

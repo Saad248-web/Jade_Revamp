@@ -18,6 +18,10 @@ interface CuratedExperiencesGridProps {
   ctaLink?: string;
   onCtaClick?: () => void;
   background?: string;
+  containerClassName?: string;
+  innerClassName?: string;
+  gridClassName?: string;
+  ctaContainerClassName?: string;
 }
 
 export default function CuratedExperiencesGrid({
@@ -28,10 +32,18 @@ export default function CuratedExperiencesGrid({
   ctaLink,
   onCtaClick,
   background = "#141517",
+  containerClassName = "py-fluid-lg md:py-fluid-xl",
+  innerClassName = "max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24",
+  gridClassName = "grid grid-cols-2 md:grid-cols-3",
+  ctaContainerClassName = "max-w-4xl mx-auto",
 }: CuratedExperiencesGridProps) {
+  const lastIdx = experiences.length - 1;
+  const mdLastAlone = experiences.length % 3 === 1;
+  const smLastAlone = experiences.length % 2 === 1;
+
   return (
-    <section className="py-fluid-lg md:py-fluid-xl" style={{ backgroundColor: background }}>
-      <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
+    <section className={containerClassName} style={{ backgroundColor: background }}>
+      <div className={innerClassName}>
         {/* Header */}
         <div
           className="text-center"
@@ -50,7 +62,7 @@ export default function CuratedExperiencesGrid({
 
         {/* Grid Section */}
         <div
-          className="grid grid-cols-2 md:grid-cols-3"
+          className={gridClassName}
           style={{
             gap: "clamp(8px, 2vw, 24px)",
             marginBottom: "clamp(32px, 6vw, 64px)",
@@ -65,7 +77,13 @@ export default function CuratedExperiencesGrid({
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               viewport={{ once: true }}
-              className="relative aspect-[4/3] md:aspect-[16/9] overflow-hidden group border border-white/5"
+              className={[
+                "relative aspect-[4/3] md:aspect-[16/9] overflow-hidden group border border-white/5",
+                idx === lastIdx && smLastAlone ? "col-span-2 sm:col-span-2" : "",
+                idx === lastIdx && mdLastAlone ? "md:col-span-1 md:col-start-2" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
             >
               {exp.image ? (
                 <Image
@@ -88,7 +106,7 @@ export default function CuratedExperiencesGrid({
         </div>
 
         {/* Footer CTA */}
-        <div className="max-w-4xl mx-auto">
+        <div className={ctaContainerClassName}>
           <PrimaryButton
             className="w-full h-[54px] text-gh-label"
             href={ctaLink}

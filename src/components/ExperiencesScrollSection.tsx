@@ -16,7 +16,7 @@ const PANELS = [
       "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone’s wishlist.",
     cta: "SEE WHAT A GETAWAY LOOKS LIKE",
     href: "/weekend-getaways",
-    image: "/Experiences/Weddings/1-Hero/2 (1).webp",
+    image: "/Experiences/Weekend Getaways/1-Hero/casual stays.webp",
   },
   {
     id: "celebrations",
@@ -25,7 +25,7 @@ const PANELS = [
       "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
     href: "/party-villas#spaces-for-celebrations",
-    image: "/X/ROR/14.webp",
+    image: "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
   },
   {
     id: "weddings",
@@ -34,7 +34,7 @@ const PANELS = [
       "Intimate ceremonies to grand, multi-day wedding celebrations, set amid private gardens, sprawling lawns, and luxury rooms.",
     cta: "SEE HOW WEDDINGS UNFOLD",
     href: "/weddings",
-    image: "/X/Magnolia/9.webp",
+    image: "/Experiences/Weddings/1-Hero/2 (1).webp",
   },
   {
     id: "corporate",
@@ -52,7 +52,8 @@ const PANELS = [
       "Element-led wellness restoration through mud baths, massages, spa and aroma therapies, designed for deep rejuvenation.",
     cta: "SEE HOW RETREAT TAKES SHAPE",
     href: "/villas?category=Wellness Retreats",
-    image: "/X/Magnolia/16.webp",
+    image:
+      "/Experiences/Weekend Getaways/2-What Weekends Look like/Nature & Nearby Escapes.webp",
   },
   {
     id: "caravans",
