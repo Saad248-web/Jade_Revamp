@@ -13,6 +13,23 @@ import { lemonTree } from "./lemon-tree";
 import { loungeFly } from "./lounge-fly";
 import { palatio } from "./palatio";
 
+export {
+  magnolia,
+  tranquil,
+  royalty,
+  domeVillas,
+  diamond,
+  vannani,
+  haven,
+  retreatOnTheRidge,
+  emerald,
+  wonderland,
+  jade735,
+  lemonTree,
+  loungeFly,
+  palatio,
+};
+
 export const VILLAS = [
   magnolia,
   tranquil,
