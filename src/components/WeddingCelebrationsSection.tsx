@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import PrimaryButton from "@/components/PrimaryButton";
 
 function pick(images: string[], idx: number) {
   if (!images.length) return "";
@@ -162,16 +163,16 @@ function EndButton({ globalProgress }: { globalProgress: any }) {
       style={{ opacity, scale, y, zIndex: 100 }}
       className="absolute inset-0 flex items-center justify-center pointer-events-none"
     >
-      <Link
-        href="/villas"
-        className="pointer-events-auto relative overflow-hidden flex items-center justify-center gap-4 px-10 py-5 md:px-14 md:py-6 rounded-full bg-[#EFCD62] text-[#1A1C1E] font-philosopher text-xl md:text-2xl shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:bg-[#F3DA85] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-all duration-500 group hover:scale-105"
-      >
-        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/10 to-white/40 pointer-events-none" />
-        <span className="relative z-10 font-bold whitespace-nowrap text-center">
-          See All Wedding Villas
-        </span>
-        <ArrowRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-2 transition-transform duration-500 relative z-10" />
-      </Link>
+      <div className="pointer-events-auto">
+        <PrimaryButton
+          href="/villas"
+          className="shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-transform duration-300 hover:scale-[1.03]"
+        >
+          <span className="font-bold whitespace-nowrap text-center">
+            See All Wedding Villas
+          </span>
+        </PrimaryButton>
+      </div>
     </motion.div>
   );
 }

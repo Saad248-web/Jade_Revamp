@@ -333,9 +333,9 @@ export default function CareersPage() {
             </p>
           </div>
 
-          <div className="w-full max-w-4xl mx-auto">
+          <div className="w-full mx-auto flex justify-center">
             <PrimaryButton
-              className="w-full h-[54px]"
+              className="h-[54px]"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();

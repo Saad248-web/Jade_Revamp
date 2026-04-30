@@ -41,7 +41,7 @@ export default function VillasCarousel() {
 
   // Read category from URL on mount
   useEffect(() => {
-    const categoryParam = searchParams.get("category");
+    const categoryParam = searchParams?.get("category");
     if (categoryParam) {
       // Check if it's a valid category
       const validCategory = CATEGORIES.find(

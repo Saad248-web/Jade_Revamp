@@ -57,7 +57,7 @@ export default function ValuePropositionSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden bg-[#25282C] flex flex-col"
+      className="relative min-h-screen w-full overflow-hidden bg-[#0D4032] flex flex-col"
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
@@ -73,7 +73,7 @@ export default function ValuePropositionSection() {
             priority
           />
           {/* gradient: dark top for text legibility, fades to visible mid */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#25282C]/90 via-[#25282C]/25 to-[#25282C]/55" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0D4032]/90 via-[#0D4032]/25 to-[#0D4032]/55" />
         </div>
 
         {/* ── TEXT — sits inside the image zone ── */}
@@ -105,10 +105,10 @@ export default function ValuePropositionSection() {
       </div>
 
       {/* ── BOTTOM AREA ── */}
-      <div className="relative w-full h-[20vh] z-10 bg-[#25282C]" />
+      <div className="relative w-full h-[20vh] z-10 bg-[#0D4032]" />
 
       {/* ── SPACER — exactly 40px gap ── */}
-      <div className="h-[40px] bg-[#25282C] shrink-0" />
+      <div className="h-[40px] bg-[#0D4032] shrink-0" />
 
       {/* ── ARROWS — straddling the 70/30 seam ── */}
       <button

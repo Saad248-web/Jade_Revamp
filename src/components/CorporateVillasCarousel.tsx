@@ -12,7 +12,7 @@ const CORPORATE_VILLA_IDS = [
   "magnolia",
   "diamond",
   "retreat-on-the-ridge",
-  "the-haven",
+  "haven",
 ];
 
 const CORPORATE_VILLAS = VILLAS.filter((villa) =>
@@ -33,7 +33,7 @@ export default function CorporateVillasCarousel() {
       id="featured-venues"
       className="relative bg-[#1A1C1E] pt-fluid-lg pb-10 md:pt-fluid-xl md:pb-10"
     >
-      <div className="max-w-7xl mx-auto px-6 w-full overflow-hidden">
+      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full overflow-hidden">
         <div className="flex flex-col gap-14">
           {CORPORATE_VILLAS.map((villa) => (
             <CorporateVillaCard

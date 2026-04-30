@@ -62,22 +62,25 @@ const SLIDES = [
 
 export default function CaravanUsageSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
 
   const currentSlide = SLIDES[currentIndex];
 
   const handlePrev = () => {
+    setDirection(-1);
     setCurrentIndex((prev) => (prev === 0 ? SLIDES.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
+    setDirection(1);
     setCurrentIndex((prev) => (prev === SLIDES.length - 1 ? 0 : prev + 1));
   };
 
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen max-h-screen w-full overflow-hidden bg-[#25282C]"
+      className="relative h-screen max-h-screen w-full overflow-hidden bg-[#0D4032]"
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
@@ -89,7 +92,7 @@ export default function CaravanUsageSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="absolute inset-0 w-full h-full"
           >
             <Image
@@ -100,13 +103,13 @@ export default function CaravanUsageSection() {
               sizes="100vw"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#25282C]/90 via-[#25282C]/25 to-[#25282C]/55" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0D4032]/90 via-[#0D4032]/25 to-[#0D4032]/55" />
           </motion.div>
         </AnimatePresence>
       </div>
 
       {/* ── BOTTOM 20vh — solid charcoal anchor ── */}
-      <div className="absolute inset-x-0 bottom-0 h-[20vh] z-10 bg-[#25282C]" />
+      <div className="absolute inset-x-0 bottom-0 h-[20vh] z-10 bg-[#0D4032]" />
 
       {/* ── TEXT ── */}
       <div className="absolute inset-x-0 top-[8vh] z-20 flex flex-col items-center text-center px-6 sm:px-10 pointer-events-none">
@@ -132,7 +135,7 @@ export default function CaravanUsageSection() {
           key={`sub-${currentIndex}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.25 }}
+        transition={{ delay: 0.12, duration: 0.22 }}
           className="font-manrope text-gh-carousel-sub text-white/80 leading-relaxed max-w-xl mx-auto line-clamp-3"
         >
           {currentSlide.subtext}
@@ -169,7 +172,7 @@ export default function CaravanUsageSection() {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.04 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             className="w-full h-full relative"
           >
             <Image

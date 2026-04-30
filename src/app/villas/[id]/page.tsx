@@ -61,6 +61,30 @@ import type { Villa } from "@/lib/types";
 import { prettyMediaLabel } from "@/lib/mediaLabels";
 import { DOME_VIDEO_URLS, getYouTubeId } from "@/lib/videoUtils";
 import { useAnimation } from "@/context/AnimationContext";
+import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
+import { getHeroOverrideForId } from "@/lib/heroOverrides";
+
+const normalizeImageSrc = (src: string) => {
+  // Local `public/` asset paths can contain spaces; `next/image` expects URI-encoded paths.
+  // Avoid double-encoding already-escaped sequences (e.g. `%20` -> `%2520`).
+  if (!src.startsWith("/")) return src;
+  return src
+    .replace(/ /g, "%20")
+    .replace(/#/g, "%23")
+    .replace(/\?/g, "%3F");
+};
+
+const getManifestEntry = (villa: { name?: string; image?: string }) => {
+  const byName = villa.name ? (MEDIA_MANIFEST as any).villasByFolder?.[villa.name] : null;
+  if (byName) return byName;
+  const m = (villa.image || "").match(/^\/Villa_Retreats\/([^/]+)\//);
+  if (!m?.[1]) return null;
+  try {
+    return (MEDIA_MANIFEST as any).villasByFolder?.[decodeURIComponent(m[1])] ?? null;
+  } catch {
+    return (MEDIA_MANIFEST as any).villasByFolder?.[m[1]] ?? null;
+  }
+};
 
 // Icon mapping helper
 const getIcon = (iconName?: string, title?: string) => {
@@ -201,7 +225,15 @@ export default function VillaDetailsPage() {
     );
   }
 
-  const heroImages = media?.hero?.length ? media.hero : [];
+  const manifestHero = getManifestEntry(villa)?.hero || [];
+  const overrideHero = getHeroOverrideForId(villa.id);
+  const heroImages = overrideHero
+    ? overrideHero
+    : media?.hero?.length
+      ? media.hero
+      : manifestHero?.length
+        ? manifestHero
+        : [];
   const spaceImages = media?.spaces?.length ? media.spaces : [];
   const experienceImages = media?.experiences?.length ? media.experiences : [];
 
@@ -253,11 +285,18 @@ export default function VillaDetailsPage() {
   // Filter out empty strings — "" is truthy in JS so we must check length
   const validImg = (s: string | undefined) => s && s.length > 0;
   const imagesList = (() => {
-    const gallery = heroImages.filter((img) => validImg(img) === true);
+    const gallery = heroImages.filter(
+      (img: string | undefined): img is string => validImg(img) === true,
+    );
     if (gallery.length > 0) return gallery; // hero only, as requested
     if (validImg(villa.image)) return [villa.image];
     return [];
   })();
+
+  const activeHeroSrc =
+    imagesList.length > 0 && imagesList[currentImageIndex]
+      ? normalizeImageSrc(imagesList[currentImageIndex])
+      : "";
 
   const handlePrevImage = () => {
     if (imagesList.length <= 1) return;
@@ -386,7 +425,7 @@ export default function VillaDetailsPage() {
 
   useEffect(() => {
     // Only start auto-scroll if the URL parameter is present
-    const shouldAutoScroll = searchParams.get("autoScroll") === "true";
+    const shouldAutoScroll = searchParams?.get("autoScroll") === "true";
 
     if (shouldAutoScroll) {
       isAutoScrolling.current = true;
@@ -462,9 +501,9 @@ export default function VillaDetailsPage() {
       <section className="relative h-[60vh] md:h-[80vh] w-full bg-[#1A1C1E]">
         {/* Image (Interactive Carousel) */}
         <div className="absolute inset-0">
-          {imagesList.length > 0 && imagesList[currentImageIndex] && (
+          {activeHeroSrc && (
             <Image
-              src={imagesList[currentImageIndex]}
+              src={activeHeroSrc}
               alt={villa.name}
               fill
               className="object-cover object-center"
@@ -744,8 +783,8 @@ export default function VillaDetailsPage() {
                       <Image
                         src={
                           validImg(currentSpace.image)
-                            ? currentSpace.image
-                            : villa.image
+                            ? normalizeImageSrc(currentSpace.image)
+                            : normalizeImageSrc(villa.image)
                         }
                         alt={currentSpace.name || "Space"}
                         fill
@@ -903,8 +942,8 @@ export default function VillaDetailsPage() {
                     <Image
                       src={
                         validImg(currentActivity.image)
-                          ? currentActivity.image
-                          : villa.image
+                          ? normalizeImageSrc(currentActivity.image)
+                          : normalizeImageSrc(villa.image)
                       }
                       alt={currentActivity.title}
                       fill
@@ -1137,7 +1176,9 @@ export default function VillaDetailsPage() {
                   <div className="relative w-full h-64 md:h-80">
                     {(villa.locationDetails.mapImage || villa.image) && (
                       <Image
-                        src={villa.locationDetails.mapImage || villa.image}
+                        src={normalizeImageSrc(
+                          villa.locationDetails.mapImage || villa.image,
+                        )}
                         alt="Map Location"
                         fill
                         className="object-cover opacity-80"
@@ -1222,7 +1263,7 @@ export default function VillaDetailsPage() {
                       >
                         {image && (
                           <Image
-                            src={image}
+                            src={normalizeImageSrc(image)}
                             alt={title}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"

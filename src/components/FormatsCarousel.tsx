@@ -63,15 +63,12 @@ export default function FormatsCarousel() {
 
   const variants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? "100%" : "-100%",
       opacity: 0,
     }),
     center: {
-      x: 0,
       opacity: 1,
     },
     exit: (direction: number) => ({
-      x: direction < 0 ? "100%" : "-100%",
       opacity: 0,
     }),
   };
@@ -115,8 +112,7 @@ export default function FormatsCarousel() {
                 animate="center"
                 exit="exit"
                 transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.2 },
+                  opacity: { duration: 0.28, ease: [0.16, 1, 0.3, 1] },
                 }}
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}

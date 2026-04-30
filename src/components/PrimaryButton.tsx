@@ -47,11 +47,13 @@ export default function PrimaryButton({
         // Core identity — gold solid CTA with 1px INSIDE stroke
         "group bg-[#EFCD62] text-black font-manrope font-bold",
         "ring-1 ring-inset ring-[#AC8831]",
+        // Shape
+        "rounded-none",
         // Self-balancing sizing: fit content, respect parent padding
         "inline-flex items-center justify-center gap-[clamp(6px,0.8vw,12px)]",
         "max-w-full box-border shrink-1",
         // Fluid padding: scales between mobile → desktop automatically
-        "px-[clamp(14px,2.5vw,28px)] py-[clamp(10px,1.2vw,14px)]",
+        "px-[clamp(12px,1.4vw,18px)] py-[clamp(12px,1.35vw,16px)]",
         // Fluid typography
         "text-gh-label tracking-[0.15em] uppercase",
         // Interaction

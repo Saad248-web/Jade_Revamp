@@ -15,13 +15,8 @@ import { useAnimation } from "@/context/AnimationContext";
 import { useWishlist } from "@/context/WishlistContext";
 
 export default function Navbar() {
-  const pathname = usePathname();
-  const {
-    isSplashComplete,
-    setPartnerOverlayOpen,
-    navbarTheme,
-    setEnquireOverlayOpen,
-  } = useAnimation();
+  const pathname = usePathname() ?? "";
+  const { isSplashComplete, navbarTheme } = useAnimation();
   const { count: wishlistCount } = useWishlist();
   const { scrollY } = useScroll();
   const [isHidden, setIsHidden] = useState(false);
@@ -76,7 +71,8 @@ export default function Navbar() {
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         {/* Glass bar */}
-        <div className="mx-auto px-4 md:px-8 py-4 md:py-5 flex items-center justify-between bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm relative">
+        <div className="w-full bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm">
+          <div className="max-w-[1920px] mx-auto px-4 sm:px-5 md:px-8 lg:px-10 xl:px-12 py-4 md:py-5 flex items-center justify-between relative">
           {/* ── LEFT: Menu link + inline nav links (desktop only) ── */}
           <div className="hidden lg:flex items-center gap-8 flex-1">
             <Link
@@ -163,18 +159,18 @@ export default function Navbar() {
           {/* ── RIGHT: Contact CTA ── */}
           <div className="flex items-center justify-end flex-1 gap-4">
             {isDetailPage ? (
-              <button
-                onClick={() => setEnquireOverlayOpen(true)}
+              <Link
+                href="/book"
                 className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center min-h-[44px]"
               >
-                ENQUIRE NOW
-              </button>
+                BOOK NOW
+              </Link>
             ) : (
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setEnquireOverlayOpen(true)}
+                <Link
+                  href="/book"
                   className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] min-h-[44px] rounded-none border border-white/20 transition-all duration-300 group shrink-0"
-                  aria-label="Enquire Now"
+                  aria-label="Book"
                 >
                   <svg
                     width="18"
@@ -194,7 +190,7 @@ export default function Navbar() {
                     <path d="M9 10h6v4H9z" />
                     <path d="M10 12h.01M12 12h.01M14 12h.01" />
                   </svg>
-                </button>
+                </Link>
 
                 {/* Wishlist icon with badge */}
                 <Link
@@ -210,22 +206,23 @@ export default function Navbar() {
                   )}
                 </Link>
                 {pathname?.startsWith("/experiences") ? (
-                  <button
-                    onClick={() => setPartnerOverlayOpen(true)}
+                  <Link
+                    href="/book"
                     className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center min-h-[44px] whitespace-nowrap"
                   >
-                    ENQUIRE NOW
-                  </button>
+                    BOOK NOW
+                  </Link>
                 ) : (
-                  <button
-                    onClick={() => setEnquireOverlayOpen(true)}
+                  <Link
+                    href="/book"
                     className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center min-h-[44px] whitespace-nowrap"
                   >
-                    ENQUIRE
-                  </button>
+                    BOOK
+                  </Link>
                 )}
               </div>
             )}
+          </div>
           </div>
         </div>
       </motion.nav>

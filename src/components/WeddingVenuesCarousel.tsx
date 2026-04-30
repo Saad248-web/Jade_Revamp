@@ -43,10 +43,10 @@ export default function WeddingVenuesCarousel() {
               <motion.div
                 key={currentVilla.id}
                 custom={direction}
-                initial={{ x: direction > 0 ? "100%" : "-100%", opacity: 1 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: direction > 0 ? "-100%" : "100%", opacity: 1 }}
-                transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 className="absolute inset-0 w-full h-full"
               >
                 <Image

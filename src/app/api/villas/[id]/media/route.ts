@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"; // API cache busted for image optimizations
 import { VILLAS } from "@/lib/mockData";
 import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
+import { getHeroOverrideForId } from "@/lib/heroOverrides";
 
 type CategorizedSpace = {
   id: string;
@@ -48,6 +49,24 @@ function collectCandidateFolders(villa: any) {
     (g?.images || []).forEach(addFrom),
   );
   return uniq(candidates);
+}
+
+function resolveRetreatFolders(villa: any): string[] {
+  const byFolder = (MEDIA_MANIFEST as any).villasByFolder || {};
+
+  // Deterministic: use `villa.name` as the manifest key (matches `public/Villa_Retreats/<Folder>`).
+  if (villa?.name && byFolder[villa.name]) return [villa.name];
+
+  // Special-case Dome Villas: always resolve to the `Dome` manifest bucket.
+  if (villa?.id === "dome-villas" && byFolder["Dome"]) return ["Dome"];
+
+  // Fallback: scan paths but only keep folders that exist in the manifest.
+  const candidates = collectCandidateFolders(villa).filter(
+    (f) => typeof f === "string" && byFolder[f],
+  );
+  if (candidates.length) return candidates.slice(0, 1);
+
+  return [];
 }
 
 function filenameTitle(url: string) {
@@ -218,7 +237,7 @@ export async function GET(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const retreatFolders = collectCandidateFolders(villa);
+  const retreatFolders = resolveRetreatFolders(villa);
   const media = {
     hero: [],
     spaces: [],
@@ -243,6 +262,9 @@ export async function GET(
   let perfectFor = uniq(media.perfectFor);
   const other = uniq(media.other);
 
+  const heroOverride = getHeroOverrideForId(id);
+  const finalHero = heroOverride ? heroOverride : hero;
+
   // Dome Villas: pin Experiences/Perfect For to their dedicated folders, and
   // build dome-color grouped sub-categorized spaces (Blue / Red / Yellow each
   // containing Bedrooms, Pool & Water, Living & Dining, etc.).
@@ -266,7 +288,7 @@ export async function GET(
   }
 
   const res: MediaResponse = {
-    hero,
+    hero: finalHero,
     spaces,
     experiences,
     perfectFor,

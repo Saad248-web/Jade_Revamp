@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useAnimation } from "@/context/AnimationContext";
 import {
@@ -41,6 +41,34 @@ export default function LandingPage() {
   const { isSplashComplete } = useAnimation();
   const containerRef = useRef(null);
   const heroRef = useRef<HTMLDivElement>(null);
+
+  const heroFallbackImage = "/Home Page/4-Venue Images/1.webp";
+
+  type VideoSource = { mp4: string; webm?: string };
+
+  const videoPlaylist = useMemo(
+    () =>
+      [
+        // Online, high-quality “party / pool / celebration” vibe clips.
+        // If any CDN blocks hotlinking, the local fallback below will still work.
+        {
+          mp4: "https://cdn.coverr.co/videos/coverr-people-at-a-party-9719/1080p.mp4",
+        },
+        {
+          mp4: "https://cdn.coverr.co/videos/coverr-cheers-with-champagne-9497/1080p.mp4",
+        },
+        {
+          mp4: "https://cdn.coverr.co/videos/coverr-pool-party-people-having-fun-2331/1080p.mp4",
+        },
+        {
+          mp4: "https://cdn.coverr.co/videos/coverr-dj-turntable-9158/1080p.mp4",
+        },
+        {
+          mp4: "https://cdn.coverr.co/videos/coverr-fireworks-over-the-city-9159/1080p.mp4",
+        },
+      ] as VideoSource[],
+    [],
+  );
 
   useEffect(() => {
     // Force scroll to top on refresh
@@ -94,12 +122,13 @@ export default function LandingPage() {
     },
   };
 
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const videoSources = ["/Hero_Video/Hero Video.mp4"];
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(() =>
+    Math.floor(Math.random() * videoPlaylist.length),
+  );
 
   const handleVideoEnd = () => {
-    if (videoSources.length > 1) {
-      setCurrentVideoIndex((prev: number) => (prev + 1) % videoSources.length);
+    if (videoPlaylist.length > 1) {
+      setCurrentVideoIndex((prev: number) => (prev + 1) % videoPlaylist.length);
     }
   };
 
@@ -133,21 +162,35 @@ export default function LandingPage() {
               autoPlay
               muted
               playsInline
-              loop={videoSources.length === 1}
+              preload="metadata"
+              poster={heroFallbackImage}
+              loop={videoPlaylist.length === 1}
               onEnded={handleVideoEnd}
+              onError={handleVideoEnd}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 1 }}
               className="absolute inset-0 w-full h-full object-cover"
             >
-              <source
-                src={videoSources[currentVideoIndex].replace(".mp4", ".webm")}
-                type="video/webm"
-              />
-              <source src={videoSources[currentVideoIndex]} type="video/mp4" />
+              {videoPlaylist[currentVideoIndex]?.webm ? (
+                <source
+                  src={videoPlaylist[currentVideoIndex].webm}
+                  type="video/webm"
+                />
+              ) : null}
+              <source src={videoPlaylist[currentVideoIndex].mp4} type="video/mp4" />
             </motion.video>
           </AnimatePresence>
+          <div className="absolute inset-0 z-[-1]">
+            <Image
+              src={heroFallbackImage}
+              alt=""
+              fill
+              priority
+              className="object-cover"
+            />
+          </div>
           <div className="absolute inset-0 bg-black/40" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
         </motion.div>

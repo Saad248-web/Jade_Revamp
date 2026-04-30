@@ -11,8 +11,8 @@ const PARTY_VILLA_IDS = [
   "dome-villas",
   "emerald",
   "magnolia",
-  "tranquil-woods",
-  "wonderland-treehouse",
+  "tranquil",
+  "wonderland",
   "vannani",
 ];
 
@@ -34,7 +34,7 @@ export default function PartyVillasCarousel() {
       id="party-villas-section"
       className="relative bg-[#25282C] pt-fluid-lg pb-10 md:pt-fluid-xl md:pb-10"
     >
-      <div className="max-w-7xl mx-auto px-6 w-full overflow-hidden">
+      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full overflow-hidden">
         <div className="flex flex-col gap-14">
           {PARTY_VILLAS.map((villa) => (
             <PartyVillaCard

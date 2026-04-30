@@ -51,38 +51,50 @@ const AMENITIES = [
 
 export default function JadeAmenitiesSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
 
   const currentSlide = AMENITIES[currentIndex];
 
   const handlePrev = () => {
+    setDirection(-1);
     setCurrentIndex((prev) => (prev === 0 ? AMENITIES.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
+    setDirection(1);
     setCurrentIndex((prev) => (prev === AMENITIES.length - 1 ? 0 : prev + 1));
   };
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden bg-[#25282C] flex flex-col"
+      className="relative min-h-screen w-full overflow-hidden bg-[#0D4032] flex flex-col"
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
       {/* ── TOP AREA (80vh) — background image ── */}
       <div className="relative w-full h-[80vh] z-0 overflow-hidden shrink-0">
-        <div className="absolute inset-0 w-full h-full">
-          <Image
-            src={currentSlide.bgImage}
-            alt="Background"
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#25282C]/90 via-[#25282C]/25 to-[#25282C]/55" />
-        </div>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={`bg-${currentIndex}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <Image
+              src={currentSlide.bgImage}
+              alt="Background"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0D4032]/90 via-[#0D4032]/25 to-[#0D4032]/55" />
+          </motion.div>
+        </AnimatePresence>
 
         {/* ── TEXT ── */}
         <div className="absolute inset-x-0 top-[10vh] z-20 flex flex-col items-center text-center px-6 sm:px-10 pointer-events-none">
@@ -104,7 +116,7 @@ export default function JadeAmenitiesSection() {
             key={`sub-${currentIndex}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.25 }}
+            transition={{ delay: 0.12, duration: 0.22 }}
             className="font-manrope text-gh-carousel-sub text-white/80 leading-relaxed max-w-xl mx-auto line-clamp-3"
           >
             {currentSlide.subtext}
@@ -113,10 +125,10 @@ export default function JadeAmenitiesSection() {
       </div>
 
       {/* ── BOTTOM AREA ── */}
-      <div className="relative w-full h-[20vh] z-10 bg-[#25282C]" />
+      <div className="relative w-full h-[20vh] z-10 bg-[#0D4032]" />
 
       {/* ── SPACER — exactly 40px gap ── */}
-      <div className="h-[40px] bg-[#25282C]" />
+      <div className="h-[40px] bg-[#0D4032]" />
 
       {/* ── ARROWS ── */}
       <button
@@ -142,23 +154,27 @@ export default function JadeAmenitiesSection() {
                       aspect-[4/3]
                       shadow-[0_20px_50px_rgba(0,0,0,0.55)] overflow-hidden border border-white/20"
       >
-        <motion.div
-          key={`card-${currentIndex}`}
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="w-full h-full relative"
-        >
-          <Image
-            src={currentSlide.cardImage}
-            alt="Feature"
-            fill
-            className="object-cover"
-            sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
-            priority
-          />
-        </motion.div>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={`card-${currentIndex}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full h-full relative"
+          >
+            <Image
+              src={currentSlide.cardImage}
+              alt="Feature"
+              fill
+              className="object-cover"
+              sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
+              priority
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
+
     </section>
   );
 }

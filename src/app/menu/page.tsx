@@ -17,6 +17,108 @@ import { VILLAS } from "@/lib/mockData";
 import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
 
+type MenuExperienceItem = {
+  title: string;
+  type: string;
+  href: string;
+  desc?: string;
+  images: [string, string];
+};
+
+const MENU_EXPERIENCES: MenuExperienceItem[] = [
+  {
+    title: "Weekend Getaways",
+    type: "JOURNEY OF WELLNESS",
+    href: "/weekend-getaways",
+    desc: "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone's wishlist.",
+    images: [
+      "/Experiences/Weekend Getaways/1-Hero/casual stays.webp",
+      "/Experiences/Weekend Getaways/2-What Weekends Look like/Poolside Mornings.webp",
+    ],
+  },
+  {
+    title: "Celebrations & Parties",
+    type: "LUXURY PRIVATE STAYS",
+    href: "/party-villas",
+    desc: "Birthdays, pool or bachelor parties unfold across private farmhouse villas with pools, open lawns and entertainment-ready spaces.",
+    images: [
+      "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
+      "/Experiences/Party Villas/3-Addons/Movie Under The Stars-2.webp",
+    ],
+  },
+  {
+    title: "Wedding Celebrations",
+    type: "UNFORGETTABLE MOMENTS",
+    href: "/weddings",
+    desc: "Say 'I do' under the stars in sprawling lawns or intimate poolside setups designed just for you.",
+    images: [
+      "/Experiences/Weddings/1-Hero/3.webp",
+      "/Experiences/Weddings/2-Venue Images/DIAMOND/10.webp",
+    ],
+  },
+  {
+    title: "Corporate Offsites",
+    type: "JOURNEY OF TEAMWORK",
+    href: "/corporate-retreats",
+    images: [
+      "/Experiences/Corporate Retreats/1-Hero/xhero.webp",
+      "/Experiences/Corporate Retreats/2-Formats/offsite and work....webp",
+    ],
+  },
+  {
+    title: "Wellness Retreats",
+    type: "PURE REJUVENATION",
+    href: "/weekend-getaways",
+    images: [
+      "/Experiences/Weekend Getaways/3-Addons/Private Chef Experience.webp",
+      "/Experiences/Weekend Getaways/2-What Weekends Look like/Evenings Under the Stars.webp",
+    ],
+  },
+  {
+    title: "Journeys in Caravans",
+    type: "LUXURY ON ROAD",
+    href: "/caravans",
+    images: ["/Experiences/Caravan/1-Hero/28.webp", "/Experiences/Caravan/2-Spaces/11.webp"],
+  },
+];
+
+const FALLBACK_MENU_IMAGE = "/Villa_Retreats/Magnolia/Hero/Hero 1.webp";
+function safeMenuImage(src?: string) {
+  return src && src.trim().length > 0 ? src : FALLBACK_MENU_IMAGE;
+}
+
+function uniq<T>(arr: T[]) {
+  return Array.from(new Set(arr));
+}
+
+function getMenuVillaCarouselImages(villa: any) {
+  const all: string[] = Array.isArray(villa?.images)
+    ? villa.images
+    : uniq([
+        villa?.image,
+        ...(Array.isArray(villa?.spaces) ? villa.spaces.map((s: any) => s?.image) : []),
+      ]).filter(Boolean);
+
+  const isHero = (p: string) => /\/hero\//i.test(p) || /\/1-hero\//i.test(p);
+  const isSpace = (p: string) =>
+    /\/spaces\//i.test(p) || /\/2-spaces\//i.test(p) || /\/space\//i.test(p);
+
+  const heroes = all.filter((p) => typeof p === "string" && isHero(p));
+  if (heroes.length >= 2) return uniq(heroes).map(safeMenuImage);
+
+  const spaces = all.filter((p) => typeof p === "string" && isSpace(p));
+  const fallback = all.filter((p) => typeof p === "string");
+
+  // If only 0-1 hero image exists, append a few space images (or any other images).
+  const combined = uniq([
+    ...heroes,
+    ...spaces.slice(0, 6),
+    ...fallback.slice(0, 6),
+  ]).slice(0, 10);
+
+  return combined.map(safeMenuImage);
+}
+
 export default function MenuPage() {
   const { setPartnerOverlayOpen } = useAnimation();
 
@@ -256,26 +358,23 @@ export default function MenuPage() {
                         </h3>
                         <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
                       </div>
-                      <div className="flex gap-2">
-                        <div className="relative h-24 flex-1 aspect-[4/3]">
-                          <Image
-                            src={villa.image}
-                            alt={villa.name}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 1024px) 50vw, 33vw"
-                          />
+                      <div className="-mx-6 md:-mx-12 px-6 md:px-12 overflow-x-auto hide-scrollbar">
+                        <div className="flex gap-2 w-max pr-6">
+                          {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
+                            <div
+                              key={`${villa.id}-${imgIdx}`}
+                              className="relative h-36 w-[280px] shrink-0 overflow-hidden"
+                            >
+                              <Image
+                                src={src}
+                                alt={`${villa.name} image ${imgIdx + 1}`}
+                                fill
+                                className="object-cover"
+                                sizes="280px"
+                              />
+                            </div>
+                          ))}
                         </div>
-                        {villa.spaces?.[1]?.image && (
-                          <div className="relative h-24 flex-1 aspect-[4/3]">
-                            <Image
-                              src={villa.spaces[1].image}
-                              alt="space"
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        )}
                       </div>
                     </Link>
                   ))}
@@ -302,29 +401,7 @@ export default function MenuPage() {
                 </h2>
 
                 <div className="space-y-8">
-                  {[
-                    {
-                      title: "Weekend Getaways",
-                      href: "/weekend-getaways",
-                      desc: "A day or two with your friends and family away from the bustling city in the wilderness is truly on everyone's wishlist.",
-                      img1: "/X/Magnolia/16.webp",
-                      img2: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
-                    },
-                    {
-                      title: "Celebrations & Parties",
-                      href: "/party-villas",
-                      desc: "Birthdays, pool or bachelor parties unfold across private farmhouse villas with pools, open lawns and entertainment-ready spaces.",
-                      img1: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
-                      img2: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
-                    },
-                    {
-                      title: "Wedding Celebrations",
-                      href: "/weddings",
-                      desc: "Say 'I do' under the stars in sprawling lawns or intimate poolside setups designed just for you.",
-                      img1: "/X/Magnolia/9.webp",
-                      img2: "/X/ROR/14.webp",
-                    },
-                  ].map((exp, idx) => (
+                  {MENU_EXPERIENCES.slice(0, 3).map((exp, idx) => (
                     <div key={idx} className="flex flex-col group">
                       <Link href={exp.href} className="cursor-pointer">
                         <div className="flex items-center justify-between mb-1">
@@ -345,7 +422,7 @@ export default function MenuPage() {
                       <div className="flex gap-2">
                         <div className="relative h-28 flex-1 aspect-[4/3]">
                           <Image
-                            src={exp.img1}
+                            src={exp.images[0]}
                             alt={exp.title}
                             fill
                             className="object-cover"
@@ -354,7 +431,7 @@ export default function MenuPage() {
                         </div>
                         <div className="relative h-28 flex-1 aspect-[4/3]">
                           <Image
-                            src={exp.img2}
+                            src={exp.images[1]}
                             alt={`${exp.title} 2`}
                             fill
                             className="object-cover"
@@ -485,31 +562,24 @@ export default function MenuPage() {
                         </Link>
                       </div>
 
-                      <div className="flex gap-4">
-                        <Link
-                          href={`/villas/${villa.id}`}
-                          className="relative h-[280px] flex-1 aspect-[4/3] cursor-grab active:cursor-grabbing overflow-hidden group/img"
-                        >
-                          <Image
-                            src={villa.image}
-                            alt={villa.name}
-                            fill
-                            className="object-cover group-hover/img:scale-105 transition-transform duration-700"
-                            sizes="30vw"
-                          />
-                        </Link>
-                        <Link
-                          href={`/villas?villa=${villa.id}`}
-                          className="relative h-[280px] flex-1 aspect-[4/3] cursor-grab active:cursor-grabbing overflow-hidden group/img"
-                        >
-                          <Image
-                            src={villa.spaces?.[1]?.image || villa.image}
-                            alt="space"
-                            fill
-                            className="object-cover group-hover/img:scale-105 transition-transform duration-700"
-                            sizes="30vw"
-                          />
-                        </Link>
+                      <div className="overflow-x-auto hide-scrollbar">
+                        <div className="flex gap-4 w-max pr-4">
+                          {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
+                            <Link
+                              key={`${villa.id}-desktop-${imgIdx}`}
+                              href={`/villas/${villa.id}`}
+                              className="relative h-[280px] w-[420px] shrink-0 overflow-hidden cursor-pointer group/img"
+                            >
+                              <Image
+                                src={src}
+                                alt={`${villa.name} image ${imgIdx + 1}`}
+                                fill
+                                className="object-cover group-hover/img:scale-105 transition-transform duration-700"
+                                sizes="420px"
+                              />
+                            </Link>
+                          ))}
+                        </div>
                       </div>
                     </motion.div>
                   ))}
@@ -530,50 +600,7 @@ export default function MenuPage() {
                 className="absolute inset-0 flex flex-col px-12 pt-6 pb-16 pointer-events-auto overflow-y-auto hide-scrollbar"
               >
                 <div className="w-full space-y-16">
-                  {[
-                    {
-                      title: "Weekend Getaways",
-                      type: "JOURNEY OF WELLNESS",
-                      href: "/weekend-getaways",
-                      img1: "/X/Magnolia/16.webp",
-                      img2: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
-                    },
-                    {
-                      title: "Celebrations & Parties",
-                      type: "LUXURY PRIVATE STAYS",
-                      href: "/party-villas",
-                      img1: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
-                      img2: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
-                    },
-                    {
-                      title: "Wedding Celebrations",
-                      type: "UNFORGETTABLE MOMENTS",
-                      href: "/weddings",
-                      img1: "/X/Magnolia/9.webp",
-                      img2: "/X/ROR/14.webp",
-                    },
-                    {
-                      title: "Corporate Offsites",
-                      type: "JOURNEY OF TEAMWORK",
-                      href: "/corporate-retreats",
-                      img1: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
-                      img2: "/X/ROR/14.webp",
-                    },
-                    {
-                      title: "Wellness Retreats",
-                      type: "PURE REJUVENATION",
-                      href: "/corporate-retreats", // Fallback to corporate-retreats
-                      img1: "/X/Magnolia/16.webp",
-                      img2: "/X/Dome Villas/Blue Dome/Dome Villas by Jade - Blue v3_Page_07_Image_0001.webp",
-                    },
-                    {
-                      title: "Journeys in Caravans",
-                      type: "LUXURY ON ROAD",
-                      href: "/caravans",
-                      img1: "/X/Magnolia/14.webp",
-                      img2: "/X/Dome Villas/Red Dome/1.webp",
-                    },
-                  ].map((exp, idx) => (
+                  {MENU_EXPERIENCES.map((exp, idx) => (
                     <motion.div
                       key={idx}
                       initial={{ opacity: 0, y: 20 }}
@@ -607,7 +634,7 @@ export default function MenuPage() {
                           className="relative h-[280px] flex-1 aspect-[4/3] cursor-pointer overflow-hidden group/img"
                         >
                           <Image
-                            src={exp.img1}
+                            src={exp.images[0]}
                             alt={exp.title}
                             fill
                             className="object-cover group-hover/img:scale-105 transition-transform duration-700"
@@ -619,7 +646,7 @@ export default function MenuPage() {
                           className="relative h-[280px] flex-1 aspect-[4/3] cursor-pointer overflow-hidden group/img"
                         >
                           <Image
-                            src={exp.img2}
+                            src={exp.images[1]}
                             alt="experience"
                             fill
                             className="object-cover group-hover/img:scale-105 transition-transform duration-700"
@@ -667,7 +694,7 @@ export default function MenuPage() {
                   {/* Banner Image Section */}
                   <div className="flex-[2] relative h-[400px] overflow-hidden group/banner shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5">
                     <Image
-                      src="/X/Magnolia/9.webp"
+                      src={FALLBACK_MENU_IMAGE}
                       alt="Jade Banner"
                       fill
                       className="object-cover opacity-60 group-hover/banner:scale-105 group-hover/banner:opacity-100 transition-all duration-1000 grayscale group-hover/banner:grayscale-0"

@@ -33,6 +33,8 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
   onClose,
   villa,
 }) => {
+  const MotionDiv = motion.div;
+  const MotionButton = motion.button;
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("Amenities");
   const [view, setView] = useState<"form" | "success">("form");
@@ -131,40 +133,32 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
   if (!mounted || !isOpen || !villa) return null;
 
   return createPortal(
-    <motion.div
+    <MotionDiv
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="fixed inset-0 z-[9999] bg-black/60 overflow-y-auto text-white scrollbar-none"
+      className="fixed inset-0 z-[9999] bg-[#0E3A2F] overflow-y-auto text-white scrollbar-none"
       data-lenis-prevent
     >
-      {/* FIXED CLOSE BUTTON IN TRANSPARENT AREA */}
-      <div className="fixed top-0 inset-x-0 z-[100] flex items-center justify-center py-6 pointer-events-none">
-        <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          onClick={onClose}
-          className="w-12 h-12 flex items-center justify-center bg-[#124131] rounded-full text-white shadow-2xl pointer-events-auto hover:bg-[#1f5c48] transition-colors z-[102]"
-        >
-          <X className="w-6 h-6 stroke-[1.5]" />
-        </motion.button>
-      </div>
+      {/* FIXED CLOSE BUTTON (TOP-RIGHT) */}
+      <MotionButton
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        onClick={onClose}
+        aria-label="Close"
+        className="fixed top-6 right-6 z-[200] w-12 h-12 flex items-center justify-center bg-[#124131] rounded-full text-white shadow-2xl pointer-events-auto hover:bg-[#1f5c48] transition-colors"
+      >
+        <X className="w-6 h-6 stroke-[1.5]" />
+      </MotionButton>
 
-      <div className="flex flex-col min-h-screen">
-        {/* TRANSPARENT SPACER */}
-        <div
-          className="h-[100px] md:h-[120px] w-full bg-transparent"
-          onClick={onClose}
-        />
-
-        {/* CONTENT SHEET */}
-        <div className="flex-1 bg-[#0E3A2F] rounded-t-2xl md:rounded-t-[48px] shadow-[0_-20px_80px_rgba(0,0,0,0.6)] relative z-10">
-          <div className="max-w-4xl mx-auto w-full pb-32">
-            <div className="relative aspect-[4/3] md:aspect-[16/9] w-full overflow-hidden rounded-t-[32px] md:rounded-t-[48px] group">
+      <div className="min-h-screen pb-28">
+        {/* CONTENT (CENTERED LIKE BOOK PAGE) */}
+        <div className="max-w-5xl mx-auto w-full pb-10 px-4 sm:px-6 md:px-8">
+            <div className="relative w-full h-[clamp(240px,45vh,520px)] overflow-hidden rounded-none group">
               <AnimatePresence initial={false} custom={direction}>
-                <motion.div
+                <MotionDiv
                   key={currentImageIndex}
                   custom={direction}
                   initial={{ opacity: 0 }}
@@ -180,7 +174,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                </motion.div>
+                </MotionDiv>
               </AnimatePresence>
 
               {/* Numerical Pagination */}
@@ -720,36 +714,33 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                 )}
               </div>
             </div>
-          </div>
         </div>
       </div>
 
-      {/* FLOATING BOTTOM BAR (ALIGNED WITH CONTENT) */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl z-50 px-6 md:px-12 py-4 bg-[#0D4032] border-x border-t border-white/10 flex items-center justify-between gap-4 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.4)] rounded-t-xl md:rounded-t-[32px]">
-        <div className="flex flex-col">
-          <span className="text-white/40 text-gh-label uppercase font-bold tracking-[0.2em] block mb-0.5">
-            Starting from
-          </span>
-          <span className="text-white font-manrope font-bold text-gh-body tracking-tight">
-            ₹35,000 onwards
-          </span>
-        </div>
-        <div className="flex items-center gap-6">
-          <button
-            onClick={() => window.open("#", "_blank")}
-            className="text-[#EFCD62] font-manrope font-bold text-gh-label tracking-widest uppercase hover:text-white transition-colors border-b border-transparent hover:border-[#EFCD62]"
-          >
-            VIEW VENUE
-          </button>
-          <PrimaryButton
-            withArrow={false}
-            onClick={() => scrollToSection("enquiry")}
-          >
-            ENQUIRE
-          </PrimaryButton>
+      {/* BOTTOM PRICE BAR (SAME AS VILLA DETAIL PAGE) */}
+      <div className="fixed bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 py-4 z-[150] transition-all flex justify-center">
+        <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-4 px-4 md:px-12">
+          <p className="text-white text-[12px] md:text-[14px] lg:text-base font-bold font-manrope whitespace-nowrap">
+            Starting from ₹35,000 onwards
+          </p>
+          <div className="flex items-center gap-4 md:gap-6">
+            <button
+              onClick={() => scrollToSection("enquiry")}
+              className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap"
+            >
+              ENQUIRE
+            </button>
+            <PrimaryButton
+              href={`/book?villa=${villa.id}`}
+              withArrow={false}
+              className="whitespace-nowrap"
+            >
+              BOOK VILLA
+            </PrimaryButton>
+          </div>
         </div>
       </div>
-    </motion.div>,
+    </MotionDiv>,
     document.body,
   );
 };

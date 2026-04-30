@@ -5,6 +5,34 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Users, Car, Home, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { getHeroOverrideForId } from "@/lib/heroOverrides";
+
+const normalizePublicImageSrc = (src: string) => {
+  if (!src.startsWith("/")) return src;
+  return src.replace(/ /g, "%20").replace(/#/g, "%23").replace(/\?/g, "%3F");
+};
+
+function buildVillaGalleryImages(villa: any, max = 8) {
+  const sources: Array<string | undefined | null> = [
+    ...(getHeroOverrideForId(villa?.id) || []),
+    ...((villa?.images as string[] | undefined) || []),
+    ...(((villa?.spaces as any[] | undefined) || []).map((s) => s?.image)),
+    ...(((villa?.activities as any[] | undefined) || []).map((a) => a?.image)),
+    villa?.image,
+  ];
+
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of sources) {
+    if (!raw || typeof raw !== "string") continue;
+    const normalized = normalizePublicImageSrc(raw);
+    if (seen.has(normalized)) continue;
+    seen.add(normalized);
+    out.push(normalized);
+    if (out.length >= max) break;
+  }
+  return out;
+}
 
 interface WeddingVillaCardProps {
   villa: any; // Type from VILLAS
@@ -18,10 +46,13 @@ export default function WeddingVillaCard({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
+  const gallery = buildVillaGalleryImages(villa, 8);
   const images =
-    villa.spaces?.length > 0
-      ? villa.spaces
-      : [{ name: "Main", image: villa.image }];
+    gallery.length > 0
+      ? gallery.map((img, idx) => ({ name: `Gallery ${idx + 1}`, image: img }))
+      : villa.spaces?.length > 0
+        ? villa.spaces
+        : [{ name: "Main", image: villa.image }];
 
   const nextImage = () => {
     setDirection(1);
@@ -57,14 +88,14 @@ export default function WeddingVillaCard({
   ];
 
   const price =
-    villa.id === "tranquil-woods"
+    villa.id === "tranquil"
       ? "₹65,000"
       : villa.id === "magnolia" || villa.id === "diamond"
         ? "₹99,000"
         : "₹75,000";
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 lg:gap-16 w-full pb-8 lg:py-10 border-b border-white/5 last:border-b-0 bg-[#25282C]">
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 xl:gap-14 w-full pb-8 lg:py-10 border-b border-white/5 last:border-b-0 bg-[#25282C]">
       {/* IMAGE SECTION */}
       <div className="relative w-full lg:w-[45%] h-[38vh] lg:h-[360px] xl:h-[420px] overflow-hidden bg-white/5 flex-shrink-0">
         <AnimatePresence initial={false} custom={direction}>
@@ -122,7 +153,7 @@ export default function WeddingVillaCard({
       </div>
 
       {/* CONTENT SECTION */}
-      <div className="flex flex-col flex-1 px-6 md:px-8 lg:px-0 pt-6 lg:pt-0 lg:max-w-2xl justify-start">
+      <div className="flex flex-col flex-1 px-6 md:px-8 lg:px-0 pt-6 lg:pt-0 justify-start">
         <span
           className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase"
           style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}

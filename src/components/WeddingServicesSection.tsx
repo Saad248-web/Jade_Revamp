@@ -1,15 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence,
-} from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
 function pick(images: string[], idx: number) {
   if (!images.length) return "";
@@ -118,244 +113,108 @@ export default function WeddingServicesSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex flex-col"
-      style={{ backgroundColor: "#25282C" }}
+      className="relative min-h-screen w-full overflow-hidden bg-[#0D4032] flex flex-col"
     >
-      {/* 
-        MOBILE LAYOUT (< 1024px) 
-      */}
-      <div className="lg:hidden relative h-[100dvh] flex flex-col">
-        {/* Background Layer */}
-        <div className="absolute inset-0 h-full w-full z-0">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
-              className="absolute inset-0 w-full h-full"
-            >
-              {currentSlide.bgImage ? (
-                <Image
-                  src={currentSlide.bgImage}
-                  alt="Background"
-                  fill
-                  className="object-cover object-center"
-                  sizes="100vw"
-                  priority
-                  unoptimized
-                />
-              ) : (
-                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#25282C] to-[#0D4032]" />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-[#25282C]/90" />
-            </motion.div>
-          </AnimatePresence>
+      <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
+
+      {/* ── TOP AREA (80vh) — background image ── */}
+      <div className="relative w-full h-[80vh] z-0 overflow-hidden shrink-0">
+        <div className="absolute inset-0 w-full h-full">
+          {currentSlide.bgImage ? (
+            <Image
+              src={currentSlide.bgImage}
+              alt="Background"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority
+              unoptimized
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0D4032] to-[#0D4032]" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0D4032]/90 via-[#0D4032]/25 to-[#0D4032]/55" />
         </div>
 
-        {/* Text Content (Top Half) */}
-        <div className="relative z-10 pt-28 px-6 text-center">
+        {/* ── TEXT ── */}
+        <div className="absolute inset-x-0 top-[10vh] z-20 flex flex-col items-center text-center px-6 sm:px-10 pointer-events-none">
           <motion.p
             key={`label-${currentIndex}`}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             className="font-manrope text-gh-label font-bold tracking-[0.3em] uppercase text-[#EFCD62]"
             style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
           >
             {currentSlide.label}
           </motion.p>
-          <div style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}>
-            {currentSlide.heading.map((line, index) => (
-              <motion.h2
-                key={`head-${currentIndex}-${index}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="font-philosopher text-gh-h2 text-white leading-tight"
-              >
-                {line}
-              </motion.h2>
-            ))}
+          <div style={{ marginBottom: "clamp(6px, 1.5vw, 12px)" }}>
+            <h2 className="font-philosopher text-gh-h1 text-white leading-tight lg:whitespace-nowrap">
+              {currentSlide.heading.join(" ")}
+            </h2>
           </div>
           <motion.p
             key={`sub-${currentIndex}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="font-manrope text-gh-body text-white/80 leading-relaxed max-w-sm mx-auto"
+            transition={{ delay: 0.25 }}
+            className="font-manrope text-gh-carousel-sub text-white/80 leading-relaxed max-w-xl mx-auto line-clamp-3"
           >
             {currentSlide.subtext}
           </motion.p>
         </div>
-
-        {/* Overlapping Card & Controls Section */}
-        <div className="mt-auto relative z-20 w-full">
-          {/* Green Bottom Bar Background */}
-          <div
-            className="absolute bottom-0 left-0 right-0 h-32"
-            style={{ backgroundColor: "#0D4032" }}
-          />
-
-          {/* Card & Arrows Container */}
-          <div className="relative px-4 pb-12 flex items-center justify-between max-w-md mx-auto">
-            {/* Prev Arrow */}
-            <button
-              onClick={handlePrev}
-              className="p-3 rounded-none bg-white/10 backdrop-blur-sm z-30 hover:bg-[#EFCD62] hover:text-black transition-all"
-            >
-              <ChevronLeft className="w-6 h-6 text-white" />
-            </button>
-
-            {/* Feature Card (Overlapping) */}
-            <motion.div
-              key={`card-${currentIndex}`}
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="relative w-[220px] aspect-[4/3] rounded-none overflow-hidden shadow-2xl z-30 border-2 border-white/10"
-            >
-              {currentSlide.cardImage ? (
-                <Image
-                  src={currentSlide.cardImage}
-                  alt="Feature"
-                  fill
-                  className="object-cover object-center"
-                  sizes="220px"
-                  unoptimized
-                />
-              ) : (
-                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#25282C] to-black/80" />
-              )}
-            </motion.div>
-
-            {/* Next Arrow */}
-            <button
-              onClick={handleNext}
-              className="p-3 rounded-none bg-white/10 backdrop-blur-sm z-30 hover:bg-[#EFCD62] hover:text-black transition-all"
-            >
-              <ChevronRight className="w-6 h-6 text-white" />
-            </button>
-          </div>
-        </div>
       </div>
 
-      {/* 
-        DESKTOP LAYOUT (>= 1024px) 
-      */}
-      <div className="hidden lg:block relative h-[100dvh] overflow-hidden">
-        {/* Background Image without Parallax */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden">
-          <div className="w-full h-full">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.8 }}
-                className="absolute inset-0 w-full h-full"
-              >
-                <div className="relative w-full h-full">
-                  {currentSlide.bgImage ? (
-                    <Image
-                      src={currentSlide.bgImage}
-                      alt="Background"
-                      fill
-                      className="object-cover object-center"
-                      sizes="100vw"
-                      priority
-                      unoptimized
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#25282C] to-[#0D4032]" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#25282C]/80 via-transparent to-[#0D4032]/90" />
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
+      {/* ── BOTTOM AREA ── */}
+      <div className="relative w-full h-[20vh] z-10 bg-[#0D4032]" />
 
-        {/* Desktop Content */}
-        <div className="relative z-10 flex flex-col justify-center min-h-[85vh] px-24">
-          <div className="max-w-[1920px] mx-auto w-full grid grid-cols-2 gap-16 items-center">
-            {/* Text Card */}
-            <motion.div
-              key={`text-desk-${currentIndex}`}
-              className="relative p-12 rounded-none bg-[#25282C]/90 backdrop-blur-md"
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <p
-                className="font-manrope text-gh-label tracking-[0.4em] uppercase"
-                style={{
-                  color: "#EFCD62",
-                  marginBottom: "clamp(6px, 1.5vw, 12px)",
-                }}
-              >
-                {currentSlide.label}
-              </p>
-              <div style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}>
-                {currentSlide.heading.map((line, index) => (
-                  <h2
-                    key={index}
-                    className="font-philosopher text-gh-h1 text-white leading-tight mb-2"
-                  >
-                    {line}
-                  </h2>
-                ))}
-              </div>
-              <p className="font-manrope text-gh-body text-white/70 leading-relaxed max-w-lg">
-                {currentSlide.subtext}
-              </p>
-            </motion.div>
+      {/* ── SPACER — exactly 40px gap ── */}
+      <div className="h-[40px] bg-[#0D4032]" />
 
-            {/* Feature Image */}
-            <div className="relative">
-              <motion.div
-                key={`img-desk-${currentIndex}`}
-                className="relative w-full aspect-[16/9] rounded-none overflow-hidden shadow-2xl border border-white/10"
-                initial={{ opacity: 0, scale: 0.95, x: 20 }}
-                animate={{ opacity: 1, scale: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                <Image
-                  src={currentSlide.cardImage}
-                  alt="Feature"
-                  fill
-                  className="object-cover object-center"
-                  sizes="50vw"
-                  priority
-                  unoptimized
-                />
-              </motion.div>
-            </div>
-          </div>
-        </div>
+      {/* ── ARROWS ── */}
+      <button
+        onClick={handlePrev}
+        aria-label="Previous"
+        className="absolute left-4 sm:left-8 lg:left-16 xl:left-28 top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
+      >
+        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white group-hover:-translate-x-1 transition-transform" />
+      </button>
 
-        {/* Desktop Navigation */}
-        <div
-          className="relative z-20 py-8 px-24"
-          style={{ backgroundColor: "#0D4032" }}
+      <button
+        onClick={handleNext}
+        aria-label="Next"
+        className="absolute right-4 sm:right-8 lg:right-16 xl:right-28 top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
+      >
+        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white group-hover:translate-x-1 transition-transform" />
+      </button>
+
+      {/* ── FEATURE CARD ── */}
+      <div
+        className="absolute top-[80vh] -translate-y-1/2 left-1/2 -translate-x-1/2 z-30
+                      w-[45vw] max-w-[280px] sm:w-[35vw] sm:max-w-[320px] lg:w-[24vw] lg:max-w-[380px] xl:w-[20vw]
+                      aspect-[4/3]
+                      shadow-[0_20px_50px_rgba(0,0,0,0.55)] overflow-hidden border border-white/20"
+      >
+        <motion.div
+          key={`card-${currentIndex}`}
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full h-full relative"
         >
-          <div className="max-w-[1920px] mx-auto flex items-center justify-between">
-            <button
-              onClick={handlePrev}
-              className="group p-4 rounded-none hover:bg-white/10 transition-all"
-            >
-              <ChevronLeft className="w-8 h-8 text-[#EFCD62]" />
-            </button>
-            <div className="flex gap-4" />
-            <button
-              onClick={handleNext}
-              className="group p-4 rounded-none hover:bg-white/10 transition-all"
-            >
-              <ChevronRight className="w-8 h-8 text-[#EFCD62]" />
-            </button>
-          </div>
-        </div>
+          {currentSlide.cardImage ? (
+            <Image
+              src={currentSlide.cardImage}
+              alt="Feature"
+              fill
+              className="object-cover"
+              sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
+              priority
+              unoptimized
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0D4032] to-black/80" />
+          )}
+        </motion.div>
       </div>
     </section>
   );

@@ -19,6 +19,31 @@ import PrimaryButton from "@/components/PrimaryButton";
 import { useBooking } from "@/context/BookingContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { prettyMediaLabel } from "@/lib/mediaLabels";
+import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
+import { getHeroOverrideForId } from "@/lib/heroOverrides";
+
+const normalizeImageSrc = (src: string) => {
+  // Local `public/` asset paths can contain spaces; `next/image` expects URI-encoded paths.
+  // Avoid double-encoding already-escaped sequences (e.g. `%20` -> `%2520`).
+  if (!src.startsWith("/")) return src;
+  return src
+    .replace(/ /g, "%20")
+    .replace(/#/g, "%23")
+    .replace(/\?/g, "%3F");
+};
+
+const getManifestEntry = (villa: { name?: string; image?: string }) => {
+  // Prefer name lookup (matches `public/Villa_Retreats/<folder>`), fall back to path extraction.
+  const byName = villa.name ? (MEDIA_MANIFEST as any).villasByFolder?.[villa.name] : null;
+  if (byName) return byName;
+  const m = (villa.image || "").match(/^\/Villa_Retreats\/([^/]+)\//);
+  if (!m?.[1]) return null;
+  try {
+    return (MEDIA_MANIFEST as any).villasByFolder?.[decodeURIComponent(m[1])] ?? null;
+  } catch {
+    return (MEDIA_MANIFEST as any).villasByFolder?.[m[1]] ?? null;
+  }
+};
 
 interface VillaCardProps {
   villa: (typeof VILLAS)[0];
@@ -66,8 +91,9 @@ export default function VillaCard({ villa }: VillaCardProps) {
     let cancelled = false;
     async function load() {
       try {
-        const res = await fetch(`/api/villas/${villa.id}/media?v=2`, {
-          cache: "force-cache",
+        // Avoid stale cached media during active image renames/updates.
+        const res = await fetch(`/api/villas/${villa.id}/media?v=4`, {
+          cache: "no-store",
         });
         if (!res.ok) return;
         const data = await res.json();
@@ -85,14 +111,31 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const images: { name: string; image: string }[] = useMemo(() => {
     const list: { name: string; image: string }[] = [];
 
+    const manifestEntry = getManifestEntry(villa);
     const heroFromApi = serverMedia?.hero?.[0];
-    const hero = validImage(heroFromApi) ? heroFromApi : villa.image;
+    const manifestHero = manifestEntry?.hero?.[0];
+    const overrideHero = getHeroOverrideForId(villa.id)?.[0];
+    const hero = validImage(heroFromApi)
+      ? heroFromApi
+      : validImage(overrideHero)
+        ? overrideHero
+        : validImage(manifestHero)
+        ? manifestHero
+        : villa.image;
     if (validImage(hero)) list.push({ name: "Main", image: hero as string });
 
     // Prefer API categorized spaces: pick one representative per category
-    const cat = (serverMedia?.categorizedSpaces || [])
+    const cat = (
+      (serverMedia?.categorizedSpaces ||
+        manifestEntry?.categorizedSpaces ||
+        []) as Array<{
+        title?: string;
+        category?: string;
+        images?: string[];
+      }>
+    )
       .map((g) => {
-        const img = g.images?.find((x) => validImage(x));
+        const img = g.images?.find((x: string) => validImage(x));
         if (!img) return null;
         const title = g.title || g.category || "Space";
         return {
@@ -114,35 +157,28 @@ export default function VillaCard({ villa }: VillaCardProps) {
       }));
     }
 
-    // Fall back to the images[] gallery array
-    const gallery = (villa.images || [])
-      .filter((img): img is string => validImage(img) === true)
-      .map((img, i) => ({
+    // Fall back to manifest spaces if present (preferred over potentially stale `villa.images`).
+    const manifestSpaces = (manifestEntry?.spaces || [])
+      .filter((img: string) => validImage(img))
+      .slice(0, 6)
+      .map((img: string, i: number) => ({
         name: prettyMediaLabel({
           url: img,
-          fallback: `View ${i + 1}`,
-          kind: "generic",
+          fallback: `Space ${i + 1}`,
+          kind: "space",
         }),
         image: img,
       }));
-    if (gallery.length > 0) return list.concat(gallery);
-
-    // Fall back to spaces[] entries with valid images
-    const spaceImages = (villa.spaces || [])
-      .filter((s) => validImage(s.image))
-      .map((s) => ({
-        name: prettyMediaLabel({
-          url: s.image as string,
-          fallback: s.name,
-          kind: "space",
-        }),
-        image: s.image as string,
-      }));
-    if (spaceImages.length > 0) return list.concat(spaceImages);
+    if (manifestSpaces.length > 0) return list.concat(manifestSpaces);
 
     if (list.length > 0) return list;
     return [{ name: "Main", image: "" }];
-  }, [serverMedia, villa.image, villa.images, villa.spaces]);
+  }, [serverMedia, villa.id, villa.image, villa.name]);
+
+  useEffect(() => {
+    if (currentImageIndex < images.length) return;
+    setCurrentImageIndex(0);
+  }, [images.length, currentImageIndex]);
 
   const nextImage = () => {
     setDirection(1);
@@ -173,15 +209,15 @@ export default function VillaCard({ villa }: VillaCardProps) {
           <motion.div
             key={`${villa.id}-${currentImageIndex}`}
             custom={direction}
-            initial={{ x: direction > 0 ? "10%" : "-10%", opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: direction > 0 ? "-10%" : "10%", opacity: 0 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             className="absolute inset-0 w-full h-full"
           >
             {validImage(currentSpace?.image) ? (
               <Image
-                src={currentSpace.image}
+                src={normalizeImageSrc(currentSpace.image)}
                 alt={`${villa.name} - ${currentSpace.name}`}
                 fill
                 className="object-cover object-center"
@@ -333,21 +369,20 @@ export default function VillaCard({ villa }: VillaCardProps) {
           </div>
 
           {/* Buttons */}
-          <div className="flex items-center gap-2 md:gap-3 shrink-0">
+          <div className="flex items-stretch gap-2 md:gap-3 shrink-0 h-[clamp(44px,5vw,52px)]">
             <Link
               href={`/villas/${villa.id}?autoScroll=true`}
-              className="border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-3 py-2 md:px-5 md:py-2.5 font-manrope font-bold text-gh-desc tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
+              className="h-full inline-flex items-center justify-center border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-3 md:px-5 font-manrope font-bold text-gh-desc tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
             >
               VIEW VILLA
             </Link>
-            <div className="whitespace-nowrap">
-              <PrimaryButton
-                withArrow={false}
-                onClick={() => router.push(bookHref)}
-              >
-                BOOK VILLA
-              </PrimaryButton>
-            </div>
+            <PrimaryButton
+              withArrow={false}
+              onClick={() => router.push(bookHref)}
+              className="h-full py-0 whitespace-nowrap"
+            >
+              BOOK VILLA
+            </PrimaryButton>
           </div>
         </div>
       </div>

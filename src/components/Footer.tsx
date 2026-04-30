@@ -70,6 +70,7 @@ export default function Footer() {
   }, []);
 
   const [isSuccess, setIsSuccess] = useState(false);
+  const [consent, setConsent] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     phoneNumber: "",
@@ -129,10 +130,13 @@ export default function Footer() {
     setFormData({ fullName: "", phoneNumber: "", subject: "", queries: "" });
     setCheckIn(null);
     setCheckOut(null);
+    setConsent(false);
   };
 
   const isFormValid =
-    formData.fullName.trim() !== "" && formData.phoneNumber.trim() !== "";
+    formData.fullName.trim() !== "" &&
+    formData.phoneNumber.trim() !== "" &&
+    consent;
 
   const LINKS_COLUMN_1 = [
     { label: "VILLAS", href: "/villas" },
@@ -195,74 +199,50 @@ export default function Footer() {
 
               {/* Form Content */}
               <form className="space-y-6" onSubmit={handleFormSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Name */}
-                  <div className="group relative">
-                    <input
-                      type="text"
-                      id="fullName"
-                      value={formData.fullName}
-                      onChange={(e) =>
-                        setFormData({ ...formData, fullName: e.target.value })
-                      }
-                      placeholder=" "
-                      className="peer w-full bg-white/[0.04] border border-white/10 px-4 py-4 text-white focus:border-[#EFCD62]/50 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
-                    />
-                    <label
-                      htmlFor="fullName"
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/40 transition-all duration-300 pointer-events-none px-2 
-                        peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-[#EFCD62] peer-focus:bg-[#2E3034] 
-                        peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
-                    >
-                      Full Name
-                    </label>
-                  </div>
-
-                  {/* Phone */}
-                  <div className="group relative">
-                    <input
-                      type="tel"
-                      id="phoneNumber"
-                      value={formData.phoneNumber}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          phoneNumber: e.target.value,
-                        })
-                      }
-                      placeholder=" "
-                      className="peer w-full bg-white/[0.04] border border-white/10 px-4 py-4 text-white focus:border-[#EFCD62]/50 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
-                    />
-                    <label
-                      htmlFor="phoneNumber"
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/40 transition-all duration-300 pointer-events-none px-2 
-                        peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-[#EFCD62] peer-focus:bg-[#2E3034] 
-                        peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
-                    >
-                      Phone Number
-                    </label>
-                  </div>
-                </div>
-
-                {/* Subject */}
+                {/* Name */}
                 <div className="group relative">
                   <input
                     type="text"
-                    id="subject"
-                    value={formData.subject}
+                    id="fullName"
+                    value={formData.fullName}
                     onChange={(e) =>
-                      setFormData({ ...formData, subject: e.target.value })
+                      setFormData({ ...formData, fullName: e.target.value })
                     }
                     placeholder=" "
-                    className="peer w-full bg-white/[0.04] border border-white/10 px-4 py-4 text-white focus:border-[#EFCD62]/50 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
+                    className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
                   />
                   <label
-                    htmlFor="subject"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/40 transition-all duration-300 pointer-events-none px-2 
-                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-[#EFCD62] peer-focus:bg-[#2E3034] 
-                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
+                    htmlFor="fullName"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 
+                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] 
+                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
                   >
-                    Subject
+                    Full Name
+                  </label>
+                </div>
+
+                {/* Phone */}
+                <div className="group relative">
+                  <input
+                    type="tel"
+                    id="phoneNumber"
+                    value={formData.phoneNumber}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        phoneNumber: e.target.value,
+                      })
+                    }
+                    placeholder=" "
+                    className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
+                  />
+                  <label
+                    htmlFor="phoneNumber"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 
+                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] 
+                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
+                  >
+                    Phone Number
                   </label>
                 </div>
 
@@ -271,26 +251,26 @@ export default function Footer() {
                   <button
                     type="button"
                     onClick={() => setShowCalendar((v) => !v)}
-                    className={`w-full h-14 bg-white/[0.04] border px-4 text-left transition-colors rounded-none flex items-center justify-between ${
-                      showCalendar ? "border-[#EFCD62]" : "border-white/10"
+                    className={`w-full h-14 bg-white/[0.02] border px-4 text-left transition-colors rounded-none flex items-center justify-between ${
+                      showCalendar ? "border-[#EFCD62]/70" : "border-white/15"
                     }`}
                   >
                     <span
                       className={`font-manrope text-gh-label ${
-                        dateLabel ? "text-white" : "text-white/30"
+                        dateLabel ? "text-white/80" : "text-white/35"
                       }`}
                     >
                       {dateLabel || "Check-In & Out Date"}
                     </span>
                     <CalendarDays
                       className={`w-4 h-4 shrink-0 transition-colors ${
-                        showCalendar ? "text-[#EFCD62]" : "text-white/20"
+                        showCalendar ? "text-[#EFCD62]" : "text-white/25"
                       }`}
                     />
                   </button>
                   {dateLabel && (
-                    <span className="absolute left-4 -top-2.5 text-gh-label text-[#EFCD62] bg-[#2E3034] px-2 pointer-events-none">
-                      Dates
+                    <span className="absolute left-4 -top-2.5 text-gh-label text-white/70 bg-[#2E3034] px-2 pointer-events-none">
+                      Check-In & Out Date
                     </span>
                   )}
                   {/* Calendar overlay */}
@@ -439,27 +419,64 @@ export default function Footer() {
                   </AnimatePresence>
                 </div>
 
+                {/* Subject */}
+                <div className="group relative">
+                  <input
+                    type="text"
+                    id="subject"
+                    value={formData.subject}
+                    onChange={(e) =>
+                      setFormData({ ...formData, subject: e.target.value })
+                    }
+                    placeholder=" "
+                    className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
+                  />
+                  <label
+                    htmlFor="subject"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 
+                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] 
+                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
+                  >
+                    Subject
+                  </label>
+                </div>
+
                 {/* Queries */}
                 <div className="group relative">
                   <textarea
                     id="queries"
-                    rows={3}
+                    rows={4}
                     value={formData.queries}
                     onChange={(e) =>
                       setFormData({ ...formData, queries: e.target.value })
                     }
                     placeholder=" "
-                    className="peer w-full bg-white/[0.04] border border-white/10 px-4 py-4 text-white focus:border-[#EFCD62]/50 focus:outline-none transition-all duration-300 rounded-none resize-none placeholder-transparent"
+                    className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none resize-none placeholder-transparent"
                   />
                   <label
                     htmlFor="queries"
-                    className="absolute left-4 top-6 text-gh-label text-white/40 transition-all duration-300 pointer-events-none px-2 
-                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-[#EFCD62] peer-focus:bg-[#2E3034] 
-                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
+                    className="absolute left-4 top-6 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 
+                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] 
+                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
                   >
                     Your Queries
                   </label>
                 </div>
+
+                {/* Consent */}
+                <label className="flex items-start gap-3 pt-1 select-none">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => setConsent(e.target.checked)}
+                    className="mt-1 h-4 w-4 rounded-[2px] border border-white/25 bg-transparent text-[#EFCD62] focus:ring-[#EFCD62]/50 focus:ring-2"
+                  />
+                  <span className="font-manrope text-gh-label text-white/40 leading-relaxed">
+                    Welcome to Jade Hospitainment, where hospitality meets
+                    entertainment in unique and unforgettable ways. With over
+                    two decades of experience.
+                  </span>
+                </label>
 
                 <button
                   type="submit"
@@ -467,7 +484,7 @@ export default function Footer() {
                   className={`w-full py-4 mt-4 font-manrope tracking-[0.25em] text-gh-label transition-all duration-300 uppercase border ${
                     isFormValid
                       ? "bg-transparent border-[#EFCD62]/40 text-[#EFCD62] hover:bg-[#EFCD62] hover:text-black hover:border-[#EFCD62]"
-                      : "bg-white/[0.02] border-white/10 text-white/10 cursor-not-allowed"
+                      : "bg-white/[0.03] border-white/10 text-white/15 cursor-not-allowed"
                   }`}
                 >
                   SUBMIT INQUIRY
@@ -475,74 +492,36 @@ export default function Footer() {
               </form>
             </div>
 
-            <div className="lg:col-start-8 lg:col-span-5 flex flex-col gap-12 pt-10 lg:pt-0">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12 lg:gap-y-16">
-                {/* Exploration Column */}
-                <div className="flex flex-col gap-8">
-                  <p className="font-philosopher text-white text-lg tracking-wider border-b border-white/10 pb-4 w-full block">
-                    Explorations
-                  </p>
+            <div className="lg:col-start-8 lg:col-span-5 flex flex-col gap-12 border-t border-white/10 pt-10 lg:border-t-0 lg:pt-0 lg:border-l lg:border-white/10 lg:pl-12">
+              {/* LINKS block (matches screenshot style, but keeps all existing links) */}
+              <div>
+                <p className="font-manrope text-gh-label tracking-[0.35em] uppercase text-white/55 mb-10">
+                  Links
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-12">
                   <div className="flex flex-col gap-4">
-                    {LINKS_COLUMN_1.slice(0, 7).map((link) => (
+                    {LINKS_COLUMN_1.map((link) => (
                       <Link
                         key={link.label}
                         href={link.href}
-                        className="group flex items-center gap-3 font-manrope text-gh-label text-white/60 tracking-widest uppercase hover:text-[#EFCD62] transition-all duration-500"
+                        className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors"
                       >
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#EFCD62]/30 group-hover:bg-[#EFCD62] group-hover:scale-125 transition-all duration-500" />
-                        <span className="relative overflow-hidden">
-                          {link.label}
-                          <span className="absolute bottom-0 left-0 w-0 h-px bg-[#EFCD62] transition-all duration-500 group-hover:w-full" />
-                        </span>
+                        {link.label}
                       </Link>
                     ))}
                   </div>
-                </div>
 
-                {/* Company & Legal Column */}
-                <div className="flex flex-col gap-16">
-                  {/* Experience */}
-                  <div className="flex flex-col gap-8">
-                    <p className="font-philosopher text-white text-lg tracking-wider border-b border-white/10 pb-4 w-full block">
-                      Experience
-                    </p>
-                    <div className="flex flex-col gap-4">
-                      {LINKS_COLUMN_1.slice(7).map((link) => (
-                        <Link
-                          key={link.label}
-                          href={link.href}
-                          className="group flex items-center gap-3 font-manrope text-gh-label text-white/60 tracking-widest uppercase hover:text-[#EFCD62] transition-all duration-500"
-                        >
-                          <div className="w-1.5 h-1.5 rounded-full bg-[#EFCD62]/30 group-hover:bg-[#EFCD62] group-hover:scale-125 transition-all duration-500" />
-                          <span className="relative overflow-hidden">
-                            {link.label}
-                            <span className="absolute bottom-0 left-0 w-0 h-px bg-[#EFCD62] transition-all duration-500 group-hover:w-full" />
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Legal */}
-                  <div className="flex flex-col gap-8">
-                    <p className="font-philosopher text-white text-lg tracking-wider border-b border-white/10 pb-4 w-full block">
-                      Legal
-                    </p>
-                    <div className="flex flex-col gap-4">
-                      {LINKS_COLUMN_2.map((link) => (
-                        <Link
-                          key={link.label}
-                          href={link.href}
-                          className="group flex items-center gap-3 font-manrope text-gh-label text-white/60 tracking-widest uppercase hover:text-[#EFCD62] transition-all duration-500"
-                        >
-                          <div className="w-1.5 h-1.5 rounded-full bg-[#EFCD62]/30 group-hover:bg-[#EFCD62] group-hover:scale-125 transition-all duration-500" />
-                          <span className="relative overflow-hidden">
-                            {link.label}
-                            <span className="absolute bottom-0 left-0 w-0 h-px bg-[#EFCD62] transition-all duration-500 group-hover:w-full" />
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
+                  <div className="flex flex-col gap-4">
+                    {LINKS_COLUMN_2.map((link) => (
+                      <Link
+                        key={link.label}
+                        href={link.href}
+                        className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -560,61 +539,58 @@ export default function Footer() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-white/50 font-manrope text-gh-label tracking-wide uppercase">
+                  <div className="flex flex-col gap-6 text-white/50 font-manrope text-gh-label tracking-wide uppercase">
                     <div className="flex items-start gap-4">
                       <MapPin className="w-4 h-4 text-[#EFCD62] shrink-0 mt-0.5" />
                       <span className="leading-relaxed">
                         76, phase II, Royal Enclave, Srirampura, Bengaluru - 64
                       </span>
                     </div>
-                    <div className="flex flex-col gap-4">
-                      <a
-                        href="tel:08970663366"
-                        className="flex items-center gap-4 hover:text-[#EFCD62] transition-colors"
-                      >
-                        <Phone className="w-4 h-4 text-[#EFCD62] shrink-0" />
-                        <span>0897 066 3366</span>
-                      </a>
-                      <a
-                        href="mailto:Info@jadehospitainment.com"
-                        className="flex items-center gap-4 hover:text-[#EFCD62] transition-colors"
-                      >
-                        <Mail className="w-4 h-4 text-[#EFCD62] shrink-0" />
-                        <span className="lowercase">
-                          Info@jadehospitainment.com
-                        </span>
-                      </a>
-                      <div className="flex gap-1 mt-2 -ml-2">
-                        {[
-                          {
-                            Icon: Facebook,
-                            size: "w-[18px] h-[18px]",
-                            href: "https://www.facebook.com/jadehospitainment/",
-                          },
-                          {
-                            Icon: Instagram,
-                            size: "w-[20px] h-[20px]",
-                            href: "https://www.instagram.com/jadehospitainment/?hl=en",
-                          },
-                          {
-                            Icon: Youtube,
-                            size: "w-[22px] h-[22px]",
-                            href: "https://www.youtube.com/@jade_hospitainment",
-                          },
-                        ].map(({ Icon, size, href }, i) => (
-                          <a
-                            key={i}
-                            href={href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-10 h-10 flex items-center justify-center text-white/30 hover:text-[#EFCD62] transition-all duration-300 cursor-pointer group"
-                          >
-                            <Icon
-                              className={`${size} transition-transform group-hover:scale-110`}
-                            />
-                          </a>
-                        ))}
-                      </div>
+                    <a
+                      href="tel:08970663366"
+                      className="flex items-center gap-4 hover:text-[#EFCD62] transition-colors"
+                    >
+                      <Phone className="w-4 h-4 text-[#EFCD62] shrink-0" />
+                      <span>0897 066 3366</span>
+                    </a>
+                    <a
+                      href="mailto:Info@jadehospitainment.com"
+                      className="flex items-center gap-4 hover:text-[#EFCD62] transition-colors normal-case tracking-normal"
+                    >
+                      <Mail className="w-4 h-4 text-[#EFCD62] shrink-0" />
+                      <span>Info@jadehospitainment.com</span>
+                    </a>
+
+                    <div className="flex gap-2 pt-2">
+                      {[
+                        {
+                          Icon: Facebook,
+                          size: "w-[18px] h-[18px]",
+                          href: "https://www.facebook.com/jadehospitainment/",
+                        },
+                        {
+                          Icon: Instagram,
+                          size: "w-[20px] h-[20px]",
+                          href: "https://www.instagram.com/jadehospitainment/?hl=en",
+                        },
+                        {
+                          Icon: Youtube,
+                          size: "w-[22px] h-[22px]",
+                          href: "https://www.youtube.com/@jade_hospitainment",
+                        },
+                      ].map(({ Icon, size, href }, i) => (
+                        <a
+                          key={i}
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-11 h-11 flex items-center justify-center bg-white/[0.03] border border-white/10 text-white/45 hover:text-[#EFCD62] hover:border-white/20 transition-all duration-300 cursor-pointer group"
+                        >
+                          <Icon
+                            className={`${size} transition-transform group-hover:scale-110`}
+                          />
+                        </a>
+                      ))}
                     </div>
                   </div>
                 </div>

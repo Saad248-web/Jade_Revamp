@@ -86,7 +86,7 @@ export default function ExperienceCarouselSection({
               initial={{ opacity: 0, scale: 1.05 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="absolute inset-0"
             >
               {slides[activeSlide]?.image ? (
@@ -107,7 +107,7 @@ export default function ExperienceCarouselSection({
                 <motion.h3
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.3, duration: 0.8 }}
+                  transition={{ delay: 0.08, duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                   className="text-gh-h3 md:text-gh-h2 font-philosopher text-white"
                   style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
                 >
@@ -116,7 +116,7 @@ export default function ExperienceCarouselSection({
                 <motion.p
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.5, duration: 0.8 }}
+                  transition={{ delay: 0.14, duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                   className="text-white/70 font-manrope text-gh-body max-w-2xl mx-auto leading-relaxed"
                 >
                   {slides[activeSlide].desc}

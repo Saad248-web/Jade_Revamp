@@ -4,6 +4,36 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Users, Car, Home, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
+import { getHeroOverrideForId } from "@/lib/heroOverrides";
+
+const normalizePublicImageSrc = (src: string) => {
+  if (!src.startsWith("/")) return src;
+  return src.replace(/ /g, "%20").replace(/#/g, "%23").replace(/\?/g, "%3F");
+};
+
+type VillaGalleryItem = { name: string; image: string };
+
+function buildVillaGalleryImages(villa: any, max = 8) {
+  const sources: Array<string | undefined | null> = [
+    ...(getHeroOverrideForId(villa?.id) || []),
+    ...((villa?.images as string[] | undefined) || []),
+    ...(((villa?.spaces as any[] | undefined) || []).map((s) => s?.image)),
+    ...(((villa?.activities as any[] | undefined) || []).map((a) => a?.image)),
+    villa?.image,
+  ];
+
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of sources) {
+    if (!raw || typeof raw !== "string") continue;
+    const normalized = normalizePublicImageSrc(raw);
+    if (seen.has(normalized)) continue;
+    seen.add(normalized);
+    out.push(normalized);
+    if (out.length >= max) break;
+  }
+  return out;
+}
 
 interface WeekendVillaCardProps {
   villa: any;
@@ -17,10 +47,21 @@ export default function WeekendVillaCard({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
+  const gallery = buildVillaGalleryImages(villa, 8);
+  const derived =
+    gallery.length > 0
+      ? gallery.map((img, idx) => ({
+          name: `Gallery ${idx + 1}`,
+          image: img,
+        }))
+      : [];
+
   const images =
-    villa.spaces?.length > 0
+    (derived.length > 0
+      ? derived
+      : villa.spaces?.length > 0
       ? villa.spaces
-      : [{ name: "Main", image: villa.image }];
+      : [{ name: "Main", image: villa.image }]) as VillaGalleryItem[];
 
   const nextImage = () => {
     setDirection(1);
@@ -62,17 +103,17 @@ export default function WeekendVillaCard({
         : "₹75,000";
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 lg:gap-16 w-full pb-8 lg:py-10 border-b border-white/5 last:border-b-0 bg-[#25282C]">
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 xl:gap-14 w-full pb-8 lg:py-10 border-b border-white/5 last:border-b-0 bg-[#25282C]">
       {/* IMAGE SECTION */}
       <div className="relative w-full lg:w-[45%] h-[38vh] lg:h-[360px] xl:h-[420px] overflow-hidden bg-white/5 flex-shrink-0">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={`${villa.id}-${currentImageIndex}`}
             custom={direction}
-            initial={{ x: direction > 0 ? "10%" : "-10%", opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: direction > 0 ? "-10%" : "10%", opacity: 0 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             className="absolute inset-0"
           >
             <Image
@@ -120,7 +161,7 @@ export default function WeekendVillaCard({
       </div>
 
       {/* CONTENT SECTION */}
-      <div className="flex flex-col flex-1 px-6 md:px-8 lg:px-0 pt-6 lg:pt-0 lg:max-w-2xl justify-start">
+      <div className="flex flex-col flex-1 px-6 md:px-8 lg:px-0 pt-6 lg:pt-0 justify-start">
         <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase mb-2">
           {villa.type || "PRIVATE RETREAT"}
         </span>

@@ -12,11 +12,11 @@ function BookingSuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const ref = searchParams.get("ref") ?? "JH-XXXXXX";
-  const villa = searchParams.get("villa") ?? "Your Villa";
-  const checkIn = searchParams.get("checkIn") ?? "—";
-  const checkOut = searchParams.get("checkOut") ?? "—";
-  const guests = searchParams.get("guests") ?? "—";
+  const ref = searchParams?.get("ref") ?? "JH-XXXXXX";
+  const villa = searchParams?.get("villa") ?? "Your Villa";
+  const checkIn = searchParams?.get("checkIn") ?? "—";
+  const checkOut = searchParams?.get("checkOut") ?? "—";
+  const guests = searchParams?.get("guests") ?? "—";
 
   // Prevent back-navigation loop
   useEffect(() => {

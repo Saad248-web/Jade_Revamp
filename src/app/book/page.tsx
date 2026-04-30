@@ -775,13 +775,13 @@ function SuccessScreen({
 function BookPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const villaParam = searchParams.get("villa");
+  const villaParam = searchParams?.get("villa") ?? null;
   const isVillaPreSelected = !!villaParam;
 
   const { dateRange, setDateRange, guests, setGuests, resetBooking } =
     useBooking();
 
-  const stepParam = searchParams.get("step") as Step | null;
+  const stepParam = (searchParams?.get("step") ?? null) as Step | null;
 
   // Resolve the correct initial step.
   // NOTE: useState initializer runs on both server and client — keep it deterministic.
@@ -1098,54 +1098,56 @@ function BookPageContent() {
     <div className="h-[100svh] bg-[#0D4032] flex flex-col overflow-hidden">
       {/* Header */}
       <div className="bg-[#0D4032] shrink-0">
-        <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
-          <h2 className="text-white text-gh-h2 font-philosopher leading-none">
-            {step === "dates" && "Select Dates"}
-            {step === "guests" && "Total Guests"}
-            {step === "details" && "Your Details"}
-            {step === "review" && "Review & Pay"}
-          </h2>
-          <div className="flex items-center gap-5">
-            <button
-              onClick={handleReset}
-              className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors"
-            >
-              RESET
-            </button>
-            <a
-              href="tel:08970663366"
-              className="text-white hover:text-[#EFCD62] transition-colors"
-            >
-              <Headset className="w-5 h-5" strokeWidth={1.5} />
-            </a>
-            <button
-              onClick={handleClose}
-              className="text-white hover:text-[#EFCD62] transition-colors"
-            >
-              <X className="w-5 h-5" strokeWidth={1.5} />
-            </button>
+        <div className="w-full max-w-[720px] mx-auto">
+          <div className="flex items-center justify-between px-5 sm:px-6 py-5 border-b border-white/10">
+            <h2 className="text-white text-gh-h2 font-philosopher leading-none">
+              {step === "dates" && "Select Dates"}
+              {step === "guests" && "Total Guests"}
+              {step === "details" && "Your Details"}
+              {step === "review" && "Review & Pay"}
+            </h2>
+            <div className="flex items-center gap-5">
+              <button
+                onClick={handleReset}
+                className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors"
+              >
+                RESET
+              </button>
+              <a
+                href="tel:08970663366"
+                className="text-white hover:text-[#EFCD62] transition-colors"
+              >
+                <Headset className="w-5 h-5" strokeWidth={1.5} />
+              </a>
+              <button
+                onClick={handleClose}
+                className="text-white hover:text-[#EFCD62] transition-colors"
+              >
+                <X className="w-5 h-5" strokeWidth={1.5} />
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Legend — only on dates step */}
-        {step === "dates" && (
-          <div className="flex justify-start items-center gap-2 md:gap-4 px-5 md:px-6 py-3 md:py-4 text-gh-label text-[#A6C0B5] font-manrope font-medium border-b border-white/10">
-            <span className="flex items-center gap-2">
-              <span className="w-4 h-4 bg-[#165040] rounded-[2px] shrink-0" />{" "}
-              Available
-            </span>
-            <span className="flex items-center gap-2 relative">
-              <span className="w-4 h-4 bg-[#165040]/50 rounded-[2px] overflow-hidden relative shrink-0">
-                <span className="block w-[150%] h-[1px] bg-[#A6C0B5]/40 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-45" />
+          {/* Legend — only on dates step */}
+          {step === "dates" && (
+            <div className="flex justify-start items-center gap-2 md:gap-4 px-5 sm:px-6 py-3 md:py-4 text-gh-label text-[#A6C0B5] font-manrope font-medium border-b border-white/10">
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 bg-[#165040] rounded-[2px] shrink-0" />{" "}
+                Available
               </span>
-              Unavailable
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="w-4 h-4 bg-[#EFCD62] rounded-[2px] shrink-0" />{" "}
-              Selected
-            </span>
-          </div>
-        )}
+              <span className="flex items-center gap-2 relative">
+                <span className="w-4 h-4 bg-[#165040]/50 rounded-[2px] overflow-hidden relative shrink-0">
+                  <span className="block w-[150%] h-[1px] bg-[#A6C0B5]/40 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-45" />
+                </span>
+                Unavailable
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 bg-[#EFCD62] rounded-[2px] shrink-0" />{" "}
+                Selected
+              </span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Content */}
@@ -1216,12 +1218,14 @@ function BookPageContent() {
       </div>
 
       {/* Floating bottom bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[#0D4032] border-t border-white/10 z-50">
-        <div className="absolute top-0 left-0 right-0 -translate-y-[1px]">
-          <StepDots step={step} />
-        </div>
-        <div className="w-full max-w-[720px] mx-auto px-4 sm:px-5 py-3 sm:py-5">
-          {renderBottomBar()}
+      <div className="fixed bottom-0 left-0 right-0 bg-[#0D4032] z-50">
+        <div className="w-full max-w-[720px] mx-auto border-t border-white/10">
+          <div className="relative px-4 sm:px-5 py-3 sm:py-5">
+            <div className="absolute left-0 right-0 top-0 -translate-y-[1px]">
+              <StepDots step={step} />
+            </div>
+            {renderBottomBar()}
+          </div>
         </div>
       </div>
     </div>

@@ -13,19 +13,19 @@ export default function SplashScreen() {
   useEffect(() => {
     const sequence = async () => {
       // Step 1: Text Enters (slight below center)
-      await new Promise((r) => setTimeout(r, 400));
+      await new Promise((r) => setTimeout(r, 250));
       setStage(1); // ACTION: Text enters at 55%
 
       // Step 2: Curtain Reveals + Text Pushes UP
-      await new Promise((r) => setTimeout(r, 1200));
+      await new Promise((r) => setTimeout(r, 700));
       setStage(2); // ACTION: Curtain opens, text moves to 40%
 
       // Step 3: Text Reading & Exit (1 sec stay at top)
-      await new Promise((r) => setTimeout(r, 3000)); // 2s motion + 1s stay = 3s total from stage 2 start
+      await new Promise((r) => setTimeout(r, 1500)); // Faster hold: shorter read time before exit
       setStage(3); // ACTION: Text exits
 
       // Step 4: Final Expansion
-      await new Promise((r) => setTimeout(r, 1200));
+      await new Promise((r) => setTimeout(r, 800));
       setStage(4); // ACTION: Curtain expands to full
     };
 
@@ -45,12 +45,12 @@ export default function SplashScreen() {
     stage2: {
       width: "clamp(250px, 35vw, 450px)",
       height: "clamp(250px, 35vh, 450px)",
-      transition: { duration: 2.0, ease: [0.76, 0, 0.24, 1] },
+      transition: { duration: 1.1, ease: [0.76, 0, 0.24, 1] },
     },
     full: {
       width: "100vw",
       height: "100dvh",
-      transition: { duration: 1.8, ease: "easeInOut" },
+      transition: { duration: 1.1, ease: "easeInOut" },
     },
   };
 
@@ -61,15 +61,15 @@ export default function SplashScreen() {
       top: "55%",
       opacity: 1,
       transition: {
-        duration: 0.8,
+        duration: 0.55,
         staggerChildren: 0.1,
-        delayChildren: 0.2,
+        delayChildren: 0.12,
       },
     },
     push: {
       top: "40%",
       opacity: 1,
-      transition: { duration: 2.0, ease: [0.76, 0, 0.24, 1] },
+      transition: { duration: 1.1, ease: [0.76, 0, 0.24, 1] },
     },
     exit: {
       top: "40%", // Lock at top-center position
@@ -91,19 +91,19 @@ export default function SplashScreen() {
       y: 0,
       opacity: 1,
       clipPath: "inset(0 0 0 0)",
-      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
     },
     push: {
       y: 0,
       opacity: 1,
       clipPath: "inset(0 0 0 0)",
-      transition: { duration: 2.0 },
+      transition: { duration: 1.1 },
     },
     exit: {
       y: 0, // No downward motion of the text itself
       opacity: 0,
       clipPath: "inset(100% 0 0 0)", // Wipe from top to bottom
-      transition: { duration: 1.0, ease: [0.76, 0, 0.24, 1] },
+      transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1] },
     },
   };
 
