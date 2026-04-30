@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Users, Home, MapPin, ArrowLeft, ArrowRight, Bed } from "lucide-react";
 import { getHeroOverrideForId } from "@/lib/heroOverrides";
+import { getBhk, getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
+import { getOverlayVillaData } from "@/lib/overlayVillaData";
 
 const normalizePublicImageSrc = (src: string) => {
   if (!src.startsWith("/")) return src;
@@ -82,30 +84,22 @@ export default function PartyVillaCard({
       value:
         villa.id === "dome-villas"
           ? "35"
-          : villa.stats.events.split(" ")[0] || "30",
+          : getEventCapacity(villa)?.toString() || villa.stats?.events?.split(" ")[0] || "30",
       icon: Users,
     },
     {
       label: villa.id === "vannani" ? "Units" : "BHK",
-      value: villa.stats.bhk.split(" ")[0] || "4",
+      value: getBhk(villa)?.toString() || villa.stats?.bhk?.split(" ")[0] || "4",
       icon: Home,
     },
     {
       label: "Overnight Stay",
-      value: villa.stats.stay.split("Ref/")[0].split(" ")[0] || "15",
+      value: getStayCapacity(villa)?.toString() || villa.stats?.stay?.split(" ")[0] || "15",
       icon: Bed,
     },
   ];
 
-  // Pricing display based on shared images
-  const getDisplayPrice = () => {
-    if (villa.id === "magnolia") return "₹50,000 per night";
-    if (villa.id === "emerald") return "₹65,000 per night onwards";
-    if (villa.id === "tranquil") return "₹70,000 per night onwards";
-    if (villa.id === "wonderland") return "₹30,000 per night onwards";
-    if (villa.id === "vannani") return "₹20,000 per night onwards";
-    return "₹35,000 per night";
-  };
+  const onwards = (getOverlayVillaData("party", villa?.id) as any)?.overlay?.onwardsPrice ?? null;
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 xl:gap-14 w-full pb-8 lg:py-10 border-b border-white/5 last:border-b-0 bg-[#25282C]">
@@ -229,7 +223,7 @@ export default function PartyVillaCard({
         {/* Footer */}
         <div className="mt-auto flex flex-row items-center justify-between pt-4">
           <span className="text-white font-manrope font-bold text-gh-label tracking-tight">
-            {getDisplayPrice()}
+            {onwards ? onwards : "Enquire for pricing"}
           </span>
 
           <button

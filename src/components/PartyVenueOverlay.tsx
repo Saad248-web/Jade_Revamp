@@ -22,17 +22,21 @@ import {
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import { buildVillaGalleryItems } from "@/lib/villaGallery";
+import { getBhk, getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
+import { getOverlayVillaData } from "@/lib/overlayVillaData";
 
 interface PartyVenueOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   villa: any;
+  overlayPage?: "party";
 }
 
 const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
   isOpen,
   onClose,
   villa,
+  overlayPage,
 }) => {
   const MotionDiv = motion.div;
   const MotionButton = motion.button;
@@ -62,22 +66,17 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
     setView("form");
   }, [isOpen, villa?.id]);
 
+  const overlayVilla = getOverlayVillaData((overlayPage ?? "party") as any, villa?.id);
+  const v = overlayVilla ?? villa;
+
   const images = (() => {
-    const gallery = buildVillaGalleryItems(villa, 8);
+    const gallery = buildVillaGalleryItems(v, 8);
     if (gallery.length > 0) return gallery;
-    if (villa?.spaces?.length > 0) return villa.spaces;
-    return [{ name: "Main", image: villa?.image }];
+    if (v?.spaces?.length > 0) return v.spaces;
+    return [{ name: "Main", image: v?.image }];
   })();
 
-  const getDisplayPrice = () => {
-    if (!villa) return "";
-    if (villa.id === "magnolia") return "₹50,000 per night";
-    if (villa.id === "emerald") return "₹65,000 per night onwards";
-    if (villa.id === "tranquil") return "₹70,000 per night onwards";
-    if (villa.id === "wonderland") return "₹30,000 per night onwards";
-    if (villa.id === "vannani") return "₹20,000 per night onwards";
-    return "₹35,000 per night";
-  };
+  const displayPrice = (overlayVilla as any)?.overlay?.onwardsPrice ?? null;
 
   const nextImage = () => {
     setDirection(1);
@@ -271,18 +270,18 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                 {[
                   {
                     label: "Capacity",
-                    value: villa.stats.events.split(" ")[0] || "30",
+                    value: getEventCapacity(villa)?.toString() || villa.stats?.events?.split(" ")[0] || "30",
                     icon: Users,
                   },
                   {
                     label: "BHK",
-                    value: villa.stats.bhk.split(" ")[0] || "4",
+                    value: getBhk(villa)?.toString() || villa.stats?.bhk?.split(" ")[0] || "4",
                     icon: Home,
                   },
                   {
                     label: "Stay",
                     value:
-                      villa.stats?.stay?.split("Ref/")[0].split(" ")[0] || "15",
+                      getStayCapacity(villa)?.toString() || villa.stats?.stay?.split(" ")[0] || "15",
                     icon: Home,
                   },
                 ].map((stat, idx) => (
@@ -746,7 +745,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
               Starting from
             </span>{" "}
             <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold">
-              {getDisplayPrice()}
+              {displayPrice || "Enquire"}
             </span>
           </p>
           <div className="flex items-center gap-4 md:gap-6">

@@ -24,14 +24,19 @@ import {
   Youtube,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import PrimaryButton from "@/components/PrimaryButton";
 import { buildVillaGalleryItems } from "@/lib/villaGallery";
+import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
+import type { OverlayPageKey } from "@/lib/overlayVillaData";
+import { getOverlayVillaData } from "@/lib/overlayVillaData";
 
 interface VenueOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   villa: any;
   context?: "wedding" | "weekend";
+  overlayPage?: OverlayPageKey;
 }
 
 const VenueOverlay: React.FC<VenueOverlayProps> = ({
@@ -39,6 +44,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
   onClose,
   villa,
   context,
+  overlayPage,
 }) => {
   const MotionDiv = motion.div;
   const MotionButton = motion.button;
@@ -48,6 +54,21 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const formRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  const resolvedContext: VenueOverlayProps["context"] =
+    context ??
+    (pathname?.includes("/weekend-getaways")
+      ? "weekend"
+      : pathname?.includes("/weddings")
+        ? "wedding"
+        : undefined);
+
+  const resolvedPage: OverlayPageKey =
+    overlayPage ?? (resolvedContext === "weekend" ? "weekend" : "wedding");
+
+  const overlayVilla = getOverlayVillaData(resolvedPage, villa?.id);
+  const v = overlayVilla ?? villa;
 
   useEffect(() => {
     setMounted(true);
@@ -69,10 +90,10 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
   }, [isOpen, villa?.id]);
 
   const images = (() => {
-    const gallery = buildVillaGalleryItems(villa, 8);
+    const gallery = buildVillaGalleryItems(v, 8);
     if (gallery.length > 0) return gallery;
-    if (villa?.spaces?.length > 0) return villa.spaces;
-    return [{ name: "Main", image: villa?.image }];
+    if (v?.spaces?.length > 0) return v.spaces;
+    return [{ name: "Main", image: v?.image }];
   })();
 
   const nextImage = () => {
@@ -142,13 +163,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
     return () => observer.disconnect();
   }, [isOpen, mounted]);
 
-  const getPrice = () => {
-    if (!villa) return "";
-    if (villa.id === "tranquil" || villa.id === "tranquil-woods") return "₹65,000";
-    if (villa.id === "magnolia" || villa.id === "diamond") return "₹99,000";
-    return "₹75,000";
-  };
-  const price = getPrice();
+  const price = (overlayVilla as any)?.overlay?.onwardsPrice ?? null;
 
   if (!mounted || !isOpen || !villa) return null;
 
@@ -239,11 +254,11 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             <div className="px-4 py-8">
               <div className="mb-4">
                 <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase block mb-2">
-                  {villa.type || "HOBBIT THEMED FARMHOUSE"}
+                  {v.type || "HOBBIT THEMED FARMHOUSE"}
                 </span>
                 <div className="flex justify-between items-center">
                   <h1 className="text-gh-h1 font-philosopher leading-tight">
-                    {villa.name}
+                    {v.name}
                   </h1>
                   <button className="p-2 text-white hover:text-[#EFCD62] transition-colors">
                     <Share2 className="w-6 h-6" />
@@ -254,7 +269,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
               <div className="flex items-center gap-6 text-white/70 font-manrope text-gh-body mb-8">
                 <div className="flex items-center gap-2">
                   <MapPin className="w-5 h-5 text-[#EFCD62]" />
-                  <span>{villa.location.split("·")[0]}</span>
+                  <span>{v.location.split("·")[0]}</span>
                 </div>
                 <div className="w-1 h-1 bg-white/20 rounded-full" />
                 <div className="flex items-center gap-2">
@@ -264,7 +279,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
               </div>
 
               <p className="text-white/70 text-gh-body leading-relaxed mb-12 text-justify">
-                {villa.description}
+                {v.description}
               </p>
 
               {/* QUICK STATS */}
@@ -273,22 +288,24 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                   {
                     label: "Guests",
                     value:
-                      villa.stats?.events?.split("-")[1]?.split(" ")[0] ||
-                      villa.stats?.events?.split(" ")[0] ||
-                      (context === "weekend" ? "15+" : "600"),
+                      getEventCapacity(v)?.toString() ||
+                      v.stats?.events?.split(" ")[0] ||
+                      (resolvedContext === "weekend" ? "15+" : "600"),
                     icon: Users,
                   },
                   {
                     label: "Parking",
-                    value: context === "weekend" ? "20+" : "80",
+                    value:
+                      (overlayVilla as any)?.overlay?.parking ??
+                      (resolvedContext === "weekend" ? "20+" : "80"),
                     icon: Car,
                   },
                   {
                     label: "Stay",
                     value:
-                      villa.stats?.stay?.split("-")[1]?.split(" ")[0] ||
-                      villa.stats?.stay?.split(" ")[0] ||
-                      (context === "weekend" ? "6-12" : "20"),
+                      getStayCapacity(v)?.toString() ||
+                      v.stats?.stay?.split(" ")[0] ||
+                      (resolvedContext === "weekend" ? "6-12" : "20"),
                     icon: Home,
                   },
                 ].map((stat, idx) => (
@@ -313,7 +330,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                   Perfect for:
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {villa.perfectFor.map((tag: any) => (
+                  {(v.perfectFor || []).map((tag: any) => (
                     <span
                       key={typeof tag === "string" ? tag : tag.title}
                       className="px-4 py-2 bg-white/5 border border-white/10 rounded-sm text-white/80 text-gh-label font-manrope"
@@ -351,7 +368,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
                       {(
-                        villa.amenities || [
+                        v.amenities || [
                           { label: "Lawn Space" },
                           { label: "Private Pool" },
                           { label: "Stay Accommodation" },
@@ -383,18 +400,18 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                       const pricingData = [];
 
                       // 1. Half-Day Rental (Mapped from event)
-                      if (villa.pricing?.event) {
+                      if (v.pricing?.event) {
                         pricingData.push({
-                          ...villa.pricing.event,
+                          ...v.pricing.event,
                           title: "Half-Day Rental",
                           subtitle: "6 hours",
                         });
                       }
 
                       // 2. Full-Day Rental (Mapped from stay)
-                      if (villa.pricing?.stay) {
+                      if (v.pricing?.stay) {
                         pricingData.push({
-                          ...villa.pricing.stay,
+                          ...v.pricing.stay,
                           title: "Full-Day Rental",
                           subtitle: "12 hours",
                         });
@@ -489,7 +506,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                     <div className="relative aspect-video w-full overflow-hidden rounded-sm bg-gray-800 border border-white/10">
                       <Image
                         src={
-                          villa.locationDetails?.mapImage ||
+                          v.locationDetails?.mapImage ||
                           "/X/Magnolia/VILLA2.webp"
                         }
                         alt="Map"
@@ -501,7 +518,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                       <MapPin className="w-6 h-6 text-[#EFCD62] shrink-0 mt-1" />
                       <div>
                         <p className="text-white font-manrope text-gh-body leading-relaxed mb-4">
-                          {villa.locationDetails?.address ||
+                          {v.locationDetails?.address ||
                             "Tranquil Woods, Kanakapura Road, Bangalore - 560062"}
                         </p>
                         <div className="px-4 py-2 bg-white/5 rounded-sm inline-block">
@@ -518,7 +535,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                       </h4>
                       <div className="space-y-4">
                         {(
-                          villa.locationDetails?.nearby || [
+                          v.locationDetails?.nearby || [
                             { label: "JW MARRIOT", distance: "1 km away" },
                             { label: "AIRPORT", distance: "5 km away" },
                             { label: "BUS STATION", distance: "2 km away" },
@@ -574,7 +591,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                   <div className="space-y-12">
                     <h3 className="text-gh-h2 font-philosopher">FAQ</h3>
                     <div className="space-y-8">
-                      {villa.faq?.map((item: any, idx: number) => (
+                      {(v.faq || []).map((item: any, idx: number) => (
                         <div key={idx} className="flex gap-4 group">
                           <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center mt-1">
                             <div className="w-2 h-2 rotate-45 bg-[#EFCD62]" />
@@ -895,7 +912,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
               Starting from
             </span>{" "}
             <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold">
-              {price}
+              {price || "Enquire"}
             </span>
           </p>
           <div className="flex items-center gap-4 md:gap-6">
@@ -906,7 +923,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
               ENQUIRE
             </button>
             <PrimaryButton
-              href={`/book?villa=${villa.id}`}
+              href={`/book?villa=${v.id}`}
               withArrow={false}
               className="whitespace-nowrap"
             >

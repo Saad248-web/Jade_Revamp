@@ -6,6 +6,8 @@ import Image from "next/image";
 import { Users, Car, Home, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { getHeroOverrideForId } from "@/lib/heroOverrides";
+import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
+import { getOverlayVillaData } from "@/lib/overlayVillaData";
 
 const normalizePublicImageSrc = (src: string) => {
   if (!src.startsWith("/")) return src;
@@ -71,8 +73,8 @@ export default function WeddingVillaCard({
     {
       label: "Guests",
       value:
-        villa.stats.events.split("-")[1]?.split(" ")[0] ||
-        villa.stats.events.split(" ")[0] ||
+        getEventCapacity(villa)?.toString() ||
+        villa.stats?.events?.split(" ")[0] ||
         "600",
       icon: Users,
     },
@@ -80,19 +82,14 @@ export default function WeddingVillaCard({
     {
       label: "Stay",
       value:
-        villa.stats.stay.split("-")[1]?.split(" ")[0] ||
-        villa.stats.stay.split(" ")[0] ||
+        getStayCapacity(villa)?.toString() ||
+        villa.stats?.stay?.split(" ")[0] ||
         "20",
       icon: Home,
     },
   ];
 
-  const price =
-    villa.id === "tranquil"
-      ? "₹65,000"
-      : villa.id === "magnolia" || villa.id === "diamond"
-        ? "₹99,000"
-        : "₹75,000";
+  const onwards = (getOverlayVillaData("wedding", villa?.id) as any)?.overlay?.onwardsPrice ?? null;
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 xl:gap-14 w-full pb-8 lg:py-10 border-b border-white/5 last:border-b-0 bg-[#25282C]">
@@ -208,7 +205,7 @@ export default function WeddingVillaCard({
         {/* Footer */}
         <div className="mt-auto flex flex-row items-center justify-between pt-4">
           <span className="text-white font-manrope font-bold text-gh-label tracking-tight">
-            {price} onwards
+            {onwards ? `${onwards} onwards` : "Enquire for pricing"}
           </span>
 
           <button

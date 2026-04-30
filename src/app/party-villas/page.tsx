@@ -132,7 +132,8 @@ export default function PartyVillasPage() {
         title="Party Types"
         slides={partySlides}
         ctaText="BOOK A PARTY VILLA"
-        buttonContainerClassName="h-[54px]"
+        buttonContainerClassName="mt-8"
+        innerClassName="h-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col py-12 md:py-16 lg:py-20"
       />
 
       {/* SECTION 4: CURATED EXPERIENCES */}
@@ -141,6 +142,8 @@ export default function PartyVillasPage() {
         title="Curated Experiences"
         ctaText="PLAN YOUR CELEBRATION"
         onCtaClick={() => setEnquireOverlayOpen(true)}
+        innerClassName="max-w-6xl mx-auto px-4 sm:px-6 md:px-8"
+        ctaContainerClassName="w-full max-w-xl mx-auto"
         experiences={[
           {
             title: "DJ & Music Setup",

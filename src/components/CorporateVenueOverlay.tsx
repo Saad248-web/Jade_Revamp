@@ -23,17 +23,22 @@ import {
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import { buildVillaGalleryItems } from "@/lib/villaGallery";
+import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
+import type { OverlayPageKey } from "@/lib/overlayVillaData";
+import { getOverlayVillaData } from "@/lib/overlayVillaData";
 
 interface CorporateVenueOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   villa: any;
+  overlayPage?: OverlayPageKey;
 }
 
 const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
   isOpen,
   onClose,
   villa,
+  overlayPage,
 }) => {
   const MotionDiv = motion.div;
   const MotionButton = motion.button;
@@ -64,11 +69,14 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
     setView("form");
   }, [isOpen, villa?.id]);
 
+  const overlayVilla = getOverlayVillaData(overlayPage ?? "corporate", villa?.id);
+  const v = overlayVilla ?? villa;
+
   const images = (() => {
-    const gallery = buildVillaGalleryItems(villa, 8);
+    const gallery = buildVillaGalleryItems(v, 8);
     if (gallery.length > 0) return gallery;
-    if (villa?.spaces?.length > 0) return villa.spaces;
-    return [{ name: "Main", image: villa?.image }];
+    if (v?.spaces?.length > 0) return v.spaces;
+    return [{ name: "Main", image: v?.image }];
   })();
 
   const nextImage = () => {
@@ -265,7 +273,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                 {[
                   {
                     label: "Offsite Cap.",
-                    value: villa.stats?.events?.split(" ")[0] || "500",
+                    value: getEventCapacity(villa)?.toString() || villa.stats?.events?.split(" ")[0] || "500",
                     icon: Users,
                   },
                   {
@@ -278,7 +286,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                   },
                   {
                     label: "Stay Cap.",
-                    value: villa.stats?.stay?.split(" ")[0] || "20",
+                    value: getStayCapacity(villa)?.toString() || villa.stats?.stay?.split(" ")[0] || "20",
                     icon: Home,
                   },
                 ].map((stat, idx) => (
@@ -839,7 +847,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
               Starting from
             </span>{" "}
             <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold">
-              ₹75,000
+              {(overlayVilla as any)?.overlay?.onwardsPrice || "Enquire"}
             </span>
           </p>
           <div className="flex items-center gap-4 md:gap-6">

@@ -194,6 +194,7 @@ export default function WeddingVenuesCarousel() {
             isOpen={isOverlayOpen}
             onClose={() => setIsOverlayOpen(false)}
             villa={currentVilla}
+            overlayPage="wedding"
           />
         )}
       </AnimatePresence>

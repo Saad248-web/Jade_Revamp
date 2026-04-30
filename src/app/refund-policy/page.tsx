@@ -3,14 +3,21 @@ import Footer from "@/components/Footer";
 
 export default function RefundPolicy() {
   return (
-    <main className="bg-[#0E3A2F] min-h-screen text-white font-manrope">
+    <main className="min-h-screen bg-[#0B2C23] text-white font-manrope">
       <Navbar />
-      <div className="max-w-4xl mx-auto px-6 py-32 border-x border-white/5 bg-[#0D4032]">
-        <h1 className="text-gh-h1 font-philosopher mb-12 border-b border-[#EFCD62]/30 pb-6">
-          Refund Policy
-        </h1>
+      <section className="relative pt-32 pb-20 px-6 md:px-12 lg:px-24 border-b border-white/10">
+        <div className="max-w-4xl mx-auto">
+          <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]/70 mb-4 text-center md:text-left">
+            Legal
+          </p>
+          <h1 className="text-gh-h1 font-philosopher mb-4 border-b border-[#EFCD62]/30 pb-6 text-center md:text-left">
+            Refund Policy
+          </h1>
+        </div>
+      </section>
 
-        <div className="space-y-12">
+      <section className="py-20 px-6 md:px-12 lg:px-24">
+        <div className="max-w-4xl mx-auto space-y-12">
           <section>
             <p className="text-gh-body text-white/70 leading-relaxed mb-8">
               When you voluntarily send us electronic mail, we will keep a
@@ -92,7 +99,7 @@ export default function RefundPolicy() {
             </p>
           </footer>
         </div>
-      </div>
+      </section>
       <Footer />
     </main>
   );

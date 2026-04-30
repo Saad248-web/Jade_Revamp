@@ -51,6 +51,7 @@ export default function CorporateVillasCarousel() {
             isOpen={isOverlayOpen}
             onClose={() => setIsOverlayOpen(false)}
             villa={selectedVilla}
+            overlayPage="corporate"
           />
         )}
       </AnimatePresence>

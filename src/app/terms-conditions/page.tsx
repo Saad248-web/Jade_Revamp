@@ -3,17 +3,24 @@ import Footer from "@/components/Footer";
 
 export default function TermsConditions() {
   return (
-    <main className="bg-[#0E3A2F] min-h-screen text-white font-manrope">
+    <main className="min-h-screen bg-[#0B2C23] text-white font-manrope">
       <Navbar />
-      <div className="max-w-4xl mx-auto px-6 py-32 border-x border-white/5 bg-[#0D4032]">
-        <h1 className="text-gh-h1 font-philosopher mb-4 border-b border-[#EFCD62]/30 pb-6">
-          Terms & Conditions
-        </h1>
-        <p className="text-[#EFCD62] text-gh-label font-bold uppercase tracking-[0.2em] mb-12">
-          Last Updated: 5th December, 2023
-        </p>
+      <section className="relative pt-32 pb-20 px-6 md:px-12 lg:px-24 border-b border-white/10">
+        <div className="max-w-4xl mx-auto">
+          <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]/70 mb-4 text-center md:text-left">
+            Legal
+          </p>
+          <h1 className="text-gh-h1 font-philosopher mb-4 border-b border-[#EFCD62]/30 pb-6 text-center md:text-left">
+            Terms & Conditions
+          </h1>
+          <p className="text-[#EFCD62] text-gh-label font-bold uppercase tracking-[0.2em] text-center md:text-left">
+            Last Updated: 5th December, 2023
+          </p>
+        </div>
+      </section>
 
-        <div className="space-y-12">
+      <section className="py-20 px-6 md:px-12 lg:px-24">
+        <div className="max-w-4xl mx-auto space-y-12">
           {/* Personal Information */}
           <section>
             <h2 className="text-gh-h2 font-philosopher mb-6 text-[#EFCD62]">
@@ -339,7 +346,7 @@ export default function TermsConditions() {
             </p>
           </footer>
         </div>
-      </div>
+      </section>
       <Footer />
     </main>
   );

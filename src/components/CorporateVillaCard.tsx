@@ -13,6 +13,8 @@ import {
   Presentation,
 } from "lucide-react";
 import { getHeroOverrideForId } from "@/lib/heroOverrides";
+import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
+import { getOverlayVillaData } from "@/lib/overlayVillaData";
 
 const normalizePublicImageSrc = (src: string) => {
   if (!src.startsWith("/")) return src;
@@ -87,7 +89,7 @@ export default function CorporateVillaCard({
   const stats = [
     {
       label: "Offsite Cap.",
-      value: villa.stats.events.split(" ")[0] || "500",
+      value: getEventCapacity(villa)?.toString() || villa.stats?.events?.split(" ")[0] || "500",
       icon: Users,
     },
     {
@@ -97,12 +99,12 @@ export default function CorporateVillaCard({
     },
     {
       label: "Stay Cap.",
-      value: villa.stats.stay.split(" ")[0] || "20",
+      value: getStayCapacity(villa)?.toString() || villa.stats?.stay?.split(" ")[0] || "20",
       icon: Home,
     },
   ];
 
-  const price = "₹75,000"; // Default corporate starting price
+  const onwards = (getOverlayVillaData("corporate", villa?.id) as any)?.overlay?.onwardsPrice ?? null;
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 xl:gap-14 w-full pb-8 lg:py-10 border-b border-white/5 last:border-b-0 bg-[#1A1C1E]">
@@ -220,7 +222,7 @@ export default function CorporateVillaCard({
         {/* Footer */}
         <div className="mt-auto flex flex-row items-center justify-between pt-4">
           <span className="text-white font-manrope font-bold text-gh-label tracking-tight">
-            {price} onwards
+            {onwards ? `${onwards} onwards` : "Enquire for pricing"}
           </span>
 
           <button

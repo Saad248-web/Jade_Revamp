@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Users, Car, Home, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
 import { getHeroOverrideForId } from "@/lib/heroOverrides";
+import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
+import { getOverlayVillaData } from "@/lib/overlayVillaData";
 
 const normalizePublicImageSrc = (src: string) => {
   if (!src.startsWith("/")) return src;
@@ -79,7 +81,7 @@ export default function WeekendVillaCard({
     {
       label: "Guests",
       value:
-        villa.stats?.events?.split("-")[1]?.split(" ")[0] ||
+        getEventCapacity(villa)?.toString() ||
         villa.stats?.events?.split(" ")[0] ||
         "15+",
       icon: Users,
@@ -88,19 +90,14 @@ export default function WeekendVillaCard({
     {
       label: "Stay",
       value:
-        villa.stats?.stay?.split("-")[1]?.split(" ")[0] ||
+        getStayCapacity(villa)?.toString() ||
         villa.stats?.stay?.split(" ")[0] ||
         "6-12",
       icon: Home,
     },
   ];
 
-  const price =
-    villa.id === "tranquil-woods"
-      ? "₹65,000"
-      : villa.id === "magnolia" || villa.id === "diamond"
-        ? "₹99,000"
-        : "₹75,000";
+  const onwards = (getOverlayVillaData("weekend", villa?.id) as any)?.overlay?.onwardsPrice ?? null;
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 xl:gap-14 w-full pb-8 lg:py-10 border-b border-white/5 last:border-b-0 bg-[#25282C]">
@@ -204,7 +201,7 @@ export default function WeekendVillaCard({
         {/* Footer */}
         <div className="mt-auto flex flex-row items-center justify-between pt-4">
           <span className="text-white font-manrope font-bold text-gh-label tracking-tight">
-            {price} onwards
+            {onwards ? `${onwards} onwards` : "Enquire for pricing"}
           </span>
 
           <button

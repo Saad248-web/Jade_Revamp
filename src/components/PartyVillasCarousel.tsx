@@ -52,6 +52,7 @@ export default function PartyVillasCarousel() {
             isOpen={isOverlayOpen}
             onClose={() => setIsOverlayOpen(false)}
             villa={selectedVilla}
+            overlayPage="party"
           />
         )}
       </AnimatePresence>

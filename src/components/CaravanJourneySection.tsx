@@ -174,12 +174,14 @@ const CaravanJourneySection = () => {
             week, and specific requirements. Fuel charges may apply depending on
             the travel route.
           </p>
-          <PrimaryButton
-            className="w-full h-[54px]"
-            onClick={() => setRathaaOverlayOpen(true)}
-          >
-            ENQUIRE
-          </PrimaryButton>
+          <div className="w-full max-w-xl mx-auto">
+            <PrimaryButton
+              className="w-full h-[54px]"
+              onClick={() => setRathaaOverlayOpen(true)}
+            >
+              ENQUIRE
+            </PrimaryButton>
+          </div>
         </div>
       </div>
     </section>

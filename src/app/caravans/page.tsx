@@ -169,7 +169,7 @@ export default function CaravansPage() {
           title="The Caravan"
           slides={caravanSlides}
           ctaText="BOOK CARAVAN"
-          buttonContainerClassName="h-[54px]"
+          buttonContainerClassName="mt-8"
         />
       </div>
 
@@ -185,6 +185,8 @@ export default function CaravansPage() {
           title: s.title,
           image: s.image,
         }))}
+        innerClassName="max-w-6xl mx-auto px-4 sm:px-6 md:px-8"
+        ctaContainerClassName="w-full max-w-xl mx-auto"
       />
 
       <PremiumFeaturesSection
