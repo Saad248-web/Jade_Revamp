@@ -36,8 +36,8 @@ export default function ExperienceCarouselSection({
   aspectClass = "flex-1 min-h-[440px] sm:min-h-[480px] md:min-h-[560px] lg:min-h-[620px] relative w-full",
   buttonClassName = "w-full text-gh-label",
   buttonContainerClassName = "mt-auto",
-  containerClassName = "h-screen min-h-[700px] md:min-h-[760px] bg-[#141517] overflow-hidden",
-  innerClassName = "h-full max-w-[1920px] mx-auto px-6 md:px-24 lg:px-48 xl:px-64 flex flex-col py-12 md:py-20 lg:py-24",
+  containerClassName = "min-h-[100dvh] bg-[#141517] overflow-x-hidden",
+  innerClassName = "min-h-[100dvh] max-w-[1920px] mx-auto px-6 md:px-24 lg:px-48 xl:px-64 flex flex-col py-12 md:py-20 lg:py-24",
 }: ExperienceCarouselSectionProps) {
   const [activeSlide, setActiveSlide] = React.useState(0);
 

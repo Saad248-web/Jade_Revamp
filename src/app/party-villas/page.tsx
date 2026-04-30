@@ -133,7 +133,7 @@ export default function PartyVillasPage() {
         slides={partySlides}
         ctaText="BOOK A PARTY VILLA"
         buttonContainerClassName="mt-8"
-        innerClassName="h-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col py-12 md:py-16 lg:py-20"
+        innerClassName="min-h-[100dvh] max-w-5xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col py-12 md:py-16 lg:py-20"
       />
 
       {/* SECTION 4: CURATED EXPERIENCES */}
