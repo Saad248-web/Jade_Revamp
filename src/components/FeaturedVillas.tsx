@@ -7,12 +7,18 @@ import {
   useTransform,
   useSpring,
   AnimatePresence,
+  useReducedMotion,
 } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import PrimaryButton from "@/components/PrimaryButton";
+import { usePreloadNeighborImages } from "@/lib/carouselMotion";
+import {
+  liquidCarouselBgVariants,
+  type HeroSplitCustom,
+} from "@/lib/heroSplitCarouselVariants";
 
 const VILLAS = [
   {
@@ -157,9 +163,17 @@ function VillaSlide({
   totalSteps: number;
 }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const reducedMotion = useReducedMotion();
+
+  const carouselCustom: HeroSplitCustom = {
+    dir: direction,
+    lowFx: !!reducedMotion,
+  };
 
   const handleNextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setDirection(1);
     setCurrentImageIndex((prev) =>
       prev === data.images.length - 1 ? 0 : prev + 1,
     );
@@ -167,10 +181,13 @@ function VillaSlide({
 
   const handlePrevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setDirection(-1);
     setCurrentImageIndex((prev) =>
       prev === 0 ? data.images.length - 1 : prev - 1,
     );
   };
+
+  usePreloadNeighborImages(data.images, currentImageIndex);
 
   // Zoom-safe offset: half-viewport + half-panel + 56px off-screen gap.
   // Ensures exactly one panel is visible at any zoom level (100/125/140/150%).
@@ -221,16 +238,24 @@ function VillaSlide({
         {/* Layout Container: Stacked universally on all screen sizes */}
         <div className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
           {/* Image Section */}
-          <div className="relative w-full aspect-[16/9] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
+          <div
+            className="relative w-full aspect-[16/9] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0"
+            style={{ perspective: "1500px" }}
+          >
             <div className="w-full h-full relative">
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
                 <motion.div
                   key={currentImageIndex}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
+                  custom={carouselCustom}
+                  variants={liquidCarouselBgVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
                   className="absolute inset-0 w-full h-full"
+                  style={{
+                    transformStyle: "preserve-3d",
+                    backfaceVisibility: "hidden",
+                  }}
                 >
                   <Image
                     src={data.images[currentImageIndex]}
@@ -238,7 +263,7 @@ function VillaSlide({
                     fill
                     className="object-cover"
                     sizes="(max-width: 640px) 100vw, (max-width: 1280px) 95vw, 1400px"
-                    priority
+                    priority={currentImageIndex === 0}
                   />
                 </motion.div>
               </AnimatePresence>

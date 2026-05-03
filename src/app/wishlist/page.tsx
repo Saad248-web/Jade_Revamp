@@ -9,6 +9,8 @@ import { useWishlist } from "@/context/WishlistContext";
 import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import EmptyState from "@/components/ui/EmptyState";
+import { VILLAS } from "@/lib/mockData";
+import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 
 export default function WishlistPage() {
   const router = useRouter();
@@ -49,7 +51,12 @@ export default function WishlistPage() {
         <AnimatePresence mode="popLayout">
           {count > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {wishlist.map((item, i) => (
+              {wishlist.map((item, i) => {
+                const matchedVilla = VILLAS.find((v) => v.id === item.id);
+                const mapsHref = getVillaGoogleMapsUrl(
+                  matchedVilla ?? { location: item.location },
+                );
+                return (
                 <motion.div
                   key={item.id}
                   layout
@@ -92,12 +99,19 @@ export default function WishlistPage() {
                     <h3 className="font-philosopher text-gh-h3 text-white mb-1">
                       {item.name}
                     </h3>
-                    <div className="flex items-center gap-1.5 text-white/50 text-gh-desc font-manrope mb-3">
+                    <a
+                      href={mapsHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-white/50 text-gh-desc font-manrope mb-3 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+                    >
                       <MapPin className="w-3.5 h-3.5 shrink-0" />
-                      {item.location}
-                    </div>
+                      <span className="hover:underline underline-offset-2">
+                        {item.location}
+                      </span>
+                    </a>
                     {item.startingPrice && (
-                      <p className="text-white/40 font-manrope text-gh-label mb-3">
+                      <p className="text-white/40 font-manrope text-gh-villa-footer-row mb-3">
                         From{" "}
                         <span className="text-white font-bold">
                           {item.startingPrice}
@@ -123,7 +137,8 @@ export default function WishlistPage() {
                     </div>
                   </div>
                 </motion.div>
-              ))}
+              );
+              })}
             </div>
           )}
         </AnimatePresence>

@@ -2,7 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import PrimaryButton from "./PrimaryButton";
 
 interface Villa {
@@ -50,17 +49,13 @@ export default function VillasCarouselSection({
         {/* Scrollable List */}
         <div className="relative mb-0 -mx-6 md:-mx-24 lg:-mx-48 xl:-mx-64 px-6 md:px-24 lg:px-48 xl:px-64">
           <div
-            className="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory"
+            className="jade-hscroll-track flex overflow-x-auto hide-scrollbar snap-x snap-mandatory"
             style={{ gap: "clamp(16px, 3vw, 32px)" }}
           >
             {villas.map((villa, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-                viewport={{ once: true }}
-                className="flex-shrink-0 w-[270px] snap-start group cursor-pointer"
+              <div
+                key={`${villa.name}-${idx}`}
+                className="flex-shrink-0 w-[270px] snap-start group cursor-pointer jade-hscroll-view-item"
               >
                 <div className="relative aspect-[270/360] overflow-hidden mb-[16px] border border-white/5 group-hover:border-[#EFCD62]/30 transition-colors">
                   <Image
@@ -83,7 +78,7 @@ export default function VillasCarouselSection({
                     {villa.name}
                   </h3>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

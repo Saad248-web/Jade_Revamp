@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getPublishedPosts } from "@/data/blogs";
+import { VILLAS } from "@/lib/mockData";
 
 const BASE = "https://jadehospitainment.com";
 
@@ -29,6 +30,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
+    },
+    {
+      url: `${BASE}/experiences/another-experience-1`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.65,
     },
     {
       url: `${BASE}/weekend-getaways`,
@@ -78,7 +85,40 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+    {
+      url: `${BASE}/privacy-policy`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.35,
+    },
+    {
+      url: `${BASE}/terms-conditions`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.35,
+    },
+    {
+      url: `${BASE}/refund-policy`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.35,
+    },
   ];
+
+  const villaRoutes: MetadataRoute.Sitemap = VILLAS.flatMap((v) => [
+    {
+      url: `${BASE}/villas/${v.id}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.88,
+    },
+    {
+      url: `${BASE}/villas/${v.id}/spaces`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.72,
+    },
+  ]);
 
   // Dynamic blog routes
   const posts = getPublishedPosts();
@@ -89,5 +129,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.65,
   }));
 
-  return [...staticRoutes, ...blogRoutes];
+  return [...staticRoutes, ...villaRoutes, ...blogRoutes];
 }

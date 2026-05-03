@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
@@ -30,7 +31,9 @@ export default function PrimaryButton({
   withArrow = true,
   className = "",
   children,
-  ...props
+  type = "button",
+  disabled,
+  ...buttonProps
 }: PrimaryButtonProps) {
   const content = (
     <>
@@ -41,41 +44,57 @@ export default function PrimaryButton({
     </>
   );
 
-  const btn = (
-    <button
-      className={[
-        // Core identity — gold solid CTA with 1px INSIDE stroke
-        "group bg-[#EFCD62] text-black font-manrope font-bold",
-        "ring-1 ring-inset ring-[#AC8831]",
-        // Shape
-        "rounded-none",
-        // Self-balancing sizing: fit content, respect parent padding
-        "inline-flex items-center justify-center gap-[clamp(6px,0.8vw,12px)]",
-        "max-w-full box-border shrink-1",
-        // Fluid padding: scales between mobile → desktop automatically
-        "px-[clamp(12px,1.4vw,18px)] py-[clamp(12px,1.35vw,16px)]",
-        // Fluid typography
-        "text-gh-label tracking-[0.15em] uppercase",
-        // Interaction
-        "hover:bg-[#dfbd52] transition-all duration-300",
-        // User overrides (w-full, custom sizing, etc.)
-        className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      {...props}
-    >
-      {content}
-    </button>
+  const sharedClassName = clsx(
+    // Core identity — gold solid CTA with 1px INSIDE stroke
+    "group bg-[#EFCD62] text-black font-manrope font-bold",
+    "ring-1 ring-inset ring-[#AC8831]",
+    "rounded-none",
+    "inline-flex items-center justify-center gap-[clamp(6px,0.8vw,12px)]",
+    "max-w-full box-border shrink-1",
+    "px-[clamp(12px,1.4vw,18px)] py-[clamp(12px,1.35vw,16px)]",
+    "text-gh-label tracking-[0.15em] uppercase",
+    "hover:bg-[#dfbd52] transition-all duration-300",
+    "disabled:opacity-50 disabled:pointer-events-none",
+    className,
   );
 
+  /** `<a>` cannot wrap `<button>` — render styled `Link` instead of nesting a button. */
   if (href) {
     return (
-      <Link href={href} target={target} rel={rel}>
-        {btn}
+      <Link
+        href={href}
+        target={target}
+        rel={rel}
+        className={clsx(
+          sharedClassName,
+          disabled && "pointer-events-none opacity-50",
+        )}
+        aria-disabled={disabled || undefined}
+        tabIndex={disabled ? -1 : buttonProps.tabIndex}
+        id={buttonProps.id}
+        style={buttonProps.style}
+        title={buttonProps.title}
+        onClick={
+          disabled
+            ? (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault()
+            : (buttonProps.onClick as
+                | React.MouseEventHandler<HTMLAnchorElement>
+                | undefined)
+        }
+      >
+        {content}
       </Link>
     );
   }
 
-  return btn;
+  return (
+    <button
+      type={type}
+      disabled={disabled}
+      className={sharedClassName}
+      {...buttonProps}
+    >
+      {content}
+    </button>
+  );
 }

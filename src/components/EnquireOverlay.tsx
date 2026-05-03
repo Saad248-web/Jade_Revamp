@@ -11,6 +11,8 @@ import { useAnimation } from "@/context/AnimationContext";
 export default function EnquireOverlay() {
   const { isEnquireOverlayOpen, setEnquireOverlayOpen } = useAnimation();
   const [view, setView] = useState<"form" | "success">("form");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -28,6 +30,8 @@ export default function EnquireOverlay() {
 
   const handleClose = () => {
     setEnquireOverlayOpen(false);
+    setSubmitError(null);
+    setSubmitting(false);
     setTimeout(() => {
       setView("form");
       setFormData({
@@ -71,10 +75,32 @@ export default function EnquireOverlay() {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isFormValid()) {
+    if (!isFormValid()) return;
+
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source: "general_enquiry",
+          payload: formData,
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      if (!res.ok) {
+        throw new Error(data.error || "Something went wrong. Please try again.");
+      }
       setView("success");
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Unable to send inquiry.",
+      );
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -125,7 +151,7 @@ export default function EnquireOverlay() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full md:w-[600px] h-[80vh] md:h-[82vh] md:max-h-[760px] bg-[#0E3A2F] flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
+              className="relative w-full md:w-[600px] h-[80vh] md:h-[82vh] md:max-h-[760px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
             >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
               {/* CONTENT AREA */}
@@ -135,6 +161,14 @@ export default function EnquireOverlay() {
               >
                 {view === "form" ? (
                   <form onSubmit={handleSubmit} className="flex flex-col">
+                    {submitError ? (
+                      <p
+                        className="text-red-400 text-sm font-manrope mb-4"
+                        role="alert"
+                      >
+                        {submitError}
+                      </p>
+                    ) : null}
                     <h2 className="text-white text-[32px] leading-tight md:text-gh-h2 font-philosopher mb-3">
                       Enquire Now
                     </h2>
@@ -306,14 +340,14 @@ export default function EnquireOverlay() {
                       </p>
                       <button
                         type="submit"
-                        disabled={!isFormValid()}
+                        disabled={!isFormValid() || submitting}
                         className={`w-full py-4 font-manrope font-bold text-gh-label tracking-[0.3em] uppercase transition-all border ${
-                          isFormValid()
+                          isFormValid() && !submitting
                             ? "bg-[#EFCD62] hover:bg-white text-black border-transparent"
                             : "bg-transparent border-white/10 text-white/40 cursor-not-allowed"
                         }`}
                       >
-                        SEND INQUIRY
+                        {submitting ? "SENDING…" : "SEND INQUIRY"}
                       </button>
                     </div>
                   </form>

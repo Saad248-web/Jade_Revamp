@@ -169,7 +169,6 @@ export default function CaravansPage() {
           title="The Caravan"
           slides={caravanSlides}
           ctaText="BOOK CARAVAN"
-          buttonContainerClassName="mt-8"
         />
       </div>
 

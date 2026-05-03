@@ -2,7 +2,6 @@
 
 import React from "react";
 import PrimaryButton from "./PrimaryButton";
-import { ArrowLeft, Headset } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
 
 interface JourneyCardProps {
@@ -85,19 +84,6 @@ const CaravanJourneySection = () => {
   return (
     <section className="bg-[#0D4032] py-fluid-lg md:py-fluid-xl px-6 md:px-12 lg:px-24">
       <div className="max-w-6xl mx-auto">
-        {/* Header with Icons */}
-        <div className="flex items-center justify-between mb-8">
-          <button
-            onClick={() => window.history.back()}
-            className="w-10 h-10 flex items-center justify-center text-white/60 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-6 h-6" />
-          </button>
-          <button className="w-10 h-10 flex items-center justify-center bg-white/5 border border-white/10 text-white/60 hover:text-white transition-colors">
-            <Headset className="w-5 h-5" />
-          </button>
-        </div>
-
         {/* Title Group */}
         <div className="mb-12">
           <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope mb-4">

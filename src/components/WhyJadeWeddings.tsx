@@ -93,7 +93,7 @@ export default function WhyJadeWeddings() {
               Why Jade Wedding Venues
             </motion.h2>
 
-            <div className="space-y-12">
+            <div className="space-y-8 md:space-y-10">
               {BENEFITS.map((benefit, index) => (
                 <motion.div
                   key={index}
@@ -101,18 +101,17 @@ export default function WhyJadeWeddings() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="flex gap-6 group"
+                  className="flex gap-4 sm:gap-5 group"
                 >
-                  {/* Diamond Icon */}
-                  <div className="mt-1.5 flex-shrink-0">
-                    <div className="w-4 h-4 bg-[#EFCD62] rotate-45 transform transition-transform group-hover:rotate-[225deg] duration-700" />
+                  <div className="mt-1 flex-shrink-0">
+                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-[#EFCD62] rotate-45 transform transition-transform group-hover:rotate-[225deg] duration-700" />
                   </div>
 
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-1">
                     <h3 className="font-manrope font-bold text-white text-gh-body tracking-[0.1em] uppercase">
                       {benefit.title}
                     </h3>
-                    <p className="font-manrope text-white/60 text-gh-body leading-relaxed max-w-lg">
+                    <p className="font-manrope text-white/60 text-gh-desc sm:text-gh-body leading-relaxed max-w-lg">
                       {benefit.description}
                     </p>
                   </div>

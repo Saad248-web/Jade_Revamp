@@ -65,7 +65,7 @@ export default function VillasHero() {
             behavior: "smooth",
           });
         }}
-        className="absolute bottom-8 md:bottom-12 inset-x-0 mx-auto w-fit flex flex-col items-center gap-4 z-20 cursor-pointer hover:opacity-80 transition-opacity"
+        className="absolute inset-x-0 mx-auto w-fit flex flex-col items-center gap-4 z-20 cursor-pointer hover:opacity-80 transition-opacity max-lg:bottom-[calc(7rem+env(safe-area-inset-bottom))] lg:bottom-12"
       >
         <div className="w-[1px] h-12 bg-white/20" />
         <span className="text-gh-label text-white/40 font-manrope tracking-[0.2em] uppercase">

@@ -20,6 +20,10 @@ import {
 } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
 import { VILLAS, CATEGORIES } from "@/lib/mockData";
+import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
+import { isBookingDetailsValid } from "@/lib/bookingDetailsValidation";
+import type { UserDetails } from "@/lib/types";
+import BookingDetailsFormFields from "@/components/booking/BookingDetailsFormFields";
 
 /* ─────────────────────────────────────────────────────────────────────
    Types
@@ -35,13 +39,6 @@ interface Guests {
   adults: number;
   children: number;
   pets: number;
-}
-
-interface UserDetails {
-  fullName: string;
-  phone: string;
-  email: string;
-  notes: string;
 }
 
 /* ─────────────────────────────────────────────────────────────────────
@@ -613,10 +610,15 @@ function StepVillas({
               <h3 className="text-white font-philosopher text-gh-h3 mb-1">
                 {villa.name}
               </h3>
-              <div className="flex items-center gap-1 text-white/50 text-gh-label font-manrope mb-2">
+              <a
+                href={getVillaGoogleMapsUrl(villa)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-white/50 text-gh-label font-manrope mb-2 w-fit rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+              >
                 <MapPin className="w-3 h-3 shrink-0" />
-                {villa.location}
-              </div>
+                <span className="hover:underline underline-offset-2">{villa.location}</span>
+              </a>
               <p className="text-white/60 text-gh-body font-manrope line-clamp-2 mb-3">
                 {villa.description}
               </p>
@@ -726,6 +728,8 @@ function StepDetails({
   currentStep: Step;
   stepTotal: number;
 }) {
+  const [forceShowErrors, setForceShowErrors] = useState(false);
+
   const basePrice = selectedVilla
     ? parseInt(
         (selectedVilla.pricing?.stay?.packages?.[0]?.price ?? "").replace(
@@ -735,8 +739,7 @@ function StepDetails({
       )
     : BASE_PRICE;
 
-  const isValid =
-    details.fullName.trim() && details.phone.trim() && details.email.trim();
+  const canProceed = isBookingDetailsValid(details);
 
   return (
     <div className="flex flex-col h-full">
@@ -753,49 +756,17 @@ function StepDetails({
 
       {/* Form */}
       <div
-        className="flex-1 overflow-y-auto px-5 py-5 space-y-4"
+        className="flex-1 overflow-y-auto px-5 py-5"
         data-lenis-prevent
       >
-        {/* Full Name */}
-        <div className="relative border border-white/20 focus-within:border-[#EFCD62] transition-colors">
-          <label className="absolute -top-2.5 left-3 bg-[#0D4032] px-1 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
-            Full Name
-          </label>
-          <input
-            type="text"
-            value={details.fullName}
-            onChange={(e) =>
-              setDetails({ ...details, fullName: e.target.value })
-            }
-            className="w-full bg-transparent px-4 py-3.5 text-white text-gh-body placeholder:text-white/30 focus:outline-none font-manrope"
-          />
-        </div>
-
-        <input
-          type="tel"
-          placeholder="Phone Number*"
-          value={details.phone}
-          onChange={(e) => setDetails({ ...details, phone: e.target.value })}
-          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors font-manrope"
+        <BookingDetailsFormFields
+          details={details}
+          setDetails={setDetails}
+          forceShowErrors={forceShowErrors}
+          idPrefix="gbo"
         />
 
-        <input
-          type="email"
-          placeholder="Email*"
-          value={details.email}
-          onChange={(e) => setDetails({ ...details, email: e.target.value })}
-          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors font-manrope"
-        />
-
-        <textarea
-          rows={4}
-          placeholder="Additional requests or note to the host"
-          value={details.notes}
-          onChange={(e) => setDetails({ ...details, notes: e.target.value })}
-          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors resize-none font-manrope"
-        />
-
-        <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
+        <p className="text-[11px] text-white/30 pt-3 text-center font-manrope">
           By proceeding, you agree to our{" "}
           <Link
             href="/privacy-policy"
@@ -828,28 +799,40 @@ function StepDetails({
         <div className="px-5 pt-3 pb-1">
           <StepDots step={currentStep} />
         </div>
-        <div className="px-5 py-4 border-t border-white/10 flex items-center justify-between">
-          <span className="text-[#EFCD62] font-manrope text-gh-label font-bold">
-            {formatRupees(basePrice)} onwards
-          </span>
-          <div className="flex gap-3">
-            <button
-              onClick={onBack}
-              className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
-            >
-              BACK
-            </button>
-            <button
-              disabled={!isValid}
-              onClick={onNext}
-              className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
-                isValid
-                  ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white"
-                  : "bg-white/10 text-white/30 cursor-not-allowed"
-              }`}
-            >
-              APPLY
-            </button>
+        <div className="px-5 py-4 border-t border-white/10 flex flex-col gap-2">
+          <p className="text-white/35 text-[10px] font-manrope">
+            Name, phone, and email are checked before you can continue. Tap Apply
+            to see what needs fixing.
+          </p>
+          <div className="flex items-center justify-between">
+            <span className="text-[#EFCD62] font-manrope text-gh-label font-bold">
+              {formatRupees(basePrice)} onwards
+            </span>
+            <div className="flex gap-3">
+              <button
+                onClick={onBack}
+                className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
+              >
+                BACK
+              </button>
+              <button
+                onClick={() => {
+                  if (!canProceed) {
+                    setForceShowErrors(true);
+                    return;
+                  }
+                  setForceShowErrors(false);
+                  onNext();
+                }}
+                className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
+                  canProceed
+                    ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white"
+                    : "bg-white/10 text-white/30 cursor-pointer"
+                }`}
+              >
+                APPLY
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -941,9 +924,17 @@ function StepReview({
                 {selectedVilla.name}
               </h3>
               <div className="flex flex-col gap-1 text-white/50 text-gh-label font-manrope">
-                <span className="flex items-center gap-1">
-                  <MapPin className="w-3 h-3" /> {selectedVilla.location}
-                </span>
+                <a
+                  href={getVillaGoogleMapsUrl(selectedVilla)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 rounded-sm outline-none transition-colors hover:text-[#EFCD62] focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+                >
+                  <MapPin className="w-3 h-3 shrink-0" />{" "}
+                  <span className="hover:underline underline-offset-2">
+                    {selectedVilla.location}
+                  </span>
+                </a>
                 {selectedVilla.stats.stay && (
                   <span className="flex items-center gap-1">
                     <Users className="w-3 h-3" /> {selectedVilla.stats.stay}{" "}
@@ -1260,7 +1251,7 @@ export default function GlobalBookingOverlay() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full md:w-[640px] h-[80vh] md:h-[82vh] md:max-h-[760px] bg-[#0E3A2F] flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
+              className="relative w-full md:w-[640px] h-[80vh] md:h-[82vh] md:max-h-[760px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
             >
               {/* Step content */}
               <div

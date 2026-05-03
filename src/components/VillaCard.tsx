@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import {
   Bed,
@@ -21,6 +21,11 @@ import { useWishlist } from "@/context/WishlistContext";
 import { prettyMediaLabel } from "@/lib/mediaLabels";
 import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
 import { getHeroOverrideForId } from "@/lib/heroOverrides";
+import {
+  liquidCarouselBgVariants,
+  type HeroSplitCustom,
+} from "@/lib/heroSplitCarouselVariants";
+import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 
 const normalizeImageSrc = (src: string) => {
   // Local `public/` asset paths can contain spaces; `next/image` expects URI-encoded paths.
@@ -65,6 +70,12 @@ export default function VillaCard({ villa }: VillaCardProps) {
   } | null>(null);
 
   const wishlisted = isWishlisted(villa.id);
+  const reducedMotion = useReducedMotion();
+
+  const carouselCustom: HeroSplitCustom = {
+    dir: direction,
+    lowFx: !!reducedMotion,
+  };
 
   const wishlistItem = {
     id: villa.id,
@@ -204,16 +215,23 @@ export default function VillaCard({ villa }: VillaCardProps) {
   return (
     <div className="flex flex-col md:flex-row gap-6 h-full pointer-events-auto">
       {/* IMAGE CONTAINER */}
-      <div className="relative w-full md:w-[45%] md:flex-shrink-0 aspect-[4/3] md:aspect-auto md:max-h-[480px] overflow-hidden rounded-md group bg-white/5">
-        <AnimatePresence initial={false} custom={direction}>
+      <div
+        className="relative w-full md:w-[45%] md:flex-shrink-0 aspect-[4/3] md:aspect-auto md:max-h-[480px] overflow-hidden rounded-md group bg-white/5"
+        style={{ perspective: "1400px" }}
+      >
+        <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
           <motion.div
             key={`${villa.id}-${currentImageIndex}`}
-            custom={direction}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            custom={carouselCustom}
+            variants={liquidCarouselBgVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="absolute inset-0 w-full h-full"
+            style={{
+              transformStyle: "preserve-3d",
+              backfaceVisibility: "hidden",
+            }}
           >
             {validImage(currentSpace?.image) ? (
               <Image
@@ -299,13 +317,16 @@ export default function VillaCard({ villa }: VillaCardProps) {
         >
           {villa.name}
         </h2>
-        <div
-          className="flex items-center gap-2 text-white/60"
+        <a
+          href={getVillaGoogleMapsUrl(villa)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-white/60 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
           style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
         >
-          <MapPin className="w-4 h-4" />
-          <span className="font-manrope text-gh-body">{villa.location}</span>
-        </div>
+          <MapPin className="w-4 h-4 shrink-0" />
+          <span className="font-manrope text-gh-body hover:underline underline-offset-4">{villa.location}</span>
+        </a>
 
         <p
           className="font-manrope text-white/70 leading-relaxed text-gh-desc line-clamp-2 lg:line-clamp-none"
@@ -361,7 +382,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
         {/* Action Row */}
         <div className="flex flex-row items-center justify-between gap-2 md:gap-4 mt-auto">
           {/* Price */}
-          <div className="text-white font-manrope font-bold text-gh-label tracking-wide leading-tight line-clamp-2 md:line-clamp-1">
+          <div className="text-white font-manrope font-bold text-gh-villa-footer-row tracking-wide line-clamp-2 md:line-clamp-1">
             {startingPrice || "Upon Request"}{" "}
             <span className="text-white/80 font-normal md:font-bold md:text-white inline-block">
               onwards
@@ -372,14 +393,14 @@ export default function VillaCard({ villa }: VillaCardProps) {
           <div className="flex items-stretch gap-2 md:gap-3 shrink-0 h-[clamp(44px,5vw,52px)]">
             <Link
               href={`/villas/${villa.id}?autoScroll=true`}
-              className="h-full inline-flex items-center justify-center border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-3 md:px-5 font-manrope font-bold text-gh-desc tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
+              className="h-full inline-flex items-center justify-center border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-3 md:px-5 font-manrope font-bold text-gh-villa-footer-row tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
             >
               VIEW VILLA
             </Link>
             <PrimaryButton
               withArrow={false}
               onClick={() => router.push(bookHref)}
-              className="h-full py-0 whitespace-nowrap"
+              className="h-full py-0 whitespace-nowrap text-gh-villa-footer-row"
             >
               BOOK VILLA
             </PrimaryButton>

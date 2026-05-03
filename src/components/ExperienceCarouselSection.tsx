@@ -1,10 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import PrimaryButton from "./PrimaryButton";
+import { experienceCarouselDefaults } from "@/lib/experienceCarouselLayout";
+import {
+  liquidCarouselBgVariants,
+  type HeroSplitCustom,
+} from "@/lib/heroSplitCarouselVariants";
 
 interface Slide {
   title: string;
@@ -33,37 +38,67 @@ export default function ExperienceCarouselSection({
   ctaText,
   ctaLink,
   onCtaClick,
-  aspectClass = "flex-1 min-h-[440px] sm:min-h-[480px] md:min-h-[560px] lg:min-h-[620px] relative w-full",
+  aspectClass = experienceCarouselDefaults.aspectClass,
   buttonClassName = "w-full text-gh-label",
-  buttonContainerClassName = "mt-auto",
-  containerClassName = "min-h-[100dvh] bg-[#141517] overflow-x-hidden",
-  innerClassName = "min-h-[100dvh] max-w-[1920px] mx-auto px-6 md:px-24 lg:px-48 xl:px-64 flex flex-col py-12 md:py-20 lg:py-24",
+  buttonContainerClassName = experienceCarouselDefaults.buttonContainerClassName,
+  containerClassName = experienceCarouselDefaults.containerClassName,
+  innerClassName = experienceCarouselDefaults.innerClassName,
 }: ExperienceCarouselSectionProps) {
   const [activeSlide, setActiveSlide] = React.useState(0);
+  const [direction, setDirection] = React.useState(0);
+  const reducedMotion = useReducedMotion();
+  const carouselCustom: HeroSplitCustom = {
+    dir: direction,
+    lowFx: !!reducedMotion,
+  };
+  const slidesRef = useRef(slides);
+  slidesRef.current = slides;
 
-  const nextSlide = () => setActiveSlide((prev) => (prev + 1) % slides.length);
-  const prevSlide = () =>
+  useEffect(() => {
+    const list = slidesRef.current;
+    const n = list.length;
+    if (n <= 1) return;
+    for (const j of [(activeSlide + 1) % n, (activeSlide - 1 + n) % n]) {
+      const src = list[j]?.image?.trim();
+      if (src) {
+        const img = new window.Image();
+        img.src = src;
+      }
+    }
+  }, [activeSlide]);
+
+  const nextSlide = () => {
+    setDirection(1);
+    setActiveSlide((prev) => (prev + 1) % slides.length);
+  };
+  const prevSlide = () => {
+    setDirection(-1);
     setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  /** Encode paths with spaces etc. — Next/Image expects valid URL paths */
+  const imageSrc =
+    slides[activeSlide]?.image
+      ?.trim()
+      ?.replace(/ /g, "%20")
+      .replace(/#/g, "%23")
+      .replace(/\?/g, "%3F") ?? "";
 
   return (
     <section className={containerClassName}>
       <div className={innerClassName}>
         {/* Header Area */}
-        <div
-          className="relative z-10 shrink-0"
-          style={{ marginBottom: "clamp(16px, 4vw, 32px)" }}
-        >
+        <div className="relative z-10 shrink-0 mb-[clamp(0.75rem,2.2vw,1.75rem)]">
           <p
-            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope"
-            style={{ marginBottom: "clamp(8px, 1.5vw, 16px)" }}
+            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope mb-[clamp(4px,1vw,12px)]"
           >
             {label}
           </p>
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-[clamp(0.75rem,2vw,1.5rem)]">
             <h2 className="text-gh-h2 font-philosopher text-white leading-tight">
               {title}
             </h2>
-            <div className="flex gap-3 shrink-0">
+            <div className="flex gap-2 sm:gap-3 md:gap-4 shrink-0">
               <button
                 onClick={prevSlide}
                 className="w-10 h-10 md:w-14 md:h-14 rounded-none border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors text-white"
@@ -80,51 +115,52 @@ export default function ExperienceCarouselSection({
           </div>
         </div>
 
-        {/* Carousel Content */}
+        {/* Carousel Content — liquid crossfade (hero split parity) */}
         <div
-          className={`relative ${aspectClass} bg-[#121417] overflow-hidden mb-8 shadow-2xl`}
+          className={`relative shrink-0 ${aspectClass}`}
+          style={{
+            minHeight: "clamp(360px, 62.4vmin, 576px)",
+            perspective: "1500px",
+          }}
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
             <motion.div
               key={activeSlide}
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute inset-0"
+              custom={carouselCustom}
+              variants={liquidCarouselBgVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              style={{
+                transformStyle: "preserve-3d",
+                backfaceVisibility: "hidden",
+              }}
+              className="absolute inset-0 overflow-hidden rounded-sm bg-[#121417]"
             >
-              {slides[activeSlide]?.image ? (
+              {imageSrc ? (
                 <Image
-                  src={slides[activeSlide].image}
+                  src={imageSrc}
                   alt={slides[activeSlide].title}
                   fill
-                  sizes="100vw"
-                  className="object-cover opacity-80"
-                  priority
+                  sizes="(max-width: 768px) 100vw, 896px"
+                  className="object-cover object-center opacity-90"
+                  priority={activeSlide === 0}
                 />
               ) : (
                 <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[#121417] to-black/80" />
               )}
 
-              {/* Subtle Overlay Gradients */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col items-center justify-end pb-12 md:pb-24 px-8 text-center">
-                <motion.h3
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.08, duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-gh-h3 md:text-gh-h2 font-philosopher text-white"
-                  style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+              <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
+
+              <div className="absolute inset-x-0 bottom-0 z-[2] flex flex-col items-center justify-end pb-[clamp(1.25rem,3.5vw,2.75rem)] px-[clamp(1rem,3vw,2rem)] sm:px-6 md:px-8 text-center">
+                <h3
+                  className="text-gh-h3 md:text-gh-h2 font-philosopher text-white mb-[clamp(5px,1.2vw,12px)]"
                 >
-                  {slides[activeSlide].title}
-                </motion.h3>
-                <motion.p
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.14, duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-white/70 font-manrope text-gh-body max-w-2xl mx-auto leading-relaxed"
-                >
-                  {slides[activeSlide].desc}
-                </motion.p>
+                  {slides[activeSlide]?.title}
+                </h3>
+                <p className="text-white/75 font-manrope text-gh-body max-w-2xl mx-auto leading-relaxed">
+                  {slides[activeSlide]?.desc}
+                </p>
               </div>
             </motion.div>
           </AnimatePresence>

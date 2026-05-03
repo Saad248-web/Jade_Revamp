@@ -246,7 +246,7 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
-          className="absolute z-10 bottom-6 md:bottom-10 inset-x-0 mx-auto w-fit flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+          className="absolute z-10 inset-x-0 mx-auto w-fit flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity max-lg:bottom-[calc(7rem+env(safe-area-inset-bottom))] lg:bottom-10"
         >
           <span className="text-gh-label tracking-[0.2em] font-manrope text-white/60 uppercase">
             Scroll to Experience

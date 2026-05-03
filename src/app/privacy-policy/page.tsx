@@ -4,7 +4,17 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Privacy Policy and Booking Rules for Jade Retreats.",
+  description:
+    "Privacy Policy and booking-data practices for Jade Hospitainment: how enquiries, Villa stays, weddings, and site usage are handled in Karnataka/Bangalore-based operations.",
+  alternates: { canonical: "https://jadehospitainment.com/privacy-policy" },
+  openGraph: {
+    title: "Privacy Policy | Jade Hospitainment",
+    description:
+      "Privacy Policy and Booking Rules covering Jade Hospitainment digital platforms and retreats.",
+    url: "https://jadehospitainment.com/privacy-policy",
+    locale: "en_IN",
+    type: "website",
+  },
 };
 
 export default function PrivacyPolicyPage() {

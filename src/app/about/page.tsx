@@ -10,8 +10,16 @@ import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import GlassStatsBanner from "@/components/GlassStatsBanner";
 import TrustedBySection from "@/components/TrustedBySection";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useAnimation } from "@/context/AnimationContext";
+import {
+  CAROUSEL_CROSSFADE,
+  usePreloadNeighborImages,
+} from "@/lib/carouselMotion";
+import {
+  liquidCarouselBgVariants,
+  type HeroSplitCustom,
+} from "@/lib/heroSplitCarouselVariants";
 
 const OFFERINGS = [
   {
@@ -50,18 +58,34 @@ const TEAM_PLACEHOLDERS = [
 export default function AboutPage() {
   const { setEnquireOverlayOpen } = useAnimation();
   const [currentOffering, setCurrentOffering] = React.useState(0);
+  const [offeringDirection, setOfferingDirection] = React.useState(0);
+  const reducedMotion = useReducedMotion();
   const [hoverPreviewSrc, setHoverPreviewSrc] = React.useState<string | null>(
     null,
   );
 
-  const nextOffering = () =>
+  const offeringCarouselCustom: HeroSplitCustom = {
+    dir: offeringDirection,
+    lowFx: !!reducedMotion,
+  };
+
+  const nextOffering = () => {
+    setOfferingDirection(1);
     setCurrentOffering((prev) => (prev + 1) % OFFERINGS.length);
-  const prevOffering = () =>
+  };
+  const prevOffering = () => {
+    setOfferingDirection(-1);
     setCurrentOffering(
       (prev) => (prev - 1 + OFFERINGS.length) % OFFERINGS.length,
     );
+  };
 
   const offering = OFFERINGS[currentOffering];
+
+  usePreloadNeighborImages(
+    OFFERINGS.map((o) => o.image),
+    currentOffering,
+  );
 
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
@@ -233,15 +257,23 @@ export default function AboutPage() {
           </div>
 
           {/* Carousel Slide */}
-          <div className="relative flex-1 max-h-[540px] md:max-h-[700px] lg:max-h-[820px] w-full rounded-none overflow-hidden group min-h-0 mx-auto">
-            <AnimatePresence mode="wait">
+          <div
+            className="relative flex-1 max-h-[540px] md:max-h-[700px] lg:max-h-[820px] w-full rounded-none overflow-hidden group min-h-0 mx-auto"
+            style={{ perspective: "1500px" }}
+          >
+            <AnimatePresence mode="sync" initial={false} custom={offeringCarouselCustom}>
               <motion.div
                 key={currentOffering}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
+                custom={offeringCarouselCustom}
+                variants={liquidCarouselBgVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
                 className="absolute inset-0 w-full h-full border border-white/10"
+                style={{
+                  transformStyle: "preserve-3d",
+                  backfaceVisibility: "hidden",
+                }}
               >
                 {/* Background Image with Overlay */}
                 <div className="absolute inset-0">
@@ -250,7 +282,7 @@ export default function AboutPage() {
                     alt={offering.title}
                     fill
                     className="object-cover"
-                    priority
+                    priority={currentOffering === 0}
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
                   <div className="absolute inset-0 opacity-[0.07] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:18px_18px]" />
@@ -258,17 +290,25 @@ export default function AboutPage() {
 
                 <div className="absolute inset-0 flex flex-col items-start justify-center p-8 md:p-16 lg:p-24 text-left max-w-4xl">
                   <motion.h3
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
+                    transition={{
+                      delay: 0.06,
+                      duration: CAROUSEL_CROSSFADE.duration,
+                      ease: CAROUSEL_CROSSFADE.ease,
+                    }}
                     className="text-gh-h2 font-philosopher text-white mb-4"
                   >
                     {offering.title}
                   </motion.h3>
                   <motion.p
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
+                    transition={{
+                      delay: 0.1,
+                      duration: CAROUSEL_CROSSFADE.duration,
+                      ease: CAROUSEL_CROSSFADE.ease,
+                    }}
                     className="text-white/80 max-w-xl font-manrope text-gh-body leading-relaxed"
                   >
                     {offering.description}

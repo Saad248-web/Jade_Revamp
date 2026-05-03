@@ -21,19 +21,18 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { VILLAS } from "@/lib/mockData";
+import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
+import { isBookingDetailsValid } from "@/lib/bookingDetailsValidation";
+import type { UserDetails } from "@/lib/types";
 import { useBooking, DateRange, Guests } from "@/context/BookingContext";
+import BookingDetailsFormFields from "@/components/booking/BookingDetailsFormFields";
+import { initiatePayment } from "@/lib/paymentService";
+import { openRazorpayCheckout } from "@/lib/payments/razorpayCheckout";
 
 /* ─────────────────────────────────────────────────────────────────────
    Types
 ───────────────────────────────────────────────────────────────────── */
 type Step = "dates" | "guests" | "details" | "review";
-
-interface UserDetails {
-  fullName: string;
-  phone: string;
-  email: string;
-  notes: string;
-}
 
 /* ─────────────────────────────────────────────────────────────────────
    Static data
@@ -445,49 +444,23 @@ function StepGuests({
 function StepDetails({
   details,
   setDetails,
+  forceShowErrors,
 }: {
   details: UserDetails;
   setDetails: (d: UserDetails) => void;
+  forceShowErrors: boolean;
 }) {
   return (
     <div className="flex flex-col h-full">
       <div
-        className="flex-1 overflow-y-auto px-5 md:px-8 py-4 pb-28 space-y-4"
+        className="flex-1 overflow-y-auto px-5 md:px-8 py-4 pb-28"
         data-lenis-prevent
       >
-        <div className="relative border border-white/20 focus-within:border-[#EFCD62] transition-colors">
-          <label className="absolute -top-2.5 left-3 bg-[#0D4032] px-1 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
-            Full Name
-          </label>
-          <input
-            type="text"
-            value={details.fullName}
-            onChange={(e) =>
-              setDetails({ ...details, fullName: e.target.value })
-            }
-            className="w-full bg-transparent px-4 py-3.5 text-white text-gh-body placeholder:text-white/30 focus:outline-none font-manrope"
-          />
-        </div>
-        <input
-          type="tel"
-          placeholder="Phone Number*"
-          value={details.phone}
-          onChange={(e) => setDetails({ ...details, phone: e.target.value })}
-          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors font-manrope"
-        />
-        <input
-          type="email"
-          placeholder="Email*"
-          value={details.email}
-          onChange={(e) => setDetails({ ...details, email: e.target.value })}
-          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors font-manrope"
-        />
-        <textarea
-          rows={4}
-          placeholder="Additional requests or note to the host"
-          value={details.notes}
-          onChange={(e) => setDetails({ ...details, notes: e.target.value })}
-          className="w-full bg-transparent border border-white/20 focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors resize-none font-manrope"
+        <BookingDetailsFormFields
+          details={details}
+          setDetails={setDetails}
+          forceShowErrors={forceShowErrors}
+          idPrefix="book"
         />
       </div>
     </div>
@@ -548,10 +521,17 @@ function StepReview({
                 {selectedVilla.name}
               </h3>
               <div className="flex flex-col gap-1.5 text-white/80 text-gh-desc font-manrope">
-                <span className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-[#EFCD62]" />{" "}
-                  {selectedVilla.location}
-                </span>
+                <a
+                  href={getVillaGoogleMapsUrl(selectedVilla)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 w-fit rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-[#EFCD62] shrink-0" />{" "}
+                  <span className="hover:underline underline-offset-2">
+                    {selectedVilla.location}
+                  </span>
+                </a>
                 {selectedVilla.stats.stay && (
                   <span className="flex items-center gap-2">
                     <Bed className="w-3.5 h-3.5 text-[#EFCD62]" />{" "}
@@ -718,21 +698,87 @@ function SuccessScreen({
   villaName,
   checkIn,
   checkOut,
+  totalPriceRupees,
+  guestName,
+  guestEmail,
+  guestPhone,
   onClose,
 }: {
   bookingId: string;
   villaName: string;
   checkIn: { month: number; day: number } | null;
   checkOut: { month: number; day: number } | null;
+  totalPriceRupees: number;
+  guestName: string;
+  guestEmail: string;
+  guestPhone: string;
   onClose: () => void;
 }) {
+  const [payBusy, setPayBusy] = useState(false);
+  const [payError, setPayError] = useState<string | null>(null);
+  const [paidNote, setPaidNote] = useState<string | null>(null);
+
+  const shortRef = bookingId.slice(0, 8).toUpperCase();
+
+  const handleRazorpay = async () => {
+    setPayError(null);
+    setPayBusy(true);
+    try {
+      const receipt = `book-${bookingId.replace(/-/g, "").slice(0, 36)}`;
+      const session = await initiatePayment(totalPriceRupees, receipt, {
+        bookingUuid: bookingId,
+      });
+
+      if (
+        !session.gatewayConfigured ||
+        !session.razorpayOrderId ||
+        !session.razorpayKeyId ||
+        session.amountSubunits == null
+      ) {
+        setPayError(
+          "Online payment is not available right now. We'll contact you to complete payment.",
+        );
+        return;
+      }
+
+      await openRazorpayCheckout({
+        keyId: session.razorpayKeyId,
+        amountPaise: session.amountSubunits,
+        currency: "INR",
+        orderId: session.razorpayOrderId,
+        name: "Jade Hospitainment",
+        description: `Booking ${shortRef}`,
+        prefill: {
+          name: guestName,
+          email: guestEmail,
+          contact: guestPhone.replace(/\s/g, ""),
+        },
+      });
+
+      setPaidNote(
+        "Payment submitted. You'll receive confirmation shortly once it is verified.",
+      );
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "";
+      if (msg === "checkout_dismissed") {
+        setPayError(null);
+      } else {
+        setPayError(
+          msg || "Could not start payment. You can try again or we'll reach out.",
+        );
+      }
+    } finally {
+      setPayBusy(false);
+    }
+  };
+
   return (
-    <div className="h-[100svh] bg-[#0D4032] flex flex-col items-center justify-center px-6 text-center">
+    <div className="h-[100svh] bg-[#0D4032] flex flex-col items-center justify-center px-6 text-center overflow-y-auto py-10">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="flex flex-col items-center max-w-sm"
+        className="flex flex-col items-center max-w-sm w-full"
       >
         <div className="w-20 h-20 rounded-full border-2 border-[#EFCD62] flex items-center justify-center mb-8">
           <CheckCircle2 className="w-10 h-10 text-[#EFCD62]" />
@@ -747,20 +793,52 @@ function SuccessScreen({
         <p className="text-white/60 font-manrope text-gh-body mb-8">
           {formatDate(checkIn)} → {formatDate(checkOut)}
         </p>
-        <div className="bg-white/5 border border-white/10 px-6 py-4 mb-8 w-full">
+        <div className="bg-white/5 border border-white/10 px-6 py-4 mb-4 w-full">
           <p className="text-white/40 text-gh-label font-manrope uppercase tracking-widest mb-1">
-            Booking ID
+            Booking reference
           </p>
-          <p className="text-[#EFCD62] font-manrope font-bold text-gh-body break-all">
-            {bookingId.split("-")[0].toUpperCase()}
+          <p
+            className="text-[#EFCD62] font-manrope font-bold text-gh-body"
+            title={bookingId}
+          >
+            {shortRef}
+          </p>
+          <p className="text-white/35 text-[10px] font-manrope break-all mt-2 text-left">
+            {bookingId}
           </p>
         </div>
-        <p className="text-white/50 text-gh-label font-manrope mb-8">
-          We'll reach out on the phone/email you provided to confirm details.
-        </p>
+
+        {paidNote ? (
+          <p className="text-emerald-300/90 text-gh-label font-manrope mb-6">
+            {paidNote}
+          </p>
+        ) : (
+          <>
+            <p className="text-white/50 text-gh-label font-manrope mb-3">
+              Pay {formatRupees(totalPriceRupees)} now with Razorpay, or we'll
+              follow up on the phone or email you provided.
+            </p>
+            {payError && (
+              <p className="text-amber-200/90 text-gh-label font-manrope mb-4 px-1">
+                {payError}
+              </p>
+            )}
+            <button
+              type="button"
+              disabled={payBusy}
+              onClick={handleRazorpay}
+              className={`w-full mb-3 py-3.5 font-manrope font-bold text-gh-label tracking-widest uppercase transition-colors flex items-center justify-center gap-2 ${payBusy ? "bg-[#EFCD62]/50 text-[#0D4032]/70 cursor-not-allowed" : "bg-[#EFCD62] text-[#0D4032] hover:bg-white"}`}
+            >
+              {payBusy && <Loader2 className="w-4 h-4 animate-spin" />}
+              {payBusy ? "OPENING…" : `PAY ${formatRupees(totalPriceRupees)}`}
+            </button>
+          </>
+        )}
+
         <button
+          type="button"
           onClick={onClose}
-          className="w-full bg-[#EFCD62] text-[#0D4032] py-3.5 font-manrope font-bold text-gh-label tracking-widest uppercase hover:bg-white transition-colors"
+          className="w-full border border-white/20 text-white py-3.5 font-manrope font-bold text-gh-label tracking-widest uppercase hover:bg-white/10 transition-colors"
         >
           BACK TO HOME
         </button>
@@ -817,10 +895,15 @@ function BookPageContent() {
   const [bookingResult, setBookingResult] = useState<{ id: string } | null>(
     null,
   );
+  const [detailsForceErrors, setDetailsForceErrors] = useState(false);
 
   useEffect(() => {
     if (villaParam) setSelectedVillaId(villaParam);
   }, [villaParam]);
+
+  useEffect(() => {
+    if (step !== "details") setDetailsForceErrors(false);
+  }, [step]);
 
   // After hydration: if villa is pre-selected and context already has dates + guests
   // (user came through the flow: /book → dates → guests → /villas → BOOK VILLA),
@@ -864,6 +947,7 @@ function BookPageContent() {
     setDetails({ fullName: "", phone: "", email: "", notes: "" });
     setSelectedAddOns([]);
     setSubmitError(null);
+    setDetailsForceErrors(false);
   };
 
   const goNextFromGuests = () => {
@@ -888,6 +972,12 @@ function BookPageContent() {
   /* ── Submit booking to API ── */
   const handlePayNow = useCallback(async () => {
     if (!selectedVilla || !dateRange.checkIn || !dateRange.checkOut) return;
+    if (!isBookingDetailsValid(details)) {
+      setDetailsForceErrors(true);
+      setSubmitError("Please correct your contact details before paying.");
+      setStep("details");
+      return;
+    }
 
     setIsSubmitting(true);
     setSubmitError(null);
@@ -951,12 +1041,17 @@ function BookPageContent() {
 
   /* ── Show success screen ── */
   if (bookingResult) {
+    const totalPriceRupees = basePrice + addOnTotal + NIGHT_TAX;
     return (
       <SuccessScreen
         bookingId={bookingResult.id}
         villaName={selectedVilla?.name ?? "Jade Villa"}
         checkIn={dateRange.checkIn}
         checkOut={dateRange.checkOut}
+        totalPriceRupees={totalPriceRupees}
+        guestName={details.fullName}
+        guestEmail={details.email}
+        guestPhone={details.phone}
         onClose={() => router.push("/")}
       />
     );
@@ -1016,27 +1111,38 @@ function BookPageContent() {
     }
 
     if (step === "details") {
-      const isValid =
-        details.fullName.trim() && details.phone.trim() && details.email.trim();
+      const canProceed = isBookingDetailsValid(details);
       return (
-        <div className="flex items-center justify-between">
-          <span className="text-[#EFCD62] font-manrope text-gh-label font-bold">
-            {formatRupees(basePrice)} onwards
-          </span>
-          <div className="flex gap-3">
-            <button
-              onClick={goBackFromDetails}
-              className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
-            >
-              BACK
-            </button>
-            <button
-              disabled={!isValid}
-              onClick={() => setStep("review")}
-              className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${isValid ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
-            >
-              CONTINUE
-            </button>
+        <div className="flex flex-col gap-3">
+          <p className="text-white/35 text-[10px] md:text-[11px] font-manrope text-center sm:text-left px-1">
+            Fields marked * are required. Continue is enabled once name, phone,
+            and email are valid.
+          </p>
+          <div className="flex items-center justify-between">
+            <span className="text-[#EFCD62] font-manrope text-gh-label font-bold">
+              {formatRupees(basePrice)} onwards
+            </span>
+            <div className="flex gap-3">
+              <button
+                onClick={goBackFromDetails}
+                className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
+              >
+                BACK
+              </button>
+              <button
+                onClick={() => {
+                  if (!canProceed) {
+                    setDetailsForceErrors(true);
+                    return;
+                  }
+                  setDetailsForceErrors(false);
+                  setStep("review");
+                }}
+                className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${canProceed ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white" : "bg-white/10 text-white/30 cursor-pointer"}`}
+              >
+                CONTINUE
+              </button>
+            </div>
           </div>
         </div>
       );
@@ -1190,7 +1296,11 @@ function BookPageContent() {
               transition={{ duration: 0.2 }}
               className="flex-1 overflow-hidden flex flex-col min-h-0"
             >
-              <StepDetails details={details} setDetails={setDetails} />
+              <StepDetails
+                details={details}
+                setDetails={setDetails}
+                forceShowErrors={detailsForceErrors}
+              />
             </motion.div>
           )}
           {step === "review" && (

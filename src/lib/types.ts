@@ -98,6 +98,8 @@ export interface VillaFAQ {
 
 export interface Villa {
   id: string;
+  /** When true, excluded from `/villas` listing only (deep links unchanged). */
+  hideFromVillasDirectory?: boolean;
   name: string;
   type: string;
   location: string;
@@ -125,6 +127,10 @@ export interface Villa {
     address: string;
     distance: string;
     nearby: Array<{ label: string; distance: string }>;
+    /** Full Google Maps URL when you need an exact listing pin */
+    googleMapsUrl?: string;
+    /** Prefer over address search when set */
+    coordinates?: { lat: number; lng: number };
   };
   activities?: VillaActivity[];
   categorizedSpaces?: VillaSpaceGroup[];

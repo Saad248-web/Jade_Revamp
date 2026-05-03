@@ -232,12 +232,12 @@ export default function VillaSpacesPage() {
                 </div>
               </div>
 
-              <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-none snap-x -mx-6 px-6 md:mx-0 md:px-0">
+              <div className="jade-hscroll-track flex gap-4 overflow-x-auto pb-4 scrollbar-none snap-x -mx-6 px-6 md:mx-0 md:px-0">
                 {(space.images.length > 0 ? space.images : ["", ""]).map(
                   (img: string, idx: number) => (
                     <div
                       key={idx}
-                      className="relative min-w-[300px] md:min-w-[500px] aspect-[4/3] md:aspect-[16/9] bg-white/5 snap-start overflow-hidden group"
+                      className="relative min-w-[300px] md:min-w-[500px] aspect-[4/3] md:aspect-[16/9] bg-white/5 snap-start overflow-hidden group jade-hscroll-view-item"
                     >
                       {img && img.length > 0 && (
                         <Image

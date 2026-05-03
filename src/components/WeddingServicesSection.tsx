@@ -1,10 +1,19 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import {
+  CAROUSEL_CROSSFADE,
+  usePreloadNeighborSlideImages,
+} from "@/lib/carouselMotion";
+import {
+  heroSplitBgVariants,
+  heroSplitCardVariants,
+  type HeroSplitCustom,
+} from "@/lib/heroSplitCarouselVariants";
 
 function pick(images: string[], idx: number) {
   if (!images.length) return "";
@@ -52,7 +61,9 @@ const SERVICES_SLIDES = [
 
 export default function WeddingServicesSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
   const [serviceImages, setServiceImages] = useState<string[]>([]);
   const [preWeddingImages, setPreWeddingImages] = useState<string[]>([]);
 
@@ -102,11 +113,20 @@ export default function WeddingServicesSection() {
 
   const currentSlide = slides[currentIndex] || SERVICES_SLIDES[0];
 
+  usePreloadNeighborSlideImages(slides, currentIndex);
+
+  const carouselCustom: HeroSplitCustom = {
+    dir: direction,
+    lowFx: !!reducedMotion,
+  };
+
   const handlePrev = () => {
+    setDirection(-1);
     setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
+    setDirection(1);
     setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   };
 
@@ -118,23 +138,40 @@ export default function WeddingServicesSection() {
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
       {/* ── TOP AREA (80vh) — background image ── */}
-      <div className="relative w-full h-[80vh] z-0 overflow-hidden shrink-0">
-        <div className="absolute inset-0 w-full h-full">
-          {currentSlide.bgImage ? (
-            <Image
-              src={currentSlide.bgImage}
-              alt="Background"
-              fill
-              className="object-cover"
-              sizes="100vw"
-              priority
-              unoptimized
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0D4032] to-[#0D4032]" />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0D4032]/90 via-[#0D4032]/25 to-[#0D4032]/55" />
-        </div>
+      <div
+        className="relative w-full h-[80vh] z-0 overflow-hidden shrink-0"
+        style={{ perspective: "1500px" }}
+      >
+        <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
+          <motion.div
+            key={`bg-${currentIndex}-${currentSlide.bgImage || "empty"}`}
+            custom={carouselCustom}
+            variants={heroSplitBgVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="absolute inset-0 w-full h-full"
+            style={{
+              transformStyle: "preserve-3d",
+              backfaceVisibility: "hidden",
+            }}
+          >
+            {currentSlide.bgImage ? (
+              <Image
+                src={currentSlide.bgImage}
+                alt="Background"
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority={currentIndex === 0}
+                unoptimized
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0D4032] to-[#0D4032]" />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0D4032]/90 via-[#0D4032]/25 to-[#0D4032]/55" />
+          </motion.div>
+        </AnimatePresence>
 
         {/* ── TEXT ── */}
         <div className="absolute inset-x-0 top-[10vh] z-20 flex flex-col items-center text-center px-6 sm:px-10 pointer-events-none">
@@ -156,7 +193,7 @@ export default function WeddingServicesSection() {
             key={`sub-${currentIndex}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.25 }}
+            transition={{ delay: 0.08, duration: CAROUSEL_CROSSFADE.duration }}
             className="font-manrope text-gh-carousel-sub text-white/80 leading-relaxed max-w-xl mx-auto line-clamp-3"
           >
             {currentSlide.subtext}
@@ -194,27 +231,32 @@ export default function WeddingServicesSection() {
                       aspect-[4/3]
                       shadow-[0_20px_50px_rgba(0,0,0,0.55)] overflow-hidden border border-white/20"
       >
-        <motion.div
-          key={`card-${currentIndex}`}
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="w-full h-full relative"
-        >
-          {currentSlide.cardImage ? (
-            <Image
-              src={currentSlide.cardImage}
-              alt="Feature"
-              fill
-              className="object-cover"
-              sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
-              priority
-              unoptimized
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0D4032] to-black/80" />
-          )}
-        </motion.div>
+        <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
+          <motion.div
+            key={`card-${currentIndex}-${currentSlide.cardImage || "empty"}`}
+            custom={carouselCustom}
+            variants={heroSplitCardVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="w-full h-full relative"
+          >
+            {currentSlide.cardImage ? (
+              <Image
+                src={currentSlide.cardImage}
+                alt="Feature"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
+                priority={currentIndex === 0}
+                unoptimized
+                loading="eager"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0D4032] to-black/80" />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );

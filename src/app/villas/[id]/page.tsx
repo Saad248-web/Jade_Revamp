@@ -40,7 +40,6 @@ import {
   Youtube,
   LayoutGrid,
   Leaf,
-  Plus,
   HandPlatter,
   Bell,
   Sparkles,
@@ -63,6 +62,11 @@ import { DOME_VIDEO_URLS, getYouTubeId } from "@/lib/videoUtils";
 import { useAnimation } from "@/context/AnimationContext";
 import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
 import { getHeroOverrideForId } from "@/lib/heroOverrides";
+import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
+import VillaPricingBlocks, {
+  buildDetailPagePricingBlocks,
+} from "@/components/experience/VillaPricingBlocks";
+import ExperienceFaqAccordion from "@/components/experience/ExperienceFaqAccordion";
 
 const normalizeImageSrc = (src: string) => {
   // Local `public/` asset paths can contain spaces; `next/image` expects URI-encoded paths.
@@ -180,7 +184,6 @@ export default function VillaDetailsPage() {
   const [currentSpaceIndex, setCurrentSpaceIndex] = useState(0);
   const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("spaces");
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
   >({});
@@ -191,6 +194,30 @@ export default function VillaDetailsPage() {
     "blue" | "red" | "yellow"
   >("blue");
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
+
+  const mapsHref = useMemo(
+    () => getVillaGoogleMapsUrl(villa ?? {}),
+    [villa],
+  );
+
+  const detailPricingBlocks = useMemo(
+    () =>
+      villa?.pricing
+        ? buildDetailPagePricingBlocks(villa.pricing as any)
+        : [],
+    [villa?.pricing],
+  );
+
+  const villaFooterPriceDisplay = useMemo(() => {
+    const p = villa?.pricing as Record<string, unknown> | undefined;
+    const stayPkg = (p?.stay as { packages?: { price?: string }[] })?.packages?.[0]
+      ?.price;
+    const eventPkg = (p?.event as { packages?: { price?: string }[] })?.packages?.[0]
+      ?.price;
+    const raw = stayPkg || eventPkg;
+    if (!raw) return null;
+    return String(raw).replace(/\s*\+\s*taxes\s*/i, "").trim();
+  }, [villa?.pricing]);
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections((prev) => ({ ...prev, [sectionId]: !prev[sectionId] }));
@@ -480,7 +507,7 @@ export default function VillaDetailsPage() {
   const domeVideoUrls = DOME_VIDEO_URLS;
 
   return (
-    <main className="bg-[#1A1C1E] min-h-screen relative">
+    <main className="bg-jade-green min-h-screen relative">
       {/* Top Navigation - Scrolls away with page */}
       <div className="absolute top-8 left-6 md:left-12 right-6 md:right-12 flex justify-between items-center z-[60] pointer-events-none">
         <button
@@ -498,7 +525,7 @@ export default function VillaDetailsPage() {
         </button>
       </div>
       {/* HERO / CAROUSEL SECTION */}
-      <section className="relative h-[60vh] md:h-[80vh] w-full bg-[#1A1C1E]">
+      <section className="relative h-[60vh] md:h-[80vh] w-full bg-jade-green">
         {/* Image (Interactive Carousel) */}
         <div className="absolute inset-0">
           {activeHeroSrc && (
@@ -559,7 +586,7 @@ export default function VillaDetailsPage() {
         </div>
       </section>
       {/* CONTENT SECTION */}
-      <div className="relative bg-[#1A1C1E] rounded-none z-10 px-6 py-8 md:px-12 md:py-16 max-w-7xl mx-auto">
+      <div className="relative bg-jade-green rounded-none z-10 px-6 py-8 md:px-12 md:py-16 max-w-7xl mx-auto">
         {/* HEADER INFO */}
         <div className="flex flex-col gap-2 mb-8">
           <span className="text-[#EFCD62] text-[10px] md:text-gh-label font-bold tracking-[0.2em] uppercase">
@@ -568,12 +595,18 @@ export default function VillaDetailsPage() {
           <h1 className="text-[28px] md:text-[32px] font-philosopher text-white mb-1 leading-tight">
             {villa.name}
           </h1>
-          <div className="flex items-center gap-2.5 text-white/90 mt-2">
-            <MapPin className="w-5 h-5 text-white/70" />
-            <span className="font-manrope text-[15px] md:text-[18px]">
+          <a
+            href={mapsHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-2.5 text-white/90 mt-2 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/60"
+            aria-label={`Open ${villa.name} location in Google Maps`}
+          >
+            <MapPin className="w-5 h-5 text-white/70 shrink-0" />
+            <span className="font-manrope text-[15px] md:text-[18px] underline-offset-4 group-hover:underline">
               {villa.location}
             </span>
-          </div>
+          </a>
         </div>
 
         {/* AMENITY SUMMARY LINE */}
@@ -616,7 +649,7 @@ export default function VillaDetailsPage() {
         </div>
 
         {/* HORIZONTAL AMENITY CARDS */}
-        <div className="flex gap-3 overflow-x-auto pb-6 mb-12 snap-x scrollbar-none -mr-6 pr-6 md:-mr-12 md:pr-12">
+        <div className="jade-hscroll-track flex gap-3 overflow-x-auto pb-6 mb-12 snap-x scrollbar-none -mr-6 pr-6 md:-mr-12 md:pr-12">
           {villa.amenities?.map((amenity, idx) => {
             const Icon = getIcon(amenity.icon);
             // Splitting logic for label and sublabel (heuristic)
@@ -631,7 +664,7 @@ export default function VillaDetailsPage() {
             return (
               <div
                 key={idx}
-                className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] bg-white/10 backdrop-blur-[12px] flex flex-col items-center justify-between text-center px-4 py-5 rounded-none snap-start group flex-shrink-0"
+                className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] bg-white/10 backdrop-blur-[12px] flex flex-col items-center justify-between text-center px-4 py-5 rounded-none snap-start group flex-shrink-0 jade-hscroll-view-item"
                 style={{
                   border: "1px solid",
                   borderImageSource:
@@ -953,7 +986,7 @@ export default function VillaDetailsPage() {
                       unoptimized
                     />
                   )}
-                  <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-[#1A1C1E]/95 via-[#1A1C1E]/50 to-transparent z-10" />
+                  <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-jade-green/95 via-jade-green/50 to-transparent z-10" />
                   <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 flex flex-col items-center justify-end text-center z-20">
                     <h4 className="text-white font-philosopher text-[28px] md:text-[36px] mb-3">
                       {currentActivity.title}
@@ -973,7 +1006,7 @@ export default function VillaDetailsPage() {
               <h3 className="text-gh-h1 font-philosopher text-white mb-12">
                 Why Jade Wedding Venues
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 md:gap-y-10">
                 {[
                   {
                     title: "FULLY PRIVATE VENUES",
@@ -992,13 +1025,15 @@ export default function VillaDetailsPage() {
                     desc: "Venues that support intimate gatherings as well as large, multi-event weddings.",
                   },
                 ].map((item, idx) => (
-                  <div key={idx} className="flex gap-4">
-                    <div className="mt-1 w-2 h-2 rotate-45 bg-jade-gold flex-shrink-0" />
-                    <div>
-                      <h4 className="text-white font-manrope font-bold tracking-widest text-[13px] mb-3 uppercase">
+                  <div key={idx} className="flex gap-4 sm:gap-5">
+                    <div className="mt-1 flex-shrink-0">
+                      <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rotate-45 bg-jade-gold" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <h4 className="text-white font-manrope font-bold tracking-widest text-[13px] uppercase">
                         {item.title}
                       </h4>
-                      <p className="text-white/60 text-gh-body leading-relaxed">
+                      <p className="text-white/60 text-gh-desc sm:text-gh-body leading-relaxed">
                         {item.desc}
                       </p>
                     </div>
@@ -1042,129 +1077,31 @@ export default function VillaDetailsPage() {
               </div>
             </section>
 
-            {/* PRICING SECTION */}
-            {villa.pricing && (
-              <section
-                id="pricing"
-                className="py-10 md:py-16 border-t border-white/5 w-full"
-              >
-                <h3 className="text-gh-h1 font-philosopher text-white mb-8">
-                  Pricing
-                </h3>
-                <div className="flex flex-col gap-8">
-                  {/* Stay Experience */}
-                  {villa.pricing.stay && (
-                    <div className="border border-white/10 p-4 md:p-6 bg-transparent">
-                      <h4 className="text-[#EFCD62] text-gh-h2 font-bold font-manrope mb-1">
-                        {villa.pricing.stay.title}
-                      </h4>
-                      <p className="text-white/60 text-gh-body mb-6 max-w-xs">
-                        {villa.pricing.stay.subtitle}
+            {/* PRICING SECTION — same card typography as experience overlays */}
+            {detailPricingBlocks.length > 0 && (
+                <section
+                  id="pricing"
+                  className="py-10 md:py-16 border-t border-white/5 w-full text-white"
+                >
+                  <VillaPricingBlocks
+                    sectionTitle="Pricing"
+                    blocks={detailPricingBlocks}
+                    footnote={
+                      <p className="text-white/40 text-gh-label mt-4 font-manrope leading-relaxed">
+                        Note: Prices are base rates and may vary based on
+                        season, day of week, and specific requirements.
+                        Additional charges may apply for decorations, catering,
+                        and extended hours.
                       </p>
-                      <div className="flex flex-col gap-3 mb-6">
-                        {villa.pricing.stay.packages.map(
-                          (pkg: any, i: number) => (
-                            <div
-                              key={i}
-                              className="flex justify-between items-start md:items-center bg-[#0B2C23] p-4 rounded-none border border-white/5"
-                            >
-                              <div>
-                                <div className="text-white font-bold text-gh-body leading-tight mb-1">
-                                  {pkg.label}
-                                </div>
-                                {pkg.sublabel && (
-                                  <div className="text-white/40 text-gh-label">
-                                    {pkg.sublabel}
-                                  </div>
-                                )}
-                              </div>
-                              <div className="text-jade-gold font-manrope text-gh-body font-bold text-right shrink-0">
-                                {pkg.price}
-                              </div>
-                            </div>
-                          ),
-                        )}
-                      </div>
-                      <p className="text-white/50 text-[10px] font-manrope mb-4">
-                        Included:
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {villa.pricing.stay.features.map(
-                          (feat: string, i: number) => (
-                            <span
-                              key={i}
-                              className="bg-[#0B2C23] text-white/80 px-4 py-2 text-gh-label rounded-none border border-white/5 font-medium"
-                            >
-                              {feat}
-                            </span>
-                          ),
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  {/* Event Experience */}
-                  {(villa.pricing as any).event && (
-                    <div className="border border-white/10 p-4 md:p-6 bg-transparent">
-                      <h4 className="text-[#EFCD62] text-gh-h2 font-bold font-manrope mb-1">
-                        {(villa.pricing as any).event.title}
-                      </h4>
-                      <p className="text-white/60 text-gh-body mb-6 max-w-xs">
-                        {(villa.pricing as any).event.subtitle}
-                      </p>
-                      <div className="flex flex-col gap-3 mb-6">
-                        {(villa.pricing as any).event.packages.map(
-                          (pkg: any, i: number) => (
-                            <div
-                              key={i}
-                              className="flex justify-between items-start md:items-center bg-[#0B2C23] p-4 rounded-none border border-white/5"
-                            >
-                              <div>
-                                <div className="text-white font-bold text-gh-body leading-tight mb-1">
-                                  {pkg.label}
-                                </div>
-                                {pkg.sublabel && (
-                                  <div className="text-white/40 text-gh-label">
-                                    {pkg.sublabel}
-                                  </div>
-                                )}
-                              </div>
-                              <div className="text-jade-gold font-manrope text-gh-body font-bold text-right shrink-0">
-                                {pkg.price}
-                              </div>
-                            </div>
-                          ),
-                        )}
-                      </div>
-                      <p className="text-white/50 text-[10px] font-manrope mb-4">
-                        Included:
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {(villa.pricing as any).event.features.map(
-                          (feat: string, i: number) => (
-                            <span
-                              key={i}
-                              className="bg-[#0B2C23] text-white/80 px-4 py-2 text-gh-label rounded-none border border-white/5 font-medium"
-                            >
-                              {feat}
-                            </span>
-                          ),
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <p className="text-white/40 text-[10px] mt-4 font-manrope leading-relaxed">
-                  Note: Prices are base rates and may vary based on season, day
-                  of week, and specific requirements. Additional charges may
-                  apply for decorations, catering, and extended hours.
-                </p>
-              </section>
-            )}
+                    }
+                  />
+                </section>
+              )}
           </div>
         </div>
       </section>
       {/* DARK ONYX SECTION: LOCATION, PERFECT FOR, VIDEO, FAQ */}
-      <section className="relative w-full bg-[#1A1C1E] text-white border-t border-white/5 pt-10 md:pt-16">
+      <section className="relative w-full bg-jade-green text-white border-t border-white/5 pt-10 md:pt-16">
         <div className="relative z-10 px-6 md:px-12 max-w-7xl mx-auto">
           <div className="flex flex-col max-w-4xl mx-auto">
             {villa.locationDetails && (
@@ -1172,8 +1109,14 @@ export default function VillaDetailsPage() {
                 <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                   Location
                 </h3>
-                <div className="bg-[#1A1C1E] rounded-none overflow-hidden mb-8 border border-white/10">
-                  <div className="relative w-full h-64 md:h-80">
+                <div className="bg-jade-green rounded-none overflow-hidden mb-8 border border-white/10">
+                  <a
+                    href={mapsHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative block w-full h-64 md:h-80 cursor-pointer outline-none transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#EFCD62]/70"
+                    aria-label="Open location in Google Maps"
+                  >
                     {(villa.locationDetails.mapImage || villa.image) && (
                       <Image
                         src={normalizeImageSrc(
@@ -1186,14 +1129,19 @@ export default function VillaDetailsPage() {
                         loading="lazy"
                       />
                     )}
-                  </div>
-                  <div className="p-5 md:p-6 bg-[#1A1C1E] border-t border-white/10">
-                    <div className="flex items-start gap-4">
+                  </a>
+                  <div className="p-5 md:p-6 bg-jade-green border-t border-white/10">
+                    <a
+                      href={mapsHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-start gap-4 rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/60"
+                    >
                       <MapPin className="w-5 h-5 text-jade-gold mt-1 shrink-0" />
-                      <p className="text-white text-gh-body font-manrope font-medium leading-relaxed">
+                      <p className="text-white text-gh-body font-manrope font-medium leading-relaxed group-hover:underline underline-offset-4">
                         {villa.locationDetails.address}
                       </p>
-                    </div>
+                    </a>
                     <div className="w-full bg-white/[0.03] border border-white/5 px-4 py-3 rounded-sm mt-6">
                       <p className="text-white/60 text-[12px] md:text-[13px] font-manrope">
                         {villa.locationDetails.distance}
@@ -1259,7 +1207,7 @@ export default function VillaDetailsPage() {
                     return (
                       <div
                         key={idx}
-                        className="relative aspect-square md:aspect-[4/3] bg-[#1A1C1E] group overflow-hidden border border-white/5"
+                        className="relative aspect-square md:aspect-[4/3] bg-jade-green group overflow-hidden border border-white/5"
                       >
                         {image && (
                           <Image
@@ -1393,7 +1341,7 @@ export default function VillaDetailsPage() {
               </section>
             )}
 
-            {/* FAQ SECTION */}
+            {/* FAQ SECTION — same accordion pattern as experience overlays */}
             <section
               id="faq"
               className="py-10 md:py-16 border-t border-white/5 mb-20 w-full"
@@ -1401,50 +1349,29 @@ export default function VillaDetailsPage() {
               <h3 className="text-gh-h1 font-philosopher text-white mb-8">
                 FAQ
               </h3>
-              <div className="flex flex-col gap-4">
-                {villa.faq?.map((item, idx) => {
-                  const isOpen = openFaqIndex === idx;
-                  return (
-                    <div
-                      key={idx}
-                      className="bg-[#1A1C1E] border border-white/10 p-6 md:p-8"
-                    >
-                      <div
-                        className="flex justify-between items-center gap-4 cursor-pointer group"
-                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                      >
-                        <h4 className="text-white font-bold text-gh-body leading-tight group-hover:text-jade-gold transition-colors">
-                          {item.question}
-                        </h4>
-                        <div
-                          className={`transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`}
-                        >
-                          <Plus className="w-4 h-4 text-white/40 group-hover:text-jade-gold transition-colors" />
-                        </div>
-                      </div>
-                      {isOpen && (
-                        <div className="mt-4 text-white/70 font-manrope text-sm leading-relaxed border-t border-white/10 pt-4">
-                          {item.answer}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+              {villa.faq?.length ? (
+                <ExperienceFaqAccordion
+                  items={villa.faq.map((item) => ({
+                    question: item.question,
+                    answer: item.answer,
+                  }))}
+                />
+              ) : null}
             </section>
           </div>
         </div>
       </section>
       {/* FOOTER */}
       <Footer />
-      <div className="fixed bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 py-4 z-50 transition-all flex justify-center">
+      <div className="fixed bottom-0 left-0 w-full bg-jade-green border-t border-white/10 py-4 z-50 transition-all flex justify-center">
         <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-4 px-4 md:px-12">
-          <p className="text-white text-[12px] md:text-[14px] lg:text-base font-bold font-manrope whitespace-nowrap">
-            {(villa.pricing as any)?.stay?.packages?.[0]?.price
-              ? `Starting from ${(villa.pricing as any).stay.packages[0].price.replace(" + taxes", "")}`
-              : (villa.pricing as any)?.event?.packages?.[0]?.price
-                ? `Starting from ${(villa.pricing as any).event.packages[0].price.replace(" + taxes", "")}`
-                : "Contact for pricing"}
+          <p className="font-manrope whitespace-nowrap leading-tight">
+            <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold">
+              Starting from
+            </span>{" "}
+            <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold">
+              {villaFooterPriceDisplay ?? "Contact for pricing"}
+            </span>
           </p>
           <div className="flex items-center gap-4 md:gap-6">
             <button

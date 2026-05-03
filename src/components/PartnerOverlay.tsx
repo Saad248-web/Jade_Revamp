@@ -21,6 +21,8 @@ import Link from "next/link";
 export default function PartnerOverlay() {
   const { isPartnerOverlayOpen, setPartnerOverlayOpen } = useAnimation();
   const [view, setView] = useState<"form" | "success">("form");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImages, setSelectedImages] = useState<
     { file: File; preview: string }[]
@@ -57,6 +59,8 @@ export default function PartnerOverlay() {
     // Reset view back to form after animation completes
     setTimeout(() => {
       setView("form");
+      setSubmitting(false);
+      setSubmitError(null);
       setSelectedImages([]); // Clear previews on close
       setFormData({
         fullName: "",
@@ -86,8 +90,53 @@ export default function PartnerOverlay() {
     }, 500);
   };
 
-  const handleSubmit = () => {
-    setView("success");
+  const handleSubmit = async () => {
+    setSubmitError(null);
+    const hasPartnership = Object.values(formData.partnershipType).some(Boolean);
+    if (!hasPartnership) {
+      setSubmitError("Please select at least one partnership interest.");
+      return;
+    }
+    if (formData.fullName.trim().length < 2) {
+      setSubmitError("Please enter your name.");
+      return;
+    }
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      formData.email.trim().toLowerCase(),
+    );
+    if (!emailOk) {
+      setSubmitError("Please enter a valid email address.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const fd = new FormData();
+      fd.append("meta", JSON.stringify(formData));
+      for (const row of selectedImages) {
+        fd.append("photos", row.file);
+      }
+      const res = await fetch("/api/leads/partner", {
+        method: "POST",
+        body: fd,
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+      };
+      if (!res.ok) {
+        throw new Error(data.error ?? "Submission failed.");
+      }
+
+      selectedImages.forEach((img) => URL.revokeObjectURL(img.preview));
+      setSelectedImages([]);
+      setView("success");
+    } catch (e) {
+      setSubmitError(
+        e instanceof Error ? e.message : "Something went wrong. Try again.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -165,7 +214,7 @@ export default function PartnerOverlay() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className={`relative w-full md:w-[600px] bg-[#0E3A2F] flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 ${view === "success" ? "h-[80vh] md:h-[650px]" : "max-h-[calc(100dvh-8rem)]"}`}
+              className={`relative w-full md:w-[600px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 ${view === "success" ? "h-[80vh] md:h-[650px]" : "max-h-[calc(100dvh-8rem)]"}`}
             >
               {/* Header */}
               {view === "form" && (
@@ -205,7 +254,7 @@ export default function PartnerOverlay() {
                         />
                         <label
                           htmlFor="fullName"
-                          className="absolute text-white/80 text-gh-label duration-300 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-gh-body peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:text-white bg-[#0E3A2F] px-1"
+                          className="absolute text-white/80 text-gh-label duration-300 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-gh-body peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:text-white bg-jade-green px-1"
                         >
                           Full Name
                         </label>
@@ -280,12 +329,12 @@ export default function PartnerOverlay() {
                                   item.key as keyof typeof formData.partnershipType
                                 ] && (
                                   <Check
-                                    className="w-3 h-3 text-[#0E3A2F]"
+                                    className="w-3 h-3 text-jade-green"
                                     strokeWidth={3}
                                   />
                                 )}
                               </div>
-                              <span className="text-white/90 text-gh-label mt-[1px] group-hover:text-white transition-colors tracking-wide">
+                              <span className="text-white/90 text-gh-label leading-none group-hover:text-white transition-colors tracking-wide">
                                 {item.label}
                               </span>
                             </label>
@@ -337,12 +386,12 @@ export default function PartnerOverlay() {
                                   item.key as keyof typeof formData.propertyType
                                 ] && (
                                   <Check
-                                    className="w-3 h-3 text-[#0E3A2F]"
+                                    className="w-3 h-3 text-jade-green"
                                     strokeWidth={3}
                                   />
                                 )}
                               </div>
-                              <span className="text-white/90 text-gh-label mt-[1px] group-hover:text-white transition-colors tracking-wide">
+                              <span className="text-white/90 text-gh-label leading-none group-hover:text-white transition-colors tracking-wide">
                                 {item.label}
                               </span>
                             </label>
@@ -458,6 +507,15 @@ export default function PartnerOverlay() {
                         )}
                       </div>
 
+                      {submitError && (
+                        <p
+                          role="alert"
+                          className="text-sm text-red-300 border border-red-400/40 rounded-sm px-3 py-2"
+                        >
+                          {submitError}
+                        </p>
+                      )}
+
                       <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
                         By proceeding, you agree to our{" "}
                         <Link
@@ -487,9 +545,12 @@ export default function PartnerOverlay() {
 
                       <PrimaryButton
                         className="w-full mt-2"
-                        onClick={handleSubmit}
+                        onClick={() => {
+                          void handleSubmit();
+                        }}
+                        disabled={submitting}
                       >
-                        SUBMIT
+                        {submitting ? "SENDING…" : "SUBMIT"}
                       </PrimaryButton>
                     </div>
                   </div>

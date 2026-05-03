@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { query } from "@/lib/db";
+import { getClientIpFromHeaders, rateLimit } from "@/lib/rateLimit";
+import { isRegisteredVillaId } from "@/lib/security/villaId";
 
 /*
   GET /api/bookings/availability?villaId=magnolia&year=2026&month=0
@@ -14,16 +16,46 @@ export async function GET(req: NextRequest) {
   const year = Number(searchParams.get("year"));
   const month = Number(searchParams.get("month")); // 0-indexed
 
-  if (!villaId || isNaN(year) || isNaN(month)) {
+  const ip = req.ip ?? getClientIpFromHeaders(req.headers);
+  const rl = rateLimit({
+    key: `bookings:availability:${ip}`,
+    limit: 120,
+    windowMs: 5 * 60 * 1000,
+  });
+  if (!rl.ok) {
+    return new NextResponse(
+      JSON.stringify({ error: "Too many requests. Please try again later." }),
+      {
+        status: 429,
+        headers: { "Content-Type": "application/json", "Retry-After": String(rl.retryAfterSeconds) },
+      },
+    );
+  }
+
+  if (
+    !villaId ||
+    isNaN(year) ||
+    isNaN(month) ||
+    !isRegisteredVillaId(villaId)
+  ) {
     return NextResponse.json(
-      { error: "villaId, year, and month are required" },
+      { error: "Valid villaId, year, and month are required" },
+      { status: 400 },
+    );
+  }
+
+  const y = Number(year);
+  const m = Number(month);
+  if (y < 2024 || y > 2045 || m < 0 || m > 11) {
+    return NextResponse.json(
+      { error: "year or month out of allowed range" },
       { status: 400 },
     );
   }
 
   // First day and last day of requested month
-  const firstDay = new Date(year, month, 1).toISOString().split("T")[0];
-  const lastDay = new Date(year, month + 1, 0).toISOString().split("T")[0];
+  const firstDay = new Date(y, m, 1).toISOString().split("T")[0];
+  const lastDay = new Date(y, m + 1, 0).toISOString().split("T")[0];
 
   try {
     // Use PostgreSQL generate_series to expand bookings into individual days.

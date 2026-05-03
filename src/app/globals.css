@@ -18,9 +18,17 @@
     --fs-h2: clamp(22px, 1.2vw + 12px, 32px);
     --fs-h3: clamp(20px, 1vw + 12px, 28px);
     --fs-scroll: clamp(18px, 1.5vw + 8px, 32px);
+    /* Villa / gallery carousel “1 — 8” counter — smaller than --fs-scroll, fluid */
+    --fs-gallery-pagination: clamp(14px, 0.45vw + 11px, 20px);
     --fs-body: clamp(14px, 0.4vw + 11px, 18px);
     --fs-desc: clamp(12px, 0.25vw + 10px, 14px);
     --fs-label: clamp(10px, 0.15vw + 8.5px, 12px);
+    /*
+     Villa card footer: price ↔ KNOW MORE / VIEW VILLA.
+     Same fluid size + line-height — uppercase CTA reads larger at matching px,
+     so min is slightly above body-small and caps peak with desc’s max-ish.
+    */
+    --fs-villa-footer-row: clamp(14px, 0.4vw + 10.75px, 15px);
     --fs-carousel-sub: clamp(12px, 0.3vw + 10px, 16px);
     --fs-sl: clamp(15px, 0.4vw + 12px, 19px); /* Services Subheading */
 
@@ -92,6 +100,9 @@
   .text-gh-scroll {
     font-size: var(--fs-scroll) !important;
   }
+  .text-gh-gallery-pagination {
+    font-size: var(--fs-gallery-pagination) !important;
+  }
   .text-gh-body {
     font-size: var(--fs-body) !important;
   }
@@ -100,6 +111,11 @@
   }
   .text-gh-label {
     font-size: var(--fs-label) !important;
+  }
+  /* After .text-gh-label: same font-size can override PrimaryButton’s label on villa cards */
+  .text-gh-villa-footer-row {
+    font-size: var(--fs-villa-footer-row) !important;
+    line-height: 1.3 !important;
   }
   .text-gh-carousel-sub {
     font-size: var(--fs-carousel-sub) !important;
@@ -202,4 +218,87 @@ body {
   padding-bottom: var(--space-fluid-lg);
   padding-left: var(--space-fluid-md);
   padding-right: var(--space-fluid-md);
+}
+
+/* ============================================================
+   HORIZONTAL SCROLL TRACK — every browser (iOS momentum, containment)
+   ============================================================ */
+.jade-hscroll-track {
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jade-hscroll-track {
+    scroll-behavior: auto;
+  }
+}
+
+/* ============================================================
+   SCROLL-DRIVEN ANIMATIONS (animation-timeline: view(inline))
+   Chromium / Edge / Android Chrome horizontal carousels.
+   https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations
+   ============================================================ */
+@keyframes jade-hscroll-scroll-reveal {
+  from {
+    opacity: 0.62;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes jade-hscroll-fallback-reveal {
+  from {
+    opacity: 0.88;
+    transform: translate3d(0, 0, 0) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@supports (animation-timeline: view(inline)) {
+  .jade-hscroll-view-item {
+    animation-name: jade-hscroll-scroll-reveal;
+    animation-duration: 1ms;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: view(inline);
+    animation-range: entry 8% contain 58%;
+  }
+}
+
+/* ============================================================
+   FALLBACK — Safari / iOS / browsers without view(inline)
+   Subtle scale+opacity on paint (no blank flash, compositor-safe).
+   ============================================================ */
+@supports not (animation-timeline: view(inline)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .jade-hscroll-view-item {
+      animation: jade-hscroll-fallback-reveal 0.72s cubic-bezier(0.16, 1, 0.3, 1)
+        both;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jade-hscroll-view-item {
+    animation: none !important;
+    animation-range: revert !important;
+    animation-timeline: revert !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
 }

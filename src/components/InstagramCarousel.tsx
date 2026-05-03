@@ -316,25 +316,22 @@ export default function InstagramCarousel() {
           </h2>
         </div>
 
-        {/* Compact cards (≈280×497) + tighter gap like your UI frame */}
-        <div className="pl-6 md:pl-12">
-          <div
-            // End exactly on the right edge (no trailing gutter), but keep a left gutter.
-            className="w-full flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth pb-4 pr-0"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {INSTAGRAM_POSTS.map((post) => (
-              <div
-                key={post.id}
-                className="flex-shrink-0 w-[280px] h-[497px] snap-center"
-              >
-                <InstagramFramedCard
-                  post={post}
-                  media={mediaMap[`${post.type}:${post.id}`]}
-                />
-              </div>
-            ))}
-          </div>
+        {/* Compact cards (≈280×497); track bleeds left and right like a full-bleed rail */}
+        <div
+          className="jade-hscroll-track w-full min-w-0 flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth pb-4 px-0"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {INSTAGRAM_POSTS.map((post) => (
+            <div
+              key={post.id}
+              className="flex-shrink-0 w-[280px] h-[497px] snap-center jade-hscroll-view-item"
+            >
+              <InstagramFramedCard
+                post={post}
+                media={mediaMap[`${post.type}:${post.id}`]}
+              />
+            </div>
+          ))}
         </div>
 
         {/* CTA Button */}

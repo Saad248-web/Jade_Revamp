@@ -132,8 +132,6 @@ export default function PartyVillasPage() {
         title="Party Types"
         slides={partySlides}
         ctaText="BOOK A PARTY VILLA"
-        buttonContainerClassName="mt-8"
-        innerClassName="min-h-[100dvh] max-w-5xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col py-12 md:py-16 lg:py-20"
       />
 
       {/* SECTION 4: CURATED EXPERIENCES */}
@@ -194,6 +192,7 @@ function SpacesForCelebrationsSection() {
     <PremiumFeaturesSection
       subheading="WHY CELEBRATE AT JADE"
       heading="Spaces Made for Celebrations"
+      cardsLayout="scroll"
       cards={[
         {
           tag: "enjoy",

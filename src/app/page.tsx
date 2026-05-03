@@ -15,7 +15,7 @@ const organizationSchema = {
   "@type": "Organization",
   name: "Jade Hospitainment",
   url: "https://jadehospitainment.com",
-  logo: "https://jadehospitainment.com/jade-logo.png",
+  logo: "https://jadehospitainment.com/assets/Golden_Logo.png",
   sameAs: [
     "https://www.instagram.com/jadehospitainment",
     "https://www.facebook.com/jadehospitainment",

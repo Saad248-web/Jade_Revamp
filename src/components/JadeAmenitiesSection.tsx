@@ -1,10 +1,16 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import { usePreloadNeighborSlideImages } from "@/lib/carouselMotion";
+import {
+  heroSplitBgVariants,
+  heroSplitCardVariants,
+  type HeroSplitCustom,
+} from "@/lib/heroSplitCarouselVariants";
 
 const AMENITIES = [
   {
@@ -53,8 +59,16 @@ export default function JadeAmenitiesSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
 
   const currentSlide = AMENITIES[currentIndex];
+
+  usePreloadNeighborSlideImages(AMENITIES, currentIndex);
+
+  const carouselCustom: HeroSplitCustom = {
+    dir: direction,
+    lowFx: !!reducedMotion,
+  };
 
   const handlePrev = () => {
     setDirection(-1);
@@ -74,15 +88,23 @@ export default function JadeAmenitiesSection() {
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
       {/* ── TOP AREA (80vh) — background image ── */}
-      <div className="relative w-full h-[80vh] z-0 overflow-hidden shrink-0">
-        <AnimatePresence mode="wait" initial={false}>
+      <div
+        className="relative w-full h-[80vh] z-0 overflow-hidden shrink-0"
+        style={{ perspective: "1500px" }}
+      >
+        <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
           <motion.div
             key={`bg-${currentIndex}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            custom={carouselCustom}
+            variants={heroSplitBgVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="absolute inset-0 w-full h-full"
+            style={{
+              transformStyle: "preserve-3d",
+              backfaceVisibility: "hidden",
+            }}
           >
             <Image
               src={currentSlide.bgImage}
@@ -90,7 +112,7 @@ export default function JadeAmenitiesSection() {
               fill
               className="object-cover"
               sizes="100vw"
-              priority
+              priority={currentIndex === 0}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-[#0D4032]/90 via-[#0D4032]/25 to-[#0D4032]/55" />
           </motion.div>
@@ -116,7 +138,7 @@ export default function JadeAmenitiesSection() {
             key={`sub-${currentIndex}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.12, duration: 0.22 }}
+            transition={{ delay: 0.06, duration: 0.38 }}
             className="font-manrope text-gh-carousel-sub text-white/80 leading-relaxed max-w-xl mx-auto line-clamp-3"
           >
             {currentSlide.subtext}
@@ -154,13 +176,14 @@ export default function JadeAmenitiesSection() {
                       aspect-[4/3]
                       shadow-[0_20px_50px_rgba(0,0,0,0.55)] overflow-hidden border border-white/20"
       >
-        <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
           <motion.div
             key={`card-${currentIndex}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            custom={carouselCustom}
+            variants={heroSplitCardVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="w-full h-full relative"
           >
             <Image
@@ -169,7 +192,8 @@ export default function JadeAmenitiesSection() {
               fill
               className="object-cover"
               sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
-              priority
+              priority={currentIndex === 0}
+              loading="eager"
             />
           </motion.div>
         </AnimatePresence>

@@ -145,7 +145,7 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full md:w-[600px] bg-[#0E3A2F] flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 max-h-[80vh] md:max-h-[85vh] overflow-hidden"
+              className="relative w-full md:w-[600px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 max-h-[80vh] md:max-h-[85vh] overflow-hidden"
             >
               {/* Header */}
               <div className="flex items-center px-6 pt-6 pb-2 border-b border-white/5">

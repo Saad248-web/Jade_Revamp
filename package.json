@@ -9,6 +9,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:ci": "npm run build && cross-env CI=true playwright test",
     "optimize-ridge": "node scripts/optimize_ridge_images.js",
     "optimize-emerald": "node scripts/optimize_emerald_images.js",
     "optimize-wonderland": "node scripts/optimize_wonderland_images.js",
@@ -19,6 +22,7 @@
   "dependencies": {
     "@gsap/react": "^2.1.2",
     "@rive-app/react-canvas": "^4.26.2",
+    "@sentry/nextjs": "^10.51.0",
     "@studio-freight/react-lenis": "^0.0.47",
     "@types/pg": "^8.20.0",
     "clsx": "^2.1.1",
@@ -35,16 +39,20 @@
   },
   "devDependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@playwright/test": "^1.59.1",
+    "@tailwindcss/container-queries": "^0.1.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.24",
+    "cross-env": "^10.1.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "png-to-ico": "^3.0.1",
     "postcss": "^8",
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.0.5"
   }
 }

@@ -19,6 +19,8 @@ import { useAnimation } from "@/context/AnimationContext";
 export default function RathaaOverlay() {
   const { isRathaaOverlayOpen, setRathaaOverlayOpen } = useAnimation();
   const [view, setView] = useState<"form" | "success">("form");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -38,6 +40,8 @@ export default function RathaaOverlay() {
     setRathaaOverlayOpen(false);
     setTimeout(() => {
       setView("form");
+      setSubmitting(false);
+      setSubmitError(null);
       setFormData({
         fullName: "",
         phoneNumber: "",
@@ -131,7 +135,7 @@ export default function RathaaOverlay() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full md:w-[600px] h-[80vh] md:h-[82vh] md:max-h-[760px] bg-[#0E3A2F] flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
+              className="relative w-full md:w-[600px] h-[80vh] md:h-[82vh] md:max-h-[760px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
             >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
               {/* CONTENT AREA */}
@@ -288,6 +292,14 @@ export default function RathaaOverlay() {
                     </div>
 
                     <div className="mt-8 border-t border-white/10 pt-6">
+                      {submitError && (
+                        <p
+                          role="alert"
+                          className="mb-4 text-sm text-red-300 border border-red-400/40 rounded-sm px-3 py-2 text-left"
+                        >
+                          {submitError}
+                        </p>
+                      )}
                       <p className="text-[11px] text-white/30 pb-4 text-center font-manrope">
                         By proceeding, you agree to our{" "}
                         <Link
@@ -316,14 +328,14 @@ export default function RathaaOverlay() {
                       </p>
                       <button
                         type="submit"
-                        disabled={!isFormValid()}
+                        disabled={!isFormValid() || submitting}
                         className={`w-full py-4 font-manrope font-bold text-gh-label tracking-[0.3em] uppercase transition-all border ${
-                          isFormValid()
+                          isFormValid() && !submitting
                             ? "bg-[#EFCD62] hover:bg-white text-black border-transparent"
                             : "bg-transparent border-white/10 text-white/40 cursor-not-allowed"
                         }`}
                       >
-                        SEND INQUIRY
+                        {submitting ? "SENDING…" : "SEND INQUIRY"}
                       </button>
                     </div>
                   </form>

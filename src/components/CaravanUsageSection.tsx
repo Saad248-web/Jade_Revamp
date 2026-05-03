@@ -1,10 +1,16 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import { usePreloadNeighborSlideImages } from "@/lib/carouselMotion";
+import {
+  heroSplitBgVariants,
+  heroSplitCardVariants,
+  type HeroSplitCustom,
+} from "@/lib/heroSplitCarouselVariants";
 
 const SLIDES = [
   {
@@ -12,24 +18,24 @@ const SLIDES = [
     label: "PERFECT FOR",
     heading: ["Family Road", "Trips"],
     subtext: "Reconnect and explore scenic destinations together.",
-    bgImage: "/X/Tranquil Woods/1.webp",
-    cardImage: "/X/Tranquil Woods/1.webp",
+    bgImage: "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
+    cardImage: "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
   },
   {
     id: 2,
     label: "PERFECT FOR",
     heading: ["Romantic", "Getaways"],
     subtext: "Private journeys designed for couples seeking quiet escapes.",
-    bgImage: "/X/Dome Villas/Red Dome/1.webp",
-    cardImage: "/X/Dome Villas/Red Dome/1.webp",
+    bgImage: "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/hero.webp",
+    cardImage: "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/hero.webp",
   },
   {
     id: 3,
     label: "PERFECT FOR",
     heading: ["Private", "Celebrations"],
     subtext: "Birthdays, proposals, bridal showers, and milestone moments.",
-    bgImage: "/X/HAVEN/pool new.webp",
-    cardImage: "/X/HAVEN/pool new.webp",
+    bgImage: "/Villa_Retreats/Haven/Spaces/Pool.webp",
+    cardImage: "/Villa_Retreats/Haven/Spaces/Pool.webp",
   },
   {
     id: 4,
@@ -37,8 +43,8 @@ const SLIDES = [
     heading: ["One-Day", "Escapes"],
     subtext:
       "Short journeys outside the city without the need for overnight stays.",
-    bgImage: "/X/Tranquil Woods/3.webp",
-    cardImage: "/X/Tranquil Woods/3.webp",
+    bgImage: "/Villa_Retreats/Tranquil Woods/2-Spaces/Private Pool Villa.webp",
+    cardImage: "/Villa_Retreats/Tranquil Woods/2-Spaces/Private Pool Villa.webp",
   },
   {
     id: 5,
@@ -46,8 +52,8 @@ const SLIDES = [
     heading: ["Content Shoots", "& Creative Projects"],
     subtext:
       "Unique mobile spaces for filming, photography, and creative work.",
-    bgImage: "/X/Magnolia/14.webp",
-    cardImage: "/X/Magnolia/14.webp",
+    bgImage: "/Villa_Retreats/Magnolia/Spaces/Private_Home_Theatre.webp",
+    cardImage: "/Villa_Retreats/Magnolia/Spaces/Private_Home_Theatre.webp",
   },
   {
     id: 6,
@@ -64,8 +70,16 @@ export default function CaravanUsageSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
 
   const currentSlide = SLIDES[currentIndex];
+
+  usePreloadNeighborSlideImages(SLIDES, currentIndex);
+
+  const carouselCustom: HeroSplitCustom = {
+    dir: direction,
+    lowFx: !!reducedMotion,
+  };
 
   const handlePrev = () => {
     setDirection(-1);
@@ -85,15 +99,23 @@ export default function CaravanUsageSection() {
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
       {/* ── TOP 80vh — full-bleed background image ── */}
-      <div className="absolute inset-x-0 top-0 h-[80vh] z-0 overflow-hidden">
-        <AnimatePresence mode="wait">
+      <div
+        className="absolute inset-x-0 top-0 h-[80vh] z-0 overflow-hidden"
+        style={{ perspective: "1500px" }}
+      >
+        <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
           <motion.div
             key={`bg-${currentIndex}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            custom={carouselCustom}
+            variants={heroSplitBgVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="absolute inset-0 w-full h-full"
+            style={{
+              transformStyle: "preserve-3d",
+              backfaceVisibility: "hidden",
+            }}
           >
             <Image
               src={currentSlide.bgImage}
@@ -101,7 +123,7 @@ export default function CaravanUsageSection() {
               fill
               className="object-cover"
               sizes="100vw"
-              priority
+              priority={currentIndex === 0}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-[#0D4032]/90 via-[#0D4032]/25 to-[#0D4032]/55" />
           </motion.div>
@@ -135,7 +157,7 @@ export default function CaravanUsageSection() {
           key={`sub-${currentIndex}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-        transition={{ delay: 0.12, duration: 0.22 }}
+          transition={{ delay: 0.06, duration: 0.38 }}
           className="font-manrope text-gh-carousel-sub text-white/80 leading-relaxed max-w-xl mx-auto line-clamp-3"
         >
           {currentSlide.subtext}
@@ -166,13 +188,14 @@ export default function CaravanUsageSection() {
                       aspect-[4/3]
                       shadow-[0_20px_50px_rgba(0,0,0,0.55)] overflow-hidden border border-white/20"
       >
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
           <motion.div
             key={`card-${currentIndex}`}
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.04 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            custom={carouselCustom}
+            variants={heroSplitCardVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="w-full h-full relative"
           >
             <Image
@@ -181,7 +204,8 @@ export default function CaravanUsageSection() {
               fill
               className="object-cover"
               sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
-              priority
+              priority={currentIndex === 0}
+              loading="eager"
             />
           </motion.div>
         </AnimatePresence>

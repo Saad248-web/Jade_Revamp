@@ -123,12 +123,12 @@ export default function VillasCarousel() {
     return false;
   })();
 
-  const filteredVillas = VILLAS.filter(
-    (villa) =>
-      activeCategory === "All" ||
-      villa.categories?.some(
-        (c: string) => c.toLowerCase() === activeCategory.toLowerCase(),
-      ),
+  const filteredVillas = VILLAS.filter((villa) =>
+    !(villa as { hideFromVillasDirectory?: boolean }).hideFromVillasDirectory &&
+      (activeCategory === "All" ||
+        villa.categories?.some(
+          (c: string) => c.toLowerCase() === activeCategory.toLowerCase(),
+        )),
   );
 
   const handleCategoryChange = (category: string) => {
@@ -166,7 +166,7 @@ export default function VillasCarousel() {
     <section id="villas-carousel" className="relative bg-[#1A1C1E]">
       {/* STICKY FILTERS BAR */}
       <div
-        className="sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/8 transition-all duration-300 ease-in-out"
+        className="sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/10 transition-all duration-300 ease-in-out"
         style={{ top: navbarVisible ? `${NAVBAR_HEIGHT}px` : "0px" }}
       >
         <div className="max-w-[1920px] mx-auto px-2 md:px-8 lg:px-16 pt-3 md:pt-6 pb-3">

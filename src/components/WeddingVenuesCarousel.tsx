@@ -1,13 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight, MapPin, Users, Car, Home } from "lucide-react";
 import Link from "next/link";
 import { VILLAS } from "@/lib/mockData";
 import VenueOverlay from "./VenueOverlay";
 import { useAnimation } from "@/context/AnimationContext";
+import {
+  liquidCarouselBgVariants,
+  type HeroSplitCustom,
+} from "@/lib/heroSplitCarouselVariants";
+import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 
 // Filter villas to specifically show Set 2: Tranquil Woods, Magnolia, Diamond
 const SET2_IDS = ["tranquil", "magnolia", "diamond"];
@@ -18,6 +23,12 @@ export default function WeddingVenuesCarousel() {
   const [direction, setDirection] = useState(0);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const { setEnquireOverlayOpen } = useAnimation();
+  const reducedMotion = useReducedMotion();
+
+  const carouselCustom: HeroSplitCustom = {
+    dir: direction,
+    lowFx: !!reducedMotion,
+  };
 
   const nextSlide = () => {
     setDirection(1);
@@ -33,21 +44,40 @@ export default function WeddingVenuesCarousel() {
 
   const currentVilla = WEDDING_VENUES[currentIndex];
 
+  useEffect(() => {
+    const n = WEDDING_VENUES.length;
+    if (n <= 1) return;
+    for (const j of [(currentIndex + 1) % n, (currentIndex - 1 + n) % n]) {
+      const src = String(WEDDING_VENUES[j]?.image ?? "").trim();
+      if (src) {
+        const img = new window.Image();
+        img.src = src;
+      }
+    }
+  }, [currentIndex]);
+
   return (
     <section className="relative bg-[#1A1C1E] pt-fluid-lg pb-10 md:pt-fluid-xl md:pb-10">
       <div className="max-w-3xl mx-auto px-6 w-full">
         <div className="flex flex-col gap-12">
           {/* IMAGE SECTION - NAVIGATION INSIDE FRAME */}
-          <div className="relative w-full aspect-[16/9] md:aspect-[2.4/1] lg:h-[48vh] lg:max-h-[520px] overflow-hidden rounded-sm bg-white/5 group">
-            <AnimatePresence initial={false} custom={direction}>
+          <div
+            className="relative w-full aspect-[16/9] md:aspect-[2.4/1] lg:h-[48vh] lg:max-h-[520px] overflow-hidden rounded-sm bg-white/5 group"
+            style={{ perspective: "1500px" }}
+          >
+            <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
               <motion.div
                 key={currentVilla.id}
-                custom={direction}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                custom={carouselCustom}
+                variants={liquidCarouselBgVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
                 className="absolute inset-0 w-full h-full"
+                style={{
+                  transformStyle: "preserve-3d",
+                  backfaceVisibility: "hidden",
+                }}
               >
                 <Image
                   src={currentVilla.image}
@@ -55,6 +85,7 @@ export default function WeddingVenuesCarousel() {
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 80vw"
+                  priority={currentIndex === 0}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
               </motion.div>
@@ -98,11 +129,11 @@ export default function WeddingVenuesCarousel() {
                 LAWN
               </span>
               <div className="flex items-center gap-4">
-                <span className="text-white font-philosopher text-gh-scroll">
+                <span className="text-white font-philosopher text-gh-gallery-pagination tabular-nums leading-none">
                   {currentIndex + 1}
                 </span>
-                <div className="w-24 h-px bg-white/40" />
-                <span className="text-white/40 font-philosopher text-gh-scroll">
+                <div className="w-24 h-px bg-white/40 shrink-0" />
+                <span className="text-white/40 font-philosopher text-gh-gallery-pagination tabular-nums leading-none">
                   {WEDDING_VENUES.length}
                 </span>
               </div>
@@ -121,15 +152,18 @@ export default function WeddingVenuesCarousel() {
               >
                 {currentVilla.name}
               </h2>
-              <div
-                className="flex items-center gap-2 text-white/60"
+              <a
+                href={getVillaGoogleMapsUrl(currentVilla)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-white/60 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
                 style={{ marginBottom: "clamp(12px, 2.5vw, 24px)" }}
               >
-                <MapPin className="w-4 h-4" />
-                <span className="font-manrope text-gh-label">
+                <MapPin className="w-4 h-4 shrink-0" />
+                <span className="font-manrope text-gh-label hover:underline underline-offset-4">
                   {currentVilla.location}
                 </span>
-              </div>
+              </a>
               <p className="font-manrope text-white/70 leading-relaxed text-gh-body">
                 {currentVilla.description.split(".")[0]}.{" "}
                 {currentVilla.description.split(".")[1] || ""}. Built to support
@@ -172,12 +206,13 @@ export default function WeddingVenuesCarousel() {
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-white font-manrope font-bold text-gh-label">
+                <span className="text-white font-manrope font-bold text-gh-villa-footer-row">
                   ₹99,000 onwards
                 </span>
                 <button
+                  type="button"
                   onClick={() => setIsOverlayOpen(true)}
-                  className="inline-flex items-center gap-3 text-[#EFCD62] font-manrope text-gh-label tracking-[0.2em] font-bold uppercase hover:text-white transition-all group"
+                  className="inline-flex items-center gap-3 text-[#EFCD62] font-manrope text-gh-villa-footer-row tracking-[0.2em] font-bold uppercase hover:text-white transition-all group"
                 >
                   KNOW MORE
                   <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />

@@ -505,9 +505,15 @@ export default function Footer() {
                       <Link
                         key={link.label}
                         href={link.href}
-                        className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors"
+                        className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors inline-flex items-center gap-2"
                       >
-                        {link.label}
+                        <span>{link.label}</span>
+                        <span
+                          aria-hidden
+                          className="shrink-0 text-[0.65em] leading-none translate-y-px select-none"
+                        >
+                          ▸
+                        </span>
                       </Link>
                     ))}
                   </div>
@@ -517,9 +523,15 @@ export default function Footer() {
                       <Link
                         key={link.label}
                         href={link.href}
-                        className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors"
+                        className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors inline-flex items-center gap-2"
                       >
-                        {link.label}
+                        <span>{link.label}</span>
+                        <span
+                          aria-hidden
+                          className="shrink-0 text-[0.65em] leading-none translate-y-px select-none"
+                        >
+                          ▸
+                        </span>
                       </Link>
                     ))}
                   </div>
@@ -599,10 +611,17 @@ export default function Footer() {
           </div>
 
           {/* ── BOTTOM COPYRIGHT BAR ─────────────────────────────────────── */}
-          <div className="border-t border-white/10 mt-14 pt-7 flex flex-col md:flex-row items-center justify-between gap-3">
-            <p className="font-manrope text-gh-label text-white/35 tracking-widest uppercase">
+          <div className="border-t border-white/10 mt-14 pt-7 flex w-full flex-col items-center justify-between gap-4 md:flex-row">
+            <p className="font-manrope text-gh-label text-white/35 tracking-widest uppercase text-center md:text-left">
               © {currentYear} Jade Hospitainment — All Rights Reserved
             </p>
+            <PrimaryButton
+              href="/experiences/another-experience-1"
+              withArrow
+              className="shrink-0"
+            >
+              Another experience
+            </PrimaryButton>
           </div>
         </div>
       </footer>

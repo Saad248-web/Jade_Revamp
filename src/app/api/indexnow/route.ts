@@ -1,11 +1,85 @@
 import { NextResponse } from "next/server";
+import { getClientIpFromHeaders, rateLimit } from "@/lib/rateLimit";
+import { readJsonBody, SafeJsonError } from "@/lib/security/safeJson";
 
-const INDEXNOW_KEY = "a8f9c1b2d4e64f789012345678abcdef";
-const HOST = "jadehospitainment.com";
+const INDEXNOW_KEY =
+  process.env.INDEXNOW_KEY ?? "a8f9c1b2d4e64f789012345678abcdef";
+const HOST = process.env.INDEXNOW_HOST ?? "jadehospitainment.com";
+
+const MAX_URLS = 80;
+const MAX_BODY = 64 * 1024;
+
+function authorizeIndexNow(req: Request): boolean {
+  const secret = process.env.INDEXNOW_API_SECRET?.trim();
+  if (!secret) {
+    return process.env.NODE_ENV !== "production";
+  }
+  const auth = req.headers.get("authorization");
+  return auth === `Bearer ${secret}`;
+}
+
+function isHttpsAppUrl(u: string, host: string): boolean {
+  try {
+    const parsed = new URL(u);
+    if (parsed.protocol !== "https:") return false;
+    return parsed.hostname === host || parsed.hostname === `www.${host}`;
+  } catch {
+    return false;
+  }
+}
 
 export async function POST(request: Request) {
   try {
-    const { urls } = await request.json();
+    const ip = getClientIpFromHeaders(request.headers);
+    const rl = rateLimit({
+      key: `indexnow:post:${ip}`,
+      limit: 20,
+      windowMs: 10 * 60 * 1000,
+    });
+    if (!rl.ok) {
+      return new NextResponse(
+        JSON.stringify({ error: "Too many requests. Please try again later." }),
+        {
+          status: 429,
+          headers: { "Content-Type": "application/json", "Retry-After": String(rl.retryAfterSeconds) },
+        },
+      );
+    }
+
+    if (process.env.NODE_ENV === "production" && !process.env.INDEXNOW_API_SECRET?.trim()) {
+      return NextResponse.json(
+        { error: "IndexNow authentication is not configured" },
+        { status: 503 },
+      );
+    }
+
+    if (!authorizeIndexNow(request)) {
+      return NextResponse.json(
+        {
+          error:
+            "Unauthorized. Set INDEXNOW_API_SECRET and send Authorization: Bearer <secret>.",
+        },
+        { status: 401 },
+      );
+    }
+
+    let parsed: unknown;
+    try {
+      parsed = await readJsonBody(request, MAX_BODY);
+    } catch (e) {
+      if (e instanceof SafeJsonError) {
+        return NextResponse.json({ error: e.message }, { status: e.status });
+      }
+      throw e;
+    }
+
+    const urls =
+      parsed &&
+      typeof parsed === "object" &&
+      parsed !== null &&
+      "urls" in parsed
+        ? (parsed as { urls?: unknown }).urls
+        : undefined;
 
     if (!urls || !Array.isArray(urls)) {
       return NextResponse.json(
@@ -14,11 +88,31 @@ export async function POST(request: Request) {
       );
     }
 
+    if (urls.length > MAX_URLS) {
+      return NextResponse.json(
+        { error: `At most ${MAX_URLS} URLs per request` },
+        { status: 400 },
+      );
+    }
+
+    const host = HOST.replace(/^https?:\/\//, "").replace(/\/$/, "");
+    const clean = urls.filter(
+      (u): u is string => typeof u === "string" && isHttpsAppUrl(u, host),
+    );
+    if (clean.length !== urls.length) {
+      return NextResponse.json(
+        {
+          error: `Every URL must be https and on host ${host} or www.${host}`,
+        },
+        { status: 400 },
+      );
+    }
+
     const payload = {
-      host: HOST,
+      host,
       key: INDEXNOW_KEY,
-      keyLocation: `https://${HOST}/${INDEXNOW_KEY}.txt`,
-      urlList: urls,
+      keyLocation: `https://${host}/${INDEXNOW_KEY}.txt`,
+      urlList: clean,
     };
 
     // Ping Bing

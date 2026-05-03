@@ -17,6 +17,8 @@ interface PremiumFeaturesSectionProps {
   onCtaClick?: () => void;
   cardClassName?: string;
   alternateGold?: boolean;
+  /** Edge-to-edge horizontal scroll rail (e.g. party villas); default is responsive grid. */
+  cardsLayout?: "grid" | "scroll";
 }
 
 export default function PremiumFeaturesSection({
@@ -29,11 +31,18 @@ export default function PremiumFeaturesSection({
   onCtaClick,
   cardClassName = "bg-[#121417]",
   alternateGold = false,
+  cardsLayout = "grid",
 }: PremiumFeaturesSectionProps) {
+  /* Narrow: justify-start avoids centered-rail clipping. xl+: centered row when viewport fits ~4×269 + gaps. */
+  const scrollOuterClasses =
+    "w-full mb-fluid-md flex justify-start xl:justify-center overflow-x-auto overflow-y-clip pb-3 scrollbar-none jade-hscroll-track scroll-pl-4 md:scroll-pl-6 lg:scroll-pl-8 xl:scroll-pl-6";
+  const scrollTrackClasses =
+    "inline-flex gap-[clamp(10px,2vw,14px)] snap-x snap-mandatory scroll-smooth pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] md:pl-8 md:pr-8 lg:pl-12 lg:pr-10 xl:pl-8 xl:pr-8";
+
   return (
     <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
       <div className="max-w-7xl mx-auto px-4 w-full flex flex-col items-center">
-        <div className="text-center mb-[40px]">
+        <div className="text-center mb-fluid-md">
           <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-[14px] font-manrope">
             {subheading}
           </p>
@@ -42,147 +51,45 @@ export default function PremiumFeaturesSection({
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[14px] mb-[40px] w-full px-4 md:px-8">
-          {cards.map((card, idx) => (
-            <div
-              key={idx}
-              className={`group relative w-full h-[375px] border border-white/[0.05] p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 hover:border-[#EFCD62]/30 ${cardClassName}`}
-            >
-              {/* Layer 1: Refined Linear Fill with Accurate Shiny Accents */}
-              <div className="absolute inset-0 z-0 overflow-hidden">
-                {/* Base Gradient - Always present for the Premium "Glass/Shine" effect */}
-                <div className="absolute inset-0 bg-[linear-gradient(135deg,#363A45_0%,#121417_100%)]" />
+        {cardsLayout === "grid" ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,2vw,14px)] mb-fluid-md w-full px-fluid-sm md:px-fluid-md">
+            {cards.map((card, idx) => (
+              <PremiumFeatureCard
+                key={idx}
+                card={card}
+                idx={idx}
+                alternateGold={alternateGold}
+                cardClassName={cardClassName}
+              />
+            ))}
+          </div>
+        ) : null}
+      </div>
 
-                {/* Alternating Shiny Champagne/Golden Accents - Always present if alternateGold is true */}
-                {alternateGold && (
-                  <>
-                    {idx % 2 === 0 ? (
-                      /* Top Left Accent */
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(239,205,98,0.25)_0%,rgba(239,205,98,0.05)_40%,transparent_70%)]" />
-                    ) : (
-                      /* Bottom Right Accent */
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_85%,rgba(239,205,98,0.25)_0%,rgba(239,205,98,0.05)_40%,transparent_70%)]" />
-                    )}
-                  </>
-                )}
-
-                {/* Ambient Center Glow for "Shine" */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(239,205,98,0.03)_0%,transparent_80%)]" />
+      {cardsLayout === "scroll" ? (
+        <div
+          className={scrollOuterClasses}
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          <div className={scrollTrackClasses}>
+            {cards.map((card, idx) => (
+              <div
+                key={idx}
+                className="snap-start flex-shrink-0 jade-hscroll-view-item w-[max(218px,min(82dvw,289px))] sm:w-[max(228px,min(78dvw,269px))] md:w-[min(269px,40vw)] lg:w-[269px]"
+              >
+                <PremiumFeatureCard
+                  card={card}
+                  idx={idx}
+                  alternateGold={alternateGold}
+                  cardClassName={cardClassName}
+                />
               </div>
-
-              {/* Layer 2: Geometric & Starry Texture (Figma Replicated) */}
-              <div className="absolute inset-0 z-10 opacity-[0.12] pointer-events-none overflow-hidden">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="100%"
-                  height="100%"
-                  className="w-full h-full"
-                >
-                  <defs>
-                    <pattern
-                      id="card-geo-luxury"
-                      x="0"
-                      y="0"
-                      width="120"
-                      height="120"
-                      patternUnits="userSpaceOnUse"
-                    >
-                      {/* Diamonds */}
-                      <path
-                        d="M 60 15 L 105 60 L 60 105 L 15 60 Z"
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="0.5"
-                        opacity="0.3"
-                      />
-                      <circle
-                        cx="60"
-                        cy="60"
-                        r="1.2"
-                        fill="white"
-                        opacity="0.6"
-                      />
-
-                      {/* Stars/Dust */}
-                      <circle cx="25" cy="25" r="0.4" fill="white" />
-                      <circle cx="95" cy="35" r="0.6" fill="white" />
-                      <circle cx="40" cy="80" r="0.5" fill="white" />
-                      <circle cx="85" cy="95" r="0.3" fill="white" />
-
-                      {/* Lens Flares / Halos */}
-                      <circle
-                        cx="60"
-                        cy="60"
-                        r="25"
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="0.2"
-                        opacity="0.08"
-                      />
-                      <circle
-                        cx="60"
-                        cy="60"
-                        r="40"
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="0.1"
-                        opacity="0.04"
-                      />
-                    </pattern>
-                  </defs>
-                  <rect
-                    width="100%"
-                    height="100%"
-                    fill="url(#card-geo-luxury)"
-                  />
-                </svg>
-              </div>
-
-              {/* Layer 3: Noise Texture Overlay */}
-              <div className="absolute inset-0 z-11 opacity-[0.08] pointer-events-none mix-blend-overlay">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="100%"
-                  height="100%"
-                  className="w-full h-full"
-                >
-                  <filter id="card-noise-texture">
-                    <feTurbulence
-                      type="fractalNoise"
-                      baseFrequency="0.65"
-                      numOctaves="3"
-                      stitchTiles="stitch"
-                    />
-                  </filter>
-                  <rect
-                    width="100%"
-                    height="100%"
-                    filter="url(#card-noise-texture)"
-                  />
-                </svg>
-              </div>
-
-              <div className="relative z-20">
-                <span className="text-[#A2A4A7] font-philosopher italic text-gh-desc mb-6 block tracking-wide">
-                  {card.tag}
-                </span>
-                <h3 className="text-gh-h3 font-manrope font-bold text-white leading-[1.1] tracking-tight uppercase">
-                  {card.title.split(" ").map((word, i) => (
-                    <React.Fragment key={i}>
-                      {word}
-                      <br />
-                    </React.Fragment>
-                  ))}
-                </h3>
-              </div>
-
-              <p className="relative z-20 text-white/40 font-manrope text-gh-label leading-relaxed max-w-[95%]">
-                {card.desc}
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+      ) : null}
 
+      <div className="max-w-7xl mx-auto px-4 w-full flex flex-col items-center">
         <div className="flex flex-col items-center">
           <p className="text-white/60 font-philosopher italic text-gh-body text-center max-w-3xl leading-relaxed mb-[24px]">
             {footerText}
@@ -200,5 +107,132 @@ export default function PremiumFeaturesSection({
         </div>
       </div>
     </section>
+  );
+}
+
+function PremiumFeatureCard({
+  card,
+  idx,
+  alternateGold,
+  cardClassName,
+}: {
+  card: FeatureCard;
+  idx: number;
+  alternateGold: boolean;
+  cardClassName: string;
+}) {
+  const geoId = `premium-card-geo-${idx}`;
+  const noiseId = `premium-card-noise-${idx}`;
+
+  return (
+    <div
+      className={`group relative w-full aspect-[269/375] border border-white/[0.05] p-[clamp(1rem,3.25vw,2rem)] flex flex-col justify-between overflow-hidden transition-all duration-500 hover:border-[#EFCD62]/30 ${cardClassName}`}
+    >
+      {/* Layer 1: Refined Linear Fill with Accurate Shiny Accents */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,#363A45_0%,#121417_100%)]" />
+
+        {alternateGold && (
+          <>
+            {idx % 2 === 0 ? (
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(239,205,98,0.25)_0%,rgba(239,205,98,0.05)_40%,transparent_70%)]" />
+            ) : (
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_85%,rgba(239,205,98,0.25)_0%,rgba(239,205,98,0.05)_40%,transparent_70%)]" />
+            )}
+          </>
+        )}
+
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(239,205,98,0.03)_0%,transparent_80%)]" />
+      </div>
+
+      <div className="absolute inset-0 z-10 opacity-[0.12] pointer-events-none overflow-hidden">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="100%"
+          height="100%"
+          className="w-full h-full"
+        >
+          <defs>
+            <pattern
+              id={geoId}
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              patternUnits="userSpaceOnUse"
+            >
+              <path
+                d="M 60 15 L 105 60 L 60 105 L 15 60 Z"
+                fill="none"
+                stroke="white"
+                strokeWidth="0.5"
+                opacity="0.3"
+              />
+              <circle cx="60" cy="60" r="1.2" fill="white" opacity="0.6" />
+              <circle cx="25" cy="25" r="0.4" fill="white" />
+              <circle cx="95" cy="35" r="0.6" fill="white" />
+              <circle cx="40" cy="80" r="0.5" fill="white" />
+              <circle cx="85" cy="95" r="0.3" fill="white" />
+              <circle
+                cx="60"
+                cy="60"
+                r="25"
+                fill="none"
+                stroke="white"
+                strokeWidth="0.2"
+                opacity="0.08"
+              />
+              <circle
+                cx="60"
+                cy="60"
+                r="40"
+                fill="none"
+                stroke="white"
+                strokeWidth="0.1"
+                opacity="0.04"
+              />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill={`url(#${geoId})`} />
+        </svg>
+      </div>
+
+      <div className="absolute inset-0 z-[11] opacity-[0.08] pointer-events-none mix-blend-overlay">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="100%"
+          height="100%"
+          className="w-full h-full"
+        >
+          <filter id={noiseId}>
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.65"
+              numOctaves="3"
+              stitchTiles="stitch"
+            />
+          </filter>
+          <rect width="100%" height="100%" filter={`url(#${noiseId})`} />
+        </svg>
+      </div>
+
+      <div className="relative z-20">
+        <span className="text-[#A2A4A7] font-philosopher italic text-gh-desc mb-[clamp(0.65rem,calc(0.45rem+0.85vw),1.0625rem)] block tracking-wide">
+          {card.tag}
+        </span>
+        <h3 className="font-manrope font-extrabold text-white text-[clamp(1.0625rem,calc(0.55rem+2.85vw),2rem)] leading-[1.2] tracking-[0.01em] uppercase break-words hyphens-none">
+          {card.title.split(" ").map((word, i) => (
+            <React.Fragment key={i}>
+              {word}
+              <br />
+            </React.Fragment>
+          ))}
+        </h3>
+      </div>
+
+      <p className="relative z-20 text-white/40 font-manrope text-[clamp(0.6875rem,calc(0.45rem+0.85vw),0.75rem)] sm:text-gh-label leading-relaxed max-w-[95%] line-clamp-6 sm:line-clamp-none">
+        {card.desc}
+      </p>
+    </div>
   );
 }

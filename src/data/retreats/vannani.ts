@@ -1,5 +1,6 @@
 export const vannani = {
   id: "vannani",
+  hideFromVillasDirectory: true,
   name: "Vannani",
   type: "PRIVATE FARMHOUSE RETREAT",
   location: "Outskirts of Bangalore",

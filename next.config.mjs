@@ -1,10 +1,53 @@
+import { withSentryConfig } from "@sentry/nextjs";
+
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === "production";
+
 const nextConfig = {
   // Remove X-Powered-By header for security
   poweredByHeader: false,
 
+  // Do not ship source maps to browsers in production (reduces attack surface)
+  productionBrowserSourceMaps: false,
+
   // Enable gzip/brotli compression
   compress: true,
+
+  async headers() {
+    const globalSecurity = [
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      {
+        key: "Referrer-Policy",
+        value: "strict-origin-when-cross-origin",
+      },
+      { key: "X-Frame-Options", value: "SAMEORIGIN" },
+      {
+        key: "Permissions-Policy",
+        value:
+          "camera=(), microphone=(), geolocation=(), interest-cohort=(), payment=(), usb=()",
+      },
+      { key: "X-DNS-Prefetch-Control", value: "off" },
+      { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
+      {
+        key: "Cross-Origin-Opener-Policy",
+        value: "same-origin-allow-popups",
+      },
+    ];
+
+    if (isProd) {
+      globalSecurity.push({
+        key: "Strict-Transport-Security",
+        value: "max-age=63072000; includeSubDomains; preload",
+      });
+    }
+
+    return [
+      {
+        source: "/:path*",
+        headers: globalSecurity,
+      },
+    ];
+  },
 
   images: {
     // Prefer AVIF then WebP for smaller file sizes
@@ -26,6 +69,30 @@ const nextConfig = {
   // Add one entry per migrated old article to preserve Google rankings
   async redirects() {
     return [
+      // Legacy policy shortcuts → canonical policy routes
+      {
+        source: "/privacy",
+        destination: "/privacy-policy",
+        permanent: true,
+      },
+      {
+        source: "/terms",
+        destination: "/terms-conditions",
+        permanent: true,
+      },
+      {
+        source: "/refund",
+        destination: "/refund-policy",
+        permanent: true,
+      },
+
+      // Common legacy blog path → current blog path
+      {
+        source: "/blog/:slug*",
+        destination: "/blogs/:slug*",
+        permanent: true,
+      },
+
       // Example pattern — update with actual old URLs when migrating
       // {
       //   source: "/blog/:slug",
@@ -36,4 +103,6 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  silent: true,
+});

@@ -113,7 +113,33 @@ export default function CareersPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
+  const [applyJobId, setApplyJobId] = useState("open-application");
+  const [apFullName, setApFullName] = useState("");
+  const [apEmail, setApEmail] = useState("");
+  const [apPhone, setApPhone] = useState("");
+  const [apCompany, setApCompany] = useState("");
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [applySubmitting, setApplySubmitting] = useState(false);
+  const [applyError, setApplyError] = useState<string | null>(null);
+
   const [canClose, setCanClose] = useState(false);
+
+  const resetApplicationForm = () => {
+    setApFullName("");
+    setApEmail("");
+    setApPhone("");
+    setApCompany("");
+    setResumeFile(null);
+    setSelectedFileName(null);
+    setApplyError(null);
+    setApplySubmitting(false);
+  };
+
+  const closeApplyModal = () => {
+    resetApplicationForm();
+    setIsApplyModalOpen(false);
+    setIsSuccess(false);
+  };
 
   useEffect(() => {
     if (isApplyModalOpen) {
@@ -135,14 +161,43 @@ export default function CareersPage() {
     setExpandedJob(expandedJob === id ? null : id);
   };
 
-  const handleApply = (e: React.FormEvent) => {
+  const handleApply = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSuccess(true);
+    setApplySubmitting(true);
+    setApplyError(null);
+    try {
+      const fd = new FormData();
+      fd.append("jobId", applyJobId);
+      fd.append("fullName", apFullName.trim());
+      fd.append("email", apEmail.trim());
+      fd.append("phone", apPhone.trim());
+      fd.append("company", apCompany.trim());
+      if (resumeFile) fd.append("resume", resumeFile);
+
+      const res = await fetch("/api/careers/apply", {
+        method: "POST",
+        body: fd,
+      });
+      const data = (await res.json().catch(() => ({}))) as { error?: string };
+
+      if (!res.ok) {
+        throw new Error(data.error || "Unable to submit application.");
+      }
+      setIsSuccess(true);
+    } catch (err) {
+      setApplyError(
+        err instanceof Error ? err.message : "Unable to submit application.",
+      );
+    } finally {
+      setApplySubmitting(false);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFileName(e.target.files[0].name);
+    const f = e.target.files?.[0];
+    if (f) {
+      setResumeFile(f);
+      setSelectedFileName(f.name);
     }
   };
 
@@ -295,6 +350,8 @@ export default function CareersPage() {
                           onClick={(e) => {
                             e.stopPropagation();
                             e.preventDefault();
+                            resetApplicationForm();
+                            setApplyJobId(job.id);
                             setIsApplyModalOpen(true);
                           }}
                         >
@@ -339,6 +396,8 @@ export default function CareersPage() {
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
+                resetApplicationForm();
+                setApplyJobId("open-application");
                 setIsApplyModalOpen(true);
               }}
             >
@@ -360,7 +419,7 @@ export default function CareersPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => {
-                  if (!isSuccess && canClose) setIsApplyModalOpen(false);
+                  if (!isSuccess && canClose) closeApplyModal();
                 }}
                 className={`fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm ${!canClose ? "pointer-events-none" : ""}`}
               />
@@ -374,11 +433,7 @@ export default function CareersPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => {
-                  if (!isSuccess && canClose) {
-                    setIsApplyModalOpen(false);
-                    setIsSuccess(false);
-                    setSelectedFileName(null);
-                  }
+                  if (!isSuccess && canClose) closeApplyModal();
                 }}
                 className="fixed inset-0 z-[46] bg-black/70 backdrop-blur-[2px]"
               />
@@ -397,7 +452,8 @@ export default function CareersPage() {
                 {/* The Close button centered at top, outside the modal */}
                 <div className="absolute -top-[72px] left-1/2 -translate-x-1/2 flex items-center z-10">
                   <button
-                    onClick={() => setIsApplyModalOpen(false)}
+                    type="button"
+                    onClick={closeApplyModal}
                     className="w-12 h-12 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl"
                   >
                     <X className="w-6 h-6 stroke-[1.5]" />
@@ -420,6 +476,15 @@ export default function CareersPage() {
                         shortly
                       </p>
 
+                      {applyError ? (
+                        <p
+                          className="text-red-400 text-sm mb-6 font-manrope"
+                          role="alert"
+                        >
+                          {applyError}
+                        </p>
+                      ) : null}
+
                       <form className="space-y-4 w-full" onSubmit={handleApply}>
                         {/* Full Name */}
                         <div className="relative w-full">
@@ -429,6 +494,8 @@ export default function CareersPage() {
                           <input
                             type="text"
                             required
+                            value={apFullName}
+                            onChange={(e) => setApFullName(e.target.value)}
                             className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors"
                           />
                         </div>
@@ -437,21 +504,29 @@ export default function CareersPage() {
                         <input
                           type="email"
                           required
+                          value={apEmail}
+                          onChange={(e) => setApEmail(e.target.value)}
                           placeholder="Email"
                           className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
+                          autoComplete="email"
                         />
 
                         {/* Phone */}
                         <input
                           type="tel"
                           required
+                          value={apPhone}
+                          onChange={(e) => setApPhone(e.target.value)}
                           placeholder="Phone Number"
                           className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
+                          autoComplete="tel"
                         />
 
                         {/* Company */}
                         <input
                           type="text"
+                          value={apCompany}
+                          onChange={(e) => setApCompany(e.target.value)}
                           placeholder="Company/Organization"
                           className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
                         />
@@ -478,7 +553,10 @@ export default function CareersPage() {
                               <button
                                 type="button"
                                 className="shrink-0"
-                                onClick={() => setSelectedFileName(null)}
+                                onClick={() => {
+                                  setSelectedFileName(null);
+                                  setResumeFile(null);
+                                }}
                               >
                                 <X className="w-3 h-3 hover:text-white" />
                               </button>
@@ -487,8 +565,12 @@ export default function CareersPage() {
                         </div>
 
                         {/* Submit */}
-                        <PrimaryButton type="submit" className="w-full">
-                          SUBMIT APPLICATION
+                        <PrimaryButton
+                          type="submit"
+                          disabled={applySubmitting}
+                          className="w-full disabled:opacity-60"
+                        >
+                          {applySubmitting ? "SUBMITTING…" : "SUBMIT APPLICATION"}
                         </PrimaryButton>
                       </form>
                     </div>
@@ -608,11 +690,7 @@ export default function CareersPage() {
                       <PrimaryButton
                         withArrow={false}
                         className="w-full"
-                        onClick={() => {
-                          setIsApplyModalOpen(false);
-                          setIsSuccess(false);
-                          setSelectedFileName(null);
-                        }}
+                        onClick={closeApplyModal}
                       >
                         OKAY
                       </PrimaryButton>
@@ -658,6 +736,15 @@ export default function CareersPage() {
                         shortly
                       </p>
 
+                      {applyError ? (
+                        <p
+                          className="text-red-400 text-sm mb-6 font-manrope"
+                          role="alert"
+                        >
+                          {applyError}
+                        </p>
+                      ) : null}
+
                       <form className="space-y-6" onSubmit={handleApply}>
                         <div className="relative">
                           <label className="absolute -top-3 left-4 bg-[#0D4032] px-2 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
@@ -666,23 +753,33 @@ export default function CareersPage() {
                           <input
                             type="text"
                             required
+                            value={apFullName}
+                            onChange={(e) => setApFullName(e.target.value)}
                             className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors"
                           />
                         </div>
                         <input
                           type="email"
                           required
+                          value={apEmail}
+                          onChange={(e) => setApEmail(e.target.value)}
                           placeholder="Email"
                           className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
+                          autoComplete="email"
                         />
                         <input
                           type="tel"
                           required
+                          value={apPhone}
+                          onChange={(e) => setApPhone(e.target.value)}
                           placeholder="Phone Number"
                           className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
+                          autoComplete="tel"
                         />
                         <input
                           type="text"
+                          value={apCompany}
+                          onChange={(e) => setApCompany(e.target.value)}
                           placeholder="Company/Organization"
                           className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
                         />
@@ -704,7 +801,10 @@ export default function CareersPage() {
                               {selectedFileName}
                               <button
                                 type="button"
-                                onClick={() => setSelectedFileName(null)}
+                                onClick={() => {
+                                  setSelectedFileName(null);
+                                  setResumeFile(null);
+                                }}
                               >
                                 <X className="w-3 h-3 hover:text-white" />
                               </button>
@@ -712,8 +812,12 @@ export default function CareersPage() {
                           )}
                         </div>
 
-                        <PrimaryButton type="submit" className="w-full mt-4">
-                          SUBMIT APPLICATION
+                        <PrimaryButton
+                          type="submit"
+                          disabled={applySubmitting}
+                          className="w-full mt-4 disabled:opacity-60"
+                        >
+                          {applySubmitting ? "SUBMITTING…" : "SUBMIT APPLICATION"}
                         </PrimaryButton>
                       </form>
                     </>
@@ -808,15 +912,13 @@ export default function CareersPage() {
                         </p>
                       </div>
 
-                      <button
-                        onClick={() => {
-                          setIsApplyModalOpen(false);
-                          setIsSuccess(false);
-                          setSelectedFileName(null);
-                        }}
+                      <PrimaryButton
+                        withArrow={false}
+                        className="w-full"
+                        onClick={closeApplyModal}
                       >
                         OKAY
-                      </button>
+                      </PrimaryButton>
                     </div>
                   )}
                 </div>

@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <title>WEBDEV Audit — Jade_ReVamp</title>
+    <style>
+      :root {
+        --bg0: #061512;
+        --bg1: #0a2820;
+        --panel: rgba(14, 58, 47, 0.45);
+        --panel2: rgba(18, 65, 49, 0.55);
+        --line: rgba(239, 205, 98, 0.18);
+        --text: #f0faf6;
+        --muted: #9dbfb3;
+        --gold: #efcd62;
+        --gold-dim: #c4a545;
+        --ok: #5ee397;
+        --warn: #f4d774;
+        --bad: #ff8a8a;
+        --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+        --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        --radius: 14px;
+        --tap: min(44px, 100%);
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      body {
+        margin: 0;
+        font-family: var(--sans);
+        color: var(--text);
+        background:
+          radial-gradient(1200px 700px at 10% -5%, rgba(239, 205, 98, 0.08), transparent),
+          radial-gradient(900px 500px at 95% 20%, rgba(94, 227, 151, 0.06), transparent),
+          linear-gradient(180deg, var(--bg0), var(--bg1));
+        line-height: 1.55;
+        font-size: 15px;
+      }
+      a {
+        color: var(--gold);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+      }
+      a:hover {
+        color: #fff4c2;
+      }
+      .skip {
+        position: absolute;
+        left: -9999px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      }
+      .skip:focus {
+        left: 12px;
+        top: 12px;
+        width: auto;
+        height: auto;
+        padding: 10px 14px;
+        background: var(--gold);
+        color: #0a1f18;
+        border-radius: 8px;
+        z-index: 9999;
+        font-weight: 700;
+      }
+      .shell {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 16px 16px 56px;
+      }
+      @media (min-width: 640px) {
+        .shell {
+          padding: 24px 22px 72px;
+        }
+      }
+      /* Top hero */
+      .hero {
+        border: 1px solid var(--line);
+        border-radius: calc(var(--radius) + 4px);
+        padding: 20px 18px;
+        background: linear-gradient(135deg, var(--panel), rgba(8, 32, 26, 0.9));
+        backdrop-filter: blur(10px);
+        margin-bottom: 18px;
+      }
+      @media (min-width: 640px) {
+        .hero {
+          padding: 26px 24px;
+        }
+      }
+      .hero h1 {
+        margin: 0 0 10px;
+        font-size: clamp(1.25rem, 4vw, 1.55rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .hero .deck {
+        color: var(--muted);
+        font-size: 0.92rem;
+        max-width: 68ch;
+        margin: 0 0 14px;
+      }
+      .kpi-banner {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+        gap: 8px;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+      }
+      .kpi-banner .kv {
+        text-align: center;
+        padding: 8px 6px;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid var(--line);
+      }
+      .kpi-banner .kv .vn {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--gold);
+        font-family: var(--mono);
+      }
+      .kpi-banner .kv .vk {
+        font-size: 0.62rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        margin-top: 4px;
+        line-height: 1.3;
+      }
+      .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+      .chip {
+        border: 1px solid var(--line);
+        background: rgba(0, 0, 0, 0.2);
+        color: var(--muted);
+        font-size: 0.74rem;
+        padding: 6px 10px;
+        border-radius: 999px;
+      }
+      .chip b {
+        color: var(--gold);
+        font-weight: 700;
+      }
+      /* Jump nav */
+      .nav-stick {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        padding: 10px 0 12px;
+        margin: 0 -4px 8px;
+        background: linear-gradient(180deg, rgba(6, 21, 18, 0.96), rgba(6, 21, 18, 0.88));
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav-inner {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .nav-inner a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 12px;
+        min-height: var(--tap);
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: var(--panel2);
+        color: var(--text);
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .nav-inner a:hover {
+        border-color: var(--gold-dim);
+        color: var(--gold);
+      }
+      /* Grid cards */
+      .grid {
+        display: grid;
+        gap: 14px;
+      }
+      @media (min-width: 720px) {
+        .grid-2 {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      section {
+        scroll-margin-top: 88px;
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 16px 14px;
+        background: var(--panel);
+      }
+      @media (min-width: 640px) {
+        .card {
+          padding: 18px 18px;
+        }
+      }
+      .card h2 {
+        margin: 0 0 10px;
+        font-size: 1.02rem;
+        color: var(--gold);
+        font-weight: 700;
+      }
+      .card h2::before {
+        content: "";
+        display: block;
+        width: 38px;
+        height: 3px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--gold-dim), transparent);
+        margin-bottom: 8px;
+      }
+      .card h3 {
+        margin: 16px 0 8px;
+        font-size: 0.95rem;
+        color: #c8e9dc;
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      /* Infographic — request flow SVG */
+      .diagram {
+        margin: 12px 0;
+        overflow: hidden;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        background: rgba(0, 0, 0, 0.2);
+      }
+      .diagram svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      /* Bar maturity chart */
+      .bars {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .bar-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 56px;
+        gap: 10px;
+        align-items: center;
+      }
+      @media (min-width: 480px) {
+        .bar-row {
+          grid-template-columns: 160px minmax(0, 1fr) 42px;
+        }
+      }
+      .bar-row .lbl {
+        font-size: 0.78rem;
+        color: var(--muted);
+        grid-column: 1 / -1;
+      }
+      @media (min-width: 480px) {
+        .bar-row .lbl {
+          grid-column: auto;
+        }
+      }
+      .bar-track {
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        overflow: hidden;
+        border: 1px solid var(--line);
+      }
+      .bar-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #124131, var(--gold-dim));
+      }
+      .bar-pct {
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--gold);
+        text-align: right;
+      }
+      /* Status pills */
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .lg {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+      .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+      .dot.ok {
+        background: var(--ok);
+      }
+      .dot.ops {
+        background: var(--warn);
+      }
+      .dot.off {
+        background: var(--bad);
+      }
+      /* Tables — mobile horizontal scroll */
+      .table-scroll {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        margin-top: 10px;
+      }
+      table.simple {
+        width: 100%;
+        min-width: 520px;
+        border-collapse: collapse;
+        font-size: 0.82rem;
+      }
+      table.simple th,
+      table.simple td {
+        padding: 10px 11px;
+        text-align: left;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      table.simple th {
+        background: rgba(18, 65, 49, 0.45);
+        color: var(--gold);
+        white-space: nowrap;
+      }
+      table.simple code {
+        font-family: var(--mono);
+        font-size: 0.88em;
+        color: #d5f5e8;
+      }
+      .tag {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-size: 0.74rem;
+        font-weight: 700;
+      }
+      .tag.ok {
+        background: rgba(94, 227, 151, 0.15);
+        color: var(--ok);
+        border: 1px solid rgba(94, 227, 151, 0.35);
+      }
+      .tag.ops {
+        background: rgba(244, 215, 116, 0.12);
+        color: var(--warn);
+        border: 1px solid rgba(244, 215, 116, 0.35);
+      }
+      .tag.stretch {
+        background: rgba(255, 138, 138, 0.1);
+        color: var(--bad);
+        border: 1px solid rgba(255, 138, 138, 0.35);
+      }
+      footer.ft {
+        margin-top: 22px;
+        padding: 14px;
+        border: 1px dashed var(--line);
+        border-radius: var(--radius);
+        color: var(--muted);
+        font-size: 0.82rem;
+        text-align: center;
+      }
+      pre.ascii-strip {
+        font-family: var(--mono);
+        font-size: 0.62rem;
+        line-height: 1.38;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 10px 0 0;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.28);
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        color: #c8e9dc;
+      }
+      @media (min-width: 560px) {
+        pre.ascii-strip {
+          font-size: 0.7rem;
+        }
+      }
+      table.simple tbody td.small-note {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+      .ul-compact {
+        margin: 8px 0 0;
+        padding-left: 1.15rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+      .ul-compact li {
+        margin-bottom: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="shell">
+      <header class="hero" role="banner">
+        <h1>WEBDEV Audit — Jade_ReVamp</h1>
+        <p class="deck">
+          Technical companion to the <b>client</b> pack
+          (<a href="./audit-report.html">audit-report.html</a>
+          /
+          <a href="./audit-report.md">audit-report.md</a>). This page is optimised for <b>mobile</b>, includes
+          <b>diagrams</b> for funnel + maturity, and lists “done vs ops vs stretch” precisely.
+          On Windows use this filename; alias <span style="font-family: var(--mono)">WEBDEVAudit</span> →
+          <a href="./WEBDEVAudit.html">WEBDEVAudit.html</a> redirect stub.
+        </p>
+        <div class="meta-row" aria-label="Document meta">
+          <span class="chip"><b>Stack</b> Next.js 14 · TS · Tailwind · pg</span>
+          <span class="chip"><b>Date</b> 2026-05-03</span>
+          <span class="chip"><b>Type</b> Repo scan + API inventory</span>
+          <span class="chip"><b>Related</b> <a href="./audit-report.html">audit-report.html</a> (client)</span>
+        </div>
+        <div class="kpi-banner" aria-label="Quick stats">
+          <div class="kv"><div class="vn">600</div><div class="vk">Edge / IP / minute</div></div>
+          <div class="kv"><div class="vn">13</div><div class="vk">API routes</div></div>
+          <div class="kv"><div class="vn">6</div><div class="vk">Funnel endpoints</div></div>
+          <div class="kv"><div class="vn">√</div><div class="vk">HMAC webhook</div></div>
+        </div>
+      </header>
+
+      <nav class="nav-stick" aria-label="Section navigation">
+        <div class="nav-inner">
+          <a href="#about">About</a>
+          <a href="#fig">Diagrams</a>
+          <a href="#inventory">Full APIs</a>
+          <a href="#funnel">Funnel</a>
+          <a href="#payments">Payments</a>
+          <a href="#seo">SEO</a>
+          <a href="#env">Env · DB</a>
+          <a href="#extras">SSR · QA</a>
+          <a href="#backlog">Backlog</a>
+          <a href="#evidence">Evidence</a>
+        </div>
+      </nav>
+
+      <main id="main">
+        <section id="about" class="card">
+          <h2>About this WEBDEV audit (parity with WEBDEV-Audit.md)</h2>
+          <p class="muted" style="margin-top: 0">
+            Engineering / DevOps companion. Audience: builders and operators—not a substitute for legal or pentest sign-off.
+          </p>
+          <div class="table-scroll">
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>Document</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>audit-report.*</code></td>
+                  <td class="small-note">Stakeholder-facing — shipped vs polish vs SEO storyline.</td>
+                </tr>
+                <tr>
+                  <td><code>WEBDEV-Audit.*</code> (this file)</td>
+                  <td class="small-note">Full API inventory, funnel verification, infra checklist, diagrams.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>Audit method (2026-05-03 · synced to repo)</h3>
+          <p class="muted">
+            Pass over <code>src/app/api/**</code>, overlays/forms, <code>src/middleware.ts</code>, <code>next.config.mjs</code>,
+            <code>.env.example</code>, <code>schema*.sql</code>, plus technical-SEO checklist themes (crawl/index, robots/sitemap, headers, GEO).
+          </p>
+          <h3>Maturity strip (ASCII — same as Markdown)</h3>
+          <pre class="ascii-strip" aria-label="Maturity approximation">[████████████████████░░░░]  Core app & SSR marketing     ~ strong
+[████████████████░░░░░░░░]  Booking + Postgres          ~ production-shaped
+[██████████████░░░░░░░░░░]  Leads / careers APIs        ~ implemented
+[████████████████░░░░░░░░]  Payments rails              ~ order + webhook + post-book checkout UI
+[████████████░░░░░░░░░░░░]  Test / observability        ~ Vitest + Playwright smoke; Sentry optional (DSN)</pre>
+          <h3>Status legend</h3>
+          <div class="table-scroll">
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>Badge</th>
+                  <th>Meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="tag ok">Done</span> (code)</td>
+                  <td class="small-note">Implemented in repo; host may still need env/secrets/migrations.</td>
+                </tr>
+                <tr>
+                  <td><span class="tag ops">Ops</span></td>
+                  <td class="small-note">Keys, Razorpay dashboard, DB apply, or business policy decision.</td>
+                </tr>
+                <tr>
+                  <td><span class="tag stretch">Stretch</span></td>
+                  <td class="small-note">Recommended hardening—non-blocking for a controlled launch.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="fig">
+          <div class="card">
+            <h2>Diagrams — request flow (marketing → Postgres → gateways)</h2>
+            <p class="muted">High-level pathway for leads, bookings, and optional capture—read left-to-right.</p>
+            <div class="diagram" role="img" aria-label="Flow from browser overlays to Postgres and external services">
+              <svg viewBox="0 0 900 210" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color: #124131" />
+                    <stop offset="100%" style="stop-color: #efcd62" />
+                  </linearGradient>
+                  <filter id="sh" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.35" />
+                  </filter>
+                </defs>
+                <rect x="10" y="35" width="150" height="70" rx="12" fill="rgba(18,65,49,0.85)" stroke="#efcd6244" stroke-width="2" filter="url(#sh)" />
+                <text x="85" y="68" fill="#f0faf6" font-size="14" font-family="system-ui,sans-serif" text-anchor="middle" font-weight="700">Browser UI</text>
+                <text x="85" y="87" fill="#9dbfb3" font-size="11" font-family="system-ui,sans-serif" text-anchor="middle">Overlays · Book · Careers</text>
+                <polygon points="180,58 205,72 180,87" fill="#efcd62" />
+
+                <rect x="218" y="28" width="168" height="84" rx="12" fill="rgba(10,36,29,0.85)" stroke="#efcd6244" stroke-width="2" filter="url(#sh)" />
+                <text x="302" y="58" fill="#efcd62" font-size="14" font-family="system-ui,sans-serif" text-anchor="middle" font-weight="700">Next API routes</text>
+                <text x="302" y="78" fill="#cdeee3" font-size="11" font-family="system-ui,sans-serif" text-anchor="middle">/api/leads* · bookings · RZP · webhooks</text>
+                <text x="302" y="94" fill="#9dbfb3" font-size="11" font-family="system-ui,sans-serif" text-anchor="middle">600/min IP + verbs + CORP</text>
+                <polygon points="401,52 426,72 401,93" fill="#efcd62" />
+
+                <rect x="434" y="28" width="150" height="84" rx="12" fill="rgba(14,58,47,0.9)" stroke="#5ee39766" stroke-width="2" filter="url(#sh)" />
+                <text x="509" y="58" fill="#5ee397" font-size="14" font-family="system-ui,sans-serif" text-anchor="middle" font-weight="700">PostgreSQL</text>
+                <text x="509" y="78" fill="#cdeee3" font-size="11" font-family="system-ui,sans-serif" text-anchor="middle">bookings · leads · partner · careers</text>
+                <text x="509" y="94" fill="#9dbfb3" font-size="11" font-family="system-ui,sans-serif" text-anchor="middle">Pool via src/lib/db.ts</text>
+                <polygon points="604,52 629,72 604,93" fill="#5ee397" />
+
+                <rect x="638" y="28" width="252" height="84" rx="12" fill="rgba(30,24,8,0.55)" stroke="#efcd6244" stroke-width="2" filter="url(#sh)" />
+                <text x="764" y="56" fill="#efcd62" font-size="14" font-family="system-ui,sans-serif" text-anchor="middle" font-weight="700">External services</text>
+                <text x="764" y="76" fill="#cdeee3" font-size="11" font-family="system-ui,sans-serif" text-anchor="middle">Resend (mail) · Razorpay (orders + webhooks)</text>
+                <text x="764" y="92" fill="#9dbfb3" font-size="11" font-family="system-ui,sans-serif" text-anchor="middle">IndexNow · Instagram oEmbed (bounded)</text>
+
+                <rect x="218" y="130" width="672" height="56" rx="10" fill="rgba(0,0,0,0.25)" stroke="url(#g1)" stroke-width="1.5" />
+                <text x="554" y="163" fill="#f0faf6" font-size="13" font-family="system-ui,sans-serif" text-anchor="middle" font-weight="600">Edge middleware: /api/* — 600 requests/min/IP (+ per-route caps below)</text>
+              </svg>
+            </div>
+
+            <h3>Maturity bars (qualitative — from code review, not load tests)</h3>
+            <div class="bars" aria-label="Qualitative maturity by area">
+              <div class="bar-row">
+                <span class="lbl">Marketing &amp; SSR</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 88%"></div></div>
+                <span class="bar-pct">88%</span>
+              </div>
+              <div class="bar-row">
+                <span class="lbl">Bookings + DB</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 82%"></div></div>
+                <span class="bar-pct">82%</span>
+              </div>
+              <div class="bar-row">
+                <span class="lbl">Leads &amp; careers</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 78%"></div></div>
+                <span class="bar-pct">78%</span>
+              </div>
+              <div class="bar-row">
+                <span class="lbl">Payments rails</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 78%"></div></div>
+                <span class="bar-pct">78%</span>
+              </div>
+              <div class="bar-row">
+                <span class="lbl">Tests &amp; observability</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 58%"></div></div>
+                <span class="bar-pct">58%</span>
+              </div>
+            </div>
+            <div class="legend">
+              <span class="lg"><span class="dot ok" aria-hidden="true"></span> Done in repo (may need env)</span>
+              <span class="lg"><span class="dot ops" aria-hidden="true"></span> Ops / dashboard / policy</span>
+              <span class="lg"><span class="dot off" aria-hidden="true"></span> Stretch hardening</span>
+            </div>
+          </div>
+        </section>
+
+        <div class="grid grid-2" style="margin-top: 14px">
+          <section id="inventory" class="card" style="grid-column: 1 / -1">
+            <h2>2. Complete API inventory (<code>src/app/api</code>)</h2>
+            <p class="muted">
+              Mirrors <strong>§3 WEBDEV-Audit.md</strong> — limits are taken from each route’s <code>rateLimit({ limit, windowMs })</code>. Every
+              <code>/api/*</code> call is also capped at the <b>edge</b> first (see SVG).
+            </p>
+            <p class="muted" style="margin-top: -4px">
+              <b>Edge (all APIs):</b> <strong>600</strong> successful passes through middleware per IP per <strong>60 s</strong> window —
+              <code>src/middleware.ts</code> (<code>key: edge:api:&lt;ip&gt;</code>). Stricter handler limits apply below when present.
+            </p>
+            <div class="table-scroll">
+              <table class="simple" style="min-width: 800px">
+                <thead>
+                  <tr>
+                    <th>Route</th>
+                    <th>Role</th>
+                    <th>Handler rate limit<br /><span style="font-weight:400;opacity:.85">(per IP · window)</span></th>
+                    <th>Auth / extra</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>POST /api/bookings</code></td>
+                    <td>Create + overlap check</td>
+                    <td class="small-note"><strong>20</strong> · 10 min</td>
+                    <td class="small-note">—</td>
+                    <td class="small-note"><span class="tag ok">Done</span> · <code>notifyBookingCreated</code> if Resend set.</td>
+                  </tr>
+                  <tr>
+                    <td><code>GET /api/bookings</code></td>
+                    <td>Admin list</td>
+                    <td class="small-note"><strong>60</strong> · 10 min</td>
+                    <td class="small-note"><code>x-admin-password</code> · <code>ADMIN_PASSWORD</code></td>
+                    <td class="small-note"><span class="tag ok">Done</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>GET …/bookings/[id]</code></td>
+                    <td>Admin fetch one</td>
+                    <td class="small-note"><strong>120</strong> · 10 min</td>
+                    <td class="small-note"><code>x-admin-password</code></td>
+                    <td class="small-note"><span class="tag ok">Done</span> · Timing-safe compare.</td>
+                  </tr>
+                  <tr>
+                    <td><code>PATCH …/bookings/[id]</code></td>
+                    <td>Admin update</td>
+                    <td class="small-note"><strong>60</strong> · 10 min</td>
+                    <td class="small-note"><code>x-admin-password</code></td>
+                    <td class="small-note"><span class="tag ok">Done</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>DELETE …/bookings/[id]</code></td>
+                    <td>Admin delete</td>
+                    <td class="small-note"><strong>30</strong> · 10 min</td>
+                    <td class="small-note"><code>x-admin-password</code></td>
+                    <td class="small-note"><span class="tag ok">Done</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>GET …/bookings/availability</code></td>
+                    <td>Monthly occupancy</td>
+                    <td class="small-note"><strong>120</strong> · 5 min</td>
+                    <td class="small-note">—</td>
+                    <td class="small-note"><span class="tag ok">Done</span> · Villa allowlisted.</td>
+                  </tr>
+                  <tr>
+                    <td><code>POST /api/leads</code></td>
+                    <td>JSON leads</td>
+                    <td class="small-note"><strong>20</strong> · 60 min</td>
+                    <td class="small-note">—</td>
+                    <td class="small-note"><span class="tag ok">Done</span> · general / rathaa / wedding sources.</td>
+                  </tr>
+                  <tr>
+                    <td><code>POST /api/leads/partner</code></td>
+                    <td>Partner + photos</td>
+                    <td class="small-note"><strong>10</strong> · 60 min</td>
+                    <td class="small-note">multipart</td>
+                    <td class="small-note"><span class="tag ok">Done</span> · DB + photo bytes.</td>
+                  </tr>
+                  <tr>
+                    <td><code>POST /api/careers/apply</code></td>
+                    <td>Résumé upload</td>
+                    <td class="small-note"><strong>8</strong> · 60 min</td>
+                    <td class="small-note">multipart</td>
+                    <td class="small-note"><span class="tag ok">Done</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>POST /api/payments/razorpay-order</code></td>
+                    <td>Razorpay order</td>
+                    <td class="small-note"><strong>30</strong> · 10 min</td>
+                    <td class="small-note">—</td>
+                    <td class="small-note"><span class="tag ok">Done</span> · optional <code>booking_uuid</code> in body.</td>
+                  </tr>
+                  <tr>
+                    <td><code>POST /api/webhooks/razorpay</code></td>
+                    <td>Payment events</td>
+                    <td class="small-note"><em>Edge only</em> (600/min)</td>
+                    <td class="small-note">HMAC <code>X-Razorpay-Signature</code></td>
+                    <td class="small-note"><span class="tag ops">Ops</span> · <code>RAZORPAY_WEBHOOK_SECRET</code> · raw body verification.</td>
+                  </tr>
+                  <tr>
+                    <td><code>POST /api/indexnow</code></td>
+                    <td>Ping URLs</td>
+                    <td class="small-note"><strong>20</strong> · 10 min</td>
+                    <td class="small-note">Bearer + host allowlist</td>
+                    <td class="small-note"><span class="tag ops">Ops</span> · <code>INDEXNOW_API_SECRET</code>.</td>
+                  </tr>
+                  <tr>
+                    <td><code>GET /api/instagram/oembed</code></td>
+                    <td>oEmbed proxy</td>
+                    <td class="small-note"><strong>60</strong> · 10 min</td>
+                    <td class="small-note">—</td>
+                    <td class="small-note"><span class="tag ok">Done</span> · bounded upstream params.</td>
+                  </tr>
+                  <tr>
+                    <td><code>GET /api/experiences/[slug]/media</code></td>
+                    <td>Media manifest JSON</td>
+                    <td class="small-note"><em>Edge only</em></td>
+                    <td class="small-note">—</td>
+                    <td class="small-note"><span class="tag ok">Done</span> · slug scoped.</td>
+                  </tr>
+                  <tr>
+                    <td><code>GET /api/villas/[id]/media</code></td>
+                    <td>Media manifest JSON</td>
+                    <td class="small-note"><em>Edge only</em></td>
+                    <td class="small-note">—</td>
+                    <td class="small-note"><span class="tag ok">Done</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="muted" style="margin-top: 12px">
+              <b>Edge recap:</b> allowed HTTP verbs, <strong>600 req/min/IP</strong>, <code>Cross-Origin-Resource-Policy: same-site</code>.
+            </p>
+          </section>
+
+          <section id="funnel" class="card" style="grid-column: 1 / -1">
+            <h2>3. Funnel verification (<code>.md §4</code>)</h2>
+            <div class="table-scroll">
+              <table class="simple">
+                <thead>
+                  <tr>
+                    <th>UI</th>
+                    <th>Backend</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Enquire overlay</td>
+                    <td><code>general_enquiry</code></td>
+                  </tr>
+                  <tr>
+                    <td>Wedding form</td>
+                    <td><code>wedding_enquiry</code></td>
+                  </tr>
+                  <tr>
+                    <td>Rathaa overlay</td>
+                    <td><code>rathaa_enquiry</code></td>
+                  </tr>
+                  <tr>
+                    <td>Partner overlay</td>
+                    <td><code>/api/leads/partner</code></td>
+                  </tr>
+                  <tr>
+                    <td>Careers</td>
+                    <td><code>/api/careers/apply</code></td>
+                  </tr>
+                  <tr>
+                    <td>Book flow</td>
+                    <td><code>POST /api/bookings</code> → success UI → <code>initiatePayment(..., { bookingUuid })</code> → <code>POST /api/payments/razorpay-order</code> → Razorpay Checkout</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="muted" style="margin-top: 12px"><b>Checkout (<code>.md §4</code>):</b> <span class="tag ok">Shipped</span> — <code>src/app/book/page.tsx</code> success screen + <code>src/lib/payments/razorpayCheckout.ts</code>. Ops still supplies Razorpay keys and applies DB migrations.</p>
+          </section>
+        </div>
+
+        <section id="payments" class="card" style="margin-top: 14px">
+          <h2>4. Payments — technical truth (<code>.md §5</code>)</h2>
+          <div class="table-scroll">
+            <table class="simple" style="min-width: 600px">
+              <thead>
+                <tr>
+                  <th>Layer</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Razorpay order (server)</td>
+                  <td class="small-note"><span class="tag ok">Done</span> — <code>RAZORPAY_KEY_ID</code> + <code>RAZORPAY_KEY_SECRET</code> required.</td>
+                </tr>
+                <tr>
+                  <td>Order ↔ booking linkage</td>
+                  <td class="small-note"><span class="tag ok">Done</span> when request carries UUID &amp; migrations applied (<code>razorpay_order_id</code>, <code>payment_gateway_state</code>).</td>
+                </tr>
+                <tr>
+                  <td>Webhook verification</td>
+                  <td class="small-note"><span class="tag ok">Shipped</span> · <span class="tag ops">Ops</span> registers URL + <code>RAZORPAY_WEBHOOK_SECRET</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>lib/paymentService.ts</code> → <code>initiatePayment()</code></td>
+                  <td class="small-note"><span class="tag ok">Done</span> — sends <strong><code>booking_uuid</code></strong> when <code>opts.bookingUuid</code> is set (success screen passes full booking id).</td>
+                </tr>
+                <tr>
+                  <td>Post-booking Checkout UX</td>
+                  <td class="small-note"><span class="tag ok">Done</span> — opens Razorpay Checkout when order API returns keys; graceful copy if gateway not configured (<strong>501</strong>).</td>
+                </tr>
+                <tr>
+                  <td><code>bookings.status</code> vs <code>payment_gateway_state</code></td>
+                  <td class="small-note"><span class="tag stretch">Policy</span> — webhook updates gateway fields only; ops defines confirm vs paid semantics.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>Split checklist (ownership)</h3>
+          <div class="table-scroll">
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>Topic</th>
+                  <th>Code</th>
+                  <th>You / Ops</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Razorpay order API</td>
+                  <td><span class="tag ok">Shipped</span></td>
+                  <td>Keys in env</td>
+                </tr>
+                <tr>
+                  <td>Order ↔ booking link</td>
+                  <td><span class="tag ok">Shipped</span> when UUID sent</td>
+                  <td>DB migration applied</td>
+                </tr>
+                <tr>
+                  <td>Webhook HMAC</td>
+                  <td><span class="tag ok">Shipped</span></td>
+                  <td>URL + <code>RAZORPAY_WEBHOOK_SECRET</code></td>
+                </tr>
+                <tr>
+                  <td>Checkout UX</td>
+                  <td><span class="tag ok">Shipped</span></td>
+                  <td>Ops: keys + webhook URL; DB migration on host.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="seo" class="card" style="margin-top: 14px">
+          <h2>5. SEO / technical checklist (<code>.md §6</code>)</h2>
+          <div class="table-scroll">
+            <table class="simple" style="min-width: 560px">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Observation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Crawlability</td>
+                  <td class="small-note"><code>robots.ts</code> + <code>sitemap.ts</code>; transactional paths disallowed intentionally.</td>
+                </tr>
+                <tr>
+                  <td>Indexability</td>
+                  <td class="small-note">Canonical / metadata villas, spaces, legal; <code>noindex</code> wishlist / admin.</td>
+                </tr>
+                <tr>
+                  <td>Security (config)</td>
+                  <td class="small-note">Prod HSTS, nosniff, frame options, COOP, Permissions-Policy; admin timing-safe compare.</td>
+                </tr>
+                <tr>
+                  <td>Security (stretch)</td>
+                  <td class="small-note"><span class="tag stretch">CSP</span> nonces · <span class="tag stretch">Redis</span>/Upstash RL · JWT admin optional.</td>
+                </tr>
+                <tr>
+                  <td>GEO / AI crawlers</td>
+                  <td class="small-note"><code>public/llms.txt</code> + mirrored user-agent blocks/allows vs marketing policy.</td>
+                </tr>
+                <tr>
+                  <td>JS rendering</td>
+                  <td class="small-note">Marketing largely SSR App Router defaults; hero motion client-side.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="env" class="card" style="margin-top: 14px">
+          <h2>6. Env · database · integrations (operators)</h2>
+          <p class="muted">See project <code>.env.example</code> for full keys. Highlights:</p>
+          <ul class="ul-compact">
+            <li><b>PostgreSQL:</b> <code>POSTGRES_*</code> → <code>src/lib/db.ts</code></li>
+            <li><b>Admin:</b> <code>ADMIN_PASSWORD</code> (<code>x-admin-password</code> header)</li>
+            <li><b>Mail:</b> <code>RESEND_API_KEY</code>, <code>RESEND_FROM</code>, <code>LEADS_NOTIFY_EMAIL</code>, <code>BOOKING_NOTIFY_EMAIL</code>, <code>CAREERS_NOTIFY_EMAIL</code></li>
+            <li><b>Razorpay:</b> <code>NEXT_PUBLIC_PAYMENT_GATEWAY_KEY</code>, <code>RAZORPAY_KEY_*</code>, <code>RAZORPAY_WEBHOOK_SECRET</code></li>
+            <li><b>Sentry (optional):</b> <code>NEXT_PUBLIC_SENTRY_DSN</code> · <code>@sentry/nextjs</code> + <code>src/instrumentation*.ts</code></li>
+            <li><b>IndexNow:</b> <code>INDEXNOW_*</code> + Bearer <code>INDEXNOW_API_SECRET</code></li>
+            <li><b>Analytics:</b> <code>NEXT_PUBLIC_GA_ID</code> → <code>GoogleAnalytics</code> in <code>providers.tsx</code></li>
+          </ul>
+          <h3>Schema files</h3>
+          <ul class="ul-compact">
+            <li><code>schema.sql</code> — greenfield Postgres bootstrap</li>
+            <li><code>schema_migration_leads_rathaa_partner_payments.sql</code> — existing DB deltas (sources, partner tables, Razorpay columns)</li>
+          </ul>
+        </section>
+
+        <section id="extras" class="card" style="margin-top: 14px">
+          <h2>7. App Router extras (not APIs)</h2>
+          <ul class="ul-compact">
+            <li><b>Errors:</b> <code>src/app/error.tsx</code>, <code>src/app/global-error.tsx</code> (Sentry capture when DSN set)</li>
+            <li><b>Tests:</b> <code>npm run test</code> → Vitest (<code>bookingDetailsValidation</code>, <code>paymentService</code>)</li>
+            <li><b>E2E:</b> <code>npm run test:e2e</code> (dev) · <code>npm run test:e2e:ci</code> (build + <code>next start</code>) → <code>e2e/smoke.spec.ts</code></li>
+            <li><b>SEO image:</b> <code>public/og-default.jpg</code> (1200×630) · referenced from <code>src/app/layout.tsx</code> Open Graph</li>
+            <li><b>Build:</b> <code>prebuild</code> → <code>scripts/generate_media_manifest.mjs</code></li>
+          </ul>
+        </section>
+
+        <section id="backlog" class="card" style="margin-top: 14px">
+          <h2>8. Still open — ops / stretch (<code>.md §7</code>)</h2>
+          <p class="muted" style="margin-top: 0">
+            Checkout, <code>booking_uuid</code> in <code>initiatePayment</code>, Sentry wiring, <code>og-default.jpg</code>, Vitest + Playwright smoke are <span class="tag ok">shipped</span> in repo.
+          </p>
+          <ol class="muted ul-compact" style="margin: 0; padding-left: 1.2rem">
+            <li><b>Ops:</b> apply <code>schema.sql</code> or <code>schema_migration_leads_rathaa_partner_payments.sql</code> on production.</li>
+            <li><b>Ops:</b> Razorpay Dashboard — webhook URL + <code>RAZORPAY_WEBHOOK_SECRET</code>; live keys in env.</li>
+            <li><b>Policy:</b> when <code>bookings.status</code> flips vs <code>payment_gateway_state</code> / paid semantics.</li>
+            <li><b>Stretch — QA:</b> deeper Vitest; form POST e2e needs a test DB. Page smoke: <code>e2e/lead-surfaces.spec.ts</code> (<code>/careers</code>, <code>/contact</code>).</li>
+            <li><b>Stretch — Performance:</b> CDN / object storage if <code>public/</code> hurts deploy size or TTFB.</li>
+            <li><b>Stretch — Security:</b> CSP nonces · Redis/Upstash rate limits · JWT admin (see §5 SEO table).</li>
+          </ol>
+        </section>
+
+        <section id="evidence" class="card" style="margin-top: 14px">
+          <h2>9. Evidence index (<code>.md §8</code>)</h2>
+          <ul class="ul-compact">
+            <li><b>APIs:</b> <code>src/app/api/**</code></li>
+            <li><b>Security:</b> <code>src/middleware.ts</code>, <code>src/lib/security/*</code>, <code>next.config.mjs</code></li>
+            <li><b>Email:</b> <code>src/lib/email/*</code></li>
+            <li><b>DB:</b> <code>schema.sql</code>, <code>schema_migration_leads_rathaa_partner_payments.sql</code>, <code>src/lib/db.ts</code></li>
+            <li><b>Funnel UI:</b> <code>src/components/EnquireOverlay.tsx</code>, <code>RathaaOverlay.tsx</code>, <code>PartnerOverlay.tsx</code>, <code>experience/WeddingVenueEnquiryForm.tsx</code>, <code>src/app/careers/page.tsx</code></li>
+            <li><b>Book + pay:</b> <code>src/app/book/page.tsx</code>, <code>src/lib/paymentService.ts</code>, <code>src/lib/payments/razorpayCheckout.ts</code></li>
+            <li><b>Observability:</b> <code>src/instrumentation.ts</code>, <code>src/instrumentation-client.ts</code>, <code>src/sentry.*.config.ts</code>, <code>withSentryConfig</code> in <code>next.config.mjs</code></li>
+            <li><b>Tests:</b> <code>src/lib/*.test.ts</code>, <code>e2e/smoke.spec.ts</code>, <code>playwright.config.ts</code></li>
+          </ul>
+        </section>
+      </main>
+
+      <footer class="ft">
+        This HTML is intended to include <strong>all sections</strong> from <a href="./WEBDEV-Audit.md">WEBDEV-Audit.md</a> (§1–§8). Client pack:
+        <a href="./audit-report.html">audit-report.html</a> ·
+        <a href="./WEBDEVAudit.html">WEBDEVAudit.html</a> (redirect).
+      </footer>
+    </div>
+  </body>
+</html>

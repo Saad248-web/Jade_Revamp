@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -97,20 +96,20 @@ export default function BlogSection() {
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Systematic Carousel */}
+      {/* Horizontal scroll aligns with heading on the left, bleeds to the viewport edge on the right */}
+      <div className="max-w-[1920px] mx-auto w-full min-w-0 pl-6 md:pl-12 lg:pl-24">
         <div
           ref={scrollContainerRef}
-          className="flex gap-8 lg:gap-11 overflow-x-auto pb-8 md:pb-10 scrollbar-none snap-x snap-mandatory"
+          className="jade-hscroll-track flex gap-8 lg:gap-11 overflow-x-auto pb-8 md:pb-10 scrollbar-none snap-x snap-mandatory"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {BLOG_POSTS.map((post) => (
-            <div key={post.id} className="snap-start">
+            <div key={post.id} className="snap-start flex-shrink-0 jade-hscroll-view-item">
               <BlogCard post={post} />
             </div>
           ))}
-          {/* Spacer for right padding */}
-          <div className="min-w-[5vw]" />
         </div>
       </div>
     </section>

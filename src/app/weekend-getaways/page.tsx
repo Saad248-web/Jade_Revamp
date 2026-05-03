@@ -181,8 +181,6 @@ export default function WeekendGetawaysPage() {
         slides={weekendSlides}
         ctaText="BOOK JADE WEEKEND"
         onCtaClick={() => setEnquireOverlayOpen(true)}
-        innerClassName="min-h-[100dvh] max-w-5xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col py-12 md:py-16 lg:py-20"
-        buttonContainerClassName="mt-8 w-full max-w-xl mx-auto"
       />
 
       {/* SECTION 4: CURATED EXPERIENCES */}

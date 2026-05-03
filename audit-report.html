@@ -1,0 +1,1201 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <title>Jade_ReVamp — End-to-End Audit Report</title>
+    <style>
+      :root {
+        --bg: #0b0b10;
+        --panel: #12121a;
+        --panel2: #171725;
+        --text: #e7e7ee;
+        --muted: #a7a7b6;
+        --line: #2a2a3b;
+        --good: #4ade80;
+        --warn: #facc15;
+        --bad: #f87171;
+        --brand: #efcd62;
+        --brand2: #c9a84c;
+        --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+          "Courier New", monospace;
+        --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+          Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+      body {
+        margin: 0;
+        font-family: var(--sans);
+        background: radial-gradient(1000px 600px at 20% -10%, rgba(239, 205, 98, 0.12), transparent),
+          radial-gradient(900px 520px at 90% 10%, rgba(201, 168, 76, 0.12), transparent),
+          var(--bg);
+        color: var(--text);
+      }
+      a {
+        color: var(--brand);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 28px 18px 64px;
+      }
+      .top {
+        display: grid;
+        gap: 16px;
+        padding: 18px;
+        border: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(23, 23, 37, 0.75), rgba(18, 18, 26, 0.75));
+        border-radius: 14px;
+        backdrop-filter: blur(8px);
+      }
+      .title {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      h1 {
+        margin: 0;
+        font-size: 1.3rem;
+        letter-spacing: 0.2px;
+      }
+      .subtitle {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+      .pillrow {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .pill {
+        border: 1px solid var(--line);
+        background: rgba(18, 18, 26, 0.7);
+        padding: 6px 10px;
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+      .grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(12, 1fr);
+        margin-top: 16px;
+      }
+      .card {
+        grid-column: span 12;
+        border: 1px solid var(--line);
+        background: rgba(18, 18, 26, 0.8);
+        border-radius: 14px;
+        padding: 16px;
+      }
+      .card h2 {
+        margin: 0 0 10px;
+        font-size: 1rem;
+        color: var(--brand);
+        letter-spacing: 0.3px;
+      }
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.65;
+        font-size: 0.92rem;
+      }
+      .skip {
+        position: absolute;
+        left: -999px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      }
+      .skip:focus {
+        left: 12px;
+        top: 12px;
+        width: auto;
+        height: auto;
+        padding: 10px 14px;
+        background: var(--brand);
+        color: var(--bg);
+        border-radius: 8px;
+        z-index: 999;
+        font-weight: 700;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .stat {
+        border: 1px solid var(--line);
+        background: rgba(23, 23, 37, 0.75);
+        border-radius: 12px;
+        padding: 12px;
+      }
+      .stat .k {
+        font-size: 0.72rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+      .stat .v {
+        margin-top: 6px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--brand);
+      }
+      .two {
+        grid-column: span 6;
+      }
+      @media (max-width: 840px) {
+        .two {
+          grid-column: span 12;
+        }
+      }
+      .list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 8px;
+      }
+      .li {
+        display: grid;
+        grid-template-columns: 16px 1fr;
+        gap: 10px;
+        align-items: start;
+        padding: 10px 10px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(23, 23, 37, 0.55);
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        margin-top: 4px;
+      }
+      .dot.good {
+        background: var(--good);
+      }
+      .dot.warn {
+        background: var(--warn);
+      }
+      .dot.bad {
+        background: var(--bad);
+      }
+      .li b {
+        color: var(--text);
+      }
+      code,
+      .mono {
+        font-family: var(--mono);
+        font-size: 0.88em;
+        color: #d7d7e6;
+      }
+      .table-scroll {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-top: 10px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+      }
+      .table-scroll .table {
+        margin-top: 0;
+        min-width: 520px;
+        border: none;
+        border-radius: 0;
+      }
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        margin-top: 10px;
+      }
+      .table th,
+      .table td {
+        text-align: left;
+        padding: 10px 10px;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.9rem;
+        vertical-align: top;
+      }
+      .table th {
+        background: rgba(23, 23, 37, 0.85);
+        color: var(--brand);
+        font-weight: 700;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 2px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        font-size: 0.78rem;
+        color: var(--muted);
+        background: rgba(18, 18, 26, 0.6);
+      }
+      .tag .t-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+      }
+      .tag.good .t-dot {
+        background: var(--good);
+      }
+      .tag.warn .t-dot {
+        background: var(--warn);
+      }
+      .tag.bad .t-dot {
+        background: var(--bad);
+      }
+      details {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(18, 18, 26, 0.65);
+        padding: 10px 12px;
+      }
+      summary {
+        cursor: pointer;
+        color: var(--text);
+        font-weight: 700;
+      }
+      .foot {
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        text-align: center;
+      }
+      @media (max-width: 720px) {
+        .card {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+      }
+      .callout-banner {
+        border: 1px solid rgba(239, 205, 98, 0.35);
+        background: rgba(239, 205, 98, 0.08);
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.55;
+      }
+      .callout-banner strong {
+        color: var(--text);
+      }
+      .nav-jump {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 0 12px;
+        margin: 0 0 4px;
+        background: linear-gradient(180deg, rgba(11, 11, 16, 0.95), rgba(11, 11, 16, 0.88));
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav-jump a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 40px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: rgba(18, 18, 26, 0.85);
+        color: var(--text);
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+      .nav-jump a:hover {
+        border-color: var(--brand2);
+        color: var(--brand);
+      }
+      .kicker {
+        display: block;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--brand2);
+        margin-bottom: 6px;
+      }
+      .card > h2 {
+        position: relative;
+      }
+      .card > h2::before {
+        content: "";
+        display: block;
+        width: 42px;
+        height: 3px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--brand), rgba(239, 205, 98, 0.15));
+        margin-bottom: 8px;
+      }
+      .ig-card {
+        background: linear-gradient(165deg, rgba(23, 23, 37, 0.95), rgba(18, 18, 26, 0.88));
+      }
+      .ig-layout {
+        display: grid;
+        gap: 18px;
+        align-items: start;
+      }
+      @media (min-width: 880px) {
+        .ig-layout {
+          grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
+        }
+      }
+      .diagram-client {
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+      }
+      .diagram-client svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .tiny-cap {
+        margin: 10px 0 0;
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      .kpi-mini {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 10px;
+      }
+      .kpi-mini .tile {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px 10px;
+        text-align: center;
+        background: rgba(23, 23, 37, 0.55);
+      }
+      .kpi-mini .num {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: var(--brand);
+        line-height: 1.2;
+      }
+      .kpi-mini .lbl {
+        margin-top: 4px;
+        font-size: 0.68rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        line-height: 1.35;
+      }
+      .funnel-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .funnel-step {
+        flex: 1 1 155px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 11px;
+        background: rgba(23, 23, 37, 0.45);
+        font-size: 0.84rem;
+        line-height: 1.45;
+      }
+      .funnel-step .st {
+        display: block;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--good);
+        margin-bottom: 4px;
+      }
+      section[id] {
+        scroll-margin-top: 72px;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#snapshot">Skip to infographic</a>
+    <div class="wrap">
+      <div class="top">
+        <div class="callout-banner" role="note">
+          <strong>Two report packs.</strong>
+          Client-friendly confirmation → this page + <span class="mono">audit-report.md</span>.
+          Engineer inventory, APIs, diagrams, mobile layout → <a href="./WEBDEV-Audit.html"><b>WEBDEV-Audit.html</b></a> ·
+          <a href="./WEBDEV-Audit.md">WEBDEV-Audit.md</a> · Alias <span class="mono">WEBDEVAudit.html</span> redirects.
+        </div>
+        <div class="title">
+          <div>
+            <h1>Jade_ReVamp — End-to-End Audit Report (Concise + Detailed)</h1>
+            <p class="subtitle">
+              Revised <span class="mono">2026-05-02</span> — <b>holistic backlog + funnel audit</b> · Prior <span class="mono">2026-05-01</span> GEO/security passes · Verified
+              <span class="mono">missingAssets=0</span> · <span class="mono">brokenRoutes=0</span> · Next.js 14 · TypeScript · Tailwind · GSAP/Framer/Rive · PostgreSQL bookings
+            </p>
+            <div class="pillrow">
+              <span class="pill"><b>Repo</b>: <span class="mono">Jade_ReVamp</span></span>
+              <span class="pill"><b>Output</b>: client HTML/MD + WEBDEV Audit pack</span>
+              <span class="pill"
+                ><b>Scope</b>: product/funnels, SEO, GEO/LLM, redirects, backend, bookings, ops, accessibility, API security</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="k">Detected routes</div>
+            <div class="v">27</div>
+          </div>
+          <div class="stat">
+            <div class="k">Broken internal routes</div>
+            <div class="v">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Missing static assets (in code)</div>
+            <div class="v">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Missing SEO assets</div>
+            <div class="v">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">API routes (app)</div>
+            <div class="v">13</div>
+          </div>
+          <div class="stat">
+            <div class="k">Forms → database</div>
+            <div class="v">6</div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="nav-jump" aria-label="Report sections">
+        <a href="#snapshot">Infographic</a>
+        <a href="#healthy">Shipped</a>
+        <a href="#gaps">Risks</a>
+        <a href="#holistic-backlog">Backlog</a>
+        <a href="#seo-pack">SEO</a>
+        <a href="#geo-pack">GEO</a>
+        <a href="#technical-ref">Security</a>
+        <a href="./WEBDEV-Audit.html">Technical deep-dive →</a>
+      </nav>
+
+      <div class="grid">
+        <div class="card ig-card" id="snapshot">
+          <span class="kicker">Visual summary</span>
+          <h2 style="margin: 0 0 10px; font-size: clamp(1rem, 3vw, 1.18rem); color: var(--text)">
+            From guest action to your inbox &amp; database
+          </h2>
+          <p class="muted" style="margin: 0 0 16px; line-height: 1.58; color: var(--muted); font-size: 0.92rem">
+            Stakeholder view of the same facts as
+            <a href="./WEBDEV-Audit.html"><b>WEBDEV-Audit.html</b></a> — enquiries, partner photos, bookings, optional Razorpay, and abuse protection on APIs.
+          </p>
+          <div class="ig-layout">
+            <div>
+              <div class="diagram-client" role="img" aria-label="Flow: website to database to email and payments">
+                <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style="stop-color: #c9a84c" />
+                      <stop offset="100%" style="stop-color: #efcd62" />
+                    </linearGradient>
+                  </defs>
+                  <rect x="14" y="28" width="128" height="64" rx="10" fill="rgba(23,23,37,.9)" stroke="#3a3a4d" stroke-width="1.5" />
+                  <text x="78" y="58" fill="#e7e7ee" font-size="13" font-family="system-ui,sans-serif" text-anchor="middle" font-weight="700">Your site</text>
+                  <text x="78" y="76" fill="#a7a7b6" font-size="10" text-anchor="middle">Forms · Book</text>
+                  <polygon points="152,52 172,60 152,68" fill="#efcd62" />
+                  <rect x="178" y="22" width="150" height="76" rx="10" fill="rgba(18,18,26,.95)" stroke="#efcd6244" stroke-width="1.5" />
+                  <text x="253" y="50" fill="#efcd62" font-size="12" text-anchor="middle" font-weight="700">Next.js APIs</text>
+                  <text x="253" y="68" fill="#c7c7d4" font-size="9.5" text-anchor="middle">600 cap/min per IP</text>
+                  <text x="253" y="84" fill="#a7a7b6" font-size="9.5" text-anchor="middle">+ stricter per form</text>
+                  <polygon points="338,52 358,60 338,68" fill="#4ade80" />
+                  <rect x="364" y="22" width="124" height="76" rx="10" fill="rgba(23,37,32,.9)" stroke="#4ade8055" stroke-width="1.5" />
+                  <text x="426" y="56" fill="#4ade80" font-size="12" text-anchor="middle" font-weight="700">PostgreSQL</text>
+                  <text x="426" y="76" fill="#a7a7b6" font-size="9.5" text-anchor="middle">Leads · Bookings</text>
+                  <polygon points="496,52 516,60 496,68" fill="#facc15" />
+                  <rect x="522" y="22" width="184" height="76" rx="10" fill="rgba(30,24,8,.55)" stroke="#efcd6244" stroke-width="1.5" />
+                  <text x="614" y="54" fill="#efcd62" font-size="11.5" text-anchor="middle" font-weight="700">Email &amp; payments</text>
+                  <text x="614" y="72" fill="#c7c7d4" font-size="9.5" text-anchor="middle">Resend · Razorpay</text>
+                  <text x="614" y="88" fill="#a7a7b6" font-size="9" text-anchor="middle">Webhook signs paid state</text>
+                  <rect x="14" y="118" width="692" height="46" rx="8" fill="rgba(0,0,0,.22)" stroke="url(#cg)" stroke-width="1" />
+                  <text x="360" y="146" fill="#d7d7e6" font-size="11.5" text-anchor="middle" font-family="system-ui,sans-serif">Abuse protection: every API hits a 600 requests/minute per-visitor shield, then each form has its own tighter budget.</text>
+                </svg>
+              </div>
+              <p class="tiny-cap">
+                <b>Booking emails:</b> when Resend keys are set, new reservations trigger staff/guest notifications.
+                <b>Checkout:</b> Razorpay order + verified webhook are coded; the booking screen still needs to pass the booking ID into pay after save.
+              </p>
+            </div>
+            <div>
+              <span class="kicker">Key numbers</span>
+              <div class="kpi-mini" aria-label="Key metrics">
+                <div class="tile"><div class="num">600</div><div class="lbl">API shield / visitor / minute</div></div>
+                <div class="tile"><div class="num">13</div><div class="lbl">Server API routes wired</div></div>
+                <div class="tile"><div class="num">6</div><div class="lbl">Ways visitors persist data</div></div>
+                <div class="tile"><div class="num">0</div><div class="lbl">Broken internal routes <small style="opacity:.75">(scan)</small></div></div>
+              </div>
+              <span class="kicker" style="margin-top: 14px">Wired journeys</span>
+              <div class="funnel-strip">
+                <div class="funnel-step"><span class="st">Live</span>General enquiry overlay → saved lead + email*</div>
+                <div class="funnel-step"><span class="st">Live</span>Wedding form → saved lead + email*</div>
+                <div class="funnel-step"><span class="st">Live</span>Rathaa / caravan enquiry → tagged lead + email*</div>
+                <div class="funnel-step"><span class="st">Live</span>Partner programme + photo uploads → DB + email*</div>
+                <div class="funnel-step"><span class="st">Live</span>Careers apply + résumé → DB + email*</div>
+                <div class="funnel-step"><span class="st">Live</span>Book villa → availability check + DB + email*</div>
+              </div>
+              <p class="tiny-cap" style="margin-top: 10px">*Email/notify when <span class="mono">RESEND_*</span> + notify addresses are configured in hosting.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card two" id="healthy">
+          <h2>What’s done (high confidence)</h2>
+          <ul class="list">
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>Modern foundation</b>: Next.js 14 App Router + strict TypeScript + Tailwind.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>Core routes shipped</b>: marketing pages, villas, blogs, booking, legal pages.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>SEO stack</b>: <span class="mono">robots.ts</span>, <span class="mono">sitemap.ts</span>, metadata base, JSON-LD helpers, IndexNow-ready API.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>GEO / LLM layer (elite)</b>: <span class="mono">public/llms.txt</span> (assistant routing + anti-hallucination hints); mirrored
+                <span class="mono">robots.txt</span> rules for GPT/OAI/Claude/Perplexity/Google-Extended crawlers;
+                <b>every villa</b> + <span class="mono">/spaces</span> + <b>legal</b> URLs in sitemap; per-villa
+                <b>VacationRental</b> + <span class="mono">title/description/OG/Twitter/canonical</span> from server layouts;
+                <span class="mono">WebSite</span> + enriched <span class="mono">Organization</span>/<span class="mono">LodgingBusiness</span> graph;
+                <span class="mono">/wishlist</span> + <span class="mono">/admin</span> <b>noindex</b> aligned with crawler blocks.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>Bookings backend</b>: PostgreSQL pool + create booking + availability + admin listing.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>Leads &amp; hiring</b>: general + wedding + Rathaa enquiries to <span class="mono">POST /api/leads</span>; partner photos to
+                <span class="mono">POST /api/leads/partner</span>; careers to <span class="mono">POST /api/careers/apply</span> — each rate-limited.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>Transactional email</b>: booking create can email guest/staff via Resend when env keys + <span class="mono">BOOKING_NOTIFY_EMAIL</span> (and related) are set.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>GA4 ready</b>: loads from <span class="mono">providers.tsx</span> when <span class="mono">NEXT_PUBLIC_GA_ID</span> is present.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>Razorpay scaffolding</b>: server order creation, booking UUID carried in Razorpay notes when sent, webhook verifies signature and marks payment state — needs dashboard URL + secrets on your host.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>IndexNow</b>: `/api/indexnow` implemented; key file in `public/`. Production requires <span class="mono">INDEXNOW_API_SECRET</span> + <span class="mono">Authorization: Bearer …</span>; URLs must be <b>https</b> on configured host.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>Security baseline (2026-05-01)</b>: <span class="mono">src/middleware.ts</span> on <span class="mono">/api/*</span> — verb allowlist, <b>600 requests/min/IP</b> coarse cap, CORP; hardened headers in <span class="mono">next.config.mjs</span> (prod <b>HSTS</b>, COOP, Permissions-Policy); safe JSON limits; timing-safe admin secret; booking <span class="mono">villaId</span> allowlist + shared validation with UI.
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card two" id="gaps">
+          <h2>What’s missing / risky (prioritized)</h2>
+          <ul class="list">
+            <li class="li">
+              <span class="dot good"></span>
+              <div><b>P0 link/asset 404s</b>: fixed (internal scan now reports 0 broken routes/assets).</div>
+            </li>
+            <li class="li">
+              <span class="dot warn"></span>
+              <div><b>Redirect coverage</b>: policy 301s + <span class="mono">/blog/*</span> → <span class="mono">/blogs/*</span> added; other legacy URL migrations still need mapping.</div>
+            </li>
+            <li class="li">
+              <span class="dot warn"></span>
+              <div>
+                <b>Security — next tier</b>: elite baseline is in (middleware + headers + API validation + timing-safe admin). For scale: move rate limits to <b>Redis/Upstash</b>; optional JWT/session admin + CSP nonces; full monitoring (e.g. Sentry).
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot warn"></span>
+              <div>
+                <b>Performance at scale</b>: large `public/` media library may benefit from CDN/object storage.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot warn"></span>
+              <div>
+                <b>SEO polish</b>: ship a dedicated <span class="mono">1200×630</span> global OG (“<span class="mono">og-default.jpg</span>”); villas already use hero imagery for shares. Off-site citations (Reddit, YouTube, Wikipedia-class) remain a separate growth track.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>Commercial / funnel APIs (large uplift)</b>: general + wedding enquiries, Rathaa overlay, Partner multipart, and Careers apply now hit real API routes (<span class="mono">/api/leads*</span>,
+                <span class="mono">/api/careers/apply</span>) with notifications when Resend is configured. Booking path unchanged (Postgres).
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot warn"></span>
+              <div>
+                <b>Payments checkout wire</b>: Razorpay <b>server order</b>, <b>webhook verification</b>, and <b>booking UUID notes</b> are implemented — the book UI must still pass <span class="mono">booking_uuid</span> post-create + open Checkout; align <span class="mono">payment_gateway_state</span> vs <span class="mono">status</span> operationally.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>GA4 wiring</b>: <span class="mono">GoogleAnalytics</span> is mounted via <span class="mono">providers.tsx</span> when <span class="mono">NEXT_PUBLIC_GA_ID</span> is set.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot warn"></span>
+              <div>
+                <b>QA &amp; resilience</b>: Vitest + one booking validation suite; <span class="mono">src/app/error.tsx</span> and <span class="mono">global-error.tsx</span> exist — still expand Playwright/coverage &amp; Sentry-style monitoring for production-grade confidence.
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card" id="holistic-backlog">
+          <h2>Holistic backlog — what still needs doing</h2>
+          <p style="margin-bottom: 12px">
+            The marketing surface remains strong on SEO/GEO. <b>Persisted enquiries, partner uploads, Rathaa submissions, careers apply, Razorpay order + webhook scaffolding, GA4 snippet</b>, and <b>booking notification emails</b> are implemented in-repo — ops work is shifting to DB migrations + dashboard secrets + polishing the checkout hand-off.
+          </p>
+          <div class="table-scroll">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Prio</th>
+                <th>Gap</th>
+                <th>Fix direction</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>P1</span></td>
+                <td>Checkout links booking → Razorpay order with UUID + opens Checkout SDK</td>
+                <td>Frontend follow-up once booking id exists; optionally extend <span class="mono">paymentService.initiatePayment</span></td>
+              </tr>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>P1</span></td>
+                <td>Razorpay + Postgres <b>ops</b>: keys, webhook secret, migrations on live DB</td>
+                <td>Dashboard + Hosting env + SQL from <span class="mono">schema*.sql</span></td>
+              </tr>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>P1</span></td>
+                <td>No centralized error tracking</td>
+                <td>Sentry (or Datadog FE/BE) + alert routing</td>
+              </tr>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>P1</span></td>
+                <td>Analytics depth</td>
+                <td>Enhance GA4 conversions + consent mode when marketing expands</td>
+              </tr>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>P2</span></td>
+                <td>Automated QA surface area</td>
+                <td>Expand Vitest; add Playwright for book + overlays</td>
+              </tr>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>P2</span></td>
+                <td>Error UX polish</td>
+                <td>Segment-level boundaries + richer recovery beside root <span class="mono">error.tsx</span></td>
+              </tr>
+              <tr>
+                <td><span class="tag good"><span class="t-dot"></span>P3</span></td>
+                <td>WCAG / reduced-motion pass</td>
+                <td>Audit overlays, focus traps, semantics; tune motion tokens</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          <h3 style="margin-top: 20px; margin-bottom: 8px; font-size: 1.05rem">
+            Implemented automatically in-repo (code)
+          </h3>
+          <ul style="margin: 0 0 12px 1.1rem; line-height: 1.65; color: var(--muted)">
+            <li>
+              <span class="mono">POST /api/leads</span> — includes
+              <span class="mono">rathaa_enquiry</span>; partner flow via
+              <span class="mono">POST /api/leads/partner</span> (multipart photos).
+            </li>
+            <li>
+              Razorpay order route accepts <span class="mono">booking_uuid</span> and attaches
+              <span class="mono">notes.booking_uuid</span>; webhook
+              <span class="mono">/api/webhooks/razorpay</span> verifies HMAC and updates paid/failed
+              state when notes match.
+            </li>
+            <li>
+              <b>Booking confirmation email</b> path from <span class="mono">POST /api/bookings</span> when Resend + notify env vars are configured.
+            </li>
+          </ul>
+          <h3 style="margin-top: 16px; margin-bottom: 8px; font-size: 1.05rem">
+            Requires manual setup or human judgment
+          </h3>
+          <ul style="margin: 0 0 12px 1.1rem; line-height: 1.65; color: var(--muted)">
+            <li>Run DB migrations on live Postgres; set Razorpay webhook URL + secrets.</li>
+            <li>Wire checkout UI to pass booking UUID into orders; define booking status vs payment policy.</li>
+            <li>Ongoing: lead SLAs, partner photo retention, legal/consent copy.</li>
+          </ul>
+          <p style="margin-top: 12px; color: var(--muted); font-size: 0.9rem">
+            <b>Strengths retained</b>: Postgres booking persistence, hardened APIs, villas + GEO indexed deeply, elite security baseline — see Markdown report for tables and file evidence.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2>Detected App Router routes</h2>
+          <p>
+            From <span class="mono">src/app/**/page.tsx</span> the project currently serves routes like
+            <span class="mono">/villas</span>, <span class="mono">/blogs</span>,
+            <span class="mono">/book</span>, and legal pages.
+          </p>
+          <details style="margin-top: 10px">
+            <summary>Show full route list</summary>
+            <div style="margin-top: 10px; color: var(--muted); line-height: 1.7">
+              <span class="mono"
+                >/, /about, /admin, /blogs, /blogs/[slug], /book, /book/success, /caravans, /careers,
+                /contact, /corporate-retreats, /experiences, /menu, /party-villas, /privacy-policy,
+                /refund-policy, /terms-conditions, /villas, /villas/[id], /villas/[id]/spaces,
+                /weddings, /weekend-getaways, /wishlist</span
+              >
+            </div>
+          </details>
+        </div>
+
+        <div class="card two">
+          <h2>Broken internal routes</h2>
+          <div class="table-scroll">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Details</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="tag good"><span class="t-dot"></span>Fixed</span></td>
+                <td>Menu links updated + 301 redirects added for legacy shortcuts.</td>
+                <td><span class="mono">next.config.mjs</span> + <span class="mono">src/app/menu/page.tsx</span></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+
+        <div class="card two">
+          <h2>Missing static assets (hard 404)</h2>
+          <div class="table-scroll">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Details</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="tag good"><span class="t-dot"></span>Fixed</span></td>
+                <td>Removed all `/X/...` references (since <span class="mono">public/X</span> didn’t exist) and replaced with real images under <span class="mono">public/Villa_Retreats/...</span>.</td>
+                <td>Internal scan now reports <span class="mono">missingAssets=0</span>.</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+
+        <div class="card" id="seo-pack">
+          <h2>SEO + Indexing</h2>
+          <ul class="list">
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>Sitemap</b> via <span class="mono">src/app/sitemap.ts</span>: static marketing routes, <b>all</b> <span class="mono">/villas/[id]</span> + <span class="mono">/villas/[id]/spaces</span>, <b>legal</b> pages, plus dynamic blog slugs.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>IndexNow</b>: <span class="mono">POST /api/indexnow</span>; key file in <span class="mono">public/</span>. Bearer token +
+                <span class="mono">INDEXNOW_HOST</span> URL allowlist for pings — see <span class="mono">.env.example</span>.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>Robots</b> via <span class="mono">src/app/robots.ts</span>: disallow <span class="mono">/book</span>, <span class="mono">/menu</span>,
+                <span class="mono">/api/</span>, <span class="mono">/admin</span>, <span class="mono">/wishlist</span>. Duplicate explicit rules for major <b>AI crawlers</b> (GPT, OAI Search, Claude, Perplexity, Google-Extended) so assistants don’t hit accidental blanket blocks.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b><span class="mono">llms.txt</span></b> at site root (<span class="mono">public/llms.txt</span>) — prioritized URLs, brand facts, and “cite the villa URL for numbers” guidance for LLMs.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>Structured data (elite)</b>: global <span class="mono">WebSite</span> (<span class="mono">en-IN</span> + publisher link),
+                <span class="mono">Organization</span> + <span class="mono">LodgingBusiness</span> with <span class="mono">@id</span>, <span class="mono">sameAs</span>,
+                <span class="mono">knowsAbout</span>; each <b>villa</b>: <span class="mono">VacationRental</span> JSON-LD +
+                canonical metadata; each <span class="mono">/spaces</span> route: <span class="mono">BreadcrumbList</span>.
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot good"></span>
+              <div>
+                <b>Social preview</b>: root defaults unchanged; villa detail shares use hero images via <span class="mono">openGraph.images</span> / Twitter. Recommended: add dedicated <span class="mono">1200×630 og-default.jpg</span> for <b>global</b> link previews (logo PNG is squared).
+              </div>
+            </li>
+            <li class="li">
+              <span class="dot warn"></span>
+              <div>
+                <b>Redirect plan</b>: policy 301s added; add more 301s when legacy URL patterns are confirmed (blogs/legacy pages).
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card" id="geo-pack">
+          <h2>GEO / LLM citation optimization</h2>
+          <p>
+            Generative retrieval favors <b>explicit entities</b>, <b>crawl clarity</b>, and <b>self-contained factual pages</b>. This tier makes on-site signals unambiguous — it does not replace off-site corroboration (Reddit / YouTube / Wikipedia-class mentions).
+          </p>
+          <div class="table-scroll">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Signal</th>
+                <th>What shipped</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="mono">llms.txt</span></td>
+                <td>
+                  Routing table + retrieval rules in <span class="mono">public/llms.txt</span>; instructs models to cite <b>villa URLs</b> for capacities and warns on live pricing inference.
+                </td>
+              </tr>
+              <tr>
+                <td>AI crawlers</td>
+                <td>
+                  <span class="mono">robots.ts</span> mirrors policy for GPT/OAI/Claude/Perplexity/Google-Extended user-agents; blocks <span class="mono">/wishlist</span>, <span class="mono">/admin</span>, APIs, bookings UI.
+                </td>
+              </tr>
+              <tr>
+                <td>Quotable corpus</td>
+                <td>
+                  <span class="mono">src/app/villas/[id]/layout.tsx</span> + <span class="mono">src/lib/seo/meta.ts</span> — SSR titles/descriptions distilled from curated copy (high citability baseline).
+                </td>
+              </tr>
+              <tr>
+                <td>Gallery depth</td>
+                <td>
+                  <span class="mono">src/app/villas/[id]/spaces/layout.tsx</span> — breadcrumb schema + canonical for long-tail (“spaces”, “pool”, venue gallery) intents.
+                </td>
+              </tr>
+              <tr>
+                <td>Rendering</td>
+                <td>
+                  Villa + spaces layouts use <span class="mono">force-dynamic</span> so client <span class="mono">useSearchParams()</span> does not fail prerender; <b>head metadata + JSON-LD still render on the server</b> per request.
+                </td>
+              </tr>
+              <tr>
+                <td>Next (optional)</td>
+                <td><span class="mono">FAQPage</span>, <span class="mono">HowTo</span>, <span class="mono">VideoObject</span> on blogs & hero video villas.</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Other remaining issues (recommended next)</h2>
+          <div class="table-scroll">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Issue</th>
+                <th>Recommendation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Security</b></td>
+                <td>Admin uses shared secret (<b>timing-safe</b> compare)</td>
+                <td>Optional: JWT/session + IP allowlist + audit log</td>
+              </tr>
+              <tr>
+                <td><b>Security</b></td>
+                <td>Rate limiting is in-memory</td>
+                <td>Use Redis/Upstash to enforce limits across instances/serverless</td>
+              </tr>
+              <tr>
+                <td><b>Security</b></td>
+                <td>HSTS + COOP + Permissions-Policy set in <span class="mono">next.config</span> (prod)</td>
+                <td>Add strict <b>CSP with nonces</b> when threat model requires it</td>
+              </tr>
+              <tr>
+                <td><b>SEO / Social</b></td>
+                <td>OG image is not a dedicated 1200×630 asset</td>
+                <td>Create <span class="mono">public/og-default.jpg</span> and switch OG/Twitter to it</td>
+              </tr>
+              <tr>
+                <td><b>SEO</b></td>
+                <td>Redirect mapping may be incomplete</td>
+                <td>Add more 301s once old URLs are confirmed (old villas/experiences/blog patterns)</td>
+              </tr>
+              <tr>
+                <td><b>GEO / Structured data</b></td>
+                <td>Blog-heavy <span class="mono">FAQPage</span> / <span class="mono">VideoObject</span> not pervasive</td>
+                <td>Emit FAQ JSON-LD where guides include question–answer pairs; use <span class="mono">VideoObject</span> on pinned hero YouTube assets</td>
+              </tr>
+              <tr>
+                <td><b>Backend / Product</b></td>
+                <td>Paid checkout not finished in the booking UI: Razorpay order + verified webhook exist server-side</td>
+                <td>Pass <span class="mono">booking_uuid</span> after save, open Razorpay Checkout; align “confirmed” vs gateway state with finance</td>
+              </tr>
+              <tr>
+                <td><b>Ops</b></td>
+                <td>Large media in <span class="mono">public/</span></td>
+                <td>Consider object storage + CDN for faster deploys and delivery</td>
+              </tr>
+              <tr>
+                <td><b>Ops</b></td>
+                <td>No monitoring/alerting</td>
+                <td>Add error tracking + logging for booking/admin endpoints (e.g., Sentry)</td>
+              </tr>
+              <tr>
+                <td><b>Analytics</b></td>
+                <td>GA4 snippet loads when ID is set — conversions/consent mode not fully expanded</td>
+                <td>Add measurement plan + consent when campaigns scale</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Action plan (end-to-end)</h2>
+          <div class="table-scroll">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Priority</th>
+                <th>Do this</th>
+                <th>Outcome</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="tag bad"><span class="t-dot"></span>P0</span></td>
+                <td>
+                  Fix Menu links or add redirects for <span class="mono">/privacy</span>,
+                  <span class="mono">/terms</span>, <span class="mono">/refund</span>
+                </td>
+                <td><b>Done</b> — links fixed + 301s added</td>
+              </tr>
+              <tr>
+                <td><span class="tag bad"><span class="t-dot"></span>P0</span></td>
+                <td>Fix missing Magnolia overlay images under <span class="mono">/X/Magnolia/*</span></td>
+                <td><b>Done</b> — `/X/...` references removed</td>
+              </tr>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>P0</span></td>
+                <td>Add <span class="mono">public/og-default.jpg</span> and <span class="mono">public/jade-logo.png</span> (or change references)</td>
+                <td><b>Done</b> — references updated to existing assets</td>
+              </tr>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>P1</span></td>
+                <td>Populate real 301 redirects in <span class="mono">next.config.mjs</span></td>
+                <td><b>Done (minimum)</b> — policy redirects added; extend for legacy URLs as needed</td>
+              </tr>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>P2</span></td>
+                <td>Harden admin + booking APIs (auth, rate limits, validation)</td>
+                <td><b>Done (baseline 2026-05-01)</b> — middleware, safe JSON, villa allowlist, form-aligned validation, timing-safe admin; optional JWT/Redis next</td>
+              </tr>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>P2</span></td>
+                <td>IndexNow env + authenticated pings</td>
+                <td><b>Done</b> — <span class="mono">INDEXNOW_KEY</span> / <span class="mono">INDEXNOW_HOST</span> / <span class="mono">INDEXNOW_API_SECRET</span> (Bearer) in <span class="mono">.env.example</span></td>
+              </tr>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>P1</span></td>
+                <td>Add legacy blog redirect coverage</td>
+                <td><b>Done (common case)</b> — `/blog/:slug*` → `/blogs/:slug*`</td>
+              </tr>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>P1</span></td>
+                <td>
+                  Elite SEO + GEO: <span class="mono">llms.txt</span>, AI crawler <span class="mono">robots</span>, villas in sitemap, entity graph,
+                  villa <span class="mono">VacationRental</span> + OG, spaces breadcrumbs, legal/canonical hygiene
+                </td>
+                <td><b>Done (2026-05-01)</b></td>
+              </tr>
+              <tr>
+                <td><span class="tag warn"><span class="t-dot"></span>Open</span></td>
+                <td>Checkout + ops: Razorpay live keys/webhook URL, Postgres migration on prod host, monitoring</td>
+                <td>See <a href="#holistic-backlog"><b>Holistic backlog</b></a> card + <a href="./WEBDEV-Audit.html"><b>WEBDEV-Audit</b></a> for API rate limits</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+
+          <details style="margin-top: 10px">
+            <summary>Minimum redirects (301) — implemented</summary>
+            <div style="margin-top: 10px; color: var(--muted); line-height: 1.7">
+              <div><span class="mono">/privacy</span> → <span class="mono">/privacy-policy</span></div>
+              <div><span class="mono">/terms</span> → <span class="mono">/terms-conditions</span></div>
+              <div><span class="mono">/refund</span> → <span class="mono">/refund-policy</span></div>
+              <div style="margin-top: 8px">
+                If you had legacy blog URLs (add when needed):
+                <span class="mono">/blog/:slug</span> → <span class="mono">/blogs/:slug</span>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="card" id="technical-ref">
+          <h2>Security hardening (reference — implemented 2026-05-01)</h2>
+          <div class="table-scroll">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Implementation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Config</b></td>
+                <td>
+                  <span class="mono">next.config.mjs</span>: security headers + production HSTS + COOP + DNS prefetch control + cross-domain policy
+                </td>
+              </tr>
+              <tr>
+                <td><b>Edge</b></td>
+                <td>
+                  <span class="mono">src/middleware.ts</span>: matcher <span class="mono">/api/*</span>, verb filter, <b>600 requests/minute per IP</b> (first line of defence), CORP
+                </td>
+              </tr>
+              <tr>
+                <td><b>Parsing</b></td>
+                <td>
+                  <span class="mono">src/lib/security/safeJson.ts</span>: <span class="mono">readJsonBody</span> max bytes + JSON Content-Type
+                </td>
+              </tr>
+              <tr>
+                <td><b>Admin</b></td>
+                <td>
+                  <span class="mono">src/lib/security/adminAuth.ts</span> + <span class="mono">timingSafe.ts</span>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Booking input</b></td>
+                <td>
+                  Villa registry (<span class="mono">src/lib/security/villaId.ts</span>), booking id hygiene (<span class="mono">ids.ts</span>)
+                </td>
+              </tr>
+              <tr>
+                <td><b>API routes</b></td>
+                <td>
+                  Bookings CRUD/list/availability/leads/partner/careers/Razorpay/indexnow/oEmbed/villa &amp; experience media — handler rate limits layered under edge cap
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Evidence (key files reviewed)</h2>
+          <p style="margin: 0">
+            Core: <span class="mono">package.json</span>, <span class="mono">next.config.mjs</span>, <span class="mono">tsconfig.json</span>, <span class="mono">src/middleware.ts</span>.
+          </p>
+          <p style="margin-top: 10px; color: var(--muted); line-height: 1.65; font-size: 0.9rem">
+            Funnels UI: <span class="mono">EnquireOverlay</span>, <span class="mono">RathaaOverlay.tsx</span>, <span class="mono">PartnerOverlay.tsx</span>,
+            <span class="mono">WeddingVenueEnquiryForm.tsx</span>, <span class="mono">careers/page.tsx</span>, <span class="mono">paymentService.ts</span>.
+          </p>
+          <p style="margin-top: 10px; color: var(--muted); line-height: 1.65; font-size: 0.9rem">
+            APIs: <span class="mono">src/app/api/bookings/**</span>, <span class="mono">leads/**</span>, <span class="mono">careers/apply</span>, <span class="mono">payments/razorpay-order</span>,
+            <span class="mono">webhooks/razorpay</span>, <span class="mono">indexnow</span>, <span class="mono">instagram/oembed</span>, <span class="mono">villas/…/media</span>,
+            <span class="mono">experiences/…/media</span>.
+          </p>
+          <p style="margin-top: 10px; color: var(--muted); line-height: 1.65; font-size: 0.9rem">
+            GEO / SEO / layout: <span class="mono">public/llms.txt</span>, <span class="mono">layout.tsx</span>, <span class="mono">sitemap.ts</span>, <span class="mono">robots.ts</span>, villa &amp;
+            spaces layouts, legal &amp; wishlist/admin; DB <span class="mono">src/lib/db.ts</span>; email <span class="mono">src/lib/email/*</span>;
+            security <span class="mono">src/lib/security/*.ts</span>; blogs <span class="mono">src/data/blogs.ts</span>; media tree <span class="mono">public/Villa_Retreats_Tree.html</span>.
+          </p>
+        </div>
+      </div>
+
+      <div class="foot">
+        Revised from project source (2026-05-02 pass) · Client pack + <a href="./WEBDEV-Audit.html">WEBDEV-Audit.html</a> · No live crawl.<br />Markdown:
+        <span class="mono">audit-report.md</span>.
+      </div>
+    </div>
+  </body>
+</html>
+

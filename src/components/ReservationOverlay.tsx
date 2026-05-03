@@ -102,7 +102,7 @@ export default function ReservationOverlay({
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full md:w-[600px] h-[80vh] md:h-auto bg-[#0E3A2F] flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden md:max-h-[85vh]"
+              className="relative w-full md:w-[600px] h-[80vh] md:h-auto bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden md:max-h-[85vh]"
             >
               {/* NEW GLOBAL HEADER (Matches Mockup 2 - Two Tone Green) */}
               <div className="flex bg-[#0A3527] items-center justify-between px-5 md:px-6 py-4 border-b border-white/5 shrink-0 relative">

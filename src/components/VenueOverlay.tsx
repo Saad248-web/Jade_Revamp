@@ -3,19 +3,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
-  X,
-  ArrowLeft,
   Share2,
   MapPin,
   Users,
   Car,
   Home,
-  ArrowRight,
   Play,
-  Calendar,
-  Check,
   Phone,
   Mail,
   User,
@@ -23,13 +18,29 @@ import {
   Instagram,
   Youtube,
 } from "lucide-react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import PrimaryButton from "@/components/PrimaryButton";
 import { buildVillaGalleryItems } from "@/lib/villaGallery";
 import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
 import type { OverlayPageKey } from "@/lib/overlayVillaData";
 import { getOverlayVillaData } from "@/lib/overlayVillaData";
+import type { HeroSplitCustom } from "@/lib/heroSplitCarouselVariants";
+import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
+import VillaPricingBlocks, {
+  buildWeddingWeekendOverlayPricingBlocks,
+} from "@/components/experience/VillaPricingBlocks";
+import ExperienceFaqAccordion, {
+  ExperiencePolicyCompactList,
+} from "@/components/experience/ExperienceFaqAccordion";
+import WeddingVenueEnquiryForm from "@/components/experience/WeddingVenueEnquiryForm";
+import { EXPERIENCE_OVERLAY_ROOT_CLASS } from "@/lib/experienceOverlayTheme";
+import {
+  VillaExperienceBookingBottomBar,
+  VillaExperienceHeroCarousel,
+  VillaExperienceOverlayCloseFramer,
+  VillaExperienceOverlayContentFrame,
+  VillaExperienceStickyTabs,
+} from "@/components/experience/VillaExperienceOverlayLayout";
 
 interface VenueOverlayProps {
   isOpen: boolean;
@@ -53,6 +64,12 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
   const [view, setView] = useState<"form" | "success">("form");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const reducedMotion = useReducedMotion();
+
+  const overlayCarouselCustom: HeroSplitCustom = {
+    dir: direction,
+    lowFx: !!reducedMotion,
+  };
   const formRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
@@ -69,6 +86,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
   const overlayVilla = getOverlayVillaData(resolvedPage, villa?.id);
   const v = overlayVilla ?? villa;
+  const mapsHref = getVillaGoogleMapsUrl(v);
 
   useEffect(() => {
     setMounted(true);
@@ -173,82 +191,19 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="fixed inset-0 z-[9999] bg-[#0E3A2F] overflow-y-auto text-white scrollbar-none"
+      className={EXPERIENCE_OVERLAY_ROOT_CLASS}
       data-lenis-prevent
     >
-      {/* FIXED CLOSE BUTTON (TOP-RIGHT) */}
-      <MotionButton
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        onClick={onClose}
-        aria-label="Close"
-        className="fixed top-6 right-6 z-[200] w-12 h-12 flex items-center justify-center bg-[#124131] rounded-full text-white shadow-2xl pointer-events-auto hover:bg-[#1f5c48] transition-colors"
-      >
-        <X className="w-6 h-6 stroke-[1.5]" />
-      </MotionButton>
+      <VillaExperienceOverlayCloseFramer MotionButton={MotionButton} onClose={onClose} />
 
-      <div className="min-h-screen pb-28">
-        {/* CONTENT (CENTERED LIKE BOOK PAGE) */}
-        <div className="max-w-5xl mx-auto w-full pb-10 px-4 sm:px-6 md:px-8">
-            {/* IMAGE CAROUSEL */}
-            <div className="relative w-full h-[clamp(260px,50vh,600px)] overflow-hidden bg-black/20 group rounded-none">
-              <AnimatePresence initial={false} custom={direction}>
-                <MotionDiv
-                  key={currentImageIndex}
-                  custom={direction}
-                  initial={{ x: direction > 0 ? "100%" : "-100%", opacity: 1 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: direction > 0 ? "-100%" : "100%", opacity: 1 }}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="absolute inset-0"
-                >
-                  <Image
-                    src={images[currentImageIndex].image}
-                    alt={images[currentImageIndex].name}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                </MotionDiv>
-              </AnimatePresence>
-
-              {/* Numerical Pagination */}
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4 bg-black/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/5">
-                <span className="text-white font-philosopher text-[14px] sm:text-[15px] md:text-[16px] leading-none">
-                  {currentImageIndex + 1}
-                </span>
-                <div className="w-8 h-[1px] bg-white/40" />
-                <span className="text-white/40 font-philosopher text-[14px] sm:text-[15px] md:text-[16px] leading-none">
-                  {images.length}
-                </span>
-              </div>
-
-              {/* Navigation Arrows */}
-              <button
-                onClick={prevImage}
-                className="absolute left-0 top-0 bottom-0 w-16 flex items-center justify-center bg-black/0 hover:bg-black/10 text-white/40 hover:text-white transition-all group z-10"
-              >
-                <div className="w-10 h-10 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-sm group-hover:bg-[#EFCD62] group-hover:text-black transition-all">
-                  <ArrowLeft className="w-5 h-5" />
-                </div>
-              </button>
-              <button
-                onClick={nextImage}
-                className="absolute right-0 top-0 bottom-0 w-16 flex items-center justify-center bg-black/0 hover:bg-black/10 text-white/40 hover:text-white transition-all group z-10"
-              >
-                <div className="w-10 h-10 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-sm group-hover:bg-[#EFCD62] group-hover:text-black transition-all">
-                  <ArrowRight className="w-5 h-5" />
-                </div>
-              </button>
-            </div>
-
-            {/* SPACE NAME - ELEVATED FOR FLOATING FEEL */}
-            <div className="mt-6 px-4 text-center">
-              <span className="text-white/50 font-manrope text-gh-label font-bold tracking-[0.12em]">
-                {images[currentImageIndex].name || "SPACE"}
-              </span>
-            </div>
+      <VillaExperienceOverlayContentFrame>
+            <VillaExperienceHeroCarousel
+              images={images}
+              currentImageIndex={currentImageIndex}
+              carouselCustom={overlayCarouselCustom}
+              onPrev={prevImage}
+              onNext={nextImage}
+            />
 
             {/* INFO SECTION */}
             <div className="px-4 py-8">
@@ -267,10 +222,16 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
               </div>
 
               <div className="flex items-center gap-6 text-white/70 font-manrope text-gh-body mb-8">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-[#EFCD62]" />
-                  <span>{v.location.split("·")[0]}</span>
-                </div>
+                <a
+                  href={mapsHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+                  aria-label="Open location in Google Maps"
+                >
+                  <MapPin className="w-5 h-5 text-[#EFCD62] shrink-0" />
+                  <span className="hover:underline underline-offset-4">{v.location.split("·")[0]}</span>
+                </a>
                 <div className="w-1 h-1 bg-white/20 rounded-full" />
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5 text-[#EFCD62]" />
@@ -341,22 +302,11 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                 </div>
               </div>
 
-              {/* TABS NAVIGATION - STICKY */}
-              <div className="sticky top-0 z-[60] bg-[#0E3A2F] border-b border-white/10 mb-8 flex overflow-x-auto scrollbar-none py-2">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => scrollToSection(tab)}
-                    className={`px-4 py-4 text-gh-label md:text-gh-label font-bold tracking-widest uppercase transition-colors whitespace-nowrap border-b-2 ${
-                      activeTab === tab
-                        ? "border-[#EFCD62] text-[#EFCD62] bg-[#EFCD62]/5"
-                        : "border-transparent text-white/40 hover:text-white"
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
+              <VillaExperienceStickyTabs
+                tabs={tabs}
+                activeTab={activeTab}
+                onTabClick={(tab) => scrollToSection(tab)}
+              />
 
               {/* ALL SECTIONS RENDERED STATICALLY */}
               <div className="space-y-24">
@@ -394,136 +344,56 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
                 {/* Pricing Section */}
                 <section id="pricing" className="scroll-mt-24">
-                  <div className="space-y-12">
-                    <h3 className="text-gh-h2 font-philosopher">Pricing</h3>
-                    {(() => {
-                      const pricingData = [];
-
-                      // 1. Half-Day Rental (Mapped from event)
-                      if (v.pricing?.event) {
-                        pricingData.push({
-                          ...v.pricing.event,
-                          title: "Half-Day Rental",
-                          subtitle: "6 hours",
-                        });
-                      }
-
-                      // 2. Full-Day Rental (Mapped from stay)
-                      if (v.pricing?.stay) {
-                        pricingData.push({
-                          ...v.pricing.stay,
-                          title: "Full-Day Rental",
-                          subtitle: "12 hours",
-                        });
-                      }
-
-                      // 3. Multi-Day Events
-                      pricingData.push({
-                        title: "Multi-Day Events",
-                        subtitle: "24+ hours (Customizable)",
-                        packages: [
-                          {
-                            label: "Starting Package",
-                            sublabel: "Custom quotes",
-                            price: "On Request",
-                          },
-                        ],
-                        features: [
-                          "Full Estate Access",
-                          "Overnight Stay",
-                          "Event Coordination",
-                          "Security",
-                        ],
-                      });
-
-                      return pricingData.map((rent: any, idx: number) => (
-                        <div
-                          key={idx}
-                          className="border border-white/10 rounded-sm p-5 md:p-6 bg-white/5 mb-6"
-                        >
-                          <h4 className="text-[#EFCD62] text-gh-h3 font-manrope font-semibold mb-1">
-                            {rent.title}
-                          </h4>
-                          <p className="text-white/40 text-gh-desc mb-6">
-                            {rent.subtitle || rent.duration}
-                          </p>
-
-                          <div className="space-y-3 mb-8">
-                            {(rent.packages || rent.items).map(
-                              (item: any, i: number) => (
-                                <div
-                                  key={i}
-                                  className="flex justify-between items-center bg-black/20 p-4 rounded-sm border border-white/5"
-                                >
-                                  <div className="flex flex-col">
-                                    <span className="text-white font-bold text-gh-desc mb-1 uppercase tracking-wide">
-                                      {item.label}
-                                    </span>
-                                    <span className="text-white/40 text-gh-label leading-tight">
-                                      {item.sublabel || item.head}
-                                    </span>
-                                  </div>
-                                  <div className="text-white font-bold text-[15px] sm:text-[16px] md:text-[18px] leading-tight uppercase tracking-wide text-right">
-                                    {item.price}
-                                  </div>
-                                </div>
-                              ),
-                            )}
-                          </div>
-
-                          <div className="space-y-4">
-                            <span className="text-white/40 text-gh-label font-bold uppercase tracking-widest">
-                              Included:
-                            </span>
-                            <div className="flex flex-wrap gap-2">
-                              {(rent.features || rent.included).map(
-                                (inc: string) => (
-                                  <span
-                                    key={inc}
-                                    className="px-3 py-1.5 bg-[#174539] border border-white/5 rounded-sm text-white/70 text-gh-label"
-                                  >
-                                    {inc}
-                                  </span>
-                                ),
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ));
-                    })()}
-                    <p className="text-white/40 text-gh-label leading-relaxed">
-                      Note: Prices are base rates and may vary based on season,
-                      day of week, and specific requirements. Additional charges
-                      may apply for decorations, catering, and extended hours.
-                    </p>
-                  </div>
+                  <VillaPricingBlocks
+                    blocks={buildWeddingWeekendOverlayPricingBlocks(v)}
+                    footnote={
+                      <p className="text-white/40 text-gh-label leading-relaxed">
+                        Note: Prices are base rates and may vary based on
+                        season, day of week, and specific requirements.
+                        Additional charges may apply for decorations, catering,
+                        and extended hours.
+                      </p>
+                    }
+                  />
                 </section>
 
                 {/* Location Section */}
                 <section id="location" className="scroll-mt-24">
                   <div className="space-y-8">
                     <h3 className="text-gh-h2 font-philosopher">Location</h3>
-                    <div className="relative aspect-video w-full overflow-hidden rounded-sm bg-gray-800 border border-white/10">
+                    <a
+                      href={mapsHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative block aspect-video w-full overflow-hidden rounded-sm bg-gray-800 border border-white/10 outline-none transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+                      aria-label="Open location in Google Maps"
+                    >
                       <Image
                         src={
                           v.locationDetails?.mapImage ||
-                          "/X/Magnolia/VILLA2.webp"
+                          "/Villa_Retreats/Magnolia/Spaces/Villa.webp"
                         }
                         alt="Map"
                         fill
                         className="object-cover opacity-80"
                       />
-                    </div>
+                    </a>
                     <div className="border border-white/10 p-6 md:p-8 rounded-sm bg-white/5 flex items-start gap-4">
-                      <MapPin className="w-6 h-6 text-[#EFCD62] shrink-0 mt-1" />
-                      <div>
-                        <p className="text-white font-manrope text-gh-body leading-relaxed mb-4">
+                      <MapPin className="w-6 h-6 text-[#EFCD62] shrink-0 mt-1" aria-hidden />
+                      <div className="min-w-0 flex-1">
+                        <a
+                          href={mapsHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-white font-manrope text-gh-body leading-relaxed mb-4 block outline-none rounded-sm hover:text-[#EFCD62] hover:underline underline-offset-4 transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+                        >
                           {v.locationDetails?.address ||
                             "Tranquil Woods, Kanakapura Road, Bangalore - 560062"}
-                        </p>
+                        </a>
                         <div className="px-4 py-2 bg-white/5 rounded-sm inline-block">
                           <span className="text-white/60 text-gh-label">
-                            Approximately 45 minutes from Bangalore City Center
+                            {v.locationDetails?.distance ||
+                              "Approximately 45 minutes from Bangalore City Center"}
                           </span>
                         </div>
                       </div>
@@ -569,7 +439,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                     </h3>
                     <div className="relative aspect-video w-full overflow-hidden rounded-sm bg-black/40 border border-white/10 group cursor-pointer">
                       <Image
-                        src="/X/Magnolia/22.webp"
+                        src="/Villa_Retreats/Magnolia/Hero/hero.webp"
                         alt="Video Cover"
                         fill
                         className="object-cover opacity-60 group-hover:opacity-40 transition-opacity"
@@ -588,60 +458,38 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
                 {/* FAQ Section */}
                 <section id="faq" className="scroll-mt-24">
-                  <div className="space-y-12">
+                  <div className="space-y-8">
                     <h3 className="text-gh-h2 font-philosopher">FAQ</h3>
-                    <div className="space-y-8">
-                      {(v.faq || []).map((item: any, idx: number) => (
-                        <div key={idx} className="flex gap-4 group">
-                          <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center mt-1">
-                            <div className="w-2 h-2 rotate-45 bg-[#EFCD62]" />
-                          </div>
-                          <div>
-                            <h4 className="text-white font-manrope font-bold text-gh-body mb-2">
-                              {item.question}
-                            </h4>
-                            <p className="text-white/60 text-gh-body leading-relaxed">
-                              {item.answer}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                    <ExperienceFaqAccordion
+                      items={(v.faq || []).map((item: any) => ({
+                        question: item.question,
+                        answer: item.answer,
+                      }))}
+                    />
 
-                    <div className="pt-12">
-                      <h3 className="text-gh-h2 font-philosopher mb-8">
+                    <div className="pt-8 border-t border-white/5">
+                      <h3 className="text-gh-h2 font-philosopher mb-6">
                         Key Policies
                       </h3>
-                      <div className="space-y-8">
-                        {[
+                      <ExperiencePolicyCompactList
+                        policies={[
                           {
                             title: "Cancellation Policy",
-                            desc: "Full refund if cancelled 90+ days before. 50% refund for 30-90 days. No refund within 30 days.",
+                            desc:
+                              "Full refund if cancelled 90+ days before. 50% refund for 30-90 days. No refund within 30 days.",
                           },
                           {
                             title: "Booking Requirements",
-                            desc: "30% advance payment required. Balance due 15 days before event. Refundable security deposit applicable.",
+                            desc:
+                              "30% advance payment required. Balance due 15 days before event. Refundable security deposit applicable.",
                           },
                           {
                             title: "Outside Vendors",
-                            desc: "You can bring your own caterers, decorators, and photographers. Coordination required.",
+                            desc:
+                              "You can bring your own caterers, decorators, and photographers. Coordination required.",
                           },
-                        ].map((policy) => (
-                          <div key={policy.title} className="flex gap-4 group">
-                            <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center mt-1">
-                              <div className="w-2 h-2 rotate-45 bg-[#EFCD62]" />
-                            </div>
-                            <div>
-                              <h4 className="text-white font-manrope font-bold text-gh-body mb-2">
-                                {policy.title}
-                              </h4>
-                              <p className="text-white/60 text-gh-body leading-relaxed">
-                                {policy.desc}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                        ]}
+                      />
                     </div>
                   </div>
                 </section>
@@ -663,169 +511,10 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                       through venues & pricing.
                     </p>
 
-                    <form
-                      className="space-y-6"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        setView("success");
-                      }}
-                    >
-                      <div className="relative">
-                        <label className="absolute -top-3 left-4 bg-[#0D4032] px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope">
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          className="w-full bg-transparent border border-white/20 rounded-[4px] px-6 py-4 focus:border-[#EFCD62] outline-none transition-colors"
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="relative">
-                          <input
-                            type="tel"
-                            placeholder="Phone Number*"
-                            className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none transition-colors"
-                          />
-                        </div>
-                        <div className="relative">
-                          <input
-                            type="email"
-                            placeholder="Email*"
-                            className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none transition-colors"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="relative">
-                        <input
-                          type="text"
-                          placeholder="Date"
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none transition-colors pr-12"
-                        />
-                        <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
-                      </div>
-
-                      <div className="space-y-4">
-                        <p className="text-white/60 text-gh-label font-bold uppercase tracking-widest">
-                          Services Required:
-                        </p>
-                        <div className="grid grid-cols-2 gap-4">
-                          {[
-                            "Décor & Styling",
-                            "Catering",
-                            "Photography",
-                            "Music & Entertainment",
-                            "Not decided yet",
-                          ].map((s) => (
-                            <label
-                              key={s}
-                              className="flex items-center gap-3 cursor-pointer group"
-                            >
-                              <div className="w-5 h-5 border border-white/20 flex items-center justify-center group-hover:border-[#EFCD62] transition-colors">
-                                <Check className="w-4 h-4 text-[#EFCD62] opacity-0" />
-                              </div>
-                              <span className="text-white/80 text-gh-desc md:text-gh-body">
-                                {s}
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="space-y-4 pt-4">
-                        <p className="text-white/60 text-gh-label font-bold uppercase tracking-widest">
-                          Events You're Planning
-                        </p>
-                        <div className="grid grid-cols-2 gap-4">
-                          {[
-                            "Mehendi",
-                            "Haldi",
-                            "Sangeet",
-                            "Cocktail Night",
-                            "Bachelor / Bachelorette",
-                            "Pre-Wedding Shoot",
-                          ].map((e) => (
-                            <label
-                              key={e}
-                              className="flex items-center gap-3 cursor-pointer group"
-                            >
-                              <div className="w-5 h-5 border border-white/20 flex items-center justify-center group-hover:border-[#EFCD62] transition-colors">
-                                <Check className="w-4 h-4 text-[#EFCD62] opacity-0" />
-                              </div>
-                              <span className="text-white/80 text-gh-desc md:text-gh-body">
-                                {e}
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="space-y-4 pt-4">
-                        <p className="text-white/60 text-gh-label font-bold uppercase tracking-widest">
-                          Preferred Setting
-                        </p>
-                        <div className="grid grid-cols-2 gap-4">
-                          {["Outdoor", "Indoor", "Combination of both"].map(
-                            (p) => (
-                              <label
-                                key={p}
-                                className="flex items-center gap-3 cursor-pointer group"
-                              >
-                                <div className="w-5 h-5 border border-white/20 flex items-center justify-center group-hover:border-[#EFCD62] transition-colors">
-                                  <Check className="w-4 h-4 text-[#EFCD62] opacity-0" />
-                                </div>
-                                <span className="text-white/80 text-gh-desc md:text-gh-body">
-                                  {p}
-                                </span>
-                              </label>
-                            ),
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="pt-4">
-                        <textarea
-                          placeholder="Additional requests"
-                          rows={4}
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none transition-colors"
-                        />
-                      </div>
-
-                      <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
-                        By proceeding, you agree to our{" "}
-                        <Link
-                          href="/privacy-policy"
-                          className="text-[#EFCD62] hover:underline"
-                          onClick={onClose}
-                        >
-                          Privacy Policy
-                        </Link>
-                        ,{" "}
-                        <Link
-                          href="/terms-conditions"
-                          className="text-[#EFCD62] hover:underline"
-                          onClick={onClose}
-                        >
-                          Terms & Conditions
-                        </Link>{" "}
-                        and{" "}
-                        <Link
-                          href="/refund-policy"
-                          className="text-[#EFCD62] hover:underline"
-                          onClick={onClose}
-                        >
-                          Refund Policy
-                        </Link>
-                      </p>
-
-                      <button
-                        type="submit"
-                        className="w-full py-5 bg-[#174539] border border-white/10 text-white font-manrope font-bold text-gh-label tracking-widest uppercase hover:bg-white hover:text-black transition-all"
-                      >
-                        CONTACT US
-                      </button>
-                    </form>
+                    <WeddingVenueEnquiryForm
+                      onSuccess={() => setView("success")}
+                      onClosePrivacyNav={onClose}
+                    />
                   </>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16 text-center">
@@ -901,37 +590,13 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                 )}
               </div>
             </div>
-        </div>
-      </div>
+      </VillaExperienceOverlayContentFrame>
 
-      {/* BOTTOM PRICE BAR (SAME AS VILLA DETAIL PAGE) */}
-      <div className="fixed bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 py-4 z-[150] transition-all flex justify-center">
-        <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-4 px-4 md:px-12">
-          <p className="font-manrope whitespace-nowrap leading-tight">
-            <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold">
-              Starting from
-            </span>{" "}
-            <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold">
-              {price || "Enquire"}
-            </span>
-          </p>
-          <div className="flex items-center gap-4 md:gap-6">
-            <button
-              onClick={() => scrollToSection("enquiry")}
-              className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap"
-            >
-              ENQUIRE
-            </button>
-            <PrimaryButton
-              href={`/book?villa=${v.id}`}
-              withArrow={false}
-              className="whitespace-nowrap"
-            >
-              BOOK VILLA
-            </PrimaryButton>
-          </div>
-        </div>
-      </div>
+      <VillaExperienceBookingBottomBar
+        villaId={v.id}
+        onwardPrice={price}
+        onEnquireClick={() => scrollToSection("enquiry")}
+      />
     </MotionDiv>,
     document.body,
   );

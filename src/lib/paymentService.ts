@@ -1,8 +1,7 @@
 /**
- * PAYMENT SERVICE ABSTRACTION
- * Prepares the frontend for embedded payment integration.
- * Currently mock-only — no real gateway is called.
- * To integrate: replace initiatePayment() with your payment provider SDK call.
+ * PAYMENT SERVICE
+ * Calls `POST /api/payments/razorpay-order` when Razorpay env keys exist (server returns 501 if not).
+ * Client UI can open Razorpay Checkout with `NEXT_PUBLIC_PAYMENT_GATEWAY_KEY` as `key` + returned `orderId`.
  */
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
@@ -10,63 +9,98 @@ const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export interface PaymentSession {
   orderId: string;
   amount: number;
+  /** INR whole rupees (UI convenience mirror of amount sent to Razorpay) */
+  amountRupees: number;
+  /** INR paise returned from order API — pass to Razorpay Checkout `amount` */
+  amountSubunits?: number;
   status: "pending" | "processing" | "success" | "failed";
+  razorpayOrderId?: string;
+  razorpayKeyId?: string;
+  /** False when Razorpay is not configured — UI should keep demo / manual flows */
+  gatewayConfigured?: boolean;
 }
 
-/**
- * Initiates a payment session.
- * Real integration: call your payment gateway (Razorpay, Stripe, etc.) here.
- * NEXT_PUBLIC_PAYMENT_GATEWAY_KEY is available via process.env (see .env.example)
- */
+export interface InitiatePaymentOptions {
+  /** Links the Razorpay order to `bookings.id` server-side */
+  bookingUuid?: string;
+}
+
 export async function initiatePayment(
-  amount: number,
+  amountRupees: number,
   referenceId: string,
+  opts?: InitiatePaymentOptions,
 ): Promise<PaymentSession> {
-  await delay(800);
+  try {
+    const amountSubunits = Math.max(100, Math.round(amountRupees * 100));
+    const receipt =
+      referenceId.replace(/[^\w-]/g, "").slice(0, 40) || `rc${Date.now()}`;
+    const body: Record<string, unknown> = {
+      amountSubunits,
+      receipt,
+    };
+    if (opts?.bookingUuid) {
+      body.booking_uuid = opts.bookingUuid;
+    }
 
-  // TODO: Replace with real payment gateway initialization:
-  // const razorpay = new window.Razorpay({
-  //   key: process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_KEY,
-  //   amount: amount * 100, // paise
-  //   ...
-  // });
+    const res = await fetch("/api/payments/razorpay-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
-  console.info("[PaymentService] Mock payment session created:", {
-    referenceId,
-    amount,
-  });
+    const data = (await res.json().catch(() => ({}))) as {
+      configured?: boolean;
+      orderId?: string;
+      keyId?: string;
+      amount?: number;
+      error?: string;
+    };
+
+    if (res.ok && data.orderId) {
+      const amtSub =
+        typeof data.amount === "number"
+          ? data.amount
+          : amountSubunits;
+      return {
+        orderId: referenceId,
+        amount: amountRupees,
+        amountRupees,
+        amountSubunits: amtSub,
+        status: "pending",
+        razorpayOrderId: data.orderId,
+        razorpayKeyId: data.keyId,
+        gatewayConfigured: true,
+      };
+    }
+
+    console.info("[PaymentService] Gateway unavailable — mock session", data.error ?? res.status);
+  } catch (e) {
+    console.warn("[PaymentService] Order request failed, using mock:", e);
+  }
+
+  await delay(400);
 
   return {
     orderId: referenceId,
-    amount,
+    amount: amountRupees,
+    amountRupees,
+    amountSubunits: Math.max(100, Math.round(amountRupees * 100)),
     status: "pending",
+    gatewayConfigured: false,
   };
 }
 
-/**
- * Mock payment processing — simulates the 2-second embedded checkout flow.
- * Returns "success" or "failed" for UI branching.
- */
 export async function processPayment(
   _session: PaymentSession,
 ): Promise<"success" | "failed"> {
-  await delay(2000); // Simulate payment gateway processing
-  // In production: this resolves via gateway webhook/callback, not polling
+  await delay(1200);
   return "success";
 }
 
-/**
- * Called after successful payment to record confirmation.
- */
 export function handleSuccess(orderId: string): void {
   console.info("[PaymentService] Payment confirmed:", orderId);
-  // TODO: Fire analytics event here (e.g., GTM dataLayer push)
 }
 
-/**
- * Called after payment failure — logs reason, ready for retry logic.
- */
 export function handleFailure(reason: string): void {
   console.warn("[PaymentService] Payment failed:", reason);
-  // TODO: Fire analytics/error tracking here
 }

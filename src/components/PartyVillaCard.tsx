@@ -1,12 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { Users, Home, MapPin, ArrowLeft, ArrowRight, Bed } from "lucide-react";
 import { getHeroOverrideForId } from "@/lib/heroOverrides";
 import { getBhk, getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
 import { getOverlayVillaData } from "@/lib/overlayVillaData";
+import {
+  liquidCarouselBgVariants,
+  type HeroSplitCustom,
+} from "@/lib/heroSplitCarouselVariants";
+import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 
 const normalizePublicImageSrc = (src: string) => {
   if (!src.startsWith("/")) return src;
@@ -77,6 +82,12 @@ export default function PartyVillaCard({
 
   const currentSpace = images[currentImageIndex];
 
+  const reducedMotion = useReducedMotion();
+  const carouselCustom: HeroSplitCustom = {
+    dir: direction,
+    lowFx: !!reducedMotion,
+  };
+
   // Party-specific stats mapping based on shared images
   const stats = [
     {
@@ -104,16 +115,23 @@ export default function PartyVillaCard({
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 xl:gap-14 w-full pb-8 lg:py-10 border-b border-white/5 last:border-b-0 bg-[#25282C]">
       {/* IMAGE SECTION */}
-      <div className="relative w-full lg:w-[45%] h-[38vh] lg:h-[360px] xl:h-[420px] overflow-hidden bg-white/5 flex-shrink-0">
-        <AnimatePresence initial={false} custom={direction}>
+      <div
+        className="relative w-full lg:w-[45%] h-[38vh] lg:h-[360px] xl:h-[420px] overflow-hidden bg-white/5 flex-shrink-0"
+        style={{ perspective: "1400px" }}
+      >
+        <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
           <motion.div
             key={`${villa.id}-${currentImageIndex}`}
-            custom={direction}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            custom={carouselCustom}
+            variants={liquidCarouselBgVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="absolute inset-0"
+            style={{
+              transformStyle: "preserve-3d",
+              backfaceVisibility: "hidden",
+            }}
           >
             <Image
               src={currentSpace.image}
@@ -140,11 +158,11 @@ export default function PartyVillaCard({
               {currentSpace.name || "ESTATE"}
             </span>
             <div className="flex items-center gap-4">
-              <span className="text-white font-philosopher text-gh-scroll">
+              <span className="text-white font-philosopher text-gh-gallery-pagination tabular-nums leading-none">
                 {currentImageIndex + 1}
               </span>
-              <div className="w-12 h-[1px] bg-white/40" />
-              <span className="text-white/60 font-philosopher text-gh-scroll">
+              <div className="w-12 h-[1px] bg-white/40 shrink-0" />
+              <span className="text-white/60 font-philosopher text-gh-gallery-pagination tabular-nums leading-none">
                 {images.length}
               </span>
             </div>
@@ -160,7 +178,7 @@ export default function PartyVillaCard({
       </div>
 
       {/* CONTENT SECTION */}
-      <div className="flex flex-col flex-1 px-6 md:px-8 lg:px-0 pt-6 lg:pt-0 justify-start">
+      <div className="flex flex-col flex-1 max-lg:px-0 lg:px-0 pt-3 lg:pt-0 justify-start text-left">
         <span
           className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase"
           style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
@@ -185,19 +203,23 @@ export default function PartyVillaCard({
           {villa.name}
         </h2>
 
-        <div
-          className="flex items-center gap-2 text-white/50"
+        <a
+          href={getVillaGoogleMapsUrl(villa)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-white/50 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
           style={{ marginBottom: "clamp(4px, 0.8vw, 8px)" }}
+          onClick={(e) => e.stopPropagation()}
         >
-          <MapPin className="w-5 h-5 text-[#EFCD62]" />
-          <span className="font-manrope text-gh-body tracking-wide">
+          <MapPin className="w-5 h-5 text-[#EFCD62] shrink-0" />
+          <span className="font-manrope text-gh-body tracking-wide hover:underline underline-offset-4">
             {villa.location}
           </span>
-        </div>
+        </a>
 
         <p
-          className="font-manrope text-white/50 leading-relaxed text-gh-desc line-clamp-2 md:line-clamp-none"
-          style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+          className="font-manrope text-white/50 leading-relaxed text-gh-desc line-clamp-3 lg:line-clamp-none"
+          style={{ marginBottom: "clamp(20px, 4vw, 36px)" }}
         >
           {villa.description}
         </p>
@@ -222,13 +244,14 @@ export default function PartyVillaCard({
 
         {/* Footer */}
         <div className="mt-auto flex flex-row items-center justify-between pt-4">
-          <span className="text-white font-manrope font-bold text-gh-label tracking-tight">
+          <span className="text-white font-manrope font-bold text-gh-villa-footer-row tracking-tight">
             {onwards ? onwards : "Enquire for pricing"}
           </span>
 
           <button
+            type="button"
             onClick={onKnowMore}
-            className="inline-flex items-center gap-2 text-[#EFCD62] font-manrope text-gh-desc tracking-[0.2em] font-bold uppercase transition-all group"
+            className="inline-flex items-center gap-2 text-[#EFCD62] font-manrope text-gh-villa-footer-row tracking-[0.2em] font-bold uppercase transition-all group"
           >
             KNOW MORE
             <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />

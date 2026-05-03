@@ -3,17 +3,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
-  X,
-  ArrowLeft,
   Share2,
   MapPin,
   Users,
   Home,
   ArrowRight,
   Calendar,
-  Check,
   ChevronRight,
   Play,
   Facebook,
@@ -26,6 +23,25 @@ import { buildVillaGalleryItems } from "@/lib/villaGallery";
 import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
 import type { OverlayPageKey } from "@/lib/overlayVillaData";
 import { getOverlayVillaData } from "@/lib/overlayVillaData";
+import type { HeroSplitCustom } from "@/lib/heroSplitCarouselVariants";
+import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
+import VillaPricingBlocks, {
+  buildCorporateOverlayPricingBlocks,
+} from "@/components/experience/VillaPricingBlocks";
+import ExperienceFaqAccordion, {
+  ExperiencePolicyCompactList,
+} from "@/components/experience/ExperienceFaqAccordion";
+import {
+  EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS,
+  EXPERIENCE_OVERLAY_ROOT_CLASS,
+} from "@/lib/experienceOverlayTheme";
+import {
+  VillaExperienceBookingBottomBar,
+  VillaExperienceHeroCarousel,
+  VillaExperienceOverlayCloseFramer,
+  VillaExperienceOverlayContentFrame,
+  VillaExperienceStickyTabs,
+} from "@/components/experience/VillaExperienceOverlayLayout";
 
 interface CorporateVenueOverlayProps {
   isOpen: boolean;
@@ -47,8 +63,37 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
   const [view, setView] = useState<"form" | "success">("form");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const reducedMotion = useReducedMotion();
+  const overlayCarouselCustom: HeroSplitCustom = {
+    dir: direction,
+    lowFx: !!reducedMotion,
+  };
   const formRef = useRef<HTMLDivElement>(null);
+  const corpDateRef = useRef<HTMLInputElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
+  const [corpFullName, setCorpFullName] = useState("");
+  const [corpCompany, setCorpCompany] = useState("");
+  const [corpPhone, setCorpPhone] = useState("");
+  const [corpEmail, setCorpEmail] = useState("");
+  const [corpTeamSize, setCorpTeamSize] = useState("");
+  const [corpDate, setCorpDate] = useState("");
+  const [corpFormats, setCorpFormats] = useState<Set<string>>(new Set());
+  const [corpServices, setCorpServices] = useState<Set<string>>(new Set());
+  const [corpPref, setCorpPref] = useState<Set<string>>(new Set());
+  const [corpNotes, setCorpNotes] = useState("");
+  const [corpError, setCorpError] = useState<string | null>(null);
+
+  const corpToggle = (
+    setFn: React.Dispatch<React.SetStateAction<Set<string>>>,
+    label: string,
+  ) => {
+    setFn((prev) => {
+      const n = new Set(prev);
+      if (n.has(label)) n.delete(label);
+      else n.add(label);
+      return n;
+    });
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -71,6 +116,8 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
   const overlayVilla = getOverlayVillaData(overlayPage ?? "corporate", villa?.id);
   const v = overlayVilla ?? villa;
+  const mapsHref = getVillaGoogleMapsUrl(v);
+  const corporatePricingBlocks = buildCorporateOverlayPricingBlocks(v);
 
   const images = (() => {
     const gallery = buildVillaGalleryItems(v, 8);
@@ -158,82 +205,20 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="fixed inset-0 z-[9999] bg-[#0E3A2F] overflow-y-auto text-white scrollbar-none"
+      className={EXPERIENCE_OVERLAY_ROOT_CLASS}
       data-lenis-prevent
     >
-      {/* FIXED CLOSE BUTTON (TOP-RIGHT) */}
-      <MotionButton
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        onClick={onClose}
-        aria-label="Close"
-        className="fixed top-6 right-6 z-[200] w-12 h-12 flex items-center justify-center bg-[#124131] rounded-full text-white shadow-2xl pointer-events-auto hover:bg-[#1f5c48] transition-colors"
-      >
-        <X className="w-6 h-6 stroke-[1.5]" />
-      </MotionButton>
+      <VillaExperienceOverlayCloseFramer MotionButton={MotionButton} onClose={onClose} />
 
-      <div className="min-h-screen pb-28">
-        {/* CONTENT (CENTERED LIKE BOOK PAGE) */}
-        <div className="max-w-5xl mx-auto w-full pb-10 px-4 sm:px-6 md:px-8">
-            {/* HERO IMAGE SECTION */}
-            <div className="relative w-full h-[clamp(260px,50vh,600px)] overflow-hidden rounded-none group">
-              <AnimatePresence initial={false} custom={direction}>
-                <MotionDiv
-                  key={currentImageIndex}
-                  custom={direction}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="absolute inset-0"
-                >
-                  <Image
-                    src={images[currentImageIndex].image}
-                    alt={images[currentImageIndex].name}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                </MotionDiv>
-              </AnimatePresence>
-
-              {/* Numerical Pagination */}
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/5">
-                <span className="text-white font-philosopher text-[14px] sm:text-[15px] md:text-[16px] leading-none">
-                  {currentImageIndex + 1}
-                </span>
-                <div className="w-8 h-[1px] bg-white/40" />
-                <span className="text-white/40 font-philosopher text-[14px] sm:text-[15px] md:text-[16px] leading-none">
-                  {images.length}
-                </span>
-              </div>
-
-              {/* Navigation Arrows */}
-              <button
-                onClick={prevImage}
-                className="absolute left-0 top-0 bottom-0 w-16 flex items-center justify-center bg-transparent text-white/40 hover:text-white transition-all group z-10"
-              >
-                <div className="w-10 h-10 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-sm group-hover:bg-[#EFCD62] group-hover:text-black transition-all">
-                  <ArrowLeft className="w-5 h-5" />
-                </div>
-              </button>
-              <button
-                onClick={nextImage}
-                className="absolute right-0 top-0 bottom-0 w-16 flex items-center justify-center bg-transparent text-white/40 hover:text-white transition-all group z-10"
-              >
-                <div className="w-10 h-10 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-sm group-hover:bg-[#EFCD62] group-hover:text-black transition-all">
-                  <ArrowRight className="w-5 h-5" />
-                </div>
-              </button>
-            </div>
-
-            {/* SPACE NAME */}
-            <div className="mt-6 px-4 text-center">
-              <span className="text-white/50 font-manrope text-gh-label font-bold tracking-[0.12em]">
-                {images[currentImageIndex].name || "Property"}
-              </span>
-            </div>
+      <VillaExperienceOverlayContentFrame>
+            <VillaExperienceHeroCarousel
+              images={images}
+              currentImageIndex={currentImageIndex}
+              carouselCustom={overlayCarouselCustom}
+              onPrev={prevImage}
+              onNext={nextImage}
+              fallbackSlideLabel="Property"
+            />
 
             {/* INFO SECTION */}
             <div className="px-6 py-8">
@@ -252,10 +237,15 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
               </div>
 
               <div className="flex items-center flex-wrap gap-4 text-white/70 font-manrope text-gh-label mb-8">
-                <div className="flex items-center gap-2">
+                <a
+                  href={mapsHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#EFCD62] focus-visible:outline-offset-2 rounded-sm"
+                >
                   <MapPin className="w-4 h-4 text-[#EFCD62]" />
-                  <span>{villa.location.split("·")[0]}</span>
-                </div>
+                  <span>{v.location.split("·")[0]}</span>
+                </a>
                 <div className="w-1 h-1 bg-white/20 rounded-full" />
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4 text-[#EFCD62]" />
@@ -328,22 +318,11 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                 </div>
               </div>
 
-              {/* TABS NAVIGATION - STICKY */}
-              <div className="sticky top-0 z-[60] bg-[#0E3A2F] border-b border-white/10 mb-8 flex overflow-x-auto scrollbar-none py-2">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => scrollToSection(tab)}
-                    className={`px-4 py-4 text-gh-label md:text-gh-label font-bold tracking-widest uppercase transition-colors whitespace-nowrap border-b-2 ${
-                      activeTab === tab
-                        ? "border-[#EFCD62] text-[#EFCD62] bg-[#EFCD62]/5"
-                        : "border-transparent text-white/40 hover:text-white"
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
+              <VillaExperienceStickyTabs
+                tabs={tabs}
+                activeTab={activeTab}
+                onTabClick={(tab) => scrollToSection(tab)}
+              />
 
               {/* ALL SECTIONS RENDERED STATICALLY */}
               <div className="space-y-24">
@@ -363,8 +342,8 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           { label: "Dining Hall" },
                         ]
                       ).map((item: any, idx: number) => (
-                        <div key={idx} className="flex items-center gap-4">
-                          <div className="w-3 h-3 rotate-45 bg-[#EFCD62]" />
+                        <div key={idx} className="flex items-center gap-3 sm:gap-4">
+                          <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rotate-45 bg-[#EFCD62] shrink-0" />
                           <span className="text-white font-manrope font-bold text-gh-body uppercase tracking-wider">
                             {item.label}
                           </span>
@@ -375,113 +354,61 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                 </section>
 
                 {/* Pricing Section */}
-                <section id="pricing" className="scroll-mt-24">
-                  <div className="space-y-12">
-                    <h3 className="text-gh-h2 font-philosopher">
-                      Corporate Pricing
-                    </h3>
-                    {(() => {
-                      const pricingData = [];
-                      if (villa.pricing?.event) {
-                        pricingData.push({
-                          ...villa.pricing.event,
-                          title: "Day Conference",
-                          subtitle: "6-12 hour sessions",
-                        });
+                {corporatePricingBlocks.length > 0 ? (
+                  <section id="pricing" className="scroll-mt-24">
+                    <VillaPricingBlocks
+                      sectionTitle="Corporate Pricing"
+                      blocks={corporatePricingBlocks}
+                      footnote={
+                        <p className="mt-6 text-gh-label text-white/30 leading-relaxed italic">
+                          Note: All corporate pricing is exclusive of GST. Custom
+                          packages for team building activities available.
+                        </p>
                       }
-                      if (villa.pricing?.stay) {
-                        pricingData.push({
-                          ...villa.pricing.stay,
-                          title: "Residential Offsite",
-                          subtitle: "Includes stay & meals",
-                        });
-                      }
-
-                      return pricingData.map((rent: any, idx: number) => (
-                        <div
-                          key={idx}
-                          className="border border-white/10 rounded-sm p-6 bg-white/5 mb-6"
-                        >
-                          <h4 className="text-[#EFCD62] text-gh-h3 font-manrope font-semibold mb-1">
-                            {rent.title}
-                          </h4>
-                          <p className="text-white/40 text-gh-desc mb-6">
-                            {rent.subtitle || rent.duration}
-                          </p>
-                          <div className="space-y-3 mb-8">
-                            {(rent.packages || rent.items).map(
-                              (item: any, i: number) => (
-                                <div
-                                  key={i}
-                                  className="flex justify-between items-center bg-black/20 p-4 rounded-sm border border-white/5"
-                                >
-                                  <div className="flex flex-col">
-                                    <span className="text-white font-bold text-gh-desc mb-1 uppercase tracking-wide">
-                                      {item.label}
-                                    </span>
-                                    <span className="text-white/40 text-gh-label leading-tight">
-                                      {item.sublabel || item.head}
-                                    </span>
-                                  </div>
-                                  <div className="text-white font-bold text-[15px] sm:text-[16px] md:text-[18px] leading-tight uppercase tracking-wide text-right">
-                                    {item.price}
-                                  </div>
-                                </div>
-                              ),
-                            )}
-                          </div>
-                          <div className="space-y-4">
-                            <span className="text-white/40 text-gh-label font-bold uppercase tracking-widest">
-                              Included:
-                            </span>
-                            <div className="flex flex-wrap gap-2">
-                              {(rent.features || rent.included || []).map(
-                                (inc: string) => (
-                                  <span
-                                    key={inc}
-                                    className="px-3 py-1.5 bg-[#174539] border border-white/5 rounded-sm text-white/70 text-gh-label"
-                                  >
-                                    {inc}
-                                  </span>
-                                ),
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ));
-                    })()}
-                    <p className="mt-6 text-gh-label text-white/30 leading-relaxed italic">
-                      Note: All corporate pricing is exclusive of GST. Custom
-                      packages for team building activities available.
-                    </p>
-                  </div>
-                </section>
+                    />
+                  </section>
+                ) : null}
 
                 {/* Location Section */}
                 <section id="location" className="scroll-mt-24">
                   <div className="space-y-8">
                     <h3 className="text-gh-h2 font-philosopher">Location</h3>
                     <div className="rounded-xl overflow-hidden border border-white/5 bg-white/5">
-                      <div className="relative aspect-video w-full bg-white/10">
+                      <a
+                        href={mapsHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="relative block aspect-video w-full bg-white/10 outline-none transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#EFCD62]/60"
+                        aria-label="Open location in Google Maps"
+                      >
                         <Image
-                          src="/X/Magnolia/VILLA2.webp"
+                          src={
+                            v.locationDetails?.mapImage ||
+                            "/Villa_Retreats/Magnolia/Spaces/Villa.webp"
+                          }
                           alt="Map"
                           fill
                           className="object-cover opacity-60"
                         />
-                      </div>
+                      </a>
                       <div className="p-6">
                         <div className="flex gap-4 mb-6">
-                          <MapPin className="w-6 h-6 text-[#EFCD62] shrink-0" />
-                          <div>
-                            <p className="text-gh-body font-manrope leading-relaxed">
-                              {villa.locationDetails?.address || villa.location}
-                            </p>
+                          <MapPin className="w-6 h-6 text-[#EFCD62] shrink-0" aria-hidden />
+                          <div className="min-w-0">
+                            <a
+                              href={mapsHref}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-gh-body font-manrope leading-relaxed text-white outline-none rounded-sm hover:text-[#EFCD62] hover:underline underline-offset-4 transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/60"
+                            >
+                              {v.locationDetails?.address || v.location}
+                            </a>
                           </div>
                         </div>
                         <div className="p-3 bg-white/5 rounded-lg text-center">
                           <p className="text-gh-label text-white/60">
-                            Approximately 45 minutes from Bangalore City Center
+                            {v.locationDetails?.distance ||
+                              "Approximately 45 minutes from Bangalore City Center"}
                           </p>
                         </div>
                       </div>
@@ -497,7 +424,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                     </h3>
                     <div className="relative aspect-video w-full overflow-hidden rounded-sm bg-black/40 border border-white/10 group cursor-pointer">
                       <Image
-                        src="/X/Magnolia/22.webp"
+                        src="/Villa_Retreats/Magnolia/Hero/hero.webp"
                         alt="Video Cover"
                         fill
                         className="object-cover opacity-60 group-hover:opacity-40 transition-opacity"
@@ -513,61 +440,39 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
                 {/* FAQ Section */}
                 <section id="faq" className="scroll-mt-24">
-                  <div className="space-y-12">
+                  <div className="space-y-8">
                     <h3 className="text-gh-h2 font-philosopher">FAQ</h3>
-                    <div className="space-y-8">
-                      {villa.faq?.map((item: any, idx: number) => (
-                        <div key={idx} className="flex gap-4 group">
-                          <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center mt-1">
-                            <div className="w-2 h-2 rotate-45 bg-[#EFCD62]" />
-                          </div>
-                          <div>
-                            <h4 className="text-white font-manrope font-bold text-gh-body mb-2">
-                              {item.question}
-                            </h4>
-                            <p className="text-white/60 text-gh-body leading-relaxed">
-                              {item.answer}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                    <ExperienceFaqAccordion
+                      items={(villa.faq || []).map((item: any) => ({
+                        question: item.question,
+                        answer: item.answer,
+                      }))}
+                    />
+                  </div>
 
-                    <div className="mt-16 pt-12 border-t border-white/5">
-                      <h3 className="text-gh-scroll font-philosopher mb-8">
-                        Key Policies
-                      </h3>
-                      <div className="space-y-6">
-                        {[
-                          {
-                            title: "AV Equipment",
-                            desc: "Projectors, screens, and basic sound systems are included. Specialized equipment on request.",
-                          },
-                          {
-                            title: "Catering",
-                            desc: "In-house culinary team provides all meals. Customized corporate menus available.",
-                          },
-                          {
-                            title: "Booking Policy",
-                            desc: "50% advance required to block dates. Full payment due week before the event.",
-                          },
-                        ].map((policy) => (
-                          <div key={policy.title} className="flex gap-4">
-                            <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center mt-1">
-                              <div className="w-2 h-2 rotate-45 bg-[#EFCD62]" />
-                            </div>
-                            <div>
-                              <h4 className="text-white font-manrope font-bold text-gh-body mb-1">
-                                {policy.title}
-                              </h4>
-                              <p className="text-white/40 text-gh-desc leading-relaxed">
-                                {policy.desc}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                  <div className="mt-12 pt-8 border-t border-white/5">
+                    <h3 className="text-gh-h2 font-philosopher mb-6">
+                      Key Policies
+                    </h3>
+                    <ExperiencePolicyCompactList
+                      policies={[
+                        {
+                          title: "AV Equipment",
+                          desc:
+                            "Projectors, screens, and basic sound systems are included. Specialized equipment on request.",
+                        },
+                        {
+                          title: "Catering",
+                          desc:
+                            "In-house culinary team provides all meals. Customized corporate menus available.",
+                        },
+                        {
+                          title: "Booking Policy",
+                          desc:
+                            "50% advance required to block dates. Full payment due week before the event.",
+                        },
+                      ]}
+                    />
                   </div>
                 </section>
               </div>
@@ -584,62 +489,135 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                       Plan Your Corporate Retreat
                     </h2>
                     <p className="text-white/60 text-gh-body mb-12">
-                      Share a few details. Our wedding team will guide you
-                      through venues & pricing.
+                      Share a few details. Our corporate team will guide you
+                      through venues &amp; pricing.
                     </p>
 
                     <form
                       className="space-y-6"
+                      noValidate
                       onSubmit={(e) => {
                         e.preventDefault();
+                        if (!corpFullName.trim()) {
+                          setCorpError("Please enter your full name.");
+                          return;
+                        }
+                        if (!corpCompany.trim()) {
+                          setCorpError("Please enter your company name.");
+                          return;
+                        }
+                        if (!/^[\d\s+()-]{10,}$/.test(corpPhone.trim())) {
+                          setCorpError(
+                            "Please enter a valid phone number (at least 10 digits).",
+                          );
+                          return;
+                        }
+                        if (
+                          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(corpEmail.trim())
+                        ) {
+                          setCorpError("Please enter a valid email address.");
+                          return;
+                        }
+                        if (!corpTeamSize.trim()) {
+                          setCorpError("Please enter an approximate team size.");
+                          return;
+                        }
+                        if (!corpDate) {
+                          setCorpError("Please choose an event date.");
+                          return;
+                        }
+                        setCorpError(null);
                         setView("success");
                       }}
                     >
+                      {corpError ? (
+                        <p className="text-red-400 text-gh-label" role="alert">
+                          {corpError}
+                        </p>
+                      ) : null}
+
                       <div className="relative">
-                        <label className="absolute -top-3 left-4 bg-[#0D4032] px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope">
-                          Full Name
+                        <label
+                          className={`absolute -top-3 left-4 ${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS} px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope`}
+                        >
+                          Full Name *
                         </label>
                         <input
                           type="text"
+                          value={corpFullName}
+                          onChange={(e) => setCorpFullName(e.target.value)}
                           className="w-full bg-transparent border border-white/20 rounded-[4px] px-6 py-4 focus:border-[#EFCD62] outline-none transition-colors text-white text-gh-body"
                         />
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <input
-                          placeholder="Company Name*"
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors"
+                          placeholder="Company Name *"
+                          value={corpCompany}
+                          onChange={(e) => setCorpCompany(e.target.value)}
+                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors placeholder:text-white/35"
                         />
                         <input
-                          placeholder="Phone Number*"
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors"
+                          type="tel"
+                          placeholder="Phone Number *"
+                          value={corpPhone}
+                          onChange={(e) => setCorpPhone(e.target.value)}
+                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors placeholder:text-white/35"
+                          autoComplete="tel"
                         />
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <input
-                          placeholder="Email*"
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors"
+                          type="email"
+                          placeholder="Email *"
+                          value={corpEmail}
+                          onChange={(e) => setCorpEmail(e.target.value)}
+                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors placeholder:text-white/35"
+                          autoComplete="email"
                         />
                         <input
-                          placeholder="Team Size*"
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors"
+                          placeholder="Team Size *"
+                          value={corpTeamSize}
+                          onChange={(e) => setCorpTeamSize(e.target.value)}
+                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors placeholder:text-white/35"
                         />
                       </div>
 
                       <div className="relative">
+                        <label
+                          htmlFor="corp-event-date"
+                          className={`absolute -top-3 left-4 ${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS} px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope`}
+                        >
+                          Event date *
+                        </label>
                         <input
-                          placeholder="Date"
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors pr-12"
+                          ref={corpDateRef}
+                          id="corp-event-date"
+                          type="date"
+                          value={corpDate}
+                          min={new Date().toISOString().slice(0, 10)}
+                          onChange={(e) => setCorpDate(e.target.value)}
+                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 pr-12 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors [color-scheme:dark]"
                         />
-                        <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                        <button
+                          type="button"
+                          aria-label="Open date picker"
+                          onClick={() => {
+                            corpDateRef.current?.showPicker?.();
+                            corpDateRef.current?.focus();
+                          }}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/50 hover:text-[#EFCD62] rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+                        >
+                          <Calendar className="w-5 h-5" />
+                        </button>
                       </div>
 
                       <div className="py-6">
                         <h4 className="text-white font-bold text-gh-body mb-4">
                           Retreat Format
                         </h4>
-                        <div className="grid grid-cols-2 gap-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
                           {[
                             "Leadership Retreat",
                             "Day Outing / Team Outing",
@@ -650,12 +628,17 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           ].map((label) => (
                             <label
                               key={label}
-                              className="flex items-center gap-3 cursor-pointer group"
+                              className="flex items-center gap-3 cursor-pointer min-h-[1.5rem]"
                             >
-                              <div className="w-5 h-5 border border-white/20 rounded flex items-center justify-center group-hover:border-[#EFCD62] transition-colors">
-                                <Check className="w-3 h-3 text-[#EFCD62] opacity-0 group-hover:opacity-100" />
-                              </div>
-                              <span className="text-gh-label text-white/70 group-hover:text-white">
+                              <input
+                                type="checkbox"
+                                checked={corpFormats.has(label)}
+                                onChange={() =>
+                                  corpToggle(setCorpFormats, label)
+                                }
+                                className="w-4 h-4 shrink-0 rounded-sm border-white/30 bg-transparent accent-[#EFCD62] focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+                              />
+                              <span className="text-gh-label text-white/70 leading-snug">
                                 {label}
                               </span>
                             </label>
@@ -665,9 +648,9 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
                       <div className="py-6 border-t border-white/5">
                         <h4 className="text-white font-bold text-gh-body mb-4">
-                          Services Required:
+                          Services Required
                         </h4>
-                        <div className="grid grid-cols-2 gap-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
                           {[
                             "Décor & Event Setup",
                             "AV & Presentation Setup",
@@ -680,12 +663,17 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           ].map((label) => (
                             <label
                               key={label}
-                              className="flex items-center gap-3 cursor-pointer group"
+                              className="flex items-center gap-3 cursor-pointer min-h-[1.5rem]"
                             >
-                              <div className="w-5 h-5 border border-white/20 rounded flex items-center justify-center group-hover:border-[#EFCD62] transition-colors">
-                                <Check className="w-3 h-3 text-[#EFCD62] opacity-0 group-hover:opacity-100" />
-                              </div>
-                              <span className="text-gh-label text-white/70 group-hover:text-white">
+                              <input
+                                type="checkbox"
+                                checked={corpServices.has(label)}
+                                onChange={() =>
+                                  corpToggle(setCorpServices, label)
+                                }
+                                className="w-4 h-4 shrink-0 rounded-sm border-white/30 bg-transparent accent-[#EFCD62] focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+                              />
+                              <span className="text-gh-label text-white/70 leading-snug">
                                 {label}
                               </span>
                             </label>
@@ -697,7 +685,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         <h4 className="text-white font-bold text-gh-body mb-4">
                           Preferred Setting
                         </h4>
-                        <div className="grid grid-cols-2 gap-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
                           {[
                             "Outdoor Lawn Setup",
                             "Poolside / Informal Setup",
@@ -706,12 +694,15 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           ].map((label) => (
                             <label
                               key={label}
-                              className="flex items-center gap-3 cursor-pointer group"
+                              className="flex items-center gap-3 cursor-pointer min-h-[1.5rem]"
                             >
-                              <div className="w-5 h-5 border border-white/20 rounded flex items-center justify-center group-hover:border-[#EFCD62] transition-colors">
-                                <Check className="w-3 h-3 text-[#EFCD62] opacity-0 group-hover:opacity-100" />
-                              </div>
-                              <span className="text-gh-label text-white/70 group-hover:text-white">
+                              <input
+                                type="checkbox"
+                                checked={corpPref.has(label)}
+                                onChange={() => corpToggle(setCorpPref, label)}
+                                className="w-4 h-4 shrink-0 rounded-sm border-white/30 bg-transparent accent-[#EFCD62] focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+                              />
+                              <span className="text-gh-label text-white/70 leading-snug">
                                 {label}
                               </span>
                             </label>
@@ -723,7 +714,9 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         <textarea
                           placeholder="Additional requests"
                           rows={4}
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors"
+                          value={corpNotes}
+                          onChange={(e) => setCorpNotes(e.target.value)}
+                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors placeholder:text-white/35"
                         />
                       </div>
 
@@ -836,37 +829,13 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                 )}
               </section>
             </div>
-        </div>
-      </div>
+      </VillaExperienceOverlayContentFrame>
 
-      {/* BOTTOM PRICE BAR (SAME AS VILLA DETAIL PAGE) */}
-      <div className="fixed bottom-0 left-0 w-full bg-[#1A1C1E] border-t border-white/10 py-4 z-[150] transition-all flex justify-center">
-        <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-4 px-4 md:px-12">
-          <p className="font-manrope whitespace-nowrap leading-tight">
-            <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold">
-              Starting from
-            </span>{" "}
-            <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold">
-              {(overlayVilla as any)?.overlay?.onwardsPrice || "Enquire"}
-            </span>
-          </p>
-          <div className="flex items-center gap-4 md:gap-6">
-            <button
-              onClick={() => scrollToSection("enquiry")}
-              className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap"
-            >
-              ENQUIRE
-            </button>
-            <PrimaryButton
-              href={`/book?villa=${villa.id}`}
-              withArrow={false}
-              className="whitespace-nowrap"
-            >
-              BOOK VILLA
-            </PrimaryButton>
-          </div>
-        </div>
-      </div>
+      <VillaExperienceBookingBottomBar
+        villaId={v.id}
+        onwardPrice={(overlayVilla as any)?.overlay?.onwardsPrice ?? null}
+        onEnquireClick={() => scrollToSection("enquiry")}
+      />
     </MotionDiv>,
     document.body,
   );

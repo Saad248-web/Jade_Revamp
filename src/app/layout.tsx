@@ -95,26 +95,51 @@ export const metadata: Metadata = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": "https://jadehospitainment.com/#organization",
   name: "Jade Hospitainment",
   url: "https://jadehospitainment.com",
-  logo: "https://jadehospitainment.com/og-default.jpg",
+  logo: "https://jadehospitainment.com/assets/Golden_Logo.png",
   description:
     "Discover curated luxury villas, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore.",
+  sameAs: [
+    "https://www.instagram.com/jadehospitainment",
+    "https://www.facebook.com/jadehospitainment",
+  ],
+  knowsAbout: [
+    "Luxury villa stays",
+    "Destination weddings",
+    "Corporate retreats",
+    "Weekend getaways Bangalore",
+    "Party villas Karnataka",
+  ],
 };
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": "LodgingBusiness",
+  "@id": "https://jadehospitainment.com/#localbusiness",
   name: "Jade Hospitainment",
-  image: "https://jadehospitainment.com/og-default.jpg",
-  "@id": "https://jadehospitainment.com",
+  image: "https://jadehospitainment.com/assets/Golden_Logo.png",
   url: "https://jadehospitainment.com",
+  parentOrganization: { "@id": "https://jadehospitainment.com/#organization" },
   address: {
     "@type": "PostalAddress",
     addressLocality: "Bangalore",
     addressRegion: "Karnataka",
     addressCountry: "IN",
   },
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://jadehospitainment.com/#website",
+  url: "https://jadehospitainment.com",
+  name: "Jade Hospitainment",
+  inLanguage: "en-IN",
+  description:
+    "Discover curated luxury villas, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore.",
+  publisher: { "@id": "https://jadehospitainment.com/#organization" },
 };
 
 export default function RootLayout({
@@ -133,6 +158,7 @@ export default function RootLayout({
       >
         <Providers>{children}</Providers>
         <SchemaMarkup schema={organizationSchema} />
+        <SchemaMarkup schema={websiteSchema} />
         <SchemaMarkup schema={localBusinessSchema} />
       </body>
     </html>

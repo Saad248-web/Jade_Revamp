@@ -1,9 +1,14 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { CAROUSEL_CROSSFADE } from "@/lib/carouselMotion";
+import {
+  liquidCarouselBgVariants,
+  type HeroSplitCustom,
+} from "@/lib/heroSplitCarouselVariants";
 
 interface Format {
   title: string;
@@ -50,6 +55,26 @@ const FORMATS: Format[] = [
 export default function FormatsCarousel() {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const reducedMotion = useReducedMotion();
+
+  const carouselCustom: HeroSplitCustom = {
+    dir: direction,
+    lowFx: !!reducedMotion,
+  };
+
+  useEffect(() => {
+    const n = FORMATS.length;
+    if (n <= 1) return;
+    for (const j of [(index + 1) % n, (index - 1 + n) % n]) {
+      const f = FORMATS[j];
+      [f.image1, f.image2].forEach((src) => {
+        if (src?.trim()) {
+          const img = new window.Image();
+          img.src = src;
+        }
+      });
+    }
+  }, [index]);
 
   const next = () => {
     setDirection(1);
@@ -59,18 +84,6 @@ export default function FormatsCarousel() {
   const prev = () => {
     setDirection(-1);
     setIndex((prev) => (prev - 1 + FORMATS.length) % FORMATS.length);
-  };
-
-  const variants = {
-    enter: (direction: number) => ({
-      opacity: 0,
-    }),
-    center: {
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      opacity: 0,
-    }),
   };
 
   return (
@@ -102,17 +115,21 @@ export default function FormatsCarousel() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-16 items-start">
         {/* IMAGES: Optimized for 8pt Spacing grid */}
         <div className="relative order-1 lg:order-1">
-          <div className="relative overflow-hidden aspect-[4/3] md:aspect-[16/9] w-full">
-            <AnimatePresence initial={false} custom={direction}>
+          <div
+            className="relative overflow-hidden aspect-[4/3] md:aspect-[16/9] w-full"
+            style={{ perspective: "1200px" }}
+          >
+            <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
               <motion.div
                 key={index}
-                custom={direction}
-                variants={variants}
+                custom={carouselCustom}
+                variants={liquidCarouselBgVariants}
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{
-                  opacity: { duration: 0.28, ease: [0.16, 1, 0.3, 1] },
+                style={{
+                  transformStyle: "preserve-3d",
+                  backfaceVisibility: "hidden",
                 }}
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
@@ -132,7 +149,7 @@ export default function FormatsCarousel() {
                       fill
                       className="object-cover"
                       sizes="(max-width: 1024px) 100vw, 50vw"
-                      priority
+                      priority={index === 0}
                     />
                   </div>
                   <div className="relative flex-1 w-full overflow-hidden border-t border-white/5">
@@ -153,13 +170,16 @@ export default function FormatsCarousel() {
         {/* CONTENT: Balanced Side content - 8pt system */}
         <div className="flex flex-col justify-start lg:pt-4 order-2 lg:order-2">
           <div className="space-y-4 md:space-y-6">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="sync" initial={false}>
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{
+                  duration: CAROUSEL_CROSSFADE.duration,
+                  ease: CAROUSEL_CROSSFADE.ease,
+                }}
               >
                 <h3 className="text-gh-scroll font-philosopher text-white mb-2 md:mb-[8px]">
                   {FORMATS[index].title}
