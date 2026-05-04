@@ -12,11 +12,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:e2e:ci": "npm run build && cross-env CI=true playwright test",
-    "optimize-ridge": "node scripts/optimize_ridge_images.js",
-    "optimize-emerald": "node scripts/optimize_emerald_images.js",
-    "optimize-wonderland": "node scripts/optimize_wonderland_images.js",
-    "optimize-jade735": "node scripts/optimize_jade735_images.js",
-    "optimize-palatio": "node scripts/optimize_palatio_images.js",
+    "optimize-images": "node scripts/optimize_public_images.mjs",
+    "optimize-images:dry-run": "node scripts/optimize_public_images.mjs --dry-run",
     "optimize-hero-video": "node scripts/optimize_hero_video.mjs"
   },
   "dependencies": {

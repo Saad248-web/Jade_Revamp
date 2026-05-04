@@ -3,13 +3,14 @@
 import { useCallback, useLayoutEffect, useState } from "react";
 import type { CSSProperties, RefObject } from "react";
 import {
+  type Demo1GrowVariant,
   pageIndexStyle,
   progressStyle,
   scrollerProgress,
   textStyleBody,
   textStyleHeadline,
   textUpStyle,
-  growStyle,
+  growStyleByVariant,
   growPhaseFromScrollGeometry,
   textPhaseFromScrollGeometry,
 } from "@/lib/experienceDemo1Motion";
@@ -57,6 +58,7 @@ function growStackStyle(
   i: number,
   cw: number,
   ch: number,
+  growVariant: Demo1GrowVariant,
 ): CSSProperties {
   const dominant = vpsGrow.reduce(
     (bestIdx, v, idx, arr) => (v >= arr[bestIdx] ? idx : bestIdx),
@@ -64,7 +66,7 @@ function growStackStyle(
   );
   const isTop = i === dominant;
   return {
-    ...growStyle(vp, cw, ch),
+    ...growStyleByVariant(growVariant, vp, cw, ch),
     zIndex: isTop ? 45 + i : i,
     opacity:
       isTop || vp > 0.1
@@ -75,7 +77,11 @@ function growStackStyle(
   };
 }
 
-function emptyFrame(cw: number, ch: number): Demo1JsFrame {
+function emptyFrame(
+  cw: number,
+  ch: number,
+  growVariant: Demo1GrowVariant,
+): Demo1JsFrame {
   const vps = Array(SLIDE_COUNT).fill(0) as number[];
   const vpsText = Array(SLIDE_COUNT).fill(0) as number[];
   /* Until layout runs, vp=0 renders Demo 1 grow at ~15% scale (looks blank). Seed slide 1 mid-phase. */
@@ -85,7 +91,9 @@ function emptyFrame(cw: number, ch: number): Demo1JsFrame {
   vpsText[0] = textPhaseFromScrollGeometry(0, 0, slideGuess, vh);
   return {
     vps,
-    grow: vps.map((vp, i) => growStackStyle(vps, vp, i, cw, ch)),
+    grow: vps.map((vp, i) =>
+      growStackStyle(vps, vp, i, cw, ch, growVariant),
+    ),
     textHead: vpsText.map((vp) => textStyleHeadline(vp)),
     textBody: vpsText.map((vp) => textStyleBody(vp)),
     textCta: vpsText.map((vp) => textStyleBody(vp)),
@@ -105,8 +113,10 @@ export function useDemo1JsFrame(
   /** `y` = vertical scroll driver (Firefox/Safari JS path — reliable snap + geometry). `x` = debug / legacy. */
   axis: Demo1ScrollAxis = "y",
 ) {
+  const growVariant: Demo1GrowVariant =
+    axis === "y" ? "vertical" : "horizontal";
   const [frame, setFrame] = useState<Demo1JsFrame>(() =>
-    emptyFrame(400, 600),
+    emptyFrame(400, 600, growVariant),
   );
 
   const measure = useCallback(() => {
@@ -176,7 +186,9 @@ export function useDemo1JsFrame(
 
     setFrame({
       vps,
-      grow: vps.map((vp, i) => growStackStyle(vps, vp, i, cw, ch)),
+      grow: vps.map((vp, i) =>
+        growStackStyle(vps, vp, i, cw, ch, growVariant),
+      ),
       textHead: vpsText.map((vp) => textStyleHeadline(vp)),
       textBody: vpsText.map((vp) => textStyleBody(vp)),
       textCta: vpsText.map((vp) => textStyleBody(vp)),
@@ -187,7 +199,7 @@ export function useDemo1JsFrame(
       cw,
       ch,
     });
-  }, [scrollerRef, rootRef, axis]);
+  }, [scrollerRef, rootRef, axis, growVariant]);
 
   useLayoutEffect(() => {
     if (!enabled) return;

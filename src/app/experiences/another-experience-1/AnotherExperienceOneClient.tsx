@@ -245,7 +245,7 @@ function ScrollDrivenCarousel({
       ref={rootRef}
       className={clsx(
         "experience-sda-root @container relative isolate flex min-h-dscreen h-dscreen w-full flex-col overflow-hidden bg-[#050505] text-white antialiased",
-        useJs && "experience-sda-js-motion",
+        useJs && "experience-sda-js-motion experience-sda-vertical-analogy",
       )}
       aria-label={
         useJs
@@ -285,15 +285,9 @@ function ScrollDrivenCarousel({
         aria-hidden
       />
 
-      {/* JS fallback only (Firefox / Safari): right editorial rail — reinforces Demo 1’s right-weighted “card/frame” read when CSS scroll timelines aren’t available */}
-      {useJs && (
-        <div
-          className="pointer-events-none absolute inset-y-0 right-0 z-[7] w-[min(34cqw,26rem)] border-l border-jade-gold/35 bg-gradient-to-l from-black/45 via-black/10 to-transparent"
-          aria-hidden
-        />
-      )}
+      {/* Same chrome as native (no extra panels): vertical path uses bottom-weighted grow + translateY in JS. */}
 
-      {/* Scroll timeline driver: horizontal + view timelines (Chrome); vertical stack (Firefox/Safari JS) */}
+      {/* Scroll timeline driver: horizontal + view timelines (Chrome); vertical stack + vertical-analogy grow (Firefox/Safari JS) */}
       {useJs ? (
         <div
           ref={scrollerRef}

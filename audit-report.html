@@ -459,7 +459,7 @@
           <div>
             <h1>Jade_ReVamp — End-to-End Audit Report (Concise + Detailed)</h1>
             <p class="subtitle">
-              Revised <span class="mono">2026-05-02</span> — <b>holistic backlog + funnel audit</b> · Prior <span class="mono">2026-05-01</span> GEO/security passes · Verified
+              Revised <span class="mono">2026-05-04</span> — <b>checkout + QA + CI</b> · Prior <span class="mono">2026-05-01</span> GEO/security · Verified
               <span class="mono">missingAssets=0</span> · <span class="mono">brokenRoutes=0</span> · Next.js 14 · TypeScript · Tailwind · GSAP/Framer/Rive · PostgreSQL bookings
             </p>
             <div class="pillrow">
@@ -554,7 +554,7 @@
               </div>
               <p class="tiny-cap">
                 <b>Booking emails:</b> when Resend keys are set, new reservations trigger staff/guest notifications.
-                <b>Checkout:</b> Razorpay order + verified webhook are coded; the booking screen still needs to pass the booking ID into pay after save.
+                <b>Checkout:</b> after save, the success screen calls pay with <span class="mono">booking_uuid</span> and opens Razorpay Checkout when keys exist — ops still configures live Razorpay + webhook on the host.
               </p>
             </div>
             <div>
@@ -639,7 +639,7 @@
             <li class="li">
               <span class="dot good"></span>
               <div>
-                <b>Razorpay scaffolding</b>: server order creation, booking UUID carried in Razorpay notes when sent, webhook verifies signature and marks payment state — needs dashboard URL + secrets on your host.
+                <b>Razorpay + book pay</b>: server order, success-screen Checkout with <span class="mono">booking_uuid</span>, webhook signature verification — <b>ops</b> still sets dashboard URL, secrets, and production DB migration.
               </div>
             </li>
             <li class="li">
@@ -671,7 +671,7 @@
             <li class="li">
               <span class="dot warn"></span>
               <div>
-                <b>Security — next tier</b>: elite baseline is in (middleware + headers + API validation + timing-safe admin). For scale: move rate limits to <b>Redis/Upstash</b>; optional JWT/session admin + CSP nonces; full monitoring (e.g. Sentry).
+                <b>Security — next tier</b>: elite baseline is in. For scale: <b>Redis/Upstash</b> rate limits; optional JWT admin + CSP nonces. <b>Sentry</b> is optional — set <span class="mono">NEXT_PUBLIC_SENTRY_DSN</span> (see WEBDEV-Audit).
               </div>
             </li>
             <li class="li">
@@ -683,7 +683,7 @@
             <li class="li">
               <span class="dot warn"></span>
               <div>
-                <b>SEO polish</b>: ship a dedicated <span class="mono">1200×630</span> global OG (“<span class="mono">og-default.jpg</span>”); villas already use hero imagery for shares. Off-site citations (Reddit, YouTube, Wikipedia-class) remain a separate growth track.
+                <b>SEO polish</b>: global <span class="mono">public/og-default.jpg</span> (1200×630) is shipped; villas still use hero imagery on detail shares. Off-site citations remain a separate growth track.
               </div>
             </li>
             <li class="li">
@@ -696,7 +696,7 @@
             <li class="li">
               <span class="dot warn"></span>
               <div>
-                <b>Payments checkout wire</b>: Razorpay <b>server order</b>, <b>webhook verification</b>, and <b>booking UUID notes</b> are implemented — the book UI must still pass <span class="mono">booking_uuid</span> post-create + open Checkout; align <span class="mono">payment_gateway_state</span> vs <span class="mono">status</span> operationally.
+                <b>Payments — ops alignment</b>: checkout UI is <b>wired</b>; align <span class="mono">payment_gateway_state</span> vs booking <span class="mono">status</span> with finance. Production still needs Razorpay keys + webhook URL + DB migration.
               </div>
             </li>
             <li class="li">
@@ -708,7 +708,7 @@
             <li class="li">
               <span class="dot warn"></span>
               <div>
-                <b>QA &amp; resilience</b>: Vitest + one booking validation suite; <span class="mono">src/app/error.tsx</span> and <span class="mono">global-error.tsx</span> exist — still expand Playwright/coverage &amp; Sentry-style monitoring for production-grade confidence.
+                <b>QA &amp; resilience</b>: Vitest (<span class="mono">paymentService</span> + validation), Playwright smoke + careers/contact; GitHub Actions CI (test + build). Optional Sentry via DSN; expand form POST e2e when you have a test DB.
               </div>
             </li>
           </ul>
@@ -717,7 +717,7 @@
         <div class="card" id="holistic-backlog">
           <h2>Holistic backlog — what still needs doing</h2>
           <p style="margin-bottom: 12px">
-            The marketing surface remains strong on SEO/GEO. <b>Persisted enquiries, partner uploads, Rathaa submissions, careers apply, Razorpay order + webhook scaffolding, GA4 snippet</b>, and <b>booking notification emails</b> are implemented in-repo — ops work is shifting to DB migrations + dashboard secrets + polishing the checkout hand-off.
+            The marketing surface remains strong on SEO/GEO. <b>Lead APIs, careers apply, Razorpay order + webhook, booking pay on success screen, GA4, booking emails</b> are in-repo — remaining work is mostly <b>ops</b> (prod DB, Razorpay dashboard, env secrets) and optional hardening (Redis, CSP, deeper e2e).
           </p>
           <div class="table-scroll">
           <table class="table">
@@ -730,9 +730,9 @@
             </thead>
             <tbody>
               <tr>
-                <td><span class="tag warn"><span class="t-dot"></span>P1</span></td>
-                <td>Checkout links booking → Razorpay order with UUID + opens Checkout SDK</td>
-                <td>Frontend follow-up once booking id exists; optionally extend <span class="mono">paymentService.initiatePayment</span></td>
+                <td><span class="tag ok"><span class="t-dot"></span>P1</span></td>
+                <td>Checkout links booking → Razorpay order with UUID + opens Checkout</td>
+                <td><b>Done</b> — <span class="mono">src/app/book/page.tsx</span> + <span class="mono">razorpayCheckout.ts</span>; ops: keys + webhook</td>
               </tr>
               <tr>
                 <td><span class="tag warn"><span class="t-dot"></span>P1</span></td>
@@ -741,8 +741,8 @@
               </tr>
               <tr>
                 <td><span class="tag warn"><span class="t-dot"></span>P1</span></td>
-                <td>No centralized error tracking</td>
-                <td>Sentry (or Datadog FE/BE) + alert routing</td>
+                <td>Centralized error tracking</td>
+                <td><b>Optional</b> — <span class="mono">NEXT_PUBLIC_SENTRY_DSN</span> + project alerts in Sentry UI</td>
               </tr>
               <tr>
                 <td><span class="tag warn"><span class="t-dot"></span>P1</span></td>
@@ -750,9 +750,9 @@
                 <td>Enhance GA4 conversions + consent mode when marketing expands</td>
               </tr>
               <tr>
-                <td><span class="tag warn"><span class="t-dot"></span>P2</span></td>
+                <td><span class="tag good"><span class="t-dot"></span>P2</span></td>
                 <td>Automated QA surface area</td>
-                <td>Expand Vitest; add Playwright for book + overlays</td>
+                <td><b>Baseline in</b> — Vitest + Playwright (home, book, careers, contact); CI runs test + build; extend form POST e2e with test DB</td>
               </tr>
               <tr>
                 <td><span class="tag warn"><span class="t-dot"></span>P2</span></td>
@@ -783,6 +783,9 @@
               state when notes match.
             </li>
             <li>
+              <b>Booking success Checkout</b>: <span class="mono">src/app/book/page.tsx</span> calls pay with UUID + <span class="mono">razorpayCheckout.ts</span> when gateway keys exist.
+            </li>
+            <li>
               <b>Booking confirmation email</b> path from <span class="mono">POST /api/bookings</span> when Resend + notify env vars are configured.
             </li>
           </ul>
@@ -791,7 +794,7 @@
           </h3>
           <ul style="margin: 0 0 12px 1.1rem; line-height: 1.65; color: var(--muted)">
             <li>Run DB migrations on live Postgres; set Razorpay webhook URL + secrets.</li>
-            <li>Wire checkout UI to pass booking UUID into orders; define booking status vs payment policy.</li>
+            <li>Define booking <span class="mono">status</span> vs <span class="mono">payment_gateway_state</span> with finance (checkout UI already passes <span class="mono">booking_uuid</span>).</li>
             <li>Ongoing: lead SLAs, partner photo retention, legal/consent copy.</li>
           </ul>
           <p style="margin-top: 12px; color: var(--muted); font-size: 0.9rem">
@@ -904,7 +907,7 @@
             <li class="li">
               <span class="dot good"></span>
               <div>
-                <b>Social preview</b>: root defaults unchanged; villa detail shares use hero images via <span class="mono">openGraph.images</span> / Twitter. Recommended: add dedicated <span class="mono">1200×630 og-default.jpg</span> for <b>global</b> link previews (logo PNG is squared).
+                <b>Social preview</b>: global <span class="mono">og-default.jpg</span> (1200×630) in <span class="mono">public/</span> + root metadata; villa detail shares still use hero images.
               </div>
             </li>
             <li class="li">
@@ -998,8 +1001,8 @@
               </tr>
               <tr>
                 <td><b>SEO / Social</b></td>
-                <td>OG image is not a dedicated 1200×630 asset</td>
-                <td>Create <span class="mono">public/og-default.jpg</span> and switch OG/Twitter to it</td>
+                <td>Global OG asset</td>
+                <td><b>Done</b> — <span class="mono">public/og-default.jpg</span> (1200×630) linked from <span class="mono">layout.tsx</span></td>
               </tr>
               <tr>
                 <td><b>SEO</b></td>
@@ -1013,8 +1016,8 @@
               </tr>
               <tr>
                 <td><b>Backend / Product</b></td>
-                <td>Paid checkout not finished in the booking UI: Razorpay order + verified webhook exist server-side</td>
-                <td>Pass <span class="mono">booking_uuid</span> after save, open Razorpay Checkout; align “confirmed” vs gateway state with finance</td>
+                <td>Live payments + policy</td>
+                <td>Checkout UI <b>shipped</b>; <b>ops</b> sets Razorpay keys + webhook; align “confirmed” vs gateway state with finance</td>
               </tr>
               <tr>
                 <td><b>Ops</b></td>
@@ -1023,8 +1026,8 @@
               </tr>
               <tr>
                 <td><b>Ops</b></td>
-                <td>No monitoring/alerting</td>
-                <td>Add error tracking + logging for booking/admin endpoints (e.g., Sentry)</td>
+                <td>Monitoring / alerting</td>
+                <td>Optional <b>Sentry</b> — set <span class="mono">NEXT_PUBLIC_SENTRY_DSN</span>; configure alerts in Sentry</td>
               </tr>
               <tr>
                 <td><b>Analytics</b></td>
@@ -1063,8 +1066,8 @@
               </tr>
               <tr>
                 <td><span class="tag warn"><span class="t-dot"></span>P0</span></td>
-                <td>Add <span class="mono">public/og-default.jpg</span> and <span class="mono">public/jade-logo.png</span> (or change references)</td>
-                <td><b>Done</b> — references updated to existing assets</td>
+                <td>Ship dedicated <span class="mono">1200×630 og-default.jpg</span> for global shares</td>
+                <td><b>Done</b> — asset generated + wired in <span class="mono">layout.tsx</span></td>
               </tr>
               <tr>
                 <td><span class="tag warn"><span class="t-dot"></span>P1</span></td>
@@ -1192,7 +1195,7 @@
       </div>
 
       <div class="foot">
-        Revised from project source (2026-05-02 pass) · Client pack + <a href="./WEBDEV-Audit.html">WEBDEV-Audit.html</a> · No live crawl.<br />Markdown:
+        Revised from project source (2026-05-04 pass) · Client pack + <a href="./WEBDEV-Audit.html">WEBDEV-Audit.html</a> · No live crawl.<br />Markdown:
         <span class="mono">audit-report.md</span>.
       </div>
     </div>

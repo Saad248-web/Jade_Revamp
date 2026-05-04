@@ -1,6 +1,6 @@
 # Jade_ReVamp — End-to-End Project Audit (Concise + Detailed)
 
-Generated / revised: **2026-05-02** · **SEO + GEO uplift (2026-05-01)** · **Holistic backlog review (same pass)**  
+Generated / revised: **2026-05-04** · **SEO + GEO uplift (2026-05-01)** · **Checkout + QA + CI pass (2026-05-04)**  
 Workspace: `c:\Users\Admin\Desktop\Jade_ReVamp`  
 Stack: **Next.js 14 (App Router) + TypeScript + Tailwind + GSAP/Framer/Rive + PostgreSQL (`pg`)**
 
@@ -42,16 +42,16 @@ Stack: **Next.js 14 (App Router) + TypeScript + Tailwind + GSAP/Framer/Rive + Po
   - `POST /api/careers/apply` (multipart résumé) wired from **`/careers`**.
 - **GA4 readiness**: **`src/components/analytics/GoogleAnalytics.tsx`** mounted from **`providers.tsx`** when **`NEXT_PUBLIC_GA_ID`** is set.
 - **Payments (server rails)**: `POST /api/payments/razorpay-order` with optional **`booking_uuid`** / **`bookingId`** metadata on Razorpay orders; **`POST /api/webhooks/razorpay`** verifies signatures and updates **`payment_gateway_state`** when `notes.booking_uuid` is present.
-- **Operational resilience UX**: **`src/app/error.tsx`**, **`src/app/global-error.tsx`**; **`npm run test`** runs Vitest (`bookingDetailsValidation.test.ts`).
+- **Operational resilience UX**: **`src/app/error.tsx`**, **`src/app/global-error.tsx`** (Sentry capture when DSN set); **`npm run test`** → Vitest (`bookingDetailsValidation`, `paymentService`); Playwright smoke (`e2e/smoke.spec.ts`, `e2e/lead-surfaces.spec.ts`); **`npm run test:e2e:ci`** for production-server e2e; **GitHub Actions** **`.github/workflows/ci.yml`** runs test + build on push/PR.
 - **Media/asset organization work started**:
   - Large curated `public/` media library (villas, experiences, home page sections).
   - A dedicated **Villa Retreats folder tree audit** already present: `public/Villa_Retreats_Tree.html`.
   - Build step generates `MEDIA_MANIFEST` (`scripts/generate_media_manifest.mjs` referenced in `package.json`).
 
-### What’s missing / risky (prioritized) — **updated post–lead & payment rails**
+### What’s missing / risky (prioritized) — **updated 2026-05-04**
 
-- **Checkout hand-off**: after `POST /api/bookings`, the UI should call **`/api/payments/razorpay-order`** with the **booking UUID** and open Razorpay Checkout (`payment_gateway_state` / `notes.booking_uuid` path is coded server-side).  
-- **Operations**: production **Postgres migrations** (`schema*.sql`), **Razorpay webhook URL + signing secret**, and host env parity remain operator-owned.  
+- **Checkout hand-off**: **Shipped in repo** — booking success screen calls **`initiatePayment(..., { bookingUuid })`**, opens Razorpay Checkout when keys exist; **Ops** still wires live Razorpay keys + webhook URL + **`RAZORPAY_WEBHOOK_SECRET`**, and applies **Postgres migrations** on production.  
+- **Policy**: reconcile **`bookings.status`** vs **`payment_gateway_state`** with finance/ops (not enforced by code alone).  
 
 ### What remains risky or incomplete (infra + polish)
 - **Redirect strategy**: policy + `/blog/:slug` → `/blogs/:slug` are mapped; extend `next.config.mjs` once more legacy URLs are confirmed.
@@ -72,7 +72,7 @@ Lead capture overlays, Rathaa/Partner endpoints, Careers apply multipart, Razorp
 | **SEO / GEO** | **`llms.txt`**, crawler-specific **`robots`**, villa **`VacationRental`** + **`/spaces`** breadcrumbs, expansive **sitemap** — unusually strong vs typical brochure sites. |
 | **Defense in depth** | Middleware on **`/api/*`**, safe JSON ingestion, timing-safe admin, IndexNow Bearer + URL allowlist. |
 
-### Previously P0 funnel items — status (**2026-05-02**)
+### Previously P0 funnel items — status (**2026-05-04**)
 | Gap (historical) | Current status |
 |------------------|----------------|
 | General enquiry / wedding forms “UI-only” | **Resolved** — `fetch("/api/leads")` from `EnquireOverlay` / `WeddingVenueEnquiryForm`. |
@@ -82,16 +82,16 @@ Lead capture overlays, Rathaa/Partner endpoints, Careers apply multipart, Razorp
 ### P1 — Revenue checkout + measurement + observability  
 | Gap | Notes |
 |-----|--------|
-| **Paid checkout UX** | Server order + webhook + `booking_uuid` notes exist; **`/book` flow must forward UUID into order creation** after booking + open Razorpay Checkout client-side; align **`bookings.status`** vs **`payment_gateway_state`** for ops. |
-| **Payment helper** | `paymentService.ts` hits **`/api/payments/razorpay-order`** but does not yet attach **`booking_uuid`** — extend at call site once booking exists. |
-| **Analytics maturity** | GA4 component loads via **`NEXT_PUBLIC_GA_ID`**; add conversions + consent mode when campaigns expand. |
-| **APM / errors** | Add **Sentry** (or similar) — still outstanding. |
+| **Paid checkout UX** | **Done (code)** — **`/book`** success screen → **`initiatePayment`** with **`bookingUuid`** → Razorpay Checkout; align **`status`** vs **`payment_gateway_state`** with ops. |
+| **Payment helper** | **Done** — `paymentService.ts` sends **`booking_uuid`** when `opts.bookingUuid` is set. |
+| **Analytics maturity** | GA4 via **`NEXT_PUBLIC_GA_ID`**; add conversions + consent mode when campaigns expand. |
+| **APM / errors** | **Sentry optional** — **`@sentry/nextjs`** + **`NEXT_PUBLIC_SENTRY_DSN`**; errors captured in **`error.tsx`** / **`global-error.tsx`** when configured. |
 
 ### P2 — Engineering durability
 | Gap | Notes |
 |-----|--------|
-| **Automated tests** | **Vitest +** `bookingDetailsValidation.test.ts` shipped; broaden coverage + Playwright smoke tests for booking/overlays. |
-| **Error boundaries** | Root **`src/app/error.tsx`** + **`global-error.tsx`** present; segment-level overlays still optional UX polish. |
+| **Automated tests** | Vitest (`bookingDetailsValidation`, `paymentService`); Playwright **`smoke`** + **`lead-surfaces`**; **`test:e2e:ci`**; CI workflow runs test + build. |
+| **Error boundaries** | Root **`error.tsx`** + **`global-error.tsx`** + optional Sentry. |
 | **Legacy `src/pages/_document.tsx`** | Keep only if Pages Router artefacts required; clarify and delete if unused. |
 
 ### P3 — UX, accessibility, compliance
@@ -119,7 +119,7 @@ Updates below were **implemented in application code**; they still rely on DB mi
 |------|-------------------------------------|
 | **Database** | Apply **`schema.sql`** on a new database, or run **`schema_migration_leads_rathaa_partner_payments.sql`** (or equivalent) on **existing** Postgres so `leads.source`, partner tables, and booking payment columns match the app. |
 | **Razorpay dashboard** | Create/configure the **webhook URL** (production host + `/api/webhooks/razorpay`), paste the **webhook signing secret** into **`RAZORPAY_WEBHOOK_SECRET`**, and align **test vs live** keys. |
-| **Checkout UI** | After creating a booking, the client must call **`/api/payments/razorpay-order`** with the **booking UUID**, open Razorpay Checkout client-side, and define what **`bookings.status`** vs **`payment_gateway_state`** should mean for your operations (e.g. hold vs confirmed). |
+| **Checkout / policy** | **UI path is implemented** (success screen pays with **`booking_uuid`**). **You** still define what **`bookings.status`** vs **`payment_gateway_state`** mean operationally (e.g. hold vs confirmed). |
 | **Policy / compliance** | Partner photo **retention**, **GDPR** / marketing consent wording, refund rules, and lead SLAs remain **business and legal** decisions—not enforced by this repo alone. |
 
 ### Work that genuinely needs ongoing human input
@@ -156,7 +156,7 @@ What was fixed:
 - Menu links: `/privacy`, `/terms`, `/refund` now point to canonical routes.
 - Added 301 redirects for `/privacy`, `/terms`, `/refund` in `next.config.mjs`.
 - Removed all `/X/...` image references (since `public/X` doesn’t exist) and replaced with real images under `public/Villa_Retreats/...`.
-- Replaced missing OG/logo references (`/og-default.jpg`, `/jade-logo.png`) with existing assets.
+- **Global social preview:** dedicated **`public/og-default.jpg`** (1200×630) is generated and referenced from **`src/app/layout.tsx`** Open Graph / Twitter (replaces prior placeholder-style references).
 
 ---
 
@@ -171,7 +171,7 @@ What was fixed:
 - **`llms.txt`**: Served at **`/llms.txt`** for crawler and assistant discovery (**`public/llms.txt`**).
 
 ### Missing / improvements (next polish)
-- **OG master asset**: Ship a dedicated **`1200×1200`** or **`1200×630`** `og-default.jpg` and point global `openGraph.images` / Twitter to it (per-villa images already elevate detail shares).
+- **OG master asset**: **Done** — **`public/og-default.jpg`** (1200×630) + root metadata (per-villa shares still use hero imagery).
 - **Redirects**: Expand beyond policy + **`/blog` → `/blogs`** when legacy slugs are confirmed.
 - **`hreflang`**: Only **`en-IN`** is implied today; add explicit alternates only if multi-locale rollout happens.
 - **Passage tuning for AI**: Blogs and long guides are your best quotable corpus — periodically add/update **FAQ** blocks (`FAQPage` JSON-LD) on high-intent URLs when copy exists.
@@ -230,7 +230,7 @@ Studies through early 2026 still show outsized citation lift from **YouTube**, *
 ### Missing / improvements
 - **Auth model**: Shared secret header hardened (timing-safe, misconfig detection); optional next steps: JWT/admin session **or** IP allowlist + audit log.
 - **Validation**: Extended on server for name/phone/email/notes, villa existence, bounded add-ons array. Optional: max stay length, guest caps tied to villa rules.
-- **Payments (UX + ops)**: Server order creation, Razorpay **notes.booking_uuid**, and **verified webhook updates** exist in-repo; **booking UI still needs to attach the UUID** after create + open Razorpay Checkout live; reconcile **`bookings.status`** with **`payment_gateway_state`** for your policy.
+- **Payments (ops)**: **Checkout UX shipped** — success screen passes UUID and opens Checkout when Razorpay env is set; **production** still needs keys, webhook URL, DB migration; reconcile **`bookings.status`** with **`payment_gateway_state`** for your policy.
 
 ---
 
@@ -251,7 +251,7 @@ Studies through early 2026 still show outsized citation lift from **YouTube**, *
 ### P0 (today) — stop 404s
 - **Done**: Menu links fixed and redirects added for `/privacy`, `/terms`, `/refund`.
 - **Done**: Removed `/X/...` image references and replaced with existing `public/Villa_Retreats/...` images.
-- **Done**: OG/logo references updated to existing assets (no missing OG file refs).
+- **Done**: Global **`og-default.jpg`** (1200×630) + layout metadata for link previews.
 
 ### P1 (this week) — SEO + migrations
 - **Done (common case)**: `/blog/:slug*` → `/blogs/:slug*` redirect added.
@@ -290,23 +290,24 @@ Studies through early 2026 still show outsized citation lift from **YouTube**, *
 - **Strict CSP**: add nonce/hash-based CSP in addition to current headers if threat model warrants it.
 
 ### SEO / Social
-- **OG image quality**: add a dedicated `public/og-default.jpg` (1200×630) for **global** shares; villas already expose **hero-based** previews.
+- **OG image quality**: **Done** — `public/og-default.jpg` (1200×630) for global shares; villas still use **hero-based** previews on detail routes.
 - **Redirect mapping**: extend redirects beyond policy + blog legacy once old URLs are known.
 - **FAQ / HowTo structured data**: add on top blogs guides when FAQs exist in copy (**not yet automated**).
 
 ### Backend reliability
-- **Payments flow**: confirm payment + webhook verification + booking status transitions (pending → confirmed).
+- **Payments flow**: webhook verification + gateway fields are coded; **ops** confirms live Razorpay + DB; define **status** transitions with finance.
 - **Validation additions** (done on API): aligned phone/name/email notes with booking form validators; **`villaId`** registered-villa allowlist. Optional extras: max stay length, tighter guest caps.
 
 ### Performance / Ops
 - **Media delivery**: consider object storage + CDN for the large `public/` library.
-- **Monitoring**: add error tracking/logging for booking and admin endpoints (e.g., Sentry).
+- **Monitoring**: **Sentry optional** — set **`NEXT_PUBLIC_SENTRY_DSN`** for client/server error capture (see **WEBDEV-Audit** for file paths).
 
 ---
 
 ## Evidence (key files reviewed)
-- `package.json`, `next.config.mjs`, `tsconfig.json`, `src/middleware.ts`
-- Funnel honesty (holistic backlog): **`src/components/EnquireOverlay.tsx`**, **`src/components/experience/WeddingVenueEnquiryForm.tsx`**, **`src/app/careers/page.tsx`**, **`src/lib/paymentService.ts`**, **`src/app/api/bookings/route.ts`**
+- `package.json`, `next.config.mjs`, `tsconfig.json`, `src/middleware.ts`, **`.github/workflows/ci.yml`**
+- Funnel + booking pay: **`src/app/book/page.tsx`**, **`src/lib/paymentService.ts`**, **`src/lib/payments/razorpayCheckout.ts`**, **`src/components/EnquireOverlay.tsx`**, **`src/components/experience/WeddingVenueEnquiryForm.tsx`**, **`src/app/careers/page.tsx`**, **`src/app/api/bookings/route.ts`**
+- Tests: **`src/lib/*.test.ts`**, **`e2e/smoke.spec.ts`**, **`e2e/lead-surfaces.spec.ts`**, **`playwright.config.ts`**
 - GEO / SEO: **`public/llms.txt`**, `src/app/robots.ts`, `src/app/sitemap.ts`, `src/app/layout.tsx`, `src/app/villas/[id]/layout.tsx`, `src/app/villas/[id]/spaces/layout.tsx`, `src/lib/seo/meta.ts`, legal **`layout.tsx`** segments, **`wishlist`**, **`admin`** layouts
 - Routes: `src/app/**/page.tsx`
 - Booking APIs: `src/app/api/bookings/**`, DB: `src/lib/db.ts`

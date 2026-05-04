@@ -279,3 +279,8 @@
 .experience-sda-js-motion .experience-sda-root {
   timeline-scope: none;
 }
+
+/* JS path: same layout as Chrome; grow math uses translateY + bottom clip (see growStyleVertical). */
+.experience-sda-vertical-analogy .experience-sda-grow-layer {
+  transform-origin: 50% 40%;
+}

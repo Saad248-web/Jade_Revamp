@@ -2,7 +2,7 @@
 
 **Audience:** Engineering, DevOps, and delivery leads · **Companion to client-facing pack:** [`audit-report.md`](./audit-report.md) / [`audit-report.html`](./audit-report.html)  
 **Filesystem note:** Alternate name `WEBDEV:Audit` is represented as **`WEBDEV-Audit`** (hyphen avoids `:` issues on Windows). See also [`WEBDEVAudit.md`](./WEBDEVAudit.md).  
-**Revision:** **2026-05-03** (synced to repo) · **Stack:** Next.js 14 App Router · TypeScript · Tailwind · PostgreSQL (`pg`) · Resend/Razorpay (optional env)
+**Revision:** **2026-05-04** (synced to repo) · **Stack:** Next.js 14 App Router · TypeScript · Tailwind · PostgreSQL (`pg`) · Resend/Razorpay (optional env)
 
 ---
 
@@ -17,7 +17,7 @@ For a visual, responsive layout open **`WEBDEV-Audit.html`** in a browser — it
 
 ---
 
-## 2. Re-audit snapshot (2026-05-02)
+## 2. Re-audit snapshot (2026-05-04)
 
 Method: fresh pass over `src/app/api/**`, `src/middleware.ts`, `next.config.mjs`, overlays/forms, `.env.example`, `schema*.sql`; cross-check with **technical SEO** categories (crawlability, indexability, security headers, robots/sitemap discipline — aligned with SEO technical checklist).
 
@@ -106,7 +106,7 @@ Method: fresh pass over `src/app/api/**`, `src/middleware.ts`, `next.config.mjs`
 
 ## 7. Still open (ops / stretch — code-complete items removed)
 
-**Shipped in repo since prior audit:** post-book **`booking_uuid`** + Razorpay Checkout on the booking success screen; **`initiatePayment`** optional **`bookingUuid`**; **`@sentry/nextjs`** (enabled when **`NEXT_PUBLIC_SENTRY_DSN`** set); global **`og-default.jpg`** (1200×630) + **`layout.tsx`** Open Graph; Vitest (**`paymentService`**, **`bookingDetailsValidation`**) + Playwright smoke (**`npm run test:e2e`** / **`test:e2e:ci`**).
+**Shipped in repo since prior audit:** post-book **`booking_uuid`** + Razorpay Checkout on the booking success screen; **`initiatePayment`** optional **`bookingUuid`**; **`@sentry/nextjs`** (enabled when **`NEXT_PUBLIC_SENTRY_DSN`** set); global **`og-default.jpg`** (1200×630) + **`layout.tsx`** Open Graph; Vitest (**`paymentService`**, **`bookingDetailsValidation`**) + Playwright (**`e2e/smoke.spec.ts`**, **`e2e/lead-surfaces.spec.ts`**; **`npm run test:e2e`** / **`test:e2e:ci`**); **GitHub Actions** (`.github/workflows/ci.yml` — `npm ci` + test + build on push/PR to `main` / `master`).
 
 1. **Ops:** Run **`schema.sql`** or **`schema_migration_leads_rathaa_partner_payments.sql`** on production DB.  
 2. **Ops:** Razorpay Dashboard — webhook URL + **`RAZORPAY_WEBHOOK_SECRET`**; live keys in env.  
@@ -126,7 +126,7 @@ Method: fresh pass over `src/app/api/**`, `src/middleware.ts`, `next.config.mjs`
 - Funnel UI: `src/components/EnquireOverlay.tsx`, `RathaaOverlay.tsx`, `PartnerOverlay.tsx`, `experience/WeddingVenueEnquiryForm.tsx`, `src/app/careers/page.tsx`  
 - Book + pay: `src/app/book/page.tsx`, `src/lib/paymentService.ts`, `src/lib/payments/razorpayCheckout.ts`  
 - Observability: `src/instrumentation.ts`, `src/instrumentation-client.ts`, `sentry.*.config.ts` under `src/`, `withSentryConfig` in `next.config.mjs`  
-- Tests: `src/lib/*.test.ts`, `e2e/smoke.spec.ts`, `playwright.config.ts`  
+- Tests + CI: `src/lib/*.test.ts`, `e2e/smoke.spec.ts`, `e2e/lead-surfaces.spec.ts`, `playwright.config.ts`, `.github/workflows/ci.yml`  
 
 ---
 

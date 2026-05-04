@@ -93,7 +93,7 @@ export function scrollerProgress(scrollLeft: number, maxScroll: number) {
   return clamp(scrollLeft / maxScroll, 0, 1);
 }
 
-/** experience-sda-grow keyframes → inline styles */
+/** experience-sda-grow keyframes → inline styles (horizontal weighting — matches Chrome native timeline). */
 export function growStyle(
   vp: number,
   cw: number,
@@ -124,6 +124,57 @@ export function growStyle(
     WebkitClipPath: "inset(0)",
     transform: `scale(${scale}) translateX(${txPct}%)`,
   };
+}
+
+/**
+ * Same timing bands as `growStyle` / `@keyframes experience-sda-grow`, but **vertical analogy** for the
+ * JS + vertical-scroll path: bottom-weighted clip + translateY (reveal rises with scroll) instead of
+ * right-weighted + translateX. Keeps one-to-one keyframe % with Chrome’s horizontal motion.
+ */
+export function growStyleVertical(
+  vp: number,
+  cw: number,
+  ch: number,
+): CSSProperties {
+  const u = clamp(vp, 0, 1);
+  const kp = u * 100;
+  const cqmin = Math.min(0.35 * cw, 0.35 * ch);
+
+  if (kp <= 58.75) {
+    const t = kp / 58.75;
+    const bottomInset = 25 * (1 - t);
+    const roundPx = cqmin * (1 - t);
+    const tyPct = 70 * (1 - t);
+    const sc = 0.15 + (1 - 0.15) * t;
+    const clip = `inset(0 0 ${bottomInset}% 0 round ${roundPx}px)`;
+    return {
+      clipPath: clip,
+      WebkitClipPath: clip,
+      transform: `translateY(${tyPct}%) scale(${sc})`,
+    };
+  }
+  const t = (kp - 58.75) / (100 - 58.75);
+  const scale = 1 + 0.5 * t;
+  const tyPct = -16 * t;
+  return {
+    clipPath: "inset(0)",
+    WebkitClipPath: "inset(0)",
+    transform: `scale(${scale}) translateY(${tyPct}%)`,
+  };
+}
+
+export type Demo1GrowVariant = "horizontal" | "vertical";
+
+/** Dispatches to Demo 1 horizontal (Chrome) vs vertical-analogy grow. */
+export function growStyleByVariant(
+  variant: Demo1GrowVariant,
+  vp: number,
+  cw: number,
+  ch: number,
+): CSSProperties {
+  return variant === "vertical"
+    ? growStyleVertical(vp, cw, ch)
+    : growStyle(vp, cw, ch);
 }
 
 /** experience-sda-text — initial headline: translateY 205%, skewY 6deg */

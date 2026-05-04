@@ -199,6 +199,7 @@ export default function AboutPage() {
             Because how you <br className="hidden md:block" /> operate matters
           </>
         }
+        cardsLayout="scroll"
         cards={[
           {
             tag: "operate",

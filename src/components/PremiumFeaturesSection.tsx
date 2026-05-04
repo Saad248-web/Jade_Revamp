@@ -38,6 +38,9 @@ export default function PremiumFeaturesSection({
     "w-full mb-fluid-md flex justify-start xl:justify-center overflow-x-auto overflow-y-clip pb-3 scrollbar-none jade-hscroll-track scroll-pl-4 md:scroll-pl-6 lg:scroll-pl-8 xl:scroll-pl-6";
   const scrollTrackClasses =
     "inline-flex gap-[clamp(10px,2vw,14px)] snap-x snap-mandatory scroll-smooth pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] md:pl-8 md:pr-8 lg:pl-12 lg:pr-10 xl:pl-8 xl:pr-8";
+  /** Narrower than ~82dvw so the next card peeks and total height stays comfortable on phones. */
+  const scrollItemWidthClasses =
+    "w-[max(200px,min(72dvw,275px))] sm:w-[max(218px,min(74dvw,275px))] md:w-[min(269px,40vw)] lg:w-[269px]";
 
   return (
     <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
@@ -60,6 +63,7 @@ export default function PremiumFeaturesSection({
                 idx={idx}
                 alternateGold={alternateGold}
                 cardClassName={cardClassName}
+                variant="grid"
               />
             ))}
           </div>
@@ -75,13 +79,14 @@ export default function PremiumFeaturesSection({
             {cards.map((card, idx) => (
               <div
                 key={idx}
-                className="snap-start flex-shrink-0 jade-hscroll-view-item w-[max(218px,min(82dvw,289px))] sm:w-[max(228px,min(78dvw,269px))] md:w-[min(269px,40vw)] lg:w-[269px]"
+                className={`snap-start flex-shrink-0 jade-hscroll-view-item ${scrollItemWidthClasses}`}
               >
                 <PremiumFeatureCard
                   card={card}
                   idx={idx}
                   alternateGold={alternateGold}
                   cardClassName={cardClassName}
+                  variant="scroll"
                 />
               </div>
             ))}
@@ -115,18 +120,24 @@ function PremiumFeatureCard({
   idx,
   alternateGold,
   cardClassName,
+  variant = "grid",
 }: {
   card: FeatureCard;
   idx: number;
   alternateGold: boolean;
   cardClassName: string;
+  variant?: "grid" | "scroll";
 }) {
   const geoId = `premium-card-geo-${idx}`;
   const noiseId = `premium-card-noise-${idx}`;
+  const aspectClass =
+    variant === "scroll"
+      ? "aspect-[4/5] md:aspect-[269/375]"
+      : "aspect-[269/375]";
 
   return (
     <div
-      className={`group relative w-full aspect-[269/375] border border-white/[0.05] p-[clamp(1rem,3.25vw,2rem)] flex flex-col justify-between overflow-hidden transition-all duration-500 hover:border-[#EFCD62]/30 ${cardClassName}`}
+      className={`group relative w-full ${aspectClass} border border-white/[0.05] p-[clamp(1rem,3.25vw,2rem)] flex flex-col justify-between overflow-hidden transition-all duration-500 hover:border-[#EFCD62]/30 ${cardClassName}`}
     >
       {/* Layer 1: Refined Linear Fill with Accurate Shiny Accents */}
       <div className="absolute inset-0 z-0 overflow-hidden">

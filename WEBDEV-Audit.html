@@ -447,7 +447,7 @@
         </p>
         <div class="meta-row" aria-label="Document meta">
           <span class="chip"><b>Stack</b> Next.js 14 · TS · Tailwind · pg</span>
-          <span class="chip"><b>Date</b> 2026-05-03</span>
+          <span class="chip"><b>Date</b> 2026-05-04</span>
           <span class="chip"><b>Type</b> Repo scan + API inventory</span>
           <span class="chip"><b>Related</b> <a href="./audit-report.html">audit-report.html</a> (client)</span>
         </div>
@@ -500,7 +500,7 @@
               </tbody>
             </table>
           </div>
-          <h3>Audit method (2026-05-03 · synced to repo)</h3>
+          <h3>Audit method (2026-05-04 · synced to repo)</h3>
           <p class="muted">
             Pass over <code>src/app/api/**</code>, overlays/forms, <code>src/middleware.ts</code>, <code>next.config.mjs</code>,
             <code>.env.example</code>, <code>schema*.sql</code>, plus technical-SEO checklist themes (crawl/index, robots/sitemap, headers, GEO).
@@ -932,7 +932,8 @@
           <ul class="ul-compact">
             <li><b>Errors:</b> <code>src/app/error.tsx</code>, <code>src/app/global-error.tsx</code> (Sentry capture when DSN set)</li>
             <li><b>Tests:</b> <code>npm run test</code> → Vitest (<code>bookingDetailsValidation</code>, <code>paymentService</code>)</li>
-            <li><b>E2E:</b> <code>npm run test:e2e</code> (dev) · <code>npm run test:e2e:ci</code> (build + <code>next start</code>) → <code>e2e/smoke.spec.ts</code></li>
+            <li><b>E2E:</b> <code>npm run test:e2e</code> (dev) · <code>npm run test:e2e:ci</code> (build + <code>next start</code>) → <code>e2e/smoke.spec.ts</code>, <code>e2e/lead-surfaces.spec.ts</code></li>
+            <li><b>CI:</b> <code>.github/workflows/ci.yml</code> — <code>npm ci</code>, <code>npm run test</code>, <code>npm run build</code> on push/PR to <code>main</code> / <code>master</code></li>
             <li><b>SEO image:</b> <code>public/og-default.jpg</code> (1200×630) · referenced from <code>src/app/layout.tsx</code> Open Graph</li>
             <li><b>Build:</b> <code>prebuild</code> → <code>scripts/generate_media_manifest.mjs</code></li>
           </ul>
@@ -941,7 +942,7 @@
         <section id="backlog" class="card" style="margin-top: 14px">
           <h2>8. Still open — ops / stretch (<code>.md §7</code>)</h2>
           <p class="muted" style="margin-top: 0">
-            Checkout, <code>booking_uuid</code> in <code>initiatePayment</code>, Sentry wiring, <code>og-default.jpg</code>, Vitest + Playwright smoke are <span class="tag ok">shipped</span> in repo.
+            Checkout, <code>booking_uuid</code> in <code>initiatePayment</code>, Sentry wiring, <code>og-default.jpg</code>, Vitest + Playwright, and GitHub Actions CI are <span class="tag ok">shipped</span> in repo.
           </p>
           <ol class="muted ul-compact" style="margin: 0; padding-left: 1.2rem">
             <li><b>Ops:</b> apply <code>schema.sql</code> or <code>schema_migration_leads_rathaa_partner_payments.sql</code> on production.</li>
@@ -963,13 +964,13 @@
             <li><b>Funnel UI:</b> <code>src/components/EnquireOverlay.tsx</code>, <code>RathaaOverlay.tsx</code>, <code>PartnerOverlay.tsx</code>, <code>experience/WeddingVenueEnquiryForm.tsx</code>, <code>src/app/careers/page.tsx</code></li>
             <li><b>Book + pay:</b> <code>src/app/book/page.tsx</code>, <code>src/lib/paymentService.ts</code>, <code>src/lib/payments/razorpayCheckout.ts</code></li>
             <li><b>Observability:</b> <code>src/instrumentation.ts</code>, <code>src/instrumentation-client.ts</code>, <code>src/sentry.*.config.ts</code>, <code>withSentryConfig</code> in <code>next.config.mjs</code></li>
-            <li><b>Tests:</b> <code>src/lib/*.test.ts</code>, <code>e2e/smoke.spec.ts</code>, <code>playwright.config.ts</code></li>
+            <li><b>Tests + CI:</b> <code>src/lib/*.test.ts</code>, <code>e2e/smoke.spec.ts</code>, <code>e2e/lead-surfaces.spec.ts</code>, <code>playwright.config.ts</code>, <code>.github/workflows/ci.yml</code></li>
           </ul>
         </section>
       </main>
 
       <footer class="ft">
-        This HTML is intended to include <strong>all sections</strong> from <a href="./WEBDEV-Audit.md">WEBDEV-Audit.md</a> (§1–§8). Client pack:
+        This HTML is intended to include <strong>all sections</strong> from <a href="./WEBDEV-Audit.md">WEBDEV-Audit.md</a> (§1–§9). Client pack:
         <a href="./audit-report.html">audit-report.html</a> ·
         <a href="./WEBDEVAudit.html">WEBDEVAudit.html</a> (redirect).
       </footer>
