@@ -182,7 +182,7 @@ export default function AnotherExperienceOneClient() {
 
 function StaticFallback() {
   return (
-    <section className="bg-[#0D4032] px-4 py-fluid-lg pb-[max(6rem,env(safe-area-inset-bottom))] md:px-fluid-md">
+    <section className="bg-[#0B2C23] px-4 py-fluid-lg pb-[max(6rem,env(safe-area-inset-bottom))] md:px-fluid-md">
       <p className="mx-auto mb-fluid-md max-w-2xl text-center font-manrope text-sm text-white/70 md:text-[length:var(--fs-body)]">
         Reduced motion is enabled. Below is the same journey with standard
         vertical scrolling.

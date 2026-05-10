@@ -145,7 +145,7 @@ export default function AboutPage() {
       <TrustedBySection />
 
       {/* 3. OUR STORY SECTION */}
-      <section className="py-fluid-lg md:py-fluid-xl bg-[#0D4032] relative overflow-hidden">
+      <section className="py-fluid-lg md:py-fluid-xl bg-[#0B2C23] relative overflow-hidden">
         {/* Background Pattern Overlay (Optional subtle texture) */}
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]" />
 

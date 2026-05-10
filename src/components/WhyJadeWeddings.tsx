@@ -57,7 +57,7 @@ export default function WhyJadeWeddings() {
   const hero = useMemo(() => whyImages[0] || "", [whyImages]);
 
   return (
-    <section className="bg-[#0D4032] py-fluid-lg md:py-fluid-xl">
+    <section className="bg-[#0B2C23] py-fluid-lg md:py-fluid-xl">
       <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
           {/* IMAGE SECTION */}
@@ -76,7 +76,7 @@ export default function WhyJadeWeddings() {
                 className="object-cover"
               />
             ) : (
-              <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-[#0D4032] to-black/70" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-[#0B2C23] to-black/70" />
             )}
           </motion.div>
 

@@ -194,7 +194,7 @@ function StepDates({
   return (
     <div className="flex flex-col h-full">
       {/* Header Area (Title & Actions) */}
-      <div className="bg-[#0D4032] shrink-0">
+      <div className="bg-[#0B2C23] shrink-0">
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
           <h2 className="text-white text-gh-h1 font-philosopher leading-none">
             Select Dates
@@ -274,7 +274,7 @@ function StepDates({
                       disabled={unavail}
                       onClick={() => !unavail && handleDayClick(mIdx, day)}
                       className={`w-9 h-9 mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-sm relative
-                      ${sel ? "bg-[#EFCD62] text-[#0D4032] font-bold" : ""}
+                      ${sel ? "bg-[#EFCD62] text-[#0B2C23] font-bold" : ""}
                       ${inRange ? "bg-[#EFCD62]/20 text-white" : ""}
                       ${!sel && !inRange && !unavail ? "text-white hover:bg-white/10" : ""}
                       ${unavail ? "text-white/20 cursor-not-allowed" : ""}
@@ -311,7 +311,7 @@ function StepDates({
             onClick={onNext}
             className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
               dateRange.checkIn && dateRange.checkOut
-                ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white"
+                ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"
                 : "bg-white/10 text-white/30 cursor-not-allowed"
             }`}
           >
@@ -462,7 +462,7 @@ function StepGuests({
               onClick={onNext}
               className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
                 guests.adults > 0
-                  ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white"
+                  ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"
                   : "bg-white/10 text-white/30 cursor-not-allowed"
               }`}
             >
@@ -552,7 +552,7 @@ function StepVillas({
               onClick={() => setActiveFilter(f)}
               className={`shrink-0 px-4 py-1.5 text-gh-label font-manrope font-semibold tracking-wide rounded-sm transition-all flex items-center gap-2 border ${
                 activeFilter === f
-                  ? "bg-[#EFCD62] text-[#0D4032] border-[#EFCD62]"
+                  ? "bg-[#EFCD62] text-[#0B2C23] border-[#EFCD62]"
                   : "bg-white/5 text-white/60 hover:bg-white/10 border-white/10"
               }`}
             >
@@ -560,7 +560,7 @@ function StepVillas({
               <span
                 className={`text-[9px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full ${
                   activeFilter === f
-                    ? "bg-[#0D4032]/20 text-[#0D4032]"
+                    ? "bg-[#0B2C23]/20 text-[#0B2C23]"
                     : "bg-white/10 text-white/40"
                 }`}
               >
@@ -597,7 +597,7 @@ function StepVillas({
               />
               {selectedVillaId === villa.id && (
                 <div className="absolute top-3 right-3 w-7 h-7 bg-[#EFCD62] rounded-full flex items-center justify-center">
-                  <Check className="w-4 h-4 text-[#0D4032]" strokeWidth={3} />
+                  <Check className="w-4 h-4 text-[#0B2C23]" strokeWidth={3} />
                 </div>
               )}
               <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm px-2 py-1 text-white text-gh-label font-manrope font-semibold tracking-widest uppercase">
@@ -694,7 +694,7 @@ function StepVillas({
             onClick={onNext}
             className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
               selectedVillaId
-                ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white"
+                ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"
                 : "bg-white/10 text-white/30 cursor-not-allowed"
             }`}
           >
@@ -826,7 +826,7 @@ function StepDetails({
                 }}
                 className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
                   canProceed
-                    ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white"
+                    ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"
                     : "bg-white/10 text-white/30 cursor-pointer"
                 }`}
               >
@@ -1049,7 +1049,7 @@ function StepReview({
                   >
                     {selectedAddOns.includes(addon.id) && (
                       <Check
-                        className="w-3 h-3 text-[#0D4032]"
+                        className="w-3 h-3 text-[#0B2C23]"
                         strokeWidth={3}
                       />
                     )}

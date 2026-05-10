@@ -70,13 +70,13 @@ export default function TravelGuidelinesModal({
               {/* Floating Close Button */}
               <button
                 onClick={onClose}
-                className="absolute -top-14 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#0D4032] border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-[#EFCD62] hover:text-[#0D4032] transition-all duration-300 shadow-2xl"
+                className="absolute -top-14 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#0B2C23] border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-[#EFCD62] hover:text-[#0B2C23] transition-all duration-300 shadow-2xl"
               >
                 <X className="w-6 h-6" />
               </button>
 
               {/* Content Box */}
-              <div className="bg-[#0D4032] border border-white/10 rounded-[24px] overflow-hidden shadow-2xl flex flex-col relative h-full">
+              <div className="bg-[#0B2C23] border border-white/10 rounded-[24px] overflow-hidden shadow-2xl flex flex-col relative h-full">
                 <div
                   className="p-8 md:p-12 overflow-y-auto custom-scrollbar h-full"
                   data-lenis-prevent

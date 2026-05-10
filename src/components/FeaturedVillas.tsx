@@ -79,7 +79,7 @@ export default function FeaturedVillas() {
   const totalSteps = totalVillas + 2; // Intro + Villas + Final
 
   return (
-    <section ref={targetRef} className="relative h-[650vh] bg-[#0D4032]">
+    <section ref={targetRef} className="relative h-[650vh] bg-[#0B2C23]">
       <NavbarThemeTrigger theme="white" sectionRef={targetRef} />
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Sections */}
@@ -162,6 +162,7 @@ function VillaSlide({
   globalProgress: any;
   totalSteps: number;
 }) {
+  const innerRef = useRef<HTMLDivElement>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const reducedMotion = useReducedMotion();
@@ -197,19 +198,21 @@ function VillaSlide({
   useEffect(() => {
     const computeOffset = () => {
       const w = window.innerWidth;
-      const panelWidth =
-        w >= 1280 ? 576 : w >= 768 ? 512 : w >= 640 ? 448 : 384;
-      const cappedPanel = Math.min(panelWidth, w - 48);
+      const actualWidth = innerRef.current ? innerRef.current.offsetWidth : Math.min(768, w - 48);
       const visibleGap = 56;
-      return Math.ceil(w / 2 + cappedPanel / 2 + visibleGap);
+      return Math.ceil(w / 2 + actualWidth / 2 + visibleGap);
     };
     const handleResize = () => {
       setOffsetPx(computeOffset());
       setVw(window.innerWidth);
     };
     handleResize();
+    const t = setTimeout(handleResize, 100);
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(t);
+    };
   }, []);
 
   const x = useTransform(globalProgress, (p: number) => {
@@ -236,7 +239,7 @@ function VillaSlide({
     >
       <div className="pointer-events-none relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-20 lg:px-32 xl:px-48">
         {/* Layout Container: Stacked universally on all screen sizes */}
-        <div className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
+        <div ref={innerRef} className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
           {/* Image Section */}
           <div
             className="relative w-full aspect-[16/9] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0"

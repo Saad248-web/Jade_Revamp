@@ -91,8 +91,8 @@ export default function ExperiencesScrollSection() {
   const totalSteps = PANELS.length + 1; // 8 steps total
 
   return (
-    <section ref={targetRef} className="relative h-[800vh] bg-[#0D4032]">
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#0D4032]">
+    <section ref={targetRef} className="relative h-[800vh] bg-[#0B2C23]">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#0B2C23]">
         {/* Top Label & Counter - Global */}
         <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(48px,6vh,80px)] pb-[clamp(8px,1.5vh,18px)]">
           <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-2 md:mb-3 font-semibold text-jade-gold drop-shadow-lg block">
@@ -150,7 +150,7 @@ function GlobalCounter({
   }, [progress, total, totalSteps]);
 
   return (
-    <div className="relative flex items-center gap-12 md:gap-16 font-philosopher text-gh-scroll mt-2">
+    <div className="relative flex md:hidden items-center gap-12 md:gap-16 font-philosopher text-gh-scroll mt-2">
       <span className="text-white drop-shadow-lg transition-all duration-300">
         {current}
       </span>
@@ -204,7 +204,7 @@ function PanelSlide({
     const computeOffset = () => {
       const vw = window.innerWidth;
       const panelWidth =
-        vw >= 1280 ? 576 : vw >= 768 ? 512 : vw >= 640 ? 448 : 384;
+        vw >= 1280 ? 896 : vw >= 768 ? 672 : vw >= 640 ? 512 : 448;
       const cappedPanel = Math.min(panelWidth, vw - 48);
       const visibleGap = 56;
       return Math.ceil(vw / 2 + cappedPanel / 2 + visibleGap);
@@ -227,9 +227,9 @@ function PanelSlide({
       <div className="pointer-events-auto flex items-center justify-center w-full h-full">
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
         <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 pt-4 pb-10">
-          <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg xl:max-w-xl mx-auto flex flex-col items-stretch gap-3 lg:gap-5">
+          <div className="relative w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto flex flex-col items-stretch gap-3 lg:gap-5">
             {/* Image Section — zoom-safe max height so CTA stays above the fold */}
-            <div className="relative w-full aspect-[16/9] max-h-[clamp(180px,38vh,360px)] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
+            <div className="relative w-full aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
               <div className="w-full h-full relative">
                 <Image
                   src={data.image}

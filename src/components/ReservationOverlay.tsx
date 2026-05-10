@@ -159,7 +159,7 @@ export default function ReservationOverlay({
               </div>
 
               {/* CONTENT AREA */}
-              <div className="flex-1 bg-[#0D4032] overflow-y-auto px-5 md:px-6 py-6 overflow-x-hidden scrollbar-hide">
+              <div className="flex-1 bg-[#0B2C23] overflow-y-auto px-5 md:px-6 py-6 overflow-x-hidden scrollbar-hide">
                 {view === "dates" && (
                   <div className="flex flex-col gap-5">
                     <h2 className="text-white text-gh-h2 font-philosopher leading-none mb-1">
@@ -356,7 +356,7 @@ export default function ReservationOverlay({
               </div>
 
               {/* FOOTER */}
-              <div className="relative border-t border-[#EFCD62]/30 bg-[#0D4032] px-6 py-4">
+              <div className="relative border-t border-[#EFCD62]/30 bg-[#0B2C23] px-6 py-4">
                 {/* Progress Line */}
                 <div className="absolute top-0 left-0 w-full h-[2px] flex">
                   <div

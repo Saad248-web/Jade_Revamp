@@ -205,7 +205,7 @@ function LoginScreen({ onLogin }: { onLogin: (pw: string) => void }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D4032] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#0B2C23] flex items-center justify-center px-4">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-sm flex flex-col gap-5"
@@ -219,7 +219,7 @@ function LoginScreen({ onLogin }: { onLogin: (pw: string) => void }) {
           </p>
         </div>
         <div className="relative border border-white/20 focus-within:border-[#EFCD62] transition-colors">
-          <label className="absolute -top-2.5 left-3 bg-[#0D4032] px-1 text-xs text-[#EFCD62] uppercase tracking-widest font-bold">
+          <label className="absolute -top-2.5 left-3 bg-[#0B2C23] px-1 text-xs text-[#EFCD62] uppercase tracking-widest font-bold">
             Password
           </label>
           <input
@@ -239,7 +239,7 @@ function LoginScreen({ onLogin }: { onLogin: (pw: string) => void }) {
         <button
           type="submit"
           disabled={loading || !pw}
-          className={`py-3.5 font-manrope font-bold text-sm tracking-widest uppercase transition-all ${loading || !pw ? "bg-white/10 text-white/30 cursor-not-allowed" : "bg-[#EFCD62] text-[#0D4032] hover:bg-white"}`}
+          className={`py-3.5 font-manrope font-bold text-sm tracking-widest uppercase transition-all ${loading || !pw ? "bg-white/10 text-white/30 cursor-not-allowed" : "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"}`}
         >
           {loading ? (
             <Loader2 className="w-4 h-4 animate-spin mx-auto" />
@@ -279,7 +279,7 @@ function ConfirmDialog({
           </button>
           <button
             onClick={onConfirm}
-            className={`flex-1 py-2.5 text-sm font-manrope font-bold tracking-widest uppercase transition-colors ${danger ? "bg-red-600 hover:bg-red-500 text-white" : "bg-[#EFCD62] text-[#0D4032] hover:bg-white"}`}
+            className={`flex-1 py-2.5 text-sm font-manrope font-bold tracking-widest uppercase transition-colors ${danger ? "bg-red-600 hover:bg-red-500 text-white" : "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"}`}
           >
             CONFIRM
           </button>
@@ -783,7 +783,7 @@ function Dashboard({
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white">
       {/* Top bar */}
-      <div className="bg-[#0D4032] border-b border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+      <div className="bg-[#0B2C23] border-b border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
         <div>
           <h1 className="font-philosopher text-white text-xl leading-tight">
             Jade Host
@@ -1072,7 +1072,7 @@ function Dashboard({
                         <button
                           key={p}
                           onClick={() => setPage(p as number)}
-                          className={`w-8 h-8 flex items-center justify-center border text-xs font-manrope font-bold transition-colors ${page === p ? "bg-[#EFCD62] text-[#0D4032] border-[#EFCD62]" : "border-white/20 text-white/60 hover:text-white hover:border-white/40"}`}
+                          className={`w-8 h-8 flex items-center justify-center border text-xs font-manrope font-bold transition-colors ${page === p ? "bg-[#EFCD62] text-[#0B2C23] border-[#EFCD62]" : "border-white/20 text-white/60 hover:text-white hover:border-white/40"}`}
                         >
                           {p}
                         </button>

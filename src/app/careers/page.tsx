@@ -259,7 +259,7 @@ export default function CareersPage() {
       {/* 2. JOBS SECTION */}
       <section
         id="jobs"
-        className="py-24 bg-[#0D4032] relative overflow-hidden"
+        className="py-24 bg-[#0B2C23] relative overflow-hidden"
       >
         {/* Diamond Pattern Overlay */}
         <div
@@ -447,7 +447,7 @@ export default function CareersPage() {
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
                 transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="fixed inset-x-0 bottom-0 top-24 z-[48] bg-[#0D4032] rounded-t-[28px] flex flex-col"
+                className="fixed inset-x-0 bottom-0 top-24 z-[48] bg-[#0B2C23] rounded-t-[28px] flex flex-col"
               >
                 {/* The Close button centered at top, outside the modal */}
                 <div className="absolute -top-[72px] left-1/2 -translate-x-1/2 flex items-center z-10">
@@ -488,7 +488,7 @@ export default function CareersPage() {
                       <form className="space-y-4 w-full" onSubmit={handleApply}>
                         {/* Full Name */}
                         <div className="relative w-full">
-                          <label className="absolute -top-2.5 left-4 bg-[#0D4032] px-2 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold z-10">
+                          <label className="absolute -top-2.5 left-4 bg-[#0B2C23] px-2 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold z-10">
                             Full Name
                           </label>
                           <input
@@ -709,7 +709,7 @@ export default function CareersPage() {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 40, opacity: 0 }}
                 transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="relative w-full max-w-lg bg-[#0D4032] overflow-visible max-h-[85vh] rounded-3xl shadow-2xl pointer-events-auto flex flex-col"
+                className="relative w-full max-w-lg bg-[#0B2C23] overflow-visible max-h-[85vh] rounded-3xl shadow-2xl pointer-events-auto flex flex-col"
               >
                 {/* The Close button centered at top, outside the modal */}
                 <div className="absolute -top-[72px] left-1/2 -translate-x-1/2 flex items-center z-10">
@@ -747,7 +747,7 @@ export default function CareersPage() {
 
                       <form className="space-y-6" onSubmit={handleApply}>
                         <div className="relative">
-                          <label className="absolute -top-3 left-4 bg-[#0D4032] px-2 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
+                          <label className="absolute -top-3 left-4 bg-[#0B2C23] px-2 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
                             Full Name
                           </label>
                           <input

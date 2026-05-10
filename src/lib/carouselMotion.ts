@@ -4,8 +4,8 @@ import { useEffect } from "react";
 
 /** Shared crossfade timings for hero + carousel image transitions */
 export const CAROUSEL_CROSSFADE = {
-  duration: 0.45,
-  ease: [0.16, 1, 0.3, 1] as const,
+  duration: 0.8,
+  ease: [0.32, 0.72, 0, 1] as const,
 };
 
 type SlidePair = { bgImage?: string; cardImage?: string };

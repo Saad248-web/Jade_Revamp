@@ -130,7 +130,7 @@ export default function WishlistPage() {
                       </Link>
                       <Link
                         href={`/book?villa=${item.id}`}
-                        className="flex-1 bg-jade-gold text-[#0D4032] font-manrope font-bold text-gh-label tracking-widest uppercase text-center py-2.5 hover:bg-white transition-colors flex items-center justify-center gap-1"
+                        className="flex-1 bg-jade-gold text-[#0B2C23] font-manrope font-bold text-gh-label tracking-widest uppercase text-center py-2.5 hover:bg-white transition-colors flex items-center justify-center gap-1"
                       >
                         BOOK <ArrowRight className="w-3.5 h-3.5" />
                       </Link>

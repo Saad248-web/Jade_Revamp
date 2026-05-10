@@ -24,7 +24,7 @@ function BookingSuccessContent() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#0D4032] flex flex-col">
+    <main className="min-h-screen bg-[#0B2C23] flex flex-col">
       <Navbar />
 
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-24 text-center">
@@ -102,7 +102,7 @@ function BookingSuccessContent() {
             </Link>
             <Link
               href="/villas"
-              className="flex-1 bg-jade-gold text-[#0D4032] font-manrope font-bold text-gh-label tracking-widest uppercase text-center py-3.5 hover:bg-white transition-colors flex items-center justify-center gap-2"
+              className="flex-1 bg-jade-gold text-[#0B2C23] font-manrope font-bold text-gh-label tracking-widest uppercase text-center py-3.5 hover:bg-white transition-colors flex items-center justify-center gap-2"
             >
               EXPLORE MORE <ArrowRight className="w-4 h-4" />
             </Link>
@@ -120,7 +120,7 @@ export default function BookSuccessPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0D4032] flex items-center justify-center">
+        <div className="min-h-screen bg-[#0B2C23] flex items-center justify-center">
           <div className="w-8 h-8 border-2 border-jade-gold border-t-transparent rounded-full animate-spin" />
         </div>
       }

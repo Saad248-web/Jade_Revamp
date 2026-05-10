@@ -67,7 +67,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
               <div className="absolute inset-0 bg-black/40" />
             </>
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#1A1C1E] to-[#0D4032]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#1A1C1E] to-[#0B2C23]" />
           )}
         </div>
 

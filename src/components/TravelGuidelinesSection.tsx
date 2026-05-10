@@ -22,7 +22,7 @@ export default function TravelGuidelinesSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section className="bg-[#0D4032] lg:h-[100dvh] min-h-[600px] flex flex-col lg:flex-row overflow-hidden relative">
+    <section className="bg-[#0B2C23] lg:h-[100dvh] min-h-[600px] flex flex-col lg:flex-row overflow-hidden relative">
       <div className="max-w-[1920px] mx-auto w-full h-full flex flex-col lg:flex-row">
         {/* Left Side: Image Banner */}
         <div className="relative w-full lg:w-1/2 h-[50dvh] lg:h-full overflow-hidden">
@@ -36,7 +36,7 @@ export default function TravelGuidelinesSection() {
           />
           {/* Subtle gradient overlay to blend into the dark green base */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent lg:hidden" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0D4032]/40 lg:hidden" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0B2C23]/40 lg:hidden" />
         </div>
 
         {/* Right Side: Content */}

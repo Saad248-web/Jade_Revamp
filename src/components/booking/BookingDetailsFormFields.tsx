@@ -61,7 +61,7 @@ export default function BookingDetailsFormFields({
         >
           <label
             htmlFor={`${idPrefix}-fullName`}
-            className="absolute -top-2.5 left-3 bg-[#0D4032] px-1 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold"
+            className="absolute -top-2.5 left-3 bg-[#0B2C23] px-1 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold"
           >
             Full Name
           </label>

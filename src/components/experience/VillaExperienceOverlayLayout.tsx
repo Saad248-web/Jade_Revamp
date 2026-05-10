@@ -23,8 +23,8 @@ export function VillaExperienceOverlayContentFrame({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen pb-28">
-      <div className="max-w-5xl mx-auto w-full pb-10 px-4 sm:px-6 md:px-8">
+    <div className="absolute inset-0 overflow-y-auto scrollbar-none pt-20 md:pt-0 pb-28">
+      <div className="w-full pb-10 bg-[#25282C] rounded-t-[32px] md:rounded-none overflow-hidden">
         {children}
       </div>
     </div>
@@ -39,16 +39,18 @@ export function VillaExperienceOverlayCloseFramer({
   onClose: () => void;
 }) {
   return (
-    <MotionButton
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      onClick={onClose}
-      aria-label="Close"
-      className={EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS}
-    >
-      <X className="w-6 h-6 stroke-[1.5]" />
-    </MotionButton>
+    <div className={EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS}>
+      <MotionButton
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        onClick={onClose}
+        aria-label="Close"
+        className="w-full h-full flex items-center justify-center rounded-full text-white"
+      >
+        <X className="w-6 h-6 stroke-[1.5]" />
+      </MotionButton>
+    </div>
   );
 }
 
@@ -75,7 +77,7 @@ export function VillaExperienceHeroCarousel({
 
   return (
     <div
-      className="relative w-full h-[clamp(260px,50vh,600px)] overflow-hidden bg-black/20 group rounded-none"
+      className="relative w-full h-[clamp(320px,65vh,720px)] overflow-hidden bg-black/20 group rounded-none"
       style={{ perspective: "1500px" }}
     >
       <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
@@ -170,21 +172,25 @@ export function VillaExperienceStickyTabs({
   onTabClick: (tab: string) => void;
 }) {
   return (
-    <div className={EXPERIENCE_OVERLAY_STICKY_TABS_CLASS}>
-      {tabs.map((tab) => (
-        <button
-          key={tab}
-          type="button"
-          onClick={() => onTabClick(tab)}
-          className={`px-4 py-4 text-gh-label md:text-gh-label font-bold tracking-widest uppercase transition-colors whitespace-nowrap border-b-2 ${
-            activeTab === tab
-              ? "border-[#EFCD62] text-[#EFCD62] bg-[#EFCD62]/5"
-              : "border-transparent text-white/40 hover:text-white"
-          }`}
-        >
-          {tab}
-        </button>
-      ))}
+    <div className="sticky top-0 z-[60] bg-[#25282C] border-b border-white/10 mb-0 w-full shadow-2xl">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="flex gap-8 md:gap-12 overflow-x-auto pb-0 scrollbar-none py-1">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => onTabClick(tab)}
+              className={`py-4 px-1 text-gh-label font-bold tracking-widest uppercase transition-colors whitespace-nowrap border-b-2 ${
+                activeTab === tab
+                  ? "border-[#EFCD62] text-[#EFCD62]"
+                  : "border-transparent text-white/40 hover:text-white"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -202,14 +208,14 @@ export function VillaExperienceBookingBottomBar({
   return (
     <div className={EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS}>
       <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-4 px-4 md:px-12">
-        <p className="font-manrope whitespace-nowrap leading-tight">
-          <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold">
+        <div className="flex flex-col font-manrope leading-tight">
+          <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">
             Starting from
-          </span>{" "}
-          <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold">
+          </span>
+          <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold whitespace-nowrap">
             {priceMain}
           </span>
-        </p>
+        </div>
         <div className="flex items-center gap-4 md:gap-6">
           <button
             type="button"

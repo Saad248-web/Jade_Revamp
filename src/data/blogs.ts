@@ -326,6 +326,52 @@ export const BLOG_POSTS: BlogPost[] = [
   //   isPublished: false,            // ← Set to true to publish
   //   sections: [],
   // },
+  {
+    id: 3,
+    slug: "ultimate-guide-private-villas",
+    title: "The Ultimate Guide to Booking Private Villas",
+    excerpt: "Find out what makes a private villa the best choice for your next vacation or staycation.",
+    description: "Discover the unparalleled privacy and luxury of booking a private villa for your next getaway.",
+    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=80",
+    link: "/blogs/ultimate-guide-private-villas",
+    date: "2024-04-10",
+    dateModified: "2024-04-10",
+    category: "TRAVEL",
+    readTime: "6 min read",
+    author: "Jade Hospitainment",
+    tags: ["private villa", "travel", "vacation"],
+    isFeatured: false,
+    isPublished: true,
+    sections: [
+      {
+        type: "text",
+        content: "Choosing the right accommodation can make or break your vacation. While hotels offer convenience, private villas provide an unmatched level of privacy, space, and personalized service.",
+      }
+    ],
+  },
+  {
+    id: 4,
+    slug: "hosting-unforgettable-events-jade",
+    title: "Hosting Unforgettable Events at Jade",
+    excerpt: "From intimate gatherings to large celebrations, learn how to make your events truly memorable.",
+    description: "Explore the endless possibilities of hosting your next big event, wedding, or party at our exclusive Jade properties.",
+    image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1600&q=80",
+    link: "/blogs/hosting-unforgettable-events-jade",
+    date: "2024-04-15",
+    dateModified: "2024-04-15",
+    category: "EXPERIENCES",
+    readTime: "7 min read",
+    author: "Jade Hospitainment",
+    tags: ["events", "celebrations", "weddings"],
+    isFeatured: false,
+    isPublished: true,
+    sections: [
+      {
+        type: "text",
+        content: "Every milestone deserves a celebration that is as unique as the occasion itself. At Jade Hospitainment, we specialize in turning your vision into a reality, offering breathtaking venues that serve as the perfect backdrop for your unforgettable moments.",
+      }
+    ],
+  },
 ];
 
 // ─── Validate at build time ───────────────────────────────────────────────────

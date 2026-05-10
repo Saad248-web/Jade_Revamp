@@ -49,7 +49,7 @@ export default function PaymentModal({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
             transition={{ type: "spring", damping: 28, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 z-[80] bg-[#0D4032] border-t border-white/10 rounded-t-2xl overflow-hidden max-h-[90svh]"
+            className="fixed bottom-0 left-0 right-0 z-[80] bg-[#0B2C23] border-t border-white/10 rounded-t-2xl overflow-hidden max-h-[90svh]"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
@@ -178,7 +178,7 @@ export default function PaymentModal({
               {status === "idle" && (
                 <button
                   onClick={onConfirm}
-                  className="w-full bg-jade-gold text-[#0D4032] font-manrope font-bold text-gh-label tracking-widest uppercase py-4 hover:bg-white transition-colors"
+                  className="w-full bg-jade-gold text-[#0B2C23] font-manrope font-bold text-gh-label tracking-widest uppercase py-4 hover:bg-white transition-colors"
                 >
                   CONFIRM BOOKING REQUEST
                 </button>
@@ -194,7 +194,7 @@ export default function PaymentModal({
               {status === "success" && (
                 <button
                   onClick={onClose}
-                  className="w-full bg-jade-gold text-[#0D4032] font-manrope font-bold text-gh-label tracking-widest uppercase py-4 hover:bg-white transition-colors"
+                  className="w-full bg-jade-gold text-[#0B2C23] font-manrope font-bold text-gh-label tracking-widest uppercase py-4 hover:bg-white transition-colors"
                 >
                   DONE
                 </button>
@@ -209,7 +209,7 @@ export default function PaymentModal({
                   </button>
                   <button
                     onClick={onConfirm}
-                    className="flex-1 bg-jade-gold text-[#0D4032] font-manrope font-bold text-gh-label tracking-widest uppercase py-3 hover:bg-white transition-colors"
+                    className="flex-1 bg-jade-gold text-[#0B2C23] font-manrope font-bold text-gh-label tracking-widest uppercase py-3 hover:bg-white transition-colors"
                   >
                     RETRY
                   </button>

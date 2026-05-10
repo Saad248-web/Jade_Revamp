@@ -35,7 +35,7 @@ export default function EmptyState({
       {ctaLabel && onCta && (
         <button
           onClick={onCta}
-          className="mt-2 bg-jade-gold text-[#0D4032] font-manrope font-bold text-gh-label tracking-widest uppercase px-8 py-3 hover:bg-white transition-colors"
+          className="mt-2 bg-jade-gold text-[#0B2C23] font-manrope font-bold text-gh-label tracking-widest uppercase px-8 py-3 hover:bg-white transition-colors"
         >
           {ctaLabel}
         </button>

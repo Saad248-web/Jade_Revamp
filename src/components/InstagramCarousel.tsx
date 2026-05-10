@@ -175,7 +175,7 @@ function InstagramFramedCard({
   const displayImage = media?.thumbnailUrl || post.fallbackImage;
 
   return (
-    <article className="w-full h-full rounded-[16px] bg-[#1E2227] border border-white/10 overflow-hidden">
+    <article className="w-full h-full flex flex-col rounded-[16px] bg-[#1E2227] border border-white/10 overflow-hidden">
       {/* Header */}
       <header className="flex items-center justify-between px-4 pt-4 pb-3">
         <div className="flex items-center gap-3 min-w-0">
@@ -200,8 +200,8 @@ function InstagramFramedCard({
       </header>
 
       {/* Media */}
-      <div className="px-4">
-        <div className="relative w-full h-[328px] rounded-[14px] overflow-hidden bg-black border border-white/10">
+      <div className="px-4 shrink-0">
+        <div className="relative w-full aspect-[4/5] rounded-[14px] overflow-hidden bg-black border border-white/10">
           {displayImage ? (
             <>
               <img
@@ -299,10 +299,10 @@ export default function InstagramCarousel() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-jade-charcoal pt-fluid-lg md:pt-fluid-xl pb-16 overflow-hidden"
+      className="relative bg-jade-charcoal py-16 md:py-24 min-h-[80dvh] lg:min-h-[100dvh] flex flex-col justify-center overflow-hidden"
     >
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
-      <div className="max-w-[1920px] mx-auto">
+      <div className="max-w-[1920px] mx-auto w-full">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16 px-6 md:px-12">
           <div className="flex items-center justify-center gap-2 mb-4">
@@ -316,22 +316,31 @@ export default function InstagramCarousel() {
           </h2>
         </div>
 
-        {/* Compact cards (≈280×497); track bleeds left and right like a full-bleed rail */}
-        <div
-          className="jade-hscroll-track w-full min-w-0 flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth pb-4 px-0"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {INSTAGRAM_POSTS.map((post) => (
-            <div
-              key={post.id}
-              className="flex-shrink-0 w-[280px] h-[497px] snap-center jade-hscroll-view-item"
-            >
-              <InstagramFramedCard
-                post={post}
-                media={mediaMap[`${post.type}:${post.id}`]}
-              />
-            </div>
-          ))}
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 0.75rem)); }
+          }
+          .animate-marquee {
+            animation: marquee 40s linear infinite;
+          }
+        `}} />
+
+        {/* Continuous Marquee Container */}
+        <div className="relative w-full overflow-hidden pb-4">
+          <div className="flex w-max gap-6 animate-marquee hover:[animation-play-state:paused]">
+            {[...INSTAGRAM_POSTS, ...INSTAGRAM_POSTS].map((post, index) => (
+              <div
+                key={`${post.id}-${index}`}
+                className="flex-shrink-0 w-[300px] sm:w-[320px] md:w-[360px]"
+              >
+                <InstagramFramedCard
+                  post={post}
+                  media={mediaMap[`${post.type}:${post.id}`]}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* CTA Button */}

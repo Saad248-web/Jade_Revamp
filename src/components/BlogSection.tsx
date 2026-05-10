@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import clsx from "clsx";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -12,9 +13,9 @@ const BlogCard = ({ post }: { post: any }) => {
   return (
     <Link
       href={post.link}
-      className="group relative block w-full min-w-[280px] sm:min-w-[340px] md:min-w-[380px] lg:min-w-[400px] lg:max-w-[420px]"
+      className="group relative block w-[280px] sm:w-[340px] md:w-[380px] lg:w-[400px]"
     >
-      <div className="relative aspect-[16/10] md:aspect-[4/3] overflow-hidden rounded-sm mb-5">
+      <div className="relative aspect-[4/5] sm:aspect-[4/3] overflow-hidden rounded-sm mb-5">
         <Image
           src={post.image}
           alt={post.title}
@@ -46,16 +47,44 @@ export default function BlogSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+  // Drag-to-scroll state
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
   const scrollRight = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({ left: 450, behavior: "smooth" });
     }
   };
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollContainerRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+    setScrollLeft(scrollContainerRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // scroll speed multiplier
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
   return (
     <section
       ref={sectionRef}
-      className="relative flex flex-col justify-center pt-fluid-lg pb-10 lg:pt-fluid-xl"
+      className="relative flex flex-col justify-center pt-16 pb-16 md:pt-fluid-lg md:pb-12 lg:pt-fluid-xl"
       style={{ backgroundColor: "#25282C" }}
     >
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
@@ -98,16 +127,32 @@ export default function BlogSection() {
         </div>
       </div>
 
-      {/* Horizontal scroll aligns with heading on the left, bleeds to the viewport edge on the right */}
-      <div className="max-w-[1920px] mx-auto w-full min-w-0 pl-6 md:pl-12 lg:pl-24">
+      {/* Horizontal scroll bleeds to the viewport edge on both sides but items align with heading */}
+      <div className="max-w-[1920px] mx-auto w-full min-w-0">
         <div
           ref={scrollContainerRef}
-          className="jade-hscroll-track flex gap-8 lg:gap-11 overflow-x-auto pb-8 md:pb-10 scrollbar-none snap-x snap-mandatory"
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          className={clsx(
+            "jade-hscroll-track flex gap-8 lg:gap-11 overflow-x-auto pb-8 md:pb-10 scrollbar-none snap-x snap-mandatory",
+            isDragging ? "cursor-grabbing" : "cursor-grab"
+          )}
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {BLOG_POSTS.map((post) => (
-            <div key={post.id} className="snap-start flex-shrink-0 jade-hscroll-view-item">
-              <BlogCard post={post} />
+          {BLOG_POSTS.map((post, index) => (
+            <div
+              key={post.id}
+              className={clsx(
+                "snap-start flex-shrink-0 jade-hscroll-view-item pointer-events-none",
+                index === 0 && "pl-6 md:pl-12 lg:pl-24",
+                index === BLOG_POSTS.length - 1 && "pr-6 md:pr-12 lg:pr-24"
+              )}
+            >
+              <div className="pointer-events-auto">
+                <BlogCard post={post} />
+              </div>
             </div>
           ))}
         </div>

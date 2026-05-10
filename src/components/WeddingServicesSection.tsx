@@ -67,6 +67,11 @@ export default function WeddingServicesSection() {
   const [serviceImages, setServiceImages] = useState<string[]>([]);
   const [preWeddingImages, setPreWeddingImages] = useState<string[]>([]);
 
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset: number, velocity: number) => {
+    return Math.abs(offset) * velocity;
+  };
+
   useEffect(() => {
     let cancelled = false;
     async function load() {
@@ -133,13 +138,26 @@ export default function WeddingServicesSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden bg-[#0D4032] flex flex-col"
+      className="relative min-h-0 md:min-h-screen w-full overflow-hidden bg-[#0B2C23] flex flex-col"
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
-      {/* ── TOP AREA (80vh) — background image ── */}
+      {/* ── GLOBAL SWIPE OVERLAY ── */}
+      <motion.div
+        className="absolute inset-0 z-10"
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0}
+        onDragEnd={(e, { offset, velocity }) => {
+          const swipe = swipePower(offset.x, velocity.x);
+          if (swipe < -swipeConfidenceThreshold) handleNext();
+          else if (swipe > swipeConfidenceThreshold) handlePrev();
+        }}
+      />
+
+      {/* ── TOP AREA (75vh mobile / 80vh desktop) — background image ── */}
       <div
-        className="relative w-full h-[80vh] z-0 overflow-hidden shrink-0"
+        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0"
         style={{ perspective: "1500px" }}
       >
         <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
@@ -167,9 +185,9 @@ export default function WeddingServicesSection() {
                 unoptimized
               />
             ) : (
-              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0D4032] to-[#0D4032]" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0B2C23] to-[#0B2C23]" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0D4032]/90 via-[#0D4032]/25 to-[#0D4032]/55" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/60 via-[#0B2C23]/25 to-[#0B2C23]/55" />
           </motion.div>
         </AnimatePresence>
 
@@ -202,16 +220,16 @@ export default function WeddingServicesSection() {
       </div>
 
       {/* ── BOTTOM AREA ── */}
-      <div className="relative w-full h-[20vh] z-10 bg-[#0D4032]" />
+      <div className="relative w-full h-[12vh] md:h-[20vh] z-10 bg-[#0B2C23]" />
 
       {/* ── SPACER — exactly 40px gap ── */}
-      <div className="h-[40px] bg-[#0D4032]" />
+      <div className="hidden md:block h-[40px] bg-[#0B2C23]" />
 
       {/* ── ARROWS ── */}
       <button
         onClick={handlePrev}
         aria-label="Previous"
-        className="absolute left-4 sm:left-8 lg:left-16 xl:left-28 top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
+        className="absolute left-4 sm:left-8 lg:left-16 xl:left-28 top-[75vh] md:top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
       >
         <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white group-hover:-translate-x-1 transition-transform" />
       </button>
@@ -219,44 +237,50 @@ export default function WeddingServicesSection() {
       <button
         onClick={handleNext}
         aria-label="Next"
-        className="absolute right-4 sm:right-8 lg:right-16 xl:right-28 top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
+        className="absolute right-4 sm:right-8 lg:right-16 xl:right-28 top-[75vh] md:top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
       >
         <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white group-hover:translate-x-1 transition-transform" />
       </button>
 
-      {/* ── FEATURE CARD ── */}
       <div
-        className="absolute top-[80vh] -translate-y-1/2 left-1/2 -translate-x-1/2 z-30
+        className="absolute top-[75vh] md:top-[80vh] -translate-y-1/2 left-1/2 -translate-x-1/2 z-30
                       w-[45vw] max-w-[280px] sm:w-[35vw] sm:max-w-[320px] lg:w-[24vw] lg:max-w-[380px] xl:w-[20vw]
                       aspect-[4/3]
                       shadow-[0_20px_50px_rgba(0,0,0,0.55)] overflow-hidden border border-white/20"
       >
-        <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
-          <motion.div
-            key={`card-${currentIndex}-${currentSlide.cardImage || "empty"}`}
-            custom={carouselCustom}
-            variants={heroSplitCardVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            className="w-full h-full relative"
-          >
-            {currentSlide.cardImage ? (
-              <Image
-                src={currentSlide.cardImage}
-                alt="Feature"
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
-                priority={currentIndex === 0}
-                unoptimized
-                loading="eager"
-              />
-            ) : (
-              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0D4032] to-black/80" />
-            )}
-          </motion.div>
-        </AnimatePresence>
+        <motion.div
+          className="flex w-full h-full cursor-grab active:cursor-grabbing"
+          animate={{ x: `-${currentIndex * 100}%` }}
+          transition={{ type: "spring", stiffness: 100, damping: 20 }}
+          style={{ willChange: "transform" }}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.2}
+          onDragEnd={(e, { offset, velocity }) => {
+            const swipe = swipePower(offset.x, velocity.x);
+            if (swipe < -swipeConfidenceThreshold) handleNext();
+            else if (swipe > swipeConfidenceThreshold) handlePrev();
+          }}
+        >
+          {slides.map((slide, idx) => (
+            <div key={`card-${idx}`} className="w-full h-full relative flex-shrink-0">
+              {slide.cardImage ? (
+                <Image
+                  src={slide.cardImage}
+                  alt="Feature"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
+                  priority={true}
+                  unoptimized
+                  loading="eager"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0B2C23] to-black/80" />
+              )}
+            </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

@@ -13,11 +13,9 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     }
 
     const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t) => 1 - Math.pow(1 - t, 4), // ease-out-quart: fast start, smooth deceleration
-      orientation: "vertical",
-      gestureOrientation: "vertical",
+      lerp: 0.075, // Perfect premium buttery smooth inertia (Apple/Awwwards standard)
       smoothWheel: true,
+      wheelMultiplier: 1,
       touchMultiplier: 1.5,
     });
 

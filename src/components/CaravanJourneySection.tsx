@@ -28,11 +28,11 @@ const JourneyCard = ({
   isPopular,
 }: JourneyCardProps) => (
   <div
-    className={`relative border ${isPopular ? "border-[#EFCD62]" : "border-white/10"} p-6 md:p-8 bg-[#0D4032] overflow-hidden`}
+    className={`relative border ${isPopular ? "border-[#EFCD62]" : "border-white/10"} p-6 md:p-8 bg-[#0B2C23] overflow-hidden`}
   >
     {isPopular && (
       <div className="absolute top-0 right-0 w-32 h-32 overflow-hidden pointer-events-none">
-        <div className="absolute top-6 -right-8 w-40 bg-[#EFCD62] text-[#0D4032] text-[10px] font-bold py-1 text-center transform rotate-45 uppercase tracking-[0.2em] shadow-lg">
+        <div className="absolute top-6 -right-8 w-40 bg-[#EFCD62] text-[#0B2C23] text-[10px] font-bold py-1 text-center transform rotate-45 uppercase tracking-[0.2em] shadow-lg">
           Popular
         </div>
       </div>
@@ -82,7 +82,7 @@ const CaravanJourneySection = () => {
 
   const [activeCard, setActiveCard] = React.useState<number | null>(null);
   return (
-    <section className="bg-[#0D4032] py-fluid-lg md:py-fluid-xl px-6 md:px-12 lg:px-24">
+    <section className="bg-[#0B2C23] py-fluid-lg md:py-fluid-xl px-6 md:px-12 lg:px-24">
       <div className="max-w-6xl mx-auto">
         {/* Title Group */}
         <div className="mb-12">

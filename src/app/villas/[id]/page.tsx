@@ -586,7 +586,8 @@ export default function VillaDetailsPage() {
         </div>
       </section>
       {/* CONTENT SECTION */}
-      <div className="relative bg-jade-green rounded-none z-10 px-6 py-8 md:px-12 md:py-16 max-w-7xl mx-auto">
+      <div className="relative bg-[#25282C] w-full z-10">
+        <div className="px-6 py-8 md:px-12 md:py-16 max-w-7xl mx-auto">
         {/* HEADER INFO */}
         <div className="flex flex-col gap-2 mb-8">
           <span className="text-[#EFCD62] text-[10px] md:text-gh-label font-bold tracking-[0.2em] uppercase">
@@ -664,7 +665,7 @@ export default function VillaDetailsPage() {
             return (
               <div
                 key={idx}
-                className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] bg-white/10 backdrop-blur-[12px] flex flex-col items-center justify-between text-center px-4 py-5 rounded-none snap-start group flex-shrink-0 jade-hscroll-view-item"
+                className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] bg-white/[0.07] backdrop-blur-[12px] flex flex-col items-center justify-between text-center px-4 py-5 rounded-none snap-start group flex-shrink-0 jade-hscroll-view-item"
                 style={{
                   border: "1px solid",
                   borderImageSource:
@@ -705,9 +706,10 @@ export default function VillaDetailsPage() {
             <Download className="w-4 h-4 text-white/40 group-hover:text-black transition-colors" />
           </a>
         </div>
+        </div>
       </div>
       {/* TABS NAVIGATION - FULL WIDTH STICKY */}
-      <div className="sticky top-0 z-50 bg-[#0B2C23] border-b border-white/10 w-full shadow-2xl">
+      <div className="sticky top-0 z-50 bg-[#25282C] border-b border-white/10 w-full shadow-2xl">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="flex gap-8 md:gap-12 overflow-x-auto pb-0 scrollbar-none">
             {[
@@ -741,549 +743,23 @@ export default function VillaDetailsPage() {
           </div>
         </div>
       </div>
-      {/* EMERALD GREEN SECTION: SPACES, AMENITIES, SERVICES, ETC. */}
-      <section className="relative w-full bg-[#0B2C23] pb-12 text-white">
-        <div className="relative z-10 px-6 md:px-12 max-w-7xl mx-auto pt-8 md:pt-12">
-          {/* CONTENT AREA */}
-          <div className="flex flex-col max-w-4xl mx-auto">
-            {/* SPACES SECTION */}
-            {(isDomeVillas || currentSpace) && (
-              <section id="spaces" className="pb-10 md:pb-16 w-full">
-                <div className="flex flex-wrap justify-between items-center gap-4 mb-8">
-                  <div className="flex flex-wrap items-center gap-3 md:gap-5">
-                    <h3 className="text-gh-h1 font-philosopher text-white">
-                      Spaces
-                    </h3>
-                    {isDomeVillas && (
-                      <div className="flex flex-wrap items-center gap-2">
-                        {(
-                          [
-                            { id: "blue", label: "Blue Dome", dot: "#3b82f6" },
-                            { id: "red", label: "Red Dome", dot: "#ef4444" },
-                            {
-                              id: "yellow",
-                              label: "Yellow Dome",
-                              dot: "#eab308",
-                            },
-                          ] as const
-                        ).map((t) => {
-                          const isActive = activeDomeSpaceTab === t.id;
-                          return (
-                            <button
-                              key={t.id}
-                              onClick={() => setActiveDomeSpaceTab(t.id)}
-                              className={`flex items-center gap-2 px-3 md:px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${
-                                isActive
-                                  ? "bg-[#EFCD62] text-black border-[#EFCD62]"
-                                  : "bg-white/5 text-white/70 border-white/10 hover:text-white hover:bg-white/10"
-                              }`}
-                            >
-                              <span
-                                className="inline-block w-2.5 h-2.5 rounded-full border border-white/30"
-                                style={{ backgroundColor: t.dot }}
-                              />
-                              {t.label}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                  {derivedSpaces && derivedSpaces.length > 1 && (
-                    <div className="flex gap-2">
-                      <button
-                        onClick={handlePrevSpace}
-                        disabled={derivedSpaces.length <= 1}
-                        className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"
-                      >
-                        <ArrowLeft className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={handleNextSpace}
-                        disabled={derivedSpaces.length <= 1}
-                        className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"
-                      >
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  )}
-                </div>
 
-                {currentSpace ? (
-                  <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20">
-                    {(validImg(currentSpace.image) ||
-                      validImg(villa.image)) && (
-                      <Image
-                        src={
-                          validImg(currentSpace.image)
-                            ? normalizeImageSrc(currentSpace.image)
-                            : normalizeImageSrc(villa.image)
-                        }
-                        alt={currentSpace.name || "Space"}
-                        fill
-                        className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, 800px"
-                        loading="lazy"
-                        unoptimized
-                      />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B2C23]/80 via-transparent to-transparent opacity-90" />
-                    <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
-                      <h4 className="text-white text-sm md:text-base uppercase tracking-[0.2em] font-bold mb-4 font-manrope">
-                        {currentSpace.name || "Lawn"}
-                      </h4>
-                      {derivedSpaces && derivedSpaces.length > 1 && (
-                        <div className="flex items-center justify-center gap-3 text-white text-gh-label font-bold tracking-widest">
-                          <span>{currentSpaceIndex + 1}</span>
-                          <div className="w-12 h-[1px] bg-white/60" />
-                          <span className="text-white/60">
-                            {derivedSpaces.length}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden bg-emerald-900/20 flex items-center justify-center text-white/40 italic">
-                    Loading spaces…
-                  </div>
-                )}
-                <Link
-                  href={`/villas/${id}/spaces`}
-                  className="mt-8 w-full border border-white/20 bg-white/5 py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2"
-                >
-                  VIEW ALL SPACES
-                </Link>
-              </section>
-            )}
-
-            {/* AMENITIES */}
-            <section
-              id="amenities"
-              className="py-10 md:py-16 border-t border-white/5 w-full"
-            >
-              <h3 className="text-gh-h2 font-philosopher text-white mb-8">
-                Amenities
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-                {villa.amenities?.slice(0, 4).map((amenity, idx) => {
-                  const Icon = getIcon(amenity.icon);
-                  return (
-                    <div
-                      key={idx}
-                      className="flex flex-col items-center gap-3 p-6 bg-[#0B2C23] border border-white/5 transition-all group"
-                    >
-                      <Icon
-                        className="w-8 h-8 text-jade-gold transition-transform"
-                        strokeWidth={1}
-                      />
-                      <span className="text-white/80 font-bold uppercase tracking-widest text-[9px] text-center">
-                        {amenity.label}
-                      </span>
-                    </div>
-                  );
-                })}
-                {/* Desktop view shows the rest without truncation logic in the same grid if needed, 
-                    but here we strictly follow the 4-item limit for mobile and rely on Know More for the rest.
-                    To show all on desktop, we would need a more complex responsive slice. 
-                    Given the request 'Remove View More', we maintain a clean 4-item preview. */}
-              </div>
-              <div className="flex flex-col gap-4">
-                <button
-                  onClick={() => openDrawer("Amenities", villa.amenities || [])}
-                  className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
-                >
-                  Know More <ArrowRight className="w-3 h-3" />
-                </button>
-              </div>
-            </section>
-
-            {/* SERVICES SECTION */}
-            <section
-              id="services"
-              className="py-10 md:py-16 border-t border-white/5 w-full"
-            >
-              <h3 className="text-gh-h2 font-philosopher text-white mb-8">
-                Services
-              </h3>
-              <div className="flex flex-col gap-8 mb-12">
-                {villa.services?.slice(0, 4).map((service, idx) => {
-                  const Icon = getIcon(service.icon, service.title);
-                  return (
-                    <div key={idx} className="flex gap-4 md:gap-6 group">
-                      <div className="w-12 h-12 md:w-16 md:h-16 flex-shrink-0 border border-[#EFCD62] flex items-center justify-center p-2.5 md:p-3">
-                        <Icon
-                          strokeWidth={1}
-                          className="w-full h-full text-[#EFCD62]"
-                        />
-                      </div>
-                      <div>
-                        <h4 className="text-gh-sl font-semibold font-manrope text-white mb-1 transition-colors">
-                          {service.title}
-                        </h4>
-                        <p className="text-white/70 text-gh-body mb-2 leading-relaxed">
-                          {service.description}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="flex flex-col gap-4">
-                <button
-                  onClick={() => openDrawer("Services", villa.services || [])}
-                  className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
-                >
-                  Know More <ArrowRight className="w-3 h-3" />
-                </button>
-              </div>
-            </section>
-
-            {/* EXPERIENCES SECTION */}
-            {currentActivity && (
-              <section
-                id="experiences"
-                className="py-10 md:py-16 border-t border-white/5 w-full"
-              >
-                <div className="flex justify-between items-end mb-8">
-                  <h3 className="text-gh-h1 font-philosopher text-white">
-                    Experiences
-                  </h3>
-                  {derivedActivities && derivedActivities.length > 1 && (
-                    <div className="flex gap-2">
-                      <button
-                        onClick={handlePrevActivity}
-                        disabled={derivedActivities.length <= 1}
-                        className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"
-                      >
-                        <ArrowLeft className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={handleNextActivity}
-                        disabled={derivedActivities.length <= 1}
-                        className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"
-                      >
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20 mt-4">
-                  {(validImg(currentActivity.image) ||
-                    validImg(villa.image)) && (
-                    <Image
-                      src={
-                        validImg(currentActivity.image)
-                          ? normalizeImageSrc(currentActivity.image)
-                          : normalizeImageSrc(villa.image)
-                      }
-                      alt={currentActivity.title}
-                      fill
-                      className="object-cover object-center transition-transform duration-700 opacity-90 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 800px"
-                      loading="lazy"
-                      unoptimized
-                    />
-                  )}
-                  <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-jade-green/95 via-jade-green/50 to-transparent z-10" />
-                  <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 flex flex-col items-center justify-end text-center z-20">
-                    <h4 className="text-white font-philosopher text-[28px] md:text-[36px] mb-3">
-                      {currentActivity.title}
-                    </h4>
-                    {(currentActivity as any).description && (
-                      <p className="text-white/80 font-manrope text-[14px] md:text-[16px] leading-relaxed max-w-2xl">
-                        {(currentActivity as any).description}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </section>
-            )}
-
-            {/* WHY JADE WEDDING VENUES */}
-            <section className="py-10 md:py-16 border-t border-white/5 w-full">
-              <h3 className="text-gh-h1 font-philosopher text-white mb-12">
-                Why Jade Wedding Venues
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 md:gap-y-10">
-                {[
-                  {
-                    title: "FULLY PRIVATE VENUES",
-                    desc: "No shared spaces, no parallel events, complete control over the setting.",
-                  },
-                  {
-                    title: "OUTDOOR-FIRST LAYOUTS",
-                    desc: "Lawns, gardens, and open-air spaces designed for ceremonies, receptions, and celebrations.",
-                  },
-                  {
-                    title: "FLEXIBLE PLANNING",
-                    desc: "Freedom to work with your own decorators, caterers, photographers, and planners.",
-                  },
-                  {
-                    title: "BUILT FOR SCALE",
-                    desc: "Venues that support intimate gatherings as well as large, multi-event weddings.",
-                  },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex gap-4 sm:gap-5">
-                    <div className="mt-1 flex-shrink-0">
-                      <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rotate-45 bg-jade-gold" />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <h4 className="text-white font-manrope font-bold tracking-widest text-[13px] uppercase">
-                        {item.title}
-                      </h4>
-                      <p className="text-white/60 text-gh-desc sm:text-gh-body leading-relaxed">
-                        {item.desc}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* PROPERTY DETAILS SECTION */}
-            <section
-              id="details"
-              className="py-10 md:py-16 border-t border-white/5 w-full"
-            >
-              <h3 className="text-gh-h1 font-philosopher text-white mb-8">
-                Property Details
-              </h3>
-              <div className="flex flex-col gap-8 mb-8">
-                {villa.propertyDetails?.slice(0, 4).map((detail, idx) => (
-                  <div key={idx} className="flex gap-4">
-                    <div className="mt-1.5 w-2 h-2 rotate-45 bg-[#EFCD62] flex-shrink-0" />
-                    <div>
-                      <h4 className="text-gh-body text-white font-manrope font-medium mb-2">
-                        {(detail as any).label || (detail as any).title}
-                      </h4>
-                      <p className="text-white/60 text-gh-body leading-relaxed">
-                        {detail.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="flex flex-col gap-4">
-                <button
-                  onClick={() =>
-                    openDrawer("Property Details", villa.propertyDetails || [])
-                  }
-                  className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
-                >
-                  Know More <ArrowRight className="w-3 h-3" />
-                </button>
-              </div>
-            </section>
-
-            {/* PRICING SECTION — same card typography as experience overlays */}
-            {detailPricingBlocks.length > 0 && (
-                <section
-                  id="pricing"
-                  className="py-10 md:py-16 border-t border-white/5 w-full text-white"
-                >
-                  <VillaPricingBlocks
-                    sectionTitle="Pricing"
-                    blocks={detailPricingBlocks}
-                    footnote={
-                      <p className="text-white/40 text-gh-label mt-4 font-manrope leading-relaxed">
-                        Note: Prices are base rates and may vary based on
-                        season, day of week, and specific requirements.
-                        Additional charges may apply for decorations, catering,
-                        and extended hours.
-                      </p>
-                    }
-                  />
-                </section>
-              )}
-          </div>
-        </div>
-      </section>
-      {/* DARK ONYX SECTION: LOCATION, PERFECT FOR, VIDEO, FAQ */}
-      <section className="relative w-full bg-jade-green text-white border-t border-white/5 pt-10 md:pt-16">
-        <div className="relative z-10 px-6 md:px-12 max-w-7xl mx-auto">
-          <div className="flex flex-col max-w-4xl mx-auto">
-            {villa.locationDetails && (
-              <section id="location" className="pb-10 md:pb-16 w-full">
-                <h3 className="text-gh-h1 font-philosopher text-white mb-8">
-                  Location
-                </h3>
-                <div className="bg-jade-green rounded-none overflow-hidden mb-8 border border-white/10">
-                  <a
-                    href={mapsHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative block w-full h-64 md:h-80 cursor-pointer outline-none transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#EFCD62]/70"
-                    aria-label="Open location in Google Maps"
-                  >
-                    {(villa.locationDetails.mapImage || villa.image) && (
-                      <Image
-                        src={normalizeImageSrc(
-                          villa.locationDetails.mapImage || villa.image,
-                        )}
-                        alt="Map Location"
-                        fill
-                        className="object-cover opacity-80"
-                        sizes="100vw"
-                        loading="lazy"
-                      />
-                    )}
-                  </a>
-                  <div className="p-5 md:p-6 bg-jade-green border-t border-white/10">
-                    <a
-                      href={mapsHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-start gap-4 rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/60"
-                    >
-                      <MapPin className="w-5 h-5 text-jade-gold mt-1 shrink-0" />
-                      <p className="text-white text-gh-body font-manrope font-medium leading-relaxed group-hover:underline underline-offset-4">
-                        {villa.locationDetails.address}
-                      </p>
-                    </a>
-                    <div className="w-full bg-white/[0.03] border border-white/5 px-4 py-3 rounded-sm mt-6">
-                      <p className="text-white/60 text-[12px] md:text-[13px] font-manrope">
-                        {villa.locationDetails.distance}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* What's Nearby - Outside the Frame */}
-                {villa.locationDetails.nearby &&
-                  villa.locationDetails.nearby.length > 0 && (
-                    <div className="mt-12">
-                      <h4 className="text-jade-gold text-gh-label font-medium tracking-widest uppercase mb-6 font-manrope">
-                        Whats nearby:
-                      </h4>
-                      <div className="flex flex-col gap-4">
-                        {villa.locationDetails.nearby.map(
-                          (item: any, idx: number) => (
-                            <div
-                              key={idx}
-                              className="flex justify-between items-center border-b border-white/5 pb-3"
-                            >
-                              <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 rotate-45 bg-jade-gold" />
-                                <span className="text-white font-manrope text-gh-desc font-medium uppercase tracking-wider">
-                                  {item.label}
-                                </span>
-                              </div>
-                              <span className="text-white/60 text-gh-desc font-manrope">
-                                {item.distance}
-                              </span>
-                            </div>
-                          ),
-                        )}
-                      </div>
-                    </div>
-                  )}
-              </section>
-            )}
-
-            {/* PERFECT FOR SECTION */}
-            {villa.perfectFor && villa.perfectFor.length > 0 && (
-              <section
-                id="perfect-for"
-                className="py-10 md:py-16 border-t border-white/5 w-full"
-              >
-                <h3 className="text-gh-h1 font-philosopher text-white mb-8">
-                  Perfect for
-                </h3>
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                  {(expandedSections["perfect-for"]
-                    ? villa.perfectFor
-                    : villa.perfectFor.slice(0, 4)
-                  ).map((item: any, idx: number) => {
-                    const title = typeof item === "string" ? item : item.title;
-                    const image =
-                      typeof item === "string"
-                        ? villa.images && villa.images.length > idx
-                          ? villa.images[idx % villa.images.length]
-                          : villa.image
-                        : item.image || villa.image;
-
-                    return (
-                      <div
-                        key={idx}
-                        className="relative aspect-square md:aspect-[4/3] bg-jade-green group overflow-hidden border border-white/5"
-                      >
-                        {image && (
-                          <Image
-                            src={normalizeImageSrc(image)}
-                            alt={title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
-                            sizes="(max-width: 768px) 50vw, 25vw"
-                            loading="lazy"
-                          />
-                        )}
-                        <div className="absolute inset-0 bg-black/40 z-10 transition-colors group-hover:bg-black/50" />
-                        <div className="absolute inset-0 flex items-center justify-center z-20 p-4">
-                          <h4 className="text-white font-philosopher text-base md:text-lg text-center leading-tight">
-                            {title}
-                          </h4>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                {villa.perfectFor && villa.perfectFor.length > 4 && (
-                  <button
-                    onClick={() => toggleSection("perfect-for")}
-                    className="md:hidden flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
-                  >
-                    {expandedSections["perfect-for"]
-                      ? "View Less"
-                      : "View More"}
-                    <ArrowRight
-                      className={`w-3 h-3 transition-transform ${expandedSections["perfect-for"] ? "-rotate-90" : "rotate-90"}`}
-                    />
-                  </button>
-                )}
-              </section>
-            )}
-
-            {/* VIDEO WALKTHROUGH */}
-            {villa.video && (
-              <section
-                id="video-walkthrough"
-                className="py-10 md:py-16 border-t border-white/5 w-full"
-              >
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-                  <h3 className="text-gh-h1 font-philosopher text-white">
-                    Video Walkthrough
-                  </h3>
-
-                  {villa.id === "dome-villas" && (
-                    <div className="flex items-center gap-2">
-                      {(
-                        [
-                          { id: "blue", label: "Blue Dome", dot: "#3b82f6" },
-                          { id: "red", label: "Red Dome", dot: "#ef4444" },
-                          {
-                            id: "yellow",
-                            label: "Yellow Dome",
-                            dot: "#eab308",
-                          },
-                        ] as const
-                      ).map((t) => {
-                        const isActive = activeDomeVideo === t.id;
+      {/* SPACES — Green */}
+      {(isDomeVillas || currentSpace) && (
+        <section id="spaces" className="w-full bg-[#0B2C23] text-white">
+          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+            <div className="flex flex-col max-w-4xl mx-auto">
+              <div className="flex flex-wrap justify-between items-center gap-4 mb-8">
+                <div className="flex flex-wrap items-center gap-3 md:gap-5">
+                  <h3 className="text-gh-h1 font-philosopher text-white">Spaces</h3>
+                  {isDomeVillas && (
+                    <div className="flex flex-wrap items-center gap-2">
+                      {([ { id: "blue", label: "Blue Dome", dot: "#3b82f6" }, { id: "red", label: "Red Dome", dot: "#ef4444" }, { id: "yellow", label: "Yellow Dome", dot: "#eab308" } ] as const).map((t) => {
+                        const isActive = activeDomeSpaceTab === t.id;
                         return (
-                          <button
-                            key={t.id}
-                            onClick={() => setActiveDomeVideo(t.id)}
-                            className={`flex items-center gap-2 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${
-                              isActive
-                                ? "bg-[#EFCD62] text-black border-[#EFCD62]"
-                                : "bg-white/5 text-white/70 border-white/10 hover:text-white hover:bg-white/10"
-                            }`}
-                          >
-                            <span
-                              className="inline-block w-2.5 h-2.5 rounded-full border border-white/30"
-                              style={{ backgroundColor: t.dot }}
-                            />
+                          <button key={t.id} onClick={() => setActiveDomeSpaceTab(t.id)}
+                            className={`flex items-center gap-2 px-3 md:px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${isActive ? "bg-[#EFCD62] text-black border-[#EFCD62]" : "bg-white/5 text-white/70 border-white/10 hover:text-white hover:bg-white/10"}`}>
+                            <span className="inline-block w-2.5 h-2.5 rounded-full border border-white/30" style={{ backgroundColor: t.dot }} />
                             {t.label}
                           </button>
                         );
@@ -1291,112 +767,333 @@ export default function VillaDetailsPage() {
                     </div>
                   )}
                 </div>
-
-                {(() => {
-                  const chosenUrl =
-                    villa.id === "dome-villas"
-                      ? domeVideoUrls[activeDomeVideo]
-                      : typeof villa.video === "object"
-                        ? villa.video.youtubeUrl
-                        : "";
-                  const ytId = chosenUrl ? getYouTubeId(chosenUrl) : "";
-
-                  if (!ytId) return null;
-
-                  if (isPlayingVideo) {
-                    return (
-                      <div className="relative aspect-video w-full bg-gray-900 overflow-hidden border border-white/10">
-                        <iframe
-                          src={`https://www.youtube.com/embed/${ytId}?autoplay=1`}
-                          title={`${villa.name} Walkthrough`}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                          className="absolute inset-0 w-full h-full"
-                        />
+                {derivedSpaces && derivedSpaces.length > 1 && (
+                  <div className="flex gap-2">
+                    <button onClick={handlePrevSpace} disabled={derivedSpaces.length <= 1} className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"><ArrowLeft className="w-4 h-4" /></button>
+                    <button onClick={handleNextSpace} disabled={derivedSpaces.length <= 1} className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"><ArrowRight className="w-4 h-4" /></button>
+                  </div>
+                )}
+              </div>
+              {currentSpace ? (
+                <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20">
+                  {(validImg(currentSpace.image) || validImg(villa.image)) && (
+                    <Image src={validImg(currentSpace.image) ? normalizeImageSrc(currentSpace.image) : normalizeImageSrc(villa.image)} alt={currentSpace.name || "Space"} fill className="object-cover object-center transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" unoptimized />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B2C23]/80 via-transparent to-transparent opacity-90" />
+                  <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
+                    <h4 className="text-white text-sm md:text-base uppercase tracking-[0.2em] font-bold mb-4 font-manrope">{currentSpace.name || "Lawn"}</h4>
+                    {derivedSpaces && derivedSpaces.length > 1 && (
+                      <div className="flex items-center justify-center gap-3 text-white text-gh-label font-bold tracking-widest">
+                        <span>{currentSpaceIndex + 1}</span>
+                        <div className="w-12 h-[1px] bg-white/60" />
+                        <span className="text-white/60">{derivedSpaces.length}</span>
                       </div>
-                    );
-                  }
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden bg-emerald-900/20 flex items-center justify-center text-white/40 italic">Loading spaces…</div>
+              )}
+              <Link href={`/villas/${id}/spaces`} className="mt-8 w-full border border-white/20 bg-white/5 py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2">VIEW ALL SPACES</Link>
+            </div>
+          </div>
+        </section>
+      )}
 
-                  return (
-                    <div
-                      className="relative aspect-video w-full bg-gray-900 overflow-hidden group border border-white/10 cursor-pointer"
-                      onClick={() => setIsPlayingVideo(true)}
-                    >
-                      <Image
-                        src={`https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`}
-                        alt={`${villa.name} Video Walkthrough`}
-                        fill
-                        className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
-                        sizes="(max-width: 768px) 100vw, 800px"
-                        priority={false}
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hover:bg-white/30 transition-all group shadow-2xl">
-                          <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })()}
-              </section>
-            )}
-
-            {/* FAQ SECTION — same accordion pattern as experience overlays */}
-            <section
-              id="faq"
-              className="py-10 md:py-16 border-t border-white/5 mb-20 w-full"
-            >
-              <h3 className="text-gh-h1 font-philosopher text-white mb-8">
-                FAQ
-              </h3>
-              {villa.faq?.length ? (
-                <ExperienceFaqAccordion
-                  items={villa.faq.map((item) => ({
-                    question: item.question,
-                    answer: item.answer,
-                  }))}
-                />
-              ) : null}
-            </section>
+      {/* AMENITIES — Charcoal */}
+      <section id="amenities" className="w-full bg-[#25282C] text-white">
+        <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+          <div className="flex flex-col max-w-4xl mx-auto">
+            <h3 className="text-gh-h2 font-philosopher text-white mb-8">Amenities</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+              {villa.amenities?.slice(0, 4).map((amenity, idx) => {
+                const Icon = getIcon(amenity.icon);
+                return (
+                  <div key={idx} className="flex flex-col items-center gap-3 p-6 bg-white/5 border border-white/5 transition-all group">
+                    <Icon className="w-8 h-8 text-jade-gold transition-transform" strokeWidth={1} />
+                    <span className="text-white/80 font-bold uppercase tracking-widest text-[9px] text-center">{amenity.label}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex flex-col gap-4">
+              <button onClick={() => openDrawer("Amenities", villa.amenities || [])} className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">Know More <ArrowRight className="w-3 h-3" /></button>
+            </div>
           </div>
         </div>
       </section>
+
+      {/* SERVICES — Green */}
+      <section id="services" className="w-full bg-[#0B2C23] text-white">
+        <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+          <div className="flex flex-col max-w-4xl mx-auto">
+            <h3 className="text-gh-h2 font-philosopher text-white mb-8">Services</h3>
+            <div className="flex flex-col gap-8 mb-12">
+              {villa.services?.slice(0, 4).map((service, idx) => {
+                const Icon = getIcon(service.icon, service.title);
+                return (
+                  <div key={idx} className="flex gap-4 md:gap-6 group">
+                    <div className="w-12 h-12 md:w-16 md:h-16 flex-shrink-0 border border-[#EFCD62] flex items-center justify-center p-2.5 md:p-3">
+                      <Icon strokeWidth={1} className="w-full h-full text-[#EFCD62]" />
+                    </div>
+                    <div>
+                      <h4 className="text-gh-sl font-semibold font-manrope text-white mb-1 transition-colors">{service.title}</h4>
+                      <p className="text-white/70 text-gh-body mb-2 leading-relaxed">{service.description}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex flex-col gap-4">
+              <button onClick={() => openDrawer("Services", villa.services || [])} className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">Know More <ArrowRight className="w-3 h-3" /></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* EXPERIENCES — Charcoal */}
+      {currentActivity && (
+        <section id="experiences" className="w-full bg-[#25282C] text-white">
+          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+            <div className="flex flex-col max-w-4xl mx-auto">
+              <div className="flex justify-between items-end mb-8">
+                <h3 className="text-gh-h1 font-philosopher text-white">Experiences</h3>
+                {derivedActivities && derivedActivities.length > 1 && (
+                  <div className="flex gap-2">
+                    <button onClick={handlePrevActivity} disabled={derivedActivities.length <= 1} className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"><ArrowLeft className="w-4 h-4" /></button>
+                    <button onClick={handleNextActivity} disabled={derivedActivities.length <= 1} className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"><ArrowRight className="w-4 h-4" /></button>
+                  </div>
+                )}
+              </div>
+              <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20 mt-4">
+                {(validImg(currentActivity.image) || validImg(villa.image)) && (
+                  <Image src={validImg(currentActivity.image) ? normalizeImageSrc(currentActivity.image) : normalizeImageSrc(villa.image)} alt={currentActivity.title} fill className="object-cover object-center transition-transform duration-700 opacity-90 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" unoptimized />
+                )}
+                <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-[#25282C]/95 via-[#25282C]/50 to-transparent z-10" />
+                <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 flex flex-col items-center justify-end text-center z-20">
+                  <h4 className="text-white font-philosopher text-[28px] md:text-[36px] mb-3">{currentActivity.title}</h4>
+                  {(currentActivity as any).description && (<p className="text-white/80 font-manrope text-[14px] md:text-[16px] leading-relaxed max-w-2xl">{(currentActivity as any).description}</p>)}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* WHY JADE WEDDING VENUES — Green */}
+      <section className="w-full bg-[#0B2C23] text-white">
+        <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+          <div className="flex flex-col max-w-4xl mx-auto">
+            <h3 className="text-gh-h1 font-philosopher text-white mb-12">Why Jade Wedding Venues</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 md:gap-y-10">
+              {[
+                { title: "FULLY PRIVATE VENUES", desc: "No shared spaces, no parallel events, complete control over the setting." },
+                { title: "OUTDOOR-FIRST LAYOUTS", desc: "Lawns, gardens, and open-air spaces designed for ceremonies, receptions, and celebrations." },
+                { title: "FLEXIBLE PLANNING", desc: "Freedom to work with your own decorators, caterers, photographers, and planners." },
+                { title: "BUILT FOR SCALE", desc: "Venues that support intimate gatherings as well as large, multi-event weddings." },
+              ].map((item, idx) => (
+                <div key={idx} className="flex gap-4 sm:gap-5">
+                  <div className="mt-1 flex-shrink-0"><div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rotate-45 bg-jade-gold" /></div>
+                  <div className="flex flex-col gap-1">
+                    <h4 className="text-white font-manrope font-bold tracking-widest text-[13px] uppercase">{item.title}</h4>
+                    <p className="text-white/60 text-gh-desc sm:text-gh-body leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PROPERTY DETAILS — Charcoal */}
+      <section id="details" className="w-full bg-[#25282C] text-white">
+        <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+          <div className="flex flex-col max-w-4xl mx-auto">
+            <h3 className="text-gh-h1 font-philosopher text-white mb-8">Property Details</h3>
+            <div className="flex flex-col gap-8 mb-8">
+              {villa.propertyDetails?.slice(0, 4).map((detail, idx) => (
+                <div key={idx} className="flex gap-4">
+                  <div className="mt-1.5 w-2 h-2 rotate-45 bg-[#EFCD62] flex-shrink-0" />
+                  <div>
+                    <h4 className="text-gh-body text-white font-manrope font-medium mb-2">{(detail as any).label || (detail as any).title}</h4>
+                    <p className="text-white/60 text-gh-body leading-relaxed">{detail.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col gap-4">
+              <button onClick={() => openDrawer("Property Details", villa.propertyDetails || [])} className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">Know More <ArrowRight className="w-3 h-3" /></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PRICING — Green */}
+      {detailPricingBlocks.length > 0 && (
+        <section id="pricing" className="w-full bg-[#0B2C23] text-white">
+          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+            <div className="flex flex-col max-w-4xl mx-auto">
+              <VillaPricingBlocks
+                sectionTitle="Pricing"
+                blocks={detailPricingBlocks}
+                footnote={<p className="text-white/40 text-gh-label mt-4 font-manrope leading-relaxed">Note: Prices are base rates and may vary based on season, day of week, and specific requirements. Additional charges may apply for decorations, catering, and extended hours.</p>}
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* LOCATION — Charcoal */}
+      {villa.locationDetails && (
+        <section id="location" className="w-full bg-[#25282C] text-white">
+          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+            <div className="flex flex-col max-w-4xl mx-auto">
+              <h3 className="text-gh-h1 font-philosopher text-white mb-8">Location</h3>
+              <div className="bg-[#25282C] rounded-none overflow-hidden mb-8 border border-white/10">
+                <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="relative block w-full h-64 md:h-80 cursor-pointer outline-none transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#EFCD62]/70" aria-label="Open location in Google Maps">
+                  {(villa.locationDetails.mapImage || villa.image) && (
+                    <Image src={normalizeImageSrc(villa.locationDetails.mapImage || villa.image)} alt="Map Location" fill className="object-cover opacity-80" sizes="100vw" loading="lazy" />
+                  )}
+                </a>
+                <div className="p-5 md:p-6 bg-[#25282C] border-t border-white/10">
+                  <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-4 rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/60">
+                    <MapPin className="w-5 h-5 text-jade-gold mt-1 shrink-0" />
+                    <p className="text-white text-gh-body font-manrope font-medium leading-relaxed group-hover:underline underline-offset-4">{villa.locationDetails.address}</p>
+                  </a>
+                  <div className="w-full bg-white/[0.03] border border-white/5 px-4 py-3 rounded-sm mt-6">
+                    <p className="text-white/60 text-[12px] md:text-[13px] font-manrope">{villa.locationDetails.distance}</p>
+                  </div>
+                </div>
+              </div>
+              {villa.locationDetails.nearby && villa.locationDetails.nearby.length > 0 && (
+                <div className="mt-12">
+                  <h4 className="text-jade-gold text-gh-label font-medium tracking-widest uppercase mb-6 font-manrope">Whats nearby:</h4>
+                  <div className="flex flex-col gap-4">
+                    {villa.locationDetails.nearby.map((item: any, idx: number) => (
+                      <div key={idx} className="flex justify-between items-center border-b border-white/5 pb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-1.5 h-1.5 rotate-45 bg-jade-gold" />
+                          <span className="text-white font-manrope text-gh-desc font-medium uppercase tracking-wider">{item.label}</span>
+                        </div>
+                        <span className="text-white/60 text-gh-desc font-manrope">{item.distance}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* PERFECT FOR — Green */}
+      {villa.perfectFor && villa.perfectFor.length > 0 && (
+        <section id="perfect-for" className="w-full bg-[#0B2C23] text-white">
+          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+            <div className="flex flex-col max-w-4xl mx-auto">
+              <h3 className="text-gh-h1 font-philosopher text-white mb-8">Perfect for</h3>
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                {(expandedSections["perfect-for"] ? villa.perfectFor : villa.perfectFor.slice(0, 4)).map((item: any, idx: number) => {
+                  const title = typeof item === "string" ? item : item.title;
+                  const image = typeof item === "string" ? (villa.images && villa.images.length > idx ? villa.images[idx % villa.images.length] : villa.image) : item.image || villa.image;
+                  return (
+                    <div key={idx} className="relative aspect-square md:aspect-[4/3] bg-[#0B2C23] group overflow-hidden border border-white/5">
+                      {image && (<Image src={normalizeImageSrc(image)} alt={title} fill className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-80" sizes="(max-width: 768px) 50vw, 25vw" loading="lazy" />)}
+                      <div className="absolute inset-0 bg-black/40 z-10 transition-colors group-hover:bg-black/50" />
+                      <div className="absolute inset-0 flex items-center justify-center z-20 p-4">
+                        <h4 className="text-white font-philosopher text-base md:text-lg text-center leading-tight">{title}</h4>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {villa.perfectFor && villa.perfectFor.length > 4 && (
+                <button onClick={() => toggleSection("perfect-for")} className="md:hidden flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">
+                  {expandedSections["perfect-for"] ? "View Less" : "View More"}
+                  <ArrowRight className={`w-3 h-3 transition-transform ${expandedSections["perfect-for"] ? "-rotate-90" : "rotate-90"}`} />
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* VIDEO WALKTHROUGH — Charcoal */}
+      {villa.video && (
+        <section id="video-walkthrough" className="w-full bg-[#25282C] text-white">
+          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+            <div className="flex flex-col max-w-4xl mx-auto">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                <h3 className="text-gh-h1 font-philosopher text-white">Video Walkthrough</h3>
+                {villa.id === "dome-villas" && (
+                  <div className="flex items-center gap-2">
+                    {([ { id: "blue", label: "Blue Dome", dot: "#3b82f6" }, { id: "red", label: "Red Dome", dot: "#ef4444" }, { id: "yellow", label: "Yellow Dome", dot: "#eab308" } ] as const).map((t) => {
+                      const isActive = activeDomeVideo === t.id;
+                      return (
+                        <button key={t.id} onClick={() => setActiveDomeVideo(t.id)} className={`flex items-center gap-2 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${isActive ? "bg-[#EFCD62] text-black border-[#EFCD62]" : "bg-white/5 text-white/70 border-white/10 hover:text-white hover:bg-white/10"}`}>
+                          <span className="inline-block w-2.5 h-2.5 rounded-full border border-white/30" style={{ backgroundColor: t.dot }} />
+                          {t.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              {(() => {
+                const chosenUrl = villa.id === "dome-villas" ? domeVideoUrls[activeDomeVideo] : typeof villa.video === "object" ? villa.video.youtubeUrl : "";
+                const ytId = chosenUrl ? getYouTubeId(chosenUrl) : "";
+                if (!ytId) return null;
+                if (isPlayingVideo) {
+                  return (
+                    <div className="relative aspect-video w-full bg-gray-900 overflow-hidden border border-white/10">
+                      <iframe src={`https://www.youtube.com/embed/${ytId}?autoplay=1`} title={`${villa.name} Walkthrough`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="absolute inset-0 w-full h-full" />
+                    </div>
+                  );
+                }
+                return (
+                  <div className="relative aspect-video w-full bg-gray-900 overflow-hidden group border border-white/10 cursor-pointer" onClick={() => setIsPlayingVideo(true)}>
+                    <Image src={`https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`} alt={`${villa.name} Video Walkthrough`} fill className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 800px" priority={false} />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hover:bg-white/30 transition-all group shadow-2xl">
+                        <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* FAQ — Green */}
+      <section id="faq" className="w-full bg-[#0B2C23] text-white">
+        <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16 pb-24">
+          <div className="flex flex-col max-w-4xl mx-auto">
+            <h3 className="text-gh-h1 font-philosopher text-white mb-8">FAQ</h3>
+            {villa.faq?.length ? (
+              <ExperienceFaqAccordion items={villa.faq.map((item) => ({ question: item.question, answer: item.answer }))} />
+            ) : null}
+          </div>
+        </div>
+      </section>
+
       {/* FOOTER */}
       <Footer />
-      <div className="fixed bottom-0 left-0 w-full bg-jade-green border-t border-white/10 py-4 z-50 transition-all flex justify-center">
+      <div className="fixed bottom-0 left-0 w-full bg-[#25282C] border-t border-white/10 py-4 z-50 transition-all flex justify-center">
         <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-4 px-4 md:px-12">
-          <p className="font-manrope whitespace-nowrap leading-tight">
-            <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold">
-              Starting from
-            </span>{" "}
-            <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold">
-              {villaFooterPriceDisplay ?? "Contact for pricing"}
-            </span>
-          </p>
+          <div className="flex flex-col font-manrope leading-tight">
+            <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">Starting from</span>
+            <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold whitespace-nowrap">{villaFooterPriceDisplay ?? "Contact for pricing"}</span>
+          </div>
           <div className="flex items-center gap-4 md:gap-6">
-            <button
-              onClick={() => setEnquireOverlayOpen(true)}
-              className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap"
-            >
-              ENQUIRE
-            </button>
-            <PrimaryButton
-              href={`/book?villa=${villa.id}`}
-              withArrow={false}
-              className="whitespace-nowrap"
-            >
-              BOOK VILLA
-            </PrimaryButton>
+            <button onClick={() => setEnquireOverlayOpen(true)} className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap">ENQUIRE</button>
+            <PrimaryButton href={`/book?villa=${villa.id}`} withArrow={false} className="whitespace-nowrap">BOOK VILLA</PrimaryButton>
           </div>
         </div>
       </div>
-      <div className="h-24 lg:h-20" /> {/* Spacer for floating bar */}
-      <DetailsDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        title={drawerData.title}
-        items={drawerData.items}
-      />
+      <div className="h-24 lg:h-20" />
+      <DetailsDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} title={drawerData.title} items={drawerData.items} />
     </main>
   );
 }

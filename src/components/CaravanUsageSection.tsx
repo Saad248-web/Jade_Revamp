@@ -72,6 +72,11 @@ export default function CaravanUsageSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
 
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset: number, velocity: number) => {
+    return Math.abs(offset) * velocity;
+  };
+
   const currentSlide = SLIDES[currentIndex];
 
   usePreloadNeighborSlideImages(SLIDES, currentIndex);
@@ -94,13 +99,26 @@ export default function CaravanUsageSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen max-h-screen w-full overflow-hidden bg-[#0D4032]"
+      className="relative h-[87vh] md:h-screen md:max-h-screen w-full overflow-hidden bg-[#0B2C23]"
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
-      {/* ── TOP 80vh — full-bleed background image ── */}
+      {/* ── GLOBAL SWIPE OVERLAY ── */}
+      <motion.div
+        className="absolute inset-0 z-10"
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0}
+        onDragEnd={(e, { offset, velocity }) => {
+          const swipe = swipePower(offset.x, velocity.x);
+          if (swipe < -swipeConfidenceThreshold) handleNext();
+          else if (swipe > swipeConfidenceThreshold) handlePrev();
+        }}
+      />
+
+      {/* ── TOP 75vh/80vh — full-bleed background image ── */}
       <div
-        className="absolute inset-x-0 top-0 h-[80vh] z-0 overflow-hidden"
+        className="absolute inset-x-0 top-0 h-[75vh] md:h-[80vh] z-0 overflow-hidden"
         style={{ perspective: "1500px" }}
       >
         <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
@@ -125,13 +143,13 @@ export default function CaravanUsageSection() {
               sizes="100vw"
               priority={currentIndex === 0}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0D4032]/90 via-[#0D4032]/25 to-[#0D4032]/55" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/60 via-[#0B2C23]/25 to-[#0B2C23]/55" />
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* ── BOTTOM 20vh — solid charcoal anchor ── */}
-      <div className="absolute inset-x-0 bottom-0 h-[20vh] z-10 bg-[#0D4032]" />
+      {/* ── BOTTOM 12vh/20vh — solid charcoal anchor ── */}
+      <div className="absolute inset-x-0 bottom-0 h-[12vh] md:h-[20vh] z-10 bg-[#0B2C23]" />
 
       {/* ── TEXT ── */}
       <div className="absolute inset-x-0 top-[8vh] z-20 flex flex-col items-center text-center px-6 sm:px-10 pointer-events-none">
@@ -168,7 +186,7 @@ export default function CaravanUsageSection() {
       <button
         onClick={handlePrev}
         aria-label="Previous"
-        className="absolute left-4 sm:left-8 lg:left-16 xl:left-28 top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
+        className="absolute left-4 sm:left-8 lg:left-16 xl:left-28 top-[75vh] md:top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
       >
         <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white group-hover:-translate-x-1 transition-transform" />
       </button>
@@ -176,39 +194,46 @@ export default function CaravanUsageSection() {
       <button
         onClick={handleNext}
         aria-label="Next"
-        className="absolute right-4 sm:right-8 lg:right-16 xl:right-28 top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
+        className="absolute right-4 sm:right-8 lg:right-16 xl:right-28 top-[75vh] md:top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
       >
         <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white group-hover:translate-x-1 transition-transform" />
       </button>
 
       {/* ── FEATURE CARD ── */}
       <div
-        className="absolute top-[80vh] -translate-y-1/2 left-1/2 -translate-x-1/2 z-30
+        className="absolute top-[75vh] md:top-[80vh] -translate-y-1/2 left-1/2 -translate-x-1/2 z-30
                       w-[45vw] max-w-[280px] sm:w-[35vw] sm:max-w-[320px] lg:w-[24vw] lg:max-w-[380px] xl:w-[20vw]
                       aspect-[4/3]
                       shadow-[0_20px_50px_rgba(0,0,0,0.55)] overflow-hidden border border-white/20"
       >
-        <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
-          <motion.div
-            key={`card-${currentIndex}`}
-            custom={carouselCustom}
-            variants={heroSplitCardVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            className="w-full h-full relative"
-          >
-            <Image
-              src={currentSlide.cardImage}
-              alt="Feature"
-              fill
-              className="object-cover"
-              sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
-              priority={currentIndex === 0}
-              loading="eager"
-            />
-          </motion.div>
-        </AnimatePresence>
+        <motion.div
+          className="flex w-full h-full cursor-grab active:cursor-grabbing"
+          animate={{ x: `-${currentIndex * 100}%` }}
+          transition={{ type: "spring", stiffness: 100, damping: 20 }}
+          style={{ willChange: "transform" }}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.2}
+          onDragEnd={(e, { offset, velocity }) => {
+            const swipe = swipePower(offset.x, velocity.x);
+            if (swipe < -swipeConfidenceThreshold) handleNext();
+            else if (swipe > swipeConfidenceThreshold) handlePrev();
+          }}
+        >
+          {SLIDES.map((slide, idx) => (
+            <div key={`card-${idx}`} className="w-full h-full relative flex-shrink-0">
+              <Image
+                src={slide.cardImage}
+                alt="Feature"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
+                priority={true}
+                loading="eager"
+              />
+            </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import Link from "next/link";
-import { Calendar } from "lucide-react";
+import { Calendar, Check } from "lucide-react";
 import { EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS } from "@/lib/experienceOverlayTheme";
 
 type Props = {
@@ -51,8 +51,19 @@ function ToggleSet({
               type="checkbox"
               checked={checked}
               onChange={() => onToggle(s)}
-              className="w-4 h-4 shrink-0 rounded-sm border-white/30 bg-transparent accent-[#EFCD62] focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+              className="sr-only"
             />
+            <div
+              className="w-5 h-5 shrink-0 flex items-center justify-center transition-all"
+              style={{
+                border: checked ? "2px solid #EFCD62" : "1.5px solid rgba(255,255,255,0.45)",
+                backgroundColor: checked ? "#EFCD62" : "transparent",
+              }}
+            >
+              {checked && (
+                <Check className="w-3 h-3 text-black" strokeWidth={3.5} />
+              )}
+            </div>
             <span className="text-white/80 text-gh-desc leading-snug group-hover:text-white transition-colors">
               {s}
             </span>
@@ -299,7 +310,7 @@ export default function WeddingVenueEnquiryForm({
       <button
         type="submit"
         disabled={submitting}
-        className="w-full py-5 bg-[#174539] border border-white/10 text-white font-manrope font-bold text-gh-label tracking-widest uppercase hover:bg-white hover:text-black transition-all disabled:opacity-50 disabled:pointer-events-none"
+        className="w-full py-5 bg-[#EFCD62] text-black font-manrope font-bold text-gh-label tracking-widest uppercase hover:bg-white hover:text-black transition-all disabled:opacity-50 disabled:pointer-events-none"
       >
         {submitting ? "SENDING…" : "CONTACT US"}
       </button>

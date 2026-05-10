@@ -330,7 +330,7 @@ function StepDates({
                       booked ? "Already booked" : past ? "Past date" : undefined
                     }
                     className={`w-[35px] h-[35px] mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-[3px] relative overflow-hidden
-                      ${sel ? "bg-[#EFCD62] text-[#0D4032] font-bold" : ""}
+                      ${sel ? "bg-[#EFCD62] text-[#0B2C23] font-bold" : ""}
                       ${inRange ? "bg-[#EFCD62]/20 text-white" : ""}
                       ${!sel && !inRange && !unavail ? "bg-[#165040] text-white hover:bg-[#1e6050]" : ""}
                       ${unavail ? "bg-[#165040]/50 text-white/25 cursor-not-allowed" : ""}`}
@@ -773,7 +773,7 @@ function SuccessScreen({
   };
 
   return (
-    <div className="h-[100svh] bg-[#0D4032] flex flex-col items-center justify-center px-6 text-center overflow-y-auto py-10">
+    <div className="h-[100svh] bg-[#0B2C23] flex flex-col items-center justify-center px-6 text-center overflow-y-auto py-10">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -827,7 +827,7 @@ function SuccessScreen({
               type="button"
               disabled={payBusy}
               onClick={handleRazorpay}
-              className={`w-full mb-3 py-3.5 font-manrope font-bold text-gh-label tracking-widest uppercase transition-colors flex items-center justify-center gap-2 ${payBusy ? "bg-[#EFCD62]/50 text-[#0D4032]/70 cursor-not-allowed" : "bg-[#EFCD62] text-[#0D4032] hover:bg-white"}`}
+              className={`w-full mb-3 py-3.5 font-manrope font-bold text-gh-label tracking-widest uppercase transition-colors flex items-center justify-center gap-2 ${payBusy ? "bg-[#EFCD62]/50 text-[#0B2C23]/70 cursor-not-allowed" : "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"}`}
             >
               {payBusy && <Loader2 className="w-4 h-4 animate-spin" />}
               {payBusy ? "OPENING…" : `PAY ${formatRupees(totalPriceRupees)}`}
@@ -1071,7 +1071,7 @@ function BookPageContent() {
           <button
             disabled={!canNext}
             onClick={() => setStep("guests")}
-            className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${canNext ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
+            className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${canNext ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
           >
             NEXT
           </button>
@@ -1101,7 +1101,7 @@ function BookPageContent() {
             <button
               disabled={guests.adults === 0}
               onClick={goNextFromGuests}
-              className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${guests.adults > 0 ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
+              className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${guests.adults > 0 ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
             >
               {nextLabel}
             </button>
@@ -1138,7 +1138,7 @@ function BookPageContent() {
                   setDetailsForceErrors(false);
                   setStep("review");
                 }}
-                className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${canProceed ? "bg-[#EFCD62] text-[#0D4032] hover:bg-white" : "bg-white/10 text-white/30 cursor-pointer"}`}
+                className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${canProceed ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white" : "bg-white/10 text-white/30 cursor-pointer"}`}
               >
                 CONTINUE
               </button>
@@ -1186,7 +1186,7 @@ function BookPageContent() {
               <button
                 disabled={isSubmitting}
                 onClick={handlePayNow}
-                className={`flex items-center gap-2 px-6 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${isSubmitting ? "bg-[#EFCD62]/60 text-[#0D4032]/60 cursor-not-allowed" : "bg-[#EFCD62] text-[#0D4032] hover:bg-white"}`}
+                className={`flex items-center gap-2 px-6 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${isSubmitting ? "bg-[#EFCD62]/60 text-[#0B2C23]/60 cursor-not-allowed" : "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"}`}
               >
                 {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 {isSubmitting ? "CONFIRMING…" : "PAY NOW"}
@@ -1201,9 +1201,9 @@ function BookPageContent() {
   };
 
   return (
-    <div className="h-[100svh] bg-[#0D4032] flex flex-col overflow-hidden">
+    <div className="h-[100svh] bg-[#0B2C23] flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-[#0D4032] shrink-0">
+      <div className="bg-[#0B2C23] shrink-0">
         <div className="w-full max-w-[720px] mx-auto">
           <div className="flex items-center justify-between px-5 sm:px-6 py-5 border-b border-white/10">
             <h2 className="text-white text-gh-h2 font-philosopher leading-none">
@@ -1328,7 +1328,7 @@ function BookPageContent() {
       </div>
 
       {/* Floating bottom bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[#0D4032] z-50">
+      <div className="fixed bottom-0 left-0 right-0 bg-[#0B2C23] z-50">
         <div className="w-full max-w-[720px] mx-auto border-t border-white/10">
           <div className="relative px-4 sm:px-5 py-3 sm:py-5">
             <div className="absolute left-0 right-0 top-0 -translate-y-[1px]">
@@ -1346,7 +1346,7 @@ export default function BookPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0D4032] flex items-center justify-center">
+        <div className="min-h-screen bg-[#0B2C23] flex items-center justify-center">
           <Loader2 className="w-8 h-8 text-[#EFCD62] animate-spin" />
         </div>
       }

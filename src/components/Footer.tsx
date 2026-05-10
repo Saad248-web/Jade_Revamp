@@ -74,7 +74,6 @@ export default function Footer() {
   const [formData, setFormData] = useState({
     fullName: "",
     phoneNumber: "",
-    subject: "",
     queries: "",
   });
 
@@ -126,8 +125,7 @@ export default function Footer() {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSuccess(true);
-    setFormData({ fullName: "", phoneNumber: "", subject: "", queries: "" });
+    setFormData({ fullName: "", phoneNumber: "", queries: "" });
     setCheckIn(null);
     setCheckOut(null);
     setConsent(false);
@@ -141,14 +139,7 @@ export default function Footer() {
   const LINKS_COLUMN_1 = [
     { label: "VILLAS", href: "/villas" },
     { label: "EXPERIENCES", href: "/experiences" },
-    { label: "WEDDINGS", href: "/weddings" },
-    { label: "CORPORATE RETREATS", href: "/corporate-retreats" },
-    { label: "WEEKEND GETAWAYS", href: "/weekend-getaways" },
-    { label: "PARTY VILLAS", href: "/party-villas" },
-    { label: "CARAVANS", href: "/caravans" },
     { label: "ABOUT", href: "/about" },
-    { label: "CAREERS", href: "/careers" },
-    { label: "BLOG", href: "/blogs" },
   ];
 
   const LINKS_COLUMN_2 = [
@@ -185,15 +176,9 @@ export default function Footer() {
             <div className="lg:col-span-7 flex flex-col gap-12 lg:pr-12">
               {/* Heading */}
               <div>
-                <p
-                  className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]/70"
-                  style={{ marginBottom: "clamp(8px, 1.5vw, 16px)" }}
-                >
-                  Get In Touch
-                </p>
                 <h2 className="font-philosopher text-gh-h1 text-white leading-tight">
-                  We'd love to <br />
-                  hear from <span className="italic text-[#EFCD62]">you</span>
+                  We'd love to hear from <br />
+                  you
                 </h2>
               </div>
 
@@ -419,28 +404,6 @@ export default function Footer() {
                   </AnimatePresence>
                 </div>
 
-                {/* Subject */}
-                <div className="group relative">
-                  <input
-                    type="text"
-                    id="subject"
-                    value={formData.subject}
-                    onChange={(e) =>
-                      setFormData({ ...formData, subject: e.target.value })
-                    }
-                    placeholder=" "
-                    className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
-                  />
-                  <label
-                    htmlFor="subject"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 
-                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] 
-                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
-                  >
-                    Subject
-                  </label>
-                </div>
-
                 {/* Queries */}
                 <div className="group relative">
                   <textarea
@@ -487,7 +450,7 @@ export default function Footer() {
                       : "bg-white/[0.03] border-white/10 text-white/15 cursor-not-allowed"
                   }`}
                 >
-                  SUBMIT INQUIRY
+                  CONTACT US
                 </button>
               </form>
             </div>
@@ -500,21 +463,36 @@ export default function Footer() {
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-12">
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 items-start">
                     {LINKS_COLUMN_1.map((link) => (
-                      <Link
-                        key={link.label}
-                        href={link.href}
-                        className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors inline-flex items-center gap-2"
-                      >
-                        <span>{link.label}</span>
-                        <span
-                          aria-hidden
-                          className="shrink-0 text-[0.65em] leading-none translate-y-px select-none"
+                      <div key={link.label} className="flex flex-col gap-4 items-start">
+                        <Link
+                          href={link.href}
+                          className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors inline-flex items-center gap-2"
                         >
-                          ▸
-                        </span>
-                      </Link>
+                          <span>{link.label}</span>
+                          <span
+                            aria-hidden
+                            className="shrink-0 text-[0.65em] leading-none translate-y-px select-none"
+                          >
+                            ▸
+                          </span>
+                        </Link>
+                        {link.label === "EXPERIENCES" && (
+                          <Link
+                            href="/experiences/another-experience-1"
+                            className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors inline-flex items-center gap-2"
+                          >
+                            <span>ANOTHER EXPERIENCE</span>
+                            <span
+                              aria-hidden
+                              className="shrink-0 text-[0.65em] leading-none translate-y-px select-none"
+                            >
+                              ▸
+                            </span>
+                          </Link>
+                        )}
+                      </div>
                     ))}
                   </div>
 
@@ -611,17 +589,10 @@ export default function Footer() {
           </div>
 
           {/* ── BOTTOM COPYRIGHT BAR ─────────────────────────────────────── */}
-          <div className="border-t border-white/10 mt-14 pt-7 flex w-full flex-col items-center justify-between gap-4 md:flex-row">
-            <p className="font-manrope text-gh-label text-white/35 tracking-widest uppercase text-center md:text-left">
-              © {currentYear} Jade Hospitainment — All Rights Reserved
+          <div className="border-t border-white/10 mt-14 pt-7 flex w-full justify-center">
+            <p className="font-manrope text-gh-label text-white/35 tracking-widest uppercase text-center">
+              © Copyright {currentYear} Jade Hospitainment – All Rights Reserved
             </p>
-            <PrimaryButton
-              href="/experiences/another-experience-1"
-              withArrow
-              className="shrink-0"
-            >
-              Another experience
-            </PrimaryButton>
           </div>
         </div>
       </footer>

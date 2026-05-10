@@ -40,28 +40,44 @@ const PANELS = [
     type: "full",
   },
   {
-    id: "grid",
-    type: "grid",
-    items: [
-      {
-        title: "Corporate Retreats",
-        img: "/Experiences/Corporate Retreats/1-Hero/xhero.webp",
-      },
-      {
-        title: "Wellness Retreats",
-        img: "/Home Page/2-Experiences/Wellness.webp",
-      },
-      {
-        title: "Caravan Journeys",
-        img: "/Experiences/Caravan/1-Hero/14.webp",
-      },
-      {
-        title: "Casual Stays",
-        img: "/Home Page/2-Experiences/casual stays.webp",
-      },
-    ],
-    cta: "SEE ALL EXPERIENCES",
-    href: "/experiences",
+    id: "corporate",
+    title: "Corporate Retreats",
+    subtext:
+      "Unwinding and ice-breaking sessions with colleagues, away from cubicles and glass walls, in private farmhouses ideal for offsites or workations.",
+    cta: "SEE HOW TEAMS GATHER",
+    href: "/corporate-retreats",
+    image: "/Experiences/Corporate Retreats/1-Hero/xhero.webp",
+    type: "full",
+  },
+  {
+    id: "wellness",
+    title: "Wellness Retreats",
+    subtext:
+      "Element-led wellness restoration through mud baths, massages, spa and aroma therapies, designed for deep rejuvenation.",
+    cta: "SEE HOW RETREAT TAKES SHAPE",
+    href: "/villas?category=Wellness Retreats",
+    image: "/Home Page/2-Experiences/Wellness.webp",
+    type: "full",
+  },
+  {
+    id: "caravans",
+    title: "Caravan Journeys",
+    subtext:
+      "Luxury motor caravans carry the idea of private retreat onto the road, offering comfort and privacy for glamping, pilgrimages or any evolving journeys.",
+    cta: "SEE HOW THE JOURNEY UNFOLDS",
+    href: "/caravans",
+    image: "/Experiences/Caravan/1-Hero/14.webp",
+    type: "full",
+  },
+  {
+    id: "casual",
+    title: "Casual Stays",
+    subtext:
+      "Easy getaways and comfortable stays for a quick escape from the city, offering a home-away-from-home vibe.",
+    cta: "SEE CASUAL STAYS",
+    href: "/villas",
+    image: "/Home Page/2-Experiences/casual stays.webp",
+    type: "full",
   },
 ];
 
@@ -71,25 +87,18 @@ export default function HorizontalScrollSection() {
     target: targetRef,
   });
 
-  // Smooth scroll spring
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
   const totalSteps = PANELS.length + 1; // 5 steps total to allow the last panel to fully exit
 
   return (
-    <section ref={targetRef} className="relative h-[400vh] bg-[#0D4032]">
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#0D4032]">
+    <section ref={targetRef} className="relative h-[800vh] bg-[#0B2C23]">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#0B2C23]">
         {/* Top Label & Counter - Global */}
         <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(48px,6vh,80px)] pb-[clamp(8px,1.5vh,18px)]">
           <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-2 md:mb-3 font-semibold text-jade-gold drop-shadow-lg block">
             WAYS JADE IS EXPERIENCED
           </span>
           <GlobalCounter
-            progress={smoothProgress}
+            progress={scrollYProgress}
             total={PANELS.length}
             totalSteps={totalSteps}
           />
@@ -102,13 +111,13 @@ export default function HorizontalScrollSection() {
               key={panel.id}
               data={panel}
               index={i}
-              globalProgress={smoothProgress}
+              globalProgress={scrollYProgress}
               totalSteps={totalSteps}
             />
           ))}
         </div>
         {/* End Button — positioned in the outer sticky container for true screen centering */}
-        <EndButton globalProgress={smoothProgress} />
+        <EndButton globalProgress={scrollYProgress} />
       </div>
     </section>
   );
@@ -147,7 +156,7 @@ function GlobalCounter({
   }, [progress, total, totalSteps]);
 
   return (
-    <div className="relative flex items-center gap-8 md:gap-12 font-philosopher text-[18px] md:text-[22px] mt-2">
+    <div className="relative flex md:hidden items-center gap-8 md:gap-12 font-philosopher text-[18px] md:text-[22px] mt-2">
       <span className="text-white drop-shadow-lg transition-all duration-300">
         {current}
       </span>
@@ -191,7 +200,6 @@ function StackedPanel({
   totalSteps: number;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
-  const isGrid = data.type === "grid";
 
   const step = 1 / totalSteps;
 
@@ -212,7 +220,7 @@ function StackedPanel({
       const vw = window.innerWidth;
       // Match Tailwind max-w-{sm|md|lg|xl} breakpoints used in the panel
       const panelWidth =
-        vw >= 1280 ? 576 : vw >= 768 ? 512 : vw >= 640 ? 448 : 384;
+        vw >= 1280 ? 896 : vw >= 768 ? 672 : vw >= 640 ? 512 : 448;
       const cappedPanel = Math.min(panelWidth, vw - 48); // account for side padding
       const visibleGap = 56; // balanced UI/UX gap between slides
       return Math.ceil(vw / 2 + cappedPanel / 2 + visibleGap);
@@ -233,128 +241,60 @@ function StackedPanel({
 
   return (
     <motion.div
-      style={{ x, zIndex: index * 10 }}
+      style={{ x, zIndex: index * 10, willChange: "transform" }}
       className="absolute inset-0 w-full h-full flex items-center justify-center bg-transparent pointer-events-none"
     >
       <div className="pointer-events-auto flex items-center justify-center w-full h-full">
-        <NavbarThemeTrigger
-          theme={isGrid ? "golden" : "white"}
-          sectionRef={panelRef}
-        />
+        <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
         <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 pt-4 pb-10">
           {/* Layout Container - vertically centered in the available space so it adapts to any viewport (incl. 125-150% Windows scaling) */}
-          <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg xl:max-w-xl mx-auto flex flex-col items-stretch gap-3 lg:gap-5">
-            {/* Image/Grid Section - adaptive max-height so the CTA button stays visible at high Windows scaling */}
-            <div
-              className={`relative w-full aspect-[16/9] max-h-[clamp(180px,38vh,360px)] overflow-hidden shadow-2xl rounded-none shrink-0 ${isGrid ? "bg-transparent" : "bg-black"}`}
-            >
+          <div className="relative w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto flex flex-col items-stretch gap-3 lg:gap-5">
+            {/* Image Section - adaptive max-height so the CTA button stays visible at high Windows scaling */}
+            <div className="relative w-full aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none shrink-0 bg-black">
               <div className="w-full h-full relative">
-                {!isGrid ? (
-                  <>
-                    <Image
-                      src={data.image}
-                      alt={data.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
-                    />
-                    {/* Subtle Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  </>
-                ) : (
-                  <div className="grid grid-cols-2 gap-3 w-full h-full">
-                    {data.items.slice(0, 4).map((item: any, idx: number) => (
-                      <div
-                        key={idx}
-                        className="relative border border-white/10 group overflow-hidden w-full h-full"
-                      >
-                        <Image
-                          src={item.img}
-                          alt={item.title}
-                          fill
-                          className="object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-700"
-                          sizes="(max-width: 1024px) 50vw, 300px"
-                        />
-                        <div className="absolute bottom-4 left-0 w-full text-center">
-                          <h3 className="font-philosopher text-white text-gh-body">
-                            {item.title}
-                          </h3>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <Image
+                  src={data.image}
+                  alt={data.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
+                />
+                {/* Subtle Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               </div>
             </div>
 
             {/* Text Section - adaptive height so title / body / CTA always fit above the fold */}
             <div className="relative w-full flex flex-col items-start text-left mt-1 shrink-0">
-              {!isGrid ? (
-                <>
-                  <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-3"
-                  >
-                    {data.title}
-                  </motion.h2>
-                  <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="font-manrope text-gh-body text-white/80 leading-relaxed mb-3 lg:mb-5 line-clamp-3 max-w-lg"
-                  >
-                    {data.subtext}
-                  </motion.p>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="w-full max-w-md"
-                  >
-                    <Link
-                      href={data.href || "#"}
-                      className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-4 transition-all"
-                    >
-                      {data.cta} <ArrowRight className="w-5 h-5" />
-                    </Link>
-                  </motion.div>
-                </>
-              ) : (
-                // Grid panel text layout
-                <>
-                  <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-3"
-                  >
-                    More Experiences
-                  </motion.h2>
-                  <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="font-manrope text-gh-body text-white/80 leading-relaxed mb-3 lg:mb-5 line-clamp-3 max-w-lg"
-                  >
-                    Discover the diverse range of retreats, journeys, and stays
-                    curated intentionally for your specific needs.
-                  </motion.p>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                  >
-                    <Link
-                      href={data.href || "#"}
-                      className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-4 transition-all"
-                    >
-                      {data.cta} <ArrowRight className="w-5 h-5" />
-                    </Link>
-                  </motion.div>
-                </>
-              )}
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-3"
+              >
+                {data.title}
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="font-manrope text-gh-body text-white/80 leading-relaxed mb-3 lg:mb-5 line-clamp-3 max-w-lg"
+              >
+                {data.subtext}
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="w-full max-w-md"
+              >
+                <Link
+                  href={data.href || "#"}
+                  className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-4 transition-all"
+                >
+                  {data.cta} <ArrowRight className="w-5 h-5" />
+                </Link>
+              </motion.div>
             </div>
           </div>
         </div>

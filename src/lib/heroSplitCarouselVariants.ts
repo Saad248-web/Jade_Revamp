@@ -24,18 +24,12 @@ function normDir(dir: number): 1 | -1 {
  */
 export const heroSplitBgVariants: Variants = {
   enter: (c: HeroSplitCustom) => {
-    const dir = normDir(c.dir);
     if (c.lowFx) {
       return { opacity: 0, transition: { duration, ease } };
     }
     return {
       opacity: 0,
-      scale: 1.07,
-      rotateY: dir * -7,
-      rotateX: 2,
-      skewX: dir * 0.45,
-      filter: "blur(12px) saturate(1.1) brightness(0.92)",
-      transformOrigin: "50% 52%",
+      scale: 1.05,
       transition: { duration: duration * 0.92, ease },
     };
   },
@@ -46,26 +40,16 @@ export const heroSplitBgVariants: Variants = {
     return {
       opacity: 1,
       scale: 1,
-      rotateY: 0,
-      rotateX: 0,
-      skewX: 0,
-      filter: "blur(0px) saturate(1) brightness(1)",
       transition: { duration: duration * 1.08, ease },
     };
   },
   exit: (c: HeroSplitCustom) => {
-    const dir = normDir(c.dir);
     if (c.lowFx) {
       return { opacity: 0, transition: { duration, ease } };
     }
     return {
       opacity: 0,
-      scale: 0.93,
-      rotateY: dir * 9,
-      rotateX: -2,
-      skewX: dir * -0.6,
-      filter: "blur(16px) saturate(1.12) brightness(1.05)",
-      transformOrigin: "50% 48%",
+      scale: 0.95,
       transition: { duration: duration * 0.86, ease },
     };
   },
