@@ -1129,22 +1129,21 @@ function StepReview({
           <StepDots step={currentStep} total={stepTotal} />
         </div>
         <div className="px-5 py-4 border-t border-white/10 flex items-center justify-between">
-          <div>
-            <p className="text-white/40 text-gh-label font-manrope uppercase tracking-widest">
-              Total Price:
-            </p>
-            <p className="text-white font-philosopher text-gh-label font-bold">
-              {formatRupees(total)}
-            </p>
+          <div className="text-white font-manrope text-gh-label font-bold tracking-wide whitespace-nowrap">
+            Total Price: {formatRupees(total)}
           </div>
-          <div className="flex gap-3">
+          <div className="flex items-center gap-6 sm:gap-8 shrink-0">
             <button
               onClick={onBack}
-              className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
+              className="text-gh-label font-bold tracking-[0.2em] text-[#EFCD62] uppercase transition-colors font-manrope hover:text-white"
             >
               BACK
             </button>
-            <PrimaryButton withArrow={false}>PAY NOW</PrimaryButton>
+            <button
+              className="px-6 sm:px-8 py-3 sm:py-3.5 text-gh-label font-bold tracking-widest uppercase font-manrope transition-all duration-300 outline outline-1 outline-[#EFCD62] outline-offset-[3px] rounded-none bg-[#EFCD62] text-[#0B2C23] hover:bg-white hover:text-black hover:outline-white"
+            >
+              PAY NOW
+            </button>
           </div>
         </div>
       </div>

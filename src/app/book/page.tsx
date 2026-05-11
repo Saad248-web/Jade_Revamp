@@ -501,7 +501,10 @@ function StepReview({
 
   return (
     <div className="flex flex-col h-full bg-transparent">
-      <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6 pb-40">
+      <div
+        className="flex-1 overflow-y-auto px-5 py-6 space-y-6 pb-40"
+        data-lenis-prevent
+      >
         {/* VILLA CARD */}
         {selectedVilla && (
           <div className="flex flex-col sm:flex-row gap-4">
@@ -1167,28 +1170,27 @@ function BookPageContent() {
             )}
           </AnimatePresence>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-3 sm:gap-0">
-            <div className="flex items-center gap-2">
-              <span className="text-white/80 font-manrope text-gh-desc font-bold tracking-wider">
-                Total Price:
-              </span>
-              <span className="text-[#EFCD62] sm:text-white font-manrope text-gh-label font-bold">
-                {formatRupees(total)}
-              </span>
+          <div className="flex items-center justify-between w-full gap-4">
+            <div className="text-white font-manrope text-gh-label font-bold tracking-wide whitespace-nowrap">
+              Total Price: {formatRupees(total)}
             </div>
-            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
+            <div className="flex items-center gap-6 sm:gap-8 shrink-0">
               <button
                 onClick={() => setStep("details")}
-                className="px-4 sm:px-6 py-2 sm:py-2.5 text-gh-label font-bold tracking-widest text-[#EFCD62] uppercase transition-colors font-manrope border border-[#EFCD62]/30 sm:border-transparent rounded-sm sm:rounded-none"
+                className="text-gh-label font-bold tracking-[0.2em] text-[#EFCD62] uppercase transition-colors font-manrope hover:text-white"
               >
                 BACK
               </button>
               <button
                 disabled={isSubmitting}
                 onClick={handlePayNow}
-                className={`flex items-center gap-2 px-6 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${isSubmitting ? "bg-[#EFCD62]/60 text-[#0B2C23]/60 cursor-not-allowed" : "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"}`}
+                className={`px-6 sm:px-8 py-3 sm:py-3.5 text-gh-label font-bold tracking-widest uppercase font-manrope transition-all duration-300 outline outline-1 outline-[#EFCD62] outline-offset-[3px] rounded-none ${
+                  isSubmitting
+                    ? "bg-[#EFCD62]/60 text-[#0B2C23]/60 cursor-not-allowed"
+                    : "bg-[#EFCD62] text-[#0B2C23] hover:bg-white hover:text-black hover:outline-white"
+                }`}
               >
-                {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                {isSubmitting && <Loader2 className="w-4 h-4 animate-spin mr-2 inline" />}
                 {isSubmitting ? "CONFIRMING…" : "PAY NOW"}
               </button>
             </div>
