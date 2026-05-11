@@ -709,7 +709,7 @@ export default function VillaDetailsPage() {
         </div>
       </div>
       {/* TABS NAVIGATION - FULL WIDTH STICKY */}
-      <div className="sticky top-0 z-50 bg-[#25282C] border-b border-white/10 w-full shadow-2xl">
+      <div className="sticky top-0 z-50 bg-[#0B2C23] border-b border-white/10 w-full shadow-2xl">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="flex gap-8 md:gap-12 overflow-x-auto pb-0 scrollbar-none">
             {[
@@ -801,7 +801,7 @@ export default function VillaDetailsPage() {
       )}
 
       {/* AMENITIES — Charcoal */}
-      <section id="amenities" className="w-full bg-[#25282C] text-white">
+      <section id="amenities" className="w-full bg-[#0B2C23] text-white">
         <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
           <div className="flex flex-col max-w-4xl mx-auto">
             <h3 className="text-gh-h2 font-philosopher text-white mb-8">Amenities</h3>
@@ -853,7 +853,7 @@ export default function VillaDetailsPage() {
 
       {/* EXPERIENCES — Charcoal */}
       {currentActivity && (
-        <section id="experiences" className="w-full bg-[#25282C] text-white">
+        <section id="experiences" className="w-full bg-[#0B2C23] text-white">
           <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
             <div className="flex flex-col max-w-4xl mx-auto">
               <div className="flex justify-between items-end mb-8">
@@ -906,7 +906,7 @@ export default function VillaDetailsPage() {
       </section>
 
       {/* PROPERTY DETAILS — Charcoal */}
-      <section id="details" className="w-full bg-[#25282C] text-white">
+      <section id="details" className="w-full bg-[#0B2C23] text-white">
         <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
           <div className="flex flex-col max-w-4xl mx-auto">
             <h3 className="text-gh-h1 font-philosopher text-white mb-8">Property Details</h3>
@@ -988,7 +988,7 @@ export default function VillaDetailsPage() {
 
       {/* PERFECT FOR — Green */}
       {villa.perfectFor && villa.perfectFor.length > 0 && (
-        <section id="perfect-for" className="w-full bg-[#0B2C23] text-white">
+        <section id="perfect-for" className="w-full bg-[#25282C] text-white">
           <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
             <div className="flex flex-col max-w-4xl mx-auto">
               <h3 className="text-gh-h1 font-philosopher text-white mb-8">Perfect for</h3>
@@ -1067,7 +1067,7 @@ export default function VillaDetailsPage() {
       )}
 
       {/* FAQ — Green */}
-      <section id="faq" className="w-full bg-[#0B2C23] text-white">
+      <section id="faq" className="w-full bg-[#25282C] text-white">
         <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16 pb-24">
           <div className="flex flex-col max-w-4xl mx-auto">
             <h3 className="text-gh-h1 font-philosopher text-white mb-8">FAQ</h3>

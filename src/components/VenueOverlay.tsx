@@ -161,6 +161,18 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const reducedMotion = useReducedMotion();
+  const [isCloseButtonHidden, setIsCloseButtonHidden] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const currentScrollY = e.currentTarget.scrollTop;
+    if (currentScrollY > lastScrollY && currentScrollY > 150) {
+      setIsCloseButtonHidden(true);
+    } else {
+      setIsCloseButtonHidden(false);
+    }
+    setLastScrollY(currentScrollY);
+  };
 
   const overlayCarouselCustom: HeroSplitCustom = {
     dir: direction,
@@ -290,9 +302,9 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
       className={EXPERIENCE_OVERLAY_ROOT_CLASS}
       data-lenis-prevent
     >
-      <VillaExperienceOverlayCloseFramer MotionButton={MotionButton} onClose={onClose} />
+      <VillaExperienceOverlayCloseFramer MotionButton={MotionButton} onClose={onClose} isHidden={isCloseButtonHidden} />
 
-      <VillaExperienceOverlayContentFrame>
+      <VillaExperienceOverlayContentFrame onScroll={handleScroll}>
             <VillaExperienceHeroCarousel
               images={images}
               currentImageIndex={currentImageIndex}
@@ -414,7 +426,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             </section>
 
             {/* ── CHARCOAL: Pricing ────────────────────────────────────────── */}
-            <section id="pricing" className="w-full bg-[#25282C] text-white">
+            <section id="pricing" className="w-full bg-[#0B2C23] text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <VillaPricingBlocks
@@ -426,11 +438,11 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             </section>
 
             {/* ── GREEN: Location ───────────────────────────────────────────── */}
-            <section id="location" className="w-full bg-[#0B2C23] text-white">
+            <section id="location" className="w-full bg-[#25282C] text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h3 className="text-gh-h2 font-philosopher mb-8">Location</h3>
-                  <div className="bg-[#0B2C23] overflow-hidden mb-8 border border-white/10">
+                  <div className="bg-[#25282C] overflow-hidden mb-8 border border-white/10">
                     <a href={mapsHref} target="_blank" rel="noopener noreferrer"
                       className="relative block w-full h-64 md:h-80 cursor-pointer outline-none transition-opacity hover:opacity-95"
                       aria-label="Open location in Google Maps">
@@ -489,7 +501,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             </section>
 
             {/* ── GREEN: FAQ + Policies ─────────────────────────────────────── */}
-            <section id="faq" className="w-full bg-[#0B2C23] text-white">
+            <section id="faq" className="w-full bg-[#25282C] text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h3 className="text-gh-h2 font-philosopher mb-8">FAQ</h3>

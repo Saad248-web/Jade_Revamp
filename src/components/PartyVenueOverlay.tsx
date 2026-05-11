@@ -158,6 +158,18 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const reducedMotion = useReducedMotion();
+  const [isCloseButtonHidden, setIsCloseButtonHidden] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const currentScrollY = e.currentTarget.scrollTop;
+    if (currentScrollY > lastScrollY && currentScrollY > 150) {
+      setIsCloseButtonHidden(true);
+    } else {
+      setIsCloseButtonHidden(false);
+    }
+    setLastScrollY(currentScrollY);
+  };
   const overlayCarouselCustom: HeroSplitCustom = {
     dir: direction,
     lowFx: !!reducedMotion,
@@ -285,9 +297,9 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
       className={EXPERIENCE_OVERLAY_ROOT_CLASS}
       data-lenis-prevent
     >
-      <VillaExperienceOverlayCloseFramer MotionButton={MotionButton} onClose={onClose} />
+      <VillaExperienceOverlayCloseFramer MotionButton={MotionButton} onClose={onClose} isHidden={isCloseButtonHidden} />
 
-      <VillaExperienceOverlayContentFrame>
+      <VillaExperienceOverlayContentFrame onScroll={handleScroll}>
             <VillaExperienceHeroCarousel
               images={images}
               currentImageIndex={currentImageIndex}
@@ -400,7 +412,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
 
             {/* ── CHARCOAL: Pricing ────────────────────────────────────────── */}
             {partyPricingBlocks.length > 0 && (
-              <section id="pricing" className="w-full bg-[#25282C] text-white">
+              <section id="pricing" className="w-full bg-[#0B2C23] text-white">
                 <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                   <div className="max-w-4xl mx-auto">
                     <VillaPricingBlocks
@@ -414,7 +426,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
             )}
 
             {/* ── GREEN: Location ───────────────────────────────────────────── */}
-            <section id="location" className="w-full bg-[#0B2C23] text-white">
+            <section id="location" className="w-full bg-[#25282C] text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h2 className="text-gh-h2 font-philosopher mb-8">Location</h2>
@@ -461,7 +473,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
             </section>
 
             {/* ── GREEN: FAQ + Policies ─────────────────────────────────────── */}
-            <section id="faq" className="w-full bg-[#0B2C23] text-white">
+            <section id="faq" className="w-full bg-[#25282C] text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h2 className="text-gh-h2 font-philosopher mb-8">FAQ</h2>

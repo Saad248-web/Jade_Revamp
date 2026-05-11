@@ -19,12 +19,17 @@ export type VillaExperienceCarouselImage = { name?: string; image: string };
 
 export function VillaExperienceOverlayContentFrame({
   children,
+  onScroll,
 }: {
   children: React.ReactNode;
+  onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
 }) {
   return (
-    <div className="absolute inset-0 overflow-y-auto scrollbar-none pt-20 md:pt-0">
-      <div className="w-full pb-20 bg-[#25282C] rounded-t-[32px] md:rounded-none overflow-hidden">
+    <div 
+      className="absolute inset-0 overflow-y-auto scrollbar-none"
+      onScroll={onScroll}
+    >
+      <div className="w-full mt-20 md:mt-0 pb-20 bg-[#25282C] rounded-t-[32px] md:rounded-none">
         {children}
       </div>
     </div>
@@ -34,19 +39,25 @@ export function VillaExperienceOverlayContentFrame({
 export function VillaExperienceOverlayCloseFramer({
   MotionButton,
   onClose,
+  isHidden = false,
 }: {
   MotionButton: typeof motion.button;
   onClose: () => void;
+  isHidden?: boolean;
 }) {
   return (
-    <div className={EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS}>
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 md:top-6 md:left-auto md:right-6 md:translate-x-0 z-[200] w-12 h-12 pointer-events-none">
       <MotionButton
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.9, y: 0 }}
+        animate={{ 
+          opacity: isHidden ? 0 : 1, 
+          scale: isHidden ? 0.8 : 1,
+          y: isHidden ? -80 : 0
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
         onClick={onClose}
         aria-label="Close"
-        className="w-full h-full flex items-center justify-center rounded-full text-white"
+        className="pointer-events-auto w-full h-full flex items-center justify-center rounded-full bg-[#124131] text-white shadow-2xl hover:bg-[#1f5c48] transition-colors"
       >
         <X className="w-6 h-6 stroke-[1.5]" />
       </MotionButton>
@@ -77,7 +88,7 @@ export function VillaExperienceHeroCarousel({
 
   return (
     <div
-      className="relative w-full h-[clamp(320px,65vh,720px)] overflow-hidden bg-black/20 group rounded-none"
+      className="relative w-full h-[clamp(320px,65vh,720px)] overflow-hidden bg-black/20 group rounded-t-[32px] md:rounded-none"
       style={{ perspective: "1500px" }}
     >
       <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
@@ -172,7 +183,7 @@ export function VillaExperienceStickyTabs({
   onTabClick: (tab: string) => void;
 }) {
   return (
-    <div className="sticky top-0 z-[60] bg-[#25282C] border-b border-white/10 mb-0 w-full shadow-2xl">
+    <div className="sticky top-0 z-[60] bg-[#0B2C23] border-b border-white/10 mb-0 w-full shadow-2xl">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex gap-8 md:gap-12 overflow-x-auto pb-0 scrollbar-none py-1">
           {tabs.map((tab) => (
