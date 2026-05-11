@@ -193,7 +193,7 @@ function StaticFallback() {
             key={p.id}
             className="overflow-hidden border border-white/15 bg-black/20"
           >
-            <div className="relative aspect-[16/9] w-full">
+            <div className="relative aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] w-full">
               <Image
                 src={p.image}
                 alt=""

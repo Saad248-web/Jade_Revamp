@@ -246,11 +246,11 @@ function StackedPanel({
     >
       <div className="pointer-events-auto flex items-center justify-center w-full h-full">
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
-        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 pt-4 pb-10">
+        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-start sm:justify-center px-4 sm:px-8 md:px-16 xl:px-24 pt-[50px] sm:pt-4 pb-10">
           {/* Layout Container - vertically centered in the available space so it adapts to any viewport (incl. 125-150% Windows scaling) */}
           <div className="relative w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto flex flex-col items-stretch gap-3 lg:gap-5">
             {/* Image Section - adaptive max-height so the CTA button stays visible at high Windows scaling */}
-            <div className="relative w-full aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none shrink-0 bg-black">
+            <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none shrink-0 bg-black">
               <div className="w-full h-full relative">
                 <Image
                   src={data.image}

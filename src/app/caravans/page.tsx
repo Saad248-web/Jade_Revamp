@@ -191,6 +191,7 @@ export default function CaravansPage() {
       <PremiumFeaturesSection
         subheading="WHY RATHAA"
         heading="Travel Reimagined"
+        cardsLayout="scroll"
         cards={[
           {
             tag: "experience",

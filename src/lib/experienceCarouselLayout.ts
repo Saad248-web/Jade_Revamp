@@ -13,7 +13,7 @@ export const experienceCarouselDefaults = {
    * Inner column — horizontal + vertical padding scale with viewport (fluid tokens + steps).
    */
   innerClassName:
-    "w-full max-w-5xl mx-auto flex flex-col px-fluid-sm sm:px-fluid-md md:px-8 lg:px-10 pt-fluid-sm sm:pt-fluid-md md:pt-fluid-lg lg:pt-fluid-xl pb-fluid-md sm:pb-fluid-lg md:pb-10 lg:pb-12",
+    "w-full max-w-5xl mx-auto flex flex-col px-fluid-sm sm:px-fluid-md md:px-8 lg:px-10 pt-fluid-xl sm:pt-fluid-xl md:pt-fluid-lg lg:pt-fluid-xl pb-fluid-md sm:pb-fluid-lg md:pb-10 lg:pb-12",
 
   /**
    * Image frame — explicit stepped heights only (avoid `min(dvh,*)` arbitrary classes;

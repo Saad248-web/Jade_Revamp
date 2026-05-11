@@ -99,6 +99,7 @@ export default function CorporateRetreatsPage() {
             Corporate Retreats
           </>
         }
+        cardsLayout="scroll"
         cards={[
           {
             tag: "provide",

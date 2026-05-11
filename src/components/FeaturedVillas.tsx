@@ -242,7 +242,7 @@ function VillaSlide({
         <div ref={innerRef} className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
           {/* Image Section */}
           <div
-            className="relative w-full aspect-[16/9] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0"
+            className="relative w-full aspect-[4/5] sm:aspect-[4/3] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0"
             style={{ perspective: "1500px" }}
           >
             <div className="w-full h-full relative">

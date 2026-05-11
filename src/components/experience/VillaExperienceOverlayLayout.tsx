@@ -23,8 +23,8 @@ export function VillaExperienceOverlayContentFrame({
   children: React.ReactNode;
 }) {
   return (
-    <div className="absolute inset-0 overflow-y-auto scrollbar-none pt-20 md:pt-0 pb-28">
-      <div className="w-full pb-10 bg-[#25282C] rounded-t-[32px] md:rounded-none overflow-hidden">
+    <div className="absolute inset-0 overflow-y-auto scrollbar-none pt-20 md:pt-0">
+      <div className="w-full pb-20 bg-[#25282C] rounded-t-[32px] md:rounded-none overflow-hidden">
         {children}
       </div>
     </div>

@@ -236,6 +236,7 @@ function WhyChooseJadeSection() {
     <PremiumFeaturesSection
       subheading="WHY CHOOSE JADE"
       heading="Designed for Private Weekend Escapes"
+      cardsLayout="scroll"
       cards={[
         {
           tag: "provide",
