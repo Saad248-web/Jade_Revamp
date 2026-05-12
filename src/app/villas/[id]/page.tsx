@@ -402,14 +402,14 @@ export default function VillaDetailsPage() {
   useEffect(() => {
     const sectionIds = [
       "spaces",
-      "amenities",
-      "services",
       "experiences",
       "details",
+      "video-walkthrough",
+      "services",
+      "amenities",
       "pricing",
       "location",
       "perfect-for",
-      "video-walkthrough",
       "faq",
     ];
 
@@ -696,16 +696,69 @@ export default function VillaDetailsPage() {
           {villa.description}
         </p>
 
-        <div className="flex flex-col gap-8 mb-12">
-          <a
-            href="/All Properties - Jade Hospitainment.pdf"
-            download
-            className="w-full bg-white/5 border border-white/10 text-white px-8 py-5 uppercase tracking-[0.2em] text-[11px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-between group rounded-sm"
-          >
-            <span>Download Brochure</span>
-            <Download className="w-4 h-4 text-white/40 group-hover:text-black transition-colors" />
-          </a>
-        </div>
+        {isDomeVillas ? (
+          <div className="mb-12">
+            <span className="text-[#EFCD62] text-[10px] md:text-gh-label font-bold tracking-[0.2em] uppercase mb-4 block">
+              Download Dome Brochures
+            </span>
+            <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-none -mr-6 pr-6 md:-mr-12 md:pr-12 snap-x">
+              {[
+                {
+                  name: "Blue Dome",
+                  image: "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Glamping_Experince.webp",
+                  brochure: "/All Properties - Jade Hospitainment.pdf",
+                },
+                {
+                  name: "Red Dome",
+                  image: "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Bath_Tub.webp",
+                  brochure: "/All Properties - Jade Hospitainment.pdf",
+                },
+                {
+                  name: "Yellow Dome",
+                  image: "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Greek_Style_Bath.webp",
+                  brochure: "/All Properties - Jade Hospitainment.pdf",
+                },
+              ].map((dome, idx) => (
+                <a
+                  key={idx}
+                  href={dome.brochure}
+                  download={`${dome.name} Brochure.pdf`}
+                  className="relative flex-shrink-0 w-[240px] h-[240px] md:w-[280px] md:h-[280px] snap-start group overflow-hidden rounded-sm border border-white/10"
+                >
+                  {/* Background Image with Hover Zoom */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out scale-100 group-hover:scale-110"
+                    style={{ backgroundImage: `url('${dome.image}')` }}
+                  />
+                  {/* Dark Elegant Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/25 group-hover:via-black/50 group-hover:from-black/90 transition-all duration-300" />
+                  
+                  {/* Content Centered */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10">
+                    <h3 className="font-philosopher text-[24px] md:text-[28px] text-white leading-tight mb-2 select-none">
+                      {dome.name}
+                    </h3>
+                    <div className="flex items-center gap-1.5 text-white/95 text-[10px] font-bold tracking-[0.2em] font-manrope uppercase mt-1 group-hover:text-[#EFCD62] transition-colors duration-300">
+                      <span>Download Brochure</span>
+                      <Download className="w-3.5 h-3.5 text-white/60 group-hover:text-[#EFCD62] transition-colors duration-300 animate-pulse" />
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-8 mb-12">
+            <a
+              href="/All Properties - Jade Hospitainment.pdf"
+              download
+              className="w-full bg-white/5 border border-white/10 text-white px-8 py-5 uppercase tracking-[0.2em] text-[11px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-between group rounded-sm"
+            >
+              <span>Download Brochure</span>
+              <Download className="w-4 h-4 text-white/40 group-hover:text-black transition-colors" />
+            </a>
+          </div>
+        )}
         </div>
       </div>
       {/* TABS NAVIGATION - FULL WIDTH STICKY */}
@@ -714,17 +767,17 @@ export default function VillaDetailsPage() {
           <div className="flex gap-8 md:gap-12 overflow-x-auto pb-0 scrollbar-none">
             {[
               "Spaces",
-              "Amenities",
-              "Services",
               "Experiences",
-              "Details",
+              "Property Details",
+              "Video Walkthrough",
+              "Services",
+              "Amenities",
               "Pricing",
               "Location",
               "Perfect For",
-              "Video Walkthrough",
               "FAQ",
             ].map((tab) => {
-              const sectionId = tab.toLowerCase().replace(/ /g, "-");
+              const sectionId = tab === "Property Details" ? "details" : tab.toLowerCase().replace(/ /g, "-");
               const isActive = activeTab === sectionId;
               return (
                 <button
@@ -800,31 +853,113 @@ export default function VillaDetailsPage() {
         </section>
       )}
 
-      {/* AMENITIES — Charcoal */}
-      <section id="amenities" className="w-full bg-[#0B2C23] text-white">
+      {/* EXPERIENCES — Green */}
+      {currentActivity && (
+        <section id="experiences" className="w-full bg-[#0B2C23] text-white">
+          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+            <div className="flex flex-col max-w-4xl mx-auto">
+              <div className="flex justify-between items-end mb-8">
+                <h3 className="text-gh-h1 font-philosopher text-white">Experiences</h3>
+                {derivedActivities && derivedActivities.length > 1 && (
+                  <div className="flex gap-2">
+                    <button onClick={handlePrevActivity} disabled={derivedActivities.length <= 1} className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"><ArrowLeft className="w-4 h-4" /></button>
+                    <button onClick={handleNextActivity} disabled={derivedActivities.length <= 1} className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"><ArrowRight className="w-4 h-4" /></button>
+                  </div>
+                )}
+              </div>
+              <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20 mt-4">
+                {(validImg(currentActivity.image) || validImg(villa.image)) && (
+                  <Image src={validImg(currentActivity.image) ? normalizeImageSrc(currentActivity.image) : normalizeImageSrc(villa.image)} alt={currentActivity.title} fill className="object-cover object-center transition-transform duration-700 opacity-90 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" unoptimized />
+                )}
+                <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-[#0B2C23]/95 via-[#0B2C23]/50 to-transparent z-10" />
+                <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 flex flex-col items-center justify-end text-center z-20">
+                  <h4 className="text-white font-philosopher text-[28px] md:text-[36px] mb-3">{currentActivity.title}</h4>
+                  {(currentActivity as any).description && (<p className="text-white/80 font-manrope text-[14px] md:text-[16px] leading-relaxed max-w-2xl">{(currentActivity as any).description}</p>)}
+                </div>
+              </div>
+              <div className="mt-8 flex justify-center">
+                <PrimaryButton onClick={() => setEnquireOverlayOpen(true)} withArrow={true}>
+                  Enquire Now
+                </PrimaryButton>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* PROPERTY DETAILS — Green */}
+      <section id="details" className="w-full bg-[#0B2C23] text-white">
         <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
           <div className="flex flex-col max-w-4xl mx-auto">
-            <h3 className="text-gh-h2 font-philosopher text-white mb-8">Amenities</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-              {villa.amenities?.slice(0, 4).map((amenity, idx) => {
-                const Icon = getIcon(amenity.icon);
-                return (
-                  <div key={idx} className="flex flex-col items-center gap-3 p-6 bg-white/5 border border-white/5 transition-all group">
-                    <Icon className="w-8 h-8 text-jade-gold transition-transform" strokeWidth={1} />
-                    <span className="text-white/80 font-bold uppercase tracking-widest text-[9px] text-center">{amenity.label}</span>
+            <h3 className="text-gh-h1 font-philosopher text-white mb-8">Property Details</h3>
+            <div className="flex flex-col gap-8 mb-8">
+              {villa.propertyDetails?.slice(0, 4).map((detail, idx) => (
+                <div key={idx} className="flex gap-4">
+                  <div className="mt-1.5 w-2 h-2 rotate-45 bg-[#EFCD62] flex-shrink-0" />
+                  <div>
+                    <h4 className="text-gh-body text-white font-manrope font-medium mb-2">{(detail as any).label || (detail as any).title}</h4>
+                    <p className="text-white/60 text-gh-body leading-relaxed">{detail.description}</p>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
             <div className="flex flex-col gap-4">
-              <button onClick={() => openDrawer("Amenities", villa.amenities || [])} className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">Know More <ArrowRight className="w-3 h-3" /></button>
+              <button onClick={() => openDrawer("Property Details", villa.propertyDetails || [])} className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">Know More <ArrowRight className="w-3 h-3" /></button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SERVICES — Green */}
-      <section id="services" className="w-full bg-[#0B2C23] text-white">
+      {/* VIDEO WALKTHROUGH — Charcoal */}
+      {villa.video && (
+        <section id="video-walkthrough" className="w-full bg-[#25282C] text-white">
+          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+            <div className="flex flex-col max-w-4xl mx-auto">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                <h3 className="text-gh-h1 font-philosopher text-white">Video Walkthrough</h3>
+                {villa.id === "dome-villas" && (
+                  <div className="flex items-center gap-2">
+                    {([ { id: "blue", label: "Blue Dome", dot: "#3b82f6" }, { id: "red", label: "Red Dome", dot: "#ef4444" }, { id: "yellow", label: "Yellow Dome", dot: "#eab308" } ] as const).map((t) => {
+                      const isActive = activeDomeVideo === t.id;
+                      return (
+                        <button key={t.id} onClick={() => setActiveDomeVideo(t.id)} className={`flex items-center gap-2 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${isActive ? "bg-[#EFCD62] text-black border-[#EFCD62]" : "bg-white/5 text-white/70 border-white/10 hover:text-white hover:bg-white/10"}`}>
+                          <span className="inline-block w-2.5 h-2.5 rounded-full border border-white/30" style={{ backgroundColor: t.dot }} />
+                          {t.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              {(() => {
+                const chosenUrl = villa.id === "dome-villas" ? domeVideoUrls[activeDomeVideo] : typeof villa.video === "object" ? villa.video.youtubeUrl : "";
+                const ytId = chosenUrl ? getYouTubeId(chosenUrl) : "";
+                if (!ytId) return null;
+                if (isPlayingVideo) {
+                  return (
+                    <div className="relative aspect-video w-full bg-gray-900 overflow-hidden border border-white/10">
+                      <iframe src={`https://www.youtube.com/embed/${ytId}?autoplay=1`} title={`${villa.name} Walkthrough`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="absolute inset-0 w-full h-full" />
+                    </div>
+                  );
+                }
+                return (
+                  <div className="relative aspect-video w-full bg-gray-900 overflow-hidden group border border-white/10 cursor-pointer" onClick={() => setIsPlayingVideo(true)}>
+                    <Image src={`https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`} alt={`${villa.name} Video Walkthrough`} fill className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 800px" priority={false} />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hover:bg-white/30 transition-all group shadow-2xl">
+                        <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* SERVICES — Charcoal */}
+      <section id="services" className="w-full bg-[#25282C] text-white">
         <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
           <div className="flex flex-col max-w-4xl mx-auto">
             <h3 className="text-gh-h2 font-philosopher text-white mb-8">Services</h3>
@@ -851,78 +986,24 @@ export default function VillaDetailsPage() {
         </div>
       </section>
 
-      {/* EXPERIENCES — Charcoal */}
-      {currentActivity && (
-        <section id="experiences" className="w-full bg-[#0B2C23] text-white">
-          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-            <div className="flex flex-col max-w-4xl mx-auto">
-              <div className="flex justify-between items-end mb-8">
-                <h3 className="text-gh-h1 font-philosopher text-white">Experiences</h3>
-                {derivedActivities && derivedActivities.length > 1 && (
-                  <div className="flex gap-2">
-                    <button onClick={handlePrevActivity} disabled={derivedActivities.length <= 1} className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"><ArrowLeft className="w-4 h-4" /></button>
-                    <button onClick={handleNextActivity} disabled={derivedActivities.length <= 1} className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"><ArrowRight className="w-4 h-4" /></button>
-                  </div>
-                )}
-              </div>
-              <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20 mt-4">
-                {(validImg(currentActivity.image) || validImg(villa.image)) && (
-                  <Image src={validImg(currentActivity.image) ? normalizeImageSrc(currentActivity.image) : normalizeImageSrc(villa.image)} alt={currentActivity.title} fill className="object-cover object-center transition-transform duration-700 opacity-90 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" unoptimized />
-                )}
-                <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-[#25282C]/95 via-[#25282C]/50 to-transparent z-10" />
-                <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 flex flex-col items-center justify-end text-center z-20">
-                  <h4 className="text-white font-philosopher text-[28px] md:text-[36px] mb-3">{currentActivity.title}</h4>
-                  {(currentActivity as any).description && (<p className="text-white/80 font-manrope text-[14px] md:text-[16px] leading-relaxed max-w-2xl">{(currentActivity as any).description}</p>)}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* WHY JADE WEDDING VENUES — Green */}
-      <section className="w-full bg-[#0B2C23] text-white">
+      {/* AMENITIES — Charcoal */}
+      <section id="amenities" className="w-full bg-[#25282C] text-white">
         <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
           <div className="flex flex-col max-w-4xl mx-auto">
-            <h3 className="text-gh-h1 font-philosopher text-white mb-12">Why Jade Wedding Venues</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 md:gap-y-10">
-              {[
-                { title: "FULLY PRIVATE VENUES", desc: "No shared spaces, no parallel events, complete control over the setting." },
-                { title: "OUTDOOR-FIRST LAYOUTS", desc: "Lawns, gardens, and open-air spaces designed for ceremonies, receptions, and celebrations." },
-                { title: "FLEXIBLE PLANNING", desc: "Freedom to work with your own decorators, caterers, photographers, and planners." },
-                { title: "BUILT FOR SCALE", desc: "Venues that support intimate gatherings as well as large, multi-event weddings." },
-              ].map((item, idx) => (
-                <div key={idx} className="flex gap-4 sm:gap-5">
-                  <div className="mt-1 flex-shrink-0"><div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rotate-45 bg-jade-gold" /></div>
-                  <div className="flex flex-col gap-1">
-                    <h4 className="text-white font-manrope font-bold tracking-widest text-[13px] uppercase">{item.title}</h4>
-                    <p className="text-white/60 text-gh-desc sm:text-gh-body leading-relaxed">{item.desc}</p>
+            <h3 className="text-gh-h2 font-philosopher text-white mb-8">Amenities</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+              {villa.amenities?.slice(0, 4).map((amenity, idx) => {
+                const Icon = getIcon(amenity.icon);
+                return (
+                  <div key={idx} className="flex flex-col items-center gap-3 p-6 bg-white/5 border border-white/5 transition-all group">
+                    <Icon className="w-8 h-8 text-jade-gold transition-transform" strokeWidth={1} />
+                    <span className="text-white/80 font-bold uppercase tracking-widest text-[9px] text-center">{amenity.label}</span>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PROPERTY DETAILS — Charcoal */}
-      <section id="details" className="w-full bg-[#0B2C23] text-white">
-        <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-          <div className="flex flex-col max-w-4xl mx-auto">
-            <h3 className="text-gh-h1 font-philosopher text-white mb-8">Property Details</h3>
-            <div className="flex flex-col gap-8 mb-8">
-              {villa.propertyDetails?.slice(0, 4).map((detail, idx) => (
-                <div key={idx} className="flex gap-4">
-                  <div className="mt-1.5 w-2 h-2 rotate-45 bg-[#EFCD62] flex-shrink-0" />
-                  <div>
-                    <h4 className="text-gh-body text-white font-manrope font-medium mb-2">{(detail as any).label || (detail as any).title}</h4>
-                    <p className="text-white/60 text-gh-body leading-relaxed">{detail.description}</p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="flex flex-col gap-4">
-              <button onClick={() => openDrawer("Property Details", villa.propertyDetails || [])} className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">Know More <ArrowRight className="w-3 h-3" /></button>
+              <button onClick={() => openDrawer("Amenities", villa.amenities || [])} className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">Know More <ArrowRight className="w-3 h-3" /></button>
             </div>
           </div>
         </div>
@@ -986,7 +1067,7 @@ export default function VillaDetailsPage() {
         </section>
       )}
 
-      {/* PERFECT FOR — Green */}
+      {/* PERFECT FOR — Charcoal */}
       {villa.perfectFor && villa.perfectFor.length > 0 && (
         <section id="perfect-for" className="w-full bg-[#25282C] text-white">
           <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
@@ -1018,57 +1099,9 @@ export default function VillaDetailsPage() {
         </section>
       )}
 
-      {/* VIDEO WALKTHROUGH — Charcoal */}
-      {villa.video && (
-        <section id="video-walkthrough" className="w-full bg-[#25282C] text-white">
-          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-            <div className="flex flex-col max-w-4xl mx-auto">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-                <h3 className="text-gh-h1 font-philosopher text-white">Video Walkthrough</h3>
-                {villa.id === "dome-villas" && (
-                  <div className="flex items-center gap-2">
-                    {([ { id: "blue", label: "Blue Dome", dot: "#3b82f6" }, { id: "red", label: "Red Dome", dot: "#ef4444" }, { id: "yellow", label: "Yellow Dome", dot: "#eab308" } ] as const).map((t) => {
-                      const isActive = activeDomeVideo === t.id;
-                      return (
-                        <button key={t.id} onClick={() => setActiveDomeVideo(t.id)} className={`flex items-center gap-2 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${isActive ? "bg-[#EFCD62] text-black border-[#EFCD62]" : "bg-white/5 text-white/70 border-white/10 hover:text-white hover:bg-white/10"}`}>
-                          <span className="inline-block w-2.5 h-2.5 rounded-full border border-white/30" style={{ backgroundColor: t.dot }} />
-                          {t.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-              {(() => {
-                const chosenUrl = villa.id === "dome-villas" ? domeVideoUrls[activeDomeVideo] : typeof villa.video === "object" ? villa.video.youtubeUrl : "";
-                const ytId = chosenUrl ? getYouTubeId(chosenUrl) : "";
-                if (!ytId) return null;
-                if (isPlayingVideo) {
-                  return (
-                    <div className="relative aspect-video w-full bg-gray-900 overflow-hidden border border-white/10">
-                      <iframe src={`https://www.youtube.com/embed/${ytId}?autoplay=1`} title={`${villa.name} Walkthrough`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="absolute inset-0 w-full h-full" />
-                    </div>
-                  );
-                }
-                return (
-                  <div className="relative aspect-video w-full bg-gray-900 overflow-hidden group border border-white/10 cursor-pointer" onClick={() => setIsPlayingVideo(true)}>
-                    <Image src={`https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`} alt={`${villa.name} Video Walkthrough`} fill className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 800px" priority={false} />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hover:bg-white/30 transition-all group shadow-2xl">
-                        <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })()}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* FAQ — Green */}
+      {/* FAQ — Charcoal */}
       <section id="faq" className="w-full bg-[#25282C] text-white">
-        <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16 pb-24">
+        <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
           <div className="flex flex-col max-w-4xl mx-auto">
             <h3 className="text-gh-h1 font-philosopher text-white mb-8">FAQ</h3>
             {villa.faq?.length ? (
