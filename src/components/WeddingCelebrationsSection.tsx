@@ -220,7 +220,7 @@ function CelebrationPanelSlide({
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
         <div
           ref={panelRef}
-          className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-start sm:justify-center px-6 md:px-24 pt-[50px] sm:pt-4"
+          className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-24 pb-[80px] sm:pb-0"
         >
           <div className="relative w-full sm:h-full max-w-xl mx-auto flex flex-col items-stretch sm:justify-center gap-4 lg:gap-6">
             <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">

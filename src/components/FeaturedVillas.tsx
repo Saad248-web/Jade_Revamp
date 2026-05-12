@@ -237,12 +237,12 @@ function VillaSlide({
       style={{ x, zIndex: index * 10 }}
       className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none bg-transparent"
     >
-      <div className="pointer-events-none relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-20 lg:px-32 xl:px-48">
+      <div className="pointer-events-none relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-20 lg:px-32 xl:px-48 pb-[80px] sm:pb-0">
         {/* Layout Container: Stacked universally on all screen sizes */}
-        <div ref={innerRef} className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-center justify-center gap-4 lg:gap-6">
+        <div ref={innerRef} className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-stretch justify-center gap-4 lg:gap-6">
           {/* Image Section */}
           <div
-            className="relative w-full aspect-[4/5] sm:aspect-[4/3] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0"
+            className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0"
             style={{ perspective: "1500px" }}
           >
             <div className="w-full h-full relative">
