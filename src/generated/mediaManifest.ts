@@ -3,7 +3,7 @@
 // Do not edit manually.
 
 export const MEDIA_MANIFEST = {
-  "generatedAt": "2026-05-12T07:01:14.908Z",
+  "generatedAt": "2026-05-12T19:03:40.770Z",
   "villasByFolder": {
     "Diamond": {
       "hero": [
@@ -993,7 +993,15 @@ export const MEDIA_MANIFEST = {
         "/Villa_Retreats/Magnolia/Spaces/Private_Home_Theatre.webp",
         "/Villa_Retreats/Magnolia/Spaces/Villa.webp"
       ],
-      "experiences": [],
+      "experiences": [
+        "/Villa_Retreats/Magnolia/3-Experiences/Bonfire.webp",
+        "/Villa_Retreats/Magnolia/3-Experiences/Floating Breakfast.webp",
+        "/Villa_Retreats/Magnolia/3-Experiences/Gazebo By The Pool.webp",
+        "/Villa_Retreats/Magnolia/3-Experiences/High tea.webp",
+        "/Villa_Retreats/Magnolia/3-Experiences/barbeque.webp",
+        "/Villa_Retreats/Magnolia/3-Experiences/candlelit dining.webp",
+        "/Villa_Retreats/Magnolia/3-Experiences/diamond.webp"
+      ],
       "perfectFor": [
         "/Villa_Retreats/Magnolia/Perfect For/Private Celebrations.webp",
         "/Villa_Retreats/Magnolia/Perfect For/Weddings.webp",

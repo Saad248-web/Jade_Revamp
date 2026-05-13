@@ -27,6 +27,7 @@ const PANELS = [
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
     href: "/party-villas#spaces-for-celebrations",
     image: "/Home Page/2-Experiences/celebrations & parties.webp",
+    mobileImage: "/Website Ratio Changes/POOL PARTY.webp",
     type: "full",
   },
   {
@@ -77,6 +78,7 @@ const PANELS = [
     cta: "SEE CASUAL STAYS",
     href: "/villas",
     image: "/Home Page/2-Experiences/casual stays.webp",
+    mobileImage: "/Website Ratio Changes/Casual Stayss.webp",
     type: "full",
   },
 ];
@@ -252,13 +254,38 @@ function StackedPanel({
             {/* Image Section - adaptive max-height so the CTA button stays visible at high Windows scaling */}
             <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none shrink-0 bg-black">
               <div className="w-full h-full relative">
-                <Image
-                  src={data.image}
-                  alt={data.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
-                />
+                {data.mobileImage ? (
+                  <>
+                    {/* Mobile & Tab View */}
+                    <div className="block lg:hidden w-full h-full relative">
+                      <Image
+                        src={data.mobileImage}
+                        alt={data.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
+                      />
+                    </div>
+                    {/* Desktop View */}
+                    <div className="hidden lg:block w-full h-full relative">
+                      <Image
+                        src={data.image}
+                        alt={data.title}
+                        fill
+                        className="object-cover"
+                        sizes="600px"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <Image
+                    src={data.image}
+                    alt={data.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
+                  />
+                )}
                 {/* Subtle Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               </div>

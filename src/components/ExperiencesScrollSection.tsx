@@ -26,6 +26,7 @@ const PANELS = [
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
     href: "/party-villas#spaces-for-celebrations",
     image: "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
+    mobileImage: "/Website Ratio Changes/POOL PARTY.webp",
   },
   {
     id: "weddings",
@@ -231,13 +232,38 @@ function PanelSlide({
             {/* Image Section — zoom-safe max height so CTA stays above the fold */}
             <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
               <div className="w-full h-full relative">
-                <Image
-                  src={data.image}
-                  alt={data.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 600px"
-                />
+                {data.mobileImage ? (
+                  <>
+                    {/* Mobile & Tab View */}
+                    <div className="block lg:hidden w-full h-full relative">
+                      <Image
+                        src={data.mobileImage}
+                        alt={data.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 600px"
+                      />
+                    </div>
+                    {/* Desktop View */}
+                    <div className="hidden lg:block w-full h-full relative">
+                      <Image
+                        src={data.image}
+                        alt={data.title}
+                        fill
+                        className="object-cover"
+                        sizes="600px"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <Image
+                    src={data.image}
+                    alt={data.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 600px"
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               </div>
             </div>

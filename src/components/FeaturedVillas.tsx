@@ -32,6 +32,11 @@ const VILLAS = [
       "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/Dome Villas by Jade - Blue v3_Page_01_Image_0001.webp",
       "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/domeye.webp",
     ],
+    mobileImages: [
+      "/Website Ratio Changes/dome.webp",
+      "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/Dome Villas by Jade - Blue v3_Page_01_Image_0001.webp",
+      "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/domeye.webp",
+    ],
     link: "/villas/dome-villa",
   },
   {
@@ -45,6 +50,11 @@ const VILLAS = [
       "/Home Page/Featured Villas/HILL VIEW VILLA/2.webp",
       "/Home Page/Featured Villas/HILL VIEW VILLA/3.webp",
     ],
+    mobileImages: [
+      "/Website Ratio Changes/ror.webp",
+      "/Home Page/Featured Villas/HILL VIEW VILLA/2.webp",
+      "/Home Page/Featured Villas/HILL VIEW VILLA/3.webp",
+    ],
     link: "/villas/retreat-on-ridge",
   },
   {
@@ -55,6 +65,11 @@ const VILLAS = [
       "A modern glass-walled estate with expansive lawns, a private pool, and an in-house theatre—crafted for vibrant celebrations, social gatherings, and large-format experiences with complete privacy.",
     images: [
       "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/1.webp",
+      "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/2.webp",
+      "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/3.webp",
+    ],
+    mobileImages: [
+      "/Website Ratio Changes/Magnoliaa.webp",
       "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/2.webp",
       "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/3.webp",
     ],
@@ -246,30 +261,89 @@ function VillaSlide({
             style={{ perspective: "1500px" }}
           >
             <div className="w-full h-full relative">
-              <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
-                <motion.div
-                  key={currentImageIndex}
-                  custom={carouselCustom}
-                  variants={liquidCarouselBgVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="absolute inset-0 w-full h-full"
-                  style={{
-                    transformStyle: "preserve-3d",
-                    backfaceVisibility: "hidden",
-                  }}
-                >
-                  <Image
-                    src={data.images[currentImageIndex]}
-                    alt={data.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1280px) 95vw, 1400px"
-                    priority={currentImageIndex === 0}
-                  />
-                </motion.div>
-              </AnimatePresence>
+              {data.mobileImages ? (
+                <>
+                  {/* Mobile & Tab View */}
+                  <div className="block lg:hidden w-full h-full relative">
+                    <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
+                      <motion.div
+                        key={currentImageIndex}
+                        custom={carouselCustom}
+                        variants={liquidCarouselBgVariants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        className="absolute inset-0 w-full h-full"
+                        style={{
+                          transformStyle: "preserve-3d",
+                          backfaceVisibility: "hidden",
+                        }}
+                      >
+                        <Image
+                          src={data.mobileImages[currentImageIndex]}
+                          alt={data.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 75vw, 1400px"
+                          priority={currentImageIndex === 0}
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                  {/* Desktop View */}
+                  <div className="hidden lg:block w-full h-full relative">
+                    <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
+                      <motion.div
+                        key={currentImageIndex}
+                        custom={carouselCustom}
+                        variants={liquidCarouselBgVariants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        className="absolute inset-0 w-full h-full"
+                        style={{
+                          transformStyle: "preserve-3d",
+                          backfaceVisibility: "hidden",
+                        }}
+                      >
+                        <Image
+                          src={data.images[currentImageIndex]}
+                          alt={data.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 95vw, 1400px"
+                          priority={currentImageIndex === 0}
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                </>
+              ) : (
+                <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
+                  <motion.div
+                    key={currentImageIndex}
+                    custom={carouselCustom}
+                    variants={liquidCarouselBgVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    className="absolute inset-0 w-full h-full"
+                    style={{
+                      transformStyle: "preserve-3d",
+                      backfaceVisibility: "hidden",
+                    }}
+                  >
+                    <Image
+                      src={data.images[currentImageIndex]}
+                      alt={data.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1280px) 95vw, 1400px"
+                      priority={currentImageIndex === 0}
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent lg:hidden" />
               {/* Navigation Arrows */}
               <div className="absolute bottom-0 left-0 z-[100]">

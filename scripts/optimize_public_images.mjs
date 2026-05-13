@@ -214,7 +214,7 @@ async function processFile(absPath, opts) {
   if (!RASTER_EXT.has(ext)) return;
 
   const dir = path.dirname(absPath);
-  const stem = path.basename(absPath, ext);
+  const stem = path.basename(absPath, path.extname(absPath));
   const webpOut = path.join(dir, `${stem}.webp`);
 
   const stats = {

@@ -162,31 +162,31 @@ export const magnolia = {
   activities: [
     {
       title: "Bonfire",
-      image: "/Villa_Retreats/Magnolia/Experiences/Bonfire.webp",
+      image: "/Villa_Retreats/Magnolia/3-Experiences/Bonfire.webp",
     },
     {
       title: "Floating Breakfast",
-      image: "/Villa_Retreats/Magnolia/Experiences/Floating Breakfast.webp",
+      image: "/Villa_Retreats/Magnolia/3-Experiences/Floating Breakfast.webp",
     },
     {
       title: "Gazebo By The Pool",
-      image: "/Villa_Retreats/Magnolia/Experiences/Gazebo By The Pool.webp",
+      image: "/Villa_Retreats/Magnolia/3-Experiences/Gazebo By The Pool.webp",
     },
     {
       title: "High Tea",
-      image: "/Villa_Retreats/Magnolia/Experiences/High tea.webp",
+      image: "/Villa_Retreats/Magnolia/3-Experiences/High tea.webp",
     },
     {
       title: "Barbeque",
-      image: "/Villa_Retreats/Magnolia/Experiences/barbeque.webp",
+      image: "/Villa_Retreats/Magnolia/3-Experiences/barbeque.webp",
     },
     {
       title: "Candlelit Dining",
-      image: "/Villa_Retreats/Magnolia/Experiences/candlelit dining.webp",
+      image: "/Villa_Retreats/Magnolia/3-Experiences/candlelit dining.webp",
     },
     {
       title: "Diamond",
-      image: "/Villa_Retreats/Magnolia/Experiences/diamond.webp",
+      image: "/Villa_Retreats/Magnolia/3-Experiences/diamond.webp",
     },
   ],
   spaces: [
