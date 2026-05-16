@@ -101,7 +101,7 @@ export default function ValuePropositionSection() {
 
       {/* ── TOP AREA (75vh mobile / 80vh desktop) — background image ── */}
       <div
-        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0"
+        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0 bg-[#25282C]"
         style={{ perspective: "1500px" }}
       >
         <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
@@ -126,7 +126,7 @@ export default function ValuePropositionSection() {
               sizes="100vw"
               priority={currentIndex === 0}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/60 via-[#0B2C23]/25 to-[#0B2C23]/55" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#25282C]/80 via-[#25282C]/30 to-[#0B2C23]" />
           </motion.div>
         </AnimatePresence>
 

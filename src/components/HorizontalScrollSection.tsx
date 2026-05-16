@@ -92,8 +92,8 @@ export default function HorizontalScrollSection() {
   const totalSteps = PANELS.length + 1; // 5 steps total to allow the last panel to fully exit
 
   return (
-    <section ref={targetRef} className="relative h-[800vh] bg-[#0B2C23]">
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#0B2C23]">
+    <section ref={targetRef} className="relative h-[800vh] bg-[#25282C]">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#25282C]">
         {/* Top Label & Counter - Global */}
         <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(48px,6vh,80px)] pb-[clamp(8px,1.5vh,18px)]">
           <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-2 md:mb-3 font-semibold text-jade-gold drop-shadow-lg block">

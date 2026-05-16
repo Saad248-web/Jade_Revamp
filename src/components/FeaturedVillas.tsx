@@ -97,8 +97,11 @@ export default function FeaturedVillas() {
     <section ref={targetRef} className="relative h-[650vh] bg-[#0B2C23]">
       <NavbarThemeTrigger theme="white" sectionRef={targetRef} />
       <div className="sticky top-0 h-screen overflow-hidden">
+        {/* Background Overlay Pattern */}
+        <div className="absolute inset-0 bg-diamond-pattern opacity-40 pointer-events-none z-0" />
+
         {/* Sections */}
-        <div className="relative w-full h-full">
+        <div className="relative w-full h-full z-10">
           {/* Panel 0: Intro */}
           <IntroPanel globalProgress={smoothProgress} totalSteps={totalSteps} />
 

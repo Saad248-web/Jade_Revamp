@@ -100,9 +100,11 @@ const SlideLines = ({
           </p>
         )}
 
-        <h2 className="font-manrope font-normal text-gh-scroll leading-[1.6] tracking-[0.01em] text-white/90 mb-12">
+        <h2 className="font-manrope font-normal text-[20px] md:text-[24px] leading-[1.6] tracking-[0.01em] text-[#FAFAFA]/90 mb-12">
           {slide.lines.map((line, lineIdx) => (
-            <div key={lineIdx}>{line}</div>
+            <div key={lineIdx} className={line === "" ? "h-6" : ""}>
+              {line}
+            </div>
           ))}
         </h2>
 

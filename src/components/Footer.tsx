@@ -169,7 +169,7 @@ export default function Footer() {
         </div>
 
         {/* ── FORM SECTION ─────────────────────────────────────────────── */}
-        <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pt-10 lg:pt-20 pb-16">
+        <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pt-10 lg:pt-20 pb-32 lg:pb-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-stretch">
             {/* LEFT: Heading + (Desktop) Links + Contact */}
             {/* LEFT: Heading + Contact Form */}
@@ -458,11 +458,7 @@ export default function Footer() {
             <div className="lg:col-start-8 lg:col-span-5 flex flex-col gap-12 border-t border-white/10 pt-10 lg:border-t-0 lg:pt-0 lg:border-l lg:border-white/10 lg:pl-12">
               {/* LINKS block (matches screenshot style, but keeps all existing links) */}
               <div>
-                <p className="font-manrope text-gh-label tracking-[0.35em] uppercase text-white/55 mb-10">
-                  Links
-                </p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-12">
+                <div className="grid grid-cols-2 gap-x-4 sm:gap-x-10 gap-y-12">
                   <div className="flex flex-col gap-4 items-start">
                     {LINKS_COLUMN_1.map((link) => (
                       <div key={link.label} className="flex flex-col gap-4 items-start">
@@ -529,20 +525,20 @@ export default function Footer() {
                     />
                   </div>
 
-                  <div className="flex flex-col gap-6 text-white/50 font-manrope text-gh-label tracking-wide uppercase">
+                  <div className="flex flex-col gap-6 text-white font-manrope text-gh-label tracking-wide uppercase">
                     <div className="flex items-start gap-4">
                       <MapPin className="w-4 h-4 text-[#EFCD62] shrink-0 mt-0.5" />
                       <span className="leading-relaxed">
                         76, phase II, Royal Enclave, Srirampura, Bengaluru - 64
                       </span>
                     </div>
-                    <a
-                      href="tel:08970663366"
-                      className="flex items-center gap-4 hover:text-[#EFCD62] transition-colors"
-                    >
+                    <div className="flex items-center gap-4 text-[#FAFAFA]">
                       <Phone className="w-4 h-4 text-[#EFCD62] shrink-0" />
-                      <span>0897 066 3366</span>
-                    </a>
+                      <span className="hidden md:inline">0897 066 3366</span>
+                      <a href="tel:08970663366" className="md:hidden hover:text-[#EFCD62] transition-colors">
+                        0897 066 3366
+                      </a>
+                    </div>
                     <a
                       href="mailto:Info@jadehospitainment.com"
                       className="flex items-center gap-4 hover:text-[#EFCD62] transition-colors normal-case tracking-normal"

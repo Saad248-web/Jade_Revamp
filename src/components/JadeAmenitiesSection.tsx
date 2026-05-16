@@ -88,7 +88,7 @@ export default function JadeAmenitiesSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-0 md:min-h-screen w-full overflow-hidden bg-[#0B2C23] flex flex-col"
+      className="relative min-h-0 md:min-h-screen w-full overflow-hidden bg-[#25282C] flex flex-col"
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
@@ -107,9 +107,12 @@ export default function JadeAmenitiesSection() {
 
       {/* ── TOP AREA (75vh mobile / 80vh desktop) — background image ── */}
       <div
-        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0"
+        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0 bg-[#0B2C23]"
         style={{ perspective: "1500px" }}
       >
+        {/* Background Overlay Pattern for the Green part */}
+        <div className="absolute inset-0 bg-diamond-pattern opacity-40 pointer-events-none z-10" />
+
         <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
           <motion.div
             key={`bg-${currentIndex}`}
@@ -132,7 +135,7 @@ export default function JadeAmenitiesSection() {
               sizes="100vw"
               priority={currentIndex === 0}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/60 via-[#0B2C23]/25 to-[#0B2C23]/55" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0B2C23]/80 via-[#0B2C23]/30 to-[#25282C]" />
           </motion.div>
         </AnimatePresence>
 
@@ -165,10 +168,10 @@ export default function JadeAmenitiesSection() {
       </div>
 
       {/* ── BOTTOM AREA ── */}
-      <div className="relative w-full h-[12vh] md:h-[20vh] z-10 bg-[#0B2C23]" />
+      <div className="relative w-full h-[12vh] md:h-[20vh] z-10 bg-[#25282C]" />
 
       {/* ── SPACER — exactly 40px gap ── */}
-      <div className="hidden md:block h-[40px] bg-[#0B2C23]" />
+      <div className="hidden md:block h-[40px] bg-[#25282C]" />
 
       {/* ── ARROWS ── */}
       <button
