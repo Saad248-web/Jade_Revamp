@@ -17,6 +17,7 @@ const PANELS = [
     cta: "SEE WHAT A GETAWAY LOOKS LIKE",
     href: "/weekend-getaways",
     image: "/Experiences/Weekend Getaways/1-Hero/casual stays.webp",
+    mobileImage: "/Website Ratio Changes/Weekend_GetAways.webp",
   },
   {
     id: "celebrations",
@@ -25,7 +26,7 @@ const PANELS = [
       "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
     href: "/party-villas#spaces-for-celebrations",
-    image: "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
+    image: "/Home Page/2-Experiences/celebrations & parties.webp",
     mobileImage: "/Website Ratio Changes/POOL PARTY.webp",
   },
   {
@@ -73,6 +74,7 @@ const PANELS = [
     cta: "SEE THE VILLAS THAT HOST IT ALL",
     href: "/villas",
     image: "/Villa_Retreats/Magnolia/Hero/hero.webp",
+    mobileImage: "/Website Ratio Changes/Magnoliaa.webp",
   },
 ];
 
