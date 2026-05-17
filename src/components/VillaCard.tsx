@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import Image from "next/image";
+import JadeImage from "@/components/ui/JadeImage";
 import {
   Bed,
   Users,
@@ -26,16 +26,7 @@ import {
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
-
-const normalizeImageSrc = (src: string) => {
-  // Local `public/` asset paths can contain spaces; `next/image` expects URI-encoded paths.
-  // Avoid double-encoding already-escaped sequences (e.g. `%20` -> `%2520`).
-  if (!src.startsWith("/")) return src;
-  return src
-    .replace(/ /g, "%20")
-    .replace(/#/g, "%23")
-    .replace(/\?/g, "%3F");
-};
+import { usePreloadNeighborImages } from "@/lib/carouselMotion";
 
 const getManifestEntry = (villa: { name?: string; image?: string }) => {
   // Prefer name lookup (matches `public/Villa_Retreats/<folder>`), fall back to path extraction.
@@ -103,9 +94,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
     async function load() {
       try {
         // Avoid stale cached media during active image renames/updates.
-        const res = await fetch(`/api/villas/${villa.id}/media?v=4`, {
-          cache: "no-store",
-        });
+        const res = await fetch(`/api/villas/${villa.id}/media?v=4`);
         if (!res.ok) return;
         const data = await res.json();
         if (!cancelled) setServerMedia(data);
@@ -203,6 +192,12 @@ export default function VillaCard({ villa }: VillaCardProps) {
 
   const currentSpace = images[currentImageIndex];
 
+  const imageUrls = useMemo(
+    () => images.map((i) => i.image).filter((img) => validImage(img)),
+    [images],
+  );
+  usePreloadNeighborImages(imageUrls, currentImageIndex);
+
   // Helper to extract the lowest price string if available
   const getStartingPrice = () => {
     if (villa.pricing?.stay?.packages?.[0]?.price) {
@@ -234,15 +229,14 @@ export default function VillaCard({ villa }: VillaCardProps) {
             }}
           >
             {validImage(currentSpace?.image) ? (
-              <Image
-                src={normalizeImageSrc(currentSpace.image)}
+              <JadeImage
+                src={currentSpace.image}
                 alt={`${villa.name} - ${currentSpace.name}`}
                 fill
                 className="object-cover object-center"
                 sizes="(max-width: 768px) 100vw, 45vw"
                 priority={currentImageIndex === 0}
                 loading={currentImageIndex === 0 ? "eager" : "lazy"}
-                unoptimized
               />
             ) : (
               <div className="absolute inset-0 bg-white/5 flex items-center justify-center text-white/20 text-xs font-bold uppercase tracking-widest">

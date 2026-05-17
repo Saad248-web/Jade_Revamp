@@ -330,7 +330,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
 
             {/* ── GREEN: Amenities ─────────────────────────────────────────── */}
-            <section id="amenities" className="w-full bg-[#0B2C23] text-white">
+            <section id="amenities" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h3 className="text-gh-h2 font-philosopher mb-8">Corporate Amenities</h3>
@@ -356,10 +356,11 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
             {/* ── CHARCOAL: Pricing ────────────────────────────────────────── */}
             {corporatePricingBlocks.length > 0 && (
-              <section id="pricing" className="w-full bg-[#0B2C23] text-white">
+              <section id="pricing" className="w-full bg-jade-green text-white">
                 <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                   <div className="max-w-4xl mx-auto">
                     <VillaPricingBlocks
+                      variant="villa-detail"
                       sectionTitle="Corporate Pricing"
                       blocks={corporatePricingBlocks}
                       footnote={
@@ -374,7 +375,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
             )}
 
             {/* ── GREEN: Location ───────────────────────────────────────────── */}
-            <section id="location" className="w-full bg-[#25282C] text-white">
+            <section id="location" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h3 className="text-gh-h2 font-philosopher mb-8">Location</h3>
@@ -404,7 +405,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
             </section>
 
             {/* ── CHARCOAL: Walkthrough ────────────────────────────────────── */}
-            <section id="walkthrough" className="w-full bg-[#25282C] text-white">
+            <section id="walkthrough" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h3 className="text-gh-h2 font-philosopher mb-8">Video Walkthrough</h3>
@@ -421,7 +422,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
             </section>
 
             {/* ── GREEN: FAQ + Policies ─────────────────────────────────────── */}
-            <section id="faq" className="w-full bg-[#25282C] text-white">
+            <section id="faq" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h3 className="text-gh-h2 font-philosopher mb-8">FAQ</h3>
@@ -440,7 +441,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
 
             {/* ── CHARCOAL: Enquiry Form ────────────────────────────────────── */}
-            <div className="w-full bg-[#25282C] text-white">
+            <div className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <div id="enquiry" ref={formRef}>

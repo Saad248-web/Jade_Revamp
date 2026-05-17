@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import JadeImage from "@/components/ui/JadeImage";
 import { Play, ArrowRight, ArrowLeft } from "lucide-react";
 import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import LiveBackground from "@/components/LiveBackground";
@@ -465,13 +466,12 @@ export default function AboutPage() {
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               className="relative w-[92vw] max-w-5xl aspect-video md:aspect-[16/9] border border-white/15 bg-black/40 overflow-hidden"
             >
-              <Image
+              <JadeImage
                 src={hoverPreviewSrc}
                 alt="Preview"
                 fill
                 className="object-contain"
                 sizes="92vw"
-                unoptimized
               />
             </motion.div>
           </motion.div>

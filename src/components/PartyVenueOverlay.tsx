@@ -391,7 +391,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
             <VillaExperienceStickyTabs tabs={tabs} activeTab={activeTab} onTabClick={(tab) => scrollToSection(tab)} />
 
             {/* ── GREEN: Amenities ─────────────────────────────────────────── */}
-            <section id="amenities" className="w-full bg-[#0B2C23] text-white">
+            <section id="amenities" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h2 className="text-gh-h2 font-philosopher mb-8">Villa Amenities</h2>
@@ -412,10 +412,11 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
 
             {/* ── CHARCOAL: Pricing ────────────────────────────────────────── */}
             {partyPricingBlocks.length > 0 && (
-              <section id="pricing" className="w-full bg-[#0B2C23] text-white">
+              <section id="pricing" className="w-full bg-jade-green text-white">
                 <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                   <div className="max-w-4xl mx-auto">
                     <VillaPricingBlocks
+                      variant="villa-detail"
                       sectionTitle="Party Pricing"
                       blocks={partyPricingBlocks}
                       footnote={<p className="mt-6 text-gh-label text-white/30 leading-relaxed italic">Note: All party pricing is exclusive of GST. Custom packages available.</p>}
@@ -426,7 +427,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
             )}
 
             {/* ── GREEN: Location ───────────────────────────────────────────── */}
-            <section id="location" className="w-full bg-[#25282C] text-white">
+            <section id="location" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h2 className="text-gh-h2 font-philosopher mb-8">Location</h2>
@@ -456,7 +457,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
             </section>
 
             {/* ── CHARCOAL: Walkthrough ────────────────────────────────────── */}
-            <section id="walkthrough" className="w-full bg-[#25282C] text-white">
+            <section id="walkthrough" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h2 className="text-gh-h2 font-philosopher mb-8">Video Walkthrough</h2>
@@ -473,7 +474,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
             </section>
 
             {/* ── GREEN: FAQ + Policies ─────────────────────────────────────── */}
-            <section id="faq" className="w-full bg-[#25282C] text-white">
+            <section id="faq" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h2 className="text-gh-h2 font-philosopher mb-8">FAQ</h2>
@@ -491,7 +492,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
             </section>
 
             {/* ── CHARCOAL: Enquiry Form ────────────────────────────────────── */}
-            <div className="w-full bg-[#25282C] text-white">
+            <div className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <div id="enquiry" ref={formRef}>

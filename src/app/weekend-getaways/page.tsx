@@ -1,37 +1,20 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence,
-} from "framer-motion";
+import { Calendar, Download } from "lucide-react";
 import CorporateHeader from "@/components/CorporateHeader";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import PrimaryButton from "@/components/PrimaryButton";
-import {
-  Home,
-  Calendar,
-  ArrowRight,
-  ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
-  Download,
-} from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
-import LiveBackground from "@/components/LiveBackground";
 import Footer from "@/components/Footer";
 import ExperienceHero from "@/components/ExperienceHero";
 import ScrollSectionComposer, {
   ScrollSlide,
 } from "@/components/ScrollSectionComposer";
 import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
-import VillasCarouselSection from "@/components/VillasCarouselSection";
 import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
-import WeekendVillasCarousel from "@/components/WeekendVillasCarousel";
+import WeekendThemedVillasSection from "@/components/weekend/WeekendThemedVillasSection";
 
 // Per request: remove all image links from this page (text-first).
 
@@ -110,29 +93,6 @@ const weekendExperiences = [
   },
 ];
 
-const weekendVillas = [
-  {
-    name: "Dome Villa",
-    tag: "HOBBIT-INSPIRED PRIVATE RETREAT",
-    image: "/Villa_Retreats/Palatio/1-Hero/Facade_Day.jpg",
-  },
-  {
-    name: "Magnolia",
-    tag: "CONTEMPORARY GLASS FARM VILLA",
-    image: "/Villa_Retreats/Palatio/3-Experiences/Pool_Breakfast.jpg",
-  },
-  {
-    name: "Haven",
-    tag: "BOUTIQUE LUXURY VILLA",
-    image: "/Experiences/Weddings/Bachelorette.webp",
-  },
-  {
-    name: "Tranquil Woods",
-    tag: "FOREST RETREAT",
-    image: "/Villa_Retreats/Palatio/1-Hero/Facade_Day.jpg",
-  },
-];
-
 export default function WeekendGetawaysPage() {
   const { setEnquireOverlayOpen } = useAnimation();
 
@@ -197,10 +157,8 @@ export default function WeekendGetawaysPage() {
       {/* SECTION 5: WHY CHOOSE JADE */}
       <WhyChooseJadeSection />
 
-      {/* SECTION 6: OUR VILLAS CAROUSEL */}
-      <div id="themed-villas">
-        <WeekendVillasCarousel />
-      </div>
+      {/* SECTION 6: THEMED VILLAS */}
+      <WeekendThemedVillasSection />
 
       {/* SECTION 4: CTA */}
       <section className="py-fluid-lg md:py-fluid-xl bg-[#141517] border-t border-white/5">

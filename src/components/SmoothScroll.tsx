@@ -2,6 +2,8 @@
 
 import { ReactNode, useEffect } from "react";
 import Lenis from "lenis";
+import "lenis/dist/lenis.css";
+import type { LenisInstance } from "@/lib/lenis";
 
 export default function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
@@ -13,14 +15,16 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     }
 
     const lenis = new Lenis({
-      lerp: 0.075, // Perfect premium buttery smooth inertia (Apple/Awwwards standard)
+      // Higher lerp = less drift after wheel stops (was 0.075 — felt like snap-back)
+      lerp: 0.12,
       smoothWheel: true,
       wheelMultiplier: 1,
-      touchMultiplier: 1.5,
+      touchMultiplier: 1.2,
+      autoResize: true,
     });
 
-    // Expose globally so overlays can call stop() / start()
-    (window as unknown as Record<string, unknown>).__lenis = lenis;
+    (window as unknown as { __lenis: LenisInstance | null }).__lenis =
+      lenis as unknown as LenisInstance;
 
     let rafId: number;
 
@@ -31,10 +35,14 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
 
     rafId = requestAnimationFrame(raf);
 
+    const onResize = () => lenis.resize();
+    window.addEventListener("resize", onResize, { passive: true });
+
     return () => {
       cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", onResize);
       lenis.destroy();
-      (window as unknown as Record<string, unknown>).__lenis = null;
+      (window as unknown as { __lenis: LenisInstance | null }).__lenis = null;
     };
   }, []);
 

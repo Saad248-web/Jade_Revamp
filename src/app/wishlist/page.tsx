@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import JadeImage from "@/components/ui/JadeImage";
 import Link from "next/link";
 import { Heart, MapPin, ArrowRight, Bed, Users, Home } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -82,12 +82,12 @@ export default function WishlistPage() {
                   >
                     {/* Image Section */}
                     <div className="relative aspect-[16/10] overflow-hidden bg-white/5 shrink-0">
-                      <Image
+                      <JadeImage
                         src={image}
                         alt={name}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-700"
-                        unoptimized
+                        sizes="(max-width: 768px) 100vw, 400px"
                       />
                       {/* Dark Overlay gradient inside image bottom */}
                       <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />

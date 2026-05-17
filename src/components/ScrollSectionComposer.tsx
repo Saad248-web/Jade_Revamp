@@ -96,18 +96,19 @@ const SlideLines = ({
         }}
       >
         {slide.label && (
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-12 text-center">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-6 md:mb-8 text-center">
             {slide.label}
           </p>
         )}
 
-        <div className="font-manrope font-normal text-[20px] md:text-[24px] leading-[1.6] tracking-[0.01em] text-[#FAFAFA]/90 mb-12 flex flex-col gap-10">
+        <p className="font-manrope font-normal text-[20px] md:text-[24px] leading-normal md:leading-relaxed tracking-[0.01em] text-[#FAFAFA]/90 mb-8 md:mb-10 max-w-[340px] sm:max-w-xl md:max-w-3xl mx-auto">
           {slide.lines.map((line, lineIdx) => (
-            <p key={lineIdx} className="max-w-[340px] sm:max-w-xl md:max-w-3xl mx-auto">
+            <span key={lineIdx}>
+              {lineIdx > 0 ? <br /> : null}
               {line}
-            </p>
+            </span>
           ))}
-        </div>
+        </p>
 
         {slide.button && (
           <div className="pointer-events-auto">

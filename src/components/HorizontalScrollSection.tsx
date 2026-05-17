@@ -2,7 +2,8 @@
 
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import Image from "next/image";
+import JadeImage from "@/components/ui/JadeImage";
+import { useMediaMinLg } from "@/lib/useMediaMinLg";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
@@ -90,45 +91,6 @@ export default function HorizontalScrollSection() {
   });
 
   const totalSteps = PANELS.length + 1; // 5 steps total to allow the last panel to fully exit
-
-  useEffect(() => {
-    if (!targetRef.current) return;
-    let timeoutId: NodeJS.Timeout;
-
-    const unsubscribe = scrollYProgress.on("change", (p) => {
-      clearTimeout(timeoutId);
-
-      timeoutId = setTimeout(() => {
-        const slideTime = p * totalSteps;
-
-        // Snap to panels 0 through PANELS.length - 1
-        if (slideTime > -0.5 && slideTime < PANELS.length - 0.5) {
-          const nearestSlide = Math.round(slideTime);
-          const diff = Math.abs(slideTime - nearestSlide);
-
-          if (diff > 0.005 && diff < 0.45) {
-            const targetP = nearestSlide / totalSteps;
-            const rect = targetRef.current!.getBoundingClientRect();
-            const absoluteTop = window.scrollY + rect.top;
-            const scrollableDistance = rect.height + window.innerHeight;
-            
-            const targetScrollY = (absoluteTop - window.innerHeight) + (targetP * scrollableDistance);
-
-            if ((window as any).__lenis) {
-              (window as any).__lenis.scrollTo(targetScrollY, { duration: 0.8 });
-            } else {
-              window.scrollTo({ top: targetScrollY, behavior: "smooth" });
-            }
-          }
-        }
-      }, 150);
-    });
-
-    return () => {
-      unsubscribe();
-      clearTimeout(timeoutId);
-    };
-  }, [scrollYProgress, totalSteps]);
 
   return (
     <section ref={targetRef} className="relative h-[800vh] bg-[#25282C]">
@@ -241,6 +203,12 @@ function StackedPanel({
   totalSteps: number;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const isLg = useMediaMinLg();
+  const panelImageSrc = data.mobileImage
+    ? isLg
+      ? data.image
+      : data.mobileImage
+    : data.image;
 
   const step = 1 / totalSteps;
 
@@ -293,45 +261,26 @@ function StackedPanel({
             {/* Image Section - adaptive max-height so the CTA button stays visible at high Windows scaling */}
             <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none shrink-0 bg-black">
               <div className="w-full h-full relative">
-                {data.mobileImage ? (
-                  <>
-                    {/* Mobile & Tab View */}
-                    <div className="block lg:hidden w-full h-full relative">
-                      <Image
-                        src={data.mobileImage}
-                        alt={data.title}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
-                      />
-                    </div>
-                    {/* Desktop View */}
-                    <div className="hidden lg:block w-full h-full relative">
-                      <Image
-                        src={data.image}
-                        alt={data.title}
-                        fill
-                        className="object-cover"
-                        sizes="600px"
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <Image
-                    src={data.image}
-                    alt={data.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
-                  />
-                )}
+                <JadeImage
+                  src={panelImageSrc}
+                  alt={data.title}
+                  fill
+                  className="object-cover"
+                  sizes={
+                    data.mobileImage
+                      ? isLg
+                        ? "600px"
+                        : "(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
+                      : "(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
+                  }
+                />
                 {/* Subtle Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               </div>
             </div>
 
             {/* Text Section - adaptive height so title / body / CTA always fit above the fold */}
-            <div className="relative w-full flex flex-col items-start text-left mt-1 shrink-0">
+            <motion.div className="relative w-full flex flex-col items-start text-left mt-1 shrink-0">
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -361,7 +310,7 @@ function StackedPanel({
                   {data.cta} <ArrowRight className="w-5 h-5" />
                 </Link>
               </motion.div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

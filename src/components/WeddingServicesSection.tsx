@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import Image from "next/image";
+import JadeImage from "@/components/ui/JadeImage";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CarouselHeroScrim from "./CarouselHeroScrim";
 import {
@@ -182,14 +182,13 @@ export default function WeddingServicesSection() {
             }}
           >
             {currentSlide.bgImage ? (
-              <Image
+              <JadeImage
                 src={currentSlide.bgImage}
                 alt="Background"
                 fill
                 className="object-cover"
                 sizes="100vw"
                 priority={currentIndex === 0}
-                unoptimized
               />
             ) : (
               <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0B2C23] to-[#0B2C23]" />
@@ -273,15 +272,14 @@ export default function WeddingServicesSection() {
           {slides.map((slide, idx) => (
             <div key={`card-${idx}`} className="w-full h-full relative flex-shrink-0">
               {slide.cardImage ? (
-                <Image
+                <JadeImage
                   src={slide.cardImage}
                   alt="Feature"
                   fill
                   className="object-cover"
                   sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
-                  priority={true}
-                  unoptimized
-                  loading="eager"
+                  priority={idx === currentIndex}
+                  loading={idx === currentIndex ? undefined : "lazy"}
                 />
               ) : (
                 <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0B2C23] to-black/80" />

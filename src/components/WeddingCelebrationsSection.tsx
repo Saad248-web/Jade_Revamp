@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, useMemo } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import Image from "next/image";
+import JadeImage from "@/components/ui/JadeImage";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -226,13 +226,12 @@ function CelebrationPanelSlide({
             <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
               <div className="w-full h-full relative">
                 {data.image ? (
-                  <Image
+                  <JadeImage
                     src={data.image}
                     alt={data.title}
                     fill
                     className="object-cover object-center"
                     sizes="(max-width: 1024px) 100vw, 600px"
-                    unoptimized
                   />
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[#1A1C1E] to-black/80" />

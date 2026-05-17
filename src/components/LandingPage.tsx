@@ -13,6 +13,7 @@ import Navbar from "./Navbar";
 import MobileBottomNav from "./MobileBottomNav";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import dynamic from "next/dynamic";
+import { getLenis, scrollToY } from "@/lib/lenis";
 
 const UnifiedScrollSection = dynamic(() => import("./UnifiedScrollSection"), {
   ssr: false,
@@ -71,16 +72,14 @@ export default function LandingPage() {
   );
 
   useEffect(() => {
-    // Force scroll to top on refresh
     if (history.scrollRestoration) {
       history.scrollRestoration = "manual";
     }
-    window.scrollTo(0, 0);
 
-    // Sync scroll after dynamic imports mount
-    const timer = setTimeout(() => {
-      window.dispatchEvent(new Event("resize"));
-    }, 1000);
+    scrollToY(0, { immediate: true });
+
+    // Recalculate scroll height when lazy sections mount — do not force scroll position
+    const timer = setTimeout(() => getLenis()?.resize(), 800);
 
     return () => {
       if (history.scrollRestoration) {
@@ -240,9 +239,7 @@ export default function LandingPage() {
 
         {/* "SCROLL TO EXPERIENCE" — Pinned to bottom of hero, outside text group */}
         <motion.button
-          onClick={() =>
-            window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
-          }
+          onClick={() => scrollToY(window.innerHeight, { duration: 1.1 })}
           initial={{ opacity: 0, y: 20 }}
           animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}

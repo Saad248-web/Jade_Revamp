@@ -96,45 +96,6 @@ export default function FeaturedVillas() {
   const totalVillas = VILLAS.length;
   const totalSteps = totalVillas + 2; // Intro + Villas + Final
 
-  useEffect(() => {
-    if (!targetRef.current) return;
-    let timeoutId: NodeJS.Timeout;
-
-    const unsubscribe = scrollYProgress.on("change", (p) => {
-      clearTimeout(timeoutId);
-
-      timeoutId = setTimeout(() => {
-        const slideTime = p * totalSteps;
-
-        // Snap to panels 1 through totalVillas
-        if (slideTime > 0.5 && slideTime < totalVillas + 0.5) {
-          const nearestSlide = Math.round(slideTime);
-          const diff = Math.abs(slideTime - nearestSlide);
-
-          if (diff > 0.005 && diff < 0.45) {
-            const targetP = nearestSlide / totalSteps;
-            const rect = targetRef.current!.getBoundingClientRect();
-            const absoluteTop = window.scrollY + rect.top;
-            const scrollableDistance = rect.height + window.innerHeight;
-            
-            const targetScrollY = (absoluteTop - window.innerHeight) + (targetP * scrollableDistance);
-
-            if ((window as any).__lenis) {
-              (window as any).__lenis.scrollTo(targetScrollY, { duration: 0.8 });
-            } else {
-              window.scrollTo({ top: targetScrollY, behavior: "smooth" });
-            }
-          }
-        }
-      }, 150);
-    });
-
-    return () => {
-      unsubscribe();
-      clearTimeout(timeoutId);
-    };
-  }, [scrollYProgress, totalSteps, totalVillas]);
-
   return (
     <SectionWrapper
       ref={targetRef}

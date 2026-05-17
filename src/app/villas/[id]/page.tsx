@@ -2,6 +2,7 @@
 
 import { useParams, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import JadeImage from "@/components/ui/JadeImage";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -81,18 +82,9 @@ import {
   VILLA_DETAIL_SPACING,
 } from "@/components/villa/villaDetailSpacing";
 import clsx from "clsx";
+import { usePreloadNeighborImages } from "@/lib/carouselMotion";
 
 const vd = VILLA_DETAIL_SPACING;
-
-const normalizeImageSrc = (src: string) => {
-  // Local `public/` asset paths can contain spaces; `next/image` expects URI-encoded paths.
-  // Avoid double-encoding already-escaped sequences (e.g. `%20` -> `%2520`).
-  if (!src.startsWith("/")) return src;
-  return src
-    .replace(/ /g, "%20")
-    .replace(/#/g, "%23")
-    .replace(/\?/g, "%3F");
-};
 
 const getManifestEntry = (villa: { name?: string; image?: string }) => {
   const byName = villa.name ? (MEDIA_MANIFEST as any).villasByFolder?.[villa.name] : null;
@@ -349,8 +341,28 @@ export default function VillaDetailsPage() {
 
   const activeHeroSrc =
     imagesList.length > 0 && imagesList[currentImageIndex]
-      ? normalizeImageSrc(imagesList[currentImageIndex])
+      ? imagesList[currentImageIndex]
       : "";
+
+  usePreloadNeighborImages(imagesList, currentImageIndex);
+
+  const spaceImageUrls = useMemo(
+    () =>
+      derivedSpaces
+        .map((s) => s.image)
+        .filter((img): img is string => validImg(img) === true),
+    [derivedSpaces],
+  );
+  usePreloadNeighborImages(spaceImageUrls, currentSpaceIndex);
+
+  const activityImageUrls = useMemo(
+    () =>
+      derivedActivities
+        .map((a) => a.image)
+        .filter((img): img is string => validImg(img) === true),
+    [derivedActivities],
+  );
+  usePreloadNeighborImages(activityImageUrls, currentActivityIndex);
 
   const handlePrevImage = () => {
     if (imagesList.length <= 1) return;
@@ -580,15 +592,13 @@ export default function VillaDetailsPage() {
         {/* Image (Interactive Carousel) */}
         <div className="absolute inset-0">
           {activeHeroSrc && (
-            <Image
+            <JadeImage
               src={activeHeroSrc}
               alt={villa.name}
               fill
               className="object-cover object-center"
               priority
               sizes="100vw"
-              quality={75}
-              unoptimized
             />
           )}
           <div className="absolute inset-0 bg-black/20" />
@@ -898,7 +908,7 @@ export default function VillaDetailsPage() {
               {currentSpace ? (
                 <div className="relative aspect-[3/4] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-black/30">
                   {(validImg(currentSpace.image) || validImg(villa.image)) && (
-                    <Image src={validImg(currentSpace.image) ? normalizeImageSrc(currentSpace.image) : normalizeImageSrc(villa.image)} alt={currentSpace.name || "Space"} fill className="object-cover object-center transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" unoptimized />
+                    <JadeImage src={validImg(currentSpace.image) ? currentSpace.image : villa.image} alt={currentSpace.name || "Space"} fill className="object-cover object-center transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-jade-charcoal/80 via-transparent to-transparent opacity-90" />
                   <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
@@ -940,7 +950,7 @@ export default function VillaDetailsPage() {
               </div>
               <div className="relative aspect-[3/4] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-black/30">
                 {(validImg(currentActivity.image) || validImg(villa.image)) && (
-                  <Image src={validImg(currentActivity.image) ? normalizeImageSrc(currentActivity.image) : normalizeImageSrc(villa.image)} alt={currentActivity.title} fill className="object-cover object-center transition-transform duration-700 opacity-90 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" unoptimized />
+                  <JadeImage src={validImg(currentActivity.image) ? currentActivity.image : villa.image} alt={currentActivity.title} fill className="object-cover object-center transition-transform duration-700 opacity-90 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" />
                 )}
                 <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-jade-charcoal/95 via-jade-charcoal/50 to-transparent z-10" />
                 <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 flex flex-col items-center justify-end text-center z-20">
@@ -1134,7 +1144,7 @@ export default function VillaDetailsPage() {
               <div className="bg-jade-charcoal rounded-none overflow-hidden border border-white/10">
                 <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="relative block w-full h-64 md:h-80 cursor-pointer outline-none transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#EFCD62]/70" aria-label="Open location in Google Maps">
                   {(villa.locationDetails.mapImage || villa.image) && (
-                    <Image src={normalizeImageSrc(villa.locationDetails.mapImage || villa.image)} alt="Map Location" fill className="object-cover opacity-80" sizes="100vw" loading="lazy" />
+                    <JadeImage src={villa.locationDetails.mapImage || villa.image} alt="Map Location" fill className="object-cover opacity-80" sizes="100vw" loading="lazy" />
                   )}
                 </a>
                 <div className="p-5 md:p-6 bg-[#25282C] border-t border-white/10">
@@ -1184,8 +1194,8 @@ export default function VillaDetailsPage() {
                   return (
                     <div key={`${title}-${idx}`} className="relative aspect-[3/4] overflow-hidden">
                       {image && (
-                        <Image
-                          src={normalizeImageSrc(image)}
+                        <JadeImage
+                          src={image}
                           alt={title ?? "Occasion"}
                           fill
                           className="object-cover transition-transform duration-700 hover:scale-105"

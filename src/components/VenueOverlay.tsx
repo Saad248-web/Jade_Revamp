@@ -404,7 +404,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             <VillaExperienceStickyTabs tabs={tabs} activeTab={activeTab} onTabClick={(tab) => scrollToSection(tab)} />
 
             {/* ── GREEN: Amenities ─────────────────────────────────────────── */}
-            <section id="amenities" className="w-full bg-[#0B2C23] text-white">
+            <section id="amenities" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h3 className="text-gh-h2 font-philosopher mb-8">Venue Amenities</h3>
@@ -426,10 +426,11 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             </section>
 
             {/* ── CHARCOAL: Pricing ────────────────────────────────────────── */}
-            <section id="pricing" className="w-full bg-[#0B2C23] text-white">
+            <section id="pricing" className="w-full bg-jade-green text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <VillaPricingBlocks
+                    variant="villa-detail"
                     blocks={buildWeddingWeekendOverlayPricingBlocks(v)}
                     footnote={<p className="text-white/40 text-gh-label leading-relaxed mt-4">Note: Prices are base rates and may vary based on season, day of week, and specific requirements. Additional charges may apply for decorations, catering, and extended hours.</p>}
                   />
@@ -438,11 +439,11 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             </section>
 
             {/* ── GREEN: Location ───────────────────────────────────────────── */}
-            <section id="location" className="w-full bg-[#25282C] text-white">
+            <section id="location" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h3 className="text-gh-h2 font-philosopher mb-8">Location</h3>
-                  <div className="bg-[#25282C] overflow-hidden mb-8 border border-white/10">
+                  <div className="bg-jade-charcoal overflow-hidden mb-8 border border-white/10">
                     <a href={mapsHref} target="_blank" rel="noopener noreferrer"
                       className="relative block w-full h-64 md:h-80 cursor-pointer outline-none transition-opacity hover:opacity-95"
                       aria-label="Open location in Google Maps">
@@ -484,7 +485,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             </section>
 
             {/* ── CHARCOAL: Video Walkthrough ──────────────────────────────── */}
-            <section id="walkthrough" className="w-full bg-[#25282C] text-white">
+            <section id="walkthrough" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h3 className="text-gh-h2 font-philosopher mb-8">Video Walkthrough</h3>
@@ -501,7 +502,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             </section>
 
             {/* ── GREEN: FAQ + Policies ─────────────────────────────────────── */}
-            <section id="faq" className="w-full bg-[#25282C] text-white">
+            <section id="faq" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <h3 className="text-gh-h2 font-philosopher mb-8">FAQ</h3>
@@ -519,7 +520,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             </section>
 
             {/* ── CHARCOAL: Enquiry Form ────────────────────────────────────── */}
-            <div className="w-full bg-[#25282C] text-white">
+            <div className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
                 <div className="max-w-4xl mx-auto">
                   <div id="enquiry" ref={formRef}>

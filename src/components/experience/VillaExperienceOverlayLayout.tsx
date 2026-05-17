@@ -8,6 +8,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 import {
   EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS,
   EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS,
+  EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS,
   EXPERIENCE_OVERLAY_STICKY_TABS_CLASS,
 } from "@/lib/experienceOverlayTheme";
 import {
@@ -29,7 +30,7 @@ export function VillaExperienceOverlayContentFrame({
       className="absolute inset-0 overflow-y-auto scrollbar-none"
       onScroll={onScroll}
     >
-      <div className="w-full mt-20 md:mt-0 pb-20 bg-[#25282C] rounded-t-[32px] md:rounded-none">
+      <div className={EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS}>
         {children}
       </div>
     </div>
@@ -57,7 +58,7 @@ export function VillaExperienceOverlayCloseFramer({
         transition={{ duration: 0.3, ease: "easeInOut" }}
         onClick={onClose}
         aria-label="Close"
-        className="pointer-events-auto w-full h-full flex items-center justify-center rounded-full bg-[#124131] text-white shadow-2xl hover:bg-[#1f5c48] transition-colors"
+        className={EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS}
       >
         <X className="w-6 h-6 stroke-[1.5]" />
       </MotionButton>
@@ -183,18 +184,18 @@ export function VillaExperienceStickyTabs({
   onTabClick: (tab: string) => void;
 }) {
   return (
-    <div className="sticky top-0 z-[60] bg-[#0B2C23] border-b border-white/10 mb-0 w-full shadow-2xl">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="flex gap-8 md:gap-12 overflow-x-auto pb-0 scrollbar-none py-1">
+    <div className={EXPERIENCE_OVERLAY_STICKY_TABS_CLASS}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex gap-2 sm:gap-4 overflow-x-auto py-4 scrollbar-none">
           {tabs.map((tab) => (
             <button
               key={tab}
               type="button"
               onClick={() => onTabClick(tab)}
-              className={`py-4 px-1 text-gh-label font-bold tracking-widest uppercase transition-colors whitespace-nowrap border-b-2 ${
+              className={`shrink-0 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold font-manrope transition-colors whitespace-nowrap ${
                 activeTab === tab
-                  ? "border-[#EFCD62] text-[#EFCD62]"
-                  : "border-transparent text-white/40 hover:text-white"
+                  ? "bg-jade-gold text-black"
+                  : "text-white/80 hover:text-white bg-transparent"
               }`}
             >
               {tab}
