@@ -80,7 +80,6 @@ import {
   VILLA_DETAIL_CHARCOAL,
   VILLA_DETAIL_SPACING,
 } from "@/components/villa/villaDetailSpacing";
-import { buildVillaGalleryItems } from "@/lib/villaGallery";
 import clsx from "clsx";
 
 const vd = VILLA_DETAIL_SPACING;
@@ -221,8 +220,6 @@ export default function VillaDetailsPage() {
     "blue" | "red" | "yellow"
   >("blue");
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-
   const mapsHref = useMemo(
     () => getVillaGoogleMapsUrl(villa ?? {}),
     [villa],
@@ -271,11 +268,6 @@ export default function VillaDetailsPage() {
       cancelled = true;
     };
   }, [id]);
-
-  const galleryItems = useMemo(
-    () => (villa ? buildVillaGalleryItems(villa, 24) : []),
-    [villa],
-  );
 
   if (!villa) {
     return (
@@ -634,14 +626,13 @@ export default function VillaDetailsPage() {
                   </h2>
                   <div className="w-16 md:w-28 h-px bg-gradient-to-r from-transparent via-[#EFCD62] to-transparent opacity-90" />
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setIsGalleryOpen(true)}
+                <Link
+                  href={`/villas/${id}/spaces`}
                   className="inline-flex w-auto max-w-full shrink-0 items-center justify-center gap-1.5 border border-white/30 bg-black/40 backdrop-blur-md px-3 py-2.5 md:px-4 md:py-3 text-white text-[9px] md:text-[11px] font-bold tracking-[0.18em] md:tracking-[0.25em] uppercase whitespace-nowrap hover:bg-white hover:text-black transition-all"
                 >
                   <LayoutGrid className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" strokeWidth={1.5} />
                   VIEW ALL PICTURES
-                </button>
+                </Link>
               </div>
 
               <button
@@ -1230,7 +1221,7 @@ export default function VillaDetailsPage() {
       </section>
 
       {/* FOOTER */}
-      <Footer />
+      <Footer stickyBottomBar />
       <div className="fixed bottom-0 left-0 w-full bg-jade-charcoal border-t border-white/10 py-4 z-50 transition-all flex justify-center">
         <div className={clsx(vd.page, vd.gutterX, "flex justify-between items-center gap-4")}>
           <div className="flex flex-col font-manrope leading-tight">
@@ -1243,37 +1234,7 @@ export default function VillaDetailsPage() {
           </div>
         </div>
       </div>
-      <div className="h-24 lg:h-20" />
       <DetailsDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} title={drawerData.title} items={drawerData.items} />
-
-      {isGalleryOpen && (
-        <div
-          className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm flex flex-col"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Villa photo gallery"
-        >
-          <div className={clsx("flex items-center justify-between border-b border-white/10", vd.gutterX, "py-4")}>
-            <h2 className="text-white font-philosopher text-xl uppercase tracking-widest">
-              {villa.name} — Gallery
-            </h2>
-            <button
-              type="button"
-              onClick={() => setIsGalleryOpen(false)}
-              className="text-white/70 hover:text-white text-gh-label font-bold uppercase tracking-widest"
-            >
-              Close
-            </button>
-          </div>
-          <div className={clsx("flex-1 overflow-y-auto grid grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto w-full", vd.gutterX, "py-6")}>
-            {(galleryItems.length > 0 ? galleryItems : imagesList.map((img: string, i: number) => ({ name: `Photo ${i + 1}`, image: img }))).map((item: { name: string; image: string }, idx: number) => (
-              <div key={idx} className="relative aspect-[4/3] overflow-hidden border border-white/10">
-                <Image src={item.image} alt={item.name} fill className="object-cover" sizes="(max-width:768px) 50vw, 33vw" unoptimized />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </main>
   );
 }

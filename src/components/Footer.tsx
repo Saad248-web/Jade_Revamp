@@ -17,6 +17,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import clsx from "clsx";
 
 // ── Calendar helpers ────────────────────────────────────────────────────────
 const MONTHS = [
@@ -56,7 +57,12 @@ function formatDate(d: Date | null) {
   });
 }
 
-export default function Footer() {
+type FooterProps = {
+  /** Tighter bottom padding when a fixed booking bar sits above the footer */
+  stickyBottomBar?: boolean;
+};
+
+export default function Footer({ stickyBottomBar = false }: FooterProps) {
   // Defer new Date() to client-only to prevent hydration mismatches
   const [currentYear, setCurrentYear] = useState(2026);
   const [today, setToday] = useState<Date>(() => new Date(2026, 0, 1));
@@ -169,7 +175,12 @@ export default function Footer() {
         </div>
 
         {/* ── FORM SECTION ─────────────────────────────────────────────── */}
-        <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pt-10 lg:pt-20 pb-32 lg:pb-16">
+        <div
+          className={clsx(
+            "max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pt-10 lg:pt-20",
+            stickyBottomBar ? "pb-20 lg:pb-12" : "pb-32 lg:pb-16",
+          )}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-stretch">
             {/* LEFT: Heading + (Desktop) Links + Contact */}
             {/* LEFT: Heading + Contact Form */}
