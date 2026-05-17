@@ -11,6 +11,10 @@ import {
   type DomeVideoKey,
   getYouTubeId,
 } from "@/lib/videoUtils";
+import {
+  getDomeColorFromVillaId,
+  isDomeEstateId,
+} from "@/lib/domeVillaIds";
 
 export default function VillaSpacesPage() {
   const params = useParams();
@@ -18,10 +22,11 @@ export default function VillaSpacesPage() {
   const id = params?.id as string;
   const villa = VILLAS.find((v) => v.id === id) as Villa | undefined;
 
-  const isDomeVillas = id === "dome-villas";
+  const domeColor = getDomeColorFromVillaId(id);
+  const isDomeEstate = isDomeEstateId(id);
 
   const [activeCategory, setActiveCategory] = useState(
-    isDomeVillas ? "Blue Dome" : "All",
+    isDomeEstate ? "Blue Dome" : "All",
   );
   const [activeDomeVideo, setActiveDomeVideo] = useState<DomeVideoKey>("blue");
   const [overrideSpaces, setOverrideSpaces] = useState<
@@ -55,10 +60,10 @@ export default function VillaSpacesPage() {
       new Set(base.map((s: VillaSpaceGroup) => s.category)),
     ).filter((c) => typeof c === "string" && c.length > 0) as string[];
     // Dome Villas: no "All" — only the three dome color tabs plus Video.
-    if (isDomeVillas) return [...cats, "Video"];
+    if (isDomeEstate) return [...cats, "Video"];
     // Prefer predictable ordering: show "All", then category groups, then Video
     return ["All", ...cats, "Video"];
-  }, [overrideSpaces, villa?.categorizedSpaces, isDomeVillas]);
+  }, [overrideSpaces, villa?.categorizedSpaces, isDomeEstate]);
 
   const filteredSpaces = useMemo(() => {
     const base = overrideSpaces || villa?.categorizedSpaces;
@@ -124,7 +129,7 @@ export default function VillaSpacesPage() {
                 Video Walkthrough
               </h2>
 
-              {isDomeVillas && (
+              {isDomeEstate && (
                 <div className="flex flex-wrap items-center gap-2">
                   {(
                     [
@@ -157,9 +162,11 @@ export default function VillaSpacesPage() {
             </div>
 
             {(() => {
-              const chosenUrl = isDomeVillas
-                ? DOME_VIDEO_URLS[activeDomeVideo]
-                : (villa.video?.youtubeUrl ?? "");
+              const chosenUrl = domeColor
+                ? DOME_VIDEO_URLS[domeColor]
+                : isDomeEstate
+                  ? DOME_VIDEO_URLS[activeDomeVideo]
+                  : (villa.video?.youtubeUrl ?? "");
               const ytId = getYouTubeId(chosenUrl);
 
               if (ytId) {
@@ -172,7 +179,7 @@ export default function VillaSpacesPage() {
                       allowFullScreen
                       className="absolute inset-0 w-full h-full"
                     />
-                    {villa.video?.duration && !isDomeVillas && (
+                    {villa.video?.duration && !isDomeEstate && !domeColor && (
                       <div className="absolute bottom-4 right-4 bg-black/60 px-2 py-1 text-[10px] text-white font-bold pointer-events-none">
                         {villa.video.duration}
                       </div>

@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Heart, Instagram, MessageCircle, Play } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import PrimaryButton from "./PrimaryButton";
+import SectionWrapper from "./SectionWrapper";
+import { JADE_CHARCOAL } from "@/lib/jadeSectionColors";
 
 type InstagramPost = {
   id: string;
@@ -297,9 +299,10 @@ export default function InstagramCarousel() {
   }, []);
 
   return (
-    <section
+    <SectionWrapper
       ref={sectionRef}
-      className="relative bg-jade-charcoal py-16 md:py-24 min-h-[80dvh] lg:min-h-[100dvh] flex flex-col justify-center overflow-hidden"
+      bg={JADE_CHARCOAL}
+      className="py-16 md:py-24 min-h-[80dvh] lg:min-h-[100dvh] flex flex-col justify-center overflow-x-hidden"
     >
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       <div className="max-w-[1920px] mx-auto w-full">
@@ -354,6 +357,7 @@ export default function InstagramCarousel() {
           </PrimaryButton>
         </div>
       </div>
-    </section>
+
+    </SectionWrapper>
   );
 }

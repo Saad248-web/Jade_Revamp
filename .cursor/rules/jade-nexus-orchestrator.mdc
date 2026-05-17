@@ -1,0 +1,24 @@
+---
+description: Jade_ReVamp NEXUS APEX engine loop — load AGENTS.md and mapped SKILL.md files every session
+alwaysApply: true
+---
+
+# Jade NEXUS orchestrator (always on)
+
+This workspace uses **NEXUS APEX v4.0** under `NEXUS_v4_APEX/`.
+
+## On every user message
+
+1. Follow **`AGENTS.md`** at the repo root (engine loop + Jade routing matrix).
+2. **Read** the relevant `NEXUS_v4_APEX/<ENGINE>/SKILL.md` file(s) before implementing — do not guess framework rules.
+3. Apply **`0A_ANTISLOP/SKILL.md`** before delivering the final answer.
+4. For API/DB/booking/payment/SEO work on this site, use the Jade task map in `AGENTS.md` (Next.js 14, `src/app/api`, PostgreSQL, Razorpay, `llms.txt`).
+
+## Paths
+
+- Orchestrator: `AGENTS.md`
+- Cheatsheet: `NEXUS_v4_APEX/ENGINE_CHEATSHEET.md`
+- Conventions: `NEXUS_v4_APEX/CONVENTIONS.md`
+- Engines: `NEXUS_v4_APEX/<ENGINE_NAME>/SKILL.md`
+
+Do not skip skill loading for "small" edits if they touch UI, API, security, or SEO.

@@ -93,7 +93,8 @@ export default function PartyVillaCard({
     {
       label: "Capacity",
       value:
-        villa.id === "dome-villas"
+        villa.id === "dome-villas" ||
+        villa.id.startsWith("dome-villas-")
           ? "35"
           : getEventCapacity(villa)?.toString() || villa.stats?.events?.split(" ")[0] || "30",
       icon: Users,
@@ -183,7 +184,7 @@ export default function PartyVillaCard({
           className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase"
           style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
         >
-          {villa.id === "dome-villas"
+          {villa.id === "dome-villas" || villa.id.startsWith("dome-villas-")
             ? "POOL VILLA FOR PRIVATE PARTIES"
             : villa.id === "magnolia"
               ? "POOL VILLA FOR PRIVATE PARTIES"

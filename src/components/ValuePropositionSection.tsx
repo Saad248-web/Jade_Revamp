@@ -5,6 +5,15 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import SectionWrapper from "./SectionWrapper";
+import { JADE_GREEN } from "@/lib/jadeSectionColors";
+import CarouselHeroScrim from "./CarouselHeroScrim";
+import {
+  carouselHeroCopyRoot,
+  carouselHeroHeadlineClass,
+  carouselHeroLabelClass,
+  carouselHeroSubtextClass,
+} from "@/lib/carouselHeroCopy";
 import {
   CAROUSEL_CROSSFADE,
   usePreloadNeighborSlideImages,
@@ -80,9 +89,10 @@ export default function ValuePropositionSection() {
   };
 
   return (
-    <section
+    <SectionWrapper
       ref={sectionRef}
-      className="relative min-h-0 md:min-h-screen w-full overflow-hidden bg-[#0B2C23] flex flex-col"
+      bg={JADE_GREEN}
+      className="min-h-0 md:min-h-screen w-full overflow-hidden flex flex-col"
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
@@ -101,7 +111,7 @@ export default function ValuePropositionSection() {
 
       {/* ── TOP AREA (75vh mobile / 80vh desktop) — background image ── */}
       <div
-        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0 bg-[#25282C]"
+        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0 bg-jade-green"
         style={{ perspective: "1500px" }}
       >
         <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
@@ -126,23 +136,24 @@ export default function ValuePropositionSection() {
               sizes="100vw"
               priority={currentIndex === 0}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#25282C]/80 via-[#25282C]/30 to-[#0B2C23]" />
           </motion.div>
         </AnimatePresence>
 
+        <CarouselHeroScrim variant="value" />
+
         {/* ── TEXT — sits inside the image zone ── */}
-        <div className="absolute inset-x-0 top-[10vh] z-20 flex flex-col items-center text-center px-6 sm:px-10 pointer-events-none">
+        <div className={carouselHeroCopyRoot}>
           <motion.p
             key={`label-${currentIndex}`}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-manrope text-gh-label font-bold tracking-[0.3em] uppercase text-[#EFCD62]"
+            className={carouselHeroLabelClass}
             style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
           >
             {currentSlide.label}
           </motion.p>
           <div style={{ marginBottom: "clamp(6px, 1.5vw, 12px)" }}>
-            <h2 className="font-philosopher text-gh-h1 text-white leading-tight lg:whitespace-nowrap">
+            <h2 className={carouselHeroHeadlineClass}>
               {currentSlide.heading.join(" ")}
             </h2>
           </div>
@@ -151,7 +162,7 @@ export default function ValuePropositionSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.08, duration: CAROUSEL_CROSSFADE.duration }}
-            className="font-manrope text-gh-carousel-sub text-white/80 leading-relaxed max-w-xl mx-auto line-clamp-3"
+            className={carouselHeroSubtextClass}
           >
             {currentSlide.subtext}
           </motion.p>
@@ -159,10 +170,10 @@ export default function ValuePropositionSection() {
       </div>
 
       {/* ── BOTTOM AREA ── */}
-      <div className="relative w-full h-[12vh] md:h-[20vh] z-10 bg-[#0B2C23]" />
+      <div className="relative w-full h-[12vh] md:h-[20vh] z-10 bg-jade-green" />
 
       {/* ── SPACER — exactly 40px gap ── */}
-      <div className="hidden md:block h-[40px] bg-[#0B2C23] shrink-0" />
+      <div className="hidden md:block h-[40px] bg-jade-green shrink-0" />
 
       {/* ── ARROWS — straddling the seam ── */}
       <button
@@ -217,6 +228,6 @@ export default function ValuePropositionSection() {
           ))}
         </motion.div>
       </div>
-    </section>
+    </SectionWrapper>
   );
 }

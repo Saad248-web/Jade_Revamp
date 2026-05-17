@@ -91,6 +91,45 @@ export default function HorizontalScrollSection() {
 
   const totalSteps = PANELS.length + 1; // 5 steps total to allow the last panel to fully exit
 
+  useEffect(() => {
+    if (!targetRef.current) return;
+    let timeoutId: NodeJS.Timeout;
+
+    const unsubscribe = scrollYProgress.on("change", (p) => {
+      clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(() => {
+        const slideTime = p * totalSteps;
+
+        // Snap to panels 0 through PANELS.length - 1
+        if (slideTime > -0.5 && slideTime < PANELS.length - 0.5) {
+          const nearestSlide = Math.round(slideTime);
+          const diff = Math.abs(slideTime - nearestSlide);
+
+          if (diff > 0.005 && diff < 0.45) {
+            const targetP = nearestSlide / totalSteps;
+            const rect = targetRef.current!.getBoundingClientRect();
+            const absoluteTop = window.scrollY + rect.top;
+            const scrollableDistance = rect.height + window.innerHeight;
+            
+            const targetScrollY = (absoluteTop - window.innerHeight) + (targetP * scrollableDistance);
+
+            if ((window as any).__lenis) {
+              (window as any).__lenis.scrollTo(targetScrollY, { duration: 0.8 });
+            } else {
+              window.scrollTo({ top: targetScrollY, behavior: "smooth" });
+            }
+          }
+        }
+      }, 150);
+    });
+
+    return () => {
+      unsubscribe();
+      clearTimeout(timeoutId);
+    };
+  }, [scrollYProgress, totalSteps]);
+
   return (
     <section ref={targetRef} className="relative h-[800vh] bg-[#25282C]">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#25282C]">
@@ -224,7 +263,7 @@ function StackedPanel({
       const panelWidth =
         vw >= 1280 ? 896 : vw >= 768 ? 672 : vw >= 640 ? 512 : 448;
       const cappedPanel = Math.min(panelWidth, vw - 48); // account for side padding
-      const visibleGap = 56; // balanced UI/UX gap between slides
+      const visibleGap = 20; // tighter gap between experience panels (Section 3)
       return Math.ceil(vw / 2 + cappedPanel / 2 + visibleGap);
     };
     const handleResize = () => setOffsetPx(computeOffset());

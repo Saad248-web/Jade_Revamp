@@ -4,6 +4,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import CarouselHeroScrim from "./CarouselHeroScrim";
+import {
+  carouselHeroCopyRoot,
+  carouselHeroHeadlineClass,
+  carouselHeroLabelClass,
+  carouselHeroSubtextClass,
+} from "@/lib/carouselHeroCopy";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import {
   CAROUSEL_CROSSFADE,
@@ -187,23 +194,24 @@ export default function WeddingServicesSection() {
             ) : (
               <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#0B2C23] to-[#0B2C23]" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/60 via-[#0B2C23]/25 to-[#0B2C23]/55" />
           </motion.div>
         </AnimatePresence>
 
+        <CarouselHeroScrim variant="upper" />
+
         {/* ── TEXT ── */}
-        <div className="absolute inset-x-0 top-[10vh] z-20 flex flex-col items-center text-center px-6 sm:px-10 pointer-events-none">
+        <div className={carouselHeroCopyRoot}>
           <motion.p
             key={`label-${currentIndex}`}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-manrope text-gh-label font-bold tracking-[0.3em] uppercase text-[#EFCD62]"
+            className={carouselHeroLabelClass}
             style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
           >
             {currentSlide.label}
           </motion.p>
           <div style={{ marginBottom: "clamp(6px, 1.5vw, 12px)" }}>
-            <h2 className="font-philosopher text-gh-h1 text-white leading-tight lg:whitespace-nowrap">
+            <h2 className={carouselHeroHeadlineClass}>
               {currentSlide.heading.join(" ")}
             </h2>
           </div>
@@ -212,7 +220,7 @@ export default function WeddingServicesSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.08, duration: CAROUSEL_CROSSFADE.duration }}
-            className="font-manrope text-gh-carousel-sub text-white/80 leading-relaxed max-w-xl mx-auto line-clamp-3"
+            className={carouselHeroSubtextClass}
           >
             {currentSlide.subtext}
           </motion.p>

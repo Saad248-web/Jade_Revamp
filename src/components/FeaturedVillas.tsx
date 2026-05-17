@@ -13,6 +13,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import LuxuryPattern from "./LuxuryPattern";
+import SectionWrapper from "./SectionWrapper";
+import { JADE_GREEN } from "@/lib/jadeSectionColors";
 import PrimaryButton from "@/components/PrimaryButton";
 import { usePreloadNeighborImages } from "@/lib/carouselMotion";
 import {
@@ -93,13 +96,55 @@ export default function FeaturedVillas() {
   const totalVillas = VILLAS.length;
   const totalSteps = totalVillas + 2; // Intro + Villas + Final
 
+  useEffect(() => {
+    if (!targetRef.current) return;
+    let timeoutId: NodeJS.Timeout;
+
+    const unsubscribe = scrollYProgress.on("change", (p) => {
+      clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(() => {
+        const slideTime = p * totalSteps;
+
+        // Snap to panels 1 through totalVillas
+        if (slideTime > 0.5 && slideTime < totalVillas + 0.5) {
+          const nearestSlide = Math.round(slideTime);
+          const diff = Math.abs(slideTime - nearestSlide);
+
+          if (diff > 0.005 && diff < 0.45) {
+            const targetP = nearestSlide / totalSteps;
+            const rect = targetRef.current!.getBoundingClientRect();
+            const absoluteTop = window.scrollY + rect.top;
+            const scrollableDistance = rect.height + window.innerHeight;
+            
+            const targetScrollY = (absoluteTop - window.innerHeight) + (targetP * scrollableDistance);
+
+            if ((window as any).__lenis) {
+              (window as any).__lenis.scrollTo(targetScrollY, { duration: 0.8 });
+            } else {
+              window.scrollTo({ top: targetScrollY, behavior: "smooth" });
+            }
+          }
+        }
+      }, 150);
+    });
+
+    return () => {
+      unsubscribe();
+      clearTimeout(timeoutId);
+    };
+  }, [scrollYProgress, totalSteps, totalVillas]);
+
   return (
-    <section ref={targetRef} className="relative h-[650vh] bg-[#0B2C23]">
+    <SectionWrapper
+      ref={targetRef}
+      bg={JADE_GREEN}
+      className="h-[650vh]"
+      pattern={{ opacity: 0.3, strokeColor: "#EFCD62" }}
+    >
       <NavbarThemeTrigger theme="white" sectionRef={targetRef} />
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Background Overlay Pattern */}
-        <div className="absolute inset-0 bg-diamond-pattern opacity-40 pointer-events-none z-0" />
-
         {/* Sections */}
         <div className="relative w-full h-full z-10">
           {/* Panel 0: Intro */}
@@ -120,7 +165,7 @@ export default function FeaturedVillas() {
           <EndButton globalProgress={smoothProgress} />
         </div>
       </div>
-    </section>
+    </SectionWrapper>
   );
 }
 

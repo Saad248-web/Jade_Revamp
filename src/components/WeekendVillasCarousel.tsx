@@ -8,7 +8,14 @@ import { AnimatePresence } from "framer-motion";
 
 // Filter villas to specifically show Weekend related venues
 // Using IDs that were present in the weekend-getaways page
-const WEEKEND_VILLA_IDS = ["dome-villas", "magnolia", "haven", "tranquil"];
+const WEEKEND_VILLA_IDS = [
+  "dome-villas-blue",
+  "dome-villas-red",
+  "dome-villas-yellow",
+  "magnolia",
+  "haven",
+  "tranquil",
+];
 
 const WEEKEND_VILLAS = VILLAS.filter((villa) =>
   WEEKEND_VILLA_IDS.includes(villa.id),

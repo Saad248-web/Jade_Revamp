@@ -17,7 +17,8 @@ export default function UnifiedScrollSection() {
     <ScrollSectionComposer
       slides={slides}
       height="150vh"
-      showScrollIndicator={false}
+      showScrollIndicator={true}
+      scrollIndicatorText="SCROLL TO EXPERIENCES"
     />
   );
 }

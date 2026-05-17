@@ -182,8 +182,8 @@ export default function ScrollSectionComposer({
 
         {/* Scroll Indicator at the bottom */}
         {showScrollIndicator && (
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6">
-            <div className="h-16 md:h-24 w-[1px] bg-gradient-to-b from-white/40 to-transparent" />
+          <div className="absolute max-lg:bottom-[calc(6rem+env(safe-area-inset-bottom))] lg:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6">
+            <div className="h-16 md:h-24 w-[1px] bg-gradient-to-b from-transparent to-white/40" />
             {scrollIndicatorText && (
               <span className="font-manrope text-[12px] tracking-[0.2em] uppercase text-white/50 whitespace-nowrap">
                 {scrollIndicatorText}

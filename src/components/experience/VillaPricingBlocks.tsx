@@ -19,6 +19,8 @@ type VillaPricingBlocksProps = {
   sectionTitle?: string;
   blocks: VillaPricingBlock[];
   footnote?: React.ReactNode;
+  /** `villa-detail` — rounded green cards per villa detail mocks */
+  variant?: "default" | "villa-detail";
 };
 
 /**
@@ -29,21 +31,48 @@ export default function VillaPricingBlocks({
   sectionTitle = "Pricing",
   blocks,
   footnote,
+  variant = "default",
 }: VillaPricingBlocksProps) {
   if (!blocks.length) return null;
 
+  const isDetail = variant === "villa-detail";
+
   return (
-    <div className="space-y-12">
-      <h3 className="text-gh-h2 font-philosopher">{sectionTitle}</h3>
+    <div className={isDetail ? "flex flex-col gap-8" : "space-y-12"}>
+      <h3
+        className={
+          isDetail
+            ? "text-gh-h1 font-philosopher text-white"
+            : "text-gh-h2 font-philosopher"
+        }
+      >
+        {sectionTitle}
+      </h3>
       {blocks.map((rent, idx) => (
         <div
           key={`${rent.title}-${idx}`}
-          className="border border-white/10 rounded-sm p-5 md:p-6 bg-white/5 mb-6"
+          className={
+            isDetail
+              ? "rounded-xl border border-[#1e6b55]/50 bg-[#0a3529]/80 p-5 md:p-7"
+              : "border border-white/10 rounded-sm p-5 md:p-6 bg-white/5 mb-6"
+          }
         >
-          <h4 className="text-[#EFCD62] text-gh-h3 font-manrope font-semibold mb-1">
+          <h4
+            className={
+              isDetail
+                ? "text-[#EFCD62] text-lg md:text-xl font-manrope font-bold mb-1"
+                : "text-[#EFCD62] text-gh-h3 font-manrope font-semibold mb-1"
+            }
+          >
             {rent.title}
           </h4>
-          <p className="text-white/40 text-gh-desc mb-6">
+          <p
+            className={
+              isDetail
+                ? "text-white/90 text-sm md:text-base font-manrope mb-6"
+                : "text-white/40 text-gh-desc mb-6"
+            }
+          >
             {rent.subtitle ?? ""}
           </p>
 
@@ -51,19 +80,41 @@ export default function VillaPricingBlocks({
             {rent.packages.map((item, i) => (
               <div
                 key={i}
-                className="flex justify-between items-center bg-black/20 p-4 rounded-sm border border-white/5"
+                className={
+                  isDetail
+                    ? "flex justify-between items-center gap-4 bg-[#062a22] p-4 rounded-lg border border-[#1a5c48]/40"
+                    : "flex justify-between items-center bg-black/20 p-4 rounded-sm border border-white/5"
+                }
               >
                 <div className="flex flex-col min-w-0 pr-3">
-                  <span className="text-white font-bold text-gh-desc mb-1 uppercase tracking-wide">
+                  <span
+                    className={
+                      isDetail
+                        ? "text-white font-semibold text-base md:text-lg font-manrope"
+                        : "text-white font-bold text-gh-desc mb-1 uppercase tracking-wide"
+                    }
+                  >
                     {item.label}
                   </span>
                   {item.sublabel ? (
-                    <span className="text-white/40 text-gh-label leading-tight">
+                    <span
+                      className={
+                        isDetail
+                          ? "text-white/70 text-sm font-manrope mt-0.5"
+                          : "text-white/40 text-gh-label leading-tight"
+                      }
+                    >
                       {item.sublabel}
                     </span>
                   ) : null}
                 </div>
-                <div className="text-white font-bold text-[15px] sm:text-[16px] md:text-[18px] leading-tight uppercase tracking-wide text-right shrink-0">
+                <div
+                  className={
+                    isDetail
+                      ? "text-white font-bold text-base md:text-lg font-manrope text-right shrink-0"
+                      : "text-white font-bold text-[15px] sm:text-[16px] md:text-[18px] leading-tight uppercase tracking-wide text-right shrink-0"
+                  }
+                >
                   {item.price}
                 </div>
               </div>
@@ -71,14 +122,24 @@ export default function VillaPricingBlocks({
           </div>
 
           <div className="space-y-4">
-            <span className="text-white/40 text-gh-label font-bold uppercase tracking-widest">
+            <span
+              className={
+                isDetail
+                  ? "text-white text-sm font-manrope"
+                  : "text-white/40 text-gh-label font-bold uppercase tracking-widest"
+              }
+            >
               Included:
             </span>
             <div className="flex flex-wrap gap-2">
               {rent.features.map((inc) => (
                 <span
                   key={inc}
-                  className="px-3 py-1.5 bg-[#174539] border border-white/5 rounded-sm text-white/70 text-gh-label"
+                  className={
+                    isDetail
+                      ? "px-4 py-2 bg-[#134a3c] rounded text-white text-xs md:text-sm font-manrope border border-[#1e6b55]/30"
+                      : "px-3 py-1.5 bg-[#174539] border border-white/5 rounded-sm text-white/70 text-gh-label"
+                  }
                 >
                   {inc}
                 </span>
@@ -107,20 +168,20 @@ export function buildDetailPagePricingBlocks(pricing: {
   };
 }): VillaPricingBlock[] {
   const out: VillaPricingBlock[] = [];
-  if (pricing.event?.packages?.length) {
-    out.push({
-      title: pricing.event.title,
-      subtitle: pricing.event.subtitle,
-      packages: pricing.event.packages,
-      features: pricing.event.features ?? [],
-    });
-  }
   if (pricing.stay?.packages?.length) {
     out.push({
       title: pricing.stay.title,
       subtitle: pricing.stay.subtitle,
       packages: pricing.stay.packages,
       features: pricing.stay.features ?? [],
+    });
+  }
+  if (pricing.event?.packages?.length) {
+    out.push({
+      title: pricing.event.title,
+      subtitle: pricing.event.subtitle,
+      packages: pricing.event.packages,
+      features: pricing.event.features ?? [],
     });
   }
   return out;

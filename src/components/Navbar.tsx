@@ -170,7 +170,8 @@ export default function Navbar() {
                 <Link
                   href="/book"
                   className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] min-h-[44px] rounded-none border border-white/20 transition-all duration-300 group shrink-0"
-                  aria-label="Book"
+                  aria-label="Book a villa"
+                  title="Book a villa"
                 >
                   <svg
                     width="18"

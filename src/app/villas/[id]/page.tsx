@@ -50,6 +50,7 @@ import {
   Coffee,
   Mic,
   Music,
+  Headset,
 } from "lucide-react"; // Import all potentially used icons
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -59,6 +60,12 @@ import { VILLAS } from "@/lib/mockData";
 import type { Villa } from "@/lib/types";
 import { prettyMediaLabel } from "@/lib/mediaLabels";
 import { DOME_VIDEO_URLS, getYouTubeId } from "@/lib/videoUtils";
+import {
+  DOME_COLOR_META,
+  DOME_COLOR_ORDER,
+  getDomeColorFromVillaId,
+  isDomeEstateId,
+} from "@/lib/domeVillaIds";
 import { useAnimation } from "@/context/AnimationContext";
 import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
 import { getHeroOverrideForId } from "@/lib/heroOverrides";
@@ -67,6 +74,16 @@ import VillaPricingBlocks, {
   buildDetailPagePricingBlocks,
 } from "@/components/experience/VillaPricingBlocks";
 import ExperienceFaqAccordion from "@/components/experience/ExperienceFaqAccordion";
+import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip";
+import VillaDetailStickyTabs from "@/components/villa/VillaDetailStickyTabs";
+import {
+  VILLA_DETAIL_CHARCOAL,
+  VILLA_DETAIL_SPACING,
+} from "@/components/villa/villaDetailSpacing";
+import { buildVillaGalleryItems } from "@/lib/villaGallery";
+import clsx from "clsx";
+
+const vd = VILLA_DETAIL_SPACING;
 
 const normalizeImageSrc = (src: string) => {
   // Local `public/` asset paths can contain spaces; `next/image` expects URI-encoded paths.
@@ -160,6 +177,16 @@ const getIcon = (iconName?: string, title?: string) => {
   return icons[iconName || ""] || Info;
 };
 
+const splitAmenityLabel = (label: string) => {
+  const words = label.trim().split(/\s+/);
+  if (words.length <= 1) return { line1: label, line2: "" };
+  const mid = Math.ceil(words.length / 2);
+  return {
+    line1: words.slice(0, mid).join(" "),
+    line2: words.slice(mid).join(" "),
+  };
+};
+
 export default function VillaDetailsPage() {
   const params = useParams();
   const searchParams = useSearchParams();
@@ -194,6 +221,7 @@ export default function VillaDetailsPage() {
     "blue" | "red" | "yellow"
   >("blue");
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   const mapsHref = useMemo(
     () => getVillaGoogleMapsUrl(villa ?? {}),
@@ -244,6 +272,11 @@ export default function VillaDetailsPage() {
     };
   }, [id]);
 
+  const galleryItems = useMemo(
+    () => (villa ? buildVillaGalleryItems(villa, 24) : []),
+    [villa],
+  );
+
   if (!villa) {
     return (
       <div className="min-h-screen bg-[#0B2C23] flex items-center justify-center text-white font-philosopher text-2xl">
@@ -264,11 +297,13 @@ export default function VillaDetailsPage() {
   const spaceImages = media?.spaces?.length ? media.spaces : [];
   const experienceImages = media?.experiences?.length ? media.experiences : [];
 
-  const isDomeVillas = villa.id === "dome-villas";
+  const domeColor = getDomeColorFromVillaId(villa.id);
+  const isDomeEstate = isDomeEstateId(villa.id);
 
-  // For Dome Villas, only show the spaces belonging to the active dome tab.
+  // Per-color pages: filter spaces to one dome. Estate page: optional tab filter.
   const domeSpaceFilter = useMemo(() => {
-    if (!isDomeVillas) return null;
+    if (domeColor) return DOME_COLOR_META[domeColor].pathNeedle;
+    if (!isDomeEstate) return null;
     const label =
       activeDomeSpaceTab === "blue"
         ? "Blue"
@@ -276,7 +311,7 @@ export default function VillaDetailsPage() {
           ? "Red"
           : "Yellow";
     return `/Villa_Retreats/Dome/Dome Villa_s - ${label}/`;
-  }, [isDomeVillas, activeDomeSpaceTab]);
+  }, [domeColor, isDomeEstate, activeDomeSpaceTab]);
 
   const derivedSpaces = useMemo(() => {
     let list = spaceImages.length
@@ -507,22 +542,46 @@ export default function VillaDetailsPage() {
   const domeVideoUrls = DOME_VIDEO_URLS;
 
   return (
-    <main className="bg-jade-green min-h-screen relative">
-      {/* Top Navigation - Scrolls away with page */}
-      <div className="absolute top-8 left-6 md:left-12 right-6 md:right-12 flex justify-between items-center z-[60] pointer-events-none">
+    <main className="bg-jade-charcoal min-h-screen relative">
+      <div
+        className={clsx(
+          "absolute top-4 sm:top-6 lg:top-8 z-[60] flex justify-between items-center pointer-events-none left-0 right-0",
+          vd.gutterX,
+        )}
+      >
         <button
+          type="button"
           onClick={() => window.history.back()}
-          className="pointer-events-auto flex items-center justify-center text-white hover:text-jade-gold transition-all"
+          className="pointer-events-auto w-11 h-11 md:w-12 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all"
           aria-label="Go back"
         >
-          <ArrowLeft className="w-8 h-8 md:w-10 md:h-10" strokeWidth={1} />
+          <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
         </button>
-        <button
-          onClick={() => setEnquireOverlayOpen(true)}
-          className="pointer-events-auto px-[20px] py-[12px] bg-black/40 backdrop-blur-md border border-white/10 text-white text-[9px] md:text-[11px] font-bold tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all flex items-center justify-center w-fit h-fit gap-[8px]"
-        >
-          ENQUIRE NOW
-        </button>
+        <div className="pointer-events-auto flex items-center gap-2 md:gap-3">
+          {/* Mobile: Dialer */}
+          <a
+            href="tel:08970663366"
+            className="md:hidden w-11 h-11 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all"
+            aria-label="Call support"
+          >
+            <Headset className="w-5 h-5" strokeWidth={1.5} />
+          </a>
+          {/* Desktop: Contact Page */}
+          <Link
+            href="/contact"
+            className="hidden md:flex w-12 h-12 items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all"
+            aria-label="Contact support"
+          >
+            <Headset className="w-5 h-5" strokeWidth={1.5} />
+          </Link>
+          <button
+            type="button"
+            onClick={() => setEnquireOverlayOpen(true)}
+            className="px-4 md:px-5 py-3 bg-black/40 backdrop-blur-md border border-white/20 text-white text-[9px] md:text-[10px] font-bold tracking-[0.35em] uppercase hover:bg-white hover:text-black transition-all"
+          >
+            ENQUIRE NOW
+          </button>
+        </div>
       </div>
       {/* HERO / CAROUSEL SECTION */}
       <section className="relative h-[60vh] md:h-[80vh] w-full bg-jade-green">
@@ -541,6 +600,7 @@ export default function VillaDetailsPage() {
             />
           )}
           <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
         </div>
 
         {/* Carousel Controls */}
@@ -548,59 +608,83 @@ export default function VillaDetailsPage() {
         <div className="absolute inset-0 z-20 pointer-events-none flex justify-center">
           <div className="max-w-7xl mx-auto h-full relative w-full">
             {/* Bottom Controls */}
-            <div className="absolute bottom-12 left-0 right-0 px-6 md:px-12 pointer-events-auto flex items-end justify-between">
-              {/* Previous Arrow */}
+            <div
+              className={clsx(
+                "absolute inset-x-0 pointer-events-none",
+                vd.heroBottom,
+              )}
+            >
               <button
+                type="button"
                 onClick={handlePrevImage}
-                className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-white/5 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all rounded-none"
+                className={clsx(
+                  "pointer-events-auto absolute bottom-0 z-10 w-11 h-11 md:w-16 md:h-16 flex items-center justify-center bg-white/5 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all rounded-none",
+                  vd.heroArrowLeft,
+                )}
+                aria-label="Previous photo"
               >
-                <ArrowLeft className="w-6 h-6" />
+                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
               </button>
 
-              {/* Center Info and Button */}
-              <div className="flex flex-col items-center justify-center gap-4">
-                {/* Pagination Dash Indicator */}
-                <div className="flex items-center gap-4 text-white text-[12px] md:text-[14px] font-bold tracking-[0.2em] opacity-80">
-                  <span>{String(currentImageIndex + 1)}</span>
-                  <div className="w-16 md:w-24 h-[1px] bg-white/40" />
-                  <span className="text-white/40">
-                    {String(imagesList.length)}
-                  </span>
+              <div className="pointer-events-auto absolute left-1/2 bottom-0 z-10 flex w-[min(100%,calc(100vw-8.5rem))] sm:w-[min(100%,calc(100vw-10rem))] -translate-x-1/2 flex-col items-center gap-3 md:gap-4 md:max-w-md px-4 sm:px-6">
+                <div className="flex w-full flex-col items-center gap-2">
+                  <div className="w-16 md:w-28 h-px bg-gradient-to-r from-transparent via-[#EFCD62] to-transparent opacity-90" />
+                  <h2 className="text-[#EFCD62] font-philosopher text-xl sm:text-2xl md:text-4xl uppercase tracking-[0.28em] md:tracking-[0.35em] text-center drop-shadow-lg leading-tight px-1">
+                    {villa.name}
+                  </h2>
+                  <div className="w-16 md:w-28 h-px bg-gradient-to-r from-transparent via-[#EFCD62] to-transparent opacity-90" />
                 </div>
-
-                {/* Branding Header Below Number */}
-                <h2 className="text-white font-philosopher text-2xl md:text-4xl uppercase tracking-[0.4em] text-center drop-shadow-2xl">
-                  {villa.name}
-                </h2>
+                <button
+                  type="button"
+                  onClick={() => setIsGalleryOpen(true)}
+                  className="inline-flex w-auto max-w-full shrink-0 items-center justify-center gap-1.5 border border-white/30 bg-black/40 backdrop-blur-md px-3 py-2.5 md:px-4 md:py-3 text-white text-[9px] md:text-[11px] font-bold tracking-[0.18em] md:tracking-[0.25em] uppercase whitespace-nowrap hover:bg-white hover:text-black transition-all"
+                >
+                  <LayoutGrid className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" strokeWidth={1.5} />
+                  VIEW ALL PICTURES
+                </button>
               </div>
 
-              {/* Next Arrow */}
               <button
+                type="button"
                 onClick={handleNextImage}
-                className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-white/5 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all rounded-none"
+                className={clsx(
+                  "pointer-events-auto absolute bottom-0 z-10 w-11 h-11 md:w-16 md:h-16 flex items-center justify-center bg-white/5 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all rounded-none",
+                  vd.heroArrowRight,
+                )}
+                aria-label="Next photo"
               >
-                <ArrowRight className="w-6 h-6" />
+                <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
               </button>
             </div>
           </div>
         </div>
       </section>
       {/* CONTENT SECTION */}
-      <div className="relative bg-[#25282C] w-full z-10">
-        <div className="px-6 py-8 md:px-12 md:py-16 max-w-7xl mx-auto">
+      <div className="relative bg-jade-charcoal w-full z-10">
+        <div className={vd.sectionShell}>
+        <div className={clsx(vd.content, vd.stack)}>
         {/* HEADER INFO */}
-        <div className="flex flex-col gap-2 mb-8">
+        <div className={vd.stackTight}>
+          {domeColor ? (
+            <Link
+              href="/villas/dome-villas"
+              className="text-[#EFCD62]/90 text-[10px] md:text-gh-label font-bold tracking-[0.2em] uppercase hover:text-[#EFCD62] inline-flex items-center gap-1.5 w-fit"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Dome Villas Estate
+            </Link>
+          ) : null}
           <span className="text-[#EFCD62] text-[10px] md:text-gh-label font-bold tracking-[0.2em] uppercase">
             {villa.type}
           </span>
-          <h1 className="text-[28px] md:text-[32px] font-philosopher text-white mb-1 leading-tight">
+          <h1 className="text-[28px] md:text-[32px] font-philosopher text-white leading-tight">
             {villa.name}
           </h1>
           <a
             href={mapsHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-2.5 text-white/90 mt-2 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/60"
+            className="group flex items-center gap-2 text-white/90 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/60"
             aria-label={`Open ${villa.name} location in Google Maps`}
           >
             <MapPin className="w-5 h-5 text-white/70 shrink-0" />
@@ -611,7 +695,7 @@ export default function VillaDetailsPage() {
         </div>
 
         {/* AMENITY SUMMARY LINE */}
-        <div className="flex flex-nowrap overflow-x-auto scrollbar-none gap-x-4 items-center text-white/90 mb-10 text-[10px] md:text-[12px] lg:text-[14px] font-normal font-manrope tracking-wide pb-2 -mr-6 pr-6 md:-mr-12 md:pr-12">
+        <div className={clsx("flex flex-nowrap overflow-x-auto scrollbar-none gap-x-4 items-center text-white/90 text-[10px] md:text-[12px] lg:text-[14px] font-normal font-manrope tracking-wide pb-2 pl-6")}>
           <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
             <Bed
               className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]"
@@ -650,7 +734,7 @@ export default function VillaDetailsPage() {
         </div>
 
         {/* HORIZONTAL AMENITY CARDS */}
-        <div className="jade-hscroll-track flex gap-3 overflow-x-auto pb-6 mb-12 snap-x scrollbar-none -mr-6 pr-6 md:-mr-12 md:pr-12">
+        <div className={clsx("jade-hscroll-track", vd.hScrollTrack, "pl-6")}>
           {villa.amenities?.map((amenity, idx) => {
             const Icon = getIcon(amenity.icon);
             // Splitting logic for label and sublabel (heuristic)
@@ -665,7 +749,7 @@ export default function VillaDetailsPage() {
             return (
               <div
                 key={idx}
-                className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] bg-white/[0.07] backdrop-blur-[12px] flex flex-col items-center justify-between text-center px-4 py-5 rounded-none snap-start group flex-shrink-0 jade-hscroll-view-item"
+                className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] bg-white/[0.07] backdrop-blur-[12px] flex flex-col items-center justify-between text-center px-5 py-6 rounded-none snap-start group flex-shrink-0 jade-hscroll-view-item"
                 style={{
                   border: "1px solid",
                   borderImageSource:
@@ -692,16 +776,37 @@ export default function VillaDetailsPage() {
           })}
         </div>
 
-        <p className="font-manrope text-white/70 text-gh-body leading-relaxed mb-12 whitespace-pre-line text-justify">
+        <p className="font-manrope text-white/70 text-gh-body leading-relaxed whitespace-pre-line text-justify">
           {villa.description}
         </p>
 
-        {isDomeVillas ? (
-          <div className="mb-12">
-            <span className="text-[#EFCD62] text-[10px] md:text-gh-label font-bold tracking-[0.2em] uppercase mb-4 block">
-              Download Dome Brochures
+        {villa.perfectFor && villa.perfectFor.length > 0 && (
+          <div className={vd.stackSm}>
+            <h4 className="text-white font-manrope font-medium text-gh-body">
+              Perfect for:
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {villa.perfectFor.map((item: { title?: string } | string, idx: number) => {
+                const label = typeof item === "string" ? item : item.title ?? "";
+                return (
+                  <span
+                    key={`${label}-${idx}`}
+                    className="px-4 py-2 bg-white/5 border border-white/15 text-white/90 text-[11px] md:text-gh-label font-manrope"
+                  >
+                    {label}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {isDomeEstate ? (
+          <div className={vd.stackSm}>
+            <span className={clsx(vd.eyebrow, "block")}>
+              Explore Each Dome
             </span>
-            <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-none -mr-6 pr-6 md:-mr-12 md:pr-12 snap-x">
+            <div className={clsx(vd.hScrollBleed, vd.hScrollTrack)}>
               {[
                 {
                   name: "Blue Dome",
@@ -719,10 +824,9 @@ export default function VillaDetailsPage() {
                   brochure: "/All Properties - Jade Hospitainment.pdf",
                 },
               ].map((dome, idx) => (
-                <a
+                <Link
                   key={idx}
-                  href={dome.brochure}
-                  download={`${dome.name} Brochure.pdf`}
+                  href={`/villas/${DOME_COLOR_META[DOME_COLOR_ORDER[idx]].id}`}
                   className="relative flex-shrink-0 w-[240px] h-[240px] md:w-[280px] md:h-[280px] snap-start group overflow-hidden rounded-sm border border-white/10"
                 >
                   {/* Background Image with Hover Zoom */}
@@ -739,73 +843,46 @@ export default function VillaDetailsPage() {
                       {dome.name}
                     </h3>
                     <div className="flex items-center gap-1.5 text-white/95 text-[10px] font-bold tracking-[0.2em] font-manrope uppercase mt-1 group-hover:text-[#EFCD62] transition-colors duration-300">
-                      <span>Download Brochure</span>
-                      <Download className="w-3.5 h-3.5 text-white/60 group-hover:text-[#EFCD62] transition-colors duration-300 animate-pulse" />
+                      <span>View Villa</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-white/60 group-hover:text-[#EFCD62] transition-colors duration-300" />
                     </div>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-8 mb-12">
             <a
               href="/All Properties - Jade Hospitainment.pdf"
               download
-              className="w-full bg-white/5 border border-white/10 text-white px-8 py-5 uppercase tracking-[0.2em] text-[11px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-between group rounded-sm"
+              className="w-full bg-white/5 border border-white/10 text-white px-8 py-4 uppercase tracking-[0.2em] text-[11px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-between group rounded-sm"
             >
-              <span>Download Brochure</span>
+              <span>Download Estate Brochure</span>
               <Download className="w-4 h-4 text-white/40 group-hover:text-black transition-colors" />
             </a>
           </div>
+        ) : (
+          <a
+            href="/All Properties - Jade Hospitainment.pdf"
+            download
+            className="w-full bg-white/5 border border-white/10 text-white px-8 py-4 uppercase tracking-[0.2em] text-[11px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-between group rounded-sm"
+          >
+            <span>Download Brochure</span>
+            <Download className="w-4 h-4 text-white/40 group-hover:text-black transition-colors" />
+          </a>
         )}
         </div>
-      </div>
-      {/* TABS NAVIGATION - FULL WIDTH STICKY */}
-      <div className="sticky top-0 z-50 bg-[#0B2C23] border-b border-white/10 w-full shadow-2xl">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="flex gap-8 md:gap-12 overflow-x-auto pb-0 scrollbar-none">
-            {[
-              "Spaces",
-              "Experiences",
-              "Property Details",
-              "Video Walkthrough",
-              "Services",
-              "Amenities",
-              "Pricing",
-              "Location",
-              "Perfect For",
-              "FAQ",
-            ].map((tab) => {
-              const sectionId = tab === "Property Details" ? "details" : tab.toLowerCase().replace(/ /g, "-");
-              const isActive = activeTab === sectionId;
-              return (
-                <button
-                  key={tab}
-                  onClick={() => scrollToSection(sectionId)}
-                  className={`py-4 px-1 text-[11px] uppercase tracking-widest font-bold transition-colors whitespace-nowrap border-b-2 ${
-                    isActive
-                      ? "border-[#EFCD62] text-[#EFCD62]"
-                      : "border-transparent text-white/60 hover:text-white"
-                  }`}
-                >
-                  {tab}
-                </button>
-              );
-            })}
-          </div>
         </div>
       </div>
+      <VillaDetailStickyTabs activeTab={activeTab} onTabClick={scrollToSection} />
 
       {/* SPACES — Green */}
-      {(isDomeVillas || currentSpace) && (
-        <section id="spaces" className="w-full bg-[#0B2C23] text-white">
-          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-            <div className="flex flex-col max-w-4xl mx-auto">
-              <div className="flex flex-wrap justify-between items-center gap-4 mb-8">
+      {(domeColor || isDomeEstate || currentSpace) && (
+        <section id="spaces" className={VILLA_DETAIL_CHARCOAL}>
+          <div className={vd.sectionShell}>
+            <div className={clsx(vd.content, vd.stack)}>
+              <div className="flex flex-wrap justify-between items-center gap-4">
                 <div className="flex flex-wrap items-center gap-3 md:gap-5">
-                  <h3 className="text-gh-h1 font-philosopher text-white">Spaces</h3>
-                  {isDomeVillas && (
+                  <h3 className={vd.heading}>Spaces</h3>
+                  {isDomeEstate && (
                     <div className="flex flex-wrap items-center gap-2">
                       {([ { id: "blue", label: "Blue Dome", dot: "#3b82f6" }, { id: "red", label: "Red Dome", dot: "#ef4444" }, { id: "yellow", label: "Yellow Dome", dot: "#eab308" } ] as const).map((t) => {
                         const isActive = activeDomeSpaceTab === t.id;
@@ -828,11 +905,11 @@ export default function VillaDetailsPage() {
                 )}
               </div>
               {currentSpace ? (
-                <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20">
+                <div className="relative aspect-[3/4] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-black/30">
                   {(validImg(currentSpace.image) || validImg(villa.image)) && (
                     <Image src={validImg(currentSpace.image) ? normalizeImageSrc(currentSpace.image) : normalizeImageSrc(villa.image)} alt={currentSpace.name || "Space"} fill className="object-cover object-center transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" unoptimized />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B2C23]/80 via-transparent to-transparent opacity-90" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-jade-charcoal/80 via-transparent to-transparent opacity-90" />
                   <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
                     <h4 className="text-white text-sm md:text-base uppercase tracking-[0.2em] font-bold mb-4 font-manrope">{currentSpace.name || "Lawn"}</h4>
                     {derivedSpaces && derivedSpaces.length > 1 && (
@@ -847,7 +924,10 @@ export default function VillaDetailsPage() {
               ) : (
                 <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden bg-emerald-900/20 flex items-center justify-center text-white/40 italic">Loading spaces…</div>
               )}
-              <Link href={`/villas/${id}/spaces`} className="mt-8 w-full border border-white/20 bg-white/5 py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2">VIEW ALL SPACES</Link>
+              <Link href={`/villas/${id}/spaces`} className="w-full border border-white/20 bg-white/5 py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2">
+                VIEW ALL SPACES
+                <LayoutGrid className="w-3.5 h-3.5" strokeWidth={1.5} />
+              </Link>
             </div>
           </div>
         </section>
@@ -855,11 +935,11 @@ export default function VillaDetailsPage() {
 
       {/* EXPERIENCES — Green */}
       {currentActivity && (
-        <section id="experiences" className="w-full bg-[#0B2C23] text-white">
-          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-            <div className="flex flex-col max-w-4xl mx-auto">
-              <div className="flex justify-between items-end mb-8">
-                <h3 className="text-gh-h1 font-philosopher text-white">Experiences</h3>
+        <section id="experiences" className={VILLA_DETAIL_CHARCOAL}>
+          <div className={vd.sectionShell}>
+            <div className={clsx(vd.content, vd.stack)}>
+              <div className="flex justify-between items-end gap-4">
+                <h3 className={vd.heading}>Experiences</h3>
                 {derivedActivities && derivedActivities.length > 1 && (
                   <div className="flex gap-2">
                     <button onClick={handlePrevActivity} disabled={derivedActivities.length <= 1} className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-colors"><ArrowLeft className="w-4 h-4" /></button>
@@ -867,44 +947,49 @@ export default function VillaDetailsPage() {
                   </div>
                 )}
               </div>
-              <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-emerald-900/20 mt-4">
+              <div className="relative aspect-[3/4] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-black/30">
                 {(validImg(currentActivity.image) || validImg(villa.image)) && (
                   <Image src={validImg(currentActivity.image) ? normalizeImageSrc(currentActivity.image) : normalizeImageSrc(villa.image)} alt={currentActivity.title} fill className="object-cover object-center transition-transform duration-700 opacity-90 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" unoptimized />
                 )}
-                <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-[#0B2C23]/95 via-[#0B2C23]/50 to-transparent z-10" />
+                <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-jade-charcoal/95 via-jade-charcoal/50 to-transparent z-10" />
                 <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 flex flex-col items-center justify-end text-center z-20">
                   <h4 className="text-white font-philosopher text-[28px] md:text-[36px] mb-3">{currentActivity.title}</h4>
                   {(currentActivity as any).description && (<p className="text-white/80 font-manrope text-[14px] md:text-[16px] leading-relaxed max-w-2xl">{(currentActivity as any).description}</p>)}
                 </div>
               </div>
-              <div className="mt-8 flex justify-center">
-                <PrimaryButton onClick={() => setEnquireOverlayOpen(true)} withArrow={true}>
-                  Enquire Now
-                </PrimaryButton>
-              </div>
+              <button
+                type="button"
+                onClick={() => setEnquireOverlayOpen(true)}
+                className="w-full py-4 bg-[#EFCD62] text-black font-manrope font-bold text-[11px] md:text-gh-label tracking-[0.2em] uppercase flex items-center justify-center gap-2 rounded-none hover:bg-[#dfbd52] transition-colors"
+              >
+                ENQUIRE
+                <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
+              </button>
             </div>
           </div>
         </section>
       )}
 
       {/* PROPERTY DETAILS — Green */}
-      <section id="details" className="w-full bg-[#0B2C23] text-white">
-        <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-          <div className="flex flex-col max-w-4xl mx-auto">
-            <h3 className="text-gh-h1 font-philosopher text-white mb-8">Property Details</h3>
-            <div className="flex flex-col gap-8 mb-8">
+      <section id="details" className={VILLA_DETAIL_CHARCOAL}>
+        <div className={vd.sectionShell}>
+          <div className={clsx(vd.content, vd.stack)}>
+            <h3 className={vd.heading}>Property Details</h3>
+            <div className="flex flex-col gap-8">
               {villa.propertyDetails?.slice(0, 4).map((detail, idx) => (
                 <div key={idx} className="flex gap-4">
-                  <div className="mt-1.5 w-2 h-2 rotate-45 bg-[#EFCD62] flex-shrink-0" />
+                  <div className="mt-2 w-1.5 h-1.5 rotate-45 bg-[#EFCD62] flex-shrink-0" />
                   <div>
-                    <h4 className="text-gh-body text-white font-manrope font-medium mb-2">{(detail as any).label || (detail as any).title}</h4>
+                    <h4 className="text-gh-body text-white font-manrope font-semibold mb-2">{(detail as any).label || (detail as any).title}</h4>
                     <p className="text-white/60 text-gh-body leading-relaxed">{detail.description}</p>
                   </div>
                 </div>
               ))}
             </div>
             <div className="flex flex-col gap-4">
-              <button onClick={() => openDrawer("Property Details", villa.propertyDetails || [])} className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">Know More <ArrowRight className="w-3 h-3" /></button>
+              <button onClick={() => openDrawer("Property Details", villa.propertyDetails || [])} className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">
+                SEE MORE <ArrowRight className="w-3 h-3" />
+              </button>
             </div>
           </div>
         </div>
@@ -912,12 +997,12 @@ export default function VillaDetailsPage() {
 
       {/* VIDEO WALKTHROUGH — Charcoal */}
       {villa.video && (
-        <section id="video-walkthrough" className="w-full bg-[#25282C] text-white">
-          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-            <div className="flex flex-col max-w-4xl mx-auto">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <section id="video-walkthrough" className={VILLA_DETAIL_CHARCOAL}>
+          <div className={vd.sectionShell}>
+            <div className={clsx(vd.content, vd.stack)}>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <h3 className="text-gh-h1 font-philosopher text-white">Video Walkthrough</h3>
-                {villa.id === "dome-villas" && (
+                {isDomeEstate && (
                   <div className="flex items-center gap-2">
                     {([ { id: "blue", label: "Blue Dome", dot: "#3b82f6" }, { id: "red", label: "Red Dome", dot: "#ef4444" }, { id: "yellow", label: "Yellow Dome", dot: "#eab308" } ] as const).map((t) => {
                       const isActive = activeDomeVideo === t.id;
@@ -932,7 +1017,13 @@ export default function VillaDetailsPage() {
                 )}
               </div>
               {(() => {
-                const chosenUrl = villa.id === "dome-villas" ? domeVideoUrls[activeDomeVideo] : typeof villa.video === "object" ? villa.video.youtubeUrl : "";
+                const chosenUrl = domeColor
+                  ? DOME_VIDEO_URLS[domeColor]
+                  : isDomeEstate
+                    ? domeVideoUrls[activeDomeVideo]
+                    : typeof villa.video === "object"
+                      ? villa.video.youtubeUrl
+                      : "";
                 const ytId = chosenUrl ? getYouTubeId(chosenUrl) : "";
                 if (!ytId) return null;
                 if (isPlayingVideo) {
@@ -955,16 +1046,16 @@ export default function VillaDetailsPage() {
               })()}
             </div>
           </div>
+          <VillaDetailMeanderStrip />
         </section>
       )}
 
       {/* SERVICES — Charcoal */}
-      <section id="services" className="w-full bg-[#25282C] text-white">
-        <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-          <div className="flex flex-col max-w-4xl mx-auto">
-            <h3 className="text-gh-h2 font-philosopher text-white mb-8">Services</h3>
-            <div className="flex flex-col gap-8 mb-12">
-              {villa.services?.slice(0, 4).map((service, idx) => {
+      <section id="services" className={VILLA_DETAIL_CHARCOAL}>
+        <div className={vd.sectionShell}>
+          <div className={clsx(vd.content, vd.stack)}>
+            <h3 className={vd.subheading}>Services</h3>
+            {villa.services?.slice(0, 4).map((service, idx) => {
                 const Icon = getIcon(service.icon, service.title);
                 return (
                   <div key={idx} className="flex gap-4 md:gap-6 group">
@@ -972,52 +1063,70 @@ export default function VillaDetailsPage() {
                       <Icon strokeWidth={1} className="w-full h-full text-[#EFCD62]" />
                     </div>
                     <div>
-                      <h4 className="text-gh-sl font-semibold font-manrope text-white mb-1 transition-colors">{service.title}</h4>
-                      <p className="text-white/70 text-gh-body mb-2 leading-relaxed">{service.description}</p>
+                      <h4 className="text-gh-sl font-semibold font-manrope text-white mb-1">{service.title}</h4>
+                      <p className="text-white/80 text-gh-body mb-2 leading-relaxed">{service.description}</p>
+                      {service.footer ? (
+                        <p className="text-white/45 text-[12px] md:text-[13px] font-manrope leading-relaxed">{service.footer}</p>
+                      ) : null}
                     </div>
                   </div>
                 );
               })}
-            </div>
-            <div className="flex flex-col gap-4">
-              <button onClick={() => openDrawer("Services", villa.services || [])} className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">Know More <ArrowRight className="w-3 h-3" /></button>
-            </div>
+            <button onClick={() => openDrawer("Services", villa.services || [])} className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">
+              SEE MORE <ArrowRight className="w-3 h-3" />
+            </button>
           </div>
         </div>
       </section>
 
       {/* AMENITIES — Charcoal */}
-      <section id="amenities" className="w-full bg-[#25282C] text-white">
-        <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-          <div className="flex flex-col max-w-4xl mx-auto">
-            <h3 className="text-gh-h2 font-philosopher text-white mb-8">Amenities</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-              {villa.amenities?.slice(0, 4).map((amenity, idx) => {
+      <section id="amenities" className={VILLA_DETAIL_CHARCOAL}>
+        <div className={vd.sectionShell}>
+          <div className={clsx(vd.content, vd.stack)}>
+            <h3 className={vd.heading}>Amenities</h3>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-8">
+              {villa.amenities?.slice(0, 8).map((amenity, idx) => {
                 const Icon = getIcon(amenity.icon);
+                const { line1, line2 } = splitAmenityLabel(amenity.label);
                 return (
-                  <div key={idx} className="flex flex-col items-center gap-3 p-6 bg-white/5 border border-white/5 transition-all group">
-                    <Icon className="w-8 h-8 text-jade-gold transition-transform" strokeWidth={1} />
-                    <span className="text-white/80 font-bold uppercase tracking-widest text-[9px] text-center">{amenity.label}</span>
+                  <div key={idx} className="flex items-start gap-3">
+                    <div className="w-10 h-10 shrink-0 border border-[#EFCD62]/70 flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-[#EFCD62]" strokeWidth={1} />
+                    </div>
+                    <div className="text-white font-manrope text-sm leading-snug pt-1">
+                      <span className="block">{line1}</span>
+                      {line2 ? <span className="block">{line2}</span> : null}
+                    </div>
                   </div>
                 );
               })}
             </div>
-            <div className="flex flex-col gap-4">
-              <button onClick={() => openDrawer("Amenities", villa.amenities || [])} className="flex items-center gap-2 text-white/40 text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">Know More <ArrowRight className="w-3 h-3" /></button>
-            </div>
+            <button
+              type="button"
+              onClick={() => openDrawer("Amenities", villa.amenities || [])}
+              className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
+            >
+              SEE MORE <ArrowRight className="w-3 h-3" />
+            </button>
           </div>
         </div>
+        <VillaDetailMeanderStrip accentLine="green" />
       </section>
 
       {/* PRICING — Green */}
       {detailPricingBlocks.length > 0 && (
-        <section id="pricing" className="w-full bg-[#0B2C23] text-white">
-          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-            <div className="flex flex-col max-w-4xl mx-auto">
+        <section id="pricing" className="w-full bg-jade-green text-white">
+          <div className={vd.sectionShell}>
+            <div className={clsx(vd.content, vd.stack)}>
               <VillaPricingBlocks
+                variant="villa-detail"
                 sectionTitle="Pricing"
                 blocks={detailPricingBlocks}
-                footnote={<p className="text-white/40 text-gh-label mt-4 font-manrope leading-relaxed">Note: Prices are base rates and may vary based on season, day of week, and specific requirements. Additional charges may apply for decorations, catering, and extended hours.</p>}
+                footnote={
+                  <p className="text-white/70 text-sm font-manrope leading-relaxed">
+                    Note: Prices are base rates and may vary based on season, day of week, and specific requirements. Additional charges may apply for decorations, catering, and extended hours.
+                  </p>
+                }
               />
             </div>
           </div>
@@ -1026,11 +1135,12 @@ export default function VillaDetailsPage() {
 
       {/* LOCATION — Charcoal */}
       {villa.locationDetails && (
-        <section id="location" className="w-full bg-[#25282C] text-white">
-          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-            <div className="flex flex-col max-w-4xl mx-auto">
-              <h3 className="text-gh-h1 font-philosopher text-white mb-8">Location</h3>
-              <div className="bg-[#25282C] rounded-none overflow-hidden mb-8 border border-white/10">
+        <section id="location" className={VILLA_DETAIL_CHARCOAL}>
+          <VillaDetailMeanderStrip />
+          <div className={vd.sectionShell}>
+            <div className={clsx(vd.content, vd.stack)}>
+              <h3 className={vd.heading}>Location</h3>
+              <div className="bg-jade-charcoal rounded-none overflow-hidden border border-white/10">
                 <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="relative block w-full h-64 md:h-80 cursor-pointer outline-none transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#EFCD62]/70" aria-label="Open location in Google Maps">
                   {(villa.locationDetails.mapImage || villa.image) && (
                     <Image src={normalizeImageSrc(villa.locationDetails.mapImage || villa.image)} alt="Map Location" fill className="object-cover opacity-80" sizes="100vw" loading="lazy" />
@@ -1047,8 +1157,8 @@ export default function VillaDetailsPage() {
                 </div>
               </div>
               {villa.locationDetails.nearby && villa.locationDetails.nearby.length > 0 && (
-                <div className="mt-12">
-                  <h4 className="text-jade-gold text-gh-label font-medium tracking-widest uppercase mb-6 font-manrope">Whats nearby:</h4>
+                <div className={vd.stackSm}>
+                  <h4 className="text-[#EFCD62] font-philosopher text-xl md:text-2xl">Whats nearby:</h4>
                   <div className="flex flex-col gap-4">
                     {villa.locationDetails.nearby.map((item: any, idx: number) => (
                       <div key={idx} className="flex justify-between items-center border-b border-white/5 pb-3">
@@ -1069,41 +1179,49 @@ export default function VillaDetailsPage() {
 
       {/* PERFECT FOR — Charcoal */}
       {villa.perfectFor && villa.perfectFor.length > 0 && (
-        <section id="perfect-for" className="w-full bg-[#25282C] text-white">
-          <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-            <div className="flex flex-col max-w-4xl mx-auto">
-              <h3 className="text-gh-h1 font-philosopher text-white mb-8">Perfect for</h3>
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                {(expandedSections["perfect-for"] ? villa.perfectFor : villa.perfectFor.slice(0, 4)).map((item: any, idx: number) => {
+        <section id="perfect-for" className={VILLA_DETAIL_CHARCOAL}>
+          <div className={vd.sectionShell}>
+            <div className={clsx(vd.content, vd.stack)}>
+              <h3 className={vd.heading}>Perfect for</h3>
+              <div className="grid grid-cols-2 gap-3 md:gap-4">
+                {villa.perfectFor.map((item: { title?: string; image?: string } | string, idx: number) => {
                   const title = typeof item === "string" ? item : item.title;
-                  const image = typeof item === "string" ? (villa.images && villa.images.length > idx ? villa.images[idx % villa.images.length] : villa.image) : item.image || villa.image;
+                  const image =
+                    typeof item === "string"
+                      ? villa.images?.[idx % (villa.images?.length || 1)] ?? villa.image
+                      : item.image || villa.image;
                   return (
-                    <div key={idx} className="relative aspect-square md:aspect-[4/3] bg-[#0B2C23] group overflow-hidden border border-white/5">
-                      {image && (<Image src={normalizeImageSrc(image)} alt={title} fill className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-80" sizes="(max-width: 768px) 50vw, 25vw" loading="lazy" />)}
-                      <div className="absolute inset-0 bg-black/40 z-10 transition-colors group-hover:bg-black/50" />
-                      <div className="absolute inset-0 flex items-center justify-center z-20 p-4">
-                        <h4 className="text-white font-philosopher text-base md:text-lg text-center leading-tight">{title}</h4>
+                    <div key={`${title}-${idx}`} className="relative aspect-[3/4] overflow-hidden">
+                      {image && (
+                        <Image
+                          src={normalizeImageSrc(image)}
+                          alt={title ?? "Occasion"}
+                          fill
+                          className="object-cover transition-transform duration-700 hover:scale-105"
+                          sizes="(max-width: 768px) 50vw, 25vw"
+                          loading="lazy"
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-black/45 z-10" />
+                      <div className="absolute inset-0 flex items-center justify-center z-20 p-3">
+                        <h4 className="text-white font-philosopher text-base md:text-lg text-center leading-tight">
+                          {title}
+                        </h4>
                       </div>
                     </div>
                   );
                 })}
               </div>
-              {villa.perfectFor && villa.perfectFor.length > 4 && (
-                <button onClick={() => toggleSection("perfect-for")} className="md:hidden flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">
-                  {expandedSections["perfect-for"] ? "View Less" : "View More"}
-                  <ArrowRight className={`w-3 h-3 transition-transform ${expandedSections["perfect-for"] ? "-rotate-90" : "rotate-90"}`} />
-                </button>
-              )}
             </div>
           </div>
         </section>
       )}
 
       {/* FAQ — Charcoal */}
-      <section id="faq" className="w-full bg-[#25282C] text-white">
-        <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
-          <div className="flex flex-col max-w-4xl mx-auto">
-            <h3 className="text-gh-h1 font-philosopher text-white mb-8">FAQ</h3>
+      <section id="faq" className={VILLA_DETAIL_CHARCOAL}>
+        <div className={vd.sectionShell}>
+          <div className={clsx(vd.content, vd.stack)}>
+            <h3 className={vd.heading}>FAQ</h3>
             {villa.faq?.length ? (
               <ExperienceFaqAccordion items={villa.faq.map((item) => ({ question: item.question, answer: item.answer }))} />
             ) : null}
@@ -1113,8 +1231,8 @@ export default function VillaDetailsPage() {
 
       {/* FOOTER */}
       <Footer />
-      <div className="fixed bottom-0 left-0 w-full bg-[#25282C] border-t border-white/10 py-4 z-50 transition-all flex justify-center">
-        <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-4 px-4 md:px-12">
+      <div className="fixed bottom-0 left-0 w-full bg-jade-charcoal border-t border-white/10 py-4 z-50 transition-all flex justify-center">
+        <div className={clsx(vd.page, vd.gutterX, "flex justify-between items-center gap-4")}>
           <div className="flex flex-col font-manrope leading-tight">
             <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">Starting from</span>
             <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold whitespace-nowrap">{villaFooterPriceDisplay ?? "Contact for pricing"}</span>
@@ -1127,6 +1245,35 @@ export default function VillaDetailsPage() {
       </div>
       <div className="h-24 lg:h-20" />
       <DetailsDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} title={drawerData.title} items={drawerData.items} />
+
+      {isGalleryOpen && (
+        <div
+          className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm flex flex-col"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Villa photo gallery"
+        >
+          <div className={clsx("flex items-center justify-between border-b border-white/10", vd.gutterX, "py-4")}>
+            <h2 className="text-white font-philosopher text-xl uppercase tracking-widest">
+              {villa.name} — Gallery
+            </h2>
+            <button
+              type="button"
+              onClick={() => setIsGalleryOpen(false)}
+              className="text-white/70 hover:text-white text-gh-label font-bold uppercase tracking-widest"
+            >
+              Close
+            </button>
+          </div>
+          <div className={clsx("flex-1 overflow-y-auto grid grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto w-full", vd.gutterX, "py-6")}>
+            {(galleryItems.length > 0 ? galleryItems : imagesList.map((img: string, i: number) => ({ name: `Photo ${i + 1}`, image: img }))).map((item: { name: string; image: string }, idx: number) => (
+              <div key={idx} className="relative aspect-[4/3] overflow-hidden border border-white/10">
+                <Image src={item.image} alt={item.name} fill className="object-cover" sizes="(max-width:768px) 50vw, 33vw" unoptimized />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </main>
   );
 }

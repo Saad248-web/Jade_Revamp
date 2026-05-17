@@ -1,7 +1,12 @@
 import { magnolia } from "./magnolia";
 import { tranquil } from "./tranquil";
 import { royalty } from "./royalty";
-import { domeVillas } from "./dome-villas";
+import {
+  domeVillas,
+  blueDomeVilla,
+  redDomeVilla,
+  yellowDomeVilla,
+} from "./dome-villas";
 import { diamond } from "./diamond";
 import { vannani } from "./vannani";
 import { haven } from "./haven";
@@ -18,6 +23,9 @@ export {
   tranquil,
   royalty,
   domeVillas,
+  blueDomeVilla,
+  redDomeVilla,
+  yellowDomeVilla,
   diamond,
   vannani,
   haven,
@@ -35,6 +43,9 @@ export const VILLAS = [
   tranquil,
   royalty,
   domeVillas,
+  blueDomeVilla,
+  redDomeVilla,
+  yellowDomeVilla,
   diamond,
   vannani,
   haven,

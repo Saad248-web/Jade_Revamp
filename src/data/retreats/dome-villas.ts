@@ -1,3 +1,9 @@
+import {
+  DOME_COLOR_META,
+  type DomeColorKey,
+} from "@/lib/domeVillaIds";
+import { DOME_VIDEO_URLS } from "@/lib/videoUtils";
+
 const BLUE_DOME_IMAGES = [
   "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 2.webp",
@@ -325,7 +331,8 @@ export const domeVillas = {
   faq: [
     {
       question: "Is the property shared with other guests?",
-      answer: "No, the entire estate is booked exclusively for one group.",
+      answer:
+        "The full Dome Villas estate is booked exclusively for one group, including all three domes.",
     },
     {
       question: "How many villas are included?",
@@ -346,3 +353,117 @@ export const domeVillas = {
     },
   ],
 };
+
+const DOME_IMAGES_BY_COLOR: Record<DomeColorKey, string[]> = {
+  blue: BLUE_DOME_IMAGES,
+  red: RED_DOME_IMAGES,
+  yellow: YELLOW_DOME_IMAGES,
+};
+
+function heroImagesForColor(images: string[]): string[] {
+  const heroes = images.filter((u) => u.includes("/Hero/"));
+  return heroes.length > 0 ? heroes : images.slice(0, 5);
+}
+
+function buildSingleDomeVilla(color: DomeColorKey) {
+  const meta = DOME_COLOR_META[color];
+  const colorImages = DOME_IMAGES_BY_COLOR[color];
+  const heroes = heroImagesForColor(colorImages);
+  const categorized = domeVillas.categorizedSpaces.filter(
+    (g) => g.category === meta.categoryLabel,
+  );
+
+  const {
+    id: _id,
+    name: _name,
+    images: _images,
+    thumbnail: _thumb,
+    image: _image,
+    spaces: _spaces,
+    categorizedSpaces: _cats,
+    video: _video,
+    propertyDetails: _pd,
+    description: _desc,
+    faq: _faq,
+    ...shared
+  } = domeVillas;
+
+  return {
+    ...shared,
+    id: meta.id,
+    name: meta.name,
+    description: `The ${meta.shortLabel} is one of three Hobbit-themed dome villas at the Dome Villas private estate near Bangalore. Book the full estate for exclusive use of all three domes, or explore this dome’s spaces, pool areas, and landscaped sit-outs in detail below.`,
+    thumbnail: heroes[0] ?? colorImages[0],
+    image: heroes[0] ?? colorImages[0],
+    images: colorImages,
+    spaces: [{ name: meta.shortLabel, image: colorImages[0] }],
+    categorizedSpaces: categorized,
+    propertyDetails: [
+      {
+        label: meta.shortLabel,
+        description:
+          "A standalone dome villa within the private Dome Villas estate, with its own bedroom, bath, and outdoor sit-out.",
+        icon: "Building",
+      },
+      {
+        label: "Hobbit-Themed Architecture",
+        description:
+          "Curved forms, warm interiors, and nature-forward design unique to this dome.",
+        icon: "Layout",
+      },
+      {
+        label: "Pool & Outdoor Living",
+        description:
+          "Access to estate pool zones and landscaped outdoor areas (full-estate booking).",
+        icon: "Waves",
+      },
+      {
+        label: "Landscaped Grounds",
+        description:
+          "Pathways and garden zones connect this dome to the wider estate.",
+        icon: "Trees",
+      },
+      {
+        label: "Exclusive Estate Booking",
+        description:
+          "The three domes are reserved together for one group — not shared with other guests.",
+        icon: "Lock",
+      },
+    ],
+    video: {
+      youtubeUrl: DOME_VIDEO_URLS[color],
+      thumbnail: "",
+      duration: "1:21",
+    },
+    faq: [
+      {
+        question: "Can I book only this dome?",
+        answer:
+          "Dome Villas is booked as a private estate with all three domes for one group. This page showcases the spaces and layout of this dome.",
+      },
+      {
+        question: "How many guests can the estate accommodate?",
+        answer: "Up to 18 guests can be accommodated across all three domes.",
+      },
+      {
+        question: "Is the pool private?",
+        answer:
+          "Yes, pool and outdoor areas are for guests of the exclusively booked estate.",
+      },
+      {
+        question: "Are meals included?",
+        answer: "Meals can be arranged on request.",
+      },
+    ],
+  };
+}
+
+export const blueDomeVilla = buildSingleDomeVilla("blue");
+export const redDomeVilla = buildSingleDomeVilla("red");
+export const yellowDomeVilla = buildSingleDomeVilla("yellow");
+
+export const DOME_VILLA_VARIANTS = [
+  blueDomeVilla,
+  redDomeVilla,
+  yellowDomeVilla,
+] as const;

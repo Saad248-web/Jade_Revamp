@@ -4,6 +4,13 @@ import { useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import CarouselHeroScrim from "./CarouselHeroScrim";
+import {
+  carouselHeroCopyRootCompact,
+  carouselHeroHeadlineClass,
+  carouselHeroLabelClass,
+  carouselHeroSubtextClass,
+} from "@/lib/carouselHeroCopy";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import { usePreloadNeighborSlideImages } from "@/lib/carouselMotion";
 import {
@@ -143,21 +150,22 @@ export default function CaravanUsageSection() {
               sizes="100vw"
               priority={currentIndex === 0}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/60 via-[#0B2C23]/25 to-[#0B2C23]/55" />
           </motion.div>
         </AnimatePresence>
+
+        <CarouselHeroScrim variant="upper" />
       </div>
 
       {/* ── BOTTOM 12vh/20vh — solid charcoal anchor ── */}
       <div className="absolute inset-x-0 bottom-0 h-[12vh] md:h-[20vh] z-10 bg-[#0B2C23]" />
 
       {/* ── TEXT ── */}
-      <div className="absolute inset-x-0 top-[8vh] z-20 flex flex-col items-center text-center px-6 sm:px-10 pointer-events-none">
+      <div className={carouselHeroCopyRootCompact}>
         <motion.p
           key={`label-${currentIndex}`}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="font-manrope text-gh-label font-bold tracking-[0.3em] uppercase text-[#EFCD62] mb-3"
+          className={`${carouselHeroLabelClass} mb-3`}
         >
           {currentSlide.label}
         </motion.p>
@@ -166,7 +174,7 @@ export default function CaravanUsageSection() {
             key={`heading-${currentIndex}`}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-philosopher text-gh-h1 text-white leading-tight lg:whitespace-nowrap"
+            className={carouselHeroHeadlineClass}
           >
             {currentSlide.heading.join(" ")}
           </motion.h2>
@@ -176,7 +184,7 @@ export default function CaravanUsageSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.06, duration: 0.38 }}
-          className="font-manrope text-gh-carousel-sub text-white/80 leading-relaxed max-w-xl mx-auto line-clamp-3"
+          className={carouselHeroSubtextClass}
         >
           {currentSlide.subtext}
         </motion.p>

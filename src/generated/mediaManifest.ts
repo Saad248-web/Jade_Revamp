@@ -3,7 +3,7 @@
 // Do not edit manually.
 
 export const MEDIA_MANIFEST = {
-  "generatedAt": "2026-05-12T19:03:40.770Z",
+  "generatedAt": "2026-05-17T11:06:35.945Z",
   "villasByFolder": {
     "Diamond": {
       "hero": [
@@ -2192,7 +2192,6 @@ export const MEDIA_MANIFEST = {
         "/Experiences/Weddings/5-Pre Wedding/Bachelorette.webp",
         "/Experiences/Weddings/5-Pre Wedding/Bridal Shoots.webp",
         "/Experiences/Weddings/5-Pre Wedding/Haldi.webp",
-        "/Experiences/Weddings/5-Pre Wedding/Mehendi.webp",
         "/Experiences/Weddings/5-Pre Wedding/Sangeeth.webp",
         "/Experiences/Weddings/5-Pre Wedding/cocktail...webp"
       ],
@@ -2371,7 +2370,6 @@ export const MEDIA_MANIFEST = {
             "/Experiences/Weddings/5-Pre Wedding/Bachelorette.webp",
             "/Experiences/Weddings/5-Pre Wedding/Bridal Shoots.webp",
             "/Experiences/Weddings/5-Pre Wedding/Haldi.webp",
-            "/Experiences/Weddings/5-Pre Wedding/Mehendi.webp",
             "/Experiences/Weddings/5-Pre Wedding/Sangeeth.webp",
             "/Experiences/Weddings/5-Pre Wedding/cocktail...webp"
           ]

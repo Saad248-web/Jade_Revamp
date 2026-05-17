@@ -2,6 +2,12 @@ import { NextResponse } from "next/server"; // API cache busted for image optimi
 import { VILLAS } from "@/lib/mockData";
 import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
 import { getHeroOverrideForId } from "@/lib/heroOverrides";
+import {
+  DOME_COLOR_META,
+  getDomeColorFromVillaId,
+  isDomeEstateId,
+  isDomeVillaId,
+} from "@/lib/domeVillaIds";
 
 type CategorizedSpace = {
   id: string;
@@ -57,8 +63,8 @@ function resolveRetreatFolders(villa: any): string[] {
   // Deterministic: use `villa.name` as the manifest key (matches `public/Villa_Retreats/<Folder>`).
   if (villa?.name && byFolder[villa.name]) return [villa.name];
 
-  // Special-case Dome Villas: always resolve to the `Dome` manifest bucket.
-  if (villa?.id === "dome-villas" && byFolder["Dome"]) return ["Dome"];
+  // Dome estate + per-color dome pages use the `Dome` manifest bucket.
+  if (isDomeVillaId(villa?.id) && byFolder["Dome"]) return ["Dome"];
 
   // Fallback: scan paths but only keep folders that exist in the manifest.
   const candidates = collectCandidateFolders(villa).filter(
@@ -265,25 +271,25 @@ export async function GET(
   const heroOverride = getHeroOverrideForId(id);
   const finalHero = heroOverride ? heroOverride : hero;
 
+  const domeColor = getDomeColorFromVillaId(id);
+
   // Dome Villas: pin Experiences/Perfect For to their dedicated folders, and
   // build dome-color grouped sub-categorized spaces (Blue / Red / Yellow each
   // containing Bedrooms, Pool & Water, Living & Dining, etc.).
-  if (id === "dome-villas") {
+  if (isDomeVillaId(id)) {
     experiences = experiences.filter((u) =>
       u.startsWith("/Villa_Retreats/Dome/3-Experienceee/"),
     );
     perfectFor = perfectFor.filter((u) =>
       u.startsWith("/Villa_Retreats/Dome/Perfect For/"),
     );
-    // Spaces pool = Hero + Spaces subfolders under each dome color
-    // (everything except Experience and Perfect For folders).
+    const domeNeedle = domeColor ? DOME_COLOR_META[domeColor].pathNeedle : null;
+    const isDomeSpace = (u: string) =>
+      u.startsWith("/Villa_Retreats/Dome/Dome Villa_s - ") &&
+      (!domeNeedle || u.includes(domeNeedle));
     spaces = uniq([
-      ...hero.filter((u) =>
-        u.startsWith("/Villa_Retreats/Dome/Dome Villa_s - "),
-      ),
-      ...spaces.filter((u) =>
-        u.startsWith("/Villa_Retreats/Dome/Dome Villa_s - "),
-      ),
+      ...hero.filter(isDomeSpace),
+      ...spaces.filter(isDomeSpace),
     ]);
   }
 
@@ -294,8 +300,17 @@ export async function GET(
     perfectFor,
     other,
     categorizedSpaces: (() => {
-      if (id === "dome-villas") {
-        return buildDomeCategorizedSpaces(spaces);
+      if (isDomeVillaId(id)) {
+        const groups = buildDomeCategorizedSpaces(spaces);
+        if (domeColor) {
+          return groups.filter(
+            (g) => g.category === DOME_COLOR_META[domeColor].categoryLabel,
+          );
+        }
+        if (isDomeEstateId(id)) {
+          return groups;
+        }
+        return groups;
       }
       // Use the manifest’s pre-built categories when we only have one folder.
       if (retreatFolders.length === 1) {

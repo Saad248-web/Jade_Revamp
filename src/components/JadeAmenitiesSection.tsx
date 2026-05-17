@@ -4,7 +4,16 @@ import { useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import CarouselHeroScrim from "./CarouselHeroScrim";
+import {
+  carouselHeroCopyRoot,
+  carouselHeroHeadlineClass,
+  carouselHeroLabelClass,
+  carouselHeroSubtextClass,
+} from "@/lib/carouselHeroCopy";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import SectionWrapper from "./SectionWrapper";
+import { JADE_CHARCOAL } from "@/lib/jadeSectionColors";
 import { usePreloadNeighborSlideImages } from "@/lib/carouselMotion";
 import {
   heroSplitBgVariants,
@@ -86,9 +95,10 @@ export default function JadeAmenitiesSection() {
   };
 
   return (
-    <section
+    <SectionWrapper
       ref={sectionRef}
-      className="relative min-h-0 md:min-h-screen w-full overflow-hidden bg-[#25282C] flex flex-col"
+      bg={JADE_CHARCOAL}
+      className="min-h-0 md:min-h-screen w-full overflow-hidden flex flex-col"
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
@@ -107,12 +117,10 @@ export default function JadeAmenitiesSection() {
 
       {/* ── TOP AREA (75vh mobile / 80vh desktop) — background image ── */}
       <div
-        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0 bg-[#0B2C23]"
+        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0 bg-jade-green"
         style={{ perspective: "1500px" }}
       >
         {/* Background Overlay Pattern for the Green part */}
-        <div className="absolute inset-0 bg-diamond-pattern opacity-40 pointer-events-none z-10" />
-
         <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
           <motion.div
             key={`bg-${currentIndex}`}
@@ -135,23 +143,24 @@ export default function JadeAmenitiesSection() {
               sizes="100vw"
               priority={currentIndex === 0}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0B2C23]/80 via-[#0B2C23]/30 to-[#25282C]" />
           </motion.div>
         </AnimatePresence>
 
+        <CarouselHeroScrim variant="upper" />
+
         {/* ── TEXT ── */}
-        <div className="absolute inset-x-0 top-[10vh] z-20 flex flex-col items-center text-center px-6 sm:px-10 pointer-events-none">
+        <div className={carouselHeroCopyRoot}>
           <motion.p
             key={`label-${currentIndex}`}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-manrope text-gh-label font-bold tracking-[0.3em] uppercase text-[#EFCD62]"
+            className={carouselHeroLabelClass}
             style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
           >
             {currentSlide.title}
           </motion.p>
           <div style={{ marginBottom: "clamp(6px, 1.5vw, 12px)" }}>
-            <h2 className="font-philosopher text-gh-h1 text-white leading-tight lg:whitespace-nowrap">
+            <h2 className={carouselHeroHeadlineClass}>
               {currentSlide.heading.join(" ")}
             </h2>
           </div>
@@ -160,7 +169,7 @@ export default function JadeAmenitiesSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.06, duration: 0.38 }}
-            className="font-manrope text-gh-carousel-sub text-white/80 leading-relaxed max-w-xl mx-auto line-clamp-3"
+            className={carouselHeroSubtextClass}
           >
             {currentSlide.subtext}
           </motion.p>
@@ -168,10 +177,10 @@ export default function JadeAmenitiesSection() {
       </div>
 
       {/* ── BOTTOM AREA ── */}
-      <div className="relative w-full h-[12vh] md:h-[20vh] z-10 bg-[#25282C]" />
+      <div className="relative w-full h-[12vh] md:h-[20vh] z-10 bg-jade-charcoal" />
 
       {/* ── SPACER — exactly 40px gap ── */}
-      <div className="hidden md:block h-[40px] bg-[#25282C]" />
+      <div className="hidden md:block h-[40px] bg-jade-charcoal" />
 
       {/* ── ARROWS ── */}
       <button
@@ -227,6 +236,6 @@ export default function JadeAmenitiesSection() {
         </motion.div>
       </div>
 
-    </section>
+    </SectionWrapper>
   );
 }

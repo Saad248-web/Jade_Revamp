@@ -144,6 +144,28 @@ body {
   background: #0b2c23;
 }
 
+/* Split-hero carousel copy — legibility over bright photos */
+@layer utilities {
+  .carousel-hero-copy .carousel-hero-label {
+    text-shadow:
+      0 1px 8px rgba(0, 0, 0, 0.8),
+      0 2px 18px rgba(0, 0, 0, 0.5);
+  }
+
+  .carousel-hero-copy .carousel-hero-headline {
+    text-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.9),
+      0 3px 24px rgba(0, 0, 0, 0.75),
+      0 0 48px rgba(37, 40, 44, 0.55);
+  }
+
+  .carousel-hero-copy .carousel-hero-sub {
+    text-shadow:
+      0 1px 12px rgba(0, 0, 0, 0.85),
+      0 2px 22px rgba(0, 0, 0, 0.6);
+  }
+}
+
 .bg-diamond-pattern {
   background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 0L120 60L60 120L0 60Z' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='1'/%3E%3Ccircle cx='60' cy='60' r='2' fill='rgba(255,255,255,0.08)'/%3E%3Cpath d='M60 30L90 60L60 90L30 60Z' fill='none' stroke='rgba(255,255,255,0.03)' stroke-width='1'/%3E%3C/svg%3E");
   background-size: 120px 120px;
