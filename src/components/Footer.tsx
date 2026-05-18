@@ -178,7 +178,9 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
         <div
           className={clsx(
             "max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pt-10 lg:pt-20",
-            stickyBottomBar ? "pb-20 lg:pb-12" : "pb-32 lg:pb-16",
+            stickyBottomBar
+              ? "pb-[max(1rem,calc(3.25rem+env(safe-area-inset-bottom,0px)))] lg:pb-12"
+              : "max-lg:pb-[max(1rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] lg:pb-16",
           )}
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-stretch">

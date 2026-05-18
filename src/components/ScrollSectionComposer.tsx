@@ -32,13 +32,35 @@ const ScrollButton = ({ href, label }: { href: string; label: string }) => (
   </div>
 );
 
+const StaggeredLine = ({
+  line,
+  progress,
+  fadeInStart,
+  fadeInEnd,
+}: {
+  line: string;
+  progress: MotionValue<number>;
+  fadeInStart: number;
+  fadeInEnd: number;
+}) => {
+  const opacity = useTransform(progress, [fadeInStart, fadeInEnd], [0, 1]);
+  const y = useTransform(progress, [fadeInStart, fadeInEnd], [16, 0]);
+  return (
+    <motion.p
+      className="m-0"
+      style={{ opacity, y, willChange: "opacity, transform" }}
+    >
+      {line}
+    </motion.p>
+  );
+};
+
 const SlideLines = ({
   slide,
   progress,
   start,
   end,
   index,
-  totalSlides,
 }: {
   slide: ScrollSlide;
   progress: MotionValue<number>;
@@ -48,10 +70,9 @@ const SlideLines = ({
   totalSlides: number;
 }) => {
   const span = end - start;
-  // Single fade for the whole slide (label + text + button)
   const fadeOut = end - span * 0.1;
 
-  // Locking/Y-parallax logic
+  // Locking / Y parallax (slide-level enter & exit)
   const yInput =
     index === 0
       ? [start, fadeOut, end]
@@ -59,25 +80,46 @@ const SlideLines = ({
   const yOutput = index === 0 ? [0, 0, -50] : [100, 0, 0, -80];
 
   const y = useTransform(progress, yInput, yOutput);
-  const opacity = useTransform(
-    progress,
-    [start, start + 0.06, fadeOut, end],
-    [0, 1, 1, 0],
-  );
-  const liftY = useTransform(
-    progress,
-    [start, start + 0.08, fadeOut, end],
-    [18, 0, 0, -8],
-  );
+
+  // Slide-level: instantly visible at start, only fades out near the end.
+  // Per-line stagger is what produces the appearance feel.
+  const opacity = useTransform(progress, [start, fadeOut, end], [1, 1, 0]);
   const scale = useTransform(
     progress,
-    [start, start + 0.08, fadeOut, end],
+    [start, start + span * 0.2, fadeOut, end],
     [0.985, 1, 1, 0.995],
   );
   const blurPx = useTransform(
     progress,
-    [start, start + 0.08, fadeOut, end],
-    [10, 0, 0, 6],
+    [start, start + span * 0.2, fadeOut, end],
+    [6, 0, 0, 4],
+  );
+
+  // Per-line fade-in windows distributed across the slide span.
+  const labelOffset = slide.label ? 0.15 : 0.05;
+  const tail = 0.15;
+  const lineCount = Math.max(slide.lines.length, 1);
+  const perLineWindow = (1 - labelOffset - tail) / lineCount;
+  const fadeWidth = perLineWindow * 0.85;
+
+  const labelOpacity = useTransform(
+    progress,
+    [start + span * 0.02, start + span * 0.12],
+    [0, 1],
+  );
+  const labelY = useTransform(
+    progress,
+    [start + span * 0.02, start + span * 0.12],
+    [12, 0],
+  );
+
+  const buttonStart =
+    start + span * (labelOffset + lineCount * perLineWindow + 0.04);
+  const buttonEnd = Math.min(buttonStart + span * 0.12, fadeOut);
+  const buttonOpacity = useTransform(
+    progress,
+    [buttonStart, buttonEnd],
+    [0, 1],
   );
 
   return (
@@ -89,31 +131,46 @@ const SlideLines = ({
         className="text-center w-full max-w-[90vw] md:max-w-4xl mx-auto mb-12"
         style={{
           opacity,
-          y: liftY,
           scale,
           filter: useTransform(blurPx, (v) => `blur(${v}px)`),
           willChange: "transform, filter, opacity",
         }}
       >
         {slide.label && (
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-6 md:mb-8 text-center">
+          <motion.p
+            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-6 md:mb-8 text-center"
+            style={{ opacity: labelOpacity, y: labelY }}
+          >
             {slide.label}
-          </p>
+          </motion.p>
         )}
 
-        <p className="font-manrope font-normal text-[20px] md:text-[24px] leading-normal md:leading-relaxed tracking-[0.01em] text-[#FAFAFA]/90 mb-8 md:mb-10 max-w-[340px] sm:max-w-xl md:max-w-3xl mx-auto">
-          {slide.lines.map((line, lineIdx) => (
-            <span key={lineIdx}>
-              {lineIdx > 0 ? <br /> : null}
-              {line}
-            </span>
-          ))}
-        </p>
+        <motion.div
+          className={`font-manrope font-normal text-[16px] sm:text-[17px] md:text-[19px] leading-[1.7] md:leading-[1.75] tracking-[0.01em] text-[#FAFAFA]/90 max-w-[340px] sm:max-w-xl md:max-w-2xl mx-auto flex flex-col gap-7 md:gap-9${slide.button ? " mb-8 md:mb-10" : ""}`}
+        >
+          {slide.lines.map((line, lineIdx) => {
+            const fadeInStart =
+              start + span * (labelOffset + lineIdx * perLineWindow);
+            const fadeInEnd = fadeInStart + span * fadeWidth;
+            return (
+              <StaggeredLine
+                key={`${line}-${lineIdx}`}
+                line={line}
+                progress={progress}
+                fadeInStart={fadeInStart}
+                fadeInEnd={fadeInEnd}
+              />
+            );
+          })}
+        </motion.div>
 
         {slide.button && (
-          <div className="pointer-events-auto">
+          <motion.div
+            className="pointer-events-auto"
+            style={{ opacity: buttonOpacity }}
+          >
             <ScrollButton href={slide.button.href} label={slide.button.label} />
-          </div>
+          </motion.div>
         )}
       </motion.div>
     </motion.div>

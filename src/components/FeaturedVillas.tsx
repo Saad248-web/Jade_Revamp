@@ -17,7 +17,10 @@ import LuxuryPattern from "./LuxuryPattern";
 import SectionWrapper from "./SectionWrapper";
 import { JADE_GREEN } from "@/lib/jadeSectionColors";
 import PrimaryButton from "@/components/PrimaryButton";
-import { usePreloadNeighborImages } from "@/lib/carouselMotion";
+import {
+  usePreloadNeighborImages,
+  useSnappedScrollProgress,
+} from "@/lib/carouselMotion";
 import {
   liquidCarouselBgVariants,
   type HeroSplitCustom,
@@ -82,26 +85,43 @@ const VILLAS = [
 
 export default function FeaturedVillas() {
   const targetRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: targetRef,
   });
 
-  // Smooth scroll spring
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 70,
+    damping: 24,
+    mass: 0.6,
     restDelta: 0.001,
   });
 
   const totalVillas = VILLAS.length;
-  const totalSteps = totalVillas + 2; // Intro + Villas + Final
+  const totalSteps = totalVillas + 2;
+  const dwellProgress = useSnappedScrollProgress(
+    smoothProgress,
+    totalSteps + 1,
+    reducedMotion,
+    0.32,
+  );
+  const snappedProgress = useSpring(dwellProgress, {
+    stiffness: 120,
+    damping: 26,
+    mass: 0.5,
+    restDelta: 0.0005,
+  });
 
   return (
     <SectionWrapper
       ref={targetRef}
       bg={JADE_GREEN}
       className="h-[650vh]"
-      pattern={{ opacity: 0.3, strokeColor: "#EFCD62" }}
+      pattern={{
+        opacity: 0.09,
+        strokeColor: "#EFCD62",
+        edgeFade: "18vh",
+      }}
     >
       <NavbarThemeTrigger theme="white" sectionRef={targetRef} />
       <div className="sticky top-0 h-screen overflow-hidden">
@@ -109,21 +129,19 @@ export default function FeaturedVillas() {
         {/* Sections */}
         <div className="relative w-full h-full z-10">
           {/* Panel 0: Intro */}
-          <IntroPanel globalProgress={smoothProgress} totalSteps={totalSteps} />
+          <IntroPanel globalProgress={snappedProgress} totalSteps={totalSteps} />
 
-          {/* Villa Slides */}
           {VILLAS.map((villa, i) => (
             <VillaSlide
               key={villa.id}
               data={villa}
-              index={i + 1} // Index starts from 1 because Panel 0 is at 0
-              globalProgress={smoothProgress}
+              index={i + 1}
+              globalProgress={snappedProgress}
               totalSteps={totalSteps}
             />
           ))}
 
-          {/* Final Floating Button */}
-          <EndButton globalProgress={smoothProgress} />
+          <EndButton globalProgress={snappedProgress} />
         </div>
       </div>
     </SectionWrapper>
@@ -186,7 +204,7 @@ function VillaSlide({
   globalProgress: any;
   totalSteps: number;
 }) {
-  const innerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLAnchorElement>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const reducedMotion = useReducedMotion();
@@ -197,6 +215,7 @@ function VillaSlide({
   };
 
   const handleNextImage = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     setDirection(1);
     setCurrentImageIndex((prev) =>
@@ -205,6 +224,7 @@ function VillaSlide({
   };
 
   const handlePrevImage = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     setDirection(-1);
     setCurrentImageIndex((prev) =>
@@ -263,8 +283,11 @@ function VillaSlide({
     >
       <div className="pointer-events-none relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-20 lg:px-32 xl:px-48 pb-[80px] sm:pb-0">
         {/* Layout Container: Stacked universally on all screen sizes */}
-        <div ref={innerRef} className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-stretch justify-center gap-4 lg:gap-6">
-          {/* Image Section */}
+        <Link
+          href={data.link}
+          ref={innerRef}
+          className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-stretch justify-center gap-4 lg:gap-6 group rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EFCD62]"
+        >
           <div
             className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0"
             style={{ perspective: "1500px" }}
@@ -407,15 +430,12 @@ function VillaSlide({
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <Link
-                href={data.link}
-                className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-4 transition-all"
-              >
+              <span className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase group-hover:gap-4 transition-all">
                 Learn more about {data.title} <ArrowRight className="w-5 h-5" />
-              </Link>
+              </span>
             </motion.div>
           </div>
-        </div>
+        </Link>
       </div>
     </motion.div>
   );

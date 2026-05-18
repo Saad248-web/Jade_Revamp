@@ -14,3 +14,6 @@ export const carouselHeroHeadlineClass =
 
 export const carouselHeroSubtextClass =
   "carousel-hero-sub font-manrope text-gh-carousel-sub text-white/90 leading-relaxed max-w-xl mx-auto line-clamp-3";
+
+export const carouselHeroMiniCardShadow =
+  "shadow-[0_10px_24px_rgba(0,0,0,0.28)]";

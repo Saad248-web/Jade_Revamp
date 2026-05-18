@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import Image from "next/image";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
+import JadeImage from "@/components/ui/JadeImage";
+import { useMediaMinLg } from "@/lib/useMediaMinLg";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
@@ -84,86 +85,37 @@ export default function ExperiencesScrollSection() {
     target: targetRef,
   });
 
-  // Smooth scroll spring
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
-  const totalSteps = PANELS.length + 1; // 8 steps total
+  const totalSteps = PANELS.length + 1;
+  const panelCount = PANELS.length;
 
   return (
     <section ref={targetRef} className="relative h-[800vh] bg-[#1A1C1E]">
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#1A1C1E]">
-        {/* Top Label & Counter - Global */}
-        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(48px,6vh,80px)] pb-[clamp(8px,1.5vh,18px)]">
-          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-2 md:mb-3 font-semibold text-jade-gold drop-shadow-lg block">
+      <motion.div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#1A1C1E] isolation isolate">
+        <motion.div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(40px,5vh,64px)] pb-[clamp(4px,1vh,12px)] shrink-0">
+          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-jade-gold drop-shadow-lg block">
             WAYS JADE IS EXPERIENCED
           </span>
-          <GlobalCounter
-            progress={smoothProgress}
-            total={PANELS.length}
-            totalSteps={totalSteps}
-          />
-        </div>
+        </motion.div>
 
-        {/* Panels Interactive Area */}
-        <div className="relative w-full flex-1 min-h-0 z-10">
+        <motion.div className="relative w-full flex-1 min-h-0 z-10">
           {PANELS.map((panel, i) => (
             <PanelSlide
               key={panel.id}
               data={panel}
               index={i}
-              globalProgress={smoothProgress}
+              globalProgress={scrollYProgress}
               totalSteps={totalSteps}
+              panelCount={panelCount}
             />
           ))}
-          <EndButton globalProgress={smoothProgress} />
-        </div>
-      </div>
+        </motion.div>
+        <EndButton globalProgress={scrollYProgress} />
+      </motion.div>
     </section>
   );
 }
 
-// Global Counter Component
-function GlobalCounter({
-  progress,
-  total,
-  totalSteps,
-}: {
-  progress: any;
-  total: number;
-  totalSteps: number;
-}) {
-  const [current, setCurrent] = useState(1);
-
-  useEffect(() => {
-    return progress.on("change", (v: number) => {
-      const step = 1 / (totalSteps - 1);
-      const lastPanelP = (total - 1) / (totalSteps - 1);
-      const effectiveP = Math.min(v, lastPanelP);
-
-      let idx = Math.round(effectiveP / step) + 1;
-      if (idx > total) idx = total;
-      if (idx < 1) idx = 1;
-
-      setCurrent(idx);
-    });
-  }, [progress, total, totalSteps]);
-
-  return (
-    <div className="relative flex md:hidden items-center gap-12 md:gap-16 font-philosopher text-gh-scroll mt-2">
-      <span className="text-white drop-shadow-lg transition-all duration-300">
-        {current}
-      </span>
-      <div className="w-24 md:w-32 h-[1px] bg-white/70 drop-shadow-lg" />
-      <span className="text-white/70 drop-shadow-lg">{total}</span>
-    </div>
-  );
-}
-
-function EndButton({ globalProgress }: { globalProgress: any }) {
+function EndButton({ globalProgress }: { globalProgress: MotionValue<number> }) {
   const opacity = useTransform(globalProgress, [0.85, 1.0], [0, 1]);
   const scale = useTransform(globalProgress, [0.85, 1.0], [0.8, 1]);
   const y = useTransform(globalProgress, [0.85, 1.0], [60, 0]);
@@ -173,7 +125,7 @@ function EndButton({ globalProgress }: { globalProgress: any }) {
       style={{ opacity, scale, y, zIndex: 100 }}
       className="absolute inset-0 flex items-center justify-center pointer-events-none"
     >
-      <div className="pointer-events-auto">
+      <motion.div className="pointer-events-auto">
         <PrimaryButton
           href="/villas"
           className="shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-transform duration-300 hover:scale-[1.03]"
@@ -182,7 +134,7 @@ function EndButton({ globalProgress }: { globalProgress: any }) {
             See Best Experience Villas
           </span>
         </PrimaryButton>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
@@ -192,15 +144,22 @@ function PanelSlide({
   index,
   globalProgress,
   totalSteps,
+  panelCount,
 }: {
-  data: any;
+  data: (typeof PANELS)[number];
   index: number;
-  globalProgress: any;
+  globalProgress: MotionValue<number>;
   totalSteps: number;
+  panelCount: number;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
-  // Zoom-safe offset: half-viewport + half-panel + small visible gap.
-  // Keeps exactly ONE panel centered at any zoom level (100/125/140/150%).
+  const isLg = useMediaMinLg();
+  const panelImageSrc = data.mobileImage
+    ? isLg
+      ? data.image
+      : data.mobileImage
+    : data.image;
+
   const [offsetPx, setOffsetPx] = useState(1000);
 
   useEffect(() => {
@@ -209,7 +168,7 @@ function PanelSlide({
       const panelWidth =
         vw >= 1280 ? 896 : vw >= 768 ? 672 : vw >= 640 ? 512 : 448;
       const cappedPanel = Math.min(panelWidth, vw - 48);
-      const visibleGap = 56;
+      const visibleGap = 20;
       return Math.ceil(vw / 2 + cappedPanel / 2 + visibleGap);
     };
     const handleResize = () => setOffsetPx(computeOffset());
@@ -222,56 +181,40 @@ function PanelSlide({
     return (index - p * totalSteps) * offsetPx;
   });
 
+  const zIndex = useTransform(globalProgress, (p: number) => {
+    const centered = Math.min(Math.round(p * totalSteps), panelCount - 1);
+    return index === centered ? 100 : index * 10;
+  });
+
   return (
     <motion.div
-      style={{ x, zIndex: index * 10 }}
+      style={{ x, zIndex, willChange: "transform" }}
       className="absolute inset-0 w-full h-full flex items-center justify-center bg-transparent pointer-events-none"
     >
-      <div className="pointer-events-auto flex items-center justify-center w-full h-full">
+      <motion.div className="pointer-events-auto flex items-center justify-center w-full h-full">
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
-        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 pb-[80px] sm:pb-10">
-          <div className="relative w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto flex flex-col items-stretch gap-3 lg:gap-5">
-            {/* Image Section — zoom-safe max height so CTA stays above the fold */}
-            <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
-              <div className="w-full h-full relative">
-                {data.mobileImage ? (
-                  <>
-                    {/* Mobile & Tab View */}
-                    <div className="block lg:hidden w-full h-full relative">
-                      <Image
-                        src={data.mobileImage}
-                        alt={data.title}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 1024px) 100vw, 600px"
-                      />
-                    </div>
-                    {/* Desktop View */}
-                    <div className="hidden lg:block w-full h-full relative">
-                      <Image
-                        src={data.image}
-                        alt={data.title}
-                        fill
-                        className="object-cover"
-                        sizes="600px"
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <Image
-                    src={data.image}
-                    alt={data.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 600px"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              </div>
-            </div>
+        <motion.div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 pb-[80px] sm:pb-10">
+          <motion.div className="relative w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto flex flex-col items-stretch gap-3 lg:gap-5">
+            <motion.div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none shrink-0 bg-black">
+              <motion.div className="w-full h-full relative">
+                <JadeImage
+                  src={panelImageSrc}
+                  alt={data.title}
+                  fill
+                  className="object-cover"
+                  sizes={
+                    data.mobileImage
+                      ? isLg
+                        ? "600px"
+                        : "(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
+                      : "(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
+                  }
+                />
+                <motion.div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              </motion.div>
+            </motion.div>
 
-            {/* Text Section — adaptive (no fixed height) so title + body + CTA always fit */}
-            <div className="relative w-full flex flex-col items-start text-left mt-1 shrink-0">
+            <motion.div className="relative w-full flex flex-col items-start text-left mt-1 shrink-0">
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -301,10 +244,10 @@ function PanelSlide({
                   {data.cta} <ArrowRight className="w-5 h-5" />
                 </Link>
               </motion.div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </motion.div>
   );
 }

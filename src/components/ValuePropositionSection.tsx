@@ -13,6 +13,7 @@ import {
   carouselHeroHeadlineClass,
   carouselHeroLabelClass,
   carouselHeroSubtextClass,
+  carouselHeroMiniCardShadow,
 } from "@/lib/carouselHeroCopy";
 import {
   CAROUSEL_CROSSFADE,
@@ -193,11 +194,8 @@ export default function ValuePropositionSection() {
       </button>
 
       {/* ── FEATURE CARD — perfectly centred on the seam ── */}
-      <div
-        className="absolute top-[75vh] md:top-[80vh] -translate-y-1/2 left-1/2 -translate-x-1/2 z-30
-                      w-[45vw] max-w-[280px] sm:w-[35vw] sm:max-w-[320px] lg:w-[24vw] lg:max-w-[380px] xl:w-[20vw]
-                      aspect-[4/3]
-                      shadow-[0_20px_50px_rgba(0,0,0,0.55)] overflow-hidden border border-white/20"
+      <motion.div
+        className={`absolute top-[75vh] md:top-[80vh] -translate-y-1/2 left-1/2 -translate-x-1/2 z-30 w-[45vw] max-w-[280px] sm:w-[35vw] sm:max-w-[320px] lg:w-[24vw] lg:max-w-[380px] xl:w-[20vw] aspect-[4/3] ${carouselHeroMiniCardShadow} overflow-hidden border border-white/20`}
       >
         <motion.div
           className="flex w-full h-full cursor-grab active:cursor-grabbing"
@@ -227,7 +225,7 @@ export default function ValuePropositionSection() {
             </div>
           ))}
         </motion.div>
-      </div>
+      </motion.div>
     </SectionWrapper>
   );
 }

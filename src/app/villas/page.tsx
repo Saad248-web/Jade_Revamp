@@ -69,7 +69,6 @@ export default function VillasPage() {
         <VillasCarousel />
       </Suspense>
       <Footer />
-      <div className="h-24 md:hidden" /> {/* Spacer for Mobile Bottom Nav */}
       <MobileBottomNav />
     </main>
   );

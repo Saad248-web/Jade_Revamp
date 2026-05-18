@@ -90,36 +90,8 @@ export default function LandingPage() {
   }, []);
 
   const { scrollY } = useScroll();
-  const yBackground = useTransform(scrollY, [0, 1000], ["0%", "40%"]); // Background moves slower (Parallax)
-  const yText = useTransform(scrollY, [0, 500], ["0%", "100%"]); // Text moves faster/away
-
-  // Text Reveal Variants
-  const revealContainer = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.4,
-      },
-    },
-  };
-
-  const revealLine = {
-    hidden: { y: "100%" },
-    visible: {
-      y: "0%",
-      transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
-    },
-  };
-
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, delay: 1.2, ease: "easeOut" },
-    },
-  };
+  const yBackground = useTransform(scrollY, [0, 1000], ["0%", "40%"]);
+  const heroContentY = useTransform(scrollY, [0, 500], ["0%", "15%"]);
 
   const [currentVideoIndex, setCurrentVideoIndex] = useState(() =>
     Math.floor(Math.random() * videoPlaylist.length),
@@ -134,7 +106,7 @@ export default function LandingPage() {
   return (
     <motion.div
       ref={containerRef}
-      className="relative min-h-[300vh] bg-jade-dark text-white" // Extended height for scroll testing
+      className="relative bg-jade-dark text-white"
       initial={{ opacity: 1 }}
       animate={{ opacity: 1 }}
     >
@@ -194,13 +166,13 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
         </motion.div>
 
-        {/* Text Content Layer — Centered on screen */}
+        {/* Foreground — copy + CTA share the same scroll parallax */}
         <motion.div
-          style={{ y: useTransform(scrollY, [0, 500], ["0%", "15%"]) }}
-          className="relative z-10 h-full flex flex-col justify-center items-center text-center px-6 md:px-12 max-w-[1920px] mx-auto"
+          style={{ y: heroContentY }}
+          className="relative z-10 h-full flex flex-col justify-between items-center text-center px-6 md:px-12 max-w-[1920px] mx-auto pointer-events-none"
         >
-          {/* Text Group — Tight Gestalt proximity grouping */}
-          <div className="max-w-5xl flex flex-col items-center gap-0">
+          <motion.div className="flex-1 flex flex-col justify-center items-center w-full">
+            <motion.div className="max-w-5xl flex flex-col items-center gap-0 pointer-events-auto">
             {/* Label */}
             <motion.p
               initial={{ opacity: 0, y: 30 }}
@@ -234,23 +206,23 @@ export default function LandingPage() {
               Private themed farmhouse villas in serene locations of Bangalore,
               curated for gatherings and getaways.
             </motion.p>
-          </div>
-        </motion.div>
+            </motion.div>
+          </motion.div>
 
-        {/* "SCROLL TO EXPERIENCE" — Pinned to bottom of hero, outside text group */}
-        <motion.button
-          onClick={() => scrollToY(window.innerHeight, { duration: 1.1 })}
-          initial={{ opacity: 0, y: 20 }}
-          animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
-          className="absolute z-10 inset-x-0 mx-auto w-fit flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity max-lg:bottom-[calc(7rem+env(safe-area-inset-bottom))] lg:bottom-10"
-        >
-          <span className="text-gh-label tracking-[0.2em] font-manrope text-white/60 uppercase">
-            Scroll to Experience
-          </span>
-          {/* Vertical Line */}
-          <div className="h-16 w-[1px] bg-gradient-to-b from-white/50 to-transparent" />
-        </motion.button>
+          <motion.button
+            type="button"
+            onClick={() => scrollToY(window.innerHeight, { duration: 1.1 })}
+            initial={{ opacity: 0, y: 20 }}
+            animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
+            className="pointer-events-auto w-fit flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity mb-[calc(7rem+env(safe-area-inset-bottom))] lg:mb-10"
+          >
+            <span className="text-gh-label tracking-[0.2em] font-manrope text-white/60 uppercase">
+              Scroll to Experience
+            </span>
+            <div className="h-16 w-[1px] bg-gradient-to-b from-white/50 to-transparent" />
+          </motion.button>
+        </motion.div>
       </div>
 
       <UnifiedScrollSection />

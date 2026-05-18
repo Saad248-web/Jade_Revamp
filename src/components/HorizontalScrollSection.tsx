@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import JadeImage from "@/components/ui/JadeImage";
 import { useMediaMinLg } from "@/lib/useMediaMinLg";
 import Link from "next/link";
@@ -90,21 +90,16 @@ export default function HorizontalScrollSection() {
     target: targetRef,
   });
 
-  const totalSteps = PANELS.length + 1; // 5 steps total to allow the last panel to fully exit
+  const totalSteps = PANELS.length + 1;
+  const panelCount = PANELS.length;
 
   return (
     <section ref={targetRef} className="relative h-[800vh] bg-[#25282C]">
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#25282C]">
-        {/* Top Label & Counter - Global */}
-        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(48px,6vh,80px)] pb-[clamp(8px,1.5vh,18px)]">
-          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase mb-2 md:mb-3 font-semibold text-jade-gold drop-shadow-lg block">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#25282C] isolation isolate">
+        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(40px,5vh,64px)] pb-[clamp(4px,1vh,12px)] shrink-0">
+          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-jade-gold drop-shadow-lg block">
             WAYS JADE IS EXPERIENCED
           </span>
-          <GlobalCounter
-            progress={scrollYProgress}
-            total={PANELS.length}
-            totalSteps={totalSteps}
-          />
         </div>
 
         {/* Panels Interactive Area */}
@@ -116,6 +111,7 @@ export default function HorizontalScrollSection() {
               index={i}
               globalProgress={scrollYProgress}
               totalSteps={totalSteps}
+              panelCount={panelCount}
             />
           ))}
         </div>
@@ -123,49 +119,6 @@ export default function HorizontalScrollSection() {
         <EndButton globalProgress={scrollYProgress} />
       </div>
     </section>
-  );
-}
-
-// Global Counter Component
-function GlobalCounter({
-  progress,
-  total,
-  totalSteps,
-}: {
-  progress: any;
-  total: number;
-  totalSteps: number;
-}) {
-  const [current, setCurrent] = useState(1);
-
-  useEffect(() => {
-    return progress.on("change", (v: number) => {
-      // With totalSteps = 5, panels are at p = 0, 0.2, 0.4, 0.6
-      // v goes from 0.0 to 1.0.
-      const step = 1 / (totalSteps - 1); // 0.2 for totalSteps=5
-
-      // Map progress to panel index (1-4)
-      // Clamping p up to the last panel's center point for the counter
-      const lastPanelP = (total - 1) / (totalSteps - 1); // 0.6 if total=4, totalSteps=5
-      const effectiveP = Math.min(v, lastPanelP);
-
-      let idx = Math.round(effectiveP / step) + 1;
-
-      if (idx > total) idx = total;
-      if (idx < 1) idx = 1;
-
-      setCurrent(idx);
-    });
-  }, [progress, total, totalSteps]);
-
-  return (
-    <div className="relative flex md:hidden items-center gap-8 md:gap-12 font-philosopher text-[18px] md:text-[22px] mt-2">
-      <span className="text-white drop-shadow-lg transition-all duration-300">
-        {current}
-      </span>
-      <div className="w-20 md:w-28 h-[1px] bg-white/70 drop-shadow-lg" />
-      <span className="text-white/70 drop-shadow-lg">{total}</span>
-    </div>
   );
 }
 
@@ -196,11 +149,13 @@ function StackedPanel({
   index,
   globalProgress,
   totalSteps,
+  panelCount,
 }: {
   data: any;
   index: number;
-  globalProgress: any;
+  globalProgress: MotionValue<number>;
   totalSteps: number;
+  panelCount: number;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const isLg = useMediaMinLg();
@@ -243,14 +198,20 @@ function StackedPanel({
   // X Position: Continuous tracked position instead of clamped keyframes
   // to ensure panels don't pile up at a fixed clamp boundary off-screen.
   const x = useTransform(globalProgress, (p: number) => {
-    // p goes from 0 to 1 over the whole scroll.
-    // Panel 'index' is at screen center (x=0) when p = index / totalSteps.
     return (index - p * totalSteps) * offsetPx;
+  });
+
+  const zIndex = useTransform(globalProgress, (p: number) => {
+    const centered = Math.min(
+      Math.round(p * totalSteps),
+      panelCount - 1,
+    );
+    return index === centered ? 100 : index * 10;
   });
 
   return (
     <motion.div
-      style={{ x, zIndex: index * 10, willChange: "transform" }}
+      style={{ x, zIndex, willChange: "transform" }}
       className="absolute inset-0 w-full h-full flex items-center justify-center bg-transparent pointer-events-none"
     >
       <div className="pointer-events-auto flex items-center justify-center w-full h-full">

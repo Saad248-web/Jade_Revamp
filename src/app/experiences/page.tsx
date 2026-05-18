@@ -68,7 +68,6 @@ export default function ExperiencesPage() {
         <ExperiencesScrollSection />
       </div>
       <Footer />
-      <div className="h-24 md:hidden" /> {/* Spacer for Mobile Bottom Nav */}
       <MobileBottomNav />
     </main>
   );

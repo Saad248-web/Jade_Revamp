@@ -7,7 +7,7 @@ export interface LuxuryPatternProps {
   patternSize?: number;
   /** Stroke/pattern color tint — currently unused (asset-driven). */
   strokeColor?: string;
-  /** Background color rendered behind the pattern. Default: Jade Green */
+  /** Background color rendered behind the pattern. Default: transparent (let parent show through) */
   backgroundColor?: string;
   /** Opacity of the pattern overlay. Default: 1 */
   opacity?: number;
@@ -15,6 +15,13 @@ export interface LuxuryPatternProps {
   className?: string;
   /** Unique id — unused in CSS-tile mode but kept for API compat */
   patternId?: string;
+  /**
+   * Vertical edge fade distance so the pattern blends into the parent
+   * background at the section's top/bottom edges (eliminates visible seams
+   * against adjacent same-color sections without a pattern overlay).
+   * Default: undefined (no mask).
+   */
+  edgeFade?: string;
   /** @deprecated use patternSize */
   tileSize?: number;
   width?: number;
@@ -32,11 +39,16 @@ const LuxuryPattern = memo(
   ({
     patternSize = 300,
     tileSize,
-    backgroundColor = "#0B2C23",
+    backgroundColor = "transparent",
     opacity = 1,
+    edgeFade,
     className = "",
   }: LuxuryPatternProps) => {
     const size = tileSize ?? patternSize;
+
+    const fadeMask = edgeFade
+      ? `linear-gradient(to bottom, transparent 0, black ${edgeFade}, black calc(100% - ${edgeFade}), transparent 100%)`
+      : undefined;
 
     return (
       <div
@@ -49,6 +61,16 @@ const LuxuryPattern = memo(
           backgroundRepeat: "repeat",
           backgroundSize: `${size}px ${size}px`,
           backgroundAttachment: "fixed",
+          ...(fadeMask
+            ? {
+                WebkitMaskImage: fadeMask,
+                maskImage: fadeMask,
+                WebkitMaskRepeat: "no-repeat",
+                maskRepeat: "no-repeat",
+                WebkitMaskSize: "100% 100%",
+                maskSize: "100% 100%",
+              }
+            : null),
         }}
       />
     );

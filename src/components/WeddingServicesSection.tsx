@@ -10,6 +10,7 @@ import {
   carouselHeroHeadlineClass,
   carouselHeroLabelClass,
   carouselHeroSubtextClass,
+  carouselHeroMiniCardShadow,
 } from "@/lib/carouselHeroCopy";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import {
@@ -249,11 +250,8 @@ export default function WeddingServicesSection() {
         <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white group-hover:translate-x-1 transition-transform" />
       </button>
 
-      <div
-        className="absolute top-[75vh] md:top-[80vh] -translate-y-1/2 left-1/2 -translate-x-1/2 z-30
-                      w-[45vw] max-w-[280px] sm:w-[35vw] sm:max-w-[320px] lg:w-[24vw] lg:max-w-[380px] xl:w-[20vw]
-                      aspect-[4/3]
-                      shadow-[0_20px_50px_rgba(0,0,0,0.55)] overflow-hidden border border-white/20"
+      <motion.div
+        className={`absolute top-[75vh] md:top-[80vh] -translate-y-1/2 left-1/2 -translate-x-1/2 z-30 w-[45vw] max-w-[280px] sm:w-[35vw] sm:max-w-[320px] lg:w-[24vw] lg:max-w-[380px] xl:w-[20vw] aspect-[4/3] ${carouselHeroMiniCardShadow} overflow-hidden border border-white/20`}
       >
         <motion.div
           className="flex w-full h-full cursor-grab active:cursor-grabbing"
@@ -287,7 +285,7 @@ export default function WeddingServicesSection() {
             </div>
           ))}
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }
