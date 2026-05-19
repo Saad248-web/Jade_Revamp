@@ -1,18 +1,6 @@
-export const jade735 = {
-  id: "jade-735",
-  name: "Jade 735",
-  type: "PRIVATE BOUTIQUE VILLA · EXPERIENTIAL RETREAT",
-  location: "Sadahalli · North Bangalore",
-  stats: {
-    stay: "20 Guests",
-    events: "30 Guests",
-    bhk: "4+1 BHK",
-    lawn: "Private Gazebo Lounge",
-    villaArea: "10ft Waterfall Pool",
-  },
-  description:
-    "Jade 735 is a private boutique villa designed as a personal retreat within a resort-like setting. The 4+1 bedroom layout combines curated interiors with multiple experiential zones, creating a space suited for both stays and hosted gatherings. Featuring a private pool with a 10 ft waterfall, jacuzzi lounge, gazebo seating, and multiple indoor-outdoor zones, the property offers a layered experience across spaces.",
-  perfectFor: [
+import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+
+const jade_735PerfectForCards = [
     {
       title: "Boutique Stays",
       image: "/Villa_Retreats/Jade 735/4-Perfect for/Boutique Stays.webp",
@@ -29,7 +17,24 @@ export const jade735 = {
       title: "Staycations",
       image: "/Villa_Retreats/Jade 735/4-Perfect for/Staycations.webp",
     },
-  ],
+  ];
+
+const jade735Base = {
+  id: "jade-735",
+  name: "Jade 735",
+  type: "PRIVATE BOUTIQUE VILLA · EXPERIENTIAL RETREAT",
+  location: "Sadahalli · North Bangalore",
+  stats: {
+    stay: "20 Guests",
+    events: "30 Guests",
+    bhk: "4+1 BHK",
+    lawn: "Private Gazebo Lounge",
+    villaArea: "10ft Waterfall Pool",
+  },
+  description:
+    "Jade 735 is a private boutique villa designed as a personal retreat within a resort-like setting. The 4+1 bedroom layout combines curated interiors with multiple experiential zones, creating a space suited for both stays and hosted gatherings. Featuring a private pool with a 10 ft waterfall, jacuzzi lounge, gazebo seating, and multiple indoor-outdoor zones, the property offers a layered experience across spaces.",
+  perfectForCards: jade_735PerfectForCards,
+  perfectForTags: perfectForTagsFromCards(jade_735PerfectForCards),
   categories: ["Luxury Stays", "Weekend Getaways", "Corporate Retreats"],
   thumbnail: "/Villa_Retreats/Jade%20735/Hero/Hero 1.webp",
   image: "/Villa_Retreats/Jade%20735/Hero/Hero 1.webp",
@@ -289,4 +294,9 @@ export const jade735 = {
       answer: "Yes, personalised decor can be arranged on request.",
     },
   ],
+};
+
+export const jade735 = {
+  ...jade735Base,
+  amenityHighlights: amenityHighlightsFrom(jade735Base.amenities),
 };

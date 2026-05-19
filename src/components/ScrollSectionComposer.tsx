@@ -2,7 +2,7 @@
 
 import { useRef, ReactNode } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
-import { ArrowLeft, Headset } from "lucide-react";
+import { ArrowLeft, MessageCircle } from "lucide-react";
 import LiveBackground from "./LiveBackground";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import PrimaryButton from "./PrimaryButton";
@@ -21,6 +21,8 @@ interface ScrollSectionComposerProps {
   theme?: "golden" | "white";
   background?: ReactNode;
   height?: string; // e.g. "400vh"
+  /** "early" — copy in by ~50% scroll, then holds locked before exit (philosophy) */
+  fadeTiming?: "default" | "early";
   showNavigation?: boolean;
   showScrollIndicator?: boolean;
   scrollIndicatorText?: string;
@@ -61,6 +63,7 @@ const SlideLines = ({
   start,
   end,
   index,
+  fadeTiming,
 }: {
   slide: ScrollSlide;
   progress: MotionValue<number>;
@@ -68,9 +71,12 @@ const SlideLines = ({
   end: number;
   index: number;
   totalSlides: number;
+  fadeTiming: "default" | "early";
 }) => {
   const span = end - start;
-  const fadeOut = end - span * 0.1;
+  const early = fadeTiming === "early";
+  // Philosophy: longer locked plateau before exit; default keeps prior 90% hold.
+  const fadeOut = end - span * (early ? 0.14 : 0.1);
 
   // Locking / Y parallax (slide-level enter & exit)
   const yInput =
@@ -81,26 +87,25 @@ const SlideLines = ({
 
   const y = useTransform(progress, yInput, yOutput);
 
-  // Slide-level: instantly visible at start, only fades out near the end.
-  // Per-line stagger is what produces the appearance feel.
+  // Slide-level: hold at full opacity through the lock window, fade only at end.
   const opacity = useTransform(progress, [start, fadeOut, end], [1, 1, 0]);
   const scale = useTransform(
     progress,
-    [start, start + span * 0.2, fadeOut, end],
+    [start, start + span * (early ? 0.12 : 0.2), fadeOut, end],
     [0.985, 1, 1, 0.995],
   );
   const blurPx = useTransform(
     progress,
-    [start, start + span * 0.2, fadeOut, end],
+    [start, start + span * (early ? 0.12 : 0.2), fadeOut, end],
     [6, 0, 0, 4],
   );
 
-  // Per-line fade-in windows distributed across the slide span.
-  const labelOffset = slide.label ? 0.15 : 0.05;
-  const tail = 0.15;
+  // Per-line fade-in: early = quick reveal, then idle until slide fade-out.
+  const labelOffset = early ? (slide.label ? 0.06 : 0.03) : slide.label ? 0.15 : 0.05;
+  const tail = early ? 0.22 : 0.15;
   const lineCount = Math.max(slide.lines.length, 1);
   const perLineWindow = (1 - labelOffset - tail) / lineCount;
-  const fadeWidth = perLineWindow * 0.85;
+  const fadeWidth = perLineWindow * (early ? 0.72 : 0.85);
 
   const labelOpacity = useTransform(
     progress,
@@ -182,6 +187,7 @@ export default function ScrollSectionComposer({
   theme = "golden",
   background = <LiveBackground />,
   height = "400vh",
+  fadeTiming = "default",
   showNavigation = false,
   showScrollIndicator = true,
   scrollIndicatorText,
@@ -214,7 +220,7 @@ export default function ScrollSectionComposer({
               <ArrowLeft className="w-6 h-6" />
             </button>
             <button className="w-10 h-10 flex items-center justify-center bg-white/5 border border-white/10 text-white/60 hover:text-white transition-colors">
-              <Headset className="w-5 h-5" />
+              <MessageCircle className="w-5 h-5" aria-hidden />
             </button>
           </div>
         )}
@@ -233,6 +239,7 @@ export default function ScrollSectionComposer({
                 end={end}
                 index={i}
                 totalSlides={total}
+                fadeTiming={fadeTiming}
               />
             );
           })}

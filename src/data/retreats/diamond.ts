@@ -1,21 +1,6 @@
-export const diamond = {
-  id: "diamond",
-  name: "Diamond",
-  type: "LARGE-FORMAT EVENT & WEDDING VENUE",
-  location: "Kanakapura Road, Bangalore",
-  stats: {
-    stay: "50 Guests Stay",
-    events: "500 Guests Event",
-    bhk: "9 BHK",
-    lawn: "50,000 sqft Lawn Area",
-    villaArea: "3 Acre Private Property",
-    banquet: "Semi-open Banquet Hall",
-    gazebo: "Two-deck Gazebo",
-    stage: "Event Stage Setup",
-  },
-  description:
-    "Diamond by Jade is a large-scale private event venue set across a 3-acre property surrounded by coconut groves. Designed for weddings, corporate events, and large gatherings, it combines expansive outdoor spaces with structured indoor facilities.\n\nWith a 50,000 sq ft lawn, banquet hall, multiple accommodation blocks, and event-ready infrastructure, the property supports both high-capacity events and group stays. The layout enables simultaneous setups across zones.",
-  perfectFor: [
+import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+
+const diamondPerfectForCards = [
     {
       title: "Events & Celebrations",
       image: "/Villa_Retreats/Diamond/4-Perfect For/Events & Celebrations.webp",
@@ -32,8 +17,27 @@ export const diamond = {
       title: "Weekend Getaways",
       image: "/Villa_Retreats/Diamond/4-Perfect For/Weekend Getaways.webp",
     },
-  ],
-  perfectForEvents: ["Weddings", "Corporate Events", "Large Gatherings"],
+  ];
+
+const diamondBase = {
+  id: "diamond",
+  name: "Diamond",
+  type: "LARGE-FORMAT EVENT & WEDDING VENUE",
+  location: "Kanakapura Road, Bangalore",
+  stats: {
+    stay: "50 Guests Stay",
+    events: "500 Guests Event",
+    bhk: "9 BHK",
+    lawn: "50,000 sqft Lawn Area",
+    villaArea: "3 Acre Private Property",
+    banquet: "Semi-open Banquet Hall",
+    gazebo: "Two-deck Gazebo",
+    stage: "Event Stage Setup",
+  },
+  description:
+    "Diamond by Jade is a large-scale private event venue set across a 3-acre property surrounded by coconut groves. Designed for weddings, corporate events, and large gatherings, it combines expansive outdoor spaces with structured indoor facilities.\n\nWith a 50,000 sq ft lawn, banquet hall, multiple accommodation blocks, and event-ready infrastructure, the property supports both high-capacity events and group stays. The layout enables simultaneous setups across zones.",
+  perfectForCards: diamondPerfectForCards,
+  perfectForTags: perfectForTagsFromCards(diamondPerfectForCards),
   categories: ["Weddings", "Corporate Retreats", "Party Venues", "Pre-wedding"],
   image: "/Villa_Retreats/Diamond/Hero/Hero 1.webp",
   images: [
@@ -340,4 +344,9 @@ export const diamond = {
       answer: "Yes, suitable for conferences, offsites, and large gatherings.",
     },
   ],
+};
+
+export const diamond = {
+  ...diamondBase,
+  amenityHighlights: amenityHighlightsFrom(diamondBase.amenities),
 };

@@ -1,4 +1,14 @@
-export const vannani = {
+import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+
+const vannaniPerfectForLegacy = [
+    "Group Getaways",
+    "Nature Retreats",
+    "Family Gatherings",
+    "Private Celebrations",
+    "Staycations",
+  ];
+
+const vannaniBase = {
   id: "vannani",
   hideFromVillasDirectory: true,
   name: "Vannani",
@@ -13,13 +23,6 @@ export const vannani = {
   },
   description:
     "Vannani is a private farmhouse retreat designed for group stays and intimate events. The 3-bedroom property combines traditional farmhouse architecture with modern comforts, set within a private estate surrounded by greenery. With a private pool, outdoor seating areas, and dedicated event spaces, it offers a relaxed countryside experience accessible from Bangalore.",
-  perfectFor: [
-    "Group Getaways",
-    "Nature Retreats",
-    "Family Gatherings",
-    "Private Celebrations",
-    "Staycations",
-  ],
   categories: ["Nature Retreats", "Weekend Getaways", "Pet Friendly"],
   thumbnail: "",
   image: "",
@@ -204,4 +207,16 @@ export const vannani = {
       answer: "Yes, the pool is exclusively for your group's use.",
     },
   ],
+};
+
+const vannaniPerfectFor = splitLegacyPerfectFor(
+  vannaniPerfectForLegacy,
+  (vannaniBase.images?.length ? vannaniBase.images : [vannaniBase.image].filter(Boolean)) as string[],
+);
+
+export const vannani = {
+  ...vannaniBase,
+  amenityHighlights: amenityHighlightsFrom(vannaniBase.amenities),
+  perfectForTags: vannaniPerfectFor.perfectForTags,
+  perfectForCards: vannaniPerfectFor.perfectForCards,
 };

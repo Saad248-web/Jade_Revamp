@@ -1,18 +1,6 @@
-export const retreatOnTheRidge = {
-  id: "retreat-on-the-ridge",
-  name: "Retreat on the Ridge",
-  type: "HILLSIDE PRIVATE RETREAT",
-  location: "Near Nandi Hills · North Bangalore",
-  stats: {
-    stay: "12 Guests",
-    events: "20 Guests",
-    bhk: "4 BHK",
-    lawn: "Ridge-view Terrace",
-    villaArea: "Hillside Property",
-  },
-  description:
-    "Retreat on the Ridge is a hillside villa at the foothills of Nandi Hills with panoramic ridge views. The 4-bedroom property combines semi-open living spaces with mountain-side experiences, designed for those seeking a mix of nature immersion and luxury living. With private pool, hillside terraces, and landscaped zones, it supports intimate stays and small gatherings.",
-  perfectFor: [
+import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+
+const retreat_on_the_ridgePerfectForCards = [
     {
       title: "Hillside Getaways",
       image:
@@ -33,7 +21,24 @@ export const retreatOnTheRidge = {
       image:
         "/Villa_Retreats/Retreat on the ridge/4-Perfect for/Weekend Getaways.webp",
     },
-  ],
+  ];
+
+const retreatOnTheRidgeBase = {
+  id: "retreat-on-the-ridge",
+  name: "Retreat on the Ridge",
+  type: "HILLSIDE PRIVATE RETREAT",
+  location: "Near Nandi Hills · North Bangalore",
+  stats: {
+    stay: "12 Guests",
+    events: "20 Guests",
+    bhk: "4 BHK",
+    lawn: "Ridge-view Terrace",
+    villaArea: "Hillside Property",
+  },
+  description:
+    "Retreat on the Ridge is a hillside villa at the foothills of Nandi Hills with panoramic ridge views. The 4-bedroom property combines semi-open living spaces with mountain-side experiences, designed for those seeking a mix of nature immersion and luxury living. With private pool, hillside terraces, and landscaped zones, it supports intimate stays and small gatherings.",
+  perfectForCards: retreat_on_the_ridgePerfectForCards,
+  perfectForTags: perfectForTagsFromCards(retreat_on_the_ridgePerfectForCards),
   categories: ["Nature Retreats", "Weekend Getaways", "Pre-wedding"],
   thumbnail: "/Villa_Retreats/Retreat on the ridge/1-Hero/Hero.webp",
   image: "/Villa_Retreats/Retreat on the ridge/1-Hero/Hero.webp",
@@ -286,4 +291,9 @@ export const retreatOnTheRidge = {
       answer: "Not designed for large-scale events.",
     },
   ],
+};
+
+export const retreatOnTheRidge = {
+  ...retreatOnTheRidgeBase,
+  amenityHighlights: amenityHighlightsFrom(retreatOnTheRidgeBase.amenities),
 };

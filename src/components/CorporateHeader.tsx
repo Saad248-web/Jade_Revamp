@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ArrowLeft, Headset } from "lucide-react";
+import { ArrowLeft, MessageCircle, Phone } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -27,9 +27,9 @@ export default function CorporateHeader() {
         animate={{ opacity: 1, x: 0 }}
         href="tel:08970663366"
         className="md:hidden p-2 bg-black/20 backdrop-blur-md rounded-none border border-white/10 text-white pointer-events-auto hover:bg-white/10 transition-colors flex items-center justify-center"
-        aria-label="Call support"
+        aria-label="Call to enquire"
       >
-        <Headset className="w-5 h-5" />
+        <Phone className="w-5 h-5" />
       </motion.a>
 
       {/* Desktop: Contact Page */}
@@ -41,9 +41,9 @@ export default function CorporateHeader() {
         <Link
           href="/contact"
           className="p-2 bg-black/20 backdrop-blur-md rounded-none border border-white/10 text-white pointer-events-auto hover:bg-white/10 transition-colors flex items-center justify-center"
-          aria-label="Contact support"
+          aria-label="Enquire with us"
         >
-          <Headset className="w-5 h-5" />
+          <MessageCircle className="w-5 h-5" />
         </Link>
       </motion.div>
     </header>

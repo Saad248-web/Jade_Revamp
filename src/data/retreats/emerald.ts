@@ -1,18 +1,6 @@
-export const emerald = {
-  id: "emerald",
-  name: "Emerald",
-  type: "GLASSHOUSE COURTYARD RETREAT",
-  location: "Sulikunte · Near Embassy Riding School",
-  stats: {
-    stay: "10 Guests",
-    events: "30 Guests",
-    bhk: "2 BHK",
-    lawn: "3,000 sqft",
-    villaArea: "Boutique Villa",
-  },
-  description:
-    "Emerald is a private pool villa designed as a traditional glasshouse around a central courtyard. This 2-bedroom villa combines indoor transparency with lush greenery, creating a setting suited for small group stays, intimate gatherings, and weekend getaways near Bangalore. With a private pool featuring an 8 ft waterfall, garden sit-outs, and courtyard living, the villa balances built space with open areas. Located 5 minutes from Embassy Riding School and 35 minutes from Hebbal, it offers accessibility with complete privacy.",
-  perfectFor: [
+import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+
+const emeraldPerfectForCards = [
     {
       title: "Couple Retreats",
       image: "/Villa_Retreats/Emerald/4-Perfect for/Couple Retreats.webp",
@@ -29,7 +17,24 @@ export const emerald = {
       title: "Weekend Getaways",
       image: "/Villa_Retreats/Emerald/4-Perfect for/Weekend getaways.webp",
     },
-  ],
+  ];
+
+const emeraldBase = {
+  id: "emerald",
+  name: "Emerald",
+  type: "GLASSHOUSE COURTYARD RETREAT",
+  location: "Sulikunte · Near Embassy Riding School",
+  stats: {
+    stay: "10 Guests",
+    events: "30 Guests",
+    bhk: "2 BHK",
+    lawn: "3,000 sqft",
+    villaArea: "Boutique Villa",
+  },
+  description:
+    "Emerald is a private pool villa designed as a traditional glasshouse around a central courtyard. This 2-bedroom villa combines indoor transparency with lush greenery, creating a setting suited for small group stays, intimate gatherings, and weekend getaways near Bangalore. With a private pool featuring an 8 ft waterfall, garden sit-outs, and courtyard living, the villa balances built space with open areas. Located 5 minutes from Embassy Riding School and 35 minutes from Hebbal, it offers accessibility with complete privacy.",
+  perfectForCards: emeraldPerfectForCards,
+  perfectForTags: perfectForTagsFromCards(emeraldPerfectForCards),
   categories: ["Luxury Stays", "Party Venues", "Weekend Getaways"],
   image: "/Villa_Retreats/Emerald/Hero/hero.webp",
   images: [
@@ -297,4 +302,9 @@ export const emerald = {
         "Yes, catering can be arranged on request through our chef on call service.",
     },
   ],
+};
+
+export const emerald = {
+  ...emeraldBase,
+  amenityHighlights: amenityHighlightsFrom(emeraldBase.amenities),
 };

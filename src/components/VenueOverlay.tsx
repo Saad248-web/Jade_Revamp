@@ -384,18 +384,20 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                 </p>
 
                 {/* Perfect For tags */}
-                {v.perfectFor && v.perfectFor.length > 0 && (
-                  <div className="mb-6">
+                {v.perfectForTags && v.perfectForTags.length > 0 && (
+                  <motion.div className="mb-6">
                     <h4 className="text-white font-manrope font-bold text-gh-label uppercase tracking-widest mb-3">Perfect for:</h4>
                     <div className="flex flex-wrap gap-2">
-                      {v.perfectFor.map((tag: any) => (
-                        <span key={typeof tag === "string" ? tag : tag.title}
-                          className="px-4 py-2 bg-white/5 border border-white/10 text-white/80 text-gh-label font-manrope">
-                          {typeof tag === "string" ? tag : tag.title}
+                      {v.perfectForTags.map((tag: string) => (
+                        <span
+                          key={tag}
+                          className="px-4 py-2 bg-white/5 border border-white/10 text-white/80 text-gh-label font-manrope"
+                        >
+                          {tag}
                         </span>
                       ))}
                     </div>
-                  </div>
+                  </motion.div>
                 )}
               </div>
             </div>

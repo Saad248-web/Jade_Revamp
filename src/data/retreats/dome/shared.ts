@@ -2,9 +2,15 @@ import {
   DOME_COLOR_META,
   type DomeColorKey,
 } from "@/lib/domeVillaIds";
+import type { VillaActivity, VillaStats } from "@/lib/types";
 import { DOME_VIDEO_URLS } from "@/lib/videoUtils";
+import {
+  amenityHighlightsFrom,
+  perfectForTagsFromCards,
+} from "@/lib/villaDetailData";
+import type { VillaPerfectForCard } from "@/lib/types";
 
-const BLUE_DOME_IMAGES = [
+export const BLUE_DOME_IMAGES = [
   "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 2.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 3.webp",
@@ -26,7 +32,7 @@ const BLUE_DOME_IMAGES = [
   "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Walk_way.webp",
 ];
 
-const RED_DOME_IMAGES = [
+export const RED_DOME_IMAGES = [
   "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 1.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 2.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 3.webp",
@@ -53,7 +59,7 @@ const RED_DOME_IMAGES = [
   "/Villa_Retreats/Dome/Dome Villa_s - Red/Spaces/Wall_Unit_Artifacts.webp",
 ];
 
-const YELLOW_DOME_IMAGES = [
+export const YELLOW_DOME_IMAGES = [
   "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/Hero_evening_View.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/hero.webp",
   "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Spaces/Bed_Room_.webp",
@@ -79,96 +85,163 @@ export const DOME_GROUP_AMENITIES = [
   "Entertainment setup",
 ];
 
-export const domeVillas = {
-  id: "dome-villas",
-  name: "Dome Villas",
+/** Shared experiences for estate + Blue / Red / Yellow dome detail pages */
+export const DOME_ESTATE_ACTIVITIES: VillaActivity[] = [
+  {
+    title: "Barbecue Experiences",
+    description: "Self-use grill setups for group cooking.",
+    image: "/Villa_Retreats/Dome/3-Experienceee/barbeque.webp",
+  },
+  {
+    title: "Bonfire Evenings",
+    description: "Outdoor bonfire for gatherings.",
+    image: "/Villa_Retreats/Dome/3-Experienceee/Bonfire.webp",
+  },
+  {
+    title: "Movie Under The Stars",
+    description: "Projector-based viewing experience.",
+    image: "/Villa_Retreats/Dome/3-Experienceee/Movie Under The Stars.webp",
+  },
+  {
+    title: "Candlelit Dining",
+    description: "A private dining setup under warm lights.",
+    image: "/Villa_Retreats/Dome/3-Experienceee/Candlelit Dining.webp",
+  },
+  {
+    title: "Picnic Setup",
+    description: "Curated picnic moments in the garden.",
+    image: "/Villa_Retreats/Dome/3-Experienceee/Picnic Setup.webp",
+  },
+  {
+    title: "Floating Breakfast",
+    description: "Breakfast served in the pool for a relaxed start.",
+    image: "/Villa_Retreats/Dome/3-Experienceee/Floating Breakfast.webp",
+  },
+  {
+    title: "Outdoor Activities",
+    description: "Open-air games and group-friendly activities.",
+    image: "/Villa_Retreats/Dome/3-Experienceee/Outdoor Activities.webp",
+  },
+  {
+    title: "Indoor Games",
+    description: "Board games and indoor entertainment for groups.",
+    image: "/Villa_Retreats/Dome/3-Experienceee/Indoor Games.webp",
+  },
+  {
+    title: "High Tea",
+    description: "Evening tea with light bites in a cozy setting.",
+    image: "/Villa_Retreats/Dome/3-Experienceee/High Tea.webp",
+  },
+  {
+    title: "Zen Garden",
+    description: "Quiet outdoor corners for slow, peaceful time.",
+    image: "/Villa_Retreats/Dome/3-Experienceee/Zen Garden.webp",
+  },
+];
+
+export const DOME_PERFECT_FOR_CARDS: VillaPerfectForCard[] = [
+  {
+    title: "Pool Parties",
+    image: "/Villa_Retreats/Dome/Perfect For/Pool Parties.webp",
+  },
+  {
+    title: "Group Getaways",
+    image: "/Villa_Retreats/Dome/Perfect For/Group Getaways.webp",
+  },
+  {
+    title: "Nature Stays",
+    image: "/Villa_Retreats/Dome/Perfect For/Nature Stays.webp",
+  },
+  {
+    title: "Intimate Weddings",
+    image: "/Villa_Retreats/Dome/Perfect For/Intimate Weddings.webp",
+  },
+];
+
+const DOME_AMENITIES = [
+  { label: "Private Pool", icon: "Waves" },
+  { label: "Airconditioned Interiors", icon: "Wind" },
+  { label: "Outdoor Seating", icon: "Sofa" },
+  { label: "Jacuzzi", icon: "Waves" },
+  { label: "Entertainment Systems", icon: "Music" },
+  { label: "Bonfire Setup", icon: "Flame" },
+  { label: "Barbecue Setup", icon: "Utensils" },
+  { label: "Fully Functional Kitchen", icon: "Kitchen" },
+  { label: "LCD Television", icon: "Tv" },
+  { label: "Tableware & Utensils", icon: "Coffee" },
+  { label: "Power Backup", icon: "Zap" },
+  { label: "Parking", icon: "Car" },
+];
+
+/** Estate-wide capacity (dome-villas listing + detail). */
+export const DOME_ESTATE_STATS: VillaStats = {
+  stay: "18 Guests",
+  events: "25 Guests",
+  bhk: "3 Villas",
+  lawn: "Landscaped Pathways",
+  villaArea: "Private Estate",
+};
+
+/** Per-dome showcase pages (blue / red / yellow detail). */
+export const DOME_SINGLE_UNIT_STATS: VillaStats = {
+  stay: "6 Guests",
+  events: "8 Guests",
+  bhk: "1 Dome",
+  lawn: "Outdoor Sit-out",
+  villaArea: "Hobbit-Themed Dome",
+};
+
+const DOME_ESTATE_PRICING = {
+  stay: {
+    title: "Stay Experience",
+    subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
+    packages: [
+      {
+        label: "Up to 4 PAX",
+        sublabel: "≈ ₹3,750 / head",
+        price: "₹14,999 + taxes",
+      },
+      { label: "Additional Guest", price: "₹1,999 + taxes" },
+    ],
+    features: ["Full estate access", "All 3 domes", "Pool access"],
+  },
+  event: {
+    title: "Event Experience",
+    subtitle: "8 hours (2 PM · 12 AM)",
+    packages: [
+      {
+        label: "Up to 8 PAX",
+        sublabel: "≈ ₹1,875 / head",
+        price: "₹14,999 + taxes",
+      },
+      { label: "Additional Guest", price: "₹1,099 + taxes" },
+    ],
+    features: ["Private venue access", "Parking included"],
+  },
+} as const;
+
+/** Pricing copy on color-dome showcase pages (book the full estate). */
+const DOME_SINGLE_UNIT_PRICING = {
+  stay: {
+    ...DOME_ESTATE_PRICING.stay,
+    features: ["Full estate booking", "All 3 domes included", "Pool access"],
+  },
+  event: {
+    ...DOME_ESTATE_PRICING.event,
+    features: ["Estate event access", "All domes & grounds", "Parking included"],
+  },
+} as const;
+
+export const DOME_ESTATE_SHARED = {
   type: "HOBBIT THEMED VILLA RETREAT",
   location: "Shoolagiri · Near Bangalore",
-  stats: {
-    stay: "18 Guests",
-    events: "25 Guests",
-    bhk: "3 Villas",
-    lawn: "Landscaped Pathways",
-    villaArea: "Private Estate",
-  },
-  description:
-    "Dome Villas is a private estate with three independent dome-shaped villas, booked exclusively by one group. The Hobbit-themed design features distributed living spaces, landscaped pathways connecting each dome, and a private plunge pool. Each dome has its own bedroom, bath, and sit-out area, offering a unique blend of fantasy architecture and nature immersion suited for small groups and intimate celebrations.",
-  perfectFor: [
-    {
-      title: "Pool Parties",
-      image: "/Villa_Retreats/Dome/Perfect For/Pool Parties.webp",
-    },
-    {
-      title: "Group Getaways",
-      image: "/Villa_Retreats/Dome/Perfect For/Group Getaways.webp",
-    },
-    {
-      title: "Nature Stays",
-      image: "/Villa_Retreats/Dome/Perfect For/Nature Stays.webp",
-    },
-    {
-      title: "Intimate Weddings",
-      image: "/Villa_Retreats/Dome/Perfect For/Intimate Weddings.webp",
-    },
-  ],
+  stats: DOME_ESTATE_STATS,
   categories: ["Nature Retreats", "Weekend Getaways", "Luxury Stays"],
-  thumbnail: "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
-  image: "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
-  images: [
-    "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
-    "/Villa_Retreats/Dome/Hero Main/Hero 2.webp",
-    ...BLUE_DOME_IMAGES,
-    ...RED_DOME_IMAGES,
-    ...YELLOW_DOME_IMAGES,
-  ],
-  amenities: [
-    { label: "Private Pool", icon: "Waves" },
-    { label: "Airconditioned Interiors", icon: "Wind" },
-    { label: "Outdoor Seating", icon: "Sofa" },
-    { label: "Jacuzzi", icon: "Waves" },
-    { label: "Entertainment Systems", icon: "Music" },
-    { label: "Bonfire Setup", icon: "Flame" },
-    { label: "Barbecue Setup", icon: "Utensils" },
-    { label: "Fully Functional Kitchen", icon: "Kitchen" },
-    { label: "LCD Television", icon: "Tv" },
-    { label: "Tableware & Utensils", icon: "Coffee" },
-    { label: "Power Backup", icon: "Zap" },
-    { label: "Parking", icon: "Car" },
-  ],
-  propertyDetails: [
-    {
-      label: "Three Dome Villas (Private Estate)",
-      description:
-        "Entire property includes three independent villas booked together.",
-      icon: "Building",
-    },
-    {
-      label: "Distributed Living Layout",
-      description:
-        "Bedrooms and living spaces spread across multiple structures.",
-      icon: "Layout",
-    },
-    {
-      label: "Private Plunge Pool",
-      description: "Outdoor pool accessible to all guests within the estate.",
-      icon: "Waves",
-    },
-    {
-      label: "Landscaped Garden Property",
-      description: "Connected pathways and outdoor zones across the property.",
-      icon: "Trees",
-    },
-    {
-      label: "Multiple Sit-out Areas",
-      description: "Dedicated outdoor seating, swings, and relaxation zones.",
-      icon: "Sofa",
-    },
-    {
-      label: "Exclusive Use Property",
-      description: "Not shared with other guests during the stay.",
-      icon: "Lock",
-    },
-  ],
+  amenities: DOME_AMENITIES,
+  amenityHighlights: amenityHighlightsFrom(DOME_AMENITIES),
+  perfectForCards: DOME_PERFECT_FOR_CARDS,
+  perfectForTags: perfectForTagsFromCards(DOME_PERFECT_FOR_CARDS),
+  activities: DOME_ESTATE_ACTIVITIES,
   services: [
     {
       title: "Chef on Call",
@@ -196,123 +269,7 @@ export const domeVillas = {
       icon: "PartyPopper",
     },
   ],
-  activities: [
-    {
-      title: "Barbecue Experiences",
-      description: "Self-use grill setups for group cooking.",
-      image: "/Villa_Retreats/Dome/3-Experienceee/barbeque.webp",
-    },
-    {
-      title: "Bonfire Evenings",
-      description: "Outdoor bonfire for gatherings.",
-      image: "/Villa_Retreats/Dome/3-Experienceee/Bonfire.webp",
-    },
-    {
-      title: "Movie Under The Stars",
-      description: "Projector-based viewing experience.",
-      image: "/Villa_Retreats/Dome/3-Experienceee/Movie Under The Stars.webp",
-    },
-    {
-      title: "Candlelit Dining",
-      description: "A private dining setup under warm lights.",
-      image: "/Villa_Retreats/Dome/3-Experienceee/Candlelit Dining.webp",
-    },
-    {
-      title: "Picnic Setup",
-      description: "Curated picnic moments in the garden.",
-      image: "/Villa_Retreats/Dome/3-Experienceee/Picnic Setup.webp",
-    },
-    {
-      title: "Floating Breakfast",
-      description: "Breakfast served in the pool for a relaxed start.",
-      image: "/Villa_Retreats/Dome/3-Experienceee/Floating Breakfast.webp",
-    },
-    {
-      title: "Outdoor Activities",
-      description: "Open-air games and group-friendly activities.",
-      image: "/Villa_Retreats/Dome/3-Experienceee/Outdoor Activities.webp",
-    },
-    {
-      title: "Indoor Games",
-      description: "Board games and indoor entertainment for groups.",
-      image: "/Villa_Retreats/Dome/3-Experienceee/Indoor Games.webp",
-    },
-    {
-      title: "High Tea",
-      description: "Evening tea with light bites in a cozy setting.",
-      image: "/Villa_Retreats/Dome/3-Experienceee/High Tea.webp",
-    },
-    {
-      title: "Zen Garden",
-      description: "Quiet outdoor corners for slow, peaceful time.",
-      image: "/Villa_Retreats/Dome/3-Experienceee/Zen Garden.webp",
-    },
-  ],
-  spaces: [
-    {
-      name: "Blue Dome",
-      image: BLUE_DOME_IMAGES[0],
-    },
-    {
-      name: "Red Dome",
-      image: RED_DOME_IMAGES[0],
-    },
-    {
-      name: "Yellow Dome",
-      image: YELLOW_DOME_IMAGES[0],
-    },
-  ],
-  categorizedSpaces: [
-    {
-      id: "blue-dome",
-      title: "Blue Dome",
-      category: "Blue Dome",
-      amenities: DOME_GROUP_AMENITIES,
-      images: BLUE_DOME_IMAGES,
-    },
-    {
-      id: "red-dome",
-      title: "Red Dome",
-      category: "Red Dome",
-      amenities: DOME_GROUP_AMENITIES,
-      images: RED_DOME_IMAGES,
-    },
-    {
-      id: "yellow-dome",
-      title: "Yellow Dome",
-      category: "Yellow Dome",
-      amenities: DOME_GROUP_AMENITIES,
-      images: YELLOW_DOME_IMAGES,
-    },
-  ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 4 PAX",
-          sublabel: "≈ ₹3,750 / head",
-          price: "₹14,999 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: ["Full estate access", "All 3 domes", "Pool access"],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (2 PM · 12 AM)",
-      packages: [
-        {
-          label: "Up to 8 PAX",
-          sublabel: "≈ ₹1,875 / head",
-          price: "₹14,999 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,099 + taxes" },
-      ],
-      features: ["Private venue access", "Parking included"],
-    },
-  },
+  pricing: DOME_ESTATE_PRICING,
   locationDetails: {
     mapImage: "",
     address: "Chinnapathirali Village, Shoolagiri, Tamil Nadu 635105",
@@ -323,35 +280,6 @@ export const domeVillas = {
       { label: "SUNSET VIEW POINT", distance: "30 mins away" },
     ],
   },
-  video: {
-    youtubeUrl: "https://www.youtube.com/watch?v=k0-1rTGdowk",
-    thumbnail: "",
-    duration: "1:21",
-  },
-  faq: [
-    {
-      question: "Is the property shared with other guests?",
-      answer:
-        "The full Dome Villas estate is booked exclusively for one group, including all three domes.",
-    },
-    {
-      question: "How many villas are included?",
-      answer:
-        "The property includes three dome villas within one private estate.",
-    },
-    {
-      question: "How many guests can stay overnight?",
-      answer: "Up to 18 guests can be accommodated.",
-    },
-    {
-      question: "Is the pool private?",
-      answer: "Yes, the plunge pool is exclusively accessible to guests.",
-    },
-    {
-      question: "Are meals included?",
-      answer: "Meals can be arranged on request.",
-    },
-  ],
 };
 
 const DOME_IMAGES_BY_COLOR: Record<DomeColorKey, string[]> = {
@@ -365,39 +293,33 @@ function heroImagesForColor(images: string[]): string[] {
   return heroes.length > 0 ? heroes : images.slice(0, 5);
 }
 
-function buildSingleDomeVilla(color: DomeColorKey) {
+export function buildSingleDomeVilla(color: DomeColorKey) {
   const meta = DOME_COLOR_META[color];
   const colorImages = DOME_IMAGES_BY_COLOR[color];
   const heroes = heroImagesForColor(colorImages);
-  const categorized = domeVillas.categorizedSpaces.filter(
-    (g) => g.category === meta.categoryLabel,
-  );
-
-  const {
-    id: _id,
-    name: _name,
-    images: _images,
-    thumbnail: _thumb,
-    image: _image,
-    spaces: _spaces,
-    categorizedSpaces: _cats,
-    video: _video,
-    propertyDetails: _pd,
-    description: _desc,
-    faq: _faq,
-    ...shared
-  } = domeVillas;
 
   return {
-    ...shared,
+    ...DOME_ESTATE_SHARED,
     id: meta.id,
     name: meta.name,
+    type: `HOBBIT THEMED · ${meta.categoryLabel.toUpperCase()}`,
+    stats: DOME_SINGLE_UNIT_STATS,
+    pricing: DOME_SINGLE_UNIT_PRICING,
     description: `The ${meta.shortLabel} is one of three Hobbit-themed dome villas at the Dome Villas private estate near Bangalore. Book the full estate for exclusive use of all three domes, or explore this dome’s spaces, pool areas, and landscaped sit-outs in detail below.`,
     thumbnail: heroes[0] ?? colorImages[0],
     image: heroes[0] ?? colorImages[0],
     images: colorImages,
+    activities: DOME_ESTATE_ACTIVITIES,
     spaces: [{ name: meta.shortLabel, image: colorImages[0] }],
-    categorizedSpaces: categorized,
+    categorizedSpaces: [
+      {
+        id: `${color}-dome`,
+        title: meta.shortLabel,
+        category: meta.categoryLabel,
+        amenities: DOME_GROUP_AMENITIES,
+        images: colorImages,
+      },
+    ],
     propertyDetails: [
       {
         label: meta.shortLabel,
@@ -457,13 +379,3 @@ function buildSingleDomeVilla(color: DomeColorKey) {
     ],
   };
 }
-
-export const blueDomeVilla = buildSingleDomeVilla("blue");
-export const redDomeVilla = buildSingleDomeVilla("red");
-export const yellowDomeVilla = buildSingleDomeVilla("yellow");
-
-export const DOME_VILLA_VARIANTS = [
-  blueDomeVilla,
-  redDomeVilla,
-  yellowDomeVilla,
-] as const;

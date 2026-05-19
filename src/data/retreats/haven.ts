@@ -1,18 +1,6 @@
-export const haven = {
-  id: "haven",
-  name: "Haven",
-  type: "PRIVATE LUXURY VILLA · SOCIAL GATHERINGS",
-  location: "Marenahalli · North Bangalore",
-  stats: {
-    stay: "20 Guests",
-    events: "100 Guests",
-    bhk: "4 BHK",
-    lawn: "Lawn Area Outdoor Space",
-    villaArea: "Private Standalone Property",
-  },
-  description:
-    "Haven is a contemporary 4-bedroom private villa offering modern design and residential comfort. Ideal for family stays and medium-scale gatherings, it features clean architectural style with emphasis on natural light. With a private pool, jacuzzi, terrace space, and large shared areas, the villa supports both relaxed stays and larger gatherings in a controlled, private setting.",
-  perfectFor: [
+import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+
+const havenPerfectForCards = [
     {
       title: "Family Gatherings",
       image: "/Villa_Retreats/Haven/4-Perfect for/Family Gatherings.webp",
@@ -30,7 +18,24 @@ export const haven = {
       title: "Weddings",
       image: "/Villa_Retreats/Haven/4-Perfect for/weddings.webp",
     },
-  ],
+  ];
+
+const havenBase = {
+  id: "haven",
+  name: "Haven",
+  type: "PRIVATE LUXURY VILLA · SOCIAL GATHERINGS",
+  location: "Marenahalli · North Bangalore",
+  stats: {
+    stay: "20 Guests",
+    events: "100 Guests",
+    bhk: "4 BHK",
+    lawn: "Lawn Area Outdoor Space",
+    villaArea: "Private Standalone Property",
+  },
+  description:
+    "Haven is a contemporary 4-bedroom private villa offering modern design and residential comfort. Ideal for family stays and medium-scale gatherings, it features clean architectural style with emphasis on natural light. With a private pool, jacuzzi, terrace space, and large shared areas, the villa supports both relaxed stays and larger gatherings in a controlled, private setting.",
+  perfectForCards: havenPerfectForCards,
+  perfectForTags: perfectForTagsFromCards(havenPerfectForCards),
   categories: ["Luxury Stays", "Party Venues", "Weekend Getaways", "Weddings"],
   image: "/Villa_Retreats/Haven/Hero/hero.webp",
   images: [
@@ -281,4 +286,9 @@ export const haven = {
       answer: "Not designed for large-scale events.",
     },
   ],
+};
+
+export const haven = {
+  ...havenBase,
+  amenityHighlights: amenityHighlightsFrom(havenBase.amenities),
 };

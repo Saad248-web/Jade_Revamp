@@ -8,6 +8,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import PrimaryButton from "@/components/PrimaryButton";
+import { experiencePanelTextOpacity } from "@/lib/experiencePanelMotion";
 
 const PANELS = [
   {
@@ -186,6 +187,10 @@ function PanelSlide({
     return index === centered ? 100 : index * 10;
   });
 
+  const textOpacity = useTransform(globalProgress, (p: number) =>
+    experiencePanelTextOpacity(p, index, totalSteps),
+  );
+
   return (
     <motion.div
       style={{ x, zIndex, willChange: "transform" }}
@@ -214,29 +219,19 @@ function PanelSlide({
               </motion.div>
             </motion.div>
 
-            <motion.div className="relative w-full flex flex-col items-start text-left mt-1 shrink-0">
+            <motion.div
+              style={{ opacity: textOpacity }}
+              className="relative w-full flex flex-col items-start text-left mt-1 shrink-0"
+            >
               <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
                 className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-2.5"
               >
                 {data.title}
               </motion.h2>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="font-manrope text-gh-body text-white/80 leading-relaxed mb-2.5 lg:mb-4 line-clamp-3 max-w-lg"
-              >
+              <motion.p className="font-manrope text-gh-body text-white/80 leading-relaxed mb-2.5 lg:mb-4 line-clamp-3 max-w-lg">
                 {data.subtext}
               </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="w-full max-w-md"
-              >
+              <motion.div className="w-full max-w-md">
                 <Link
                   href={data.href || "#"}
                   className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-3 transition-all"

@@ -1,7 +1,6 @@
 "use client";
 
 import clsx from "clsx";
-import VillaDetailMeanderStrip from "./VillaDetailMeanderStrip";
 import { VILLA_DETAIL_SPACING } from "./villaDetailSpacing";
 
 const TAB_LABELS = [
@@ -33,7 +32,6 @@ export default function VillaDetailStickyTabs({
 }: VillaDetailStickyTabsProps) {
   return (
     <div className="sticky top-0 z-50 w-full shadow-2xl">
-      <VillaDetailMeanderStrip />
       <div className="bg-jade-charcoal border-b border-white/5">
         <div className={clsx(VILLA_DETAIL_SPACING.page, VILLA_DETAIL_SPACING.gutterX)}>
           <div className="flex gap-2 sm:gap-3 overflow-x-auto py-4 scrollbar-none">

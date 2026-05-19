@@ -1,12 +1,9 @@
 "use client";
 
 import React from "react";
+import type { VillaPricingPackage } from "@/lib/types";
 
-export type VillaPricingPackage = {
-  label: string;
-  sublabel?: string;
-  price: string;
-};
+export type { VillaPricingPackage };
 
 export type VillaPricingBlock = {
   title: string;
@@ -22,6 +19,28 @@ type VillaPricingBlocksProps = {
   /** `villa-detail` — rounded green cards per villa detail mocks */
   variant?: "default" | "villa-detail";
 };
+
+/** Villa detail pricing — dark forest green + gold (reference mocks) */
+const DETAIL = {
+  card: "rounded-xl border border-[#1A4036] bg-[#0B3027] p-5 md:p-7",
+  title: "text-[#EEDC82] text-lg md:text-xl font-manrope font-bold mb-1",
+  row: "flex justify-between items-center gap-4 rounded-lg border border-[#1A4036] bg-[#1A4036] p-4",
+  label: "text-white font-semibold text-base md:text-lg font-manrope",
+  sublabel: "text-[#B0B0B0] text-sm font-manrope mt-0.5",
+  price: "text-white font-bold text-base md:text-lg font-manrope text-right shrink-0",
+  included: "text-white text-sm font-manrope",
+  chip: "rounded-md border border-[#1A4036] bg-[#1A4036] px-4 py-2 text-xs md:text-sm font-manrope text-white",
+} as const;
+
+function parsePricingSubtitle(subtitle?: string) {
+  if (!subtitle) return { lead: "", detail: "" };
+  const paren = subtitle.indexOf("(");
+  if (paren === -1) return { lead: subtitle, detail: "" };
+  return {
+    lead: subtitle.slice(0, paren).trim(),
+    detail: subtitle.slice(paren).trim(),
+  };
+}
 
 /**
  * Shared pricing cards used on villa detail page and experience overlays
@@ -48,41 +67,49 @@ export default function VillaPricingBlocks({
       >
         {sectionTitle}
       </h3>
-      {blocks.map((rent, idx) => (
+      {blocks.map((rent, idx) => {
+        const subtitleParts = isDetail
+          ? parsePricingSubtitle(rent.subtitle)
+          : { lead: rent.subtitle ?? "", detail: "" };
+
+        return (
         <div
           key={`${rent.title}-${idx}`}
           className={
             isDetail
-              ? "rounded-xl border border-[#1e6b55]/50 bg-[#0a3529]/80 p-5 md:p-7"
+              ? DETAIL.card
               : "border border-white/10 rounded-sm p-5 md:p-6 bg-white/5 mb-6"
           }
         >
           <h4
             className={
               isDetail
-                ? "text-[#EFCD62] text-lg md:text-xl font-manrope font-bold mb-1"
+                ? DETAIL.title
                 : "text-[#EFCD62] text-gh-h3 font-manrope font-semibold mb-1"
             }
           >
             {rent.title}
           </h4>
-          <p
-            className={
-              isDetail
-                ? "text-white/90 text-sm md:text-base font-manrope mb-6"
-                : "text-white/40 text-gh-desc mb-6"
-            }
-          >
-            {rent.subtitle ?? ""}
-          </p>
+          {isDetail ? (
+            <p className="mb-6 font-manrope text-sm md:text-base">
+              {subtitleParts.lead ? (
+                <span className="font-bold text-white">{subtitleParts.lead}</span>
+              ) : null}
+              {subtitleParts.detail ? (
+                <span className="ml-1 text-[#B0B0B0]">{subtitleParts.detail}</span>
+              ) : null}
+            </p>
+          ) : (
+            <p className="text-white/40 text-gh-desc mb-6">{rent.subtitle ?? ""}</p>
+          )}
 
-          <div className="space-y-2.5 mb-6">
+          <div className={isDetail ? "mb-6 space-y-3" : "mb-6 space-y-2.5"}>
             {rent.packages.map((item, i) => (
               <div
                 key={i}
                 className={
                   isDetail
-                    ? "flex justify-between items-center gap-4 bg-[#062a22] p-4 rounded-lg border border-[#1a5c48]/40"
+                    ? DETAIL.row
                     : "flex justify-between items-center bg-black/20 p-4 rounded-sm border border-white/5"
                 }
               >
@@ -90,7 +117,7 @@ export default function VillaPricingBlocks({
                   <span
                     className={
                       isDetail
-                        ? "text-white font-semibold text-base md:text-lg font-manrope"
+                        ? DETAIL.label
                         : "text-white font-bold text-gh-desc mb-1 uppercase tracking-wide"
                     }
                   >
@@ -100,7 +127,7 @@ export default function VillaPricingBlocks({
                     <span
                       className={
                         isDetail
-                          ? "text-white/70 text-sm font-manrope mt-0.5"
+                          ? DETAIL.sublabel
                           : "text-white/40 text-gh-label leading-tight"
                       }
                     >
@@ -108,15 +135,15 @@ export default function VillaPricingBlocks({
                     </span>
                   ) : null}
                 </div>
-                <div
+                <span
                   className={
                     isDetail
-                      ? "text-white font-bold text-base md:text-lg font-manrope text-right shrink-0"
+                      ? DETAIL.price
                       : "text-white font-bold text-[15px] sm:text-[16px] md:text-[18px] leading-tight uppercase tracking-wide text-right shrink-0"
                   }
                 >
                   {item.price}
-                </div>
+                </span>
               </div>
             ))}
           </div>
@@ -125,7 +152,7 @@ export default function VillaPricingBlocks({
             <span
               className={
                 isDetail
-                  ? "text-white text-sm font-manrope"
+                  ? DETAIL.included
                   : "text-white/40 text-gh-label font-bold uppercase tracking-widest"
               }
             >
@@ -137,7 +164,7 @@ export default function VillaPricingBlocks({
                   key={inc}
                   className={
                     isDetail
-                      ? "px-4 py-2 bg-[#134a3c] rounded text-white text-xs md:text-sm font-manrope border border-[#1e6b55]/30"
+                      ? DETAIL.chip
                       : "px-3 py-1.5 bg-[#174539] border border-white/5 rounded-sm text-white/70 text-gh-label"
                   }
                 >
@@ -147,7 +174,8 @@ export default function VillaPricingBlocks({
             </div>
           </div>
         </div>
-      ))}
+        );
+      })}
       {footnote}
     </div>
   );

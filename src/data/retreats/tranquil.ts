@@ -1,18 +1,6 @@
-export const tranquil = {
-  id: "tranquil",
-  name: "Tranquil Woods",
-  type: "LUXURY GARDEN RETREAT · WEDDING VENUE",
-  location: "Kanakapura Road · South Bangalore",
-  stats: {
-    stay: "15 Guests",
-    events: "500 Guests",
-    bhk: "2 BHK",
-    lawn: "Multi-layered Garden",
-    villaArea: "Glass-walled Living Areas",
-  },
-  description:
-    "Tranquil Woods is a 2-bedroom private pool villa within an expansive multi-layered garden layout. Close to the Art of Living International Centre, the property features glass-walled living areas and undulating lawns. Designed for both overnight luxury stays and large-format weddings and events, it holds capacity for up to 500 guests in its outdoor event spaces while offering intimate villa living for smaller groups.",
-  perfectFor: [
+import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+
+const tranquilPerfectForCards = [
     {
       title: "Grand Weddings",
       image: "/Villa_Retreats/Tranquil Woods/4-Perfect For/Grand Weddings.webp",
@@ -31,7 +19,24 @@ export const tranquil = {
       title: "Staycations",
       image: "/Villa_Retreats/Tranquil Woods/4-Perfect For/Staycations.webp",
     },
-  ],
+  ];
+
+const tranquilBase = {
+  id: "tranquil",
+  name: "Tranquil Woods",
+  type: "LUXURY GARDEN RETREAT · WEDDING VENUE",
+  location: "Kanakapura Road · South Bangalore",
+  stats: {
+    stay: "15 Guests",
+    events: "500 Guests",
+    bhk: "2 BHK",
+    lawn: "Multi-layered Garden",
+    villaArea: "Glass-walled Living Areas",
+  },
+  description:
+    "Tranquil Woods is a 2-bedroom private pool villa within an expansive multi-layered garden layout. Close to the Art of Living International Centre, the property features glass-walled living areas and undulating lawns. Designed for both overnight luxury stays and large-format weddings and events, it holds capacity for up to 500 guests in its outdoor event spaces while offering intimate villa living for smaller groups.",
+  perfectForCards: tranquilPerfectForCards,
+  perfectForTags: perfectForTagsFromCards(tranquilPerfectForCards),
   categories: ["Weddings", "Pre-wedding", "Luxury Stays", "Nature Retreats"],
   thumbnail: "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
   image: "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
@@ -313,4 +318,9 @@ export const tranquil = {
       answer: "Meals can be arranged on request.",
     },
   ],
+};
+
+export const tranquil = {
+  ...tranquilBase,
+  amenityHighlights: amenityHighlightsFrom(tranquilBase.amenities),
 };

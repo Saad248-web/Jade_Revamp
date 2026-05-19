@@ -48,7 +48,7 @@ export default function WeddingHero() {
       icon: <Download className="w-5 h-5" />,
       label: "Brochure",
       onClick: () => {
-        window.open("/brochure.pdf", "_blank");
+        window.open("/All Properties - Jade Hospitainment.pdf", "_blank");
       },
     },
   ];

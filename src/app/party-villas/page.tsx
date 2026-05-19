@@ -101,7 +101,7 @@ export default function PartyVillasPage() {
           {
             icon: <Download className="w-5 h-5" />,
             label: "BROCHURE",
-            onClick: () => window.open("/brochure.pdf", "_blank"),
+            onClick: () => window.open("/All Properties - Jade Hospitainment.pdf", "_blank"),
           },
         ]}
       />

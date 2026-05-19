@@ -20,8 +20,16 @@ export const VILLA_DETAIL_SPACING = {
   row: "flex flex-wrap gap-3",
   hScrollBleed: "-mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8",
   hScrollTrack: "flex gap-4 overflow-x-auto pb-2 snap-x scrollbar-none",
-  heading: "text-gh-h1 font-philosopher text-white",
+  heading: "text-gh-h1 font-philosopher text-white leading-tight",
+  /** Alias — section titles (Experiences, Spaces, FAQ, etc.) */
+  sectionHeading: "text-gh-h1 font-philosopher text-white leading-tight",
   subheading: "text-gh-h2 font-philosopher text-white",
+  /** Carousel / image frame primary label (subordinate to sectionHeading) */
+  mediaCaption:
+    "text-white text-sm md:text-base uppercase tracking-[0.2em] font-bold font-manrope",
+  /** Secondary line below mediaCaption */
+  mediaDescription:
+    "text-white/70 text-[13px] md:text-[15px] font-manrope leading-relaxed",
   eyebrow: "text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase",
   heroInsetX: "px-4 sm:px-6 lg:px-8",
   heroBottom: "bottom-8 lg:bottom-12",

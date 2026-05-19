@@ -87,8 +87,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "Planning a company offsite? Step away from generic hotels and discover why a private luxury villa buyout is the ultimate canvas for team bonding and productivity.",
     description:
       "Discover why Jade Hospitainment's private luxury villas near Bangalore are the ultimate venue for corporate team outings, offsites, and workcations. Exclusive buyouts, bespoke catering, and inspiring spaces.",
-    image:
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1600",
+    image: "/Villa_Retreats/Jade%20735/Hero/Hero 1.webp",
     link: "/blogs/corporate-team-outing-bangalore-guide",
     date: "2024-03-20",
     dateModified: "2024-03-20",
@@ -199,7 +198,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "image",
         image:
-          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1600",
+          "/Experiences/Corporate Retreats/1-Hero/xhero.webp",
         caption:
           "Jade 735: The pinnacle of boutique luxury with temperature-controlled pools.",
       },
@@ -264,8 +263,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "Welcome to Jade Hospitainment. Discover our unique approach to hosting and why taking time to disconnect is essential for modern wellbeing.",
     description:
       "Escape the always-on culture and embrace slow living at Jade Hospitainment's luxury private villas near Bangalore. A guide to intentional rest, digital detox, and the art of truly unwinding.",
-    image:
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80",
+    image: "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
     link: "/blogs/the-art-of-slow-living",
     date: "2024-03-15",
     dateModified: "2024-03-15",
@@ -332,7 +330,7 @@ export const BLOG_POSTS: BlogPost[] = [
     title: "The Ultimate Guide to Booking Private Villas",
     excerpt: "Find out what makes a private villa the best choice for your next vacation or staycation.",
     description: "Discover the unparalleled privacy and luxury of booking a private villa for your next getaway.",
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=80",
+    image: "/Villa_Retreats/Magnolia/Hero/hero.webp",
     link: "/blogs/ultimate-guide-private-villas",
     date: "2024-04-10",
     dateModified: "2024-04-10",
@@ -355,7 +353,7 @@ export const BLOG_POSTS: BlogPost[] = [
     title: "Hosting Unforgettable Events at Jade",
     excerpt: "From intimate gatherings to large celebrations, learn how to make your events truly memorable.",
     description: "Explore the endless possibilities of hosting your next big event, wedding, or party at our exclusive Jade properties.",
-    image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1600&q=80",
+    image: "/Villa_Retreats/Diamond/Hero/Hero 1.webp",
     link: "/blogs/hosting-unforgettable-events-jade",
     date: "2024-04-15",
     dateModified: "2024-04-15",

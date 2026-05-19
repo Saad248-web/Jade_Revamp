@@ -6,7 +6,7 @@ import {
   blueDomeVilla,
   redDomeVilla,
   yellowDomeVilla,
-} from "./dome-villas";
+} from "./dome";
 import { diamond } from "./diamond";
 import { vannani } from "./vannani";
 import { haven } from "./haven";
@@ -38,16 +38,15 @@ export {
   palatio,
 };
 
+/** Estate dome + hidden villas stay in VILLAS for detail/booking; directory filters `hideFromVillasDirectory`. */
 export const VILLAS = [
   magnolia,
   tranquil,
   royalty,
-  domeVillas,
   blueDomeVilla,
   redDomeVilla,
   yellowDomeVilla,
   diamond,
-  vannani,
   haven,
   retreatOnTheRidge,
   emerald,
@@ -56,6 +55,8 @@ export const VILLAS = [
   lemonTree,
   loungeFly,
   palatio,
+  domeVillas,
+  vannani,
 ];
 
 export const CATEGORIES = [

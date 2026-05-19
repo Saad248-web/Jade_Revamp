@@ -7,8 +7,8 @@ import type { Villa } from "@/lib/types";
 import {
   SITE_ORIGIN,
   absoluteSiteUrl,
-  trimMetaDescription,
 } from "@/lib/seo/meta";
+import { buildVillaMetaDescription } from "@/lib/seo/villaMetaDescription";
 
 type Props = { children: ReactNode; params: { id: string } };
 
@@ -64,7 +64,7 @@ export function generateMetadata({ params }: Props): Metadata {
 
   const canonical = `${SITE_ORIGIN}/villas/${villa.id}`;
   const title = `${villa.name} — ${villa.type} near ${villa.location.replace(/\s*[·\.]\s*.+$/, "").trim()}`;
-  const description = trimMetaDescription(villa.description);
+  const description = buildVillaMetaDescription(villa);
   const ogPath = villa.image;
 
   return {

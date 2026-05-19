@@ -177,7 +177,7 @@ function IntroPanel({
       <div className="relative w-full max-w-4xl mx-auto flex flex-col items-center text-center">
         <motion.div style={{ y: textY }} className="z-10 relative">
           <span className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-3 font-bold block">
-            FEATURED VILLA'S
+            FEATURED VILLAS
           </span>
           <h2 className="font-philosopher text-gh-h1 text-white leading-tight mb-5">
             Spaces That Hold

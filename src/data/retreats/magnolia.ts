@@ -1,4 +1,25 @@
-export const magnolia = {
+import { amenityHighlightsFrom, perfectForTagsFromCards } from "@/lib/villaDetailData";
+
+const magnoliaPerfectForCards = [
+  {
+    title: "Private Celebrations",
+    image: "/Villa_Retreats/Magnolia/Perfect For/Private Celebrations.webp",
+  },
+  {
+    title: "Weddings",
+    image: "/Villa_Retreats/Magnolia/Perfect For/Weddings.webp",
+  },
+  {
+    title: "Corporate Outings",
+    image: "/Villa_Retreats/Magnolia/Perfect For/corporate outings.webp",
+  },
+  {
+    title: "Staycations",
+    image: "/Villa_Retreats/Magnolia/Perfect For/stayctions.webp",
+  },
+];
+
+const magnoliaBase = {
   id: "magnolia",
   name: "Magnolia",
   type: "CONTEMPORARY GLASS FARM VILLA",
@@ -12,24 +33,8 @@ export const magnolia = {
   },
   description:
     "Magnolia is a contemporary private luxury villa designed for immersive stays and large-scale gatherings. This modern three-bedroom glass villa brings together luxury, scale, and ambience, making it ideal for weekend getaways, private parties, corporate outings, and wedding celebrations. Featuring a massive private pool, bar and lounge, personal home theatre, conference hall, and a basketball court, it offers a rare balance of accessibility and complete privacy.",
-  perfectFor: [
-    {
-      title: "Private Celebrations",
-      image: "/Villa_Retreats/Magnolia/Perfect For/Private Celebrations.webp",
-    },
-    {
-      title: "Weddings",
-      image: "/Villa_Retreats/Magnolia/Perfect For/Weddings.webp",
-    },
-    {
-      title: "Corporate Outings",
-      image: "/Villa_Retreats/Magnolia/Perfect For/corporate outings.webp",
-    },
-    {
-      title: "Staycations",
-      image: "/Villa_Retreats/Magnolia/Perfect For/stayctions.webp",
-    },
-  ],
+  perfectForCards: magnoliaPerfectForCards,
+  perfectForTags: perfectForTagsFromCards(magnoliaPerfectForCards),
   categories: [
     "Weddings",
     "Corporate Retreats",
@@ -162,30 +167,37 @@ export const magnolia = {
   activities: [
     {
       title: "Bonfire",
+      description: "Evening bonfire for gatherings under the stars.",
       image: "/Villa_Retreats/Magnolia/3-Experiences/Bonfire.webp",
     },
     {
       title: "Floating Breakfast",
+      description: "Breakfast served in the pool for a relaxed morning.",
       image: "/Villa_Retreats/Magnolia/3-Experiences/Floating Breakfast.webp",
     },
     {
       title: "Gazebo By The Pool",
+      description: "Shaded poolside gazebo for lounging and small celebrations.",
       image: "/Villa_Retreats/Magnolia/3-Experiences/Gazebo By The Pool.webp",
     },
     {
       title: "High Tea",
+      description: "Evening tea with light bites in a relaxed setting.",
       image: "/Villa_Retreats/Magnolia/3-Experiences/High tea.webp",
     },
     {
       title: "Barbeque",
+      description: "Outdoor grill setup for group dining and celebrations.",
       image: "/Villa_Retreats/Magnolia/3-Experiences/barbeque.webp",
     },
     {
       title: "Candlelit Dining",
+      description: "Private dining under warm ambient lighting.",
       image: "/Villa_Retreats/Magnolia/3-Experiences/candlelit dining.webp",
     },
     {
       title: "Diamond",
+      description: "Signature curated experience on the estate.",
       image: "/Villa_Retreats/Magnolia/3-Experiences/diamond.webp",
     },
   ],
@@ -338,4 +350,9 @@ export const magnolia = {
         "Yes, the hall is flexible and can be converted into a dorm-style room for larger groups or used for conference meetings.",
     },
   ],
+};
+
+export const magnolia = {
+  ...magnoliaBase,
+  amenityHighlights: amenityHighlightsFrom(magnoliaBase.amenities),
 };

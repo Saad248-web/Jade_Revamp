@@ -157,22 +157,19 @@ export default function WishlistPage() {
                       )}
 
                       {/* 6. Perfect For Tags (Limited to top 2 for grid balance) */}
-                      {matchedVilla?.perfectFor && matchedVilla.perfectFor.length > 0 && (
+                      {matchedVilla?.perfectForTags && matchedVilla.perfectForTags.length > 0 && (
                         <div className="flex flex-wrap items-center gap-1.5 mb-4 text-gh-label font-manrope">
                           <span className="text-white/30 font-bold uppercase tracking-wider mr-1">
                             For:
                           </span>
-                          {matchedVilla.perfectFor.slice(0, 2).map((tag, idx) => {
-                            const title = typeof tag === "string" ? tag : tag.title;
-                            return (
+                          {matchedVilla.perfectForTags.slice(0, 2).map((title, idx) => (
                               <span
                                 key={`${title}-${idx}`}
                                 className="whitespace-nowrap bg-white/5 border border-white/10 text-white/70 px-2.5 py-0.5 rounded-sm font-manrope text-[11px]"
                               >
                                 {title}
                               </span>
-                            );
-                          })}
+                            ))}
                         </div>
                       )}
 

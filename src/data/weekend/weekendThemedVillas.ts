@@ -1,6 +1,6 @@
 /** Simple villa cards for the Weekend Getaways themed-villas section. */
 
-import { domeVillas } from "@/data/retreats/dome-villas";
+import { domeVillas } from "@/data/retreats/dome";
 import { magnolia } from "@/data/retreats/magnolia";
 import { haven } from "@/data/retreats/haven";
 import { tranquil } from "@/data/retreats/tranquil";

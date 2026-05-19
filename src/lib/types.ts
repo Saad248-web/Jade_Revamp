@@ -66,6 +66,18 @@ export interface VillaAmenity {
   description?: string;
 }
 
+/** Intro-band horizontal amenity tiles on villa detail page */
+export interface VillaAmenityHighlight {
+  label: string;
+  sublabel?: string;
+  icon: string;
+}
+
+export interface VillaPerfectForCard {
+  title: string;
+  image: string;
+}
+
 export interface VillaService {
   title: string;
   description: string;
@@ -81,6 +93,7 @@ export interface VillaSpace {
 export interface VillaActivity {
   title: string;
   image: string;
+  description?: string;
 }
 
 export interface VillaSpaceGroup {
@@ -101,13 +114,20 @@ export interface Villa {
   /** When true, excluded from `/villas` listing only (deep links unchanged). */
   hideFromVillasDirectory?: boolean;
   name: string;
+  /** One-line trust signal shown under villa name on detail page */
+  socialProof?: string;
   type: string;
   location: string;
   description: string;
   image: string;
   images?: string[];
   stats: VillaStats;
-  perfectFor: string[];
+  /** Intro chips on villa detail + listing cards */
+  perfectForTags: string[];
+  /** Image gallery section on villa detail */
+  perfectForCards: VillaPerfectForCard[];
+  /** Intro horizontal scroll tiles (distinct from full amenities grid) */
+  amenityHighlights: VillaAmenityHighlight[];
   categories: string[];
   spaces?: VillaSpace[];
   amenities: VillaAmenity[];

@@ -15,3 +15,10 @@ export const FLUID_SPACE = {
   xl: "clamp(38.4px, 4.8vw, 76.8px)",
   "2xl": "clamp(51.2px, 6.4vw, 102.4px)",
 } as const;
+
+/**
+ * Footer bottom padding when a fixed booking bar sits over the page (villa detail, etc.).
+ * ~5.75rem clears py-4 bar + PrimaryButton + safe-area on desktop (lg:pb-12 was too short).
+ */
+export const STICKY_BOOKING_BAR_FOOTER_PAD_CLASS =
+  "pb-[max(5.75rem,calc(5.75rem+env(safe-area-inset-bottom,0px)))]";

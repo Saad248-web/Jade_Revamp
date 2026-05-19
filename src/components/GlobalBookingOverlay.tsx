@@ -16,7 +16,7 @@ import {
   Bed,
   Home,
   Check,
-  Headset,
+  Phone,
 } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
 import { VILLAS, CATEGORIES } from "@/lib/mockData";
@@ -208,7 +208,7 @@ function StepDates({
               href="tel:08970663366"
               className="text-white hover:text-[#EFCD62] transition-colors"
             >
-              <Headset className="w-6 h-6 md:w-7 md:h-7" strokeWidth={1.5} />
+              <Phone className="w-6 h-6 md:w-7 md:h-7" strokeWidth={1.5} aria-hidden />
             </a>
             <button
               onClick={onClose}

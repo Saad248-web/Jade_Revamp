@@ -200,8 +200,34 @@ function LoginScreen({ onLogin }: { onLogin: (pw: string) => void }) {
       headers: { "x-admin-password": pw },
     });
     setLoading(false);
-    if (res.ok) onLogin(pw);
-    else setError("Incorrect password");
+    if (res.ok) {
+      onLogin(pw);
+      return;
+    }
+    if (res.status === 401) {
+      setError("Incorrect password");
+      return;
+    }
+    if (res.status === 503) {
+      setError(
+        "Admin is not configured on the server (missing ADMIN_PASSWORD).",
+      );
+      return;
+    }
+    let message = "Could not reach the bookings service. Try again.";
+    try {
+      const data = (await res.json()) as { error?: string };
+      if (data.error) message = data.error;
+    } catch {
+      /* ignore */
+    }
+    if (res.status === 500) {
+      setError(
+        "Database unavailable. Start PostgreSQL on port 5432, run schema.sql, then restart npm run dev.",
+      );
+      return;
+    }
+    setError(message);
   };
 
   return (

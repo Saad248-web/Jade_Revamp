@@ -1,18 +1,6 @@
-export const palatio = {
-  id: "palatio",
-  name: "Palatio",
-  type: "PRIVATE NATURE RETREAT VILLA",
-  location: "Harohalli · South Bangalore",
-  stats: {
-    stay: "15 Guests",
-    events: "60 Guests",
-    bhk: "2 BHK",
-    lawn: "Landscaped Gardens",
-    villaArea: "Nature Retreat",
-  },
-  description:
-    "Palatio is a sprawling nature retreat set within large landscaped grounds in Harohalli. The 2-bedroom villa combines rustic charm with traditional architecture, providing a serene environment removed from the city. With a private pool, open lawns, and dedicated event spaces, it offers a balanced experience for both peaceful stays and intimate social gatherings.",
-  perfectFor: [
+import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+
+const palatioPerfectForCards = [
     {
       title: "Staycations",
       image: "/Villa_Retreats/Palatio/4-Perfect For/Staycations.webp",
@@ -30,7 +18,24 @@ export const palatio = {
       image:
         "/Villa_Retreats/Palatio/4-Perfect For/intimate Social Events.webp",
     },
-  ],
+  ];
+
+const palatioBase = {
+  id: "palatio",
+  name: "Palatio",
+  type: "PRIVATE NATURE RETREAT VILLA",
+  location: "Harohalli · South Bangalore",
+  stats: {
+    stay: "15 Guests",
+    events: "60 Guests",
+    bhk: "2 BHK",
+    lawn: "Landscaped Gardens",
+    villaArea: "Nature Retreat",
+  },
+  description:
+    "Palatio is a sprawling nature retreat set within large landscaped grounds in Harohalli. The 2-bedroom villa combines rustic charm with traditional architecture, providing a serene environment removed from the city. With a private pool, open lawns, and dedicated event spaces, it offers a balanced experience for both peaceful stays and intimate social gatherings.",
+  perfectForCards: palatioPerfectForCards,
+  perfectForTags: perfectForTagsFromCards(palatioPerfectForCards),
   categories: [
     "Nature Retreats",
     "Wellness Retreats",
@@ -281,4 +286,9 @@ export const palatio = {
       answer: "Not designed for large-scale events.",
     },
   ],
+};
+
+export const palatio = {
+  ...palatioBase,
+  amenityHighlights: amenityHighlightsFrom(palatioBase.amenities),
 };

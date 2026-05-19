@@ -4,7 +4,6 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
-  Headset,
   Check,
   Facebook,
   Instagram,

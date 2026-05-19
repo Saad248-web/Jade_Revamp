@@ -1,4 +1,14 @@
-export const lemonTree = {
+import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+
+const lemonTreePerfectForLegacy = [
+    "Group Getaways",
+    "Nature Stays",
+    "Family Celebrations",
+    "Staycations",
+    "Team Outings",
+  ];
+
+const lemonTreeBase = {
   id: "lemon-tree",
   name: "Lemon Tree",
   type: "LEMON ORCHARD RETREAT · PRIVATE ROOFTOP POOL",
@@ -12,13 +22,6 @@ export const lemonTree = {
   },
   description:
     "Lemon Tree is a nature retreat set within a lemon orchard, designed for relaxed stays and group gatherings. The 3-bedroom villa combines indoor comfort with expansive outdoor spaces, creating a countryside experience within close reach of the city. With a private rooftop pool, multipurpose hall, and orchard setting, the property supports both stays and small events. Surrounded by greenery and open views, it offers a quiet environment for extended stays and group retreats.",
-  perfectFor: [
-    "Group Getaways",
-    "Nature Stays",
-    "Family Celebrations",
-    "Staycations",
-    "Team Outings",
-  ],
   categories: ["Nature Retreats", "Weekend Getaways", "Pet Friendly"],
   thumbnail: "",
   image: "",
@@ -235,4 +238,16 @@ export const lemonTree = {
         "Suitable for small to mid-sized gatherings, not large-scale events.",
     },
   ],
+};
+
+const lemonTreePerfectFor = splitLegacyPerfectFor(
+  lemonTreePerfectForLegacy,
+  (lemonTreeBase.images?.length ? lemonTreeBase.images : [lemonTreeBase.image].filter(Boolean)) as string[],
+);
+
+export const lemonTree = {
+  ...lemonTreeBase,
+  amenityHighlights: amenityHighlightsFrom(lemonTreeBase.amenities),
+  perfectForTags: lemonTreePerfectFor.perfectForTags,
+  perfectForCards: lemonTreePerfectFor.perfectForCards,
 };

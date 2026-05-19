@@ -22,10 +22,13 @@ export async function getVillas(filters?: {
   category?: string;
 }): Promise<Villa[]> {
   await delay();
+  const directoryVillas = VILLAS.filter(
+    (v) => !(v as Villa).hideFromVillasDirectory,
+  );
   if (!filters?.category || filters.category === "All") {
-    return VILLAS as unknown as Villa[];
+    return directoryVillas as unknown as Villa[];
   }
-  return VILLAS.filter((v) =>
+  return directoryVillas.filter((v) =>
     v.categories?.some(
       (c: string) => c.toLowerCase() === filters.category!.toLowerCase(),
     ),

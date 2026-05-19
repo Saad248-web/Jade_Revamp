@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
+import { STICKY_BOOKING_BAR_FOOTER_PAD_CLASS } from "@/lib/layoutSpacing";
+import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
 
 // ── Calendar helpers ────────────────────────────────────────────────────────
 const MONTHS = [
@@ -76,10 +78,14 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
   }, []);
 
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     phoneNumber: "",
+    noOfGuests: "",
+    occasionType: "",
     queries: "",
   });
 
@@ -129,17 +135,58 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
       : `${formatDate(checkIn)} – Select checkout`
     : "";
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormData({ fullName: "", phoneNumber: "", queries: "" });
-    setCheckIn(null);
-    setCheckOut(null);
-    setConsent(false);
+    if (!isFormValid || submitting) return;
+
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source: "general_enquiry",
+          payload: {
+            fullName: formData.fullName,
+            phoneNumber: formData.phoneNumber,
+            guests: formData.noOfGuests,
+            occasionType: formData.occasionType,
+            preferredDate: dateLabel || undefined,
+            queries: formData.queries,
+            travelFormat: {},
+          },
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      if (!res.ok) {
+        throw new Error(data.error || "Something went wrong. Please try again.");
+      }
+      setIsSuccess(true);
+      setFormData({
+        fullName: "",
+        phoneNumber: "",
+        noOfGuests: "",
+        occasionType: "",
+        queries: "",
+      });
+      setCheckIn(null);
+      setCheckOut(null);
+      setConsent(false);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Unable to send inquiry.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const isFormValid =
     formData.fullName.trim() !== "" &&
     formData.phoneNumber.trim() !== "" &&
+    formData.noOfGuests.trim() !== "" &&
+    formData.occasionType.trim() !== "" &&
     consent;
 
   const LINKS_COLUMN_1 = [
@@ -179,7 +226,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
           className={clsx(
             "max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pt-10 lg:pt-20",
             stickyBottomBar
-              ? "pb-[max(1rem,calc(3.25rem+env(safe-area-inset-bottom,0px)))] lg:pb-12"
+              ? STICKY_BOOKING_BAR_FOOTER_PAD_CLASS
               : "max-lg:pb-[max(1rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] lg:pb-16",
           )}
         >
@@ -240,37 +287,38 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                   </label>
                 </div>
 
-                {/* Date */}
-                <div className="relative" ref={calendarRef}>
-                  <button
-                    type="button"
-                    onClick={() => setShowCalendar((v) => !v)}
-                    className={`w-full h-14 bg-white/[0.02] border px-4 text-left transition-colors rounded-none flex items-center justify-between ${ showCalendar ? "border-[#EFCD62]/70" : "border-white/15" }`}
-                  >
-                    <span
-                      className={`font-manrope text-gh-label ${ dateLabel ? "text-white/80" : "text-white/35" }`}
+                {/* Date + Guests */}
+                <div className="grid grid-cols-2 gap-5">
+                  <div className="relative min-w-0" ref={calendarRef}>
+                    <button
+                      type="button"
+                      onClick={() => setShowCalendar((v) => !v)}
+                      className={`w-full h-14 bg-white/[0.02] border px-4 text-left transition-colors rounded-none flex items-center justify-between gap-2 min-w-0 ${ showCalendar ? "border-[#EFCD62]/70" : "border-white/15" }`}
                     >
-                      {dateLabel || "Check-In & Out Date"}
-                    </span>
-                    <CalendarDays
-                      className={`w-4 h-4 shrink-0 transition-colors ${ showCalendar ? "text-[#EFCD62]" : "text-white/25" }`}
-                    />
-                  </button>
-                  {dateLabel && (
-                    <span className="absolute left-4 -top-2.5 text-gh-label text-white/70 bg-[#2E3034] px-2 pointer-events-none">
-                      Check-In & Out Date
-                    </span>
-                  )}
-                  {/* Calendar overlay */}
-                  <AnimatePresence>
-                    {showCalendar && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8, scale: 0.97 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.97 }}
-                        transition={{ duration: 0.18 }}
-                        className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 bg-[#1C1F22] border border-white/10 shadow-2xl p-5"
+                      <span
+                        className={`font-manrope text-gh-label truncate ${ dateLabel ? "text-white/80" : "text-white/35" }`}
                       >
+                        {dateLabel || "Check-In & Out Date"}
+                      </span>
+                      <CalendarDays
+                        className={`w-4 h-4 shrink-0 transition-colors ${ showCalendar ? "text-[#EFCD62]" : "text-white/25" }`}
+                      />
+                    </button>
+                    {dateLabel && (
+                      <span className="absolute left-4 -top-2.5 text-gh-label text-white/70 bg-[#2E3034] px-2 pointer-events-none">
+                        Check-In & Out Date
+                      </span>
+                    )}
+                    {/* Calendar overlay — spans full row width */}
+                    <AnimatePresence>
+                      {showCalendar && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 8, scale: 0.97 }}
+                          transition={{ duration: 0.18 }}
+                          className="absolute left-0 w-[calc(200%+1.25rem)] top-[calc(100%+8px)] z-50 bg-[#1C1F22] border border-white/10 shadow-2xl p-5"
+                        >
                         {/* Month nav */}
                         <div className="flex items-center justify-between mb-3">
                           <button
@@ -392,10 +440,74 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                             </button>
                           )}
                         </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  <div className="group relative min-w-0">
+                    <select
+                      id="occasionType"
+                      value={formData.occasionType}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          occasionType: e.target.value,
+                        })
+                      }
+                      className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 appearance-none"
+                    >
+                      <option value="" className="bg-[#2E3034] text-white/60">
+                        Occasion type
+                      </option>
+                      {OCCASION_OPTIONS.map((opt) => (
+                        <option
+                          key={opt}
+                          value={opt}
+                          className="bg-[#2E3034] text-white"
+                        >
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                    <label
+                      htmlFor="occasionType"
+                      className={`absolute left-4 transition-all duration-300 pointer-events-none px-2 text-gh-label ${
+                        formData.occasionType
+                          ? "-top-2.5 translate-y-0 text-white/75 bg-[#2E3034]"
+                          : "top-1/2 -translate-y-1/2 text-white/45"
+                      }`}
+                    >
+                      Occasion type
+                    </label>
+                  </div>
+
+                  <div className="group relative min-w-0">
+                    <input
+                      type="number"
+                      id="noOfGuests"
+                      min={1}
+                      value={formData.noOfGuests}
+                      onChange={(e) =>
+                        setFormData({ ...formData, noOfGuests: e.target.value })
+                      }
+                      placeholder=" "
+                      className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <label
+                      htmlFor="noOfGuests"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
+                    >
+                      No. Of Guests
+                    </label>
+                  </div>
                 </div>
+
+                {submitError && (
+                  <p role="alert" className="text-sm text-red-300 border border-red-400/40 rounded-sm px-3 py-2">
+                    {submitError}
+                  </p>
+                )}
 
                 {/* Queries */}
                 <div className="group relative">
@@ -434,10 +546,10 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
 
                 <button
                   type="submit"
-                  disabled={!isFormValid}
-                  className={`w-full py-4 mt-3 font-manrope tracking-[0.25em] text-gh-label transition-all duration-300 uppercase border ${ isFormValid ? "bg-transparent border-[#EFCD62]/40 text-[#EFCD62] hover:bg-[#EFCD62] hover:text-black hover:border-[#EFCD62]" : "bg-white/[0.03] border-white/10 text-white/15 cursor-not-allowed" }`}
+                  disabled={!isFormValid || submitting}
+                  className={`w-full py-4 mt-3 font-manrope tracking-[0.25em] text-gh-label transition-all duration-300 uppercase border ${ isFormValid && !submitting ? "bg-transparent border-[#EFCD62]/40 text-[#EFCD62] hover:bg-[#EFCD62] hover:text-black hover:border-[#EFCD62]" : "bg-white/[0.03] border-white/10 text-white/15 cursor-not-allowed" }`}
                 >
-                  CONTACT US
+                  {submitting ? "SENDING…" : "CONTACT US"}
                 </button>
               </form>
             </div>

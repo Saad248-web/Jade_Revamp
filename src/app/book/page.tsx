@@ -15,7 +15,7 @@ import {
   Bed,
   Home,
   Check,
-  Headset,
+  Phone,
   Loader2,
   AlertCircle,
   CheckCircle2,
@@ -1217,7 +1217,7 @@ function BookPageContent() {
                 href="tel:08970663366"
                 className="text-white hover:text-[#EFCD62] transition-colors"
               >
-                <Headset className="w-5 h-5" strokeWidth={1.5} />
+                <Phone className="w-5 h-5" strokeWidth={1.5} aria-hidden />
               </a>
               <button
                 onClick={handleClose}

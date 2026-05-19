@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
-  Headset,
   Check,
   Facebook,
   Instagram,
@@ -15,6 +14,7 @@ import Link from "next/link";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useAnimation } from "@/context/AnimationContext";
+import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
 
 export default function RathaaOverlay() {
   const { isRathaaOverlayOpen, setRathaaOverlayOpen } = useAnimation();
@@ -33,7 +33,8 @@ export default function RathaaOverlay() {
       overnight: false,
       multiDay: false,
     },
-    occasion: "",
+    occasionType: "",
+    specialRequests: "",
   });
 
   const handleClose = () => {
@@ -53,7 +54,8 @@ export default function RathaaOverlay() {
           overnight: false,
           multiDay: false,
         },
-        occasion: "",
+        occasionType: "",
+        specialRequests: "",
       });
     }, 500);
   };
@@ -66,7 +68,7 @@ export default function RathaaOverlay() {
       guests,
       preferredDate,
       travelFormat,
-      occasion,
+      occasionType,
     } = formData;
     const hasFormat =
       travelFormat.oneDay || travelFormat.overnight || travelFormat.multiDay;
@@ -76,7 +78,7 @@ export default function RathaaOverlay() {
       email.trim() !== "" &&
       guests.trim() !== "" &&
       preferredDate.trim() !== "" &&
-      occasion.trim() !== "" &&
+      occasionType.trim() !== "" &&
       hasFormat
     );
   };
@@ -275,17 +277,41 @@ export default function RathaaOverlay() {
                         </div>
                       </div>
 
+                      <select
+                        value={formData.occasionType}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            occasionType: e.target.value,
+                          })
+                        }
+                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body focus:outline-none focus:border-[#EFCD62] transition-colors"
+                      >
+                        <option value="" className="bg-[#123A2D] text-white/60">
+                          Occasion type
+                        </option>
+                        {OCCASION_OPTIONS.map((opt) => (
+                          <option
+                            key={opt}
+                            value={opt}
+                            className="bg-[#123A2D] text-white"
+                          >
+                            {opt}
+                          </option>
+                        ))}
+                      </select>
+
                       <div className="mt-2 text-white">
                         <textarea
-                          placeholder="Occasion / Special Requests"
-                          value={formData.occasion}
+                          placeholder="Special requests (optional)"
+                          value={formData.specialRequests}
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              occasion: e.target.value,
+                              specialRequests: e.target.value,
                             })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-4 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-24 resize-none font-manrope transition-colors"
+                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-4 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope transition-colors"
                         />
                       </div>
                     </div>

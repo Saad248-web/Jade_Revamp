@@ -209,10 +209,10 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const startingPrice = getStartingPrice();
 
   return (
-    <div className="flex flex-col md:flex-row gap-5 h-full pointer-events-auto">
+    <motion.div className="flex w-full flex-col gap-5 md:flex-row md:items-start pointer-events-auto">
       {/* IMAGE CONTAINER */}
       <div
-        className="relative w-full md:w-[45%] md:flex-shrink-0 aspect-[4/3] md:aspect-auto md:max-h-[480px] overflow-hidden rounded-md group bg-white/5"
+        className="relative w-full md:w-[45%] md:flex-shrink-0 aspect-[4/3] md:max-h-[480px] overflow-hidden rounded-md group bg-white/5"
         style={{ perspective: "1400px" }}
       >
         <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
@@ -305,7 +305,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
       </div>
 
       {/* DETAILS CONTAINER */}
-      <div className="flex flex-col text-left flex-1 md:py-2">
+      <div className="flex min-w-0 flex-1 flex-col text-left md:py-2">
         <span
           className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase"
           style={{ marginBottom: "clamp(4px, 0.64vw, 8px)" }}
@@ -367,17 +367,14 @@ export default function VillaCard({ villa }: VillaCardProps) {
           <span className="shrink-0 text-white/40 text-gh-label font-manrope font-bold uppercase tracking-wider mr-1">
             Perfect for:
           </span>
-          {villa.perfectFor.map((tag, idx) => {
-            const title = typeof tag === "string" ? tag : tag.title;
-            return (
+          {(villa.perfectForTags ?? []).map((title, idx) => (
               <span
                 key={`${title}-${idx}`}
                 className="shrink-0 whitespace-nowrap bg-white/5 border border-white/10 text-white/80 text-gh-label px-2.5 py-1 rounded-sm font-manrope"
               >
                 {title}
               </span>
-            );
-          })}
+            ))}
         </div>
 
         {/* Action Row */}
@@ -408,6 +405,6 @@ export default function VillaCard({ villa }: VillaCardProps) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

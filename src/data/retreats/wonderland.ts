@@ -1,17 +1,6 @@
-export const wonderland = {
-  id: "wonderland",
-  name: "Wonderland",
-  type: "TREEHOUSE NATURE RETREAT",
-  location: "Hosur · Near Bangalore",
-  stats: {
-    stay: "6 Guests",
-    events: "15 Guests",
-    bhk: "2 BHK",
-    pool: "Natural Rock Pool",
-  },
-  description:
-    "Wonderland is a 2-bedroom treehouse villa designed for intimate stays surrounded by greenery. Built as an elevated living space, it offers a nature-led experience with open views and outdoor-focused living. With a party deck, outdoor dining under the treehouse, and access to a natural freshwater pool, the property is suited for small groups, quiet getaways, and private celebrations.",
-  perfectFor: [
+import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+
+const wonderlandPerfectForCards = [
     {
       title: "Family Getaways",
       image: "/Villa_Retreats/Wonderland/Perfect For/Family Getaways.webp",
@@ -28,7 +17,23 @@ export const wonderland = {
       title: "Weekend Getaways",
       image: "/Villa_Retreats/Wonderland/Perfect For/Weekend Getaways.webp",
     },
-  ],
+  ];
+
+const wonderlandBase = {
+  id: "wonderland",
+  name: "Wonderland",
+  type: "TREEHOUSE NATURE RETREAT",
+  location: "Hosur · Near Bangalore",
+  stats: {
+    stay: "6 Guests",
+    events: "15 Guests",
+    bhk: "2 BHK",
+    pool: "Natural Rock Pool",
+  },
+  description:
+    "Wonderland is a 2-bedroom treehouse villa designed for intimate stays surrounded by greenery. Built as an elevated living space, it offers a nature-led experience with open views and outdoor-focused living. With a party deck, outdoor dining under the treehouse, and access to a natural freshwater pool, the property is suited for small groups, quiet getaways, and private celebrations.",
+  perfectForCards: wonderlandPerfectForCards,
+  perfectForTags: perfectForTagsFromCards(wonderlandPerfectForCards),
   categories: ["Pet Friendly", "Weekend Getaways", "Nature Retreats"],
   image: "/Villa_Retreats/Wonderland/Hero/hero.webp",
   images: [
@@ -266,4 +271,9 @@ export const wonderland = {
       answer: "Yes, the property is pet-friendly.",
     },
   ],
+};
+
+export const wonderland = {
+  ...wonderlandBase,
+  amenityHighlights: amenityHighlightsFrom(wonderlandBase.amenities),
 };

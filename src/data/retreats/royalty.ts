@@ -1,18 +1,6 @@
-export const royalty = {
-  id: "royalty",
-  name: "Royalty",
-  type: "EQUESTRIAN HILL VIEW RETREAT",
-  location: "Chikkaballapur · Near Nandi Hills",
-  stats: {
-    stay: "15 Guests",
-    events: "30 Guests",
-    bhk: "5 BHK",
-    lawn: "Equestrian Arena",
-    villaArea: "Hilltop Glasshouse",
-  },
-  description:
-    "Royalty is a private equestrian 5-bedroom glasshouse villa set against the Varlakonda hills. The property features indoor living with expansive outdoor spaces, including a private pool with a waterfall, a riding arena, and a horse stable. The property combines rustic hillside experiences with modern comforts, creating a unique retreat experience.",
-  perfectFor: [
+import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+
+const royaltyPerfectForCards = [
     {
       title: "Equestrian Enthusiasts",
       image:
@@ -30,7 +18,24 @@ export const royalty = {
       title: "Staycations",
       image: "/Villa_Retreats/Royalty/4- Perfect For/Staycations.webp",
     },
-  ],
+  ];
+
+const royaltyBase = {
+  id: "royalty",
+  name: "Royalty",
+  type: "EQUESTRIAN HILL VIEW RETREAT",
+  location: "Chikkaballapur · Near Nandi Hills",
+  stats: {
+    stay: "15 Guests",
+    events: "30 Guests",
+    bhk: "5 BHK",
+    lawn: "Equestrian Arena",
+    villaArea: "Hilltop Glasshouse",
+  },
+  description:
+    "Royalty is a private equestrian 5-bedroom glasshouse villa set against the Varlakonda hills. The property features indoor living with expansive outdoor spaces, including a private pool with a waterfall, a riding arena, and a horse stable. The property combines rustic hillside experiences with modern comforts, creating a unique retreat experience.",
+  perfectForCards: royaltyPerfectForCards,
+  perfectForTags: perfectForTagsFromCards(royaltyPerfectForCards),
   categories: [
     "Luxury Stays",
     "Weekend Getaways",
@@ -258,4 +263,9 @@ export const royalty = {
         "Suitable for small to mid-sized gatherings, not large-scale events.",
     },
   ],
+};
+
+export const royalty = {
+  ...royaltyBase,
+  amenityHighlights: amenityHighlightsFrom(royaltyBase.amenities),
 };

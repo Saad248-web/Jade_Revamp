@@ -1,4 +1,14 @@
-export const loungeFly = {
+import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+
+const loungeFlyPerfectForLegacy = [
+    "Couple Stays",
+    "Short Getaways",
+    "City Escapes",
+    "Solo Travelers",
+    "Boutique Stays",
+  ];
+
+const loungeFlyBase = {
   id: "lounge-fly",
   name: "Lounge Fly",
   type: "LUXURY APARTMENT SUITE · BHARTIYA CITY",
@@ -12,13 +22,6 @@ export const loungeFly = {
   },
   description:
     "Lounge Fly is a luxury 1-bedroom apartment suite located in the heart of Bhartiya City, designed for short stays and private escapes. The 1-bedroom layout combines compact living with elevated, curated lounge-style interiors. With dual balconies, direct access to the mall and Leela Hotel, and city-facing views, the space offers a premium urban stay experience. Designed for comfort and privacy, it suits couples, solo stays, and small groups.",
-  perfectFor: [
-    "Couple Stays",
-    "Short Getaways",
-    "City Escapes",
-    "Solo Travelers",
-    "Boutique Stays",
-  ],
   categories: ["Luxury Stays", "Weekend Getaways", "Corporate Retreats"],
   thumbnail: "/Villa_Retreats/Lounge Fly/1-Hero/Hero.webp",
   image: "/Villa_Retreats/Lounge Fly/1-Hero/Hero.webp",
@@ -292,4 +295,16 @@ export const loungeFly = {
       answer: "Yes, parking is available within the premises.",
     },
   ],
+};
+
+const loungeFlyPerfectFor = splitLegacyPerfectFor(
+  loungeFlyPerfectForLegacy,
+  (loungeFlyBase.images?.length ? loungeFlyBase.images : [loungeFlyBase.image].filter(Boolean)) as string[],
+);
+
+export const loungeFly = {
+  ...loungeFlyBase,
+  amenityHighlights: amenityHighlightsFrom(loungeFlyBase.amenities),
+  perfectForTags: loungeFlyPerfectFor.perfectForTags,
+  perfectForCards: loungeFlyPerfectFor.perfectForCards,
 };

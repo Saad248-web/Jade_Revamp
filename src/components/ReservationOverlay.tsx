@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Headset, Minus, Plus, ChevronLeft } from "lucide-react";
+import { X, Phone, Minus, Plus, ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useEffect, useState } from "react";
@@ -150,9 +150,10 @@ export default function ReservationOverlay({
                     href="tel:08970663366"
                     className="text-white hover:text-[#EFCD62] transition-colors relative"
                   >
-                    <Headset
+                    <Phone
                       className="w-5 h-5 md:w-6 md:h-6"
                       strokeWidth={1.5}
+                      aria-hidden
                     />
                   </a>
                 </div>

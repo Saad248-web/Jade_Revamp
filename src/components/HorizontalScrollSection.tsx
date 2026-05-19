@@ -8,6 +8,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import PrimaryButton from "@/components/PrimaryButton";
+import { experiencePanelTextOpacity } from "@/lib/experiencePanelMotion";
 
 const PANELS = [
   {
@@ -72,11 +73,11 @@ const PANELS = [
     type: "full",
   },
   {
-    id: "casual",
-    title: "Casual Stays",
+    id: "private-getaways",
+    title: "Private Getaways",
     subtext:
-      "Easy getaways and comfortable stays for a quick escape from the city, offering a home-away-from-home vibe.",
-    cta: "SEE CASUAL STAYS",
+      "Exclusive-use villas for intimate escapes—curated privacy, refined comfort, and the freedom to unwind on your own terms.",
+    cta: "SEE PRIVATE GETAWAYS",
     href: "/villas",
     image: "/Home Page/2-Experiences/casual stays.webp",
     mobileImage: "/Website Ratio Changes/Casual Stayss.webp",
@@ -209,6 +210,10 @@ function StackedPanel({
     return index === centered ? 100 : index * 10;
   });
 
+  const textOpacity = useTransform(globalProgress, (p: number) =>
+    experiencePanelTextOpacity(p, index, totalSteps),
+  );
+
   return (
     <motion.div
       style={{ x, zIndex, willChange: "transform" }}
@@ -240,8 +245,11 @@ function StackedPanel({
               </div>
             </div>
 
-            {/* Text Section - adaptive height so title / body / CTA always fit above the fold */}
-            <motion.div className="relative w-full flex flex-col items-start text-left mt-1 shrink-0">
+            {/* Text Section — fades on horizontal exit to avoid overflow clip */}
+            <motion.div
+              style={{ opacity: textOpacity }}
+              className="relative w-full flex flex-col items-start text-left mt-1 shrink-0"
+            >
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
