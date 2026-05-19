@@ -183,10 +183,10 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
               : "max-lg:pb-[max(1rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] lg:pb-16",
           )}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
             {/* LEFT: Heading + (Desktop) Links + Contact */}
             {/* LEFT: Heading + Contact Form */}
-            <div className="lg:col-span-7 flex flex-col gap-12 lg:pr-12">
+            <div className="lg:col-span-7 flex flex-col gap-10 lg:pr-12">
               {/* Heading */}
               <div>
                 <h2 className="font-philosopher text-gh-h1 text-white leading-tight">
@@ -196,7 +196,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
               </div>
 
               {/* Form Content */}
-              <form className="space-y-6" onSubmit={handleFormSubmit}>
+              <form className="space-y-5" onSubmit={handleFormSubmit}>
                 {/* Name */}
                 <div className="group relative">
                   <input
@@ -211,9 +211,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                   />
                   <label
                     htmlFor="fullName"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 
-                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] 
-                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
                   >
                     Full Name
                   </label>
@@ -236,9 +234,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                   />
                   <label
                     htmlFor="phoneNumber"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 
-                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] 
-                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
                   >
                     Phone Number
                   </label>
@@ -249,21 +245,15 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                   <button
                     type="button"
                     onClick={() => setShowCalendar((v) => !v)}
-                    className={`w-full h-14 bg-white/[0.02] border px-4 text-left transition-colors rounded-none flex items-center justify-between ${
-                      showCalendar ? "border-[#EFCD62]/70" : "border-white/15"
-                    }`}
+                    className={`w-full h-14 bg-white/[0.02] border px-4 text-left transition-colors rounded-none flex items-center justify-between ${ showCalendar ? "border-[#EFCD62]/70" : "border-white/15" }`}
                   >
                     <span
-                      className={`font-manrope text-gh-label ${
-                        dateLabel ? "text-white/80" : "text-white/35"
-                      }`}
+                      className={`font-manrope text-gh-label ${ dateLabel ? "text-white/80" : "text-white/35" }`}
                     >
                       {dateLabel || "Check-In & Out Date"}
                     </span>
                     <CalendarDays
-                      className={`w-4 h-4 shrink-0 transition-colors ${
-                        showCalendar ? "text-[#EFCD62]" : "text-white/25"
-                      }`}
+                      className={`w-4 h-4 shrink-0 transition-colors ${ showCalendar ? "text-[#EFCD62]" : "text-white/25" }`}
                     />
                   </button>
                   {dateLabel && (
@@ -282,7 +272,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                         className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 bg-[#1C1F22] border border-white/10 shadow-2xl p-5"
                       >
                         {/* Month nav */}
-                        <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center justify-between mb-3">
                           <button
                             type="button"
                             onClick={() =>
@@ -372,17 +362,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                                 onClick={() => !isPast && handleDayClick(day)}
                                 onMouseEnter={() => setHoverDate(day)}
                                 onMouseLeave={() => setHoverDate(null)}
-                                className={`relative h-9 w-full font-manrope text-gh-label transition-all duration-150 ${
-                                  isPast
-                                    ? "text-white/15 cursor-not-allowed"
-                                    : isStart || isEnd
-                                      ? "bg-[#EFCD62] text-[#1C1F22] font-bold z-10"
-                                      : inRange
-                                        ? "bg-[#EFCD62]/15 text-white"
-                                        : isToday
-                                          ? "text-[#EFCD62] font-semibold hover:bg-white/10"
-                                          : "text-white/70 hover:bg-white/10"
-                                }`}
+                                className={`relative h-9 w-full font-manrope text-gh-label transition-all duration-150 ${ isPast ? "text-white/15 cursor-not-allowed" : isStart || isEnd ? "bg-[#EFCD62] text-[#1C1F22] font-bold z-10" : inRange ? "bg-[#EFCD62]/15 text-white" : isToday ? "text-[#EFCD62] font-semibold hover:bg-white/10" : "text-white/70 hover:bg-white/10" }`}
                               >
                                 {i + 1}
                               </button>
@@ -391,7 +371,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                         </div>
 
                         {/* Footer hint */}
-                        <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+                        <div className="mt-3 pt-4 border-t border-white/10 flex items-center justify-between">
                           <p className="font-manrope text-gh-label text-white/30">
                             {!checkIn
                               ? "Select check-in date"
@@ -431,16 +411,14 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                   />
                   <label
                     htmlFor="queries"
-                    className="absolute left-4 top-6 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 
-                      peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] 
-                      peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
+                    className="absolute left-4 top-6 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
                   >
                     Your Queries
                   </label>
                 </div>
 
                 {/* Consent */}
-                <label className="flex items-start gap-3 pt-1 select-none">
+                <label className="flex items-start gap-2.5 pt-1 select-none">
                   <input
                     type="checkbox"
                     checked={consent}
@@ -457,24 +435,20 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                 <button
                   type="submit"
                   disabled={!isFormValid}
-                  className={`w-full py-4 mt-4 font-manrope tracking-[0.25em] text-gh-label transition-all duration-300 uppercase border ${
-                    isFormValid
-                      ? "bg-transparent border-[#EFCD62]/40 text-[#EFCD62] hover:bg-[#EFCD62] hover:text-black hover:border-[#EFCD62]"
-                      : "bg-white/[0.03] border-white/10 text-white/15 cursor-not-allowed"
-                  }`}
+                  className={`w-full py-4 mt-3 font-manrope tracking-[0.25em] text-gh-label transition-all duration-300 uppercase border ${ isFormValid ? "bg-transparent border-[#EFCD62]/40 text-[#EFCD62] hover:bg-[#EFCD62] hover:text-black hover:border-[#EFCD62]" : "bg-white/[0.03] border-white/10 text-white/15 cursor-not-allowed" }`}
                 >
                   CONTACT US
                 </button>
               </form>
             </div>
 
-            <div className="lg:col-start-8 lg:col-span-5 flex flex-col gap-12 border-t border-white/10 pt-10 lg:border-t-0 lg:pt-0 lg:border-l lg:border-white/10 lg:pl-12">
+            <div className="lg:col-start-8 lg:col-span-5 flex flex-col gap-10 border-t border-white/10 pt-8 lg:border-t-0 lg:pt-0 lg:border-l lg:border-white/10 lg:pl-12">
               {/* LINKS block (matches screenshot style, but keeps all existing links) */}
               <div>
                 <div className="grid grid-cols-2 gap-x-4 sm:gap-x-10 gap-y-12">
-                  <div className="flex flex-col gap-4 items-start">
+                  <div className="flex flex-col gap-3 items-start">
                     {LINKS_COLUMN_1.map((link) => (
-                      <div key={link.label} className="flex flex-col gap-4 items-start">
+                      <div key={link.label} className="flex flex-col gap-3 items-start">
                         <Link
                           href={link.href}
                           className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors inline-flex items-center gap-2"
@@ -505,7 +479,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                     ))}
                   </div>
 
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-3">
                     {LINKS_COLUMN_2.map((link) => (
                       <Link
                         key={link.label}
@@ -526,8 +500,8 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
               </div>
 
               {/* Contact Info Anchor */}
-              <div className="mt-auto pt-12 border-t border-white/10">
-                <div className="flex flex-col gap-8">
+              <div className="mt-auto pt-10 border-t border-white/10">
+                <div className="flex flex-col gap-6">
                   <div className="w-12 h-12 relative opacity-50 contrast-125">
                     <Image
                       src="/assets/Golden_Logo.png"
@@ -538,14 +512,14 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                     />
                   </div>
 
-                  <div className="flex flex-col gap-6 text-white font-manrope text-gh-label tracking-wide uppercase">
-                    <div className="flex items-start gap-4">
+                  <div className="flex flex-col gap-5 text-white font-manrope text-gh-label tracking-wide uppercase">
+                    <div className="flex items-start gap-3">
                       <MapPin className="w-4 h-4 text-[#EFCD62] shrink-0 mt-0.5" />
                       <span className="leading-relaxed">
                         76, phase II, Royal Enclave, Srirampura, Bengaluru - 64
                       </span>
                     </div>
-                    <div className="flex items-center gap-4 text-[#FAFAFA]">
+                    <div className="flex items-center gap-3 text-[#FAFAFA]">
                       <Phone className="w-4 h-4 text-[#EFCD62] shrink-0" />
                       <span className="hidden md:inline">0897 066 3366</span>
                       <a href="tel:08970663366" className="md:hidden hover:text-[#EFCD62] transition-colors">
@@ -554,7 +528,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                     </div>
                     <a
                       href="mailto:Info@jadehospitainment.com"
-                      className="flex items-center gap-4 hover:text-[#EFCD62] transition-colors normal-case tracking-normal"
+                      className="flex items-center gap-3 hover:text-[#EFCD62] transition-colors normal-case tracking-normal"
                     >
                       <Mail className="w-4 h-4 text-[#EFCD62] shrink-0" />
                       <span>Info@jadehospitainment.com</span>
@@ -598,7 +572,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
           </div>
 
           {/* ── BOTTOM COPYRIGHT BAR ─────────────────────────────────────── */}
-          <div className="border-t border-white/10 mt-14 pt-7 flex w-full justify-center">
+          <div className="border-t border-white/10 mt-11 pt-6 flex w-full justify-center">
             <p className="font-manrope text-gh-label text-white/35 tracking-widest uppercase text-center">
               © Copyright {currentYear} Jade Hospitainment – All Rights Reserved
             </p>
@@ -642,13 +616,13 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                   onClick={(e) => e.stopPropagation()}
                   className="w-full max-h-[85vh] bg-[#0B2C23] rounded-3xl flex flex-col shadow-2xl border border-white/10 overflow-hidden"
                 >
-                  <div className="flex flex-col items-center justify-center px-8 text-center pt-8 pb-10 overflow-y-auto">
+                  <div className="flex flex-col items-center justify-center px-8 text-center pt-6 pb-8 overflow-y-auto">
                     {/* Glassy circular wrapper for the checkmark */}
                     <motion.div
                       initial={{ scale: 0.7, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ duration: 0.5, ease: "easeOut" }}
-                      className="w-[160px] h-[160px] shrink-0 relative mb-8 rounded-full flex items-center justify-center"
+                      className="w-[160px] h-[160px] shrink-0 relative mb-6 rounded-full flex items-center justify-center"
                     >
                       <div
                         className="absolute inset-0 rounded-full"
@@ -691,7 +665,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                       initial={{ opacity: 0, y: 16 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
-                      className="text-white text-gh-h2 font-philosopher mb-4"
+                      className="text-white text-gh-h2 font-philosopher mb-3"
                     >
                       We've got it from here
                     </motion.h2>
@@ -700,7 +674,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
-                      className="text-white/80 text-gh-body leading-relaxed mb-10 max-w-sm mx-auto font-manrope"
+                      className="text-white/80 text-gh-body leading-relaxed mb-8 max-w-sm mx-auto font-manrope"
                     >
                       Thanks for sharing your details!
                       <br />
@@ -712,13 +686,13 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.4 }}
-                      className="flex flex-col w-full max-w-[280px] mx-auto gap-5"
+                      className="flex flex-col w-full max-w-[280px] mx-auto gap-4"
                     >
                       <p className="text-white/50 text-gh-label font-bold tracking-[0.2em] uppercase text-center">
                         MEANWHILE CHECK US OUT HERE
                       </p>
 
-                      <div className="flex justify-center gap-4">
+                      <div className="flex justify-center gap-3">
                         {[
                           {
                             Icon: Facebook,

@@ -14,31 +14,15 @@ import { VILLAS } from "@/lib/mockData";
 import Footer from "@/components/Footer";
 import ExperienceHero from "@/components/ExperienceHero";
 import TrustedBySection from "@/components/TrustedBySection";
-import ScrollSectionComposer, {
-  ScrollSlide,
-} from "@/components/ScrollSectionComposer";
+import ExperienceScrollSection from "@/components/ExperienceScrollSection";
 import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import { useAnimation } from "@/context/AnimationContext";
-
-const animatedSlides: ScrollSlide[] = [
-  {
-    lines: [
-      "At Jade Hospitainment, corporate",
-      "retreats are thoughtfully designed to",
-      "balance productivity and relaxation.",
-      "From strategic planning sessions and",
-      "workshops to recognition nights and",
-      "team celebrations, each gathering is",
-      "structured around your objectives.",
-    ],
-  },
-];
 
 export default function CorporateRetreatsPage() {
   const { setEnquireOverlayOpen } = useAnimation();
 
   return (
-    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
+    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
       <CorporateHeader />
       <MobileBottomNav />
 
@@ -80,10 +64,10 @@ export default function CorporateRetreatsPage() {
       {/* SECTION 2: TRUSTED BY SECTION */}
       <TrustedBySection />
       {/* SECTION 3: ANIMATED TEXT SECTION */}
-      <ScrollSectionComposer slides={animatedSlides} height="250vh" />
+      <ExperienceScrollSection variant="corporate" />
 
       {/* SECTION 4: py-12 (48px) for tighter flow */}
-      <section className="py-12 bg-[#1A1C1E] border-t border-white/5">
+      <section className="py-10 bg-[#1A1C1E] border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <FormatsCarousel />
         </div>
@@ -129,11 +113,11 @@ export default function CorporateRetreatsPage() {
       />
       {/* SECTION 6: SELECTED VILLAS FOR CORPORET RETREATS */}
       <section className="py-fluid-lg md:py-fluid-xl bg-[#1A1C1E] border-t border-white/5">
-        <div className="text-center mb-16 px-8">
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4 font-manrope">
+        <div className="text-center mb-12 px-8">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3 font-manrope">
             FEATURED VENUES
           </p>
-          <h2 className="text-gh-h1 font-philosopher text-white mb-8">
+          <h2 className="text-gh-h1 font-philosopher text-white mb-6">
             Explore Our Private
             <br />
             Corporate Retreats

@@ -25,6 +25,7 @@ import {
   liquidCarouselBgVariants,
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
+import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 
 const VILLAS = [
   {
@@ -175,10 +176,10 @@ function IntroPanel({
     >
       <div className="relative w-full max-w-4xl mx-auto flex flex-col items-center text-center">
         <motion.div style={{ y: textY }} className="z-10 relative">
-          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-4 font-bold block">
+          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-3 font-bold block">
             FEATURED VILLA'S
           </span>
-          <h2 className="font-philosopher text-gh-h1 text-white leading-tight mb-6">
+          <h2 className="font-philosopher text-gh-h1 text-white leading-tight mb-5">
             Spaces That Hold
             <br />
             the Experience
@@ -234,6 +235,20 @@ function VillaSlide({
 
   usePreloadNeighborImages(data.images, currentImageIndex);
 
+  const swipePrevImage = () => {
+    setDirection(-1);
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? data.images.length - 1 : prev - 1,
+    );
+  };
+
+  const swipeNextImage = () => {
+    setDirection(1);
+    setCurrentImageIndex((prev) =>
+      prev === data.images.length - 1 ? 0 : prev + 1,
+    );
+  };
+
   // Zoom-safe offset: half-viewport + half-panel + 56px off-screen gap.
   // Ensures exactly one panel is visible at any zoom level (100/125/140/150%).
   const [offsetPx, setOffsetPx] = useState(1000);
@@ -281,12 +296,12 @@ function VillaSlide({
       style={{ x, zIndex: index * 10 }}
       className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none bg-transparent"
     >
-      <div className="pointer-events-none relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-20 lg:px-32 xl:px-48 pb-[80px] sm:pb-0">
+      <div className="pointer-events-none relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-20 lg:px-32 xl:px-48 pb-[64px] sm:pb-0">
         {/* Layout Container: Stacked universally on all screen sizes */}
         <Link
           href={data.link}
           ref={innerRef}
-          className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-stretch justify-center gap-4 lg:gap-6 group rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EFCD62]"
+          className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-stretch justify-center gap-3 lg:gap-5 group rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EFCD62]"
         >
           <div
             className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0"
@@ -377,6 +392,12 @@ function VillaSlide({
                 </AnimatePresence>
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent lg:hidden" />
+              <CarouselSwipeLayer
+                onPrev={swipePrevImage}
+                onNext={swipeNextImage}
+                slideCount={data.images.length}
+                className="absolute inset-0 z-[50] touch-pan-y"
+              />
               {/* Navigation Arrows */}
               <div className="absolute bottom-0 left-0 z-[100]">
                 <button
@@ -400,7 +421,7 @@ function VillaSlide({
           </div>
 
           {/* Text Section */}
-          <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 pb-10">
+          <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 pb-8">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -413,7 +434,7 @@ function VillaSlide({
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="font-philosopher text-gh-h2 text-white leading-none mb-4"
+              className="font-philosopher text-gh-h2 text-white leading-none mb-3"
             >
               {data.title}
             </motion.h2>
@@ -421,7 +442,7 @@ function VillaSlide({
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="font-manrope text-gh-body text-white/80 leading-relaxed mb-6 lg:mb-8 line-clamp-3"
+              className="font-manrope text-gh-body text-white/80 leading-relaxed mb-5 lg:mb-6 line-clamp-3"
             >
               {data.description}
             </motion.p>

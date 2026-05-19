@@ -21,6 +21,7 @@ import {
   liquidCarouselBgVariants,
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
+import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 
 const OFFERINGS = [
   {
@@ -89,12 +90,12 @@ export default function AboutPage() {
   );
 
   return (
-    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
+    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
       {/* ── Navigation ── */}
       <Navbar />
       <MobileBottomNav />
       {/* 1. HERO SECTION */}
-      <section className="relative min-h-[100svh] w-full flex flex-col items-center justify-end pb-24 overflow-hidden">
+      <section className="relative min-h-[100svh] w-full flex flex-col items-center justify-end pb-20 overflow-hidden">
         {/* Live Background */}
         <div className="absolute inset-0 z-0">
           <LiveBackground />
@@ -105,7 +106,7 @@ export default function AboutPage() {
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto">
           {/* Logo */}
-          <div className="mb-10 relative w-16 h-16 md:w-24 md:h-24">
+          <div className="mb-8 relative w-16 h-16 md:w-24 md:h-24">
             <Image
               src="/assets/Golden_Logo.png"
               alt="Jade Logo"
@@ -120,13 +121,13 @@ export default function AboutPage() {
             ABOUT JADEHOSPITAINMENT
           </h2>
 
-          <h1 className="text-gh-h1 font-philosopher text-white mb-4 leading-tight">
+          <h1 className="text-gh-h1 font-philosopher text-white mb-3 leading-tight">
             Curated Villas.
             <br />
             Thoughtfully Operated.
           </h1>
 
-          <p className="text-white/80 font-manrope text-gh-body max-w-2xl leading-relaxed mb-6">
+          <p className="text-white/80 font-manrope text-gh-body max-w-2xl leading-relaxed mb-5">
             Where hospitality and experience go beyond conventional listing
             platforms.
           </p>
@@ -151,11 +152,11 @@ export default function AboutPage() {
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]" />
 
         <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
-          <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-8">
+          <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-6">
             OUR STORY
           </h3>
 
-          <div className="text-white/90 font-manrope text-gh-body leading-relaxed mb-16 text-center">
+          <div className="text-white/90 font-manrope text-gh-body leading-relaxed mb-12 text-center">
             <p>
               Founded in 2011 under Jade Retreats, Jade Hospitainment created
               exclusive private retreat experiences, starting with one of
@@ -172,7 +173,7 @@ export default function AboutPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
 
             {/* Logo/Play Button Center */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
               <div className="relative w-20 h-20 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
                 <Image
                   src="/assets/Golden_Logo.png"
@@ -230,12 +231,12 @@ export default function AboutPage() {
       />
 
       {/* 5. WHAT WE DO SECTION (Offering Carousel) */}
-      <section className="relative h-screen min-h-[600px] flex flex-col justify-center bg-[#1A1C1E] py-12 md:py-16 overflow-hidden">
+      <section className="relative h-screen min-h-[600px] flex flex-col justify-center bg-[#1A1C1E] py-10 md:py-12 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 w-full flex flex-col h-full">
           {/* Header & Nav */}
-          <div className="flex justify-between items-end mb-8 md:mb-12">
+          <div className="flex justify-between items-end mb-6 md:mb-10">
             <div>
-              <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3 font-manrope">
+              <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-2.5 font-manrope">
                 WHAT WE DO
               </h3>
               <h2 className="text-gh-h2 font-philosopher text-white leading-none">
@@ -299,7 +300,7 @@ export default function AboutPage() {
                       duration: CAROUSEL_CROSSFADE.duration,
                       ease: CAROUSEL_CROSSFADE.ease,
                     }}
-                    className="text-gh-h2 font-philosopher text-white mb-4"
+                    className="text-gh-h2 font-philosopher text-white mb-3"
                   >
                     {offering.title}
                   </motion.h3>
@@ -318,6 +319,12 @@ export default function AboutPage() {
                 </div>
               </motion.div>
             </AnimatePresence>
+            <CarouselSwipeLayer
+              onPrev={prevOffering}
+              onNext={nextOffering}
+              slideCount={OFFERINGS.length}
+              className="absolute inset-0 z-[15] touch-pan-y"
+            />
           </div>
         </div>
       </section>
@@ -328,11 +335,11 @@ export default function AboutPage() {
           <LiveBackground />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center mb-16">
-          <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
+        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center mb-12">
+          <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3">
             MEET THE TEAM
           </h3>
-          <h2 className="text-gh-h2 font-philosopher text-white mb-6">
+          <h2 className="text-gh-h2 font-philosopher text-white mb-5">
             The Faces of Hospitainment
           </h2>
           <p className="text-white/60 max-w-2xl mx-auto font-manrope text-gh-body">
@@ -342,13 +349,13 @@ export default function AboutPage() {
         </div>
 
         <div className="relative z-10 pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]">
-          <div className="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x snap-mandatory pr-12 md:pr-24 lg:pr-[30vw]">
+          <div className="flex overflow-x-auto gap-5 pb-6 no-scrollbar snap-x snap-mandatory pr-12 md:pr-24 lg:pr-[30vw]">
             {TEAM_PLACEHOLDERS.map((member, i) => (
               <div
                 key={i}
                 className="flex-shrink-0 w-[240px] xs:w-[280px] md:w-[350px] bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 flex flex-col items-center text-center rounded-none snap-center"
               >
-                <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border-2 border-[#EFCD62]/30 mb-8 flex items-center justify-center bg-gradient-to-br from-white/10 to-white/[0.02] text-[#EFCD62] font-philosopher text-3xl md:text-4xl tracking-wide">
+                <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border-2 border-[#EFCD62]/30 mb-6 flex items-center justify-center bg-gradient-to-br from-white/10 to-white/[0.02] text-[#EFCD62] font-philosopher text-3xl md:text-4xl tracking-wide">
                   {member.initials}
                 </div>
                 <h4 className="text-white text-gh-body font-bold font-manrope mb-2">
@@ -367,11 +374,11 @@ export default function AboutPage() {
       {/* 7. MEDIA SECTION */}
       <section className="py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
+          <div className="text-center mb-12">
+            <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3">
               MEDIA
             </h3>
-            <h2 className="text-gh-h2 font-philosopher text-white mb-6">
+            <h2 className="text-gh-h2 font-philosopher text-white mb-5">
               Awards and Recognition
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto font-manrope text-gh-body">
@@ -380,7 +387,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Unique Media Items */}
             <div
               className="relative aspect-square bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"

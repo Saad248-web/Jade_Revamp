@@ -26,16 +26,14 @@ export default function ExperienceFaqAccordion({
             <button
               type="button"
               aria-expanded={expanded}
-              className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left outline-none hover:bg-white/[0.04] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+              className="w-full flex items-center justify-between gap-2.5 px-4 py-3 text-left outline-none hover:bg-white/[0.04] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
               onClick={() => setOpen(expanded ? null : i)}
             >
               <span className="text-white font-manrope font-bold text-gh-body leading-snug pr-2">
                 {item.question}
               </span>
               <ChevronDown
-                className={`w-5 h-5 shrink-0 text-[#EFCD62] transition-transform duration-200 ${
-                  expanded ? "rotate-180" : ""
-                }`}
+                className={`w-5 h-5 shrink-0 text-[#EFCD62] transition-transform duration-200 ${ expanded ? "rotate-180" : "" }`}
                 aria-hidden
               />
             </button>
@@ -57,9 +55,9 @@ export function ExperiencePolicyCompactList({
   policies: { title: string; desc: string }[];
 }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {policies.map((policy) => (
-        <div key={policy.title} className="flex gap-3">
+        <div key={policy.title} className="flex gap-2.5">
           <div
             className="w-2 h-2 rotate-45 bg-[#EFCD62] shrink-0 mt-1.5 opacity-90"
             aria-hidden

@@ -180,7 +180,7 @@ function InstagramFramedCard({
     <article className="w-full h-full flex flex-col rounded-[16px] bg-[#1E2227] border border-white/10 overflow-hidden">
       {/* Header */}
       <header className="flex items-center justify-between px-4 pt-4 pb-3">
-        <div className="flex items-center gap-3 min-w-0">
+        <div className="flex items-center gap-2.5 min-w-0">
           <div className="w-10 h-10 rounded-full bg-black/25 border border-white/10 flex items-center justify-center">
             <img
               src="/assets/Golden_Logo.png"
@@ -240,7 +240,7 @@ function InstagramFramedCard({
 
       {/* Actions + content */}
       <div className="px-4 pt-3 pb-4">
-        <div className="flex items-center gap-6 text-white/65">
+        <div className="flex items-center gap-5 text-white/65">
           <div className="flex items-center gap-2">
             <Heart className="w-5 h-5" />
             <span className="font-manrope text-[13px]">{post.likes}</span>
@@ -251,11 +251,11 @@ function InstagramFramedCard({
           </div>
         </div>
 
-        <div className="mt-3 font-manrope text-[14px] text-white/70 leading-snug line-clamp-2">
+        <div className="mt-2.5 font-manrope text-[14px] text-white/70 leading-snug line-clamp-2">
           <span className="text-white/85">{post.caption}</span>
         </div>
 
-        <div className="mt-3 space-y-1">
+        <div className="mt-2.5 space-y-1">
           {post.commentPreview.slice(0, 2).map((c, idx) => (
             <div
               key={idx}
@@ -302,13 +302,13 @@ export default function InstagramCarousel() {
     <SectionWrapper
       ref={sectionRef}
       bg={JADE_CHARCOAL}
-      className="py-16 md:py-24 min-h-[80dvh] lg:min-h-[100dvh] flex flex-col justify-center overflow-x-hidden"
+      className="py-12 md:py-20 min-h-[80dvh] lg:min-h-[100dvh] flex flex-col justify-center overflow-x-hidden"
     >
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       <div className="max-w-[1920px] mx-auto w-full">
         {/* Header */}
-        <div className="text-center mb-12 md:mb-16 px-6 md:px-12">
-          <div className="flex items-center justify-center gap-2 mb-4">
+        <div className="text-center mb-10 md:mb-12 px-6 md:px-12">
+          <div className="flex items-center justify-center gap-2 mb-3">
             <Instagram className="w-5 h-5 text-jade-gold" />
             <span className="font-manrope text-gh-label tracking-[0.3em] uppercase text-jade-gold">
               Featured on Instagram
@@ -331,7 +331,7 @@ export default function InstagramCarousel() {
 
         {/* Continuous Marquee Container */}
         <div className="relative w-full overflow-hidden pb-4">
-          <div className="flex w-max gap-6 animate-marquee hover:[animation-play-state:paused]">
+          <div className="flex w-max gap-5 animate-marquee hover:[animation-play-state:paused]">
             {[...INSTAGRAM_POSTS, ...INSTAGRAM_POSTS].map((post, index) => (
               <div
                 key={`${post.id}-${index}`}
@@ -347,7 +347,7 @@ export default function InstagramCarousel() {
         </div>
 
         {/* CTA Button */}
-        <div className="flex justify-center mt-10 px-6">
+        <div className="flex justify-center mt-8 px-6">
           <PrimaryButton
             href="https://www.instagram.com/jadehospitainment"
             target="_blank"

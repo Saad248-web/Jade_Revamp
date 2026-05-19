@@ -20,13 +20,13 @@ export default function WishlistPage() {
     <main className="min-h-screen bg-[#1A1C1E]">
       <Navbar />
 
-      <div className="max-w-[1280px] mx-auto px-4 md:px-8 lg:px-16 pt-28 pb-32">
+      <div className="max-w-[1280px] mx-auto px-4 md:px-8 lg:px-16 pt-24 pb-24">
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-10">
           <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase">
             YOUR SAVED RETREATS
           </span>
-          <h1 className="font-philosopher text-gh-h1 text-white mt-2 leading-tight flex items-baseline gap-3">
+          <h1 className="font-philosopher text-gh-h1 text-white mt-2 leading-tight flex items-baseline gap-2.5">
             <span>Saved Villas</span>
             {count > 0 && (
               <span className="text-white/30 font-manrope text-gh-body font-normal">
@@ -50,7 +50,7 @@ export default function WishlistPage() {
         {/* Wishlist Grid */}
         <AnimatePresence mode="popLayout">
           {count > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {wishlist.map((item, i) => {
                 const matchedVilla = VILLAS.find((v) => v.id === item.id);
                 
@@ -121,7 +121,7 @@ export default function WishlistPage() {
                         href={mapsHref}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 text-white/50 text-gh-desc font-manrope mb-4 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors duration-300"
+                        className="flex items-center gap-1.5 text-white/50 text-gh-desc font-manrope mb-3 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors duration-300"
                       >
                         <MapPin className="w-4 h-4 text-[#EFCD62] shrink-0" />
                         <span className="hover:underline underline-offset-2">
@@ -131,14 +131,14 @@ export default function WishlistPage() {
 
                       {/* 4. Description */}
                       {matchedVilla?.description && (
-                        <p className="font-manrope text-white/60 leading-relaxed text-gh-desc line-clamp-2 mb-4">
+                        <p className="font-manrope text-white/60 leading-relaxed text-gh-desc line-clamp-2 mb-3">
                           {matchedVilla.description}
                         </p>
                       )}
 
                       {/* 5. Stats Row (Stay, Events, BHK) */}
                       {matchedVilla?.stats && (
-                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/70 font-manrope text-gh-label border-t border-b border-white/5 py-3.5 mb-4">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/70 font-manrope text-gh-label border-t border-b border-white/5 py-3.5 mb-3">
                           <div className="flex items-center gap-1.5 shrink-0">
                             <Bed className="w-4 h-4 text-[#EFCD62]/80" />
                             <span>{matchedVilla.stats.stay}</span>
@@ -158,7 +158,7 @@ export default function WishlistPage() {
 
                       {/* 6. Perfect For Tags (Limited to top 2 for grid balance) */}
                       {matchedVilla?.perfectFor && matchedVilla.perfectFor.length > 0 && (
-                        <div className="flex flex-wrap items-center gap-1.5 mb-5 text-gh-label font-manrope">
+                        <div className="flex flex-wrap items-center gap-1.5 mb-4 text-gh-label font-manrope">
                           <span className="text-white/30 font-bold uppercase tracking-wider mr-1">
                             For:
                           </span>
@@ -178,11 +178,11 @@ export default function WishlistPage() {
 
                       {/* 7. Price onwards & CTA Buttons */}
                       <div className="mt-auto pt-4 border-t border-white/5">
-                        <p className="text-white/40 font-manrope text-gh-desc mb-4">
+                        <p className="text-white/40 font-manrope text-gh-desc mb-3">
                           Starting Price: <span className="text-white font-bold ml-1">{startingPrice}</span>
                         </p>
 
-                        <div className="flex gap-3">
+                        <div className="flex gap-2.5">
                           <Link
                             href={`/villas/${item.id}`}
                             className="flex-1 border border-white/20 text-white font-manrope font-bold text-gh-label tracking-widest uppercase text-center py-2.5 hover:bg-white hover:text-black hover:border-white transition-all rounded-sm duration-300"
@@ -207,10 +207,10 @@ export default function WishlistPage() {
 
         {/* CTA when list not empty */}
         {count > 0 && (
-          <div className="mt-16 text-center border-t border-white/5 pt-10">
+          <div className="mt-12 text-center border-t border-white/5 pt-8">
             <Link
               href="/villas"
-              className="inline-flex items-center gap-2 text-white/60 hover:text-white font-manrope text-gh-body transition-all group hover:gap-3"
+              className="inline-flex items-center gap-2 text-white/60 hover:text-white font-manrope text-gh-body transition-all group hover:gap-2.5"
             >
               <span>Continue exploring our collection of villas</span>
               <ArrowRight className="w-4 h-4 text-[#EFCD62] transform group-hover:translate-x-1 transition-transform" />

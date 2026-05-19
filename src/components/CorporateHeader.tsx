@@ -10,7 +10,7 @@ export default function CorporateHeader() {
   const router = useRouter();
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 py-6 pointer-events-none">
+    <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 py-5 pointer-events-none">
       <motion.button
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}

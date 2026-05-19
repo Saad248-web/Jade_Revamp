@@ -124,7 +124,7 @@ export default function RathaaOverlay() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={handleClose}
-              className="w-12 h-12 mb-3 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0 z-[102]"
+              className="w-12 h-12 mb-2.5 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0 z-[102]"
             >
               <X className="w-6 h-6 stroke-[1.5]" />
             </motion.button>
@@ -140,7 +140,7 @@ export default function RathaaOverlay() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
               {/* CONTENT AREA */}
               <div
-                className="flex-1 overflow-y-auto scrollbar-hide px-6 pt-6 pb-10"
+                className="flex-1 overflow-y-auto scrollbar-hide px-6 pt-5 pb-8"
                 data-lenis-prevent
               >
                 {view === "form" ? (
@@ -148,16 +148,16 @@ export default function RathaaOverlay() {
                     onSubmit={handleSubmit}
                     className="flex flex-col h-full"
                   >
-                    <h2 className="text-white text-[32px] leading-tight md:text-gh-h2 font-philosopher mb-3">
+                    <h2 className="text-white text-[32px] leading-tight md:text-gh-h2 font-philosopher mb-2.5">
                       Plan Your Rathaa Journey
                     </h2>
-                    <p className="text-white/80 text-gh-body mb-8">
+                    <p className="text-white/80 text-gh-body mb-6">
                       Tell us your preferred dates, group size, and destination.
                       Our team will help you design a curated caravan
                       experience.
                     </p>
 
-                    <div className="flex flex-col gap-5 flex-1">
+                    <div className="flex flex-col gap-4 flex-1">
                       {/* Floating Label Input - Full Name */}
                       <div className="relative border border-white/20 focus-within:border-[#EFCD62] transition-colors rounded-sm group">
                         <label className="absolute -top-3 left-4 bg-[#123A2D] px-1 text-white text-gh-label">
@@ -227,10 +227,10 @@ export default function RathaaOverlay() {
 
                       {/* Travel Format Checkboxes */}
                       <div className="mt-2 text-white">
-                        <h3 className="text-white text-gh-body mb-4">
+                        <h3 className="text-white text-gh-body mb-3">
                           Travel Format:
                         </h3>
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-2.5">
                           {[
                             {
                               key: "oneDay",
@@ -253,11 +253,10 @@ export default function RathaaOverlay() {
                                   item.key as keyof typeof formData.travelFormat,
                                 );
                               }}
-                              className="flex items-center gap-3 cursor-pointer group"
+                              className="flex items-center gap-2.5 cursor-pointer group"
                             >
                               <div
-                                className={`w-5 h-5 rounded-sm border flex items-center justify-center transition-colors shrink-0 bg-[#0E2E23]
-                                  ${formData.travelFormat[item.key as keyof typeof formData.travelFormat] ? "border-white bg-white" : "border-white/40 group-hover:border-white/80"}`}
+                                className={`w-5 h-5 rounded-sm border flex items-center justify-center transition-colors shrink-0 bg-[#0E2E23] ${formData.travelFormat[item.key as keyof typeof formData.travelFormat] ? "border-white bg-white" : "border-white/40 group-hover:border-white/80"}`}
                               >
                                 {formData.travelFormat[
                                   item.key as keyof typeof formData.travelFormat
@@ -291,11 +290,11 @@ export default function RathaaOverlay() {
                       </div>
                     </div>
 
-                    <div className="mt-8 border-t border-white/10 pt-6">
+                    <div className="mt-6 border-t border-white/10 pt-5">
                       {submitError && (
                         <p
                           role="alert"
-                          className="mb-4 text-sm text-red-300 border border-red-400/40 rounded-sm px-3 py-2 text-left"
+                          className="mb-3 text-sm text-red-300 border border-red-400/40 rounded-sm px-3 py-2 text-left"
                         >
                           {submitError}
                         </p>
@@ -329,20 +328,16 @@ export default function RathaaOverlay() {
                       <button
                         type="submit"
                         disabled={!isFormValid() || submitting}
-                        className={`w-full py-4 font-manrope font-bold text-gh-label tracking-[0.3em] uppercase transition-all border ${
-                          isFormValid() && !submitting
-                            ? "bg-[#EFCD62] hover:bg-white text-black border-transparent"
-                            : "bg-transparent border-white/10 text-white/40 cursor-not-allowed"
-                        }`}
+                        className={`w-full py-4 font-manrope font-bold text-gh-label tracking-[0.3em] uppercase transition-all border ${ isFormValid() && !submitting ? "bg-[#EFCD62] hover:bg-white text-black border-transparent" : "bg-transparent border-white/10 text-white/40 cursor-not-allowed" }`}
                       >
                         {submitting ? "SENDING…" : "SEND INQUIRY"}
                       </button>
                     </div>
                   </form>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full px-4 text-center pb-8">
+                  <div className="flex flex-col items-center justify-center h-full px-4 text-center pb-6">
                     {/* Glassy circular wrapper for the checkmark */}
-                    <div className="w-[180px] h-[180px] shrink-0 relative mb-8 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
+                    <div className="w-[180px] h-[180px] shrink-0 relative mb-6 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
                       <div className="w-[84px] h-[84px] shrink-0 relative drop-shadow-2xl">
                         <Image
                           src="/assets/JAde%20Correction.png"
@@ -355,11 +350,11 @@ export default function RathaaOverlay() {
                       </div>
                     </div>
 
-                    <h2 className="text-white text-shadow-sm text-[36px] font-philosopher mb-4">
+                    <h2 className="text-white text-shadow-sm text-[36px] font-philosopher mb-3">
                       We've got it from here
                     </h2>
 
-                    <p className="text-white/90 text-[16px] leading-relaxed mb-12 max-w-sm mx-auto">
+                    <p className="text-white/90 text-[16px] leading-relaxed mb-10 max-w-sm mx-auto">
                       Thanks for sharing your details!
                       <br />
                       Our team will take a look and reach out shortly to
@@ -367,11 +362,11 @@ export default function RathaaOverlay() {
                     </p>
 
                     <div className="flex flex-col w-full max-w-[300px] mx-auto mt-auto">
-                      <p className="text-white/60 text-[11px] font-bold tracking-[0.2em] uppercase mb-5">
+                      <p className="text-white/60 text-[11px] font-bold tracking-[0.2em] uppercase mb-4">
                         MEANWHILE CHECK US OUT HERE
                       </p>
 
-                      <div className="flex justify-center gap-4">
+                      <div className="flex justify-center gap-3">
                         {[
                           {
                             Icon: Facebook,
@@ -398,7 +393,7 @@ export default function RathaaOverlay() {
                         ))}
                       </div>
 
-                      <p className="text-white/60 text-[13px] mb-10 mt-6">
+                      <p className="text-white/60 text-[13px] mb-8 mt-5">
                         Thoughtfully operated. Always.
                       </p>
 

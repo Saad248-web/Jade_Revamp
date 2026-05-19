@@ -96,7 +96,7 @@ export default function HorizontalScrollSection() {
   return (
     <section ref={targetRef} className="relative h-[800vh] bg-[#25282C]">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#25282C] isolation isolate">
-        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(40px,5vh,64px)] pb-[clamp(4px,1vh,12px)] shrink-0">
+        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(32px,4vh,51.2px)] pb-[clamp(4px,0.8vh,9.6px)] shrink-0">
           <span className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-jade-gold drop-shadow-lg block">
             WAYS JADE IS EXPERIENCED
           </span>
@@ -216,9 +216,9 @@ function StackedPanel({
     >
       <div className="pointer-events-auto flex items-center justify-center w-full h-full">
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
-        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 pb-[80px] sm:pb-10">
+        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 pb-[64px] sm:pb-8">
           {/* Layout Container - vertically centered in the available space so it adapts to any viewport (incl. 125-150% Windows scaling) */}
-          <div className="relative w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto flex flex-col items-stretch gap-3 lg:gap-5">
+          <div className="relative w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto flex flex-col items-stretch gap-2.5 lg:gap-4">
             {/* Image Section - adaptive max-height so the CTA button stays visible at high Windows scaling */}
             <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none shrink-0 bg-black">
               <div className="w-full h-full relative">
@@ -246,7 +246,7 @@ function StackedPanel({
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-3"
+                className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-2.5"
               >
                 {data.title}
               </motion.h2>
@@ -254,7 +254,7 @@ function StackedPanel({
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="font-manrope text-gh-body text-white/80 leading-relaxed mb-3 lg:mb-5 line-clamp-3 max-w-lg"
+                className="font-manrope text-gh-body text-white/80 leading-relaxed mb-2.5 lg:mb-4 line-clamp-3 max-w-lg"
               >
                 {data.subtext}
               </motion.p>
@@ -266,7 +266,7 @@ function StackedPanel({
               >
                 <Link
                   href={data.href || "#"}
-                  className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-4 transition-all"
+                  className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-3 transition-all"
                 >
                   {data.cta} <ArrowRight className="w-5 h-5" />
                 </Link>

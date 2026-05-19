@@ -9,29 +9,12 @@ import PrimaryButton from "@/components/PrimaryButton";
 import { useAnimation } from "@/context/AnimationContext";
 import Footer from "@/components/Footer";
 import ExperienceHero from "@/components/ExperienceHero";
-import ScrollSectionComposer, {
-  ScrollSlide,
-} from "@/components/ScrollSectionComposer";
+import ExperienceScrollSection from "@/components/ExperienceScrollSection";
 import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
 import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
 import WeekendThemedVillasSection from "@/components/weekend/WeekendThemedVillasSection";
 
 // Per request: remove all image links from this page (text-first).
-
-const animatedSlides: ScrollSlide[] = [
-  {
-    label: "A DIFFERENT KIND OF WEEKEND ESCAPE",
-    lines: [
-      "Jade’s private villas offer space,",
-      "privacy, and comfort just outside the",
-      "city. Whether you’re planning a",
-      "relaxed stay with friends, a family",
-      "getaway, or a small celebration, each",
-      "retreat is designed to let you slow",
-      "down and enjoy the moment.",
-    ],
-  },
-];
 
 const weekendSlides = [
   {
@@ -97,7 +80,7 @@ export default function WeekendGetawaysPage() {
   const { setEnquireOverlayOpen } = useAnimation();
 
   return (
-    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
+    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
       <CorporateHeader />
       <MobileBottomNav />
 
@@ -132,7 +115,7 @@ export default function WeekendGetawaysPage() {
       />
 
       {/* SECTION 2: ANIMATED TEXT SECTION */}
-      <ScrollSectionComposer slides={animatedSlides} height="250vh" />
+      <ExperienceScrollSection variant="weekend" />
 
       {/* SECTION 3: WEEKEND TYPES CAROUSEL */}
       <ExperienceCarouselSection
@@ -163,13 +146,13 @@ export default function WeekendGetawaysPage() {
       {/* SECTION 4: CTA */}
       <section className="py-fluid-lg md:py-fluid-xl bg-[#141517] border-t border-white/5">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-6">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-5">
             PLAN YOUR WEEKEND
           </p>
-          <h2 className="text-gh-h1 font-philosopher text-white mb-6">
+          <h2 className="text-gh-h1 font-philosopher text-white mb-5">
             Want a curated weekend escape?
           </h2>
-          <p className="text-white/60 font-manrope text-gh-body leading-relaxed mb-10">
+          <p className="text-white/60 font-manrope text-gh-body leading-relaxed mb-8">
             Reach out and we&apos;ll suggest the best villas for your group
             size, occasion, and preferred vibe.
           </p>

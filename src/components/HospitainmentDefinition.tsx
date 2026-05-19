@@ -54,7 +54,7 @@ export default function HospitainmentDefinition() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-[#0A0A0A] py-24 md:py-32"
+      className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-[#0A0A0A] py-20 md:py-24"
     >
       {/* Background Layer (Parallax) */}
       {/* Background Layer (Live) */}
@@ -72,7 +72,7 @@ export default function HospitainmentDefinition() {
         {/* Main Definition Heading */}
         <h2
           className="font-philosopher text-gh-h1 leading-[1.1] md:leading-[1.1] text-white/90"
-          style={{ marginBottom: "clamp(24px, 5vw, 48px)" }}
+          style={{ marginBottom: "clamp(15.4px, 3.2vw, 30.7px)" }}
         >
           {/* Split into lines for animation */}
           <div className="overflow-hidden">

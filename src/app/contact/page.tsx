@@ -36,7 +36,7 @@ function ContactCard({
   wrap?: boolean;
 }) {
   const inner = (
-    <div className="flex flex-col items-center text-center gap-3 py-10 px-8">
+    <div className="flex flex-col items-center text-center gap-2.5 py-8 px-8">
       <div className="w-10 h-10 flex items-center justify-center mb-1">
         <Icon className="w-5 h-5 text-white/50" strokeWidth={1.5} />
       </div>
@@ -75,7 +75,7 @@ function JadeCoin() {
       initial={{ scale: 0.7, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="relative w-48 h-48 flex items-center justify-center mx-auto mb-10"
+      className="relative w-48 h-48 flex items-center justify-center mx-auto mb-8"
     >
       <div
         className="absolute inset-0 rounded-full"
@@ -133,7 +133,7 @@ export default function ContactPage() {
   }
 
   return (
-    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
+    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
       {/* ── Navigation ── */}
       <Navbar />
       <MobileBottomNav />
@@ -141,7 +141,7 @@ export default function ContactPage() {
       {/* ═══════════════════════════════════════════════════════════════
           1. HERO — Live Background, heading, contact cards
       ════════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 pb-16 pt-28 md:pt-32">
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 pb-12 pt-24 md:pt-24">
         {/* Live Background — matches UnifiedScrollSection: no heavy overlay */}
         <div className="absolute inset-0 z-0">
           <LiveBackground />
@@ -154,7 +154,7 @@ export default function ContactPage() {
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-6"
+            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-5"
           >
             CONTACT US
           </motion.p>
@@ -163,7 +163,7 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-gh-h1 font-philosopher leading-tight mb-8 max-w-3xl"
+            className="text-gh-h1 font-philosopher leading-tight mb-6 max-w-3xl"
           >
             Planning a stay, <span className="block">celebration or</span>
             <span className="block">partnership?</span>
@@ -173,7 +173,7 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-white/70 font-manrope text-gh-body max-w-xl mx-auto leading-relaxed mb-14"
+            className="text-white/70 font-manrope text-gh-body max-w-xl mx-auto leading-relaxed mb-11"
           >
             We&apos;re available{" "}
             <strong className="text-white font-semibold">
@@ -191,7 +191,7 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full max-w-5xl"
+            className="grid grid-cols-1 md:grid-cols-3 gap-2.5 w-full max-w-5xl"
           >
             <ContactCard
               icon={Phone}
@@ -256,13 +256,13 @@ export default function ContactPage() {
                   onClick={(e) => e.stopPropagation()}
                   className="w-full max-h-[85vh] bg-[#0B2C23] rounded-3xl flex flex-col shadow-2xl border border-white/10 overflow-hidden"
                 >
-                  <div className="flex flex-col items-center justify-center px-8 text-center pt-10 pb-10 overflow-y-auto">
+                  <div className="flex flex-col items-center justify-center px-8 text-center pt-8 pb-8 overflow-y-auto">
                     {/* Glassy circular wrapper for the checkmark */}
                     <motion.div
                       initial={{ scale: 0.7, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ duration: 0.5, ease: "easeOut" }}
-                      className="w-[160px] h-[160px] shrink-0 relative mb-8 rounded-full flex items-center justify-center"
+                      className="w-[160px] h-[160px] shrink-0 relative mb-6 rounded-full flex items-center justify-center"
                     >
                       <div
                         className="absolute inset-0 rounded-full"
@@ -305,7 +305,7 @@ export default function ContactPage() {
                       initial={{ opacity: 0, y: 16 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
-                      className="text-white text-gh-h2 font-philosopher mb-4"
+                      className="text-white text-gh-h2 font-philosopher mb-3"
                     >
                       We've got it from here
                     </motion.h2>
@@ -314,7 +314,7 @@ export default function ContactPage() {
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
-                      className="text-white/80 text-gh-body leading-relaxed mb-10 max-w-sm mx-auto font-manrope"
+                      className="text-white/80 text-gh-body leading-relaxed mb-8 max-w-sm mx-auto font-manrope"
                     >
                       Thanks for sharing your details!
                       <br />
@@ -326,13 +326,13 @@ export default function ContactPage() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.4 }}
-                      className="flex flex-col w-full max-w-[280px] mx-auto gap-5"
+                      className="flex flex-col w-full max-w-[280px] mx-auto gap-4"
                     >
                       <p className="text-white/50 text-gh-label font-bold tracking-[0.2em] uppercase text-center">
                         MEANWHILE CHECK US OUT HERE
                       </p>
 
-                      <div className="flex justify-center gap-4">
+                      <div className="flex justify-center gap-3">
                         {[
                           {
                             Icon: Facebook,

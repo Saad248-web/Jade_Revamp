@@ -26,7 +26,7 @@ export default function VillasHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase"
-          style={{ marginBottom: "clamp(6px, 1.5vw, 12px)" }}
+          style={{ marginBottom: "clamp(4px, 0.96vw, 8px)" }}
         >
           VILLA RETREATS
         </motion.span>
@@ -37,7 +37,7 @@ export default function VillasHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           className="font-philosopher text-gh-h1 text-white leading-tight tracking-tight"
-          style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+          style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
         >
           All Our Villa Retreats
         </motion.h1>
@@ -65,7 +65,7 @@ export default function VillasHero() {
             behavior: "smooth",
           });
         }}
-        className="absolute inset-x-0 mx-auto w-fit flex flex-col items-center gap-4 z-20 cursor-pointer hover:opacity-80 transition-opacity max-lg:bottom-[calc(7rem+env(safe-area-inset-bottom))] lg:bottom-12"
+        className="absolute inset-x-0 mx-auto w-fit flex flex-col items-center gap-3 z-20 cursor-pointer hover:opacity-80 transition-opacity max-lg:bottom-[calc(7rem+env(safe-area-inset-bottom))] lg:bottom-12"
       >
         <div className="w-[1px] h-12 bg-white/20" />
         <span className="text-gh-label text-white/40 font-manrope tracking-[0.2em] uppercase">

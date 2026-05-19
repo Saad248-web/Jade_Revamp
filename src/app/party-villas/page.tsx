@@ -35,9 +35,7 @@ import LiveBackground from "@/components/LiveBackground";
 import Footer from "@/components/Footer";
 import PartyVillasCarousel from "@/components/PartyVillasCarousel";
 import ExperienceHero from "@/components/ExperienceHero";
-import ScrollSectionComposer, {
-  ScrollSlide,
-} from "@/components/ScrollSectionComposer";
+import ExperienceScrollSection from "@/components/ExperienceScrollSection";
 import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
 import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
 import { useAnimation } from "@/context/AnimationContext";
@@ -68,26 +66,11 @@ const partySlides = [
   },
 ];
 
-const animatedSlides: ScrollSlide[] = [
-  {
-    label: "CELEBRATIONS, REIMAGINED",
-    lines: [
-      "Jade's private villas offer the perfect",
-      "setting for unforgettable celebrations.",
-      "Whether it's a birthday, anniversary,",
-      "pool party, or reunion with friends,",
-      "each space is designed for private",
-      "gatherings with curated setups, great",
-      "music, and moments worth celebrating.",
-    ],
-  },
-];
-
 export default function PartyVillasPage() {
   const { setEnquireOverlayOpen } = useAnimation();
 
   return (
-    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
+    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
       <CorporateHeader />
       <MobileBottomNav />
 
@@ -124,7 +107,7 @@ export default function PartyVillasPage() {
       />
 
       {/* SECTION 2: ANIMATED TEXT SECTION */}
-      <ScrollSectionComposer slides={animatedSlides} height="250vh" />
+      <ExperienceScrollSection variant="party" />
 
       {/* SECTION 3: PARTY TYPES CAROUSEL */}
       <ExperienceCarouselSection

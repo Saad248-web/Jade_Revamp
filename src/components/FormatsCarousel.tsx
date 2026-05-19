@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CAROUSEL_CROSSFADE } from "@/lib/carouselMotion";
+import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import {
   liquidCarouselBgVariants,
   type HeroSplitCustom,
@@ -89,8 +90,8 @@ export default function FormatsCarousel() {
   return (
     <div className="w-full max-w-7xl mx-auto px-8">
       {/* SECTION HEADER: Tightened mb-8 lg:mb-12 */}
-      <div className="flex flex-col mb-4 md:mb-[16px]">
-        <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-[14px] font-manrope">
+      <div className="flex flex-col mb-3 md:mb-[12.8px]">
+        <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-[11.2px] font-manrope">
           CORPORATE EXPERIENCE AT JADE
         </p>
         <div className="flex items-center justify-between w-full">
@@ -112,7 +113,7 @@ export default function FormatsCarousel() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-16 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-10 items-start">
         {/* IMAGES: Optimized for 8pt Spacing grid */}
         <div className="relative order-1 lg:order-1">
           <div
@@ -130,14 +131,6 @@ export default function FormatsCarousel() {
                 style={{
                   transformStyle: "preserve-3d",
                   backfaceVisibility: "hidden",
-                }}
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={1}
-                onDragEnd={(e, { offset, velocity }) => {
-                  const swipe = Math.abs(offset.x) > 50;
-                  if (swipe && offset.x > 0) prev();
-                  else if (swipe && offset.x < 0) next();
                 }}
                 className="absolute inset-0 flex flex-col"
               >
@@ -164,12 +157,17 @@ export default function FormatsCarousel() {
                 </div>
               </motion.div>
             </AnimatePresence>
+            <CarouselSwipeLayer
+              onPrev={prev}
+              onNext={next}
+              slideCount={FORMATS.length}
+            />
           </div>
         </div>
 
         {/* CONTENT: Balanced Side content - 8pt system */}
         <div className="flex flex-col justify-start lg:pt-4 order-2 lg:order-2">
-          <div className="space-y-4 md:space-y-6">
+          <div className="space-y-3 md:space-y-5">
             <AnimatePresence mode="sync" initial={false}>
               <motion.div
                 key={index}

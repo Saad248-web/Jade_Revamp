@@ -85,7 +85,7 @@ export default function VillaSpacesPage() {
     <main className="bg-[#1A1C1E] min-h-screen">
       {/* STICKY HEADER */}
       <header className="sticky top-0 z-50 bg-[#1A1C1E] border-b border-white/5 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => router.back()}
             className="p-2 text-white/60 hover:text-white transition-colors"
@@ -103,16 +103,12 @@ export default function VillaSpacesPage() {
 
       {/* FILTER BAR - STICKY BELOW HEADER */}
       <nav className="sticky top-[73px] z-40 bg-[#1A1C1E]/80 backdrop-blur-md border-b border-white/5 px-6 py-4">
-        <div className="flex gap-4 overflow-x-auto scrollbar-none">
+        <div className="flex gap-3 overflow-x-auto scrollbar-none">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-6 py-2 rounded-sm text-[11px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
-                activeCategory === cat
-                  ? "bg-[#EFCD62] text-black"
-                  : "bg-white/5 text-white/60 hover:bg-white/10"
-              }`}
+              className={`px-6 py-2 rounded-sm text-[11px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${ activeCategory === cat ? "bg-[#EFCD62] text-black" : "bg-white/5 text-white/60 hover:bg-white/10" }`}
             >
               {cat}
             </button>
@@ -121,10 +117,10 @@ export default function VillaSpacesPage() {
       </nav>
 
       {/* SPACES CONTENT */}
-      <div className="p-6 md:p-12 max-w-7xl mx-auto flex flex-col gap-16">
+      <div className="p-6 md:p-12 max-w-7xl mx-auto flex flex-col gap-12">
         {activeCategory === "Video" ? (
-          <section className="flex flex-col gap-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <section className="flex flex-col gap-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
               <h2 className="text-white font-philosopher text-3xl md:text-4xl">
                 Video Walkthrough
               </h2>
@@ -143,11 +139,7 @@ export default function VillaSpacesPage() {
                       <button
                         key={t.id}
                         onClick={() => setActiveDomeVideo(t.id)}
-                        className={`flex items-center gap-2 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${
-                          isActive
-                            ? "bg-[#EFCD62] text-black border-[#EFCD62]"
-                            : "bg-white/5 text-white/70 border-white/10 hover:text-white hover:bg-white/10"
-                        }`}
+                        className={`flex items-center gap-2 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-bold border transition-colors ${ isActive ? "bg-[#EFCD62] text-black border-[#EFCD62]" : "bg-white/5 text-white/70 border-white/10 hover:text-white hover:bg-white/10" }`}
                       >
                         <span
                           className="inline-block w-2.5 h-2.5 rounded-full border border-white/30"
@@ -224,7 +216,7 @@ export default function VillaSpacesPage() {
           </section>
         ) : filteredSpaces.length > 0 ? (
           filteredSpaces.map((space: VillaSpaceGroup) => (
-            <section key={space.id} className="flex flex-col gap-6">
+            <section key={space.id} className="flex flex-col gap-5">
               <div>
                 <h2 className="text-white font-philosopher text-3xl md:text-4xl mb-2">
                   {space.title}
@@ -239,7 +231,7 @@ export default function VillaSpacesPage() {
                 </div>
               </div>
 
-              <div className="jade-hscroll-track flex gap-4 overflow-x-auto pb-4 scrollbar-none snap-x -mx-6 px-6 md:mx-0 md:px-0">
+              <div className="jade-hscroll-track flex gap-3 overflow-x-auto pb-4 scrollbar-none snap-x -mx-6 px-6 md:mx-0 md:px-0">
                 {(space.images.length > 0 ? space.images : ["", ""]).map(
                   (img: string, idx: number) => (
                     <div

@@ -15,7 +15,11 @@ import {
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import SectionWrapper from "./SectionWrapper";
 import { JADE_CHARCOAL } from "@/lib/jadeSectionColors";
-import { usePreloadNeighborSlideImages } from "@/lib/carouselMotion";
+import {
+  useCarouselSwipeDragProps,
+  usePreloadNeighborSlideImages,
+} from "@/lib/carouselMotion";
+import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import {
   heroSplitBgVariants,
   heroSplitCardVariants,
@@ -71,11 +75,6 @@ export default function JadeAmenitiesSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
 
-  const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity;
-  };
-
   const currentSlide = AMENITIES[currentIndex];
 
   usePreloadNeighborSlideImages(AMENITIES, currentIndex);
@@ -95,6 +94,8 @@ export default function JadeAmenitiesSection() {
     setCurrentIndex((prev) => (prev === AMENITIES.length - 1 ? 0 : prev + 1));
   };
 
+  const miniCardSwipeProps = useCarouselSwipeDragProps(handlePrev, handleNext);
+
   return (
     <SectionWrapper
       ref={sectionRef}
@@ -103,17 +104,10 @@ export default function JadeAmenitiesSection() {
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
-      {/* ── GLOBAL SWIPE OVERLAY ── */}
-      <motion.div
-        className="absolute inset-0 z-10"
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0}
-        onDragEnd={(e, { offset, velocity }) => {
-          const swipe = swipePower(offset.x, velocity.x);
-          if (swipe < -swipeConfidenceThreshold) handleNext();
-          else if (swipe > swipeConfidenceThreshold) handlePrev();
-        }}
+      <CarouselSwipeLayer
+        onPrev={handlePrev}
+        onNext={handleNext}
+        slideCount={AMENITIES.length}
       />
 
       {/* ── TOP AREA (75vh mobile / 80vh desktop) — background image ── */}
@@ -156,11 +150,11 @@ export default function JadeAmenitiesSection() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             className={carouselHeroLabelClass}
-            style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
+            style={{ marginBottom: "clamp(4px, 0.64vw, 8px)" }}
           >
             {currentSlide.title}
           </motion.p>
-          <div style={{ marginBottom: "clamp(6px, 1.5vw, 12px)" }}>
+          <div style={{ marginBottom: "clamp(4px, 0.96vw, 8px)" }}>
             <h2 className={carouselHeroHeadlineClass}>
               {currentSlide.heading.join(" ")}
             </h2>
@@ -209,14 +203,8 @@ export default function JadeAmenitiesSection() {
           animate={{ x: `-${currentIndex * 100}%` }}
           transition={{ type: "spring", stiffness: 100, damping: 20 }}
           style={{ willChange: "transform" }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.2}
-          onDragEnd={(e, { offset, velocity }) => {
-            const swipe = swipePower(offset.x, velocity.x);
-            if (swipe < -swipeConfidenceThreshold) handleNext();
-            else if (swipe > swipeConfidenceThreshold) handlePrev();
-          }}
+          dragElastic={miniCardSwipeProps.drag ? 0.2 : 0}
+          {...miniCardSwipeProps}
         >
           {AMENITIES.map((amenity, idx) => (
             <div key={`card-${idx}`} className="w-full h-full relative flex-shrink-0">

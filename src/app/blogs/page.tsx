@@ -38,7 +38,7 @@ const BlogCard = ({ post, index }: { post: BlogPost; index: number }) => {
       </Link>
 
       <div className="flex flex-col flex-1 p-6 md:p-8">
-        <div className="flex items-center gap-4 mb-4 text-white/40 text-[11px] font-manrope tracking-wider uppercase">
+        <div className="flex items-center gap-3 mb-3 text-white/40 text-[11px] font-manrope tracking-wider uppercase">
           <div className="flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5 text-[#EFCD62]" />
             {post.date}
@@ -49,18 +49,18 @@ const BlogCard = ({ post, index }: { post: BlogPost; index: number }) => {
           </div>
         </div>
 
-        <h3 className="font-philosopher text-gh-h3 md:text-gh-h3 text-white group-hover:text-[#EFCD62] transition-colors mb-4 leading-snug">
+        <h3 className="font-philosopher text-gh-h3 md:text-gh-h3 text-white group-hover:text-[#EFCD62] transition-colors mb-3 leading-snug">
           <Link href={post.link}>{post.title}</Link>
         </h3>
 
-        <p className="font-manrope text-white/60 text-gh-body leading-relaxed mb-8 line-clamp-3">
+        <p className="font-manrope text-white/60 text-gh-body leading-relaxed mb-6 line-clamp-3">
           {post.excerpt}
         </p>
 
         <div className="mt-auto">
           <Link
             href={post.link}
-            className="inline-flex items-center gap-3 text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase group-hover:gap-5 transition-all duration-300"
+            className="inline-flex items-center gap-2.5 text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase group-hover:gap-5 transition-all duration-300"
           >
             Read More <ArrowRight className="w-4 h-4" />
           </Link>
@@ -77,13 +77,13 @@ export default function BlogsPage() {
       <MobileBottomNav />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 md:pt-48 md:pb-24 px-6 md:px-12 lg:px-24">
+      <section className="pt-24 pb-12 md:pt-40 md:pb-20 px-6 md:px-12 lg:px-24">
         <div className="max-w-[1920px] mx-auto">
           <div className="max-w-3xl">
-            <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-6">
+            <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-5">
               OUR JOURNAL
             </p>
-            <h1 className="font-philosopher text-gh-h1 text-white mb-8 leading-tight">
+            <h1 className="font-philosopher text-gh-h1 text-white mb-6 leading-tight">
               Stories of Hospitality, <br />
               <span className="italic text-[#EFCD62]">Architecture</span> &
               Escape
@@ -103,7 +103,7 @@ export default function BlogsPage() {
       {/* Blog Grid */}
       <section className="py-fluid-lg md:py-fluid-xl px-6 md:px-12 lg:px-24">
         <div className="max-w-[1920px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
             {BLOG_POSTS.map((post, idx) => (
               <BlogCard key={post.id} post={post} index={idx} />
             ))}
@@ -114,9 +114,9 @@ export default function BlogsPage() {
       {/* Newsletter Section */}
       <section className="py-fluid-lg md:py-fluid-xl bg-[#1E2023] border-t border-white/5">
         <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
-          <div className="bg-[#EFCD62] p-12 md:p-20 flex flex-col md:flex-row items-center justify-between gap-12 rounded-none">
+          <div className="bg-[#EFCD62] p-12 md:p-20 flex flex-col md:flex-row items-center justify-between gap-10 rounded-none">
             <div className="max-w-xl text-black">
-              <h2 className="font-philosopher text-gh-h2 mb-4 leading-tight">
+              <h2 className="font-philosopher text-gh-h2 mb-3 leading-tight">
                 Get the latest from <br /> Jade Hospitainment
               </h2>
               <p className="font-manrope text-black/70 text-gh-body">
@@ -124,7 +124,7 @@ export default function BlogsPage() {
                 ideas, and architectural highlights.
               </p>
             </div>
-            <div className="w-full max-w-md flex flex-col md:flex-row gap-4">
+            <div className="w-full max-w-md flex flex-col md:flex-row gap-3">
               <input
                 type="email"
                 placeholder="YOUR EMAIL ADDRESS"

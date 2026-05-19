@@ -8,16 +8,16 @@
  */
 
 export const VILLA_DETAIL_SPACING = {
-  gutterX: "px-4 sm:px-6 lg:px-8",
-  sectionY: "py-12 lg:py-16",
+  gutterX: "px-3 sm:px-5 lg:px-6",
+  sectionY: "py-10 lg:py-12",
   page: "max-w-7xl mx-auto w-full",
   content: "max-w-4xl mx-auto w-full",
   /** Equal vertical + horizontal section padding */
-  sectionShell: "px-4 sm:px-6 lg:px-8 py-12 lg:py-16 max-w-7xl mx-auto w-full",
-  stack: "flex flex-col gap-8",
-  stackSm: "flex flex-col gap-4",
+  sectionShell: "px-3 sm:px-5 lg:px-6 py-10 lg:py-12 max-w-7xl mx-auto w-full",
+  stack: "flex flex-col gap-6",
+  stackSm: "flex flex-col gap-3",
   stackTight: "flex flex-col gap-2",
-  row: "flex flex-wrap gap-4",
+  row: "flex flex-wrap gap-3",
   hScrollBleed: "-mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8",
   hScrollTrack: "flex gap-4 overflow-x-auto pb-2 snap-x scrollbar-none",
   heading: "text-gh-h1 font-philosopher text-white",

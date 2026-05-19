@@ -40,21 +40,21 @@ export default function TravelGuidelinesSection() {
         </div>
 
         {/* Right Side: Content */}
-        <div className="w-full lg:w-1/2 h-full flex flex-col justify-center px-8 md:px-16 lg:px-24 py-16 lg:py-0 relative z-10">
+        <div className="w-full lg:w-1/2 h-full flex flex-col justify-center px-8 md:px-16 lg:px-24 py-12 lg:py-0 relative z-10">
           <div className="max-w-xl">
-            <h2 className="text-gh-h2 md:text-gh-h1 font-philosopher text-white leading-tight mb-12">
+            <h2 className="text-gh-h2 md:text-gh-h1 font-philosopher text-white leading-tight mb-10">
               Important <br />
               Travel Guidelines
             </h2>
 
-            <div className="space-y-10 mb-14">
+            <div className="space-y-8 mb-11">
               {GUIDELINES.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-5 group">
+                <div key={idx} className="flex items-start gap-4 group">
                   <div className="mt-1.5 flex-shrink-0">
                     <div className="w-3 h-3 bg-[#EFCD62] rotate-45 transition-transform duration-500 group-hover:rotate-[225deg]" />
                   </div>
                   <div>
-                    <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope mb-2.5">
+                    <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope mb-2">
                       {item.title}
                     </h3>
                     <p className="text-white/80 text-gh-body leading-relaxed font-manrope">
@@ -66,7 +66,7 @@ export default function TravelGuidelinesSection() {
             </div>
 
             <button
-              className="flex items-center gap-3 text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope group bg-white/5 hover:bg-white/10 border border-[#EFCD62]/30 px-6 py-4 transition-all duration-300"
+              className="flex items-center gap-2.5 text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope group bg-white/5 hover:bg-white/10 border border-[#EFCD62]/30 px-6 py-4 transition-all duration-300"
               onClick={() => setIsModalOpen(true)}
             >
               SEE ALL GUIDELINES

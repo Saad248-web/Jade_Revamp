@@ -54,7 +54,7 @@ export default function BookingDetailsFormFields({
     show(key) ? "border-red-400/70" : "border-white/20";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div>
         <div
           className={`relative border ${border("fullName")} focus-within:border-[#EFCD62] transition-colors rounded-sm`}

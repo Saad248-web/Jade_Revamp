@@ -12,7 +12,7 @@ export default function ErrorState({
   onRetry,
 }: ErrorStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center gap-5 py-24 text-center px-6">
+    <div className="flex flex-col items-center justify-center gap-4 py-20 text-center px-6">
       <AlertCircle className="w-12 h-12 text-red-400/60" strokeWidth={1.5} />
       <p className="text-white/60 font-manrope text-gh-body max-w-xs">
         {message}

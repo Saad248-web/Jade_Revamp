@@ -59,7 +59,7 @@ export default function WhyJadeWeddings() {
   return (
     <section className="bg-[#0B2C23] py-fluid-lg md:py-fluid-xl">
       <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           {/* IMAGE SECTION */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -88,12 +88,12 @@ export default function WhyJadeWeddings() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
               className="font-philosopher text-gh-h1 text-white"
-              style={{ marginBottom: "clamp(32px, 6vw, 64px)" }}
+              style={{ marginBottom: "clamp(20.5px, 3.84vw, 41px)" }}
             >
               Why Jade Wedding Venues
             </motion.h2>
 
-            <div className="space-y-8 md:space-y-10">
+            <div className="space-y-6 md:space-y-8">
               {BENEFITS.map((benefit, index) => (
                 <motion.div
                   key={index}
@@ -101,7 +101,7 @@ export default function WhyJadeWeddings() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="flex gap-4 sm:gap-5 group"
+                  className="flex gap-3 sm:gap-4 group"
                 >
                   <div className="mt-1 flex-shrink-0">
                     <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-[#EFCD62] rotate-45 transform transition-transform group-hover:rotate-[225deg] duration-700" />

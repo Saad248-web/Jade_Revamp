@@ -203,7 +203,7 @@ export default function PartnerOverlay() {
             {/* Floating close button — sits above the panel */}
             <button
               onClick={handleClose}
-              className="w-12 h-12 mb-3 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0"
+              className="w-12 h-12 mb-2.5 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0"
             >
               <X className="w-6 h-6 stroke-[1.5]" />
             </button>
@@ -218,7 +218,7 @@ export default function PartnerOverlay() {
             >
               {/* Header */}
               {view === "form" && (
-                <div className="flex items-center px-6 pt-6 pb-2">
+                <div className="flex items-center px-6 pt-5 pb-2">
                   <h2 className="text-white text-gh-h2 font-philosopher">
                     Partner with us
                   </h2>
@@ -231,12 +231,12 @@ export default function PartnerOverlay() {
                 data-lenis-prevent
               >
                 {view === "form" ? (
-                  <div className="flex flex-col px-6 pb-8">
-                    <p className="text-white/80 text-gh-body mb-6 mt-2">
+                  <div className="flex flex-col px-6 pb-6">
+                    <p className="text-white/80 text-gh-body mb-5 mt-2">
                       Share a few details. Our team will get back to you shortly
                     </p>
 
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-3">
                       {/* Floating Label Input - Full Name */}
                       <div className="relative">
                         <input
@@ -249,7 +249,7 @@ export default function PartnerOverlay() {
                               fullName: e.target.value,
                             })
                           }
-                          className="block w-full bg-transparent border border-white/20 rounded-sm px-4 pt-5 pb-2 text-white text-gh-body focus:outline-none focus:border-[#EFCD62] peer"
+                          className="block w-full bg-transparent border border-white/20 rounded-sm px-4 pt-4 pb-2 text-white text-gh-body focus:outline-none focus:border-[#EFCD62] peer"
                           placeholder=" "
                         />
                         <label
@@ -294,8 +294,8 @@ export default function PartnerOverlay() {
                       />
 
                       {/* Partnership Type Checkboxes */}
-                      <div className="mt-4">
-                        <h3 className="text-white text-gh-body mb-3">
+                      <div className="mt-3">
+                        <h3 className="text-white text-gh-body mb-2.5">
                           Partnership Type:
                         </h3>
                         <div className="grid grid-cols-2 gap-y-3 gap-x-2">
@@ -322,8 +322,7 @@ export default function PartnerOverlay() {
                               className="flex items-center gap-2 cursor-pointer group"
                             >
                               <div
-                                className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors shrink-0
-                                  ${formData.partnershipType[item.key as keyof typeof formData.partnershipType] ? "bg-white border-white" : "border-white group-hover:border-white/70"}`}
+                                className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors shrink-0 ${formData.partnershipType[item.key as keyof typeof formData.partnershipType] ? "bg-white border-white" : "border-white group-hover:border-white/70"}`}
                               >
                                 {formData.partnershipType[
                                   item.key as keyof typeof formData.partnershipType
@@ -349,13 +348,13 @@ export default function PartnerOverlay() {
                               partnershipOther: e.target.value,
                             })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3 mt-4 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope"
+                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3 mt-3 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope"
                         />
                       </div>
 
                       {/* Property Type Checkboxes */}
                       <div className="mt-2 text-white">
-                        <h3 className="text-white text-gh-body mb-3">
+                        <h3 className="text-white text-gh-body mb-2.5">
                           Property Type
                         </h3>
                         <div className="grid grid-cols-2 gap-y-3 gap-x-2">
@@ -379,8 +378,7 @@ export default function PartnerOverlay() {
                               className="flex items-center gap-2 cursor-pointer group"
                             >
                               <div
-                                className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors shrink-0
-                                  ${formData.propertyType[item.key as keyof typeof formData.propertyType] ? "bg-white border-white" : "border-white group-hover:border-white/70"}`}
+                                className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors shrink-0 ${formData.propertyType[item.key as keyof typeof formData.propertyType] ? "bg-white border-white" : "border-white group-hover:border-white/70"}`}
                               >
                                 {formData.propertyType[
                                   item.key as keyof typeof formData.propertyType
@@ -406,12 +404,12 @@ export default function PartnerOverlay() {
                               propertyOther: e.target.value,
                             })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3 mt-4 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope"
+                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3 mt-3 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope"
                         />
                       </div>
 
                       {/* Property Details */}
-                      <div className="mt-2 flex flex-col gap-4 text-white">
+                      <div className="mt-2 flex flex-col gap-3 text-white">
                         <h3 className="text-white text-gh-body mb-0">
                           Property Details
                         </h3>
@@ -463,7 +461,7 @@ export default function PartnerOverlay() {
                       </div>
 
                       {/* Image Upload Area */}
-                      <div className="mt-6 flex flex-col items-center">
+                      <div className="mt-5 flex flex-col items-center">
                         <input
                           type="file"
                           ref={fileInputRef}
@@ -475,7 +473,7 @@ export default function PartnerOverlay() {
                         <button
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
-                          className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase mb-6 hover:text-white transition-colors"
+                          className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase mb-5 hover:text-white transition-colors"
                         >
                           UPLOAD IMAGES
                           <Upload className="w-4 h-4" />
@@ -555,9 +553,9 @@ export default function PartnerOverlay() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full px-8 text-center pt-8 md:pt-12 pb-12">
+                  <div className="flex flex-col items-center justify-center h-full px-8 text-center pt-6 md:pt-10 pb-10">
                     {/* Glassy circular wrapper for the checkmark */}
-                    <div className="w-[180px] h-[180px] md:w-48 md:h-48 shrink-0 relative mb-8 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
+                    <div className="w-[180px] h-[180px] md:w-48 md:h-48 shrink-0 relative mb-6 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
                       <div className="w-[72px] h-[72px] md:w-[84px] md:h-[84px] shrink-0 relative drop-shadow-2xl">
                         <Image
                           src="/assets/JAde%20Correction.png" // Using provided success check icon
@@ -570,11 +568,11 @@ export default function PartnerOverlay() {
                       </div>
                     </div>
 
-                    <h2 className="text-white text-shadow-sm text-gh-h1 font-philosopher mb-4">
+                    <h2 className="text-white text-shadow-sm text-gh-h1 font-philosopher mb-3">
                       We've got it from here
                     </h2>
 
-                    <p className="text-white text-gh-body leading-relaxed mb-12 max-w-xs mx-auto">
+                    <p className="text-white text-gh-body leading-relaxed mb-10 max-w-xs mx-auto">
                       Thanks for sharing your details!
                       <br />
                       Our team will take a look and reach out shortly to
@@ -582,11 +580,11 @@ export default function PartnerOverlay() {
                     </p>
 
                     <div className="flex flex-col w-full max-w-[280px] mx-auto mt-auto">
-                      <p className="text-white/60 text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
+                      <p className="text-white/60 text-gh-label font-bold tracking-[0.2em] uppercase mb-3">
                         MEANWHILE CHECK US OUT HERE
                       </p>
 
-                      <div className="flex justify-center gap-4">
+                      <div className="flex justify-center gap-3">
                         {[
                           {
                             Icon: Facebook,
@@ -613,7 +611,7 @@ export default function PartnerOverlay() {
                         ))}
                       </div>
 
-                      <p className="text-white/60 text-gh-label mb-8">
+                      <p className="text-white/60 text-gh-label mb-6">
                         Thoughtfully operated. Always.
                       </p>
 

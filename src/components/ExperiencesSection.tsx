@@ -70,7 +70,7 @@ export default function ExperiencesSection() {
         variants={containerReveal}
       >
         {/* Main Heading */}
-        <h2 className="font-philosopher text-gh-h1 leading-[1.1] md:leading-[1.1] text-white/90 mb-12">
+        <h2 className="font-philosopher text-gh-h1 leading-[1.1] md:leading-[1.1] text-white/90 mb-10">
           <div className="overflow-hidden">
             <motion.div variants={lineReveal}>
               From high-energy parties and
@@ -109,7 +109,7 @@ export default function ExperiencesSection() {
           <motion.div variants={buttonReveal}>
             <Link
               href="/experiences"
-              className="inline-flex items-center gap-3 text-jade-gold font-manrope text-gh-label tracking-widest uppercase hover:text-white transition-colors group"
+              className="inline-flex items-center gap-2.5 text-jade-gold font-manrope text-gh-label tracking-widest uppercase hover:text-white transition-colors group"
             >
               VIEW EXPERIENCES AT JADE
               <svg

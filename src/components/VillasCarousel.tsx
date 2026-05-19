@@ -169,24 +169,20 @@ export default function VillasCarousel() {
         className="sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/10 transition-all duration-300 ease-in-out"
         style={{ top: navbarVisible ? `${NAVBAR_HEIGHT}px` : "0px" }}
       >
-        <div className="max-w-[1920px] mx-auto px-2 md:px-8 lg:px-16 pt-3 md:pt-6 pb-3">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-start gap-3 md:gap-6">
+        <div className="max-w-[1920px] mx-auto px-2 md:px-8 lg:px-16 pt-3 md:pt-5 pb-3">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-start gap-2.5 md:gap-5">
             {/* SEARCH BAR - Left Side on Desktop */}
             <div className="order-1 lg:order-1 w-full lg:w-auto flex justify-start">
               <BookingBanner onSearch={handleSearch} />
             </div>
 
             {/* CATEGORIES - Right Side on Desktop (Scrollable, edge-to-edge) */}
-            <div className="order-2 lg:order-2 flex-1 min-w-0 flex overflow-x-auto items-center gap-2 md:gap-3 pb-1 -mr-2 md:-mr-8 lg:-mr-16 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+            <div className="order-2 lg:order-2 flex-1 min-w-0 flex overflow-x-auto items-center gap-2 md:gap-2.5 pb-1 -mr-2 md:-mr-8 lg:-mr-16 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
               {CATEGORIES.map((category) => (
                 <button
                   key={category}
                   onClick={() => handleCategoryChange(category)}
-                  className={`whitespace-nowrap flex-shrink-0 px-4 py-2 text-gh-label font-manrope font-medium transition-all duration-300 ${
-                    activeCategory === category
-                      ? "bg-[#EFCD62] text-[#1A1C1E] border border-[#EFCD62]"
-                      : "bg-transparent text-white/60 border border-white/20 hover:border-white/50 hover:text-white"
-                  }`}
+                  className={`whitespace-nowrap flex-shrink-0 px-4 py-2 text-gh-label font-manrope font-medium transition-all duration-300 ${ activeCategory === category ? "bg-[#EFCD62] text-[#1A1C1E] border border-[#EFCD62]" : "bg-transparent text-white/60 border border-white/20 hover:border-white/50 hover:text-white" }`}
                 >
                   {category}
                 </button>
@@ -199,7 +195,7 @@ export default function VillasCarousel() {
       {/* MAIN CONTENT */}
       {hasDateConflict ? (
         /* ── No Results UI — full viewport height ── */
-        <div className="flex flex-col items-center justify-center h-[100svh] text-center gap-6 px-6">
+        <div className="flex flex-col items-center justify-center h-[100svh] text-center gap-5 px-6">
           <div className="w-40 h-40 md:w-52 md:h-52 opacity-40">
             <svg
               viewBox="0 0 200 200"
@@ -277,7 +273,7 @@ export default function VillasCarousel() {
           <h2 className="text-white text-gh-h2 font-philosopher leading-tight">
             Next Available Dates:
           </h2>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-2.5">
             {NEXT_AVAILABLE.map((d) => (
               <button
                 key={d.label}
@@ -313,14 +309,14 @@ export default function VillasCarousel() {
           </PrimaryButton>
         </div>
       ) : (
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full mt-12 pb-10 min-h-screen">
+        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full mt-10 pb-8 min-h-screen">
           {filteredVillas.length > 0 ? (
             <div className="flex flex-col">
               {filteredVillas.map((villa, index) => (
                 <div key={villa.id}>
                   <VillaCard villa={villa} />
                   {index < filteredVillas.length - 1 && (
-                    <hr className="border-0 border-t border-white/10 my-12" />
+                    <hr className="border-0 border-t border-white/10 my-10" />
                   )}
                 </div>
               ))}
@@ -332,7 +328,7 @@ export default function VillasCarousel() {
               </span>
               <button
                 onClick={() => setActiveCategory("All")}
-                className="mt-4 text-[#EFCD62] font-manrope underline underline-offset-4"
+                className="mt-3 text-[#EFCD62] font-manrope underline underline-offset-4"
               >
                 View All Villas
               </button>

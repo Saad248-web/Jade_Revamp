@@ -204,7 +204,7 @@ function StaticFallback() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent" />
             </div>
-            <div className="space-y-3 px-5 py-6 md:px-8">
+            <div className="space-y-2.5 px-5 py-5 md:px-8">
               <p className="font-manrope text-[length:var(--fs-label)] font-semibold uppercase tracking-[0.28em] text-jade-gold">
                 {String(i + 1).padStart(2, "0")} — {p.title}
               </p>
@@ -216,7 +216,7 @@ function StaticFallback() {
               </p>
               <Link
                 href={p.href}
-                className="inline-flex items-center gap-2 font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-jade-gold hover:gap-3"
+                className="inline-flex items-center gap-2 font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-jade-gold hover:gap-2.5"
               >
                 {p.cta}
                 <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
@@ -326,8 +326,8 @@ function ScrollDrivenCarousel({
       )}
 
       {/* Chrome */}
-      <header className="relative z-50 flex shrink-0 flex-col gap-3 border-b border-white/20 px-4 pb-4 pt-[max(0.75rem,env(safe-area-inset-top))] md:flex-row md:items-center md:justify-between md:px-8 md:pb-5">
-        <div className="pointer-events-auto flex items-center gap-4">
+      <header className="relative z-50 flex shrink-0 flex-col gap-2.5 border-b border-white/20 px-4 pb-4 pt-[max(0.75rem,env(safe-area-inset-top))] md:flex-row md:items-center md:justify-between md:px-8 md:pb-4">
+        <div className="pointer-events-auto flex items-center gap-3">
           <Link
             href="/experiences"
             className="font-manrope text-[length:var(--fs-label)] font-semibold uppercase tracking-[0.22em] text-white/90 underline-offset-4 hover:text-jade-gold hover:underline"
@@ -338,7 +338,7 @@ function ScrollDrivenCarousel({
             Another experience · 1
           </span>
         </div>
-        <div className="pointer-events-none h-1 w-full max-w-md overflow-hidden rounded-full bg-white/25 md:mx-4">
+        <div className="pointer-events-none h-1 w-full max-w-md overflow-hidden rounded-full bg-white/25 md:mx-3">
           <div
             className="experience-sda-animate-progress experience-sda-progress-fill h-full origin-left bg-jade-gold"
             style={
@@ -352,7 +352,7 @@ function ScrollDrivenCarousel({
 
       {/* Index rail — horizontal on small screens, vertical on md+ */}
       <nav
-        className="pointer-events-auto absolute bottom-[max(6.5rem,env(safe-area-inset-bottom))] left-0 right-0 z-50 flex justify-center gap-2 overflow-x-auto px-3 pb-1 md:bottom-auto md:left-8 md:right-auto md:top-1/2 md:flex md:w-auto md:-translate-y-1/2 md:flex-col md:justify-center md:gap-4 md:overflow-visible md:px-0"
+        className="pointer-events-auto absolute bottom-[max(6.5rem,env(safe-area-inset-bottom))] left-0 right-0 z-50 flex justify-center gap-2 overflow-x-auto px-3 pb-1 md:bottom-auto md:left-8 md:right-auto md:top-1/2 md:flex md:w-auto md:-translate-y-1/2 md:flex-col md:justify-center md:gap-3 md:overflow-visible md:px-0"
         aria-label="Slide index"
       >
         {PANELS.map((_, i) => (
@@ -373,10 +373,10 @@ function ScrollDrivenCarousel({
 
       {/* Copy stacks — left column; vertical flow between caption / headline / body (outer must NOT use overlap grid or layers stack on one cell). */}
       <div className="relative z-40 flex min-h-0 flex-1 flex-col overflow-hidden pointer-events-none">
-        <div className="flex min-h-0 flex-1 flex-col justify-end pb-[max(8.5rem,env(safe-area-inset-bottom))] pt-4 md:justify-center md:pb-12 md:pt-0 md:items-start">
-          <div className="pointer-events-auto flex w-full max-w-[min(100%,36rem)] flex-col items-start gap-3 text-left md:max-w-[min(100%,31rem)] md:gap-4 md:pl-[clamp(5.25rem,15.5cqw,9.5rem)] md:pr-[clamp(1rem,4cqw,2rem)] px-5 md:px-6">
+        <div className="flex min-h-0 flex-1 flex-col justify-end pb-[max(8.5rem,env(safe-area-inset-bottom))] pt-4 md:justify-center md:pb-10 md:pt-0 md:items-start">
+          <div className="pointer-events-auto flex w-full max-w-[min(100%,36rem)] flex-col items-start gap-2.5 text-left md:max-w-[min(100%,31rem)] md:gap-3 md:pl-[clamp(5.25rem,15.5cqw,9.5rem)] md:pr-[clamp(1rem,4cqw,2rem)] px-5 md:px-6">
             {/* Caption strip — stacked overlap layers + clip mask (Demo 1 text-up) */}
-            <div className="experience-sda-overlap relative mb-2 w-full min-h-[2.75rem] md:mb-4 md:min-h-[3rem]">
+            <div className="experience-sda-overlap relative mb-2 w-full min-h-[2.75rem] md:mb-3 md:min-h-[3rem]">
               {PANELS.map((p, i) => (
                 <div key={`cap-${p.id}`} className="overflow-clip">
                   <p
@@ -394,7 +394,7 @@ function ScrollDrivenCarousel({
             </div>
 
             {/* Headlines */}
-            <div className="experience-sda-overlap relative mb-3 w-full min-h-[clamp(3.5rem,12cqw,7rem)] md:mb-5 md:min-h-[clamp(4rem,14cqw,8rem)]">
+            <div className="experience-sda-overlap relative mb-2.5 w-full min-h-[clamp(3.5rem,12cqw,7rem)] md:mb-4 md:min-h-[clamp(4rem,14cqw,8rem)]">
               {PANELS.map((p, i) => {
                 const words = [...p.title.split(/\s+/)];
                 const last = words.pop() ?? "";
@@ -423,7 +423,7 @@ function ScrollDrivenCarousel({
             </div>
 
             {/* Body */}
-            <div className="experience-sda-overlap relative mb-5 w-full min-h-[4.5rem] md:min-h-[5.5rem]">
+            <div className="experience-sda-overlap relative mb-4 w-full min-h-[4.5rem] md:min-h-[5.5rem]">
               {PANELS.map((p, i) => (
                 <p
                   key={`sub-${p.id}`}

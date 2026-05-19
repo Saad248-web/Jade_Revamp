@@ -124,9 +124,7 @@ function StepDots({ step, total = 5 }: { step: Step; total?: number }) {
       {steps.map((s, i) => (
         <div
           key={s}
-          className={`flex-1 h-[2px] transition-all duration-400 ${
-            i <= currentIdx ? "bg-[#EFCD62]" : "bg-white/20"
-          }`}
+          className={`flex-1 h-[2px] transition-all duration-400 ${ i <= currentIdx ? "bg-[#EFCD62]" : "bg-white/20" }`}
         />
       ))}
     </div>
@@ -195,11 +193,11 @@ function StepDates({
     <div className="flex flex-col h-full">
       {/* Header Area (Title & Actions) */}
       <div className="bg-[#0B2C23] shrink-0">
-        <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <h2 className="text-white text-gh-h1 font-philosopher leading-none">
             Select Dates
           </h2>
-          <div className="flex items-center gap-5 md:gap-6">
+          <div className="flex items-center gap-4 md:gap-5">
             <button
               onClick={onReset}
               className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors"
@@ -222,18 +220,18 @@ function StepDates({
         </div>
 
         {/* Legend */}
-        <div className="flex justify-center md:justify-start items-center gap-6 md:gap-10 px-6 py-5 text-gh-label text-[#A6C0B5] font-manrope font-medium">
-          <span className="flex items-center gap-3">
+        <div className="flex justify-center md:justify-start items-center gap-5 md:gap-8 px-6 py-4 text-gh-label text-[#A6C0B5] font-manrope font-medium">
+          <span className="flex items-center gap-2.5">
             <span className="w-6 h-6 bg-[#165040] rounded-[2px]" />
             Available
           </span>
-          <span className="flex items-center gap-3 relative">
+          <span className="flex items-center gap-2.5 relative">
             <span className="w-6 h-6 bg-[#165040] rounded-[2px] overflow-hidden relative border border-[#165040]">
               <span className="block w-[150%] h-[1.5px] bg-[#A6C0B5]/40 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-45" />
             </span>
             Unavailable
           </span>
-          <span className="flex items-center gap-3">
+          <span className="flex items-center gap-2.5">
             <span className="w-6 h-6 bg-[#EFCD62] rounded-[2px]" />
             Selected
           </span>
@@ -255,8 +253,8 @@ function StepDates({
       {/* Calendars */}
       <div className="flex-1 overflow-y-auto px-5 pb-4" data-lenis-prevent>
         {MONTHS.map((month, mIdx) => (
-          <div key={month.name} className="mb-6">
-            <h3 className="text-white font-manrope font-semibold text-gh-body mb-3">
+          <div key={month.name} className="mb-5">
+            <h3 className="text-white font-manrope font-semibold text-gh-body mb-2.5">
               {month.name}
             </h3>
             <div className="grid grid-cols-7 gap-y-1.5 text-center">
@@ -273,12 +271,7 @@ function StepDates({
                       key={day}
                       disabled={unavail}
                       onClick={() => !unavail && handleDayClick(mIdx, day)}
-                      className={`w-9 h-9 mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-sm relative
-                      ${sel ? "bg-[#EFCD62] text-[#0B2C23] font-bold" : ""}
-                      ${inRange ? "bg-[#EFCD62]/20 text-white" : ""}
-                      ${!sel && !inRange && !unavail ? "text-white hover:bg-white/10" : ""}
-                      ${unavail ? "text-white/20 cursor-not-allowed" : ""}
-                    `}
+                      className={`w-9 h-9 mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-sm relative ${sel ? "bg-[#EFCD62] text-[#0B2C23] font-bold" : ""} ${inRange ? "bg-[#EFCD62]/20 text-white" : ""} ${!sel && !inRange && !unavail ? "text-white hover:bg-white/10" : ""} ${unavail ? "text-white/20 cursor-not-allowed" : ""} `}
                     >
                       {unavail && (
                         <span className="absolute inset-0 flex items-center justify-center overflow-hidden">
@@ -309,11 +302,7 @@ function StepDates({
           <button
             disabled={!dateRange.checkIn || !dateRange.checkOut}
             onClick={onNext}
-            className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
-              dateRange.checkIn && dateRange.checkOut
-                ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"
-                : "bg-white/10 text-white/30 cursor-not-allowed"
-            }`}
+            className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${ dateRange.checkIn && dateRange.checkOut ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed" }`}
           >
             NEXT
           </button>
@@ -365,7 +354,7 @@ function StepGuests({
     onMinus: () => void;
     onPlus: () => void;
   }) => (
-    <div className="flex items-center justify-between py-5 border-b border-white/8">
+    <div className="flex items-center justify-between py-4 border-b border-white/8">
       <div>
         <p className="text-white font-philosopher text-gh-body">{label}</p>
         {subtitle && (
@@ -374,7 +363,7 @@ function StepGuests({
           </p>
         )}
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <button
           onClick={onMinus}
           className="w-9 h-9 border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors"
@@ -399,7 +388,7 @@ function StepGuests({
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
         <h2 className="text-white text-gh-h2 font-philosopher">Total Guests</h2>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={onReset}
             className="text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
@@ -450,7 +439,7 @@ function StepGuests({
               ? `${guests.adults} Guest${guests.adults !== 1 ? "s" : ""}${guests.children > 0 ? `, ${guests.children} Children` : ""}`
               : "-- --"}
           </span>
-          <div className="flex gap-3">
+          <div className="flex gap-2.5">
             <button
               onClick={onBack}
               className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
@@ -460,11 +449,7 @@ function StepGuests({
             <button
               disabled={guests.adults === 0}
               onClick={onNext}
-              className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
-                guests.adults > 0
-                  ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"
-                  : "bg-white/10 text-white/30 cursor-not-allowed"
-              }`}
+              className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${ guests.adults > 0 ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed" }`}
             >
               APPLY
             </button>
@@ -550,19 +535,11 @@ function StepVillas({
             <button
               key={f}
               onClick={() => setActiveFilter(f)}
-              className={`shrink-0 px-4 py-1.5 text-gh-label font-manrope font-semibold tracking-wide rounded-sm transition-all flex items-center gap-2 border ${
-                activeFilter === f
-                  ? "bg-[#EFCD62] text-[#0B2C23] border-[#EFCD62]"
-                  : "bg-white/5 text-white/60 hover:bg-white/10 border-white/10"
-              }`}
+              className={`shrink-0 px-4 py-1.5 text-gh-label font-manrope font-semibold tracking-wide rounded-sm transition-all flex items-center gap-2 border ${ activeFilter === f ? "bg-[#EFCD62] text-[#0B2C23] border-[#EFCD62]" : "bg-white/5 text-white/60 hover:bg-white/10 border-white/10" }`}
             >
               {f}
               <span
-                className={`text-[9px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full ${
-                  activeFilter === f
-                    ? "bg-[#0B2C23]/20 text-[#0B2C23]"
-                    : "bg-white/10 text-white/40"
-                }`}
+                className={`text-[9px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full ${ activeFilter === f ? "bg-[#0B2C23]/20 text-[#0B2C23]" : "bg-white/10 text-white/40" }`}
               >
                 {count}
               </span>
@@ -574,18 +551,14 @@ function StepVillas({
 
       {/* Villa cards */}
       <div
-        className="flex-1 overflow-y-auto px-5 pb-4 space-y-5"
+        className="flex-1 overflow-y-auto px-5 pb-4 space-y-4"
         data-lenis-prevent
       >
         {filtered.map((villa) => (
           <div
             key={villa.id}
             onClick={() => setSelectedVillaId(villa.id)}
-            className={`rounded-lg overflow-hidden cursor-pointer transition-all border-2 ${
-              selectedVillaId === villa.id
-                ? "border-[#EFCD62]"
-                : "border-transparent"
-            }`}
+            className={`rounded-lg overflow-hidden cursor-pointer transition-all border-2 ${ selectedVillaId === villa.id ? "border-[#EFCD62]" : "border-transparent" }`}
           >
             {/* Image */}
             <div className="relative w-full h-44">
@@ -619,10 +592,10 @@ function StepVillas({
                 <MapPin className="w-3 h-3 shrink-0" />
                 <span className="hover:underline underline-offset-2">{villa.location}</span>
               </a>
-              <p className="text-white/60 text-gh-body font-manrope line-clamp-2 mb-3">
+              <p className="text-white/60 text-gh-body font-manrope line-clamp-2 mb-2.5">
                 {villa.description}
               </p>
-              <div className="flex flex-wrap gap-3 text-white/50 text-gh-label font-manrope">
+              <div className="flex flex-wrap gap-2.5 text-white/50 text-gh-label font-manrope">
                 {villa.stats.stay && (
                   <span className="flex items-center gap-1">
                     <Users className="w-3 h-3" /> {villa.stats.stay} Stay
@@ -640,7 +613,7 @@ function StepVillas({
                 )}
               </div>
 
-              <div className="mt-3 flex items-center justify-between">
+              <div className="mt-2.5 flex items-center justify-between">
                 <div>
                   <p className="text-white/40 text-gh-label font-manrope">
                     Starting from
@@ -692,11 +665,7 @@ function StepVillas({
           <button
             disabled={!selectedVillaId}
             onClick={onNext}
-            className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
-              selectedVillaId
-                ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"
-                : "bg-white/10 text-white/30 cursor-not-allowed"
-            }`}
+            className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${ selectedVillaId ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed" }`}
           >
             NEXT
           </button>
@@ -756,7 +725,7 @@ function StepDetails({
 
       {/* Form */}
       <div
-        className="flex-1 overflow-y-auto px-5 py-5"
+        className="flex-1 overflow-y-auto px-5 py-4"
         data-lenis-prevent
       >
         <BookingDetailsFormFields
@@ -808,7 +777,7 @@ function StepDetails({
             <span className="text-[#EFCD62] font-manrope text-gh-label font-bold">
               {formatRupees(basePrice)} onwards
             </span>
-            <div className="flex gap-3">
+            <div className="flex gap-2.5">
               <button
                 onClick={onBack}
                 className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
@@ -824,11 +793,7 @@ function StepDetails({
                   setForceShowErrors(false);
                   onNext();
                 }}
-                className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${
-                  canProceed
-                    ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"
-                    : "bg-white/10 text-white/30 cursor-pointer"
-                }`}
+                className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${ canProceed ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white" : "bg-white/10 text-white/30 cursor-pointer" }`}
               >
                 APPLY
               </button>
@@ -902,12 +867,12 @@ function StepReview({
 
       {/* Scrollable content */}
       <div
-        className="flex-1 overflow-y-auto px-5 py-4 space-y-5"
+        className="flex-1 overflow-y-auto px-5 py-4 space-y-4"
         data-lenis-prevent
       >
         {/* Villa preview */}
         {selectedVilla && (
-          <div className="flex gap-4 bg-white/5 rounded-lg p-3">
+          <div className="flex gap-3 bg-white/5 rounded-lg p-3">
             <div className="relative w-20 h-20 rounded-md overflow-hidden shrink-0">
               <Image
                 src={selectedVilla.image}
@@ -1028,7 +993,7 @@ function StepReview({
           <h4 className="text-white font-philosopher text-gh-body mb-2">
             Add On Experiences
           </h4>
-          <p className="text-white/40 text-gh-label font-manrope mb-3">
+          <p className="text-white/40 text-gh-label font-manrope mb-2.5">
             Optional experiences available at an additional cost. Pricing is
             subject to confirmation based on group size.
           </p>
@@ -1036,16 +1001,12 @@ function StepReview({
             {ADD_ONS.map((addon) => (
               <label
                 key={addon.id}
-                className="flex items-center justify-between gap-3 py-2 cursor-pointer group"
+                className="flex items-center justify-between gap-2.5 py-2 cursor-pointer group"
                 onClick={() => toggleAddOn(addon.id)}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2.5">
                   <div
-                    className={`w-4 h-4 border flex items-center justify-center shrink-0 transition-colors ${
-                      selectedAddOns.includes(addon.id)
-                        ? "bg-[#EFCD62] border-[#EFCD62]"
-                        : "border-white/30 group-hover:border-white/60"
-                    }`}
+                    className={`w-4 h-4 border flex items-center justify-center shrink-0 transition-colors ${ selectedAddOns.includes(addon.id) ? "bg-[#EFCD62] border-[#EFCD62]" : "border-white/30 group-hover:border-white/60" }`}
                   >
                     {selectedAddOns.includes(addon.id) && (
                       <Check
@@ -1070,7 +1031,7 @@ function StepReview({
 
         {/* Price details */}
         <div className="border border-white/10 rounded-lg p-4 space-y-2">
-          <h4 className="text-white font-philosopher text-gh-body mb-3">
+          <h4 className="text-white font-philosopher text-gh-body mb-2.5">
             Price Details
           </h4>
           <div className="flex items-center justify-between text-gh-body font-manrope">
@@ -1132,7 +1093,7 @@ function StepReview({
           <div className="text-white font-manrope text-gh-label font-bold tracking-wide whitespace-nowrap">
             Total Price: {formatRupees(total)}
           </div>
-          <div className="flex items-center gap-6 sm:gap-8 shrink-0">
+          <div className="flex items-center gap-5 sm:gap-6 shrink-0">
             <button
               onClick={onBack}
               className="text-gh-label font-bold tracking-[0.2em] text-[#EFCD62] uppercase transition-colors font-manrope hover:text-white"
@@ -1239,7 +1200,7 @@ export default function GlobalBookingOverlay() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={handleClose}
-              className="w-12 h-12 mb-3 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0 z-[202]"
+              className="w-12 h-12 mb-2.5 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0 z-[202]"
             >
               <X className="w-6 h-6 stroke-[1.5]" />
             </motion.button>

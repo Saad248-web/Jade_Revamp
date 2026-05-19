@@ -33,7 +33,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
       <MobileBottomNav />
 
       {/* Hero Header */}
-      <section className="relative pt-32 pb-16 md:pt-48 md:pb-32 px-6 md:px-12 lg:px-24 overflow-hidden">
+      <section className="relative pt-24 pb-12 md:pt-40 md:pb-24 px-6 md:px-12 lg:px-24 overflow-hidden">
         <div className="max-w-[1920px] mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -41,7 +41,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
             transition={{ duration: 0.6 }}
             className="max-w-4xl"
           >
-            <div className="flex items-center gap-6 mb-8">
+            <div className="flex items-center gap-5 mb-6">
               <Link
                 href="/blogs"
                 className="group flex items-center gap-2 text-white/40 hover:text-[#EFCD62] transition-colors uppercase text-gh-label tracking-widest"
@@ -55,11 +55,11 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
               </span>
             </div>
 
-            <h1 className="font-philosopher text-gh-h1 md:text-[80px] text-white mb-10 leading-[1.1]">
+            <h1 className="font-philosopher text-gh-h1 md:text-[80px] text-white mb-8 leading-[1.1]">
               {post.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-8 text-white/50 text-gh-label uppercase tracking-widest">
+            <div className="flex flex-wrap items-center gap-6 text-white/50 text-gh-label uppercase tracking-widest">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-[#EFCD62]/60" /> {post.date}
               </div>
@@ -86,7 +86,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
       </section>
 
       {/* Featured Image */}
-      <section className="px-6 md:px-12 lg:px-24 mb-24">
+      <section className="px-6 md:px-12 lg:px-24 mb-20">
         <div className="max-w-[1920px] mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
@@ -108,10 +108,10 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
       </section>
 
       {/* Content Layout */}
-      <section className="px-6 md:px-12 lg:px-24 pb-32">
-        <div className="max-w-[1920px] mx-auto flex flex-col lg:flex-row gap-20">
+      <section className="px-6 md:px-12 lg:px-24 pb-24">
+        <div className="max-w-[1920px] mx-auto flex flex-col lg:flex-row gap-16">
           {/* Main Article Content */}
-          <article className="lg:w-[65%] space-y-12">
+          <article className="lg:w-[65%] space-y-10">
             {post.sections.map((section, idx) => {
               switch (section.type) {
                 case "text":
@@ -127,7 +127,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
                   return (
                     <blockquote
                       key={idx}
-                      className="relative py-8 md:py-12 border-y border-white/10"
+                      className="relative py-6 md:py-10 border-y border-white/10"
                     >
                       <div className="absolute -top-6 -left-4 text-[120px] font-philosopher text-[#EFCD62] opacity-10 leading-none">
                         "
@@ -139,7 +139,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
                   );
                 case "image":
                   return (
-                    <div key={idx} className="space-y-4">
+                    <div key={idx} className="space-y-3">
                       <div className="relative aspect-video overflow-hidden">
                         <Image
                           src={section.image || ""}
@@ -159,10 +159,10 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
                   return (
                     <ul
                       key={idx}
-                      className="space-y-6 pl-6 border-l-2 border-[#EFCD62]/30"
+                      className="space-y-5 pl-6 border-l-2 border-[#EFCD62]/30"
                     >
                       {section.items?.map((item, i) => (
-                        <li key={i} className="flex gap-4 items-start">
+                        <li key={i} className="flex gap-3 items-start">
                           <span className="w-2 h-2 rounded-full bg-[#EFCD62] mt-2 shrink-0" />
                           <span className="font-manrope text-gh-body text-white/70 leading-relaxed text-lg italic">
                             {item}
@@ -175,7 +175,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
                   return (
                     <div
                       key={idx}
-                      className="overflow-x-auto my-12 border border-white/10 rounded-sm bg-[#1A1C1E]/50"
+                      className="overflow-x-auto my-10 border border-white/10 rounded-sm bg-[#1A1C1E]/50"
                     >
                       <table className="w-full text-left border-collapse min-w-[600px]">
                         <thead>
@@ -212,8 +212,8 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
                   );
                 case "faq":
                   return (
-                    <div key={idx} className="space-y-4 my-12">
-                      <h3 className="font-philosopher text-gh-h2 text-[#EFCD62] mb-8">
+                    <div key={idx} className="space-y-3 my-10">
+                      <h3 className="font-philosopher text-gh-h2 text-[#EFCD62] mb-6">
                         Guided Insights
                       </h3>
                       {section.faqs?.map((faq, i) => (
@@ -238,21 +238,21 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
                   return section.level === 2 ? (
                     <h2
                       key={idx}
-                      className="font-philosopher text-gh-h2 text-white border-b-2 border-white/10 pb-4 mb-8 mt-16 flex items-center gap-4"
+                      className="font-philosopher text-gh-h2 text-white border-b-2 border-white/10 pb-4 mb-6 mt-12 flex items-center gap-3"
                     >
                       {section.content}
                     </h2>
                   ) : (
                     <h3
                       key={idx}
-                      className="font-philosopher text-gh-h3 text-[#EFCD62] mb-4 mt-12"
+                      className="font-philosopher text-gh-h3 text-[#EFCD62] mb-3 mt-10"
                     >
                       {section.content}
                     </h3>
                   );
                 case "cta":
                   return (
-                    <div key={idx} className="flex flex-wrap gap-6 my-12">
+                    <div key={idx} className="flex flex-wrap gap-5 my-10">
                       {section.ctas?.map((cta, i) => {
                         const isEnquire = cta.link === "/contact";
                         const Component = isEnquire ? "button" : Link;
@@ -264,11 +264,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
                           <Component
                             key={i}
                             {...(props as any)}
-                            className={`inline-flex items-center justify-center px-8 py-4 font-manrope font-bold tracking-[0.2em] uppercase text-[10px] transition-all duration-300 ${
-                              cta.variant === "primary"
-                                ? "bg-[#EFCD62] text-black hover:bg-[#EFCD62]/90 shadow-[inset_0_0_0_1px_rgba(172,136,49,1)]"
-                                : "bg-transparent text-[#EFCD62] border border-[#EFCD62] hover:bg-[#EFCD62]/10"
-                            }`}
+                            className={`inline-flex items-center justify-center px-8 py-4 font-manrope font-bold tracking-[0.2em] uppercase text-[10px] transition-all duration-300 ${ cta.variant === "primary" ? "bg-[#EFCD62] text-black hover:bg-[#EFCD62]/90 shadow-[inset_0_0_0_1px_rgba(172,136,49,1)]" : "bg-transparent text-[#EFCD62] border border-[#EFCD62] hover:bg-[#EFCD62]/10" }`}
                           >
                             {cta.label}
                           </Component>
@@ -282,7 +278,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
             })}
 
             {/* Tags & Footer Meta */}
-            <div className="pt-20 border-t border-white/10 flex flex-wrap gap-4">
+            <div className="pt-16 border-t border-white/10 flex flex-wrap gap-3">
               {(post.tags || ["WELLNESS", "RETREAT", "JOURNAL", "LUXURY"]).map(
                 (tag) => (
                   <span
@@ -297,14 +293,14 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
           </article>
 
           {/* Sidebar */}
-          <aside className="lg:w-[35%] space-y-16">
-            <div className="sticky top-32 space-y-16">
+          <aside className="lg:w-[35%] space-y-12">
+            <div className="sticky top-32 space-y-12">
               {/* Share */}
               <div className="bg-white/5 p-8 border border-white/10 rounded-sm">
-                <h4 className="font-philosopher text-xl text-white mb-6">
+                <h4 className="font-philosopher text-xl text-white mb-5">
                   Share this Story
                 </h4>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-3">
                   {[Facebook, Twitter, Linkedin].map((Icon, idx) => (
                     <button
                       key={idx}
@@ -318,14 +314,14 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
 
               {/* Sticky Newsletter */}
               <div className="sticky top-32 bg-[#EFCD62] p-8 md:p-10 rounded-sm text-black">
-                <h4 className="font-philosopher text-2xl mb-4 leading-tight">
+                <h4 className="font-philosopher text-2xl mb-3 leading-tight">
                   Stay Inspired
                 </h4>
-                <p className="font-manrope text-sm text-black/70 mb-8 leading-relaxed">
+                <p className="font-manrope text-sm text-black/70 mb-6 leading-relaxed">
                   Join our list for monthly curations of Bangalore's finest
                   escapes and architectural highlights.
                 </p>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <input
                     type="email"
                     placeholder="EMAIL ADDRESS"
@@ -342,11 +338,11 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
       </section>
 
       {/* Related Reading */}
-      <section className="py-32 bg-[#1E2023] border-t border-white/5">
+      <section className="py-24 bg-[#1E2023] border-t border-white/5">
         <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
-          <div className="flex justify-between items-end mb-16">
+          <div className="flex justify-between items-end mb-12">
             <div>
-              <p className="text-[#EFCD62] text-gh-label tracking-widest uppercase mb-4">
+              <p className="text-[#EFCD62] text-gh-label tracking-widest uppercase mb-3">
                 CONTINUE READING
               </p>
               <h2 className="font-philosopher text-gh-h2 text-white">
@@ -361,12 +357,12 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {relatedPosts.map((rPost, idx) => (
               <Link
                 key={rPost.id}
                 href={`/blogs/${rPost.slug}`}
-                className="group block space-y-6"
+                className="group block space-y-5"
               >
                 <div className="relative aspect-[3/2] overflow-hidden">
                   <Image
@@ -376,7 +372,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   <span className="text-[#EFCD62] text-[10px] font-bold tracking-[0.2em] uppercase">
                     {rPost.category}
                   </span>

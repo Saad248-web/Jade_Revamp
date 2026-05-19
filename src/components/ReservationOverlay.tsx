@@ -91,7 +91,7 @@ export default function ReservationOverlay({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={onClose}
-              className="w-12 h-12 mb-3 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0 z-[102]"
+              className="w-12 h-12 mb-2.5 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0 z-[102]"
             >
               <X className="w-6 h-6 stroke-[1.5]" />
             </motion.button>
@@ -112,7 +112,7 @@ export default function ReservationOverlay({
                   className="flex items-center gap-1.5 text-white/70 hover:text-white transition-colors"
                 >
                   <ChevronLeft className="w-5 h-5" />
-                  <span className="font-manrope text-gh-body pt-[1px]">
+                  <span className="font-manrope text-gh-body pt-[4px]">
                     Exit
                   </span>
                 </button>
@@ -133,7 +133,7 @@ export default function ReservationOverlay({
                 </div>
 
                 {/* Right: Actions */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <button
                     onClick={() => {
                       if (view === "guests") {
@@ -142,7 +142,7 @@ export default function ReservationOverlay({
                         setDates([]);
                       }
                     }}
-                    className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors pt-[2px]"
+                    className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors pt-[4px]"
                   >
                     RESET
                   </button>
@@ -159,15 +159,15 @@ export default function ReservationOverlay({
               </div>
 
               {/* CONTENT AREA */}
-              <div className="flex-1 bg-[#0B2C23] overflow-y-auto px-5 md:px-6 py-6 overflow-x-hidden scrollbar-hide">
+              <div className="flex-1 bg-[#0B2C23] overflow-y-auto px-5 md:px-6 py-5 overflow-x-hidden scrollbar-hide">
                 {view === "dates" && (
-                  <div className="flex flex-col gap-5">
+                  <div className="flex flex-col gap-4">
                     <h2 className="text-white text-gh-h2 font-philosopher leading-none mb-1">
                       Select Dates
                     </h2>
 
                     {/* Legend */}
-                    <div className="flex justify-start items-center gap-5 md:gap-8 text-gh-label text-[#A6C0B5] font-manrope font-medium mb-2">
+                    <div className="flex justify-start items-center gap-4 md:gap-6 text-gh-label text-[#A6C0B5] font-manrope font-medium mb-2">
                       <span className="flex items-center gap-2">
                         <span className="w-4 h-4 md:w-5 md:h-5 bg-[#165040] rounded-[2px]" />
                         Available
@@ -197,7 +197,7 @@ export default function ReservationOverlay({
 
                     {/* January 2026 Mock Calendar */}
                     <div>
-                      <h3 className="text-white font-manrope font-semibold text-gh-body mb-4">
+                      <h3 className="text-white font-manrope font-semibold text-gh-body mb-3">
                         January 2026
                       </h3>
                       <div className="grid grid-cols-7 gap-y-2 gap-x-1 text-center">
@@ -214,14 +214,7 @@ export default function ReservationOverlay({
                               onClick={() =>
                                 !isUnavailable && handleDateToggle(day)
                               }
-                              className={`w-8 h-8 md:w-10 md:h-10 mx-auto flex items-center justify-center text-gh-body transition-colors rounded-sm
-                              ${
-                                isSelected
-                                  ? "bg-[#EFCD62] text-[#0E211A] font-bold"
-                                  : isUnavailable
-                                    ? "text-white/20 relative overflow-hidden"
-                                    : "text-white hover:bg-white/10"
-                              }`}
+                              className={`w-8 h-8 md:w-10 md:h-10 mx-auto flex items-center justify-center text-gh-body transition-colors rounded-sm ${ isSelected ? "bg-[#EFCD62] text-[#0E211A] font-bold" : isUnavailable ? "text-white/20 relative overflow-hidden" : "text-white hover:bg-white/10" }`}
                             >
                               {isUnavailable && (
                                 <div className="absolute inset-0 border-t border-white/20 -rotate-45 transform origin-center scale-150" />
@@ -235,7 +228,7 @@ export default function ReservationOverlay({
 
                     {/* February 2026 Mock Calendar */}
                     <div>
-                      <h3 className="text-white font-manrope font-semibold text-gh-body mb-4 mt-4">
+                      <h3 className="text-white font-manrope font-semibold text-gh-body mb-3 mt-3">
                         February 2026
                       </h3>
                       <div className="grid grid-cols-7 gap-y-2 gap-x-1 text-center">
@@ -251,8 +244,7 @@ export default function ReservationOverlay({
                           return (
                             <button
                               key={`feb-${day}`}
-                              className={`w-8 h-8 md:w-10 md:h-10 mx-auto flex items-center justify-center text-gh-body transition-colors rounded-sm
-                              ${isUnavailable ? "text-white/20 relative overflow-hidden" : "text-white hover:bg-white/10"}`}
+                              className={`w-8 h-8 md:w-10 md:h-10 mx-auto flex items-center justify-center text-gh-body transition-colors rounded-sm ${isUnavailable ? "text-white/20 relative overflow-hidden" : "text-white hover:bg-white/10"}`}
                             >
                               {isUnavailable && (
                                 <div className="absolute inset-0 border-t border-white/20 -rotate-45 transform origin-center scale-150" />
@@ -267,7 +259,7 @@ export default function ReservationOverlay({
                 )}
 
                 {view === "guests" && (
-                  <div className="flex flex-col gap-8 mt-4">
+                  <div className="flex flex-col gap-6 mt-3">
                     {/* Adults */}
                     <div className="flex items-center justify-between">
                       <div>
@@ -278,7 +270,7 @@ export default function ReservationOverlay({
                           Age 13 years and more
                         </p>
                       </div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-3">
                         <button
                           onClick={() => updateGuests("adults", adults - 1)}
                           className="w-8 h-8 rounded-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors"
@@ -307,7 +299,7 @@ export default function ReservationOverlay({
                           Age 3 - 12 years
                         </p>
                       </div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-3">
                         <button
                           onClick={() => updateGuests("children", children - 1)}
                           className="w-8 h-8 rounded-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors"
@@ -333,7 +325,7 @@ export default function ReservationOverlay({
                           Pets
                         </h4>
                       </div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-3">
                         <button
                           onClick={() => updateGuests("pets", pets - 1)}
                           className="w-8 h-8 rounded-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors"
@@ -405,7 +397,7 @@ export default function ReservationOverlay({
                         -- --
                       </div>
                     )}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
                       <button
                         onClick={() => setView("dates")}
                         className="text-[#EFCD62] hover:text-white transition-colors text-gh-label font-bold tracking-widest uppercase"

@@ -15,7 +15,7 @@ export default function RootErrorBoundary({
   }, [error]);
 
   return (
-    <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 bg-[#0B2C23] px-6 py-24 text-center text-white">
+    <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 bg-[#0B2C23] px-6 py-20 text-center text-white">
       <p className="text-gh-label uppercase tracking-[0.2em] text-[#EFCD62]/80">
         Something interrupted this page
       </p>

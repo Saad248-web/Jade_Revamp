@@ -47,11 +47,11 @@ export default function CuratedExperiencesGrid({
         {/* Header */}
         <div
           className="text-center"
-          style={{ marginBottom: "clamp(32px, 6vw, 64px)" }}
+          style={{ marginBottom: "clamp(20.5px, 3.84vw, 41px)" }}
         >
           <p
             className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope"
-            style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+            style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
           >
             {label}
           </p>
@@ -64,8 +64,8 @@ export default function CuratedExperiencesGrid({
         <div
           className={gridClassName}
           style={{
-            gap: "clamp(8px, 2vw, 24px)",
-            marginBottom: "clamp(32px, 6vw, 64px)",
+            gap: "clamp(8px, 1.28vw, 15.4px)",
+            marginBottom: "clamp(20.5px, 3.84vw, 41px)",
           }}
         >
           {" "}

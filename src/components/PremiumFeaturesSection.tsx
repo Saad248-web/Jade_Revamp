@@ -46,7 +46,7 @@ export default function PremiumFeaturesSection({
     <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
       <div className="max-w-7xl mx-auto px-4 w-full flex flex-col items-center">
         <div className="text-center mb-fluid-md">
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-[14px] font-manrope">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-[11.2px] font-manrope">
             {subheading}
           </p>
           <h2 className="text-gh-h2 font-philosopher text-white leading-tight">
@@ -55,7 +55,7 @@ export default function PremiumFeaturesSection({
         </div>
 
         {cardsLayout === "grid" ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,2vw,14px)] mb-fluid-md w-full px-fluid-sm md:px-fluid-md">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[clamp(9.6px,1.6vw,11.2px)] mb-fluid-md w-full px-fluid-sm md:px-fluid-md">
             {cards.map((card, idx) => (
               <PremiumFeatureCard
                 key={idx}
@@ -96,7 +96,7 @@ export default function PremiumFeaturesSection({
 
       <div className="max-w-7xl mx-auto px-4 w-full flex flex-col items-center">
         <div className="flex flex-col items-center">
-          <p className="text-white/60 font-philosopher italic text-gh-body text-center max-w-3xl leading-relaxed mb-[24px]">
+          <p className="text-white/60 font-philosopher italic text-gh-body text-center max-w-3xl leading-relaxed mb-[19.2px]">
             {footerText}
           </p>
 
@@ -228,7 +228,7 @@ function PremiumFeatureCard({
       </div>
 
       <div className="relative z-20">
-        <span className="text-[#A2A4A7] font-philosopher italic text-gh-desc mb-[clamp(0.65rem,calc(0.45rem+0.85vw),1.0625rem)] block tracking-wide">
+        <span className="text-[#A2A4A7] font-philosopher italic text-gh-desc mb-[clamp(0.65rem,calc(0.45rem+0.68vw),1.0625rem)] block tracking-wide">
           {card.tag}
         </span>
         <h3 className="font-manrope font-extrabold text-white text-[clamp(1.0625rem,calc(0.55rem+2.85vw),2rem)] leading-[1.2] tracking-[0.01em] uppercase break-words hyphens-none">

@@ -20,7 +20,7 @@ export default function WeekendThemedVillasSection() {
       className="bg-[#141517] border-t border-white/5 overflow-hidden flex flex-col min-h-[80dvh] max-h-[85dvh] h-[85dvh] lg:min-h-[100dvh] lg:max-h-[100dvh] lg:h-[100dvh]"
       style={sectionVars}
     >
-      <header className="shrink-0 text-center px-6 pt-6 md:pt-10 pb-3 md:pb-4">
+      <header className="shrink-0 text-center px-6 pt-5 md:pt-8 pb-3 md:pb-4">
         <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-2">
           OUR VILLAS
         </p>
@@ -40,7 +40,7 @@ export default function WeekendThemedVillasSection() {
               href={villa.href}
               className="group flex flex-col shrink-0 cursor-pointer jade-hscroll-view-item w-[clamp(220px,48vw,300px)] lg:shrink lg:w-[var(--villa-card-w)] lg:max-w-[320px] lg:min-w-[220px]"
             >
-              <div className="relative aspect-[5/6] w-full max-h-[min(42dvh,340px)] lg:max-h-[min(48vh,380px)] overflow-hidden border border-white/5 group-hover:border-[#EFCD62]/30 transition-colors mb-3 lg:mb-4">
+              <div className="relative aspect-[5/6] w-full max-h-[min(42dvh,340px)] lg:max-h-[min(48vh,380px)] overflow-hidden border border-white/5 group-hover:border-[#EFCD62]/30 transition-colors mb-2.5 lg:mb-3">
                 <Image
                   src={villa.image}
                   alt={villa.name}
@@ -53,7 +53,7 @@ export default function WeekendThemedVillasSection() {
               <div className="shrink-0 pb-1">
                 <p
                   className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase text-left"
-                  style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
+                  style={{ marginBottom: "clamp(4px, 0.64vw, 8px)" }}
                 >
                   {villa.tag}
                 </p>
@@ -66,7 +66,7 @@ export default function WeekendThemedVillasSection() {
         </div>
       </div>
 
-      <div className="shrink-0 px-6 pb-6 md:pb-8 pt-3 md:pt-4 flex justify-center">
+      <div className="shrink-0 px-6 pb-5 md:pb-6 pt-3 md:pt-4 flex justify-center">
         <PrimaryButton className="w-full max-w-xl text-gh-label" href="/villas">
           VIEW ALL VILLA RETREATS
         </PrimaryButton>

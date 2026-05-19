@@ -82,7 +82,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
             {/* Logo */}
             <div
               className="relative w-[45px] h-[45px]"
-              style={{ marginBottom: "clamp(6px, 1.5vw, 10px)" }}
+              style={{ marginBottom: "clamp(4px, 0.96vw, 8px)" }}
             >
               <Image
                 src="/assets/White_Logo.png"
@@ -96,7 +96,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
             {/* Heading */}
             <h1
               className="font-philosopher text-white text-gh-h1 leading-tight"
-              style={{ marginBottom: "clamp(6px, 1.5vw, 12px)" }}
+              style={{ marginBottom: "clamp(4px, 0.96vw, 8px)" }}
             >
               {heading}
             </h1>
@@ -104,7 +104,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
             {/* Description */}
             <p
               className="font-manrope text-white/90 text-gh-body max-w-2xl leading-relaxed"
-              style={{ marginBottom: "clamp(12px, 2.5vw, 20px)" }}
+              style={{ marginBottom: "clamp(8px, 1.6vw, 12.8px)" }}
             >
               {description}
             </p>
@@ -115,7 +115,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
           {/* Optional Extra Content */}
           {children}
           {/* Action Buttons */}
-          <div className="flex flex-row items-center justify-center gap-3 w-full max-w-2xl mb-24 md:mb-16">
+          <div className="flex flex-row items-center justify-center gap-2.5 w-full max-w-2xl mb-20 md:mb-12">
             {buttons.map((btn, idx) => (
               <GlassButton
                 key={idx}

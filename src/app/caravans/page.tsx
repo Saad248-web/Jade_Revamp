@@ -6,9 +6,7 @@ import CorporateHeader from "@/components/CorporateHeader";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import Footer from "@/components/Footer";
 import ExperienceHero from "@/components/ExperienceHero";
-import ScrollSectionComposer, {
-  ScrollSlide,
-} from "@/components/ScrollSectionComposer";
+import ExperienceScrollSection from "@/components/ExperienceScrollSection";
 import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
 import CaravanUsageSection from "@/components/CaravanUsageSection";
 import CaravanJourneySection from "@/components/CaravanJourneySection";
@@ -43,19 +41,6 @@ const DEFAULT_SLIDES = [
   {
     title: "Capacity",
     desc: "Ideal for 6–8 guests travelling together.",
-  },
-];
-
-const animatedSlides: ScrollSlide[] = [
-  {
-    label: "A PRIVATE RETREAT ON WHEELS",
-    lines: [
-      "Rathaa is a fully equipped luxury caravan designed for small-group journeys.",
-      "Combining the comfort of a private stay with the freedom of road travel, it allows you to explore",
-      "scenic destinations, celebrate special moments, or simply travel differently.",
-      "From short day escapes to overnight and multi-day journeys, every experience is",
-      "curated around your route, your group, and your pace.",
-    ],
   },
 ];
 
@@ -124,7 +109,7 @@ export default function CaravansPage() {
   }, [heroImages, heroIndex, heroBg]);
 
   return (
-    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
+    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
       <CorporateHeader />
       <MobileBottomNav />
 
@@ -160,7 +145,7 @@ export default function CaravansPage() {
       />
 
       {/* SECTION 2: ANIMATED TEXT SECTION */}
-      <ScrollSectionComposer slides={animatedSlides} height="300vh" />
+      <ExperienceScrollSection variant="caravans" />
 
       {/* SECTION 3: THE CARAVAN CAROUSEL */}
       <div id="the-caravan">

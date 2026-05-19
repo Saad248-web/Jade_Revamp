@@ -12,6 +12,7 @@ import {
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
+import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 
 const normalizePublicImageSrc = (src: string) => {
   if (!src.startsWith("/")) return src;
@@ -114,7 +115,7 @@ export default function PartyVillaCard({
   const onwards = (getOverlayVillaData("party", villa?.id) as any)?.overlay?.onwardsPrice ?? null;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 xl:gap-14 w-full pb-8 lg:py-10 border-b border-white/5 last:border-b-0 bg-[#25282C]">
+    <div className="flex flex-col lg:flex-row gap-5 lg:gap-10 xl:gap-11 w-full pb-6 lg:py-8 border-b border-white/5 last:border-b-0 bg-[#25282C]">
       {/* IMAGE SECTION */}
       <div
         className="relative w-full lg:w-[45%] h-[38vh] lg:h-[360px] xl:h-[420px] overflow-hidden bg-white/5 flex-shrink-0"
@@ -145,6 +146,13 @@ export default function PartyVillaCard({
           </motion.div>
         </AnimatePresence>
 
+        <CarouselSwipeLayer
+          onPrev={prevImage}
+          onNext={nextImage}
+          slideCount={images.length}
+          className="absolute inset-0 z-[15] touch-pan-y"
+        />
+
         {/* IMAGE CONTROLS */}
         <div className="absolute bottom-6 left-4 right-4 z-20 flex items-center justify-between">
           <button
@@ -158,7 +166,7 @@ export default function PartyVillaCard({
             <span className="text-white font-manrope text-gh-label font-bold tracking-[0.3em] uppercase mb-2">
               {currentSpace.name || "ESTATE"}
             </span>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <span className="text-white font-philosopher text-gh-gallery-pagination tabular-nums leading-none">
                 {currentImageIndex + 1}
               </span>
@@ -182,7 +190,7 @@ export default function PartyVillaCard({
       <div className="flex flex-col flex-1 max-lg:px-0 lg:px-0 pt-3 lg:pt-0 justify-start text-left">
         <span
           className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase"
-          style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
+          style={{ marginBottom: "clamp(4px, 0.64vw, 8px)" }}
         >
           {villa.id === "dome-villas" || villa.id.startsWith("dome-villas-")
             ? "POOL VILLA FOR PRIVATE PARTIES"
@@ -199,7 +207,7 @@ export default function PartyVillaCard({
 
         <h2
           className="font-philosopher text-gh-h3 text-white leading-tight"
-          style={{ marginBottom: "clamp(4px, 0.8vw, 8px)" }}
+          style={{ marginBottom: "clamp(4px, 0.512vw, 8px)" }}
         >
           {villa.name}
         </h2>
@@ -209,7 +217,7 @@ export default function PartyVillaCard({
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-white/50 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
-          style={{ marginBottom: "clamp(4px, 0.8vw, 8px)" }}
+          style={{ marginBottom: "clamp(4px, 0.512vw, 8px)" }}
           onClick={(e) => e.stopPropagation()}
         >
           <MapPin className="w-5 h-5 text-[#EFCD62] shrink-0" />
@@ -220,13 +228,13 @@ export default function PartyVillaCard({
 
         <p
           className="font-manrope text-white/50 leading-relaxed text-gh-desc line-clamp-3 lg:line-clamp-none"
-          style={{ marginBottom: "clamp(20px, 4vw, 36px)" }}
+          style={{ marginBottom: "clamp(12.8px, 2.56vw, 23px)" }}
         >
           {villa.description}
         </p>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-3 mb-4">
+        <div className="grid grid-cols-3 gap-2.5 mb-3">
           {stats.map((stat, idx) => (
             <div
               key={idx}

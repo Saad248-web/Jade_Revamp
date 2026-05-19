@@ -2,6 +2,10 @@ import type { Config } from "tailwindcss";
 import containerQueries from "@tailwindcss/container-queries";
 import plugin from "tailwindcss/plugin";
 
+/** External layout rhythm — 0.8× fluid section/gap tokens (not control padding). */
+const LAYOUT_SPACE_SCALE = 0.8;
+const s = (n: number) => n * LAYOUT_SPACE_SCALE;
+
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -41,12 +45,12 @@ const config: Config = {
          e.g. pt-fluid-lg  gap-fluid-md  px-fluid-md
          ============================================================ */
       spacing: {
-        "fluid-xs": "clamp(4px, 0.5vw, 8px)",
-        "fluid-sm": "clamp(8px, 1vw, 16px)",
-        "fluid-md": "clamp(16px, 2vw, 32px)",
-        "fluid-lg": "clamp(32px, 4vw, 64px)",
-        "fluid-xl": "clamp(48px, 6vw, 96px)",
-        "fluid-2xl": "clamp(64px, 8vw, 128px)",
+        "fluid-xs": `clamp(${s(4)}px, ${s(0.5)}vw, ${s(8)}px)`,
+        "fluid-sm": `clamp(${s(8)}px, ${s(1)}vw, ${s(16)}px)`,
+        "fluid-md": `clamp(${s(16)}px, ${s(2)}vw, ${s(32)}px)`,
+        "fluid-lg": `clamp(${s(32)}px, ${s(4)}vw, ${s(64)}px)`,
+        "fluid-xl": `clamp(${s(48)}px, ${s(6)}vw, ${s(96)}px)`,
+        "fluid-2xl": `clamp(${s(64)}px, ${s(8)}vw, ${s(128)}px)`,
       },
       /* Dynamic viewport units — prefer over vh/vw which misbehave at
          high Windows display scaling and on mobile browser chrome. */

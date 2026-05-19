@@ -315,9 +315,9 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
             {/* ── CHARCOAL: Title / Info / Amenity Cards / Description ─── */}
             <div className="w-full bg-[#25282C]">
-              <div className="px-6 py-8 md:px-12 md:py-16 max-w-7xl mx-auto">
+              <div className="px-6 py-6 md:px-12 md:py-12 max-w-7xl mx-auto">
                 {/* Header info sitting directly in max-w-7xl for full-width alignment like detail page */}
-                <div className="flex flex-col gap-2 mb-8">
+                <div className="flex flex-col gap-2 mb-6">
                   <span className="text-[#EFCD62] text-[10px] md:text-gh-label font-bold tracking-[0.2em] uppercase">
                     {v.type || "VILLA"}
                   </span>
@@ -325,7 +325,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                     {v.name}
                   </h1>
                   <a href={mapsHref} target="_blank" rel="noopener noreferrer"
-                    className="group flex items-center gap-2.5 text-white/90 mt-2 w-fit hover:text-[#EFCD62] transition-colors"
+                    className="group flex items-center gap-2 text-white/90 mt-2 w-fit hover:text-[#EFCD62] transition-colors"
                     aria-label="Open location in Google Maps">
                     <MapPin className="w-5 h-5 text-white/70 shrink-0" />
                     <span className="font-manrope text-[15px] md:text-[18px] underline-offset-4 group-hover:underline">
@@ -335,18 +335,18 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                 </div>
 
                 {/* Stats pill row */}
-                <div className="flex flex-nowrap overflow-x-auto scrollbar-none gap-x-4 items-center text-white/90 mb-10 text-[10px] md:text-[12px] lg:text-[14px] font-normal font-manrope tracking-wide pb-2 -mr-6 pr-6 md:-mr-12 md:pr-12">
-                  <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+                <div className="flex flex-nowrap overflow-x-auto scrollbar-none gap-x-4 items-center text-white/90 mb-8 text-[10px] md:text-[12px] lg:text-[14px] font-normal font-manrope tracking-wide pb-2 -mr-6 pr-6 md:-mr-12 md:pr-12">
+                  <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
                     <Users className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
                     <span>{getEventCapacity(v)?.toString() || v.stats?.events || (resolvedContext === "weekend" ? "15+ Guests" : "600 Guests")}</span>
                   </div>
                   <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
-                  <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+                  <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
                     <Home className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
                     <span>{getStayCapacity(v)?.toString() || v.stats?.stay || (resolvedContext === "weekend" ? "6-12 Stay" : "20 Stay")}</span>
                   </div>
                   <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
-                  <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+                  <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
                     <Car className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
                     <span>{(overlayVilla as any)?.overlay?.parking ?? (resolvedContext === "weekend" ? "20+ Parking" : "80 Parking")}</span>
                   </div>
@@ -354,7 +354,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
                 {/* Horizontal amenity cards (Categories UI) — perfectly matches splitting & style of detail page */}
                 {v.amenities && v.amenities.length > 0 && (
-                  <div className="flex gap-3 overflow-x-auto pb-6 mb-12 snap-x scrollbar-none -mr-6 pr-6 md:-mr-12 md:pr-12">
+                  <div className="flex gap-2.5 overflow-x-auto pb-5 mb-10 snap-x scrollbar-none -mr-6 pr-6 md:-mr-12 md:pr-12">
                     {v.amenities.map((amenity: any, idx: number) => {
                       const IconComponent = getIcon(amenity.icon, amenity.label);
                       const words = (amenity.label || "").split(" ");
@@ -363,7 +363,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
                       return (
                         <div key={idx}
-                          className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] bg-white/[0.07] backdrop-blur-[12px] flex flex-col items-center justify-between text-center px-4 py-5 rounded-none snap-start flex-shrink-0"
+                          className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] bg-white/[0.07] backdrop-blur-[12px] flex flex-col items-center justify-between text-center px-4 py-4 rounded-none snap-start flex-shrink-0"
                           style={{ border: "1px solid", borderImageSource: "linear-gradient(135deg,rgba(255,255,255,0.95) 0%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 60%,rgba(255,255,255,0.2) 100%)", borderImageSlice: 1 }}>
                           <IconComponent className="w-[26px] h-[26px] text-white/80 mt-1" strokeWidth={1} />
                           <div className="flex flex-col items-center w-full">
@@ -379,14 +379,14 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                 )}
 
                 {/* Description */}
-                <p className="font-manrope text-white/70 text-gh-body leading-relaxed mb-12 whitespace-pre-line text-justify">
+                <p className="font-manrope text-white/70 text-gh-body leading-relaxed mb-10 whitespace-pre-line text-justify">
                   {v.description}
                 </p>
 
                 {/* Perfect For tags */}
                 {v.perfectFor && v.perfectFor.length > 0 && (
-                  <div className="mb-8">
-                    <h4 className="text-white font-manrope font-bold text-gh-label uppercase tracking-widest mb-4">Perfect for:</h4>
+                  <div className="mb-6">
+                    <h4 className="text-white font-manrope font-bold text-gh-label uppercase tracking-widest mb-3">Perfect for:</h4>
                     <div className="flex flex-wrap gap-2">
                       {v.perfectFor.map((tag: any) => (
                         <span key={typeof tag === "string" ? tag : tag.title}
@@ -405,15 +405,15 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
             {/* ── GREEN: Amenities ─────────────────────────────────────────── */}
             <section id="amenities" className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
                 <div className="max-w-4xl mx-auto">
-                  <h3 className="text-gh-h2 font-philosopher mb-8">Venue Amenities</h3>
+                  <h3 className="text-gh-h2 font-philosopher mb-6">Venue Amenities</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
                     {(v.amenities || [
                       { label: "Lawn Space" }, { label: "Private Pool" },
                       { label: "Stay Accommodation" }, { label: "Kitchen Access" }, { label: "Parking" },
                     ]).map((item: any, idx: number) => (
-                      <div key={idx} className="flex items-center gap-4">
+                      <div key={idx} className="flex items-center gap-3">
                         <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center">
                           <div className="w-2.5 h-2.5 rotate-45 bg-[#EFCD62]" />
                         </div>
@@ -427,12 +427,12 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
             {/* ── CHARCOAL: Pricing ────────────────────────────────────────── */}
             <section id="pricing" className="w-full bg-jade-green text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
                 <div className="max-w-4xl mx-auto">
                   <VillaPricingBlocks
                     variant="villa-detail"
                     blocks={buildWeddingWeekendOverlayPricingBlocks(v)}
-                    footnote={<p className="text-white/40 text-gh-label leading-relaxed mt-4">Note: Prices are base rates and may vary based on season, day of week, and specific requirements. Additional charges may apply for decorations, catering, and extended hours.</p>}
+                    footnote={<p className="text-white/40 text-gh-label leading-relaxed mt-3">Note: Prices are base rates and may vary based on season, day of week, and specific requirements. Additional charges may apply for decorations, catering, and extended hours.</p>}
                   />
                 </div>
               </div>
@@ -440,10 +440,10 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
             {/* ── GREEN: Location ───────────────────────────────────────────── */}
             <section id="location" className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
                 <div className="max-w-4xl mx-auto">
-                  <h3 className="text-gh-h2 font-philosopher mb-8">Location</h3>
-                  <div className="bg-jade-charcoal overflow-hidden mb-8 border border-white/10">
+                  <h3 className="text-gh-h2 font-philosopher mb-6">Location</h3>
+                  <div className="bg-jade-charcoal overflow-hidden mb-6 border border-white/10">
                     <a href={mapsHref} target="_blank" rel="noopener noreferrer"
                       className="relative block w-full h-64 md:h-80 cursor-pointer outline-none transition-opacity hover:opacity-95"
                       aria-label="Open location in Google Maps">
@@ -451,13 +451,13 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                     </a>
                     <div className="p-5 md:p-6 border-t border-white/10">
                       <a href={mapsHref} target="_blank" rel="noopener noreferrer"
-                        className="group flex items-start gap-4 outline-none hover:text-[#EFCD62] transition-colors">
+                        className="group flex items-start gap-3 outline-none hover:text-[#EFCD62] transition-colors">
                         <MapPin className="w-5 h-5 text-jade-gold mt-1 shrink-0" />
                         <p className="text-white text-gh-body font-manrope font-medium leading-relaxed group-hover:underline underline-offset-4">
                           {v.locationDetails?.address || "Tranquil Woods, Kanakapura Road, Bangalore - 560062"}
                         </p>
                       </a>
-                      <div className="w-full bg-white/[0.03] border border-white/5 px-4 py-3 mt-6">
+                      <div className="w-full bg-white/[0.03] border border-white/5 px-4 py-3 mt-5">
                         <p className="text-white/60 text-[12px] md:text-[13px] font-manrope">
                           {v.locationDetails?.distance || "Approximately 45 minutes from Bangalore City Center"}
                         </p>
@@ -465,12 +465,12 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                     </div>
                   </div>
                   {v.locationDetails?.nearby && v.locationDetails.nearby.length > 0 && (
-                    <div className="mt-8">
-                      <h4 className="text-jade-gold text-gh-label font-medium tracking-widest uppercase mb-6 font-manrope">Whats nearby:</h4>
-                      <div className="flex flex-col gap-4">
+                    <div className="mt-6">
+                      <h4 className="text-jade-gold text-gh-label font-medium tracking-widest uppercase mb-5 font-manrope">Whats nearby:</h4>
+                      <div className="flex flex-col gap-3">
                         {v.locationDetails.nearby.map((place: any) => (
                           <div key={place.label} className="flex justify-between items-center border-b border-white/5 pb-3">
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2.5">
                               <div className="w-1.5 h-1.5 rotate-45 bg-jade-gold" />
                               <span className="text-white font-manrope text-gh-desc font-medium uppercase tracking-wider">{place.label}</span>
                             </div>
@@ -486,9 +486,9 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
             {/* ── CHARCOAL: Video Walkthrough ──────────────────────────────── */}
             <section id="walkthrough" className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
                 <div className="max-w-4xl mx-auto">
-                  <h3 className="text-gh-h2 font-philosopher mb-8">Video Walkthrough</h3>
+                  <h3 className="text-gh-h2 font-philosopher mb-6">Video Walkthrough</h3>
                   <div className="relative aspect-video w-full overflow-hidden bg-black/40 border border-white/10 group cursor-pointer">
                     <Image src="/Villa_Retreats/Magnolia/Hero/hero.webp" alt="Video Cover" fill className="object-cover opacity-60 group-hover:opacity-40 transition-opacity" />
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -503,12 +503,12 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
             {/* ── GREEN: FAQ + Policies ─────────────────────────────────────── */}
             <section id="faq" className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
                 <div className="max-w-4xl mx-auto">
-                  <h3 className="text-gh-h2 font-philosopher mb-8">FAQ</h3>
+                  <h3 className="text-gh-h2 font-philosopher mb-6">FAQ</h3>
                   <ExperienceFaqAccordion items={(v.faq || []).map((item: any) => ({ question: item.question, answer: item.answer }))} />
-                  <div className="pt-8 mt-8 border-t border-white/5">
-                    <h3 className="text-gh-h2 font-philosopher mb-6">Key Policies</h3>
+                  <div className="pt-6 mt-6 border-t border-white/5">
+                    <h3 className="text-gh-h2 font-philosopher mb-5">Key Policies</h3>
                     <ExperiencePolicyCompactList policies={[
                       { title: "Cancellation Policy", desc: "Full refund if cancelled 90+ days before. 50% refund for 30-90 days. No refund within 30 days." },
                       { title: "Booking Requirements", desc: "30% advance payment required. Balance due 15 days before event. Refundable security deposit applicable." },
@@ -521,24 +521,24 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
             {/* ── CHARCOAL: Enquiry Form ────────────────────────────────────── */}
             <div className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-10 md:py-16">
+              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
                 <div className="max-w-4xl mx-auto">
                   <div id="enquiry" ref={formRef}>
                     {view === "form" ? (
                       <>
-                        <h2 className="text-gh-h1 font-philosopher mb-4">Plan Your Wedding at Jade</h2>
-                        <p className="text-white/60 text-gh-body mb-12">Share a few details. Our wedding team will guide you through venues &amp; pricing.</p>
+                        <h2 className="text-gh-h1 font-philosopher mb-3">Plan Your Wedding at Jade</h2>
+                        <p className="text-white/60 text-gh-body mb-10">Share a few details. Our wedding team will guide you through venues &amp; pricing.</p>
                         <WeddingVenueEnquiryForm onSuccess={() => setView("success")} onClosePrivacyNav={onClose} />
                       </>
                     ) : (
-                      <div className="flex flex-col items-center justify-center py-16 text-center">
-                        <div className="w-[180px] h-[180px] shrink-0 relative mb-8 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
+                      <div className="flex flex-col items-center justify-center py-12 text-center">
+                        <div className="w-[180px] h-[180px] shrink-0 relative mb-6 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
                           <div className="w-[84px] h-[84px] shrink-0 relative drop-shadow-2xl">
                             <Image src="/assets/JAde%20Correction.png" alt="Success Check" fill sizes="96px" quality={100} className="object-contain" />
                           </div>
                         </div>
-                        <h2 className="text-white text-[36px] font-philosopher mb-4">We've got it from here</h2>
-                        <p className="text-white/90 text-[16px] leading-relaxed mb-12 max-w-sm mx-auto">Thanks for sharing your details!<br />Our team will take a look and reach out shortly.</p>
+                        <h2 className="text-white text-[36px] font-philosopher mb-3">We've got it from here</h2>
+                        <p className="text-white/90 text-[16px] leading-relaxed mb-10 max-w-sm mx-auto">Thanks for sharing your details!<br />Our team will take a look and reach out shortly.</p>
                         <PrimaryButton withArrow={false} className="max-w-[300px] w-full" onClick={() => setView("form")}>SUBMIT ANOTHER</PrimaryButton>
                       </div>
                     )}

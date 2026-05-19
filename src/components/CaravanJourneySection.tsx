@@ -41,13 +41,13 @@ const JourneyCard = ({
     <h3 className="text-[#EFCD62] text-gh-scroll font-philosopher mb-1.5">
       {title}
     </h3>
-    <p className="text-white/60 text-gh-label font-manrope mb-6">{duration}</p>
+    <p className="text-white/60 text-gh-label font-manrope mb-5">{duration}</p>
 
-    <p className="text-white/80 text-gh-body leading-relaxed font-manrope mb-8 max-w-xl">
+    <p className="text-white/80 text-gh-body leading-relaxed font-manrope mb-6 max-w-xl">
       {description}
     </p>
 
-    <div className="bg-white/5 p-6 mb-8 flex flex-row justify-between items-center gap-4">
+    <div className="bg-white/5 p-6 mb-6 flex flex-row justify-between items-center gap-3">
       <div className="flex flex-col gap-1">
         <p className="text-white text-gh-desc font-manrope">{capacity}</p>
         {pricePerHead && (
@@ -61,7 +61,7 @@ const JourneyCard = ({
       </p>
     </div>
 
-    <p className="text-white/40 text-gh-label uppercase tracking-widest font-manrope mb-4">
+    <p className="text-white/40 text-gh-label uppercase tracking-widest font-manrope mb-3">
       {tagsLabel}
     </p>
     <div className="flex flex-wrap gap-2">
@@ -85,8 +85,8 @@ const CaravanJourneySection = () => {
     <section className="bg-[#0B2C23] py-fluid-lg md:py-fluid-xl px-6 md:px-12 lg:px-24">
       <div className="max-w-6xl mx-auto">
         {/* Title Group */}
-        <div className="mb-12">
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope mb-4">
+        <div className="mb-10">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase font-manrope mb-3">
             TRAVEL EXPERIENCES
           </p>
           <h2 className="text-gh-h1 font-philosopher text-white leading-tight">
@@ -95,7 +95,7 @@ const CaravanJourneySection = () => {
         </div>
 
         {/* Content Tiles */}
-        <div className="grid grid-cols-1 gap-8 mb-12">
+        <div className="grid grid-cols-1 gap-6 mb-10">
           {/* One-Day */}
           <JourneyCard
             title="One-Day Caravan Experience"
@@ -155,7 +155,7 @@ const CaravanJourneySection = () => {
 
         {/* Footer Disclaimer & CTA */}
         <div className="">
-          <p className="text-white/40 text-[10px] md:text-gh-label leading-relaxed font-manrope mb-8">
+          <p className="text-white/40 text-[10px] md:text-gh-label leading-relaxed font-manrope mb-6">
             Note: Prices are base rates and may vary based on season, day of
             week, and specific requirements. Fuel charges may apply depending on
             the travel route.

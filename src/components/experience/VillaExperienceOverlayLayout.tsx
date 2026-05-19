@@ -15,6 +15,7 @@ import {
   liquidCarouselBgVariants,
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
+import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 
 export type VillaExperienceCarouselImage = { name?: string; image: string };
 
@@ -117,6 +118,13 @@ export function VillaExperienceHeroCarousel({
         </MotionDiv>
       </AnimatePresence>
 
+      <CarouselSwipeLayer
+        onPrev={onPrev}
+        onNext={onNext}
+        slideCount={images.length}
+        className="absolute inset-0 z-[15] touch-pan-y"
+      />
+
       {/* Bottom bar — same pattern as experience villa cards (arrows + label + index) */}
       {hasMultiple ? (
         <div className="absolute bottom-4 md:bottom-6 left-4 right-4 z-20 flex items-center justify-between gap-2 pointer-events-none">
@@ -133,7 +141,7 @@ export function VillaExperienceHeroCarousel({
             <span className="text-white font-manrope text-gh-label font-bold tracking-[0.25em] md:tracking-[0.3em] uppercase mb-2 text-center line-clamp-2">
               {slideLabel}
             </span>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <span className="text-white font-philosopher text-gh-gallery-pagination tabular-nums leading-none">
                 {currentImageIndex + 1}
               </span>
@@ -166,7 +174,7 @@ export function VillaExperienceHeroCarousel({
 
 export function VillaExperienceGalleryCaption({ label }: { label: string }) {
   return (
-    <div className="mt-6 px-4 text-center">
+    <div className="mt-5 px-4 text-center">
       <span className="text-white/50 font-manrope text-gh-label font-bold tracking-[0.12em]">
         {label}
       </span>
@@ -186,17 +194,13 @@ export function VillaExperienceStickyTabs({
   return (
     <div className={EXPERIENCE_OVERLAY_STICKY_TABS_CLASS}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex gap-2 sm:gap-4 overflow-x-auto py-4 scrollbar-none">
+        <div className="flex gap-2 sm:gap-3 overflow-x-auto py-4 scrollbar-none">
           {tabs.map((tab) => (
             <button
               key={tab}
               type="button"
               onClick={() => onTabClick(tab)}
-              className={`shrink-0 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold font-manrope transition-colors whitespace-nowrap ${
-                activeTab === tab
-                  ? "bg-jade-gold text-black"
-                  : "text-white/80 hover:text-white bg-transparent"
-              }`}
+              className={`shrink-0 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold font-manrope transition-colors whitespace-nowrap ${ activeTab === tab ? "bg-jade-gold text-black" : "text-white/80 hover:text-white bg-transparent" }`}
             >
               {tab}
             </button>
@@ -219,7 +223,7 @@ export function VillaExperienceBookingBottomBar({
   const priceMain = onwardPrice?.trim() || "Enquire";
   return (
     <div className={EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS}>
-      <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-4 px-4 md:px-12">
+      <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-3 px-4 md:px-12">
         <div className="flex flex-col font-manrope leading-tight">
           <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">
             Starting from
@@ -228,7 +232,7 @@ export function VillaExperienceBookingBottomBar({
             {priceMain}
           </span>
         </div>
-        <div className="flex items-center gap-4 md:gap-6">
+        <div className="flex items-center gap-3 md:gap-5">
           <button
             type="button"
             onClick={onEnquireClick}

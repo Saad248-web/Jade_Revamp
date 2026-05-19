@@ -15,7 +15,7 @@ const BlogCard = ({ post }: { post: any }) => {
       href={post.link}
       className="group relative block w-[280px] sm:w-[340px] md:w-[380px] lg:w-[400px]"
     >
-      <div className="relative aspect-[4/5] sm:aspect-[4/3] overflow-hidden rounded-sm mb-5">
+      <div className="relative aspect-[4/5] sm:aspect-[4/3] overflow-hidden rounded-sm mb-4">
         <Image
           src={post.image}
           alt={post.title}
@@ -28,10 +28,10 @@ const BlogCard = ({ post }: { post: any }) => {
 
       <div className="flex flex-col pr-4">
         {/* Title - Systematic size and clamping */}
-        <h3 className="font-philosopher text-[1.1rem] sm:text-[1.2rem] lg:text-[1.4rem] text-white group-hover:text-[#EFCD62] transition-colors mb-3 line-clamp-2 leading-normal">
+        <h3 className="font-philosopher text-[1.1rem] sm:text-[1.2rem] lg:text-[1.4rem] text-white group-hover:text-[#EFCD62] transition-colors mb-2.5 line-clamp-2 leading-normal">
           {post.title}
         </h3>
-        <p className="font-manrope text-white/60 text-[0.85rem] sm:text-[0.9rem] leading-relaxed line-clamp-2 mb-5 min-h-[3em]">
+        <p className="font-manrope text-white/60 text-[0.85rem] sm:text-[0.9rem] leading-relaxed line-clamp-2 mb-4 min-h-[3em]">
           {post.excerpt}
         </p>
 
@@ -84,23 +84,23 @@ export default function BlogSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex flex-col justify-center pt-16 pb-16 md:pt-fluid-lg md:pb-12 lg:pt-fluid-xl"
+      className="relative flex flex-col justify-center pt-12 pb-12 md:pt-fluid-lg md:pb-10 lg:pt-fluid-xl"
       style={{ backgroundColor: "#25282C" }}
     >
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       <div className="max-w-[1920px] mx-auto w-full px-6 md:px-12 lg:px-24">
         {/* Header Area */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 lg:mb-12 gap-4 md:gap-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 lg:mb-10 gap-3 md:gap-6">
           <div className="max-w-2xl">
             <p
               className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]"
-              style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
+              style={{ marginBottom: "clamp(4px, 0.64vw, 8px)" }}
             >
               BLOG
             </p>
             <h2
               className="font-philosopher text-gh-h2 sm:text-gh-h1 text-white"
-              style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+              style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
             >
               From the Journal
             </h2>
@@ -110,7 +110,7 @@ export default function BlogSection() {
             </p>
           </div>
 
-          <div className="flex items-center gap-5 md:gap-6">
+          <div className="flex items-center gap-4 md:gap-5">
             <Link
               href="/blogs"
               className="font-manrope text-[0.75rem] sm:text-gh-label text-[#EFCD62] tracking-widest uppercase border-b border-[#EFCD62]/30 hover:border-[#EFCD62] transition-colors pb-1"

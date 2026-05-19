@@ -76,7 +76,7 @@ export default function VillaPricingBlocks({
             {rent.subtitle ?? ""}
           </p>
 
-          <div className="space-y-3 mb-8">
+          <div className="space-y-2.5 mb-6">
             {rent.packages.map((item, i) => (
               <div
                 key={i}
@@ -121,7 +121,7 @@ export default function VillaPricingBlocks({
             ))}
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             <span
               className={
                 isDetail

@@ -13,6 +13,7 @@ import {
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
+import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 
 // Filter villas to specifically show Set 2: Tranquil Woods, Magnolia, Diamond
 const SET2_IDS = ["tranquil", "magnolia", "diamond"];
@@ -57,9 +58,9 @@ export default function WeddingVenuesCarousel() {
   }, [currentIndex]);
 
   return (
-    <section className="relative bg-[#1A1C1E] pt-fluid-lg pb-10 md:pt-fluid-xl md:pb-10">
+    <section className="relative bg-[#1A1C1E] pt-fluid-lg pb-8 md:pt-fluid-xl md:pb-8">
       <div className="max-w-3xl mx-auto px-6 w-full">
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-10">
           {/* IMAGE SECTION - NAVIGATION INSIDE FRAME */}
           <div
             className="relative w-full aspect-[16/9] md:aspect-[2.4/1] lg:h-[48vh] lg:max-h-[520px] overflow-hidden rounded-sm bg-white/5 group"
@@ -90,6 +91,13 @@ export default function WeddingVenuesCarousel() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
               </motion.div>
             </AnimatePresence>
+
+            <CarouselSwipeLayer
+              onPrev={prevSlide}
+              onNext={nextSlide}
+              slideCount={WEDDING_VENUES.length}
+              className="absolute inset-0 z-[15] touch-pan-y"
+            />
 
             {/* Top Overlay Link (Like Reference Image) */}
             <div className="absolute top-6 left-6 z-20">
@@ -128,7 +136,7 @@ export default function WeddingVenuesCarousel() {
               <span className="text-white font-manrope text-gh-label font-bold tracking-[0.3em] uppercase">
                 LAWN
               </span>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <span className="text-white font-philosopher text-gh-gallery-pagination tabular-nums leading-none">
                   {currentIndex + 1}
                 </span>
@@ -141,14 +149,14 @@ export default function WeddingVenuesCarousel() {
           </div>
 
           {/* CONTENT SECTION BELOW IMAGE */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mt-8">
-            <div className="lg:col-span-7 flex flex-col gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mt-6">
+            <div className="lg:col-span-7 flex flex-col gap-3">
               <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase">
                 {currentVilla.type}
               </span>
               <h2
                 className="font-philosopher text-gh-h1 text-white"
-                style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
+                style={{ marginBottom: "clamp(4px, 0.64vw, 8px)" }}
               >
                 {currentVilla.name}
               </h2>
@@ -157,7 +165,7 @@ export default function WeddingVenuesCarousel() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-white/60 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
-                style={{ marginBottom: "clamp(12px, 2.5vw, 24px)" }}
+                style={{ marginBottom: "clamp(8px, 1.6vw, 15.4px)" }}
               >
                 <MapPin className="w-4 h-4 shrink-0" />
                 <span className="font-manrope text-gh-label hover:underline underline-offset-4">
@@ -171,9 +179,9 @@ export default function WeddingVenuesCarousel() {
               </p>
             </div>
 
-            <div className="lg:col-span-5 flex flex-col gap-10">
+            <div className="lg:col-span-5 flex flex-col gap-8">
               {/* Stats Grid */}
-              <div className="grid grid-cols-3 gap-4 border-y border-white/10 py-8">
+              <div className="grid grid-cols-3 gap-3 border-y border-white/10 py-6">
                 <div className="flex flex-col items-center gap-2 text-center border-r border-white/10">
                   <Users className="w-5 h-5 text-white/40" />
                   <span className="text-white font-philosopher text-gh-scroll">
@@ -212,7 +220,7 @@ export default function WeddingVenuesCarousel() {
                 <button
                   type="button"
                   onClick={() => setIsOverlayOpen(true)}
-                  className="inline-flex items-center gap-3 text-[#EFCD62] font-manrope text-gh-villa-footer-row tracking-[0.2em] font-bold uppercase hover:text-white transition-all group"
+                  className="inline-flex items-center gap-2.5 text-[#EFCD62] font-manrope text-gh-villa-footer-row tracking-[0.2em] font-bold uppercase hover:text-white transition-all group"
                 >
                   KNOW MORE
                   <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />

@@ -39,13 +39,13 @@ function ToggleSet({
   onToggle: (s: string) => void;
 }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
       {options.map((s) => {
         const checked = selected.has(s);
         return (
           <label
             key={s}
-            className="flex items-center gap-3 cursor-pointer group text-left min-h-[1.5rem]"
+            className="flex items-center gap-2.5 cursor-pointer group text-left min-h-[1.5rem]"
           >
             <input
               type="checkbox"
@@ -126,7 +126,7 @@ export default function WeddingVenueEnquiryForm({
 
   return (
     <form
-      className="space-y-6"
+      className="space-y-5"
       onSubmit={async (e) => {
         e.preventDefault();
         if (!validate()) return;
@@ -192,7 +192,7 @@ export default function WeddingVenueEnquiryForm({
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <input
           type="tel"
           placeholder="Phone Number *"
@@ -237,7 +237,7 @@ export default function WeddingVenueEnquiryForm({
         </button>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         <p className="text-white/60 text-gh-label font-bold uppercase tracking-widest">
           Services Required
         </p>
@@ -248,7 +248,7 @@ export default function WeddingVenueEnquiryForm({
         />
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         <p className="text-white/60 text-gh-label font-bold uppercase tracking-widest">
           Events You&apos;re Planning
         </p>
@@ -259,7 +259,7 @@ export default function WeddingVenueEnquiryForm({
         />
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         <p className="text-white/60 text-gh-label font-bold uppercase tracking-widest">
           Preferred Setting
         </p>
@@ -310,7 +310,7 @@ export default function WeddingVenueEnquiryForm({
       <button
         type="submit"
         disabled={submitting}
-        className="w-full py-5 bg-[#EFCD62] text-black font-manrope font-bold text-gh-label tracking-widest uppercase hover:bg-white hover:text-black transition-all disabled:opacity-50 disabled:pointer-events-none"
+        className="w-full py-4 bg-[#EFCD62] text-black font-manrope font-bold text-gh-label tracking-widest uppercase hover:bg-white hover:text-black transition-all disabled:opacity-50 disabled:pointer-events-none"
       >
         {submitting ? "SENDING…" : "CONTACT US"}
       </button>

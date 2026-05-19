@@ -160,7 +160,7 @@ export default function SplashScreen() {
             </div>
 
             {/* Spacing — subtitle ↔ brand name: generous gap to separate groups */}
-            <div style={{ height: "clamp(12px, 3vw, 20px)" }} />
+            <div style={{ height: "clamp(9.6px, 2.4vw, 16px)" }} />
 
             {/* 2. Main Title Group — Proximity: zero gap = one visual unit */}
             <div className="flex flex-col items-center" style={{ gap: 0 }}>
@@ -170,7 +170,7 @@ export default function SplashScreen() {
                   style={{
                     fontSize: "clamp(32px, 8.5vw, 54px)",
                     lineHeight: 1.05,
-                    marginBottom: "clamp(-2px, -0.3vw, -4px)",
+                    marginBottom: "clamp(-4px, -0.192vw, -4px)",
                   }}
                   className="font-philosopher text-white text-center"
                 >
@@ -192,7 +192,7 @@ export default function SplashScreen() {
             </div>
 
             {/* Spacing — brand name ↔ logo: wider gap to separate groups */}
-            <div style={{ height: "clamp(20px, 4vw, 32px)" }} />
+            <div style={{ height: "clamp(16px, 3.2vw, 25.6px)" }} />
 
             {/* 3. Logo Icon */}
             <div className="overflow-hidden">

@@ -134,7 +134,7 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={onClose}
-              className="w-12 h-12 mb-3 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0 z-[102]"
+              className="w-12 h-12 mb-2.5 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0 z-[102]"
             >
               <X className="w-6 h-6 stroke-[1.5]" />
             </motion.button>
@@ -148,7 +148,7 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
               className="relative w-full md:w-[600px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 max-h-[80vh] md:max-h-[85vh] overflow-hidden"
             >
               {/* Header */}
-              <div className="flex items-center px-6 pt-6 pb-2 border-b border-white/5">
+              <div className="flex items-center px-6 pt-5 pb-2 border-b border-white/5">
                 <h2 className="text-white text-gh-h2 font-philosopher">
                   {title}
                 </h2>
@@ -159,7 +159,7 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
                 className="flex-1 overflow-y-auto scrollbar-hide p-6 md:p-8"
                 data-lenis-prevent
               >
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-5">
                   {items.map((item, idx) => {
                     const Icon = item.icon ? getIcon(item.icon) : null;
                     const itemTitle =
@@ -170,7 +170,7 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
                       item.description || (item as any).answer;
 
                     return (
-                      <div key={idx} className="flex gap-4 items-start group">
+                      <div key={idx} className="flex gap-3 items-start group">
                         {Icon && (
                           <div className="shrink-0 w-10 h-10 flex items-center justify-center border border-white/10 rounded-sm bg-white/5 transition-colors">
                             <Icon className="w-4 h-4 text-[#EFCD62]" />

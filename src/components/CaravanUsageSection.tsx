@@ -13,7 +13,11 @@ import {
   carouselHeroMiniCardShadow,
 } from "@/lib/carouselHeroCopy";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
-import { usePreloadNeighborSlideImages } from "@/lib/carouselMotion";
+import {
+  useCarouselSwipeDragProps,
+  usePreloadNeighborSlideImages,
+} from "@/lib/carouselMotion";
+import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import {
   heroSplitBgVariants,
   heroSplitCardVariants,
@@ -80,11 +84,6 @@ export default function CaravanUsageSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
 
-  const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity;
-  };
-
   const currentSlide = SLIDES[currentIndex];
 
   usePreloadNeighborSlideImages(SLIDES, currentIndex);
@@ -104,6 +103,8 @@ export default function CaravanUsageSection() {
     setCurrentIndex((prev) => (prev === SLIDES.length - 1 ? 0 : prev + 1));
   };
 
+  const miniCardSwipeProps = useCarouselSwipeDragProps(handlePrev, handleNext);
+
   return (
     <section
       ref={sectionRef}
@@ -111,17 +112,10 @@ export default function CaravanUsageSection() {
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
-      {/* ── GLOBAL SWIPE OVERLAY ── */}
-      <motion.div
-        className="absolute inset-0 z-10"
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0}
-        onDragEnd={(e, { offset, velocity }) => {
-          const swipe = swipePower(offset.x, velocity.x);
-          if (swipe < -swipeConfidenceThreshold) handleNext();
-          else if (swipe > swipeConfidenceThreshold) handlePrev();
-        }}
+      <CarouselSwipeLayer
+        onPrev={handlePrev}
+        onNext={handleNext}
+        slideCount={SLIDES.length}
       />
 
       {/* ── TOP 75vh/80vh — full-bleed background image ── */}
@@ -166,11 +160,11 @@ export default function CaravanUsageSection() {
           key={`label-${currentIndex}`}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`${carouselHeroLabelClass} mb-3`}
+          className={`${carouselHeroLabelClass} mb-2.5`}
         >
           {currentSlide.label}
         </motion.p>
-        <div className="mb-3">
+        <div className="mb-2.5">
           <motion.h2
             key={`heading-${currentIndex}`}
             initial={{ opacity: 0, y: 12 }}
@@ -217,14 +211,8 @@ export default function CaravanUsageSection() {
           animate={{ x: `-${currentIndex * 100}%` }}
           transition={{ type: "spring", stiffness: 100, damping: 20 }}
           style={{ willChange: "transform" }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.2}
-          onDragEnd={(e, { offset, velocity }) => {
-            const swipe = swipePower(offset.x, velocity.x);
-            if (swipe < -swipeConfidenceThreshold) handleNext();
-            else if (swipe > swipeConfidenceThreshold) handlePrev();
-          }}
+          dragElastic={miniCardSwipeProps.drag ? 0.2 : 0}
+          {...miniCardSwipeProps}
         >
           {SLIDES.map((slide, idx) => (
             <div key={`card-${idx}`} className="w-full h-full relative flex-shrink-0">

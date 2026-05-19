@@ -15,8 +15,10 @@ import {
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import {
   CAROUSEL_CROSSFADE,
+  useCarouselSwipeDragProps,
   usePreloadNeighborSlideImages,
 } from "@/lib/carouselMotion";
+import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import {
   heroSplitBgVariants,
   heroSplitCardVariants,
@@ -74,11 +76,6 @@ export default function WeddingServicesSection() {
   const reducedMotion = useReducedMotion();
   const [serviceImages, setServiceImages] = useState<string[]>([]);
   const [preWeddingImages, setPreWeddingImages] = useState<string[]>([]);
-
-  const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity;
-  };
 
   useEffect(() => {
     let cancelled = false;
@@ -143,6 +140,8 @@ export default function WeddingServicesSection() {
     setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   };
 
+  const miniCardSwipeProps = useCarouselSwipeDragProps(handlePrev, handleNext);
+
   return (
     <section
       ref={sectionRef}
@@ -150,17 +149,10 @@ export default function WeddingServicesSection() {
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
-      {/* ── GLOBAL SWIPE OVERLAY ── */}
-      <motion.div
-        className="absolute inset-0 z-10"
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0}
-        onDragEnd={(e, { offset, velocity }) => {
-          const swipe = swipePower(offset.x, velocity.x);
-          if (swipe < -swipeConfidenceThreshold) handleNext();
-          else if (swipe > swipeConfidenceThreshold) handlePrev();
-        }}
+      <CarouselSwipeLayer
+        onPrev={handlePrev}
+        onNext={handleNext}
+        slideCount={slides.length}
       />
 
       {/* ── TOP AREA (75vh mobile / 80vh desktop) — background image ── */}
@@ -206,11 +198,11 @@ export default function WeddingServicesSection() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             className={carouselHeroLabelClass}
-            style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
+            style={{ marginBottom: "clamp(4px, 0.64vw, 8px)" }}
           >
             {currentSlide.label}
           </motion.p>
-          <div style={{ marginBottom: "clamp(6px, 1.5vw, 12px)" }}>
+          <div style={{ marginBottom: "clamp(4px, 0.96vw, 8px)" }}>
             <h2 className={carouselHeroHeadlineClass}>
               {currentSlide.heading.join(" ")}
             </h2>
@@ -258,14 +250,8 @@ export default function WeddingServicesSection() {
           animate={{ x: `-${currentIndex * 100}%` }}
           transition={{ type: "spring", stiffness: 100, damping: 20 }}
           style={{ willChange: "transform" }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.2}
-          onDragEnd={(e, { offset, velocity }) => {
-            const swipe = swipePower(offset.x, velocity.x);
-            if (swipe < -swipeConfidenceThreshold) handleNext();
-            else if (swipe > swipeConfidenceThreshold) handlePrev();
-          }}
+          dragElastic={miniCardSwipeProps.drag ? 0.2 : 0}
+          {...miniCardSwipeProps}
         >
           {slides.map((slide, idx) => (
             <div key={`card-${idx}`} className="w-full h-full relative flex-shrink-0">

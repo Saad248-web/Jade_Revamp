@@ -83,6 +83,7 @@ import {
 } from "@/components/villa/villaDetailSpacing";
 import clsx from "clsx";
 import { usePreloadNeighborImages } from "@/lib/carouselMotion";
+import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 
 const vd = VILLA_DETAIL_SPACING;
 
@@ -561,7 +562,7 @@ export default function VillaDetailsPage() {
         >
           <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
         </button>
-        <div className="pointer-events-auto flex items-center gap-2 md:gap-3">
+        <div className="pointer-events-auto flex items-center gap-2 md:gap-2.5">
           {/* Mobile: Dialer */}
           <a
             href="tel:08970663366"
@@ -603,6 +604,12 @@ export default function VillaDetailsPage() {
           )}
           <div className="absolute inset-0 bg-black/20" />
           <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
+          <CarouselSwipeLayer
+            onPrev={handlePrevImage}
+            onNext={handleNextImage}
+            slideCount={imagesList.length}
+            className="absolute inset-0 z-[15] touch-pan-y"
+          />
         </div>
 
         {/* Carousel Controls */}
@@ -628,7 +635,7 @@ export default function VillaDetailsPage() {
                 <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
               </button>
 
-              <div className="pointer-events-auto absolute left-1/2 bottom-0 z-10 flex w-[min(100%,calc(100vw-8.5rem))] sm:w-[min(100%,calc(100vw-10rem))] -translate-x-1/2 flex-col items-center gap-3 md:gap-4 md:max-w-md px-4 sm:px-6">
+              <div className="pointer-events-auto absolute left-1/2 bottom-0 z-10 flex w-[min(100%,calc(100vw-8.5rem))] sm:w-[min(100%,calc(100vw-10rem))] -translate-x-1/2 flex-col items-center gap-2.5 md:gap-3 md:max-w-md px-4 sm:px-6">
                 <div className="flex w-full flex-col items-center gap-2">
                   <div className="w-16 md:w-28 h-px bg-gradient-to-r from-transparent via-[#EFCD62] to-transparent opacity-90" />
                   <h2 className="text-[#EFCD62] font-philosopher text-xl sm:text-2xl md:text-4xl uppercase tracking-[0.28em] md:tracking-[0.35em] text-center drop-shadow-lg leading-tight px-1">
@@ -697,7 +704,7 @@ export default function VillaDetailsPage() {
 
         {/* AMENITY SUMMARY LINE */}
         <div className={clsx("flex flex-nowrap overflow-x-auto scrollbar-none gap-x-4 items-center text-white/90 text-[10px] md:text-[12px] lg:text-[14px] font-normal font-manrope tracking-wide pb-2 pl-6")}>
-          <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+          <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
             <Bed
               className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]"
               strokeWidth={1.5}
@@ -711,7 +718,7 @@ export default function VillaDetailsPage() {
 
           <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
 
-          <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+          <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
             <Users
               className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]"
               strokeWidth={1.5}
@@ -725,7 +732,7 @@ export default function VillaDetailsPage() {
 
           <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
 
-          <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+          <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
             <Home
               className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]"
               strokeWidth={1.5}
@@ -750,7 +757,7 @@ export default function VillaDetailsPage() {
             return (
               <div
                 key={idx}
-                className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] bg-white/[0.07] backdrop-blur-[12px] flex flex-col items-center justify-between text-center px-5 py-6 rounded-none snap-start group flex-shrink-0 jade-hscroll-view-item"
+                className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] bg-white/[0.07] backdrop-blur-[12px] flex flex-col items-center justify-between text-center px-5 py-5 rounded-none snap-start group flex-shrink-0 jade-hscroll-view-item"
                 style={{
                   border: "1px solid",
                   borderImageSource:
@@ -880,8 +887,8 @@ export default function VillaDetailsPage() {
         <section id="spaces" className={VILLA_DETAIL_CHARCOAL}>
           <div className={vd.sectionShell}>
             <div className={clsx(vd.content, vd.stack)}>
-              <div className="flex flex-wrap justify-between items-center gap-4">
-                <div className="flex flex-wrap items-center gap-3 md:gap-5">
+              <div className="flex flex-wrap justify-between items-center gap-3">
+                <div className="flex flex-wrap items-center gap-2.5 md:gap-4">
                   <h3 className={vd.heading}>Spaces</h3>
                   {isDomeEstate && (
                     <div className="flex flex-wrap items-center gap-2">
@@ -911,10 +918,16 @@ export default function VillaDetailsPage() {
                     <JadeImage src={validImg(currentSpace.image) ? currentSpace.image : villa.image} alt={currentSpace.name || "Space"} fill className="object-cover object-center transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-jade-charcoal/80 via-transparent to-transparent opacity-90" />
+                  <CarouselSwipeLayer
+                    onPrev={handlePrevSpace}
+                    onNext={handleNextSpace}
+                    slideCount={derivedSpaces?.length ?? 0}
+                    className="absolute inset-0 z-[10] touch-pan-y"
+                  />
                   <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
-                    <h4 className="text-white text-sm md:text-base uppercase tracking-[0.2em] font-bold mb-4 font-manrope">{currentSpace.name || "Lawn"}</h4>
+                    <h4 className="text-white text-sm md:text-base uppercase tracking-[0.2em] font-bold mb-3 font-manrope">{currentSpace.name || "Lawn"}</h4>
                     {derivedSpaces && derivedSpaces.length > 1 && (
-                      <div className="flex items-center justify-center gap-3 text-white text-gh-label font-bold tracking-widest">
+                      <div className="flex items-center justify-center gap-2.5 text-white text-gh-label font-bold tracking-widest">
                         <span>{currentSpaceIndex + 1}</span>
                         <div className="w-12 h-[1px] bg-white/60" />
                         <span className="text-white/60">{derivedSpaces.length}</span>
@@ -939,7 +952,7 @@ export default function VillaDetailsPage() {
         <section id="experiences" className={VILLA_DETAIL_CHARCOAL}>
           <div className={vd.sectionShell}>
             <div className={clsx(vd.content, vd.stack)}>
-              <div className="flex justify-between items-end gap-4">
+              <div className="flex justify-between items-end gap-3">
                 <h3 className={vd.heading}>Experiences</h3>
                 {derivedActivities && derivedActivities.length > 1 && (
                   <div className="flex gap-2">
@@ -953,8 +966,14 @@ export default function VillaDetailsPage() {
                   <JadeImage src={validImg(currentActivity.image) ? currentActivity.image : villa.image} alt={currentActivity.title} fill className="object-cover object-center transition-transform duration-700 opacity-90 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" />
                 )}
                 <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-jade-charcoal/95 via-jade-charcoal/50 to-transparent z-10" />
+                <CarouselSwipeLayer
+                  onPrev={handlePrevActivity}
+                  onNext={handleNextActivity}
+                  slideCount={derivedActivities?.length ?? 0}
+                  className="absolute inset-0 z-[15] touch-pan-y"
+                />
                 <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 flex flex-col items-center justify-end text-center z-20">
-                  <h4 className="text-white font-philosopher text-[28px] md:text-[36px] mb-3">{currentActivity.title}</h4>
+                  <h4 className="text-white font-philosopher text-[28px] md:text-[36px] mb-2.5">{currentActivity.title}</h4>
                   {(currentActivity as any).description && (<p className="text-white/80 font-manrope text-[14px] md:text-[16px] leading-relaxed max-w-2xl">{(currentActivity as any).description}</p>)}
                 </div>
               </div>
@@ -976,9 +995,9 @@ export default function VillaDetailsPage() {
         <div className={vd.sectionShell}>
           <div className={clsx(vd.content, vd.stack)}>
             <h3 className={vd.heading}>Property Details</h3>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6">
               {villa.propertyDetails?.slice(0, 4).map((detail, idx) => (
-                <div key={idx} className="flex gap-4">
+                <div key={idx} className="flex gap-3">
                   <div className="mt-2 w-1.5 h-1.5 rotate-45 bg-[#EFCD62] flex-shrink-0" />
                   <div>
                     <h4 className="text-gh-body text-white font-manrope font-semibold mb-2">{(detail as any).label || (detail as any).title}</h4>
@@ -987,7 +1006,7 @@ export default function VillaDetailsPage() {
                 </div>
               ))}
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               <button onClick={() => openDrawer("Property Details", villa.propertyDetails || [])} className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors">
                 SEE MORE <ArrowRight className="w-3 h-3" />
               </button>
@@ -1001,7 +1020,7 @@ export default function VillaDetailsPage() {
         <section id="video-walkthrough" className={VILLA_DETAIL_CHARCOAL}>
           <div className={vd.sectionShell}>
             <div className={clsx(vd.content, vd.stack)}>
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                 <h3 className="text-gh-h1 font-philosopher text-white">Video Walkthrough</h3>
                 {isDomeEstate && (
                   <div className="flex items-center gap-2">
@@ -1059,7 +1078,7 @@ export default function VillaDetailsPage() {
             {villa.services?.slice(0, 4).map((service, idx) => {
                 const Icon = getIcon(service.icon, service.title);
                 return (
-                  <div key={idx} className="flex gap-4 md:gap-6 group">
+                  <div key={idx} className="flex gap-3 md:gap-5 group">
                     <div className="w-12 h-12 md:w-16 md:h-16 flex-shrink-0 border border-[#EFCD62] flex items-center justify-center p-2.5 md:p-3">
                       <Icon strokeWidth={1} className="w-full h-full text-[#EFCD62]" />
                     </div>
@@ -1090,7 +1109,7 @@ export default function VillaDetailsPage() {
                 const Icon = getIcon(amenity.icon);
                 const { line1, line2 } = splitAmenityLabel(amenity.label);
                 return (
-                  <div key={idx} className="flex items-start gap-3">
+                  <div key={idx} className="flex items-start gap-2.5">
                     <div className="w-10 h-10 shrink-0 border border-[#EFCD62]/70 flex items-center justify-center">
                       <Icon className="w-5 h-5 text-[#EFCD62]" strokeWidth={1} />
                     </div>
@@ -1148,11 +1167,11 @@ export default function VillaDetailsPage() {
                   )}
                 </a>
                 <div className="p-5 md:p-6 bg-[#25282C] border-t border-white/10">
-                  <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-4 rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/60">
+                  <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-3 rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/60">
                     <MapPin className="w-5 h-5 text-jade-gold mt-1 shrink-0" />
                     <p className="text-white text-gh-body font-manrope font-medium leading-relaxed group-hover:underline underline-offset-4">{villa.locationDetails.address}</p>
                   </a>
-                  <div className="w-full bg-white/[0.03] border border-white/5 px-4 py-3 rounded-sm mt-6">
+                  <div className="w-full bg-white/[0.03] border border-white/5 px-4 py-3 rounded-sm mt-5">
                     <p className="text-white/60 text-[12px] md:text-[13px] font-manrope">{villa.locationDetails.distance}</p>
                   </div>
                 </div>
@@ -1160,10 +1179,10 @@ export default function VillaDetailsPage() {
               {villa.locationDetails.nearby && villa.locationDetails.nearby.length > 0 && (
                 <div className={vd.stackSm}>
                   <h4 className="text-[#EFCD62] font-philosopher text-xl md:text-2xl">Whats nearby:</h4>
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-3">
                     {villa.locationDetails.nearby.map((item: any, idx: number) => (
                       <div key={idx} className="flex justify-between items-center border-b border-white/5 pb-3">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2.5">
                           <div className="w-1.5 h-1.5 rotate-45 bg-jade-gold" />
                           <span className="text-white font-manrope text-gh-desc font-medium uppercase tracking-wider">{item.label}</span>
                         </div>
@@ -1184,7 +1203,7 @@ export default function VillaDetailsPage() {
           <div className={vd.sectionShell}>
             <div className={clsx(vd.content, vd.stack)}>
               <h3 className={vd.heading}>Perfect for</h3>
-              <div className="grid grid-cols-2 gap-3 md:gap-4">
+              <div className="grid grid-cols-2 gap-2.5 md:gap-3">
                 {villa.perfectFor.map((item: { title?: string; image?: string } | string, idx: number) => {
                   const title = typeof item === "string" ? item : item.title;
                   const image =
@@ -1238,7 +1257,7 @@ export default function VillaDetailsPage() {
             <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">Starting from</span>
             <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold whitespace-nowrap">{villaFooterPriceDisplay ?? "Contact for pricing"}</span>
           </div>
-          <div className="flex items-center gap-4 md:gap-6">
+          <div className="flex items-center gap-3 md:gap-5">
             <button onClick={() => setEnquireOverlayOpen(true)} className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap">ENQUIRE</button>
             <PrimaryButton href={`/book?villa=${villa.id}`} withArrow={false} className="whitespace-nowrap">BOOK VILLA</PrimaryButton>
           </div>

@@ -65,7 +65,7 @@ export default function TravelGuidelinesModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-2xl max-h-[calc(100dvh-8rem)] mt-12 flex flex-col pointer-events-auto"
+              className="relative w-full max-w-2xl max-h-[calc(100dvh-8rem)] mt-10 flex flex-col pointer-events-auto"
             >
               {/* Floating Close Button */}
               <button
@@ -81,18 +81,18 @@ export default function TravelGuidelinesModal({
                   className="p-8 md:p-12 overflow-y-auto custom-scrollbar h-full"
                   data-lenis-prevent
                 >
-                  <h2 className="text-gh-h1 font-philosopher text-white mb-10">
+                  <h2 className="text-gh-h1 font-philosopher text-white mb-8">
                     Property Details
                   </h2>
 
-                  <div className="space-y-10">
+                  <div className="space-y-8">
                     {MODAL_GUIDELINES.map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-4">
+                      <div key={idx} className="flex items-start gap-3">
                         <div className="mt-1.5 flex-shrink-0">
                           <div className="w-2.5 h-2.5 bg-[#EFCD62] rotate-45" />
                         </div>
                         <div>
-                          <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope mb-2.5">
+                          <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope mb-2">
                             {item.title}
                           </h3>
                           <p className="text-white/80 text-gh-body leading-relaxed font-manrope">

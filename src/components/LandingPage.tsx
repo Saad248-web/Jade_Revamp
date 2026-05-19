@@ -179,7 +179,7 @@ export default function LandingPage() {
               animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className="text-gh-label tracking-[0.3em] text-jade-gold uppercase font-manrope font-bold"
-              style={{ marginBottom: "clamp(6px, 1.5vw, 12px)" }}
+              style={{ marginBottom: "clamp(4px, 0.96vw, 8px)" }}
             >
               JADE HOSPITAINMENT
             </motion.p>
@@ -190,7 +190,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-              style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+              style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
             >
               <div className="block">Where Hospitality</div>
               <div className="block">Meets Entertainment</div>
@@ -215,7 +215,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
-            className="pointer-events-auto w-fit flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity mb-[calc(7rem+env(safe-area-inset-bottom))] lg:mb-10"
+            className="pointer-events-auto w-fit flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity mb-[calc(7rem+env(safe-area-inset-bottom))] lg:mb-8"
           >
             <span className="text-gh-label tracking-[0.2em] font-manrope text-white/60 uppercase">
               Scroll to Experience

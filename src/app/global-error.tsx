@@ -17,9 +17,9 @@ export default function GlobalErrorBoundary({
 
   return (
     <html lang="en">
-      <body className="m-0 min-h-screen bg-[#0B2C23] px-6 py-16 font-sans text-white">
-        <h1 className="mb-3 text-xl font-semibold">Application error</h1>
-        <p className="mb-8 max-w-lg text-sm text-white/70">{error.message}</p>
+      <body className="m-0 min-h-screen bg-[#0B2C23] px-6 py-12 font-sans text-white">
+        <h1 className="mb-2.5 text-xl font-semibold">Application error</h1>
+        <p className="mb-6 max-w-lg text-sm text-white/70">{error.message}</p>
         <button
           type="button"
           onClick={() => reset()}

@@ -202,7 +202,7 @@ export default function CareersPage() {
   };
 
   return (
-    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
+    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
       {/* ── Navigation ── */}
       <Navbar />
       <MobileBottomNav />
@@ -219,7 +219,7 @@ export default function CareersPage() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-6"
+            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-5"
           >
             CAREERS
           </motion.p>
@@ -227,7 +227,7 @@ export default function CareersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-gh-h1 font-philosopher leading-tight mb-8"
+            className="text-gh-h1 font-philosopher leading-tight mb-6"
           >
             Work Where <br /> Standards Matter
           </motion.h1>
@@ -235,7 +235,7 @@ export default function CareersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-white/70 text-gh-body max-w-2xl mx-auto mb-12 font-manrope leading-relaxed"
+            className="text-white/70 text-gh-body max-w-2xl mx-auto mb-10 font-manrope leading-relaxed"
           >
             Join us in building Hospitainment, bringing together hospitality,
             events and operations with clarity and care.
@@ -249,7 +249,7 @@ export default function CareersPage() {
                 .getElementById("jobs")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold uppercase tracking-widest text-gh-label px-12 py-5 rounded-none transition-all"
+            className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold uppercase tracking-widest text-gh-label px-12 py-4 rounded-none transition-all"
           >
             VIEW OPEN ROLES
           </motion.button>
@@ -259,7 +259,7 @@ export default function CareersPage() {
       {/* 2. JOBS SECTION */}
       <section
         id="jobs"
-        className="py-24 bg-[#0B2C23] relative overflow-hidden"
+        className="py-20 bg-[#0B2C23] relative overflow-hidden"
       >
         {/* Diamond Pattern Overlay */}
         <div
@@ -273,8 +273,8 @@ export default function CareersPage() {
         />
 
         <div className="max-w-4xl mx-auto px-6 relative z-10">
-          <div className="text-center mb-16">
-            <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
+          <div className="text-center mb-12">
+            <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3">
               JOBS
             </p>
             <h2 className="text-gh-h2 font-philosopher text-white">
@@ -287,7 +287,7 @@ export default function CareersPage() {
               <div key={job.id} className="border-b border-white/10">
                 <button
                   onClick={() => toggleJob(job.id)}
-                  className="w-full py-8 flex items-center justify-between text-left group hover:opacity-80 transition-opacity"
+                  className="w-full py-6 flex items-center justify-between text-left group hover:opacity-80 transition-opacity"
                 >
                   <span className="text-gh-label font-bold tracking-widest uppercase">
                     {job.title}
@@ -307,9 +307,9 @@ export default function CareersPage() {
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="pb-12 text-white/80 font-manrope space-y-8">
+                      <div className="pb-10 text-white/80 font-manrope space-y-6">
                         <div>
-                          <p className="leading-relaxed text-gh-body mb-6 text-justify">
+                          <p className="leading-relaxed text-gh-body mb-5 text-justify">
                             {job.purpose}
                           </p>
                           <p className="leading-relaxed text-gh-body italic text-justify">
@@ -323,7 +323,7 @@ export default function CareersPage() {
 
                         {job.purposeToTeam && (
                           <div>
-                            <h4 className="font-bold text-white mb-4 uppercase tracking-wider text-gh-label">
+                            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-gh-label">
                               Your Purpose to the Team:
                             </h4>
                             <ul className="list-disc pl-5 space-y-2 text-gh-desc">
@@ -335,7 +335,7 @@ export default function CareersPage() {
                         )}
 
                         <div>
-                          <h4 className="font-bold text-white mb-4 uppercase tracking-wider text-gh-label">
+                          <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-gh-label">
                             What We&apos;re Looking For:
                           </h4>
                           <ul className="list-disc pl-5 space-y-2 text-gh-desc">
@@ -346,7 +346,7 @@ export default function CareersPage() {
                         </div>
 
                         <PrimaryButton
-                          className="w-full mt-4"
+                          className="w-full mt-3"
                           onClick={(e) => {
                             e.stopPropagation();
                             e.preventDefault();
@@ -368,16 +368,16 @@ export default function CareersPage() {
       </section>
 
       {/* 3. CULTURE SECTION (Optimized for 100vh) */}
-      <section className="relative min-h-[100svh] flex flex-col justify-center bg-[#1A1C1E] border-t border-white/5 py-16 md:py-24 overflow-hidden">
+      <section className="relative min-h-[100svh] flex flex-col justify-center bg-[#1A1C1E] border-t border-white/5 py-12 md:py-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 text-center relative z-10 w-full">
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
+          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3">
             CULTURE
           </p>
-          <h2 className="text-gh-h1 font-philosopher text-white mb-8">
+          <h2 className="text-gh-h1 font-philosopher text-white mb-6">
             Work Hard. <br /> Celebrate Well.
           </h2>
 
-          <div className="text-white/70 max-w-2xl mx-auto space-y-6 font-manrope leading-relaxed mb-12 text-gh-body">
+          <div className="text-white/70 max-w-2xl mx-auto space-y-5 font-manrope leading-relaxed mb-10 text-gh-body">
             <p className="text-center">
               Our culture is built on accountability, teamwork, and consistent
               execution. We take our work seriously, knowing that experience is
@@ -464,28 +464,28 @@ export default function CareersPage() {
                 <div className="flex-1 w-full overflow-y-auto overflow-x-hidden rounded-t-[28px]">
                   {!isSuccess ? (
                     /* FORM VIEW */
-                    <div className="px-5 pt-8 pb-10 w-full box-border">
+                    <div className="px-5 pt-6 pb-8 w-full box-border">
                       {/* Title row */}
-                      <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-start justify-between mb-3">
                         <h3 className="text-gh-h3 font-philosopher text-white mt-2">
                           Apply Now
                         </h3>
                       </div>
-                      <p className="text-white/60 text-gh-desc mb-8 leading-relaxed">
+                      <p className="text-white/60 text-gh-desc mb-6 leading-relaxed">
                         Share a few details. Our team will get back to you
                         shortly
                       </p>
 
                       {applyError ? (
                         <p
-                          className="text-red-400 text-sm mb-6 font-manrope"
+                          className="text-red-400 text-sm mb-5 font-manrope"
                           role="alert"
                         >
                           {applyError}
                         </p>
                       ) : null}
 
-                      <form className="space-y-4 w-full" onSubmit={handleApply}>
+                      <form className="space-y-3 w-full" onSubmit={handleApply}>
                         {/* Full Name */}
                         <div className="relative w-full">
                           <label className="absolute -top-2.5 left-4 bg-[#0B2C23] px-2 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold z-10">
@@ -532,7 +532,7 @@ export default function CareersPage() {
                         />
 
                         {/* Upload CV */}
-                        <div className="flex flex-col items-center gap-3 py-3">
+                        <div className="flex flex-col items-center gap-2.5 py-3">
                           <label className="cursor-pointer flex items-center gap-2 text-[#EFCD62]">
                             <span className="uppercase tracking-[0.2em] text-gh-label font-bold">
                               UPLOAD CV
@@ -546,7 +546,7 @@ export default function CareersPage() {
                           </label>
 
                           {selectedFileName && (
-                            <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 text-gh-label text-white/60 max-w-full overflow-hidden">
+                            <div className="flex items-center gap-2.5 bg-white/5 border border-white/10 px-4 py-2 text-gh-label text-white/60 max-w-full overflow-hidden">
                               <span className="truncate">
                                 {selectedFileName}
                               </span>
@@ -576,13 +576,13 @@ export default function CareersPage() {
                     </div>
                   ) : (
                     /* SUCCESS VIEW */
-                    <div className="flex flex-col items-center text-center px-6 pt-12 pb-10 w-full box-border">
+                    <div className="flex flex-col items-center text-center px-6 pt-10 pb-8 w-full box-border">
                       {/* Jade Coin — Glassmorphic Circle */}
                       <motion.div
                         initial={{ scale: 0.7, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="relative w-48 h-48 flex items-center justify-center mx-auto mb-10"
+                        className="relative w-48 h-48 flex items-center justify-center mx-auto mb-8"
                       >
                         {/* Outer soft glow */}
                         <div
@@ -630,7 +630,7 @@ export default function CareersPage() {
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2, duration: 0.4 }}
-                        className="text-[2rem] font-philosopher text-white mb-4 leading-tight"
+                        className="text-[2rem] font-philosopher text-white mb-3 leading-tight"
                       >
                         We&apos;ve got it from here
                       </motion.h3>
@@ -639,7 +639,7 @@ export default function CareersPage() {
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3, duration: 0.4 }}
-                        className="text-white/70 text-gh-desc leading-relaxed mb-10 max-w-xs mx-auto"
+                        className="text-white/70 text-gh-desc leading-relaxed mb-8 max-w-xs mx-auto"
                       >
                         Thanks for sharing your details!
                         <br />
@@ -651,12 +651,12 @@ export default function CareersPage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4, duration: 0.4 }}
-                        className="space-y-5 mb-10 w-full"
+                        className="space-y-4 mb-8 w-full"
                       >
                         <p className="text-gh-label tracking-[0.3em] text-white/40 uppercase">
                           MEANWHILE CHECK US OUT HERE
                         </p>
-                        <div className="flex justify-center gap-4">
+                        <div className="flex justify-center gap-3">
                           {[
                             {
                               Icon: Facebook,
@@ -728,24 +728,24 @@ export default function CareersPage() {
                 <div className="p-12 overflow-y-auto overflow-x-hidden rounded-3xl">
                   {!isSuccess ? (
                     <>
-                      <h3 className="text-gh-h1 font-philosopher text-white mb-4 pr-16">
+                      <h3 className="text-gh-h1 font-philosopher text-white mb-3 pr-16">
                         Apply Now
                       </h3>
-                      <p className="text-white/60 text-gh-desc mb-10">
+                      <p className="text-white/60 text-gh-desc mb-8">
                         Share a few details. Our team will get back to you
                         shortly
                       </p>
 
                       {applyError ? (
                         <p
-                          className="text-red-400 text-sm mb-6 font-manrope"
+                          className="text-red-400 text-sm mb-5 font-manrope"
                           role="alert"
                         >
                           {applyError}
                         </p>
                       ) : null}
 
-                      <form className="space-y-6" onSubmit={handleApply}>
+                      <form className="space-y-5" onSubmit={handleApply}>
                         <div className="relative">
                           <label className="absolute -top-3 left-4 bg-[#0B2C23] px-2 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
                             Full Name
@@ -784,7 +784,7 @@ export default function CareersPage() {
                           className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
                         />
 
-                        <div className="flex flex-col items-center gap-4 py-4">
+                        <div className="flex flex-col items-center gap-3 py-4">
                           <label className="cursor-pointer flex items-center gap-2 text-[#EFCD62] hover:text-white transition-colors">
                             <span className="uppercase tracking-[0.2em] text-gh-label font-bold">
                               UPLOAD CV
@@ -797,7 +797,7 @@ export default function CareersPage() {
                             />
                           </label>
                           {selectedFileName && (
-                            <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 text-gh-label text-white/60">
+                            <div className="flex items-center gap-2.5 bg-white/5 border border-white/10 px-4 py-2 text-gh-label text-white/60">
                               {selectedFileName}
                               <button
                                 type="button"
@@ -815,20 +815,20 @@ export default function CareersPage() {
                         <PrimaryButton
                           type="submit"
                           disabled={applySubmitting}
-                          className="w-full mt-4 disabled:opacity-60"
+                          className="w-full mt-3 disabled:opacity-60"
                         >
                           {applySubmitting ? "SUBMITTING…" : "SUBMIT APPLICATION"}
                         </PrimaryButton>
                       </form>
                     </>
                   ) : (
-                    <div className="text-center pb-12">
+                    <div className="text-center pb-10">
                       {/* Jade Coin — Glassmorphic Circle */}
                       <motion.div
                         initial={{ scale: 0.7, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="relative w-48 h-48 flex items-center justify-center mx-auto mb-10"
+                        className="relative w-48 h-48 flex items-center justify-center mx-auto mb-8"
                       >
                         {/* Outer soft glow */}
                         <div
@@ -869,19 +869,19 @@ export default function CareersPage() {
                         />
                       </motion.div>
 
-                      <h3 className="text-gh-h3 font-philosopher text-white mb-6">
+                      <h3 className="text-gh-h3 font-philosopher text-white mb-5">
                         We&apos;ve got it from here
                       </h3>
-                      <p className="text-white/70 text-gh-desc leading-relaxed mb-10 max-w-xs mx-auto text-center">
+                      <p className="text-white/70 text-gh-desc leading-relaxed mb-8 max-w-xs mx-auto text-center">
                         Thanks for sharing your details! Our team will take a
                         look and reach out shortly to understand things better.
                       </p>
 
-                      <div className="space-y-8">
+                      <div className="space-y-6">
                         <p className="text-gh-label tracking-[0.3em] text-white/40 uppercase">
                           MEANWHILE CHECK US OUT HERE
                         </p>
-                        <div className="flex justify-center gap-6">
+                        <div className="flex justify-center gap-5">
                           {[
                             {
                               Icon: Facebook,

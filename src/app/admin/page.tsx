@@ -208,7 +208,7 @@ function LoginScreen({ onLogin }: { onLogin: (pw: string) => void }) {
     <div className="min-h-screen bg-[#0B2C23] flex items-center justify-center px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm flex flex-col gap-5"
+        className="w-full max-w-sm flex flex-col gap-4"
       >
         <div className="text-center mb-2">
           <h1 className="font-philosopher text-white text-3xl mb-2">
@@ -269,8 +269,8 @@ function ConfirmDialog({
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center px-4">
       <div className="bg-[#1a1a1a] border border-white/10 p-6 max-w-sm w-full">
-        <p className="text-white font-manrope text-sm mb-6">{message}</p>
-        <div className="flex gap-3">
+        <p className="text-white font-manrope text-sm mb-5">{message}</p>
+        <div className="flex gap-2.5">
           <button
             onClick={onCancel}
             className="flex-1 py-2.5 border border-white/20 text-white/60 text-sm font-manrope font-bold tracking-widest uppercase hover:bg-white/5 transition-colors"
@@ -408,8 +408,8 @@ function BookingRow({
 
       {open && (
         <tr className="border-b border-white/5 bg-white/[0.02]">
-          <td colSpan={8} className="px-4 py-5">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm font-manrope mb-5">
+          <td colSpan={8} className="px-4 py-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm font-manrope mb-4">
               <Detail
                 icon={<Users className="w-4 h-4 text-[#EFCD62]" />}
                 label="Guests"
@@ -792,7 +792,7 @@ function Dashboard({
             Admin Dashboard
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={() => exportCSV(filtered)}
             className="flex items-center gap-2 px-3 py-2 bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 text-xs font-manrope font-bold tracking-widest uppercase transition-colors"
@@ -814,9 +814,9 @@ function Dashboard({
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 space-y-6">
         {/* ── Stats grid ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
           <StatCard
             icon={<Home className="w-5 h-5" />}
             label="Total Bookings"
@@ -857,7 +857,7 @@ function Dashboard({
 
         {/* ── Today's activity ── */}
         {(todayCheckIns.length > 0 || todayCheckOuts.length > 0) && (
-          <div className="grid md:grid-cols-2 gap-3">
+          <div className="grid md:grid-cols-2 gap-2.5">
             {todayCheckIns.length > 0 && (
               <ActivityCard
                 title="Today's Check-ins"
@@ -876,8 +876,8 @@ function Dashboard({
         )}
 
         {/* ── Filters ── */}
-        <div className="space-y-3">
-          <div className="flex flex-wrap gap-3">
+        <div className="space-y-2.5">
+          <div className="flex flex-wrap gap-2.5">
             {/* Search */}
             <div className="relative flex-1 min-w-48">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
@@ -925,7 +925,7 @@ function Dashboard({
           </div>
 
           {/* Date range */}
-          <div className="flex flex-wrap gap-3 items-center">
+          <div className="flex flex-wrap gap-2.5 items-center">
             <div className="flex items-center gap-2 text-white/40 text-xs font-manrope uppercase tracking-widest">
               <Calendar className="w-4 h-4" /> Check-in range:
             </div>
@@ -964,11 +964,11 @@ function Dashboard({
 
         {/* ── Table ── */}
         {loading ? (
-          <div className="flex items-center justify-center py-24">
+          <div className="flex items-center justify-center py-20">
             <Loader2 className="w-8 h-8 text-[#EFCD62] animate-spin" />
           </div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-24 text-white/30 font-manrope">
+          <div className="text-center py-20 text-white/30 font-manrope">
             No bookings match your filters.
           </div>
         ) : (
@@ -1139,7 +1139,7 @@ function ActivityCard({
   return (
     <div className={`bg-white/5 border ${border} p-4 rounded-sm`}>
       <p
-        className={`text-xs font-manrope font-bold uppercase tracking-widest ${text} mb-3`}
+        className={`text-xs font-manrope font-bold uppercase tracking-widest ${text} mb-2.5`}
       >
         {title}
       </p>
@@ -1153,7 +1153,7 @@ function ActivityCard({
               <span className="text-white/90 font-semibold">{b.full_name}</span>
               <span className="text-white/40 ml-2">· {b.villa_name}</span>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <a href={`tel:${b.phone}`} className={`${text} hover:opacity-80`}>
                 <Phone className="w-3.5 h-3.5" />
               </a>

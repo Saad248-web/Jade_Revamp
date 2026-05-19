@@ -27,6 +27,7 @@ import {
 } from "@/lib/heroSplitCarouselVariants";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 import { usePreloadNeighborImages } from "@/lib/carouselMotion";
+import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 
 const getManifestEntry = (villa: { name?: string; image?: string }) => {
   // Prefer name lookup (matches `public/Villa_Retreats/<folder>`), fall back to path extraction.
@@ -208,7 +209,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const startingPrice = getStartingPrice();
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 h-full pointer-events-auto">
+    <div className="flex flex-col md:flex-row gap-5 h-full pointer-events-auto">
       {/* IMAGE CONTAINER */}
       <div
         className="relative w-full md:w-[45%] md:flex-shrink-0 aspect-[4/3] md:aspect-auto md:max-h-[480px] overflow-hidden rounded-md group bg-white/5"
@@ -248,6 +249,13 @@ export default function VillaCard({ villa }: VillaCardProps) {
           </motion.div>
         </AnimatePresence>
 
+        <CarouselSwipeLayer
+          onPrev={prevImage}
+          onNext={nextImage}
+          slideCount={images.length}
+          className="absolute inset-0 z-[8] touch-pan-y"
+        />
+
         {/* WISHLIST HEART */}
         <button
           onClick={() => toggleWishlist(wishlistItem)}
@@ -255,59 +263,58 @@ export default function VillaCard({ villa }: VillaCardProps) {
           className="absolute top-3 right-3 z-10 w-9 h-9 flex items-center justify-center bg-black/40 backdrop-blur-sm border border-white/20 hover:border-white/60 transition-colors rounded-sm"
         >
           <Heart
-            className={`w-4 h-4 transition-colors ${
-              wishlisted ? "fill-red-400 text-red-400" : "text-white/70"
-            }`}
+            className={`w-4 h-4 transition-colors ${ wishlisted ? "fill-red-400 text-red-400" : "text-white/70" }`}
           />
         </button>
 
-        {/* IMAGE CONTROLS */}
-        {images.length > 1 && (
-          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-10">
+        {/* Slide label + carousel controls — label always visible (mobile + desktop) */}
+        <div className="absolute bottom-3 sm:bottom-4 left-3 right-3 sm:left-4 sm:right-4 z-10 flex items-center justify-between gap-1.5 sm:gap-2 pointer-events-none">
+          {images.length > 1 ? (
             <button
+              type="button"
               onClick={prevImage}
-              className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-black transition-colors rounded-sm"
+              aria-label="Previous image"
+              className="pointer-events-auto shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-black transition-colors rounded-sm"
             >
               <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
             </button>
+          ) : (
+            <span className="shrink-0 w-10 h-10 md:w-12 md:h-12" aria-hidden />
+          )}
 
-            {/* Pagination Info */}
-            <div className="flex flex-col flex-1 items-center px-4">
-              <span className="text-white text-gh-label font-manrope font-bold tracking-widest uppercase mb-1">
-                {currentSpace.name || "VIEW"}
-              </span>
-              <div className="flex items-center gap-2">
-                <span className="text-white font-manrope text-gh-label font-light">
-                  {currentImageIndex + 1}
-                </span>
-                <div className="w-16 md:w-24 h-[1px] bg-white/40" />
-                <span className="text-white/60 font-manrope text-gh-label font-light">
-                  {images.length}
-                </span>
-              </div>
-            </div>
+          <p
+            className="flex-1 min-w-0 px-0.5 sm:px-1 text-center text-white text-gh-label font-manrope font-bold tracking-[0.2em] sm:tracking-widest uppercase line-clamp-2 break-words [overflow-wrap:anywhere]"
+            title={currentSpace.name || "VIEW"}
+          >
+            {currentSpace.name || "VIEW"}
+          </p>
 
+          {images.length > 1 ? (
             <button
+              type="button"
               onClick={nextImage}
-              className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-black transition-colors rounded-sm"
+              aria-label="Next image"
+              className="pointer-events-auto shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-black transition-colors rounded-sm"
             >
               <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
             </button>
-          </div>
-        )}
+          ) : (
+            <span className="shrink-0 w-10 h-10 md:w-12 md:h-12" aria-hidden />
+          )}
+        </div>
       </div>
 
       {/* DETAILS CONTAINER */}
       <div className="flex flex-col text-left flex-1 md:py-2">
         <span
           className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase"
-          style={{ marginBottom: "clamp(4px, 1vw, 8px)" }}
+          style={{ marginBottom: "clamp(4px, 0.64vw, 8px)" }}
         >
           {villa.type}
         </span>
         <h2
           className="font-philosopher text-gh-h2 text-white leading-snug"
-          style={{ marginBottom: "clamp(4px, 0.8vw, 8px)" }}
+          style={{ marginBottom: "clamp(4px, 0.512vw, 8px)" }}
         >
           {villa.name}
         </h2>
@@ -316,7 +323,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-white/60 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
-          style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+          style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
         >
           <MapPin className="w-4 h-4 shrink-0" />
           <span className="font-manrope text-gh-body hover:underline underline-offset-4">{villa.location}</span>
@@ -324,13 +331,13 @@ export default function VillaCard({ villa }: VillaCardProps) {
 
         <p
           className="font-manrope text-white/70 leading-relaxed text-gh-desc line-clamp-2 lg:line-clamp-none"
-          style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+          style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
         >
           {villa.description}
         </p>
 
         {/* Stats Row */}
-        <div className="flex flex-nowrap overflow-x-auto items-center gap-x-4 mb-4 text-white/80 font-manrope text-gh-label [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+        <div className="flex flex-nowrap overflow-x-auto items-center gap-x-4 mb-3 text-white/80 font-manrope text-gh-label [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
           <div className="flex shrink-0 items-center gap-2">
             <Bed className="w-4 h-4 text-[#EFCD62]" />
             <span className="whitespace-nowrap">{villa.stats.stay}</span>
@@ -356,7 +363,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
         </div>
 
         {/* Perfect For Tags */}
-        <div className="flex flex-nowrap overflow-x-auto items-center gap-2 mb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+        <div className="flex flex-nowrap overflow-x-auto items-center gap-2 mb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
           <span className="shrink-0 text-white/40 text-gh-label font-manrope font-bold uppercase tracking-wider mr-1">
             Perfect for:
           </span>
@@ -374,7 +381,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
         </div>
 
         {/* Action Row */}
-        <div className="flex flex-row items-center justify-between gap-2 md:gap-4 mt-auto">
+        <div className="flex flex-row items-center justify-between gap-2 md:gap-3 mt-auto">
           {/* Price */}
           <div className="text-white font-manrope font-bold text-gh-villa-footer-row tracking-wide line-clamp-2 md:line-clamp-1">
             {startingPrice || "Upon Request"}{" "}
@@ -384,7 +391,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
           </div>
 
           {/* Buttons */}
-          <div className="flex items-stretch gap-2 md:gap-3 shrink-0 h-[clamp(44px,5vw,52px)]">
+          <div className="flex items-stretch gap-2 md:gap-2.5 shrink-0 h-[clamp(44px,5vw,52px)]">
             <Link
               href={`/villas/${villa.id}?autoScroll=true`}
               className="h-full inline-flex items-center justify-center border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-3 md:px-5 font-manrope font-bold text-gh-villa-footer-row tracking-widest uppercase text-center rounded-sm whitespace-nowrap"

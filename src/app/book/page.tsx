@@ -294,15 +294,15 @@ function StepDates({
 
       {/* Calendars */}
       <div
-        className="flex-1 overflow-y-auto px-5 pb-24 pt-4"
+        className="flex-1 overflow-y-auto px-5 pb-20 pt-4"
         data-lenis-prevent
       >
         {MONTHS.map(({ name, year, month, days, startDay }) => (
-          <div key={name} className="mb-8">
-            <h3 className="text-white font-manrope font-bold text-gh-scroll mb-4">
+          <div key={name} className="mb-6">
+            <h3 className="text-white font-manrope font-bold text-gh-scroll mb-3">
               {name}
             </h3>
-            <div className="grid grid-cols-7 gap-[12px] text-center">
+            <div className="grid grid-cols-7 gap-[9.6px] text-center">
               {Array.from({ length: startDay }, (_, i) => (
                 <div key={`empty-${i}`} className="w-[35px] h-[35px]" />
               ))}
@@ -329,11 +329,7 @@ function StepDates({
                     title={
                       booked ? "Already booked" : past ? "Past date" : undefined
                     }
-                    className={`w-[35px] h-[35px] mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-[3px] relative overflow-hidden
-                      ${sel ? "bg-[#EFCD62] text-[#0B2C23] font-bold" : ""}
-                      ${inRange ? "bg-[#EFCD62]/20 text-white" : ""}
-                      ${!sel && !inRange && !unavail ? "bg-[#165040] text-white hover:bg-[#1e6050]" : ""}
-                      ${unavail ? "bg-[#165040]/50 text-white/25 cursor-not-allowed" : ""}`}
+                    className={`w-[35px] h-[35px] mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-[3px] relative overflow-hidden ${sel ? "bg-[#EFCD62] text-[#0B2C23] font-bold" : ""} ${inRange ? "bg-[#EFCD62]/20 text-white" : ""} ${!sel && !inRange && !unavail ? "bg-[#165040] text-white hover:bg-[#1e6050]" : ""} ${unavail ? "bg-[#165040]/50 text-white/25 cursor-not-allowed" : ""}`}
                   >
                     {unavail && (
                       <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -378,7 +374,7 @@ function StepGuests({
     onMinus: () => void;
     onPlus: () => void;
   }) => (
-    <div className="flex items-center justify-between py-5 border-b border-white/10">
+    <div className="flex items-center justify-between py-4 border-b border-white/10">
       <div>
         <p className="text-white font-philosopher text-gh-body">{label}</p>
         {subtitle && (
@@ -387,7 +383,7 @@ function StepGuests({
           </p>
         )}
       </div>
-      <div className="flex items-center gap-3 shrink-0">
+      <div className="flex items-center gap-2.5 shrink-0">
         <button
           onClick={onMinus}
           className="w-9 h-9 border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors shrink-0"
@@ -410,7 +406,7 @@ function StepGuests({
   return (
     <div className="flex flex-col h-full">
       <div
-        className="flex-1 overflow-y-auto px-5 md:px-8 pb-28"
+        className="flex-1 overflow-y-auto px-5 md:px-8 pb-24"
         data-lenis-prevent
       >
         <Counter
@@ -453,7 +449,7 @@ function StepDetails({
   return (
     <div className="flex flex-col h-full">
       <div
-        className="flex-1 overflow-y-auto px-5 md:px-8 py-4 pb-28"
+        className="flex-1 overflow-y-auto px-5 md:px-8 py-4 pb-24"
         data-lenis-prevent
       >
         <BookingDetailsFormFields
@@ -502,12 +498,12 @@ function StepReview({
   return (
     <div className="flex flex-col h-full bg-transparent">
       <div
-        className="flex-1 overflow-y-auto px-5 py-6 space-y-6 pb-40"
+        className="flex-1 overflow-y-auto px-5 py-5 space-y-5 pb-32"
         data-lenis-prevent
       >
         {/* VILLA CARD */}
         {selectedVilla && (
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative w-full sm:w-32 h-48 sm:h-32 shrink-0 border border-white/20">
               <Image
                 src={selectedVilla.image}
@@ -520,7 +516,7 @@ function StepReview({
               <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.15em] uppercase mb-1 mt-2 sm:mt-0">
                 {selectedVilla.type}
               </p>
-              <h3 className="text-white font-philosopher text-gh-h2 mb-3 leading-none">
+              <h3 className="text-white font-philosopher text-gh-h2 mb-2.5 leading-none">
                 {selectedVilla.name}
               </h3>
               <div className="flex flex-col gap-1.5 text-white/80 text-gh-desc font-manrope">
@@ -553,7 +549,7 @@ function StepReview({
         )}
 
         {/* SUMMARY BLOCKS */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           <SummaryBlock
             label="Dates"
             value={`${formatDate(dateRange.checkIn)} – ${formatDate(dateRange.checkOut)}`}
@@ -591,23 +587,23 @@ function StepReview({
         </div>
 
         {/* ADD-ONS */}
-        <div className="mt-8">
+        <div className="mt-6">
           <h4 className="text-white font-manrope font-bold text-gh-body mb-1">
             Add On Experiences
           </h4>
-          <p className="text-white/70 text-gh-desc font-manrope mb-4">
+          <p className="text-white/70 text-gh-desc font-manrope mb-3">
             Optional experiences available at an additional cost.
             <br />
             Pricing is subject to confirmation based on group size.
           </p>
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {ADD_ONS.map((addon) => (
               <label
                 key={addon.id}
                 className="flex items-center justify-between py-1 cursor-pointer group"
                 onClick={() => toggleAddOn(addon.id)}
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <div
                     className={`w-4 h-4 border flex items-center justify-center shrink-0 transition-colors ${selectedAddOns.includes(addon.id) ? "border-white bg-transparent" : "border-white/50 group-hover:border-white"}`}
                   >
@@ -630,8 +626,8 @@ function StepReview({
         </div>
 
         {/* PRICE DETAILS */}
-        <div className="mt-8 border-t border-white/10 pt-6">
-          <h4 className="text-white font-manrope font-bold text-gh-body mb-4">
+        <div className="mt-6 border-t border-white/10 pt-5">
+          <h4 className="text-white font-manrope font-bold text-gh-body mb-3">
             Price details
           </h4>
           <div className="space-y-2 text-gh-desc font-manrope">
@@ -656,7 +652,7 @@ function StepReview({
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-4 text-white/50 text-gh-label font-manrope mt-5">
+          <div className="flex items-center gap-3 text-white/50 text-gh-label font-manrope mt-4">
             <span>Cancel within 24 hours for refund</span>
             <span>Full Policy</span>
           </div>
@@ -776,27 +772,27 @@ function SuccessScreen({
   };
 
   return (
-    <div className="h-[100svh] bg-[#0B2C23] flex flex-col items-center justify-center px-6 text-center overflow-y-auto py-10">
+    <div className="h-[100svh] bg-[#0B2C23] flex flex-col items-center justify-center px-6 text-center overflow-y-auto py-8">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="flex flex-col items-center max-w-sm w-full"
       >
-        <div className="w-20 h-20 rounded-full border-2 border-[#EFCD62] flex items-center justify-center mb-8">
+        <div className="w-20 h-20 rounded-full border-2 border-[#EFCD62] flex items-center justify-center mb-6">
           <CheckCircle2 className="w-10 h-10 text-[#EFCD62]" />
         </div>
-        <h1 className="font-philosopher text-white text-gh-h1 mb-3">
+        <h1 className="font-philosopher text-white text-gh-h1 mb-2.5">
           Booking Confirmed
         </h1>
         <p className="text-white/60 font-manrope text-gh-body mb-2">
           Your stay at <span className="text-white font-bold">{villaName}</span>{" "}
           is confirmed.
         </p>
-        <p className="text-white/60 font-manrope text-gh-body mb-8">
+        <p className="text-white/60 font-manrope text-gh-body mb-6">
           {formatDate(checkIn)} → {formatDate(checkOut)}
         </p>
-        <div className="bg-white/5 border border-white/10 px-6 py-4 mb-4 w-full">
+        <div className="bg-white/5 border border-white/10 px-6 py-4 mb-3 w-full">
           <p className="text-white/40 text-gh-label font-manrope uppercase tracking-widest mb-1">
             Booking reference
           </p>
@@ -812,17 +808,17 @@ function SuccessScreen({
         </div>
 
         {paidNote ? (
-          <p className="text-emerald-300/90 text-gh-label font-manrope mb-6">
+          <p className="text-emerald-300/90 text-gh-label font-manrope mb-5">
             {paidNote}
           </p>
         ) : (
           <>
-            <p className="text-white/50 text-gh-label font-manrope mb-3">
+            <p className="text-white/50 text-gh-label font-manrope mb-2.5">
               Pay {formatRupees(totalPriceRupees)} now with Razorpay, or we'll
               follow up on the phone or email you provided.
             </p>
             {payError && (
-              <p className="text-amber-200/90 text-gh-label font-manrope mb-4 px-1">
+              <p className="text-amber-200/90 text-gh-label font-manrope mb-3 px-1">
                 {payError}
               </p>
             )}
@@ -830,7 +826,7 @@ function SuccessScreen({
               type="button"
               disabled={payBusy}
               onClick={handleRazorpay}
-              className={`w-full mb-3 py-3.5 font-manrope font-bold text-gh-label tracking-widest uppercase transition-colors flex items-center justify-center gap-2 ${payBusy ? "bg-[#EFCD62]/50 text-[#0B2C23]/70 cursor-not-allowed" : "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"}`}
+              className={`w-full mb-2.5 py-3.5 font-manrope font-bold text-gh-label tracking-widest uppercase transition-colors flex items-center justify-center gap-2 ${payBusy ? "bg-[#EFCD62]/50 text-[#0B2C23]/70 cursor-not-allowed" : "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"}`}
             >
               {payBusy && <Loader2 className="w-4 h-4 animate-spin" />}
               {payBusy ? "OPENING…" : `PAY ${formatRupees(totalPriceRupees)}`}
@@ -1094,7 +1090,7 @@ function BookPageContent() {
           <span className="text-white/60 text-gh-body font-manrope">
             {guestLabel}
           </span>
-          <div className="flex gap-3">
+          <div className="flex gap-2.5">
             <button
               onClick={() => setStep("dates")}
               className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
@@ -1116,7 +1112,7 @@ function BookPageContent() {
     if (step === "details") {
       const canProceed = isBookingDetailsValid(details);
       return (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2.5">
           <p className="text-white/35 text-[10px] md:text-[11px] font-manrope text-center sm:text-left px-1">
             Fields marked * are required. Continue is enabled once name, phone,
             and email are valid.
@@ -1125,7 +1121,7 @@ function BookPageContent() {
             <span className="text-[#EFCD62] font-manrope text-gh-label font-bold">
               {formatRupees(basePrice)} onwards
             </span>
-            <div className="flex gap-3">
+            <div className="flex gap-2.5">
               <button
                 onClick={goBackFromDetails}
                 className="px-5 py-2.5 text-gh-label font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors font-manrope"
@@ -1154,7 +1150,7 @@ function BookPageContent() {
     if (step === "review") {
       const total = basePrice + addOnTotal + NIGHT_TAX;
       return (
-        <div className="flex flex-col gap-3 w-full">
+        <div className="flex flex-col gap-2.5 w-full">
           {/* Error message */}
           <AnimatePresence>
             {submitError && (
@@ -1170,11 +1166,11 @@ function BookPageContent() {
             )}
           </AnimatePresence>
 
-          <div className="flex items-center justify-between w-full gap-4">
+          <div className="flex items-center justify-between w-full gap-3">
             <div className="text-white font-manrope text-gh-label font-bold tracking-wide whitespace-nowrap">
               Total Price: {formatRupees(total)}
             </div>
-            <div className="flex items-center gap-6 sm:gap-8 shrink-0">
+            <div className="flex items-center gap-5 sm:gap-6 shrink-0">
               <button
                 onClick={() => setStep("details")}
                 className="text-gh-label font-bold tracking-[0.2em] text-[#EFCD62] uppercase transition-colors font-manrope hover:text-white"
@@ -1184,11 +1180,7 @@ function BookPageContent() {
               <button
                 disabled={isSubmitting}
                 onClick={handlePayNow}
-                className={`px-6 sm:px-8 py-3 sm:py-3.5 text-gh-label font-bold tracking-widest uppercase font-manrope transition-all duration-300 outline outline-1 outline-[#EFCD62] outline-offset-[3px] rounded-none ${
-                  isSubmitting
-                    ? "bg-[#EFCD62]/60 text-[#0B2C23]/60 cursor-not-allowed"
-                    : "bg-[#EFCD62] text-[#0B2C23] hover:bg-white hover:text-black hover:outline-white"
-                }`}
+                className={`px-6 sm:px-8 py-3 sm:py-3.5 text-gh-label font-bold tracking-widest uppercase font-manrope transition-all duration-300 outline outline-1 outline-[#EFCD62] outline-offset-[3px] rounded-none ${ isSubmitting ? "bg-[#EFCD62]/60 text-[#0B2C23]/60 cursor-not-allowed" : "bg-[#EFCD62] text-[#0B2C23] hover:bg-white hover:text-black hover:outline-white" }`}
               >
                 {isSubmitting && <Loader2 className="w-4 h-4 animate-spin mr-2 inline" />}
                 {isSubmitting ? "CONFIRMING…" : "PAY NOW"}
@@ -1207,14 +1199,14 @@ function BookPageContent() {
       {/* Header */}
       <div className="bg-[#0B2C23] shrink-0">
         <div className="w-full max-w-[720px] mx-auto">
-          <div className="flex items-center justify-between px-5 sm:px-6 py-5 border-b border-white/10">
+          <div className="flex items-center justify-between px-5 sm:px-6 py-4 border-b border-white/10">
             <h2 className="text-white text-gh-h2 font-philosopher leading-none">
               {step === "dates" && "Select Dates"}
               {step === "guests" && "Total Guests"}
               {step === "details" && "Your Details"}
               {step === "review" && "Review & Pay"}
             </h2>
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-4">
               <button
                 onClick={handleReset}
                 className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-widest uppercase hover:text-white transition-colors"
@@ -1238,7 +1230,7 @@ function BookPageContent() {
 
           {/* Legend — only on dates step */}
           {step === "dates" && (
-            <div className="flex justify-start items-center gap-2 md:gap-4 px-5 sm:px-6 py-3 md:py-4 text-gh-label text-[#A6C0B5] font-manrope font-medium border-b border-white/10">
+            <div className="flex justify-start items-center gap-2 md:gap-3 px-5 sm:px-6 py-3 md:py-4 text-gh-label text-[#A6C0B5] font-manrope font-medium border-b border-white/10">
               <span className="flex items-center gap-2">
                 <span className="w-4 h-4 bg-[#165040] rounded-[2px] shrink-0" />{" "}
                 Available
@@ -1332,7 +1324,7 @@ function BookPageContent() {
       {/* Floating bottom bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-[#0B2C23] z-50">
         <div className="w-full max-w-[720px] mx-auto border-t border-white/10">
-          <div className="relative px-4 sm:px-5 py-3 sm:py-5">
+          <div className="relative px-4 sm:px-5 py-3 sm:py-4">
             <div className="absolute left-0 right-0 top-0 -translate-y-[1px]">
               <StepDots step={step} />
             </div>

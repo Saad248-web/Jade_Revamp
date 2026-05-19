@@ -61,7 +61,7 @@ export default function Navbar() {
            NAVBAR
       ══════════════════════════════════════════ */}
       <motion.nav
-        className="fixed top-0 left-0 w-full z-50 mt-[2px]"
+        className="fixed top-0 left-0 w-full z-50 mt-[4px]"
         variants={{
           visible: { y: 0 },
           hidden: { y: "-100%" },
@@ -72,15 +72,15 @@ export default function Navbar() {
       >
         {/* Glass bar */}
         <div className="w-full bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm">
-          <div className="max-w-[1920px] mx-auto px-4 sm:px-5 md:px-8 lg:px-10 xl:px-12 py-4 md:py-5 flex items-center justify-between relative">
+          <div className="max-w-[1920px] mx-auto px-4 sm:px-5 md:px-8 lg:px-10 xl:px-12 py-4 md:py-4 flex items-center justify-between relative">
           {/* ── LEFT: Menu link + inline nav links (desktop only) ── */}
-          <div className="hidden lg:flex items-center gap-8 flex-1">
+          <div className="hidden lg:flex items-center gap-6 flex-1">
             <Link
               href="/menu"
-              className="flex items-center gap-2.5 text-white/60 hover:text-jade-gold transition-colors group p-2 min-h-[44px]"
+              className="flex items-center gap-2 text-white/60 hover:text-jade-gold transition-colors group p-2 min-h-[44px]"
             >
               <div className="relative w-5 h-5 flex items-center justify-center">
-                <span className="flex flex-col gap-[5px] w-5">
+                <span className="flex flex-col gap-[4px] w-5">
                   <span className="block h-[1px] w-5 bg-current transition-all" />
                   <span className="block h-[1px] w-3 bg-current transition-all group-hover:w-5" />
                 </span>
@@ -94,7 +94,7 @@ export default function Navbar() {
             <span className="h-4 w-px bg-white/15" />
 
             {/* Inline nav links */}
-            <nav className="flex items-center gap-7">
+            <nav className="flex items-center gap-6">
               {[
                 { name: "Experiences", href: "/experiences" },
                 { name: "Villas", href: "/villas" },
@@ -104,11 +104,7 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-gh-label font-manrope tracking-[0.18em] uppercase transition-colors p-2 min-h-[44px] flex items-center ${
-                    pathname === item.href
-                      ? "text-jade-gold"
-                      : "text-white/55 hover:text-white"
-                  }`}
+                  className={`text-gh-label font-manrope tracking-[0.18em] uppercase transition-colors p-2 min-h-[44px] flex items-center ${ pathname === item.href ? "text-jade-gold" : "text-white/55 hover:text-white" }`}
                 >
                   {item.name}
                 </Link>
@@ -157,7 +153,7 @@ export default function Navbar() {
           </div>
 
           {/* ── RIGHT: Contact CTA ── */}
-          <div className="flex items-center justify-end flex-1 gap-4">
+          <div className="flex items-center justify-end flex-1 gap-3">
             {isDetailPage ? (
               <Link
                 href="/book"

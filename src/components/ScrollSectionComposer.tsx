@@ -128,7 +128,7 @@ const SlideLines = ({
       style={{ y }}
     >
       <motion.div
-        className="text-center w-full max-w-[90vw] md:max-w-4xl mx-auto mb-12"
+        className="text-center w-full max-w-[90vw] md:max-w-4xl mx-auto mb-10"
         style={{
           opacity,
           scale,
@@ -138,7 +138,7 @@ const SlideLines = ({
       >
         {slide.label && (
           <motion.p
-            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-6 md:mb-8 text-center"
+            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-5 md:mb-6 text-center"
             style={{ opacity: labelOpacity, y: labelY }}
           >
             {slide.label}
@@ -146,7 +146,7 @@ const SlideLines = ({
         )}
 
         <motion.div
-          className={`font-manrope font-normal text-[16px] sm:text-[17px] md:text-[19px] leading-[1.7] md:leading-[1.75] tracking-[0.01em] text-[#FAFAFA]/90 max-w-[340px] sm:max-w-xl md:max-w-2xl mx-auto flex flex-col gap-7 md:gap-9${slide.button ? " mb-8 md:mb-10" : ""}`}
+          className={`font-manrope font-normal text-[16px] sm:text-[17px] md:text-[19px] leading-[1.7] md:leading-[1.75] tracking-[0.01em] text-[#FAFAFA]/90 max-w-[340px] sm:max-w-xl md:max-w-2xl mx-auto flex flex-col${slide.lines.length > 1 ? " gap-6 md:gap-7" : ""}${slide.button ? " mb-6 md:mb-8" : ""}`}
         >
           {slide.lines.map((line, lineIdx) => {
             const fadeInStart =
@@ -201,7 +201,7 @@ export default function ScrollSectionComposer({
     <div ref={containerRef} className="relative" style={{ height }}>
       <NavbarThemeTrigger theme={theme} sectionRef={containerRef} />
 
-      <div className="sticky top-0 min-h-screen w-full overflow-hidden pb-10">
+      <div className="sticky top-0 min-h-screen w-full overflow-hidden pb-8">
         {background}
 
         {/* Floating Icons - Only if showNavigation is true */}
@@ -240,7 +240,7 @@ export default function ScrollSectionComposer({
 
         {/* Scroll Indicator at the bottom */}
         {showScrollIndicator && (
-          <div className="absolute max-lg:bottom-[calc(6rem+env(safe-area-inset-bottom))] lg:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6">
+          <div className="absolute max-lg:bottom-[calc(6rem+env(safe-area-inset-bottom))] lg:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-5">
             <div className="h-16 md:h-24 w-[1px] bg-gradient-to-b from-transparent to-white/40" />
             {scrollIndicatorText && (
               <span className="font-manrope text-[12px] tracking-[0.2em] uppercase text-white/50 whitespace-nowrap">

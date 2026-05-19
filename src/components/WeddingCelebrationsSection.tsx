@@ -83,11 +83,11 @@ export default function WeddingCelebrationsSection() {
     <section ref={targetRef} className="relative h-[600vh] bg-[#1A1C1E]">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#1A1C1E]">
         {/* Top Label & Counter - Global */}
-        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(48px,6vh,80px)] pb-10">
+        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(38.4px,4.8vh,64px)] pb-8">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/90 to-transparent -z-10" />
           <span
             className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-[#EFCD62] drop-shadow-lg block"
-            style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+            style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
           >
             PRE WEDDING CELEBRATIONS
           </span>
@@ -143,7 +143,7 @@ function GlobalCounter({
   }, [progress, total, totalSteps]);
 
   return (
-    <div className="relative flex items-center gap-12 md:gap-16 font-philosopher text-gh-scroll mt-2">
+    <div className="relative flex items-center gap-10 md:gap-12 font-philosopher text-gh-scroll mt-2">
       <span className="text-white drop-shadow-lg transition-all duration-300">
         {current}
       </span>
@@ -220,9 +220,9 @@ function CelebrationPanelSlide({
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
         <div
           ref={panelRef}
-          className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-24 pb-[80px] sm:pb-0"
+          className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-24 pb-[64px] sm:pb-0"
         >
-          <div className="relative w-full sm:h-full max-w-xl mx-auto flex flex-col items-stretch sm:justify-center gap-4 lg:gap-6">
+          <div className="relative w-full sm:h-full max-w-xl mx-auto flex flex-col items-stretch sm:justify-center gap-3 lg:gap-5">
             <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
               <div className="w-full h-full relative">
                 {data.image ? (
@@ -247,7 +247,7 @@ function CelebrationPanelSlide({
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
                 className="font-philosopher text-gh-h2 text-white leading-none"
-                style={{ marginBottom: "clamp(8px, 2vw, 16px)" }}
+                style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
               >
                 {data.title}
               </motion.h2>
@@ -256,7 +256,7 @@ function CelebrationPanelSlide({
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
                 className="font-manrope text-gh-body text-white/80 leading-relaxed line-clamp-3 max-w-lg"
-                style={{ marginBottom: "clamp(12px, 3vw, 24px)" }}
+                style={{ marginBottom: "clamp(8px, 1.92vw, 15.4px)" }}
               >
                 {data.subtext}
               </motion.p>
@@ -268,7 +268,7 @@ function CelebrationPanelSlide({
               >
                 <Link
                   href={data.href || "#"}
-                  className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-4 transition-all"
+                  className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-3 transition-all"
                 >
                   {data.cta} <ArrowRight className="w-5 h-5" />
                 </Link>

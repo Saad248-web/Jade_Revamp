@@ -52,7 +52,7 @@ export default function PaymentModal({
             className="fixed bottom-0 left-0 right-0 z-[80] bg-[#0B2C23] border-t border-white/10 rounded-t-2xl overflow-hidden max-h-[90svh]"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
               <h3 className="text-white font-philosopher text-gh-h2">
                 {status === "success"
                   ? "Booking Confirmed"
@@ -71,10 +71,10 @@ export default function PaymentModal({
               )}
             </div>
 
-            <div className="px-6 py-6 space-y-6">
+            <div className="px-6 py-5 space-y-5">
               {/* Success State */}
               {status === "success" && (
-                <div className="flex flex-col items-center text-center gap-4 py-4">
+                <div className="flex flex-col items-center text-center gap-3 py-4">
                   <CheckCircle
                     className="w-16 h-16 text-jade-gold"
                     strokeWidth={1.5}
@@ -99,7 +99,7 @@ export default function PaymentModal({
 
               {/* Failed State */}
               {status === "failed" && (
-                <div className="flex flex-col items-center text-center gap-4 py-4">
+                <div className="flex flex-col items-center text-center gap-3 py-4">
                   <AlertCircle
                     className="w-16 h-16 text-red-400"
                     strokeWidth={1.5}
@@ -149,7 +149,7 @@ export default function PaymentModal({
                     <p className="text-white/40 font-manrope text-gh-label uppercase tracking-widest">
                       Payment Method
                     </p>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-2.5">
                       {["UPI / QR", "Credit / Debit Card"].map((method) => (
                         <div
                           key={method}
@@ -174,7 +174,7 @@ export default function PaymentModal({
             </div>
 
             {/* Footer Actions */}
-            <div className="px-6 pb-8 pt-2">
+            <div className="px-6 pb-6 pt-2">
               {status === "idle" && (
                 <button
                   onClick={onConfirm}
@@ -184,7 +184,7 @@ export default function PaymentModal({
                 </button>
               )}
               {status === "processing" && (
-                <div className="flex items-center justify-center gap-3 py-4">
+                <div className="flex items-center justify-center gap-2.5 py-4">
                   <Loader2 className="w-5 h-5 text-jade-gold animate-spin" />
                   <span className="text-white/70 font-manrope text-gh-body">
                     Processing your request...
@@ -200,7 +200,7 @@ export default function PaymentModal({
                 </button>
               )}
               {status === "failed" && (
-                <div className="flex gap-3">
+                <div className="flex gap-2.5">
                   <button
                     onClick={onClose}
                     className="flex-1 border border-white/20 text-white/60 font-manrope font-bold text-gh-label tracking-widest uppercase py-3 hover:border-white/50 transition-colors"

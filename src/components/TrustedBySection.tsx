@@ -40,14 +40,14 @@ export default function TrustedBySection() {
   return (
     <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
       <div className="max-w-4xl mx-auto px-8 text-center w-full">
-        <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-4">
+        <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3">
           TRUSTED BY
         </p>
-        <h2 className="text-gh-h1 font-philosopher text-white mb-20 leading-tight">
+        <h2 className="text-gh-h1 font-philosopher text-white mb-16 leading-tight">
           World-Class <br /> Organizations
         </h2>
 
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 text-center">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 text-center">
           {LOGOS.map((logo) => (
             <div
               key={logo.id}

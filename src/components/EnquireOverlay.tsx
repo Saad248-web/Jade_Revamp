@@ -157,28 +157,28 @@ export default function EnquireOverlay() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
               {/* CONTENT AREA */}
               <div
-                className="flex-1 overflow-y-auto scrollbar-hide px-6 pt-6 pb-8"
+                className="flex-1 overflow-y-auto scrollbar-hide px-6 pt-5 pb-6"
                 data-lenis-prevent
               >
                 {view === "form" ? (
                   <form onSubmit={handleSubmit} className="flex flex-col">
                     {submitError ? (
                       <p
-                        className="text-red-400 text-sm font-manrope mb-4"
+                        className="text-red-400 text-sm font-manrope mb-3"
                         role="alert"
                       >
                         {submitError}
                       </p>
                     ) : null}
-                    <h2 className="text-white text-[32px] leading-tight md:text-gh-h2 font-philosopher mb-3">
+                    <h2 className="text-white text-[32px] leading-tight md:text-gh-h2 font-philosopher mb-2.5">
                       Enquire Now
                     </h2>
-                    <p className="text-white/80 text-gh-body mb-8">
+                    <p className="text-white/80 text-gh-body mb-6">
                       Tell us your preferred dates, group size, and occasion.
                       Our team will help you design a curated luxury experience.
                     </p>
 
-                    <div className="flex flex-col gap-5 flex-1">
+                    <div className="flex flex-col gap-4 flex-1">
                       {/* Floating Label Input - Full Name */}
                       <div className="relative border border-white/20 focus-within:border-[#EFCD62] transition-colors rounded-sm group">
                         <label className="absolute -top-3 left-4 bg-[#123A2D] px-1 text-white text-gh-label">
@@ -248,10 +248,10 @@ export default function EnquireOverlay() {
 
                       {/* Travel Format Checkboxes */}
                       <div className="mt-2 text-white">
-                        <h3 className="text-white text-gh-body mb-4">
+                        <h3 className="text-white text-gh-body mb-3">
                           Interest:
                         </h3>
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-2.5">
                           {[
                             {
                               key: "weekendGetaway",
@@ -274,11 +274,10 @@ export default function EnquireOverlay() {
                                   item.key as keyof typeof formData.travelFormat,
                                 );
                               }}
-                              className="flex items-center gap-3 cursor-pointer group"
+                              className="flex items-center gap-2.5 cursor-pointer group"
                             >
                               <div
-                                className={`w-5 h-5 rounded-sm border flex items-center justify-center transition-colors shrink-0 bg-[#0E2E23]
-                                  ${formData.travelFormat[item.key as keyof typeof formData.travelFormat] ? "border-white bg-white" : "border-white/40 group-hover:border-white/80"}`}
+                                className={`w-5 h-5 rounded-sm border flex items-center justify-center transition-colors shrink-0 bg-[#0E2E23] ${formData.travelFormat[item.key as keyof typeof formData.travelFormat] ? "border-white bg-white" : "border-white/40 group-hover:border-white/80"}`}
                               >
                                 {formData.travelFormat[
                                   item.key as keyof typeof formData.travelFormat
@@ -312,8 +311,8 @@ export default function EnquireOverlay() {
                       </div>
                     </div>
 
-                    <div className="mt-8 border-t border-white/10 pt-6">
-                      <p className="text-[11px] text-white/40 mb-4 text-center font-manrope">
+                    <div className="mt-6 border-t border-white/10 pt-5">
+                      <p className="text-[11px] text-white/40 mb-3 text-center font-manrope">
                         By sending an inquiry, you agree to our{" "}
                         <Link
                           href="/privacy-policy"
@@ -342,20 +341,16 @@ export default function EnquireOverlay() {
                       <button
                         type="submit"
                         disabled={!isFormValid() || submitting}
-                        className={`w-full py-4 font-manrope font-bold text-gh-label tracking-[0.3em] uppercase transition-all border ${
-                          isFormValid() && !submitting
-                            ? "bg-[#EFCD62] hover:bg-white text-black border-transparent"
-                            : "bg-transparent border-white/10 text-white/40 cursor-not-allowed"
-                        }`}
+                        className={`w-full py-4 font-manrope font-bold text-gh-label tracking-[0.3em] uppercase transition-all border ${ isFormValid() && !submitting ? "bg-[#EFCD62] hover:bg-white text-black border-transparent" : "bg-transparent border-white/10 text-white/40 cursor-not-allowed" }`}
                       >
                         {submitting ? "SENDING…" : "SEND INQUIRY"}
                       </button>
                     </div>
                   </form>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full px-4 text-center pb-8">
+                  <div className="flex flex-col items-center justify-center h-full px-4 text-center pb-6">
                     {/* Glassy circular wrapper for the checkmark */}
-                    <div className="w-[180px] h-[180px] shrink-0 relative mb-8 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
+                    <div className="w-[180px] h-[180px] shrink-0 relative mb-6 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
                       <div className="w-[84px] h-[84px] shrink-0 relative drop-shadow-2xl">
                         <Image
                           src="/assets/JAde%20Correction.png"
@@ -368,11 +363,11 @@ export default function EnquireOverlay() {
                       </div>
                     </div>
 
-                    <h2 className="text-white text-shadow-sm text-[36px] font-philosopher mb-4">
+                    <h2 className="text-white text-shadow-sm text-[36px] font-philosopher mb-3">
                       We've got it from here
                     </h2>
 
-                    <p className="text-white/90 text-[16px] leading-relaxed mb-12 max-w-sm mx-auto">
+                    <p className="text-white/90 text-[16px] leading-relaxed mb-10 max-w-sm mx-auto">
                       Thanks for sharing your details!
                       <br />
                       Our team will take a look and reach out shortly to
@@ -380,11 +375,11 @@ export default function EnquireOverlay() {
                     </p>
 
                     <div className="flex flex-col w-full max-w-[300px] mx-auto mt-auto">
-                      <p className="text-white/60 text-[11px] font-bold tracking-[0.2em] uppercase mb-5">
+                      <p className="text-white/60 text-[11px] font-bold tracking-[0.2em] uppercase mb-4">
                         MEANWHILE CHECK US OUT HERE
                       </p>
 
-                      <div className="flex justify-center gap-4">
+                      <div className="flex justify-center gap-3">
                         {[
                           {
                             Icon: Facebook,
@@ -411,7 +406,7 @@ export default function EnquireOverlay() {
                         ))}
                       </div>
 
-                      <p className="text-white/60 text-[13px] mb-10 mt-6">
+                      <p className="text-white/60 text-[13px] mb-8 mt-5">
                         Thoughtfully operated. Always.
                       </p>
 

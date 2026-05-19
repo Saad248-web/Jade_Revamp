@@ -23,9 +23,9 @@ export default function PrivacyPolicyPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-6 md:px-12 lg:px-24 border-b border-white/10">
+      <section className="relative pt-24 pb-16 px-6 md:px-12 lg:px-24 border-b border-white/10">
         <div className="max-w-4xl mx-auto">
-          <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]/70 mb-4 text-center md:text-left">
+          <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]/70 mb-3 text-center md:text-left">
             Legal
           </p>
           <h1 className="font-philosopher text-gh-h1 md:text-5xl text-white leading-tight text-center md:text-left">
@@ -36,14 +36,14 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* Content Section */}
-      <section className="py-20 px-6 md:px-12 lg:px-24">
-        <div className="max-w-4xl mx-auto space-y-16">
+      <section className="py-16 px-6 md:px-12 lg:px-24">
+        <div className="max-w-4xl mx-auto space-y-12">
           {/* Privacy Policy */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <h2 className="font-philosopher text-gh-h2 text-[#EFCD62] border-b border-[#EFCD62]/20 pb-4">
               Privacy Policy
             </h2>
-            <div className="font-manrope text-gh-body text-white/80 leading-relaxed space-y-4">
+            <div className="font-manrope text-gh-body text-white/80 leading-relaxed space-y-3">
               <p>
                 When you voluntarily send us electronic mail, we will keep a
                 record of this information so that we can respond to you. We
@@ -62,11 +62,11 @@ export default function PrivacyPolicyPage() {
           </div>
 
           {/* Booking Rules */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <h2 className="font-philosopher text-gh-h2 text-[#EFCD62] border-b border-[#EFCD62]/20 pb-4">
               Booking Rules & Guidelines
             </h2>
-            <ul className="font-manrope text-gh-body text-white/80 leading-relaxed space-y-4 list-decimal pl-6">
+            <ul className="font-manrope text-gh-body text-white/80 leading-relaxed space-y-3 list-decimal pl-6">
               <li>
                 Payment of 50% advance to be made at the time of booking and
                 balance 50% 24 hour prior to check in time.
@@ -89,7 +89,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           {/* Credit Note Policy */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <h2 className="font-philosopher text-gh-h2 text-[#EFCD62] border-b border-[#EFCD62]/20 pb-4">
               Credit Note Policy
             </h2>
@@ -105,7 +105,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           {/* Conclusion */}
-          <div className="pt-10 text-center md:text-left border-t border-white/10">
+          <div className="pt-8 text-center md:text-left border-t border-white/10">
             <p className="font-philosopher text-gh-h3 text-white">Thank You!</p>
             <p className="font-manrope text-gh-body text-white/60 mt-2">
               With Regards, <br />

@@ -23,7 +23,7 @@ export default function FloatingBottomAction({
         <p className="text-white text-gh-label font-bold font-manrope">
           {price}
         </p>
-        <div className="flex items-center gap-2 md:gap-4">
+        <div className="flex items-center gap-2 md:gap-3">
           <button
             onClick={() => setEnquireOverlayOpen(true)}
             className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase px-2 py-2 md:px-4 md:py-3 hover:text-white transition-colors border border-white/10 rounded-sm"

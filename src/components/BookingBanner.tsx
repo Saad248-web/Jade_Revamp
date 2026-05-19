@@ -71,7 +71,7 @@ export default function BookingBanner({ onSearch }: { onSearch?: () => void }) {
 
       <div className="block w-[1px] h-3 sm:h-4 bg-white/10 shrink-0 mx-0.5 sm:mx-0" />
 
-      <div className="flex items-center gap-2 sm:gap-6 lg:gap-10 shrink-0">
+      <div className="flex items-center gap-2 sm:gap-5 lg:gap-8 shrink-0">
         <Link
           href="/book?step=guests"
           className="flex-none transition-all hover:opacity-80 py-1"
