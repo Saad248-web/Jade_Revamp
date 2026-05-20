@@ -80,7 +80,7 @@ const PANELS = [
     cta: "SEE PRIVATE GETAWAYS",
     href: "/villas",
     image: "/Home Page/2-Experiences/casual stays.webp",
-    mobileImage: "/Website Ratio Changes/Casual Stayss.webp",
+    mobileImage: "/Website Ratio Changes/Weekend_GetAways.webp",
     type: "full",
   },
 ];

@@ -5,6 +5,10 @@ import Image from "next/image";
 import React from "react";
 import GlassButton from "./GlassButton";
 import GlassStatsBanner from "./GlassStatsBanner";
+import {
+  EXPERIENCE_HERO_CHROME_WIDTH_CLASS,
+  EXPERIENCE_HERO_SAFE_BOTTOM_CLASS,
+} from "@/lib/experienceHeroLayout";
 
 export interface HeroButton {
   icon: React.ReactNode;
@@ -50,7 +54,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
     return (
       <section
         ref={ref}
-        className="major-section relative h-screen w-full flex flex-col items-center justify-end overflow-hidden"
+        className="major-section relative flex min-h-[100dvh] min-h-screen w-full flex-col items-center justify-end overflow-hidden"
       >
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
@@ -72,7 +76,9 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
         </div>
 
         {/* Content - Grouped at the Bottom */}
-        <div className="relative z-10 text-center px-6 page-wrapper flex flex-col items-center w-full max-w-5xl">
+        <div
+          className={`relative z-10 flex w-full max-w-5xl flex-col items-center px-4 text-center sm:px-6 page-wrapper ${EXPERIENCE_HERO_SAFE_BOTTOM_CLASS}`}
+        >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -109,21 +115,25 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
               {description}
             </p>
           </motion.div>
-          {stats && stats.length > 0 && (
-            <GlassStatsBanner stats={stats} marginBottom="mb-4" />
-          )}
-          {/* Optional Extra Content */}
+          {/* Optional Extra Content (invisible observers, etc.) */}
           {children}
-          {/* Action Buttons */}
-          <div className="flex flex-row items-center justify-center gap-2.5 w-full max-w-2xl mb-20 md:mb-12">
-            {buttons.map((btn, idx) => (
-              <GlassButton
-                key={idx}
-                icon={btn.icon}
-                label={btn.label}
-                onClick={btn.onClick}
-              />
-            ))}
+          {/* Stats strip + CTAs share one width lane so edges stay aligned */}
+          <div
+            className={`mt-4 flex w-full flex-col gap-2.5 sm:mt-5 ${EXPERIENCE_HERO_CHROME_WIDTH_CLASS}`}
+          >
+            {stats && stats.length > 0 && (
+              <GlassStatsBanner stats={stats} marginBottom="mb-0" />
+            )}
+            <div className="flex w-full flex-row items-stretch justify-center gap-2.5">
+              {buttons.map((btn, idx) => (
+                <GlassButton
+                  key={idx}
+                  icon={btn.icon}
+                  label={btn.label}
+                  onClick={btn.onClick}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

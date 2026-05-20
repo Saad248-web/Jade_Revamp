@@ -20,6 +20,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 import { STICKY_BOOKING_BAR_FOOTER_PAD_CLASS } from "@/lib/layoutSpacing";
 import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
+import { sanitizeGuestCountInput } from "@/lib/guestCountInput";
+import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
 
 // ── Calendar helpers ────────────────────────────────────────────────────────
 const MONTHS = [
@@ -135,6 +137,15 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
       : `${formatDate(checkIn)} – Select checkout`
     : "";
 
+  const guestsNum = Number.parseInt(formData.noOfGuests, 10);
+  const isFormValid =
+    formData.fullName.trim() !== "" &&
+    formData.phoneNumber.trim() !== "" &&
+    Number.isFinite(guestsNum) &&
+    guestsNum >= 1 &&
+    formData.occasionType.trim() !== "" &&
+    consent;
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormValid || submitting) return;
@@ -182,13 +193,6 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
     }
   };
 
-  const isFormValid =
-    formData.fullName.trim() !== "" &&
-    formData.phoneNumber.trim() !== "" &&
-    formData.noOfGuests.trim() !== "" &&
-    formData.occasionType.trim() !== "" &&
-    consent;
-
   const LINKS_COLUMN_1 = [
     { label: "VILLAS", href: "/villas" },
     { label: "EXPERIENCES", href: "/experiences" },
@@ -227,7 +231,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
             "max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pt-10 lg:pt-20",
             stickyBottomBar
               ? STICKY_BOOKING_BAR_FOOTER_PAD_CLASS
-              : "max-lg:pb-[max(1rem,calc(4.5rem+env(safe-area-inset-bottom,0px)))] lg:pb-16",
+              : "max-lg:pb-[max(1rem,calc(5.375rem+env(safe-area-inset-bottom,0px)))] lg:pb-16",
           )}
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
@@ -269,11 +273,13 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                   <input
                     type="tel"
                     id="phoneNumber"
+                    inputMode="numeric"
+                    autoComplete="tel"
                     value={formData.phoneNumber}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        phoneNumber: e.target.value,
+                        phoneNumber: sanitizePhoneDigitsInput(e.target.value),
                       })
                     }
                     placeholder=" "
@@ -287,38 +293,73 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                   </label>
                 </div>
 
-                {/* Date + Guests */}
-                <div className="grid grid-cols-2 gap-5">
-                  <div className="relative min-w-0" ref={calendarRef}>
-                    <button
-                      type="button"
-                      onClick={() => setShowCalendar((v) => !v)}
-                      className={`w-full h-14 bg-white/[0.02] border px-4 text-left transition-colors rounded-none flex items-center justify-between gap-2 min-w-0 ${ showCalendar ? "border-[#EFCD62]/70" : "border-white/15" }`}
-                    >
-                      <span
-                        className={`font-manrope text-gh-label truncate ${ dateLabel ? "text-white/80" : "text-white/35" }`}
+                {/* Check-In & Out (left half) + Guests (right half); occasion full-width below */}
+                <div className="relative" ref={calendarRef}>
+                  {/* Always two columns so date + guests match the footer layout reference (narrow screens included) */}
+                  <div className="grid grid-cols-2 gap-3 sm:gap-5">
+                    <div className="relative min-w-0">
+                      <button
+                        type="button"
+                        aria-expanded={showCalendar}
+                        onClick={() => setShowCalendar((v) => !v)}
+                        className={`w-full h-14 bg-white/[0.02] border px-4 text-left transition-colors rounded-none flex items-center justify-between gap-2 min-w-0 ${ showCalendar ? "border-[#EFCD62]/70" : "border-white/15" }`}
                       >
-                        {dateLabel || "Check-In & Out Date"}
-                      </span>
-                      <CalendarDays
-                        className={`w-4 h-4 shrink-0 transition-colors ${ showCalendar ? "text-[#EFCD62]" : "text-white/25" }`}
-                      />
-                    </button>
-                    {dateLabel && (
-                      <span className="absolute left-4 -top-2.5 text-gh-label text-white/70 bg-[#2E3034] px-2 pointer-events-none">
-                        Check-In & Out Date
-                      </span>
-                    )}
-                    {/* Calendar overlay — spans full row width */}
-                    <AnimatePresence>
-                      {showCalendar && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 8, scale: 0.97 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 8, scale: 0.97 }}
-                          transition={{ duration: 0.18 }}
-                          className="absolute left-0 w-[calc(200%+1.25rem)] top-[calc(100%+8px)] z-50 bg-[#1C1F22] border border-white/10 shadow-2xl p-5"
+                        <span
+                          className={`font-manrope text-gh-label truncate ${ dateLabel ? "text-white/80" : "text-white/35" }`}
                         >
+                          {dateLabel || "Check-In & Out Date"}
+                        </span>
+                        <CalendarDays
+                          className={`w-4 h-4 shrink-0 transition-colors ${ showCalendar ? "text-[#EFCD62]" : "text-white/25" }`}
+                        />
+                      </button>
+                      {dateLabel && (
+                        <span className="absolute left-4 -top-2.5 text-gh-label text-white/70 bg-[#2E3034] px-2 pointer-events-none">
+                          Check-In & Out Date
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="group relative min-w-0">
+                      <input
+                        type="text"
+                        id="noOfGuests"
+                        name="noOfGuests"
+                        inputMode="numeric"
+                        autoComplete="off"
+                        enterKeyHint="done"
+                        aria-invalid={
+                          formData.noOfGuests !== "" &&
+                          (!Number.isFinite(guestsNum) || guestsNum < 1)
+                        }
+                        value={formData.noOfGuests}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            noOfGuests: sanitizeGuestCountInput(e.target.value),
+                          })
+                        }
+                        placeholder=" "
+                        className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
+                      />
+                      <label
+                        htmlFor="noOfGuests"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
+                      >
+                        No. Of Guests
+                      </label>
+                    </div>
+                  </div>
+
+                  <AnimatePresence>
+                    {showCalendar && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8, scale: 0.97 }}
+                        transition={{ duration: 0.18 }}
+                        className="absolute left-0 sm:w-[calc(200%+1.25rem)] w-full max-w-[min(100vw-3rem,22rem)] top-[calc(100%+8px)] z-50 bg-[#1C1F22] border border-white/10 shadow-2xl p-5"
+                      >
                         {/* Month nav */}
                         <div className="flex items-center justify-between mb-3">
                           <button
@@ -455,10 +496,12 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                           occasionType: e.target.value,
                         })
                       }
-                      className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 appearance-none"
+                      className={`peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 appearance-none ${
+                        formData.occasionType ? "text-white" : "text-transparent"
+                      }`}
                     >
-                      <option value="" className="bg-[#2E3034] text-white/60">
-                        Occasion type
+                      <option value="" disabled hidden>
+                        {"\u00A0"}
                       </option>
                       {OCCASION_OPTIONS.map((opt) => (
                         <option
@@ -472,36 +515,15 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                     </select>
                     <label
                       htmlFor="occasionType"
-                      className={`absolute left-4 transition-all duration-300 pointer-events-none px-2 text-gh-label ${
+                      className={`absolute left-4 z-10 transition-all duration-300 pointer-events-none px-2 text-gh-label bg-[#2E3034] ${
                         formData.occasionType
-                          ? "-top-2.5 translate-y-0 text-white/75 bg-[#2E3034]"
-                          : "top-1/2 -translate-y-1/2 text-white/45"
+                          ? "-top-2.5 translate-y-0 text-white/75"
+                          : "top-1/2 -translate-y-1/2 text-white/45 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75"
                       }`}
                     >
                       Occasion type
                     </label>
                   </div>
-
-                  <div className="group relative min-w-0">
-                    <input
-                      type="number"
-                      id="noOfGuests"
-                      min={1}
-                      value={formData.noOfGuests}
-                      onChange={(e) =>
-                        setFormData({ ...formData, noOfGuests: e.target.value })
-                      }
-                      placeholder=" "
-                      className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-                    <label
-                      htmlFor="noOfGuests"
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
-                    >
-                      No. Of Guests
-                    </label>
-                  </div>
-                </div>
 
                 {submitError && (
                   <p role="alert" className="text-sm text-red-300 border border-red-400/40 rounded-sm px-3 py-2">

@@ -22,3 +22,21 @@ export const FLUID_SPACE = {
  */
 export const STICKY_BOOKING_BAR_FOOTER_PAD_CLASS =
   "pb-[max(5.75rem,calc(5.75rem+env(safe-area-inset-bottom,0px)))]";
+
+/**
+ * Fixed {@link MobileBottomNav} stack height — mirrors `MobileBottomNav.tsx` classes:
+ * `pt-2` + icon/label row (~2.75rem) + `pb-[max(0.75rem,calc(safe-area+0.875rem))]`.
+ * Safe-area is included once here (do not add inset again on top).
+ */
+export const MOBILE_BOTTOM_NAV_HEIGHT_EXPR =
+  "0.5rem + 2.75rem + max(0.75rem, calc(env(safe-area-inset-bottom, 0px) + 0.875rem))";
+
+/** Gap above mobile nav: 20px phone → 24px tablet (still clears fixed bar) */
+export const MOBILE_BOTTOM_NAV_CONTENT_GAP = "clamp(1.25rem, 3.5vw, 1.5rem)";
+
+/**
+ * Hero / fixed-bottom UI: nav height + responsive gap (mobile + tablet; nav is `lg:hidden`).
+ * Literal string so Tailwind JIT includes the arbitrary `calc(...)`.
+ */
+export const MOBILE_BOTTOM_NAV_CLEARANCE_CLASS =
+  "max-lg:pb-[calc(0.5rem+2.75rem+max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))+clamp(1.25rem,3.5vw,1.5rem))]";

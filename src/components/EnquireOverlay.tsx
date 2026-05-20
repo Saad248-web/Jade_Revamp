@@ -8,6 +8,8 @@ import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useAnimation } from "@/context/AnimationContext";
 import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
+import { sanitizeGuestCountInput } from "@/lib/guestCountInput";
+import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
 
 export default function EnquireOverlay() {
   const { isEnquireOverlayOpen, setEnquireOverlayOpen } = useAnimation();
@@ -63,6 +65,7 @@ export default function EnquireOverlay() {
       travelFormat,
       occasionType,
     } = formData;
+    const guestCount = Number.parseInt(guests, 10);
     const hasFormat =
       travelFormat.weekendGetaway ||
       travelFormat.corporateRetreat ||
@@ -71,7 +74,8 @@ export default function EnquireOverlay() {
       fullName.trim() !== "" &&
       phoneNumber.trim() !== "" &&
       email.trim() !== "" &&
-      guests.trim() !== "" &&
+      Number.isFinite(guestCount) &&
+      guestCount >= 1 &&
       preferredDate.trim() !== "" &&
       occasionType.trim() !== "" &&
       hasFormat
@@ -202,12 +206,14 @@ export default function EnquireOverlay() {
 
                       <input
                         type="tel"
+                        inputMode="numeric"
+                        autoComplete="tel"
                         placeholder="Phone Number"
                         value={formData.phoneNumber}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            phoneNumber: e.target.value,
+                            phoneNumber: sanitizePhoneDigitsInput(e.target.value),
                           })
                         }
                         className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] transition-colors"
@@ -225,10 +231,15 @@ export default function EnquireOverlay() {
 
                       <input
                         type="text"
+                        inputMode="numeric"
+                        autoComplete="off"
                         placeholder="Number of Guests"
                         value={formData.guests}
                         onChange={(e) =>
-                          setFormData({ ...formData, guests: e.target.value })
+                          setFormData({
+                            ...formData,
+                            guests: sanitizeGuestCountInput(e.target.value),
+                          })
                         }
                         className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] transition-colors"
                       />

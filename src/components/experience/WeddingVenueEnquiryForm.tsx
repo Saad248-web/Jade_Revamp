@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { Calendar, Check } from "lucide-react";
 import { EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS } from "@/lib/experienceOverlayTheme";
+import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
 
 type Props = {
   onSuccess: () => void;
@@ -195,9 +196,10 @@ export default function WeddingVenueEnquiryForm({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <input
           type="tel"
+          inputMode="numeric"
           placeholder="Phone Number *"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(e) => setPhone(sanitizePhoneDigitsInput(e.target.value))}
           className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/35"
           autoComplete="tel"
         />

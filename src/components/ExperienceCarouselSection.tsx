@@ -101,14 +101,16 @@ export default function ExperienceCarouselSection({
             </h2>
             <div className="flex gap-2 sm:gap-2.5 md:gap-3 shrink-0">
               <button
+                type="button"
                 onClick={prevSlide}
-                className="w-10 h-10 md:w-14 md:h-14 rounded-none border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors text-white"
+                className="flex h-10 w-10 items-center justify-center rounded-none border border-white/15 bg-transparent text-white backdrop-blur-2xl transition-all hover:border-white/35 md:h-14 md:w-14"
               >
                 <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 stroke-[1.25]" />
               </button>
               <button
+                type="button"
                 onClick={nextSlide}
-                className="w-10 h-10 md:w-14 md:h-14 rounded-none border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors text-white"
+                className="flex h-10 w-10 items-center justify-center rounded-none border border-white/15 bg-transparent text-white backdrop-blur-2xl transition-all hover:border-white/35 md:h-14 md:w-14"
               >
                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6 stroke-[1.25]" />
               </button>

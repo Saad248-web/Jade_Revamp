@@ -20,6 +20,7 @@ import LiveBackground from "@/components/LiveBackground";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
 
 const JOBS = [
   {
@@ -515,8 +516,11 @@ export default function CareersPage() {
                         <input
                           type="tel"
                           required
+                          inputMode="numeric"
                           value={apPhone}
-                          onChange={(e) => setApPhone(e.target.value)}
+                          onChange={(e) =>
+                            setApPhone(sanitizePhoneDigitsInput(e.target.value))
+                          }
                           placeholder="Phone Number"
                           className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
                           autoComplete="tel"
@@ -770,8 +774,11 @@ export default function CareersPage() {
                         <input
                           type="tel"
                           required
+                          inputMode="numeric"
                           value={apPhone}
-                          onChange={(e) => setApPhone(e.target.value)}
+                          onChange={(e) =>
+                            setApPhone(sanitizePhoneDigitsInput(e.target.value))
+                          }
                           placeholder="Phone Number"
                           className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
                           autoComplete="tel"

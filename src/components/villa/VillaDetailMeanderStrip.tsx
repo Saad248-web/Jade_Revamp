@@ -12,10 +12,13 @@ export default function VillaDetailMeanderStrip({
   accentLine = "none",
 }: VillaDetailMeanderStripProps) {
   return (
-    <div className={`relative w-full ${className}`} aria-hidden="true">
-      <div className="relative h-[23px] w-full overflow-hidden bg-jade-charcoal">
+    <div
+      className={`relative w-screen max-w-[100vw] shrink-0 left-1/2 -translate-x-1/2 ${className}`}
+      aria-hidden="true"
+    >
+      <div className="relative h-[23px] w-full bg-jade-charcoal/82">
         <div
-          className="absolute inset-0 bg-[url('/assets/Sep_bar_design.svg')] bg-repeat-x bg-[length:auto_23px] bg-center opacity-70"
+          className="pointer-events-none absolute inset-y-0 left-[-1px] right-[-1px] bg-[url('/assets/Sep_bar_design.svg')] bg-left bg-repeat-x bg-[length:auto_23px] opacity-50"
           role="presentation"
         />
       </div>

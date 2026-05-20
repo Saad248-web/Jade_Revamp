@@ -134,9 +134,12 @@ import {
   VillaExperienceBookingBottomBar,
   VillaExperienceHeroCarousel,
   VillaExperienceOverlayCloseFramer,
-  VillaExperienceOverlayContentFrame,
+  VillaExperienceOverlayBody,
   VillaExperienceStickyTabs,
+  isExperienceOverlayMdUp,
 } from "@/components/experience/VillaExperienceOverlayLayout";
+import AmenityHighlightTile from "@/components/villa/AmenityHighlightTile";
+import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
 
 interface VenueOverlayProps {
   isOpen: boolean;
@@ -165,6 +168,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (!isExperienceOverlayMdUp()) return;
     const currentScrollY = e.currentTarget.scrollTop;
     if (currentScrollY > lastScrollY && currentScrollY > 150) {
       setIsCloseButtonHidden(true);
@@ -179,6 +183,8 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
     lowFx: !!reducedMotion,
   };
   const formRef = useRef<HTMLDivElement>(null);
+  const overlayScrollRef = useRef<HTMLDivElement>(null);
+  const [overlayScrollRootGen, setOverlayScrollRootGen] = useState(0);
   const pathname = usePathname();
 
   const resolvedContext: VenueOverlayProps["context"] =
@@ -250,7 +256,8 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
   };
 
   useEffect(() => {
-    const container = document.querySelector(".fixed.inset-0.z-\\[9999\\]");
+    if (!isOpen || !mounted) return;
+    const container = overlayScrollRef.current;
     if (!container) return;
 
     const sectionIds = [
@@ -287,7 +294,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
     });
 
     return () => observer.disconnect();
-  }, [isOpen, mounted]);
+  }, [isOpen, mounted, villa?.id, overlayScrollRootGen]);
 
   const price = (overlayVilla as any)?.overlay?.onwardsPrice ?? null;
 
@@ -302,17 +309,34 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
       className={EXPERIENCE_OVERLAY_ROOT_CLASS}
       data-lenis-prevent
     >
-      <VillaExperienceOverlayCloseFramer MotionButton={MotionButton} onClose={onClose} isHidden={isCloseButtonHidden} />
+      <VillaExperienceOverlayCloseFramer
+        MotionButton={MotionButton}
+        onClose={onClose}
+        isHidden={isCloseButtonHidden}
+        variant="fixed"
+      />
 
-      <VillaExperienceOverlayContentFrame onScroll={handleScroll}>
-            <VillaExperienceHeroCarousel
-              images={images}
-              currentImageIndex={currentImageIndex}
-              carouselCustom={overlayCarouselCustom}
-              onPrev={prevImage}
-              onNext={nextImage}
-            />
-
+      <VillaExperienceOverlayBody
+        scrollRef={overlayScrollRef}
+        onScroll={handleScroll}
+        onScrollRootUpdated={() => setOverlayScrollRootGen((g) => g + 1)}
+        mobileTopChrome={
+          <VillaExperienceOverlayCloseFramer
+            MotionButton={MotionButton}
+            onClose={onClose}
+            variant="in-sheet"
+          />
+        }
+        pinnedTop={
+          <VillaExperienceHeroCarousel
+            images={images}
+            currentImageIndex={currentImageIndex}
+            carouselCustom={overlayCarouselCustom}
+            onPrev={prevImage}
+            onNext={nextImage}
+          />
+        }
+      >
             {/* ── CHARCOAL: Title / Info / Amenity Cards / Description ─── */}
             <div className="w-full bg-[#25282C]">
               <div className="px-6 py-6 md:px-12 md:py-12 max-w-7xl mx-auto">
@@ -354,7 +378,11 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
                 {/* Horizontal amenity cards (Categories UI) — perfectly matches splitting & style of detail page */}
                 {v.amenities && v.amenities.length > 0 && (
-                  <div className="flex gap-2.5 overflow-x-auto pb-5 mb-10 snap-x scrollbar-none -mr-6 pr-6 md:-mr-12 md:pr-12">
+                  <div
+                    className={
+                      VILLA_DETAIL_SPACING.amenityHighlightTrackOverlay
+                    }
+                  >
                     {v.amenities.map((amenity: any, idx: number) => {
                       const IconComponent = getIcon(amenity.icon, amenity.label);
                       const words = (amenity.label || "").split(" ");
@@ -362,17 +390,12 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                       const sublabel = words.length > 2 ? words.slice(2).join(" ") : words.slice(1).join(" ");
 
                       return (
-                        <div key={idx}
-                          className="relative min-w-[130px] h-[130px] md:min-w-[140px] md:h-[140px] bg-white/[0.07] backdrop-blur-[12px] flex flex-col items-center justify-between text-center px-4 py-4 rounded-none snap-start flex-shrink-0"
-                          style={{ border: "1px solid", borderImageSource: "linear-gradient(135deg,rgba(255,255,255,0.95) 0%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 60%,rgba(255,255,255,0.2) 100%)", borderImageSlice: 1 }}>
-                          <IconComponent className="w-[26px] h-[26px] text-white/80 mt-1" strokeWidth={1} />
-                          <div className="flex flex-col items-center w-full">
-                            <span className="text-white font-manrope font-medium text-[15px] leading-tight text-center break-words w-full">{label}</span>
-                            {sublabel && (
-                              <span className="text-white/60 font-manrope text-[13px] leading-tight mt-1 text-center break-words w-full">{sublabel}</span>
-                            )}
-                          </div>
-                        </div>
+                        <AmenityHighlightTile
+                          key={idx}
+                          icon={IconComponent}
+                          label={label}
+                          sublabel={sublabel || null}
+                        />
                       );
                     })}
                   </div>
@@ -548,7 +571,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                 </div>
               </div>
             </div>
-      </VillaExperienceOverlayContentFrame>
+      </VillaExperienceOverlayBody>
 
       <VillaExperienceBookingBottomBar
         villaId={v.id}

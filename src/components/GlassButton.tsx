@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { GlassChromeButtonPanel } from "./GlassChromePanel";
 
 interface GlassButtonProps {
   icon?: React.ReactNode;
@@ -16,17 +17,14 @@ const GlassButton = ({
   className = "",
 }: GlassButtonProps) => {
   return (
-    <button
+    <GlassChromeButtonPanel
       onClick={onClick}
-      style={{
-        backdropFilter: "blur(48px)",
-        WebkitBackdropFilter: "blur(48px)",
-      }}
-      className={`flex items-center justify-center gap-2.5 bg-[#FAFAFA]/[0.08] border border-[#FAFAFA]/[0.12] text-white font-manrope text-gh-label md:text-gh-label font-bold tracking-[0.2em] uppercase px-6 h-[48px] md:h-[52px] w-full md:w-auto md:min-w-[172px] whitespace-nowrap hover:bg-[#FAFAFA]/[0.15] transition-all shadow-2xl pointer-events-auto ${className}`}
+      className={`box-border flex h-12 min-h-12 w-full flex-1 transition-colors hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:h-[52px] md:min-h-[52px] md:w-auto md:flex-initial md:min-w-[172px] ${className}`.trim()}
+      contentClassName="items-center justify-center gap-2.5 px-3 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-white sm:px-6 whitespace-nowrap"
     >
       {icon}
       <span>{label}</span>
-    </button>
+    </GlassChromeButtonPanel>
   );
 };
 

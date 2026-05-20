@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { UserDetails } from "@/lib/types";
 import { bookingDetailsFieldErrors } from "@/lib/bookingDetailsValidation";
+import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
 
 type TouchedKey = keyof UserDetails;
 
@@ -93,6 +94,7 @@ export default function BookingDetailsFormFields({
           type="tel"
           name="phone"
           placeholder="Phone Number*"
+          inputMode="numeric"
           autoComplete="tel"
           aria-invalid={show("phone")}
           aria-describedby={
@@ -100,7 +102,12 @@ export default function BookingDetailsFormFields({
           }
           value={details.phone}
           onBlur={() => markTouched("phone")}
-          onChange={(e) => setDetails({ ...details, phone: e.target.value })}
+          onChange={(e) =>
+            setDetails({
+              ...details,
+              phone: sanitizePhoneDigitsInput(e.target.value),
+            })
+          }
           className={`w-full bg-transparent border ${border("phone")} focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors font-manrope rounded-sm`}
         />
         {show("phone") && errors.phone ? (

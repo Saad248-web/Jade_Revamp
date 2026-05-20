@@ -507,7 +507,7 @@ export default function VillaDetailsPage() {
         <button
           type="button"
           onClick={() => window.history.back()}
-          className="pointer-events-auto w-11 h-11 md:w-12 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all"
+          className="pointer-events-auto w-11 h-11 md:w-12 md:h-12 flex items-center justify-center border border-white/15 bg-transparent text-white backdrop-blur-2xl transition-all hover:border-white/35"
           aria-label="Go back"
         >
           <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
@@ -516,7 +516,7 @@ export default function VillaDetailsPage() {
           {/* Mobile: Dialer */}
           <a
             href="tel:08970663366"
-            className="md:hidden w-11 h-11 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all"
+            className="md:hidden w-11 h-11 flex items-center justify-center border border-white/15 bg-transparent text-white backdrop-blur-2xl transition-all hover:border-white/35"
             aria-label="Call to enquire"
           >
             <Phone className="w-5 h-5" strokeWidth={1.5} />
@@ -524,7 +524,7 @@ export default function VillaDetailsPage() {
           {/* Desktop: Contact Page */}
           <Link
             href="/contact"
-            className="hidden md:flex w-12 h-12 items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all"
+            className="hidden md:flex w-12 h-12 items-center justify-center border border-white/15 bg-transparent text-white backdrop-blur-2xl transition-all hover:border-white/35"
             aria-label="Enquire with us"
           >
             <MessageCircle className="w-5 h-5" strokeWidth={1.5} />
@@ -532,7 +532,7 @@ export default function VillaDetailsPage() {
           <button
             type="button"
             onClick={() => setEnquireOverlayOpen(true)}
-            className="px-4 md:px-5 py-3 bg-black/40 backdrop-blur-md border border-white/20 text-white text-[9px] md:text-[10px] font-bold tracking-[0.35em] uppercase hover:bg-white hover:text-black transition-all"
+            className="inline-flex h-11 items-center justify-center whitespace-nowrap border border-white/15 bg-transparent px-3 text-[9px] font-bold uppercase tracking-[0.35em] text-white backdrop-blur-2xl transition-all hover:border-white/35 md:h-12 md:px-5 md:text-[10px]"
           >
             ENQUIRE NOW
           </button>
@@ -658,7 +658,7 @@ export default function VillaDetailsPage() {
         </div>
 
         {/* AMENITY SUMMARY LINE */}
-        <div className={clsx("flex flex-nowrap overflow-x-auto scrollbar-none gap-x-4 items-center text-white/90 text-[10px] md:text-[12px] lg:text-[14px] font-normal font-manrope tracking-wide pb-2 pl-6")}>
+        <div className={clsx("flex flex-nowrap overflow-x-auto scrollbar-none gap-x-4 items-center text-white/90 text-[10px] md:text-[12px] lg:text-[14px] font-normal font-manrope tracking-wide pb-2")}>
           <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
             <Bed
               className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]"
@@ -1014,7 +1014,7 @@ export default function VillaDetailsPage() {
 
       {/* FOOTER */}
       <Footer stickyBottomBar />
-      <div className="fixed bottom-0 left-0 w-full bg-jade-charcoal border-t border-white/10 py-4 z-50 transition-all flex justify-center">
+      <div className="fixed bottom-0 left-0 z-50 flex w-full justify-center border-t border-white/10 bg-transparent py-4 backdrop-blur-2xl transition-all shadow-[0_-8px_32px_rgba(0,0,0,0.12)]">
         <div className={clsx(vd.page, vd.gutterX, "flex justify-between items-center gap-4")}>
           <div className="flex flex-col font-manrope leading-tight">
             <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">Starting from</span>

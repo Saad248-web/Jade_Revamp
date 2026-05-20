@@ -15,7 +15,7 @@ export default function CorporateHeader() {
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={() => router.back()}
-        className="p-2 bg-black/20 backdrop-blur-md rounded-none border border-white/10 text-white pointer-events-auto hover:bg-white/10 transition-colors"
+        className="rounded-none border border-white/15 bg-transparent p-2 text-white backdrop-blur-2xl pointer-events-auto transition-all hover:border-white/35"
         aria-label="Back"
       >
         <ArrowLeft className="w-5 h-5" />
@@ -26,7 +26,7 @@ export default function CorporateHeader() {
         initial={{ opacity: 0, x: 10 }}
         animate={{ opacity: 1, x: 0 }}
         href="tel:08970663366"
-        className="md:hidden p-2 bg-black/20 backdrop-blur-md rounded-none border border-white/10 text-white pointer-events-auto hover:bg-white/10 transition-colors flex items-center justify-center"
+        className="md:hidden flex items-center justify-center rounded-none border border-white/15 bg-transparent p-2 text-white backdrop-blur-2xl pointer-events-auto transition-all hover:border-white/35"
         aria-label="Call to enquire"
       >
         <Phone className="w-5 h-5" />
@@ -40,7 +40,7 @@ export default function CorporateHeader() {
       >
         <Link
           href="/contact"
-          className="p-2 bg-black/20 backdrop-blur-md rounded-none border border-white/10 text-white pointer-events-auto hover:bg-white/10 transition-colors flex items-center justify-center"
+          className="flex items-center justify-center rounded-none border border-white/15 bg-transparent p-2 text-white backdrop-blur-2xl pointer-events-auto transition-all hover:border-white/35"
           aria-label="Enquire with us"
         >
           <MessageCircle className="w-5 h-5" />

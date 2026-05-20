@@ -52,9 +52,9 @@ export default function MobileBottomNav() {
             delay: 0.2, // Slight delay after splash ends for better flow
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#25282C] border-t border-white/5 pb-safe shadow-2xl safe-area-bottom"
+          className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-transparent backdrop-blur-2xl pt-2 shadow-[0_-8px_32px_rgba(0,0,0,0.12)] pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))]"
         >
-          <div className="flex items-center justify-around py-2 pb-safe-offset">
+          <div className="flex items-center justify-around px-1">
             {navItems.map((item) => {
               const isActive =
                 item.href === pathname ||

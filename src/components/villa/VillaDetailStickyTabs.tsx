@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import { VILLA_DETAIL_SPACING } from "./villaDetailSpacing";
+import { stickyCategoryTabClass } from "@/lib/stickyTabGlass";
 
 const TAB_LABELS = [
   "Spaces",
@@ -31,24 +32,31 @@ export default function VillaDetailStickyTabs({
   onTabClick,
 }: VillaDetailStickyTabsProps) {
   return (
-    <div className="sticky top-0 z-50 w-full shadow-2xl">
-      <div className="bg-jade-charcoal border-b border-white/5">
-        <div className={clsx(VILLA_DETAIL_SPACING.page, VILLA_DETAIL_SPACING.gutterX)}>
-          <div className="flex gap-2 sm:gap-3 overflow-x-auto py-4 scrollbar-none">
-            {TAB_LABELS.map((tab) => {
-              const sectionId = tabToSectionId(tab);
-              const isActive = activeTab === sectionId;
-              return (
-                <button
-                  key={tab}
-                  type="button"
-                  onClick={() => onTabClick(sectionId)}
-                  className={`shrink-0 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold font-manrope transition-colors whitespace-nowrap ${ isActive ? "bg-[#EFCD62] text-black" : "text-white/80 hover:text-white bg-transparent" }`}
-                >
-                  {tab === "Details" ? "Property Details" : tab}
-                </button>
-              );
-            })}
+    <div className="sticky top-0 z-50 w-full">
+      <div className="border-b border-white/10 bg-transparent backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
+        <div
+          className={clsx(
+            VILLA_DETAIL_SPACING.page,
+            VILLA_DETAIL_SPACING.gutterX,
+          )}
+        >
+          <div className={VILLA_DETAIL_SPACING.content}>
+            <div className="flex gap-2 sm:gap-3 overflow-x-auto py-4 scrollbar-none">
+              {TAB_LABELS.map((tab) => {
+                const sectionId = tabToSectionId(tab);
+                const isActive = activeTab === sectionId;
+                return (
+                  <button
+                    key={tab}
+                    type="button"
+                    onClick={() => onTabClick(sectionId)}
+                    className={stickyCategoryTabClass(isActive)}
+                  >
+                    {tab === "Details" ? "Property Details" : tab}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

@@ -16,6 +16,7 @@ import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useAnimation } from "@/context/AnimationContext";
 import Link from "next/link";
+import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
 
 export default function PartnerOverlay() {
   const { isPartnerOverlayOpen, setPartnerOverlayOpen } = useAnimation();
@@ -261,12 +262,14 @@ export default function PartnerOverlay() {
 
                       <input
                         type="tel"
+                        inputMode="numeric"
+                        autoComplete="tel"
                         placeholder="Phone Number"
                         value={formData.phoneNumber}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            phoneNumber: e.target.value,
+                            phoneNumber: sanitizePhoneDigitsInput(e.target.value),
                           })
                         }
                         className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"

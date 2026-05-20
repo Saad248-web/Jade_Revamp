@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
@@ -9,6 +9,8 @@ import {
   EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS,
   EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS,
   EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_FRAME_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS,
   EXPERIENCE_OVERLAY_STICKY_TABS_CLASS,
 } from "@/lib/experienceOverlayTheme";
 import {
@@ -16,53 +18,116 @@ import {
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
+import { stickyCategoryTabClass } from "@/lib/stickyTabGlass";
 
 export type VillaExperienceCarouselImage = { name?: string; image: string };
 
-export function VillaExperienceOverlayContentFrame({
-  children,
-  onScroll,
-}: {
-  children: React.ReactNode;
-  onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
-}) {
-  return (
-    <div 
-      className="absolute inset-0 overflow-y-auto scrollbar-none"
-      onScroll={onScroll}
-    >
-      <div className={EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS}>
-        {children}
-      </div>
-    </div>
-  );
+export const EXPERIENCE_OVERLAY_MD_UP_QUERY = "(min-width: 768px)";
+
+export function isExperienceOverlayMdUp(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia(EXPERIENCE_OVERLAY_MD_UP_QUERY).matches;
 }
 
+/**
+ * Below `md`: stuck frame + inner scroll sheet (close, hero, body).
+ * At `md` and up: full-sheet scroll (unchanged).
+ */
+export function VillaExperienceOverlayBody({
+  pinnedTop,
+  children,
+  mobileTopChrome,
+  onScroll,
+  scrollRef,
+  onScrollRootUpdated,
+}: {
+  pinnedTop: React.ReactNode;
+  children: React.ReactNode;
+  /** Rendered inside the mobile scroll sheet (e.g. close button). */
+  mobileTopChrome?: React.ReactNode;
+  onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
+  scrollRef?: React.Ref<HTMLDivElement>;
+  /** Fire after scroll root ref is synced (incl. breakpoint change) so observers can reconnect. */
+  onScrollRootUpdated?: () => void;
+}) {
+  const scrollEl = useRef<HTMLDivElement>(null);
+  const onScrollRootUpdatedRef = useRef(onScrollRootUpdated);
+  onScrollRootUpdatedRef.current = onScrollRootUpdated;
+
+  useLayoutEffect(() => {
+    if (!scrollRef) return;
+    const refObj = scrollRef as React.MutableRefObject<HTMLDivElement | null>;
+    const sync = () => {
+      refObj.current = scrollEl.current;
+      onScrollRootUpdatedRef.current?.();
+    };
+    sync();
+    const mq = window.matchMedia(EXPERIENCE_OVERLAY_MD_UP_QUERY);
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, [scrollRef]);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    onScroll?.(e);
+  };
+
+  const scrollSheet = (
+    <div
+      ref={scrollEl}
+      className={`${EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS} md:absolute md:inset-0 md:overflow-y-auto md:overscroll-y-contain md:scrollbar-none md:touch-pan-y`}
+      onScroll={handleScroll}
+    >
+      {mobileTopChrome ? (
+        <div className="relative z-[2] md:hidden shrink-0">{mobileTopChrome}</div>
+      ) : null}
+      <div className="relative z-[1]">{pinnedTop}</div>
+      <div className={EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS}>{children}</div>
+    </div>
+  );
+
+  return <div className={EXPERIENCE_OVERLAY_MOBILE_FRAME_CLASS}>{scrollSheet}</div>;
+}
+
+/** Close control: in-scroll on phone, fixed top-right at md+. */
 export function VillaExperienceOverlayCloseFramer({
   MotionButton,
   onClose,
   isHidden = false,
+  variant = "fixed",
 }: {
   MotionButton: typeof motion.button;
   onClose: () => void;
   isHidden?: boolean;
+  variant?: "in-sheet" | "fixed";
 }) {
+  const button = (
+    <MotionButton
+      initial={{ opacity: 0, scale: 0.9, y: 0 }}
+      animate={{
+        opacity: variant === "in-sheet" ? 1 : isHidden ? 0 : 1,
+        scale: variant === "in-sheet" ? 1 : isHidden ? 0.8 : 1,
+        y: variant === "in-sheet" ? 0 : isHidden ? -80 : 0,
+      }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      onClick={onClose}
+      aria-label="Close"
+      className={EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS}
+    >
+      <X className="w-6 h-6 stroke-[1.5]" />
+    </MotionButton>
+  );
+
+  if (variant === "in-sheet") {
+    return (
+      <div className="flex justify-center pt-3 pb-2 w-12 h-12 mx-auto pointer-events-none">
+        {button}
+      </div>
+    );
+  }
+
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 md:top-6 md:left-auto md:right-6 md:translate-x-0 z-[200] w-12 h-12 pointer-events-none">
-      <MotionButton
-        initial={{ opacity: 0, scale: 0.9, y: 0 }}
-        animate={{ 
-          opacity: isHidden ? 0 : 1, 
-          scale: isHidden ? 0.8 : 1,
-          y: isHidden ? -80 : 0
-        }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        onClick={onClose}
-        aria-label="Close"
-        className={EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS}
-      >
-        <X className="w-6 h-6 stroke-[1.5]" />
-      </MotionButton>
+    <div className="hidden md:block fixed top-6 right-6 z-[200] w-12 h-12 pointer-events-none">
+      {button}
     </div>
   );
 }
@@ -90,7 +155,7 @@ export function VillaExperienceHeroCarousel({
 
   return (
     <div
-      className="relative w-full h-[clamp(320px,65vh,720px)] overflow-hidden bg-black/20 group rounded-t-[32px] md:rounded-none"
+      className="relative w-full max-md:h-[clamp(200px,38dvh,340px)] md:h-[clamp(320px,65vh,720px)] overflow-hidden bg-black/20 group rounded-t-[32px] md:rounded-none"
       style={{ perspective: "1500px" }}
     >
       <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
@@ -132,7 +197,7 @@ export function VillaExperienceHeroCarousel({
             type="button"
             aria-label="Previous image"
             onClick={onPrev}
-            className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-[#EFCD62] hover:text-black transition-all"
+            className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center border border-white/15 bg-transparent text-white backdrop-blur-2xl transition-all hover:border-white/35 hover:text-[#EFCD62]"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -156,7 +221,7 @@ export function VillaExperienceHeroCarousel({
             type="button"
             aria-label="Next image"
             onClick={onNext}
-            className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-[#EFCD62] hover:text-black transition-all"
+            className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center border border-white/15 bg-transparent text-white backdrop-blur-2xl transition-all hover:border-white/35 hover:text-[#EFCD62]"
           >
             <ArrowRight className="w-5 h-5" />
           </button>
@@ -194,17 +259,19 @@ export function VillaExperienceStickyTabs({
   return (
     <div className={EXPERIENCE_OVERLAY_STICKY_TABS_CLASS}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex gap-2 sm:gap-3 overflow-x-auto py-4 scrollbar-none">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              onClick={() => onTabClick(tab)}
-              className={`shrink-0 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold font-manrope transition-colors whitespace-nowrap ${ activeTab === tab ? "bg-jade-gold text-black" : "text-white/80 hover:text-white bg-transparent" }`}
-            >
-              {tab}
-            </button>
-          ))}
+        <div className="max-w-4xl mx-auto w-full">
+          <div className="flex gap-2 sm:gap-3 overflow-x-auto py-4 scrollbar-none">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => onTabClick(tab)}
+                className={stickyCategoryTabClass(activeTab === tab)}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
