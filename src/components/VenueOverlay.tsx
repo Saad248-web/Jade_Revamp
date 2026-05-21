@@ -219,6 +219,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
     setCurrentImageIndex(0);
     setDirection(0);
     setView("form");
+    setActiveTab("Amenities");
   }, [isOpen, villa?.id]);
 
   const images =
@@ -240,7 +241,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
   const tabs = ["Amenities", "Pricing", "Location", "Walkthrough", "FAQ"];
 
   const { scrollToSection } = useVenueOverlaySectionNav(
-    overlayScrollRef.current,
+    overlayScrollRef,
     setActiveTab,
     isOpen && mounted,
     overlayScrollRootGen,

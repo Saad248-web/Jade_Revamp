@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import clsx from "clsx";
 import type { VillaAmenityHighlight } from "@/lib/types";
 import { getVillaDetailIcon } from "@/lib/villaDetailIcons";
@@ -21,28 +22,25 @@ export default function VillaDetailAmenityHighlights({
 
   return (
     <div className={vd.amenityHighlightViewportShell}>
-      <div className={vd.amenityHighlightRailAlign}>
-        <div className={vd.amenityHighlightRailContent}>
-          <div
-            className={clsx(
-              "jade-hscroll-track",
-              vd.amenityHighlightTrackFullBleed,
-              className,
-            )}
-          >
-            {highlights.map((amenity, idx) => {
-              const Icon = getVillaDetailIcon(amenity.icon);
-              return (
-                <AmenityHighlightTile
-                  key={`${amenity.label}-${idx}`}
-                  icon={Icon}
-                  label={amenity.label}
-                  sublabel={amenity.sublabel}
-                />
-              );
-            })}
-          </div>
-        </div>
+      <div
+        className={clsx(vd.amenityHighlightTrackFullBleed, className)}
+        style={
+          {
+            "--amenity-highlight-count": highlights.length,
+          } as CSSProperties
+        }
+      >
+        {highlights.map((amenity, idx) => {
+          const Icon = getVillaDetailIcon(amenity.icon);
+          return (
+            <AmenityHighlightTile
+              key={`${amenity.label}-${idx}`}
+              icon={Icon}
+              label={amenity.label}
+              sublabel={amenity.sublabel}
+            />
+          );
+        })}
       </div>
     </div>
   );

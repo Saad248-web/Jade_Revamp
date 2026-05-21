@@ -131,6 +131,7 @@ export default function BlogSection() {
       <div className="max-w-[1920px] mx-auto w-full min-w-0">
         <div
           ref={scrollContainerRef}
+          data-lenis-prevent
           onMouseDown={handleMouseDown}
           onMouseLeave={handleMouseLeave}
           onMouseUp={handleMouseUp}

@@ -5,6 +5,11 @@
  * Section background transitions use `@/components/ui/MeanderStrip` (Sep_bar_design.svg).
  */
 
+import {
+  OVERLAY_PRICING_BOTTOM_BAR_CHROME_CLASS,
+  OVERLAY_STICKY_TABS_CHROME_CLASS,
+} from "@/lib/scrollChromeGlass";
+
 export const OVERLAY_SECTION_CHARCOAL = "w-full bg-jade-charcoal text-white";
 export const OVERLAY_SECTION_GREEN = "w-full bg-jade-green text-white";
 
@@ -42,11 +47,9 @@ export const EXPERIENCE_OVERLAY_MOBILE_SHEET_SCRIM_CLASS = `absolute inset-0 poi
 export const EXPERIENCE_OVERLAY_MOBILE_SHEET_FRAME_CLASS =
   "relative z-10 flex h-full min-h-0 flex-col overflow-hidden rounded-t-[32px] bg-jade-charcoal isolate";
 
-export const EXPERIENCE_OVERLAY_STICKY_TABS_CLASS =
-  "sticky top-0 z-[60] mb-0 w-full border-b border-white/10 bg-transparent backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.12)]";
+export const EXPERIENCE_OVERLAY_STICKY_TABS_CLASS = `sticky top-0 z-[60] mb-0 w-full ${OVERLAY_STICKY_TABS_CHROME_CLASS}`;
 
-const EXPERIENCE_OVERLAY_BOTTOM_BAR_BASE =
-  "w-full bg-jade-charcoal/90 backdrop-blur-2xl border-t border-white/10 pt-4 pb-6 md:pb-4 transition-all flex justify-center shadow-[0_-8px_32px_rgba(0,0,0,0.12)]";
+const EXPERIENCE_OVERLAY_BOTTOM_BAR_BASE = `w-full ${OVERLAY_PRICING_BOTTOM_BAR_CHROME_CLASS} pt-4 pb-6 md:pb-4 transition-all flex justify-center`;
 
 /** Pinned inside 80vh mobile sheet. */
 export const EXPERIENCE_OVERLAY_BOTTOM_BAR_SHEET_CLASS =

@@ -130,6 +130,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
     setCurrentImageIndex(0);
     setDirection(0);
     setView("form");
+    setActiveTab("Amenities");
   }, [isOpen, villa?.id]);
 
   const overlayVilla = getOverlayVillaData(overlayPage ?? "corporate", villa?.id);
@@ -159,7 +160,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
   const tabs = ["Amenities", "Pricing", "Location", "Walkthrough", "FAQ"];
 
   const { scrollToSection } = useVenueOverlaySectionNav(
-    overlayScrollRef.current,
+    overlayScrollRef,
     setActiveTab,
     isOpen && mounted,
     overlayScrollRootGen,

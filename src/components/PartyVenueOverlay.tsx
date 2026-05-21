@@ -203,6 +203,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
     setCurrentImageIndex(0);
     setDirection(0);
     setView("form");
+    setActiveTab("Amenities");
   }, [isOpen, villa?.id]);
 
   const overlayVilla = getOverlayVillaData((overlayPage ?? "party") as any, villa?.id);
@@ -232,7 +233,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
   const tabs = ["Amenities", "Pricing", "Location", "Walkthrough", "FAQ"];
 
   const { scrollToSection } = useVenueOverlaySectionNav(
-    overlayScrollRef.current,
+    overlayScrollRef,
     setActiveTab,
     isOpen && mounted,
     overlayScrollRootGen,

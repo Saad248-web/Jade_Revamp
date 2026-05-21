@@ -1,21 +1,28 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, type RefObject } from "react";
 import { scrollToOverlaySection } from "@/lib/scrollToOverlaySection";
 import {
   VENUE_OVERLAY_TABS,
   venueTabFromSectionId,
 } from "@/lib/venueOverlaySectionNav";
 import { useVenueOverlayScrollSpy } from "@/lib/useVenueOverlayScrollSpy";
+import { lockScrollSpy } from "@/lib/scrollSpyLock";
+import { PANEL_SMOOTH_SCROLL_MS } from "@/lib/lenisConfig";
 
 /** Scroll-spy + scroll-to-section for wedding / corporate / party overlays. */
 export function useVenueOverlaySectionNav(
-  scrollRoot: HTMLDivElement | null,
+  scrollRootRef: RefObject<HTMLDivElement | null>,
   setActiveTab: (tab: string) => void,
   enabled: boolean,
   scrollRootVersion = 0,
 ) {
-  useVenueOverlayScrollSpy(scrollRoot, setActiveTab, enabled, scrollRootVersion);
+  useVenueOverlayScrollSpy(
+    scrollRootRef,
+    setActiveTab,
+    enabled,
+    scrollRootVersion,
+  );
 
   const scrollToSection = useCallback(
     (tabOrSectionId: string) => {
@@ -27,9 +34,10 @@ export function useVenueOverlaySectionNav(
       ) {
         setActiveTab(tabOrSectionId);
       }
-      scrollToOverlaySection(tabOrSectionId, scrollRoot);
+      lockScrollSpy(PANEL_SMOOTH_SCROLL_MS + 80);
+      scrollToOverlaySection(tabOrSectionId, scrollRootRef.current);
     },
-    [scrollRoot, setActiveTab],
+    [scrollRootRef, setActiveTab],
   );
 
   return { scrollToSection };

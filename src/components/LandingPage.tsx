@@ -14,6 +14,13 @@ import MobileBottomNav from "./MobileBottomNav";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import dynamic from "next/dynamic";
 import { getLenis, scrollToY } from "@/lib/lenis";
+import LazyWhenNear from "@/components/ui/LazyWhenNear";
+import { InstagramCarouselShell } from "@/components/InstagramCarouselShell";
+import { prefetchInstagramOembed } from "@/lib/instagramOembedCache";
+
+const InstagramCarousel = dynamic(() => import("./InstagramCarousel"), {
+  ssr: false,
+});
 
 const UnifiedScrollSection = dynamic(() => import("./UnifiedScrollSection"), {
   ssr: false,
@@ -22,9 +29,6 @@ const HorizontalScrollSection = dynamic(
   () => import("./HorizontalScrollSection"),
   { ssr: false },
 );
-const InstagramCarousel = dynamic(() => import("./InstagramCarousel"), {
-  ssr: false,
-});
 const ValuePropositionSection = dynamic(
   () => import("./ValuePropositionSection"),
   { ssr: false },
@@ -73,6 +77,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => getLenis()?.resize(), 800);
+    prefetchInstagramOembed();
     return () => clearTimeout(timer);
   }, []);
 
@@ -215,12 +220,29 @@ export default function LandingPage() {
       <UnifiedScrollSection />
       <MobileBottomNav />
       <HorizontalScrollSection />
-      <InstagramCarousel />
-      <ValuePropositionSection />
+      <LazyWhenNear
+        minHeight="90vh"
+        approachMargin="800px 0px"
+        mountMargin="72px 0px"
+        mountDeferMs={48}
+        shell={<InstagramCarouselShell />}
+        onApproach={prefetchInstagramOembed}
+      >
+        <InstagramCarousel />
+      </LazyWhenNear>
+      <LazyWhenNear minHeight="100vh">
+        <ValuePropositionSection />
+      </LazyWhenNear>
       <FeaturedVillas />
-      <JadeAmenitiesSection />
-      <BlogSection />
-      <Footer />
+      <LazyWhenNear minHeight="80vh">
+        <JadeAmenitiesSection />
+      </LazyWhenNear>
+      <LazyWhenNear minHeight="70vh">
+        <BlogSection />
+      </LazyWhenNear>
+      <LazyWhenNear minHeight="50vh">
+        <Footer />
+      </LazyWhenNear>
     </motion.div>
   );
 }

@@ -1,12 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import {
-  motion,
-  useScroll,
-  useSpring,
-  useMotionValueEvent,
-} from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { useBatchedScrollHide } from "@/lib/useBatchedScrollHide";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,27 +13,13 @@ export default function Navbar() {
   const pathname = usePathname() ?? "";
   const { isSplashComplete, navbarTheme } = useAnimation();
   const { count: wishlistCount } = useWishlist();
-  const { scrollY } = useScroll();
-  const [isHidden, setIsHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const isHidden = useBatchedScrollHide(150);
 
-  // Smart Scroll Logic
-  useMotionValueEvent(scrollY, "change", (latest: number) => {
-    const previous = lastScrollY;
-    if (latest > previous && latest > 150) {
-      setIsHidden(true); // Scroll Down -> Hide
-    } else {
-      setIsHidden(false); // Scroll Up -> Show
-    }
-    setLastScrollY(latest);
-  });
-
-  // Scroll Progress (Filler Line)
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
+    stiffness: 120,
+    damping: 28,
+    restDelta: 0.002,
   });
 
   // Only hide navbar on home page if splash isn't complete
@@ -60,15 +41,9 @@ export default function Navbar() {
       {/* ═══════════════════════════════════════════
            NAVBAR
       ══════════════════════════════════════════ */}
-      <motion.nav
-        className="fixed top-0 left-0 w-full z-50 mt-[4px]"
-        variants={{
-          visible: { y: 0 },
-          hidden: { y: "-100%" },
-        }}
-        initial="visible"
-        animate={isHidden ? "hidden" : "visible"}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
+      <nav
+        className={`jade-nav-chrome fixed top-0 left-0 w-full z-50 mt-[4px]${isHidden ? " jade-nav-chrome--hidden" : ""}`}
+        aria-hidden={isHidden}
       >
         {/* Glass bar */}
         <div className="w-full bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm">
@@ -250,7 +225,7 @@ export default function Navbar() {
           </div>
           </div>
         </div>
-      </motion.nav>
+      </nav>
     </>
   );
 }

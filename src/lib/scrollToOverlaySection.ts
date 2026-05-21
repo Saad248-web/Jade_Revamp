@@ -1,4 +1,5 @@
 import { VENUE_OVERLAY_TAB_OFFSET_PX, venueSectionIdFromTab } from "@/lib/venueOverlaySectionNav";
+import { smoothScrollTo } from "@/lib/smoothScrollTo";
 
 /** Scroll an overlay's inner panel to a section by tab label (e.g. "Amenities"). */
 export function scrollToOverlaySection(
@@ -18,10 +19,10 @@ export function scrollToOverlaySection(
       container.getBoundingClientRect().top +
       container.scrollTop -
       VENUE_OVERLAY_TAB_OFFSET_PX;
-    container.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    smoothScrollTo(container, Math.max(0, top));
     return true;
   }
 
-  element.scrollIntoView({ behavior: "smooth", block: "start" });
+  element.scrollIntoView({ behavior: "auto", block: "start" });
   return true;
 }

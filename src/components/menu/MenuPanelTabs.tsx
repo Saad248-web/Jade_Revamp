@@ -21,6 +21,7 @@ export function MenuSectionChipTabs({
     >
       <nav
         className={`flex gap-2 overflow-x-auto overscroll-x-contain [-webkit-overflow-scrolling:touch] [scrollbar-width:thin] ${bleedClassName}`}
+        data-lenis-prevent
         aria-label="Section pages"
       >
         {tabs.map((tab) => (

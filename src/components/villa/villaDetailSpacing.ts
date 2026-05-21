@@ -21,25 +21,17 @@ export const VILLA_DETAIL_SPACING = {
   hScrollBleed: "-mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8",
   hScrollTrack: "flex gap-4 overflow-x-auto pb-2 snap-x scrollbar-none",
   /**
-   * Escapes `max-w-4xl` so the amenity strip spans the full viewport width (edge-to-edge),
-   * while tiles stay aligned with body copy (see nested rails + `amenityHighlightTrackFullBleed`).
+   * Narrow rail: mobile-only edge-to-edge scroll; tablet stays inset; wide = grid.
+   * See `.amenity-highlight-rail` + `.amenity-highlight-viewport` in globals.css.
    */
   amenityHighlightViewportShell:
-    "relative w-screen max-w-[100vw] shrink-0 left-1/2 -translate-x-1/2",
-  /** Matches `sectionShell` horizontal chrome — pairs with `amenityHighlightRailContent`. */
-  amenityHighlightRailAlign:
-    "max-w-7xl mx-auto w-full min-w-0 px-3 sm:px-5 lg:px-6",
-  /** Same as `content` — reference width for `50%` in the full-bleed track padding calc. */
-  amenityHighlightRailContent: "max-w-4xl mx-auto w-full min-w-0",
-  /**
-   * Full-bleed horizontal track centered on the 4xl column: `pl` lands on the same axis as
-   * title/stats/description on all breakpoints; `gap-3` keeps tile rhythm fixed.
-   */
+    "amenity-highlight-rail amenity-highlight-viewport w-full min-w-0",
+  /** Villa detail amenity row — layout mode is container-driven, not viewport lg. */
   amenityHighlightTrackFullBleed:
-    "flex min-w-0 gap-3 overflow-x-auto pb-2 snap-x scrollbar-none w-screen relative left-1/2 -translate-x-1/2 pl-[max(0.75rem,calc(50vw-50%))] pr-3 sm:pr-5 lg:pr-6 scroll-pl-[max(0.75rem,calc(50vw-50%))] scroll-pr-3 sm:scroll-pr-5 lg:scroll-pr-6",
+    "amenity-highlight-track--responsive scrollbar-none",
   /** Same row in experience overlays — right-edge scroll bleed + extra left inset on the track. */
   amenityHighlightTrackOverlay:
-    "flex w-full min-w-0 gap-3 overflow-x-auto pb-5 mb-10 snap-x scrollbar-none scroll-pl-0 scroll-pr-6 md:scroll-pr-12 -mr-6 pr-6 md:-mr-12 md:pr-12",
+    "flex w-full min-w-0 gap-[clamp(0.5rem,0.35rem+0.65vw,0.875rem)] overflow-x-auto pb-5 mb-10 snap-x scrollbar-none scroll-pl-0 scroll-pr-6 md:scroll-pr-12 -mr-6 pr-6 md:-mr-12 md:pr-12",
   heading: "text-gh-h1 font-philosopher text-white leading-tight",
   /** Alias — section titles (Experiences, Spaces, FAQ, etc.) */
   sectionHeading: "text-gh-h1 font-philosopher text-white leading-tight",

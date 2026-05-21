@@ -9,6 +9,8 @@ import VillaCard from "./VillaCard";
 import BookingBanner from "./BookingBanner";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useBooking } from "@/context/BookingContext";
+import { scrollToElement } from "@/lib/lenis";
+import { useBatchedScrollHide } from "@/lib/useBatchedScrollHide";
 
 // Navbar height to offset the sticky filter bar
 const NAVBAR_HEIGHT = 72;
@@ -36,7 +38,7 @@ const NEXT_AVAILABLE = [
 
 export default function VillasCarousel() {
   const [activeCategory, setActiveCategory] = useState("All");
-  const [navbarVisible, setNavbarVisible] = useState(true);
+  const navbarVisible = !useBatchedScrollHide(150);
   const searchParams = useSearchParams();
 
   // Read category from URL on mount
@@ -53,12 +55,7 @@ export default function VillasCarousel() {
         setTimeout(() => {
           const el = document.getElementById("villas-carousel");
           if (el) {
-            const y =
-              el.getBoundingClientRect().top +
-              window.scrollY -
-              NAVBAR_HEIGHT -
-              20;
-            window.scrollTo({ top: y, behavior: "smooth" });
+            scrollToElement(el, { offset: -(NAVBAR_HEIGHT + 20) });
           }
         }, 500);
       }
@@ -88,22 +85,6 @@ export default function VillasCarousel() {
       str += `, ${guests.pets} Pet${guests.pets > 1 ? "s" : ""}`;
     return str;
   };
-
-  // Mirror the same hide/show logic used in Navbar.tsx
-  useEffect(() => {
-    let lastY = window.scrollY;
-    const onScroll = () => {
-      const current = window.scrollY;
-      if (current > lastY && current > 150) {
-        setNavbarVisible(false);
-      } else {
-        setNavbarVisible(true);
-      }
-      lastY = current;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const { dateRange, setDateRange, guests: contextGuests } = useBooking();
 
@@ -140,25 +121,14 @@ export default function VillasCarousel() {
     if (!hasDateConflict) return;
     const el = document.getElementById("villas-carousel");
     if (!el) return;
-    // Try Lenis first, fall back to native
-    const lenis = (window as unknown as Record<string, unknown>).__lenis as
-      | { scrollTo?: (el: Element, opts: object) => void }
-      | undefined;
-    if (lenis?.scrollTo) {
-      lenis.scrollTo(el, { offset: 0, duration: 1.2 });
-    } else {
-      const y = el.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
+    scrollToElement(el, { offset: 0 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasDateConflict]);
 
   const handleSearch = () => {
     const el = document.getElementById("villas-carousel");
     if (el) {
-      const y =
-        el.getBoundingClientRect().top + window.scrollY - NAVBAR_HEIGHT - 20;
-      window.scrollTo({ top: y, behavior: "smooth" });
+      scrollToElement(el, { offset: -(NAVBAR_HEIGHT + 20) });
     }
   };
 
@@ -177,7 +147,10 @@ export default function VillasCarousel() {
             </div>
 
             {/* CATEGORIES - Right Side on Desktop (Scrollable, edge-to-edge) */}
-            <div className="order-2 lg:order-2 flex-1 min-w-0 flex overflow-x-auto items-center gap-2 md:gap-2.5 pb-1 -mr-2 md:-mr-8 lg:-mr-16 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+            <div
+              data-lenis-prevent
+              className="order-2 lg:order-2 flex-1 min-w-0 flex overflow-x-auto items-center gap-2 md:gap-2.5 pb-1 -mr-2 md:-mr-8 lg:-mr-16 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
+            >
               {CATEGORIES.map((category) => (
                 <button
                   key={category}

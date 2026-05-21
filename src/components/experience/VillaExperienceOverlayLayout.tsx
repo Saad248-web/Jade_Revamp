@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
+import { useNestedLenisPanel } from "@/lib/nestedLenisPanel";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
@@ -64,6 +65,18 @@ export function VillaExperienceOverlayBody({
   const desktopScrollEl = useRef<HTMLDivElement>(null);
   const onScrollRootUpdatedRef = useRef(onScrollRootUpdated);
   onScrollRootUpdatedRef.current = onScrollRootUpdated;
+  const [mdUp, setMdUp] = useState(false);
+
+  useLayoutEffect(() => {
+    const mq = window.matchMedia(EXPERIENCE_OVERLAY_MD_UP_QUERY);
+    const syncMq = () => setMdUp(mq.matches);
+    syncMq();
+    mq.addEventListener("change", syncMq);
+    return () => mq.removeEventListener("change", syncMq);
+  }, []);
+
+  useNestedLenisPanel(mobileScrollEl, !mdUp);
+  useNestedLenisPanel(desktopScrollEl, mdUp);
 
   useLayoutEffect(() => {
     if (!scrollRef) return;
@@ -311,6 +324,7 @@ export function VillaExperienceStickyTabs({
         <div className="max-w-4xl mx-auto w-full">
           <div
             ref={trackRef}
+            data-lenis-prevent
             className="jade-hscroll-track flex gap-2 sm:gap-3 overflow-x-auto py-4 scrollbar-none overscroll-x-contain"
           >
             {tabs.map((tab) => (

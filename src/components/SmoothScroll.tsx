@@ -4,6 +4,15 @@ import { ReactNode, useEffect } from "react";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import type { LenisInstance } from "@/lib/lenis";
+import {
+  LENIS_EASING,
+  LENIS_LERP,
+  LENIS_SYNC_TOUCH_LERP,
+  LENIS_TOUCH_MULTIPLIER,
+  LENIS_WHEEL_MULTIPLIER,
+  lenisSyncTouchEnabled,
+} from "@/lib/lenisConfig";
+import { attachLenisScrollBridge } from "@/lib/lenisScrollBridge";
 
 export default function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
@@ -14,17 +23,29 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
       return;
     }
 
+    const root = document.documentElement;
+    root.classList.add("lenis", "lenis-smooth");
+
     const lenis = new Lenis({
-      // Higher lerp = less drift after wheel stops (was 0.075 — felt like snap-back)
-      lerp: 0.12,
+      lerp: LENIS_LERP,
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.2,
+      wheelMultiplier: LENIS_WHEEL_MULTIPLIER,
+      touchMultiplier: LENIS_TOUCH_MULTIPLIER,
+      syncTouch: lenisSyncTouchEnabled(),
+      syncTouchLerp: LENIS_SYNC_TOUCH_LERP,
+      easing: LENIS_EASING,
       autoResize: true,
+      anchors: {
+        duration: 1.25,
+        easing: LENIS_EASING,
+        offset: -88,
+      },
     });
 
     (window as unknown as { __lenis: LenisInstance | null }).__lenis =
       lenis as unknown as LenisInstance;
+
+    const detachBridge = attachLenisScrollBridge(lenis);
 
     let rafId: number;
 
@@ -41,8 +62,10 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
+      detachBridge();
       lenis.destroy();
       (window as unknown as { __lenis: LenisInstance | null }).__lenis = null;
+      root.classList.remove("lenis", "lenis-smooth");
     };
   }, []);
 

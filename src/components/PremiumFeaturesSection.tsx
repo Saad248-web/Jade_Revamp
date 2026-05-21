@@ -72,6 +72,7 @@ export default function PremiumFeaturesSection({
 
       {cardsLayout === "scroll" ? (
         <div
+          data-lenis-prevent
           className={scrollOuterClasses}
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >

@@ -7,7 +7,10 @@ import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { useSectionScrollSpy } from "@/lib/useSectionScrollSpy";
-import { VILLA_DETAIL_SECTION_IDS } from "@/lib/villaDetailSectionNav";
+import { getLenis, scrollToElement } from "@/lib/lenis";
+import { VILLA_DETAIL_SCROLL_TO_DURATION } from "@/lib/lenisConfig";
+import { VILLA_DETAIL_PRICING_BOTTOM_BAR_CHROME_CLASS } from "@/lib/scrollChromeGlass";
+import { lockScrollSpy } from "@/lib/scrollSpyLock";
 import {
   ArrowLeft,
   ArrowRight,
@@ -409,21 +412,68 @@ export default function VillaDetailsPage() {
     setIsDrawerOpen(true);
   };
 
+  const detailSectionIds = useMemo((): readonly string[] => {
+    const ids: string[] = [];
+    if (domeColor || isDomeEstate || currentSpace) ids.push("spaces");
+    if (currentActivity) ids.push("experiences");
+    ids.push("details");
+    if (villa?.video) ids.push("video-walkthrough");
+    ids.push("services", "amenities", "pricing", "location", "perfect-for", "faq");
+    return ids;
+  }, [
+    domeColor,
+    isDomeEstate,
+    currentSpace,
+    currentActivity,
+    villa?.video,
+  ]);
+
   const scrollToSection = useCallback((id: string) => {
     setActiveTab(id);
     const element = document.getElementById(id);
     if (!element) return;
-
-    const offset = 88;
-    const top =
-      element.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    lockScrollSpy(VILLA_DETAIL_SCROLL_TO_DURATION * 1000 + 100);
+    scrollToElement(element, {
+      offset: -88,
+      duration: VILLA_DETAIL_SCROLL_TO_DURATION,
+    });
   }, []);
 
+  const defaultDetailTab = detailSectionIds.includes("spaces")
+    ? "spaces"
+    : (detailSectionIds[0] ?? "spaces");
+
+  const setActiveTabFromScroll = useCallback(
+    (sectionId: string) => {
+      const scrollY = getLenis()?.scroll ?? window.scrollY;
+      const spacesEl = document.getElementById("spaces");
+      if (
+        detailSectionIds.includes("spaces") &&
+        spacesEl &&
+        scrollY < 64 &&
+        spacesEl.getBoundingClientRect().top > 96
+      ) {
+        setActiveTab("spaces");
+        return;
+      }
+      setActiveTab(sectionId);
+    },
+    [detailSectionIds],
+  );
+
+  useEffect(() => {
+    setActiveTab(defaultDetailTab);
+  }, [id]);
+
+  useEffect(() => {
+    if (detailSectionIds.includes(activeTab)) return;
+    setActiveTab(defaultDetailTab);
+  }, [detailSectionIds, activeTab, defaultDetailTab]);
+
   useSectionScrollSpy({
-    sectionIds: VILLA_DETAIL_SECTION_IDS,
-    onActiveSection: setActiveTab,
-    rootMargin: "-12% 0px -55% 0px",
+    sectionIds: detailSectionIds,
+    onActiveSection: setActiveTabFromScroll,
+    offsetPx: 88,
   });
 
   useEffect(() => {
@@ -433,7 +483,7 @@ export default function VillaDetailsPage() {
     if (shouldAutoScroll) {
       isAutoScrolling.current = true;
       let lastTime = performance.now();
-      const scrollSpeed = 0.5; // pixels per millisecond (adjust for speed)
+      const scrollSpeed = 0.18; // px/ms — gentle auto-tour (~180px/s)
 
       const autoScroll = (currentTime: number) => {
         if (!isAutoScrolling.current) return;
@@ -441,8 +491,13 @@ export default function VillaDetailsPage() {
         const deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
-        // Scroll down slightly
-        window.scrollBy({ top: scrollSpeed, left: 0, behavior: "auto" });
+        const lenis = getLenis();
+        const step = scrollSpeed * deltaTime;
+        if (lenis) {
+          lenis.scrollTo(lenis.scroll + step, { immediate: true, force: true });
+        } else {
+          window.scrollBy({ top: step, left: 0, behavior: "auto" });
+        }
 
         // Continue the animation frame
         scrollFrameRef.current = requestAnimationFrame(autoScroll);
@@ -762,7 +817,11 @@ export default function VillaDetailsPage() {
         </div>
       </div>
       <VillaDetailMeanderStrip />
-      <VillaDetailStickyTabs activeTab={activeTab} onTabClick={scrollToSection} />
+      <VillaDetailStickyTabs
+        activeTab={activeTab}
+        onTabClick={scrollToSection}
+        sectionIds={detailSectionIds}
+      />
 
       {/* SPACES — Green */}
       {(domeColor || isDomeEstate || currentSpace) && (
@@ -1007,7 +1066,12 @@ export default function VillaDetailsPage() {
 
       {/* FOOTER */}
       <Footer stickyBottomBar />
-      <div className="jade-scroll-chrome fixed bottom-0 left-0 z-50 flex w-full justify-center border-t border-white/10 bg-transparent py-4 backdrop-blur-2xl transition-all shadow-[0_-8px_32px_rgba(0,0,0,0.12)]">
+      <div
+        className={clsx(
+          "jade-scroll-chrome fixed bottom-0 left-0 z-50 flex w-full justify-center py-4 transition-all",
+          VILLA_DETAIL_PRICING_BOTTOM_BAR_CHROME_CLASS,
+        )}
+      >
         <div className={clsx(vd.page, vd.gutterX, "flex justify-between items-center gap-4")}>
           <div className="flex flex-col font-manrope leading-tight">
             <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">Starting from</span>
