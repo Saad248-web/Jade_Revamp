@@ -5,6 +5,7 @@ import {
   motion,
   useScroll,
   useTransform,
+  useSpring,
   AnimatePresence,
   useReducedMotion,
 } from "framer-motion";
@@ -90,20 +91,32 @@ export default function FeaturedVillas() {
     target: targetRef,
   });
 
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 70,
+    damping: 24,
+    mass: 0.6,
+    restDelta: 0.001,
+  });
+
   const totalVillas = VILLAS.length;
   const totalSteps = totalVillas + 2;
-  const snappedProgress = useSnappedScrollProgress(
-    scrollYProgress,
+  const dwellProgress = useSnappedScrollProgress(
+    smoothProgress,
     totalSteps + 1,
     reducedMotion,
     0.32,
   );
+  const snappedProgress = useSpring(dwellProgress, {
+    stiffness: 120,
+    damping: 26,
+    mass: 0.5,
+    restDelta: 0.0005,
+  });
 
   return (
     <SectionWrapper
       ref={targetRef}
       bg={JADE_GREEN}
-      data-scroll-pin
       className="h-[650vh]"
       pattern={{
         opacity: 0.09,

@@ -2,15 +2,9 @@
 
 import { ReactNode, useEffect } from "react";
 import Lenis from "lenis";
-import gsap from "gsap";
 import "lenis/dist/lenis.css";
-import {
-  emitLenisScroll,
-  type LenisInstance,
-  type LenisScrollPayload,
-} from "@/lib/lenis";
+import type { LenisInstance } from "@/lib/lenis";
 
-/** Single global Lenis — all App Router pages via root Providers. */
 export default function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (
@@ -21,47 +15,33 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     }
 
     const lenis = new Lenis({
-      // One smooth layer only — avoid stacking springs on top of low lerp
-      lerp: 0.09,
+      // Higher lerp = less drift after wheel stops (was 0.075 — felt like snap-back)
+      lerp: 0.12,
       smoothWheel: true,
-      syncTouch: false,
-      wheelMultiplier: 0.95,
-      touchMultiplier: 1,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.2,
       autoResize: true,
     });
-
-    document.documentElement.classList.add("lenis", "lenis-smooth");
 
     (window as unknown as { __lenis: LenisInstance | null }).__lenis =
       lenis as unknown as LenisInstance;
 
-    const onLenisScrollEvent = (instance: Lenis) => {
-      emitLenisScroll({
-        scroll: instance.scroll,
-        velocity: instance.velocity,
-        direction: instance.direction,
-        progress: instance.progress,
-      });
-    };
+    let rafId: number;
 
-    lenis.on("scroll", onLenisScrollEvent);
+    function raf(time: number) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
 
-    // Single animation clock: Lenis + GSAP share one ticker (no competing RAF loops)
-    gsap.ticker.lagSmoothing(0);
-    const tick = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(tick);
+    rafId = requestAnimationFrame(raf);
 
     const onResize = () => lenis.resize();
     window.addEventListener("resize", onResize, { passive: true });
 
     return () => {
-      gsap.ticker.remove(tick);
-      lenis.off("scroll", onLenisScrollEvent);
+      cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
       lenis.destroy();
-      document.documentElement.classList.remove("lenis", "lenis-smooth");
       (window as unknown as { __lenis: LenisInstance | null }).__lenis = null;
     };
   }, []);

@@ -111,7 +111,7 @@ export default function LandingPage() {
         <NavbarThemeTrigger theme="white" sectionRef={heroRef} />
         {/* Background Layer: Video Sequence */}
         <motion.div
-          style={{ y: yBackground, willChange: "transform" }}
+          style={{ y: yBackground }}
           className="absolute inset-0 w-full h-[120%] z-0"
         >
           <AnimatePresence mode="wait">
@@ -155,7 +155,7 @@ export default function LandingPage() {
 
         {/* Foreground — copy + CTA share the same scroll parallax */}
         <motion.div
-          style={{ y: heroContentY, willChange: "transform" }}
+          style={{ y: heroContentY }}
           className="relative z-10 h-full flex flex-col justify-between items-center text-center px-6 md:px-12 max-w-[1920px] mx-auto pointer-events-none"
         >
           <motion.div className="flex-1 flex flex-col justify-center items-center w-full">

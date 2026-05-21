@@ -95,11 +95,7 @@ export default function HorizontalScrollSection() {
   const panelCount = PANELS.length;
 
   return (
-    <section
-      ref={targetRef}
-      data-scroll-pin
-      className="relative h-[800vh] bg-[#25282C]"
-    >
+    <section ref={targetRef} className="relative h-[800vh] bg-[#25282C]">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#25282C] isolation isolate">
         <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(32px,4vh,51.2px)] pb-[clamp(4px,0.8vh,9.6px)] shrink-0">
           <span className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-jade-gold drop-shadow-lg block">

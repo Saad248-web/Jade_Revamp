@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
+import { scrollToPageTopWithRetries } from "@/lib/scrollToPageTop";
 
 /**
- * App Router template remounts on every navigation.
- * Scroll-to-top runs in ScrollToTopOnNavigate (route key) — avoid duplicate Lenis fights here.
+ * App Router template remounts on every navigation — guarantees scroll reset on all pages.
  */
 export default function RootTemplate({
   children,
@@ -15,6 +15,7 @@ export default function RootTemplate({
     if (typeof history !== "undefined" && "scrollRestoration" in history) {
       history.scrollRestoration = "manual";
     }
+    scrollToPageTopWithRetries();
   }, []);
 
   return <>{children}</>;

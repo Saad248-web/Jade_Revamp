@@ -1,7 +1,12 @@
 "use client";
 
-import { motion, useScroll } from "framer-motion";
-import { useScrollHide } from "@/lib/useScrollHide";
+import { useState } from "react";
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useMotionValueEvent,
+} from "framer-motion";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,11 +18,28 @@ export default function Navbar() {
   const pathname = usePathname() ?? "";
   const { isSplashComplete, navbarTheme } = useAnimation();
   const { count: wishlistCount } = useWishlist();
-  const { scrollYProgress } = useScroll();
-  const isHidden = useScrollHide(150);
+  const { scrollY } = useScroll();
+  const [isHidden, setIsHidden] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
-  // Scroll progress — direct bind (Lenis already smooths wheel; extra spring = lag)
-  const scaleX = scrollYProgress;
+  // Smart Scroll Logic
+  useMotionValueEvent(scrollY, "change", (latest: number) => {
+    const previous = lastScrollY;
+    if (latest > previous && latest > 150) {
+      setIsHidden(true); // Scroll Down -> Hide
+    } else {
+      setIsHidden(false); // Scroll Up -> Show
+    }
+    setLastScrollY(latest);
+  });
+
+  // Scroll Progress (Filler Line)
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   // Only hide navbar on home page if splash isn't complete
   if (pathname === "/" && !isSplashComplete) return null;
@@ -28,7 +50,7 @@ export default function Navbar() {
   return (
     <>
       {/* Scroll Progress Line ("Filler Line") - LOCKED TO TOP */}
-      <div className="jade-scroll-chrome fixed top-0 left-0 right-0 h-[2px] w-full z-[60] bg-white/5">
+      <div className="fixed top-0 left-0 right-0 h-[2px] w-full z-[60] bg-white/5">
         <motion.div
           className="h-full bg-jade-gold origin-left"
           style={{ scaleX }}
@@ -39,7 +61,7 @@ export default function Navbar() {
            NAVBAR
       ══════════════════════════════════════════ */}
       <motion.nav
-        className="jade-scroll-chrome fixed top-0 left-0 w-full z-50 mt-[4px]"
+        className="fixed top-0 left-0 w-full z-50 mt-[4px]"
         variants={{
           visible: { y: 0 },
           hidden: { y: "-100%" },
@@ -49,7 +71,7 @@ export default function Navbar() {
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         {/* Glass bar */}
-        <div className="w-full bg-gradient-to-b from-black/80 to-transparent">
+        <div className="w-full bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm">
           <div className="max-w-[1920px] mx-auto px-4 sm:px-5 md:px-8 lg:px-10 xl:px-12 py-4 md:py-4 flex items-center justify-between relative">
           {/* ── LEFT: Menu link + inline nav links (desktop only) ── */}
           <div className="hidden lg:flex items-center gap-6 flex-1">

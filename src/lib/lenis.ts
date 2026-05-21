@@ -12,28 +12,6 @@ export type LenisInstance = {
   raf: (time: number) => void;
 };
 
-export type LenisScrollPayload = {
-  scroll: number;
-  velocity: number;
-  direction: 0 | 1 | -1;
-  progress: number;
-};
-
-type LenisScrollListener = (payload: LenisScrollPayload) => void;
-
-const scrollListeners = new Set<LenisScrollListener>();
-
-/** Subscribe to Lenis scroll ticks (preferred over native `scroll` when Lenis is active). */
-export function onLenisScroll(listener: LenisScrollListener): () => void {
-  scrollListeners.add(listener);
-  return () => scrollListeners.delete(listener);
-}
-
-/** Called from SmoothScroll on each Lenis scroll event. */
-export function emitLenisScroll(payload: LenisScrollPayload) {
-  scrollListeners.forEach((listener) => listener(payload));
-}
-
 export function getLenis(): LenisInstance | null {
   if (typeof window === "undefined") return null;
   return (
@@ -52,5 +30,3 @@ export function scrollToY(
   }
   window.scrollTo({ top, behavior: options?.immediate ? "auto" : "smooth" });
 }
-
-export { useLenis } from "./useLenis";
