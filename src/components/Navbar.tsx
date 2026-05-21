@@ -1,12 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import {
-  motion,
-  useScroll,
-  useSpring,
-  useMotionValueEvent,
-} from "framer-motion";
+import { motion, useScroll } from "framer-motion";
+import { useScrollHide } from "@/lib/useScrollHide";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,28 +13,11 @@ export default function Navbar() {
   const pathname = usePathname() ?? "";
   const { isSplashComplete, navbarTheme } = useAnimation();
   const { count: wishlistCount } = useWishlist();
-  const { scrollY } = useScroll();
-  const [isHidden, setIsHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  // Smart Scroll Logic
-  useMotionValueEvent(scrollY, "change", (latest: number) => {
-    const previous = lastScrollY;
-    if (latest > previous && latest > 150) {
-      setIsHidden(true); // Scroll Down -> Hide
-    } else {
-      setIsHidden(false); // Scroll Up -> Show
-    }
-    setLastScrollY(latest);
-  });
-
-  // Scroll Progress (Filler Line)
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
+  const isHidden = useScrollHide(150);
+
+  // Scroll progress — direct bind (Lenis already smooths wheel; extra spring = lag)
+  const scaleX = scrollYProgress;
 
   // Only hide navbar on home page if splash isn't complete
   if (pathname === "/" && !isSplashComplete) return null;
@@ -50,7 +28,7 @@ export default function Navbar() {
   return (
     <>
       {/* Scroll Progress Line ("Filler Line") - LOCKED TO TOP */}
-      <div className="fixed top-0 left-0 right-0 h-[2px] w-full z-[60] bg-white/5">
+      <div className="jade-scroll-chrome fixed top-0 left-0 right-0 h-[2px] w-full z-[60] bg-white/5">
         <motion.div
           className="h-full bg-jade-gold origin-left"
           style={{ scaleX }}
@@ -61,7 +39,7 @@ export default function Navbar() {
            NAVBAR
       ══════════════════════════════════════════ */}
       <motion.nav
-        className="fixed top-0 left-0 w-full z-50 mt-[4px]"
+        className="jade-scroll-chrome fixed top-0 left-0 w-full z-50 mt-[4px]"
         variants={{
           visible: { y: 0 },
           hidden: { y: "-100%" },
@@ -71,7 +49,7 @@ export default function Navbar() {
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         {/* Glass bar */}
-        <div className="w-full bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm">
+        <div className="w-full bg-gradient-to-b from-black/80 to-transparent">
           <div className="max-w-[1920px] mx-auto px-4 sm:px-5 md:px-8 lg:px-10 xl:px-12 py-4 md:py-4 flex items-center justify-between relative">
           {/* ── LEFT: Menu link + inline nav links (desktop only) ── */}
           <div className="hidden lg:flex items-center gap-6 flex-1">
@@ -163,11 +141,12 @@ export default function Navbar() {
               </Link>
             ) : (
               <div className="flex items-center gap-2">
-                <Link
-                  href="/book"
-                  className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] min-h-[44px] rounded-none border border-white/20 transition-all duration-300 group shrink-0"
-                  aria-label="Book a villa"
-                  title="Book a villa"
+                {/* Headset: mobile & tablet → call; desktop → contact */}
+                <a
+                  href="tel:08970663366"
+                  className="lg:hidden bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] min-h-[44px] rounded-none border border-white/20 transition-all duration-300 group shrink-0"
+                  aria-label="Call to enquire"
+                  title="Call us"
                 >
                   <svg
                     width="18"
@@ -179,6 +158,33 @@ export default function Navbar() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     className="transition-colors drop-shadow-sm"
+                    aria-hidden
+                  >
+                    <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3V11z" />
+                    <path d="M21 11h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3v-7z" />
+                    <path d="M3 11V9a9 9 0 0 1 18 0v2" />
+                    <path d="M21 16v2a4 4 0 0 1-4 4h-5" />
+                    <path d="M9 10h6v4H9z" />
+                    <path d="M10 12h.01M12 12h.01M14 12h.01" />
+                  </svg>
+                </a>
+                <Link
+                  href="/contact"
+                  className="hidden lg:flex bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black items-center justify-center min-w-[44px] min-h-[44px] rounded-none border border-white/20 transition-all duration-300 group shrink-0"
+                  aria-label="Contact us"
+                  title="Contact"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.25"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-colors drop-shadow-sm"
+                    aria-hidden
                   >
                     <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3V11z" />
                     <path d="M21 11h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3v-7z" />

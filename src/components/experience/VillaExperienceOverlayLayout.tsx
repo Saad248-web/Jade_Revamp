@@ -7,10 +7,17 @@ import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import PrimaryButton from "@/components/PrimaryButton";
 import {
   EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS,
+  EXPERIENCE_OVERLAY_BOTTOM_BAR_SHEET_CLASS,
   EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS,
   EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS,
-  EXPERIENCE_OVERLAY_MOBILE_FRAME_CLASS,
+  EXPERIENCE_OVERLAY_DESKTOP_BODY_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_HOST_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_SHEET_FRAME_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_SHEET_SCRIM_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_SHEET_ZONE_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH,
   EXPERIENCE_OVERLAY_STICKY_TABS_CLASS,
 } from "@/lib/experienceOverlayTheme";
 import {
@@ -19,6 +26,7 @@ import {
 } from "@/lib/heroSplitCarouselVariants";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import { stickyCategoryTabClass } from "@/lib/stickyTabGlass";
+import { useScrollTabIntoView } from "@/lib/useScrollTabIntoView";
 
 export type VillaExperienceCarouselImage = { name?: string; image: string };
 
@@ -30,27 +38,30 @@ export function isExperienceOverlayMdUp(): boolean {
 }
 
 /**
- * Below `md`: stuck frame + inner scroll sheet (close, hero, body).
+ * Below `md`: top shade + stuck rounded sheet; inner scroll clips at top radius.
  * At `md` and up: full-sheet scroll (unchanged).
  */
 export function VillaExperienceOverlayBody({
   pinnedTop,
   children,
-  mobileTopChrome,
+  mobileFooter,
   onScroll,
   scrollRef,
   onScrollRootUpdated,
+  onBackdropClick,
 }: {
   pinnedTop: React.ReactNode;
   children: React.ReactNode;
-  /** Rendered inside the mobile scroll sheet (e.g. close button). */
-  mobileTopChrome?: React.ReactNode;
+  /** Pinned to bottom of mobile sheet (booking bar). */
+  mobileFooter?: React.ReactNode;
   onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
   scrollRef?: React.Ref<HTMLDivElement>;
-  /** Fire after scroll root ref is synced (incl. breakpoint change) so observers can reconnect. */
   onScrollRootUpdated?: () => void;
+  /** Tap top shade to dismiss (mobile). */
+  onBackdropClick?: () => void;
 }) {
-  const scrollEl = useRef<HTMLDivElement>(null);
+  const mobileScrollEl = useRef<HTMLDivElement>(null);
+  const desktopScrollEl = useRef<HTMLDivElement>(null);
   const onScrollRootUpdatedRef = useRef(onScrollRootUpdated);
   onScrollRootUpdatedRef.current = onScrollRootUpdated;
 
@@ -58,7 +69,9 @@ export function VillaExperienceOverlayBody({
     if (!scrollRef) return;
     const refObj = scrollRef as React.MutableRefObject<HTMLDivElement | null>;
     const sync = () => {
-      refObj.current = scrollEl.current;
+      refObj.current = isExperienceOverlayMdUp()
+        ? desktopScrollEl.current
+        : mobileScrollEl.current;
       onScrollRootUpdatedRef.current?.();
     };
     sync();
@@ -71,24 +84,55 @@ export function VillaExperienceOverlayBody({
     onScroll?.(e);
   };
 
-  const scrollSheet = (
-    <div
-      ref={scrollEl}
-      className={`${EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS} md:absolute md:inset-0 md:overflow-y-auto md:overscroll-y-contain md:scrollbar-none md:touch-pan-y`}
-      onScroll={handleScroll}
-    >
-      {mobileTopChrome ? (
-        <div className="relative z-[2] md:hidden shrink-0">{mobileTopChrome}</div>
-      ) : null}
+  const scrollContent = (
+    <>
       <div className="relative z-[1]">{pinnedTop}</div>
       <div className={EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS}>{children}</div>
-    </div>
+    </>
   );
 
-  return <div className={EXPERIENCE_OVERLAY_MOBILE_FRAME_CLASS}>{scrollSheet}</div>;
+  return (
+    <>
+      {/* Mobile: top shade + stuck sheet */}
+      <div className={EXPERIENCE_OVERLAY_MOBILE_HOST_CLASS}>
+        <button
+          type="button"
+          className={`${EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_CLASS} w-full border-0 p-0 cursor-pointer relative z-20`}
+          aria-label="Close overlay"
+          onClick={onBackdropClick}
+        />
+        <div className={EXPERIENCE_OVERLAY_MOBILE_SHEET_ZONE_CLASS}>
+          <div className={EXPERIENCE_OVERLAY_MOBILE_SHEET_SCRIM_CLASS} aria-hidden />
+          <div className={EXPERIENCE_OVERLAY_MOBILE_SHEET_FRAME_CLASS}>
+            <div
+              ref={mobileScrollEl}
+              className={EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS}
+              data-lenis-prevent
+              onScroll={handleScroll}
+            >
+              {scrollContent}
+            </div>
+            {mobileFooter ? (
+              <div className="shrink-0 relative">{mobileFooter}</div>
+            ) : null}
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop: full viewport scroll */}
+      <div
+        ref={desktopScrollEl}
+        className={EXPERIENCE_OVERLAY_DESKTOP_BODY_CLASS}
+        data-lenis-prevent
+        onScroll={handleScroll}
+      >
+        {scrollContent}
+      </div>
+    </>
+  );
 }
 
-/** Close control: in-scroll on phone, fixed top-right at md+. */
+/** Close: above sheet on phone; fixed top-right at md+. */
 export function VillaExperienceOverlayCloseFramer({
   MotionButton,
   onClose,
@@ -98,15 +142,15 @@ export function VillaExperienceOverlayCloseFramer({
   MotionButton: typeof motion.button;
   onClose: () => void;
   isHidden?: boolean;
-  variant?: "in-sheet" | "fixed";
+  variant?: "above-sheet" | "fixed";
 }) {
   const button = (
     <MotionButton
       initial={{ opacity: 0, scale: 0.9, y: 0 }}
       animate={{
-        opacity: variant === "in-sheet" ? 1 : isHidden ? 0 : 1,
-        scale: variant === "in-sheet" ? 1 : isHidden ? 0.8 : 1,
-        y: variant === "in-sheet" ? 0 : isHidden ? -80 : 0,
+        opacity: variant === "above-sheet" ? 1 : isHidden ? 0 : 1,
+        scale: variant === "above-sheet" ? 1 : isHidden ? 0.8 : 1,
+        y: variant === "above-sheet" ? 0 : isHidden ? -80 : 0,
       }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
       onClick={onClose}
@@ -117,9 +161,12 @@ export function VillaExperienceOverlayCloseFramer({
     </MotionButton>
   );
 
-  if (variant === "in-sheet") {
+  if (variant === "above-sheet") {
     return (
-      <div className="flex justify-center pt-3 pb-2 w-12 h-12 mx-auto pointer-events-none">
+      <div
+        className="md:hidden fixed left-1/2 -translate-x-1/2 z-[210] w-12 h-12 pointer-events-none"
+        style={{ top: `calc(${EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH}vh - 3.25rem)` }}
+      >
         {button}
       </div>
     );
@@ -155,7 +202,7 @@ export function VillaExperienceHeroCarousel({
 
   return (
     <div
-      className="relative w-full max-md:h-[clamp(200px,38dvh,340px)] md:h-[clamp(320px,65vh,720px)] overflow-hidden bg-black/20 group rounded-t-[32px] md:rounded-none"
+      className="relative w-full max-md:h-[clamp(200px,32dvh,300px)] md:h-[clamp(320px,65vh,720px)] overflow-hidden bg-black/20 group max-md:rounded-none md:rounded-none"
       style={{ perspective: "1500px" }}
     >
       <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
@@ -256,17 +303,24 @@ export function VillaExperienceStickyTabs({
   activeTab: string;
   onTabClick: (tab: string) => void;
 }) {
+  const trackRef = useScrollTabIntoView(activeTab);
+
   return (
     <div className={EXPERIENCE_OVERLAY_STICKY_TABS_CLASS}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto w-full">
-          <div className="flex gap-2 sm:gap-3 overflow-x-auto py-4 scrollbar-none">
+          <div
+            ref={trackRef}
+            className="jade-hscroll-track flex gap-2 sm:gap-3 overflow-x-auto py-4 scrollbar-none overscroll-x-contain"
+          >
             {tabs.map((tab) => (
               <button
                 key={tab}
                 type="button"
+                data-tab-key={tab}
                 onClick={() => onTabClick(tab)}
                 className={stickyCategoryTabClass(activeTab === tab)}
+                aria-current={activeTab === tab ? "true" : undefined}
               >
                 {tab}
               </button>
@@ -282,14 +336,20 @@ export function VillaExperienceBookingBottomBar({
   villaId,
   onwardPrice,
   onEnquireClick,
+  placement = "viewport",
 }: {
   villaId: string;
   onwardPrice: string | null | undefined;
   onEnquireClick: () => void;
+  placement?: "viewport" | "sheet";
 }) {
   const priceMain = onwardPrice?.trim() || "Enquire";
+  const barClass =
+    placement === "sheet"
+      ? EXPERIENCE_OVERLAY_BOTTOM_BAR_SHEET_CLASS
+      : EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS;
   return (
-    <div className={EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS}>
+    <div className={barClass}>
       <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-3 px-4 md:px-12">
         <div className="flex flex-col font-manrope leading-tight">
           <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">

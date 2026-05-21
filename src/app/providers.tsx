@@ -1,7 +1,9 @@
 "use client";
 
+import { Suspense } from "react";
 import { AnimationProvider } from "@/context/AnimationContext";
 import SmoothScroll from "@/components/SmoothScroll";
+import ScrollToTopOnNavigate from "@/components/ScrollToTopOnNavigate";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import PartnerOverlay from "@/components/PartnerOverlay";
 import RathaaOverlay from "@/components/RathaaOverlay";
@@ -17,7 +19,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <AnimationProvider>
         <BookingProvider>
           <WishlistProvider>
-            <SmoothScroll>{children}</SmoothScroll>
+            <SmoothScroll>
+              <Suspense fallback={null}>
+                <ScrollToTopOnNavigate />
+              </Suspense>
+              {children}
+            </SmoothScroll>
             <PartnerOverlay />
             <RathaaOverlay />
             <EnquireOverlay />

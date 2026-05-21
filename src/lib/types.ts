@@ -1,10 +1,6 @@
 /**
  * SHARED TYPE SYSTEM — Single source of truth for all interfaces.
- * These replace the 4 inline type definitions previously scattered across:
- *   - GlobalBookingOverlay.tsx (deleted)
- *   - /book/page.tsx
- *   - BookingContext.tsx
- *   - ReservationOverlay.tsx
+ * Shared booking/enquiry types for /book, BookingContext, and overlays.
  */
 
 // ─── Date & Booking Core ──────────────────────────────────

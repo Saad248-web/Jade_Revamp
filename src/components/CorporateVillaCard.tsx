@@ -12,9 +12,9 @@ import {
   ArrowRight,
   Presentation,
 } from "lucide-react";
-import { getHeroOverrideForId } from "@/lib/heroOverrides";
 import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
 import { getOverlayVillaData } from "@/lib/overlayVillaData";
+import { useVillaListingImages } from "@/lib/useVillaListingImages";
 import {
   liquidCarouselBgVariants,
   type HeroSplitCustom,
@@ -22,34 +22,7 @@ import {
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 
-const normalizePublicImageSrc = (src: string) => {
-  if (!src.startsWith("/")) return src;
-  return src.replace(/ /g, "%20").replace(/#/g, "%23").replace(/\?/g, "%3F");
-};
-
 type VillaGalleryItem = { name: string; image: string };
-
-function buildVillaGalleryImages(villa: any, max = 8) {
-  const sources: Array<string | undefined | null> = [
-    ...(getHeroOverrideForId(villa?.id) || []),
-    ...((villa?.images as string[] | undefined) || []),
-    ...(((villa?.spaces as any[] | undefined) || []).map((s) => s?.image)),
-    ...(((villa?.activities as any[] | undefined) || []).map((a) => a?.image)),
-    villa?.image,
-  ];
-
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const raw of sources) {
-    if (!raw || typeof raw !== "string") continue;
-    const normalized = normalizePublicImageSrc(raw);
-    if (seen.has(normalized)) continue;
-    seen.add(normalized);
-    out.push(normalized);
-    if (out.length >= max) break;
-  }
-  return out;
-}
 
 interface CorporateVillaCardProps {
   villa: any; // Type from VILLAS
@@ -63,20 +36,10 @@ export default function CorporateVillaCard({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
-  const gallery = buildVillaGalleryImages(villa, 8);
-  const derived =
-    gallery.length > 0
-      ? gallery.map((img, idx) => ({
-          name: `Gallery ${idx + 1}`,
-          image: img,
-        }))
-      : [];
-
+  const { images: listingImages } = useVillaListingImages(villa);
   const images: VillaGalleryItem[] =
-    derived.length > 0
-      ? derived
-      : villa.spaces?.length > 0
-      ? villa.spaces
+    listingImages.filter((i) => i.image).length > 0
+      ? listingImages.filter((i) => i.image)
       : [{ name: "Main", image: villa.image }];
 
   const nextImage = () => {

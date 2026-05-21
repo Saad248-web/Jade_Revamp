@@ -1,32 +1,17 @@
-import { getHeroOverrideForId } from "@/lib/heroOverrides";
+import {
+  buildVillaListingImages,
+  type VillaGalleryItem,
+} from "@/lib/villaListingImagesCore";
 
-export type VillaGalleryItem = { name: string; image: string };
+export type { VillaGalleryItem };
 
-const normalizePublicImageSrc = (src: string) => {
-  if (!src.startsWith("/")) return src;
-  return src.replace(/ /g, "%20").replace(/#/g, "%23").replace(/\?/g, "%3F");
-};
-
+/** Manifest-only gallery (no API). Prefer `useVillaListingImages` for listing parity with `/villas`. */
 export function buildVillaGalleryItems(villa: any, max = 8): VillaGalleryItem[] {
-  const sources: Array<string | undefined | null> = [
-    ...(getHeroOverrideForId(villa?.id) || []),
-    ...((villa?.images as string[] | undefined) || []),
-    ...(((villa?.spaces as any[] | undefined) || []).map((s) => s?.image)),
-    ...(((villa?.activities as any[] | undefined) || []).map((a) => a?.image)),
-    villa?.image,
-  ];
-
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const raw of sources) {
-    if (!raw || typeof raw !== "string") continue;
-    const normalized = normalizePublicImageSrc(raw);
-    if (seen.has(normalized)) continue;
-    seen.add(normalized);
-    out.push(normalized);
-    if (out.length >= max) break;
-  }
-
-  return out.map((img, idx) => ({ name: `Gallery ${idx + 1}`, image: img }));
+  const items = buildVillaListingImages(
+    villa?.id
+      ? { id: villa.id, name: villa.name, image: villa.image }
+      : undefined,
+  );
+  return items.filter((i) => i.image).slice(0, max);
 }
 

@@ -462,7 +462,7 @@ export default function CareersPage() {
                 </div>
 
                 {/* ── Scrollable Content (no custom header — real Navbar is above) ── */}
-                <div className="flex-1 w-full overflow-y-auto overflow-x-hidden rounded-t-[28px]">
+                <div className="flex-1 w-full overflow-y-auto overflow-x-hidden rounded-t-[28px]" data-lenis-prevent>
                   {!isSuccess ? (
                     /* FORM VIEW */
                     <div className="px-5 pt-6 pb-8 w-full box-border">
@@ -729,7 +729,7 @@ export default function CareersPage() {
                   </button>
                 </div>
 
-                <div className="p-12 overflow-y-auto overflow-x-hidden rounded-3xl">
+                <div className="p-12 overflow-y-auto overflow-x-hidden rounded-3xl" data-lenis-prevent>
                   {!isSuccess ? (
                     <>
                       <h3 className="text-gh-h1 font-philosopher text-white mb-3 pr-16">

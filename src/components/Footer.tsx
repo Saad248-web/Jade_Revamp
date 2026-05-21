@@ -750,7 +750,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                   onClick={(e) => e.stopPropagation()}
                   className="w-full max-h-[85vh] bg-[#0B2C23] rounded-3xl flex flex-col shadow-2xl border border-white/10 overflow-hidden"
                 >
-                  <div className="flex flex-col items-center justify-center px-8 text-center pt-6 pb-8 overflow-y-auto">
+                  <div className="flex flex-col items-center justify-center px-8 text-center pt-6 pb-8 overflow-y-auto" data-lenis-prevent>
                     {/* Glassy circular wrapper for the checkmark */}
                     <motion.div
                       initial={{ scale: 0.7, opacity: 0 }}

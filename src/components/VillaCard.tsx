@@ -18,9 +18,7 @@ import { VILLAS } from "@/lib/mockData";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useBooking } from "@/context/BookingContext";
 import { useWishlist } from "@/context/WishlistContext";
-import { prettyMediaLabel } from "@/lib/mediaLabels";
-import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
-import { getHeroOverrideForId } from "@/lib/heroOverrides";
+import { useVillaListingImages } from "@/lib/useVillaListingImages";
 import {
   liquidCarouselBgVariants,
   type HeroSplitCustom,
@@ -28,19 +26,6 @@ import {
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 import { usePreloadNeighborImages } from "@/lib/carouselMotion";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
-
-const getManifestEntry = (villa: { name?: string; image?: string }) => {
-  // Prefer name lookup (matches `public/Villa_Retreats/<folder>`), fall back to path extraction.
-  const byName = villa.name ? (MEDIA_MANIFEST as any).villasByFolder?.[villa.name] : null;
-  if (byName) return byName;
-  const m = (villa.image || "").match(/^\/Villa_Retreats\/([^/]+)\//);
-  if (!m?.[1]) return null;
-  try {
-    return (MEDIA_MANIFEST as any).villasByFolder?.[decodeURIComponent(m[1])] ?? null;
-  } catch {
-    return (MEDIA_MANIFEST as any).villasByFolder?.[m[1]] ?? null;
-  }
-};
 
 interface VillaCardProps {
   villa: (typeof VILLAS)[0];
@@ -52,14 +37,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const router = useRouter();
   const { dateRange, guests } = useBooking();
   const { toggleWishlist, isWishlisted } = useWishlist();
-  const [serverMedia, setServerMedia] = useState<{
-    hero: string[];
-    categorizedSpaces?: Array<{
-      title?: string;
-      category?: string;
-      images?: string[];
-    }>;
-  } | null>(null);
+  const { images } = useVillaListingImages(villa);
 
   const wishlisted = isWishlisted(villa.id);
   const reducedMotion = useReducedMotion();
@@ -88,93 +66,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
       : `/book?villa=${villa.id}`;
   })();
 
-  // Build a rich carousel: hero image first, then gallery (or spaces fallback)
   const validImage = (img: string | undefined) => img && img.length > 0;
-  useEffect(() => {
-    let cancelled = false;
-    async function load() {
-      try {
-        // Avoid stale cached media during active image renames/updates.
-        const res = await fetch(`/api/villas/${villa.id}/media?v=4`);
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!cancelled) setServerMedia(data);
-      } catch {
-        // ignore
-      }
-    }
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [villa.id]);
-
-  const images: { name: string; image: string }[] = useMemo(() => {
-    const list: { name: string; image: string }[] = [];
-
-    const manifestEntry = getManifestEntry(villa);
-    const heroFromApi = serverMedia?.hero?.[0];
-    const manifestHero = manifestEntry?.hero?.[0];
-    const overrideHero = getHeroOverrideForId(villa.id)?.[0];
-    const hero = validImage(heroFromApi)
-      ? heroFromApi
-      : validImage(overrideHero)
-        ? overrideHero
-        : validImage(manifestHero)
-        ? manifestHero
-        : villa.image;
-    if (validImage(hero)) list.push({ name: "Main", image: hero as string });
-
-    // Prefer API categorized spaces: pick one representative per category
-    const cat = (
-      (serverMedia?.categorizedSpaces ||
-        manifestEntry?.categorizedSpaces ||
-        []) as Array<{
-        title?: string;
-        category?: string;
-        images?: string[];
-      }>
-    )
-      .map((g) => {
-        const img = g.images?.find((x: string) => validImage(x));
-        if (!img) return null;
-        const title = g.title || g.category || "Space";
-        return {
-          name: title,
-          image: img,
-        };
-      })
-      .filter(Boolean) as { name: string; image: string }[];
-
-    if (cat.length > 0) {
-      list.push(...cat);
-      return list.map((x) => ({
-        name: prettyMediaLabel({
-          url: x.image,
-          fallback: x.name,
-          kind: "space",
-        }),
-        image: x.image,
-      }));
-    }
-
-    // Fall back to manifest spaces if present (preferred over potentially stale `villa.images`).
-    const manifestSpaces = (manifestEntry?.spaces || [])
-      .filter((img: string) => validImage(img))
-      .slice(0, 6)
-      .map((img: string, i: number) => ({
-        name: prettyMediaLabel({
-          url: img,
-          fallback: `Space ${i + 1}`,
-          kind: "space",
-        }),
-        image: img,
-      }));
-    if (manifestSpaces.length > 0) return list.concat(manifestSpaces);
-
-    if (list.length > 0) return list;
-    return [{ name: "Main", image: "" }];
-  }, [serverMedia, villa.id, villa.image, villa.name]);
 
   useEffect(() => {
     if (currentImageIndex < images.length) return;

@@ -5,42 +5,15 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { Users, Car, Home, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { getHeroOverrideForId } from "@/lib/heroOverrides";
 import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
 import { getOverlayVillaData } from "@/lib/overlayVillaData";
+import { useVillaListingImages } from "@/lib/useVillaListingImages";
 import {
   liquidCarouselBgVariants,
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
-
-const normalizePublicImageSrc = (src: string) => {
-  if (!src.startsWith("/")) return src;
-  return src.replace(/ /g, "%20").replace(/#/g, "%23").replace(/\?/g, "%3F");
-};
-
-function buildVillaGalleryImages(villa: any, max = 8) {
-  const sources: Array<string | undefined | null> = [
-    ...(getHeroOverrideForId(villa?.id) || []),
-    ...((villa?.images as string[] | undefined) || []),
-    ...(((villa?.spaces as any[] | undefined) || []).map((s) => s?.image)),
-    ...(((villa?.activities as any[] | undefined) || []).map((a) => a?.image)),
-    villa?.image,
-  ];
-
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const raw of sources) {
-    if (!raw || typeof raw !== "string") continue;
-    const normalized = normalizePublicImageSrc(raw);
-    if (seen.has(normalized)) continue;
-    seen.add(normalized);
-    out.push(normalized);
-    if (out.length >= max) break;
-  }
-  return out;
-}
 
 interface WeddingVillaCardProps {
   villa: any; // Type from VILLAS
@@ -54,13 +27,11 @@ export default function WeddingVillaCard({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
-  const gallery = buildVillaGalleryImages(villa, 8);
+  const { images: listingImages } = useVillaListingImages(villa);
   const images =
-    gallery.length > 0
-      ? gallery.map((img, idx) => ({ name: `Gallery ${idx + 1}`, image: img }))
-      : villa.spaces?.length > 0
-        ? villa.spaces
-        : [{ name: "Main", image: villa.image }];
+    listingImages.filter((i) => i.image).length > 0
+      ? listingImages.filter((i) => i.image)
+      : [{ name: "Main", image: villa.image }];
 
   const nextImage = () => {
     setDirection(1);

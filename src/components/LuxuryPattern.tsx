@@ -32,8 +32,8 @@ export interface LuxuryPatternProps {
  * LuxuryPattern — tiles the official `/assets/Design.png` as a transparent
  * geometric background overlay on the Jade Green base.
  *
- * The pattern uses `background-attachment: fixed` so the design stays
- * static while content scrolls over it, creating a parallax-like effect.
+ * Pattern scrolls with the section (`background-attachment: scroll`) so
+ * wheel/touch scrolling stays GPU-friendly — `fixed` repaints every frame.
  */
 const LuxuryPattern = memo(
   ({
@@ -60,7 +60,7 @@ const LuxuryPattern = memo(
           backgroundImage: "url(/assets/Design.png)",
           backgroundRepeat: "repeat",
           backgroundSize: `${size}px ${size}px`,
-          backgroundAttachment: "fixed",
+          backgroundAttachment: "scroll",
           ...(fadeMask
             ? {
                 WebkitMaskImage: fadeMask,

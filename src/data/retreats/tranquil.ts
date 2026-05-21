@@ -29,12 +29,12 @@ const tranquilBase = {
   stats: {
     stay: "15 Guests",
     events: "500 Guests",
-    bhk: "2 BHK",
+    bhk: "6 BHK",
     lawn: "Multi-layered Garden",
-    villaArea: "Glass-walled Living Areas",
+    villaArea: "6 Bedrooms · Glass Villa & Suites",
   },
   description:
-    "Tranquil Woods is a 2-bedroom private pool villa within an expansive multi-layered garden layout. Close to the Art of Living International Centre, the property features glass-walled living areas and undulating lawns. Designed for both overnight luxury stays and large-format weddings and events, it holds capacity for up to 500 guests in its outdoor event spaces while offering intimate villa living for smaller groups.",
+    "Tranquil Woods is a 6-bedroom private pool estate within an expansive multi-layered garden layout — a 2-bedroom glass pool villa paired with four garden-facing family suites. Close to the Art of Living International Centre, the property features glass-walled living areas and undulating lawns. Designed for both overnight luxury stays and large-format weddings and events, it holds capacity for up to 500 guests in its outdoor event spaces while offering villa and suite accommodation across the grounds.",
   perfectForCards: tranquilPerfectForCards,
   perfectForTags: perfectForTagsFromCards(tranquilPerfectForCards),
   categories: ["Weddings", "Pre-wedding", "Luxury Stays", "Nature Retreats"],
@@ -48,11 +48,15 @@ const tranquilBase = {
     "/Villa_Retreats/Tranquil Woods/2-Spaces/Amphitheater.webp",
     "/Villa_Retreats/Tranquil Woods/2-Spaces/walkway.webp",
     "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa Bedroom 1.webp",
+    "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa Bedroom 2.webp",
+    "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden Suite 1.webp",
+    "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden Suite 2.webp",
     "/Villa_Retreats/Tranquil Woods/2-Spaces/lawn area.webp",
   ],
   amenities: [
     { label: "Private Pool", icon: "Waves" },
     { label: "Airconditioned Interiors", icon: "Wind" },
+    { label: "Garden Family Suites", icon: "Bed" },
     { label: "Outdoor Seating", icon: "Sofa" },
     { label: "Glasshouse Living Area", icon: "Home" },
     { label: "Entertainment Systems", icon: "Music" },
@@ -64,14 +68,27 @@ const tranquilBase = {
   ],
   propertyDetails: [
     {
-      label: "1.5 Acre",
-      description: "Landscaped Lawn",
+      label: "6-Bedroom Estate",
+      description:
+        "Two bedrooms in the glass pool villa plus four garden-facing family suites across the grounds.",
+      icon: "Bed",
+    },
+    {
+      label: "Glass Pool Villa",
+      description:
+        "2-bedroom glass-walled villa with private pool access, living areas, and event-ready interiors.",
+      icon: "Home",
+    },
+    {
+      label: "Garden Family Suites",
+      description:
+        "Four garden-facing suites set within the landscaped lawns, ideal for families and group stays.",
       icon: "Trees",
     },
     {
-      label: "Glasshouse",
-      description: "Living Space",
-      icon: "Home",
+      label: "1.5 Acre",
+      description: "Landscaped Lawn",
+      icon: "Sun",
     },
     {
       label: "Multi-level",
@@ -156,95 +173,93 @@ const tranquilBase = {
   ],
   spaces: [
     {
+      name: "Glass Pool Villa",
+      image: "/Villa_Retreats/Tranquil Woods/2-Spaces/Private Pool Villa.webp",
+    },
+    {
+      name: "Garden Family Suites",
+      image: "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden Suite 1.webp",
+    },
+    {
       name: "Garden Lawn",
-      image: "/Villa_Retreats/Tranquil Woods/Spaces/spaces_01.webp",
-    },
-    {
-      name: "Glass Villa Living",
-      image: "/Villa_Retreats/Tranquil Woods/Spaces/spaces_02.webp",
-    },
-    {
-      name: "Private Pool",
-      image: "/Villa_Retreats/Tranquil Woods/Spaces/spaces_03.webp",
+      image: "/Villa_Retreats/Tranquil Woods/2-Spaces/lawn area.webp",
     },
     {
       name: "Event Grounds",
-      image: "/Villa_Retreats/Tranquil Woods/Spaces/spaces_04.webp",
+      image: "/Villa_Retreats/Tranquil Woods/2-Spaces/Open to lawn Party hall.webp",
     },
   ],
   categorizedSpaces: [
     {
-      id: "garden-lawn",
-      title: "Garden Lawn",
-      category: "Outdoors",
-      amenities: [
-        "Private pool access",
-        "Garden sit-out",
-        "Bonfire zone",
-        "Barbecue setup",
-      ],
+      id: "outdoors-lawns",
+      title: "Outdoors & Lawns",
+      category: "Outdoors & Lawns",
+      amenities: ["Lawns", "Garden zones", "Open-air seating", "Activities"],
       images: [
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_01.webp",
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_02.webp",
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_03.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/lawn area.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/multileveled lawn.webp",
       ],
     },
     {
-      id: "glass-villa-living",
-      title: "Glass Villa Living",
-      category: "Indoors",
-      amenities: [
-        "Comfortable seating",
-        "Ambient lighting",
-        "Air conditioning",
-        "Entertainment setup",
-      ],
+      id: "pool-water",
+      title: "Pool & Water",
+      category: "Pool & Water",
+      amenities: ["Pool", "Plunge", "Water features", "Deck"],
       images: [
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_02.webp",
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_04.webp",
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_05.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Private Pool Villa.webp",
       ],
     },
     {
-      id: "private-pool",
-      title: "Private Pool",
-      category: "Outdoors",
-      amenities: [
-        "Private pool access",
-        "Garden sit-out",
-        "Bonfire zone",
-        "Barbecue setup",
-      ],
+      id: "living-dining",
+      title: "Living & Dining",
+      category: "Living & Dining",
+      amenities: ["Living spaces", "Dining", "Lounges", "Interiors"],
       images: [
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_03.webp",
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_06.webp",
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_07.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Amphitheater.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Living Area.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Open to lawn Party hall.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Party Hall interiors.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Semi Open Party Hall.webp",
       ],
     },
     {
-      id: "event-grounds",
-      title: "Event Grounds",
-      category: "Indoors",
-      amenities: [
-        "Comfortable seating",
-        "Ambient lighting",
-        "Air conditioning",
-        "Entertainment setup",
-      ],
+      id: "bedrooms",
+      title: "Bedrooms",
+      category: "Bedrooms",
+      amenities: ["Beds", "Sleep comfort", "Storage", "AC"],
       images: [
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_04.webp",
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_08.webp",
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_09.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden Suite - Lawn Area.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden Suite 1.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden Suite 2.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden Suite 3.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden Suite 4.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden SuiteTerrace view.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Garden View Suite.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa Bedroom 1.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa Bedroom 2.webp",
       ],
     },
     {
-      id: "additional-spaces",
-      title: "Additional Spaces",
-      category: "Outdoors",
-      amenities: ["Expansive views", "Open area"],
+      id: "entrances-paths",
+      title: "Entrances & Paths",
+      category: "Entrances & Paths",
+      amenities: ["Walkways", "Entrances", "Courtyards", "Landscaping"],
       images: [
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_10.webp",
-        "/Villa_Retreats/Tranquil Woods/Spaces/spaces_11.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Villa 1 Entrance 2.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/walkway.webp",
+      ],
+    },
+    {
+      id: "other",
+      title: "Other",
+      category: "Other",
+      amenities: ["Spaces", "Details", "Ambience", "Highlights"],
+      images: [
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/31.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/32.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Artificial pond.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Kid_s Play Area.webp",
+        "/Villa_Retreats/Tranquil Woods/2-Spaces/Swing.webp",
       ],
     },
   ],
@@ -262,7 +277,7 @@ const tranquilBase = {
       ],
       features: [
         "Full venue access",
-        "Overnight villa stay",
+        "Overnight stay across 6 bedrooms",
         "Complimentary breakfast",
       ],
     },
@@ -297,8 +312,14 @@ const tranquilBase = {
   },
   faq: [
     {
+      question: "How many bedrooms does the property have?",
+      answer:
+        "Six bedrooms in total — two in the glass pool villa and four garden-facing family suites.",
+    },
+    {
       question: "How many guests can stay overnight?",
-      answer: "Up to 10-15 guests can be accommodated.",
+      answer:
+        "Up to 15 guests can be accommodated across the six bedrooms and shared living areas.",
     },
     {
       question: "Is the property suitable for weddings?",

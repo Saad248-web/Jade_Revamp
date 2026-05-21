@@ -72,21 +72,8 @@ export default function LandingPage() {
   );
 
   useEffect(() => {
-    if (history.scrollRestoration) {
-      history.scrollRestoration = "manual";
-    }
-
-    scrollToY(0, { immediate: true });
-
-    // Recalculate scroll height when lazy sections mount — do not force scroll position
     const timer = setTimeout(() => getLenis()?.resize(), 800);
-
-    return () => {
-      if (history.scrollRestoration) {
-        history.scrollRestoration = "auto";
-      }
-      clearTimeout(timer);
-    };
+    return () => clearTimeout(timer);
   }, []);
 
   const { scrollY } = useScroll();
@@ -124,7 +111,7 @@ export default function LandingPage() {
         <NavbarThemeTrigger theme="white" sectionRef={heroRef} />
         {/* Background Layer: Video Sequence */}
         <motion.div
-          style={{ y: yBackground }}
+          style={{ y: yBackground, willChange: "transform" }}
           className="absolute inset-0 w-full h-[120%] z-0"
         >
           <AnimatePresence mode="wait">
@@ -168,7 +155,7 @@ export default function LandingPage() {
 
         {/* Foreground — copy + CTA share the same scroll parallax */}
         <motion.div
-          style={{ y: heroContentY }}
+          style={{ y: heroContentY, willChange: "transform" }}
           className="relative z-10 h-full flex flex-col justify-between items-center text-center px-6 md:px-12 max-w-[1920px] mx-auto pointer-events-none"
         >
           <motion.div className="flex-1 flex flex-col justify-center items-center w-full">

@@ -13,9 +13,49 @@ import {
   Youtube,
   Phone,
 } from "lucide-react";
-import { VILLAS } from "@/lib/mockData";
+import { VILLAS, CATEGORIES } from "@/lib/mockData";
 import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import {
+  MenuSectionChipTabs,
+  MenuVillasExperiencesSwitcher,
+  type MenuTabItem,
+} from "@/components/menu/MenuPanelTabs";
+
+/** Villas hidden from menu villa section only (still bookable via direct URL). */
+const MENU_VILLA_EXCLUDED_IDS = new Set(["vannani", "lemon-tree"]);
+const MENU_VILLAS = VILLAS.filter(
+  (v) =>
+    !MENU_VILLA_EXCLUDED_IDS.has(v.id) &&
+    !(v as { hideFromVillasDirectory?: boolean }).hideFromVillasDirectory,
+);
+
+/** Canonical landing route per villa directory category (matches site experience pages). */
+function villaCategoryHref(category: string): string {
+  const dedicated: Record<string, string> = {
+    All: "/villas",
+    Weddings: "/weddings",
+    "Pre-wedding": "/weddings",
+    "Corporate Retreats": "/corporate-retreats",
+    "Weekend Getaways": "/weekend-getaways",
+    "Party Venues": "/party-villas",
+    "Wellness Retreats": "/villas?category=Wellness Retreats",
+  };
+  if (dedicated[category]) return dedicated[category];
+  return `/villas?category=${encodeURIComponent(category)}`;
+}
+
+const MENU_VILLA_CATEGORY_TABS: MenuTabItem[] = CATEGORIES.filter(
+  (cat) =>
+    cat === "All" ||
+    MENU_VILLAS.some((v) =>
+      v.categories?.some((c: string) => c.toLowerCase() === cat.toLowerCase()),
+    ),
+).map((cat) => ({
+  id: cat,
+  label: cat,
+  href: villaCategoryHref(cat),
+}));
 
 type MenuExperienceItem = {
   title: string;
@@ -25,6 +65,7 @@ type MenuExperienceItem = {
   images: [string, string];
 };
 
+/** Aligned with ExperiencesScrollSection / HorizontalScrollSection canonical routes. */
 const MENU_EXPERIENCES: MenuExperienceItem[] = [
   {
     title: "Weekend Getaways",
@@ -40,19 +81,19 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
     title: "Celebrations & Parties",
     type: "LUXURY PRIVATE STAYS",
     href: "/party-villas",
-    desc: "Birthdays, pool or bachelor parties unfold across private farmhouse villas with pools, open lawns and entertainment-ready spaces.",
+    desc: "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
     images: [
       "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
       "/Experiences/Party Villas/3-Addons/Movie Under The Stars-2.webp",
     ],
   },
   {
-    title: "Wedding Celebrations",
+    title: "Weddings",
     type: "UNFORGETTABLE MOMENTS",
     href: "/weddings",
-    desc: "Say 'I do' under the stars in sprawling lawns or intimate poolside setups designed just for you.",
+    desc: "Intimate ceremonies to grand, multi-day wedding celebrations, set amid private gardens, sprawling lawns, and luxury rooms.",
     images: [
-      "/Experiences/Weddings/1-Hero/3.webp",
+      "/Experiences/Weddings/1-Hero/2 (1).webp",
       "/Experiences/Weddings/2-Venue Images/DIAMOND/10.webp",
     ],
   },
@@ -60,6 +101,7 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
     title: "Corporate Offsites",
     type: "JOURNEY OF TEAMWORK",
     href: "/corporate-retreats",
+    desc: "Unwinding and ice-breaking sessions with colleagues, away from cubicles and glass walls, in private farmhouses ideal for offsites or workations.",
     images: [
       "/Experiences/Corporate Retreats/1-Hero/xhero.webp",
       "/Experiences/Corporate Retreats/2-Formats/offsite and work....webp",
@@ -68,18 +110,42 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
   {
     title: "Wellness Retreats",
     type: "PURE REJUVENATION",
-    href: "/weekend-getaways",
+    href: "/villas?category=Wellness Retreats",
+    desc: "Element-led wellness restoration through mud baths, massages, spa and aroma therapies, designed for deep rejuvenation.",
     images: [
-      "/Experiences/Weekend Getaways/3-Addons/Private Chef Experience.webp",
-      "/Experiences/Weekend Getaways/2-What Weekends Look like/Evenings Under the Stars.webp",
+      "/Home Page/2-Experiences/Wellness.webp",
+      "/Experiences/Weekend Getaways/2-What Weekends Look like/Nature & Nearby Escapes.webp",
     ],
   },
   {
     title: "Journeys in Caravans",
     type: "LUXURY ON ROAD",
     href: "/caravans",
-    images: ["/Experiences/Caravan/1-Hero/28.webp", "/Experiences/Caravan/2-Spaces/11.webp"],
+    desc: "Luxury motor caravans carry the idea of private retreat onto the road, offering comfort and privacy for glamping, pilgrimages or evolving journeys.",
+    images: [
+      "/Experiences/Caravan/1-Hero/6.webp",
+      "/Experiences/Caravan/2-Spaces/11.webp",
+    ],
   },
+  {
+    title: "Private Villas",
+    type: "CURATED COLLECTION",
+    href: "/villas",
+    desc: "A curated collection of fully private farmhouses, suited for everything from quiet stays to vibrant celebrations and bespoke experiences.",
+    images: [
+      "/Villa_Retreats/Magnolia/Hero/hero.webp",
+      "/Villa_Retreats/Magnolia/Hero/Hero 1.webp",
+    ],
+  },
+];
+
+const MENU_EXPERIENCE_TABS: MenuTabItem[] = [
+  { id: "all", label: "All", href: "/experiences" },
+  ...MENU_EXPERIENCES.map((exp) => ({
+    id: exp.href,
+    label: exp.title,
+    href: exp.href,
+  })),
 ];
 
 const FALLBACK_MENU_IMAGE = "/Villa_Retreats/Magnolia/Hero/Hero 1.webp";
@@ -119,6 +185,53 @@ function getMenuVillaCarouselImages(villa: any) {
   return combined.map(safeMenuImage);
 }
 
+/** < md: full-width phone panels use px-6 */
+const MENU_BLEED_RIGHT_MOBILE = "-mr-6 w-[calc(100%+1.5rem)]";
+/** md+ preview column: matches scroll area px-4 / md:px-6 / lg:px-8 */
+const MENU_BLEED_RIGHT_DESKTOP =
+  "-mr-4 md:-mr-6 lg:-mr-8 w-[calc(100%+1rem)] md:w-[calc(100%+1.5rem)] lg:w-[calc(100%+2rem)]";
+
+function MenuExperienceImages({
+  exp,
+  variant,
+}: {
+  exp: MenuExperienceItem;
+  variant: "mobile" | "desktop";
+}) {
+  const bleed =
+    variant === "mobile" ? MENU_BLEED_RIGHT_MOBILE : MENU_BLEED_RIGHT_DESKTOP;
+  const height = variant === "mobile" ? "h-28" : "h-[280px]";
+  const gap = variant === "mobile" ? "gap-2" : "gap-3";
+  const imgHover =
+    variant === "desktop"
+      ? "group-hover/img:scale-105 transition-transform duration-700"
+      : "";
+
+  return (
+    <div className={`flex ${gap} ${bleed}`}>
+      {exp.images.map((src, imgIdx) => (
+        <Link
+          key={`${exp.href}-${imgIdx}`}
+          href={exp.href}
+          className={`relative ${height} min-w-0 flex-1 overflow-hidden ${variant === "desktop" ? "cursor-pointer group/img" : ""}`}
+        >
+          <Image
+            src={src}
+            alt={imgIdx === 0 ? exp.title : `${exp.title} ${imgIdx + 1}`}
+            fill
+            className={`object-cover ${imgHover}`}
+            sizes={
+              variant === "mobile"
+                ? "(max-width: 1024px) 50vw, 33vw"
+                : "30vw"
+            }
+          />
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 export default function MenuPage() {
   const { setPartnerOverlayOpen } = useAnimation();
 
@@ -136,16 +249,28 @@ export default function MenuPage() {
     "default" | "villas" | "experiences" | "more"
   >("default");
 
+  const openVillasSection = () => {
+    setMenuView("villas");
+    setDesktopSelectedView("villas");
+    setDesktopHoverView("villas");
+  };
+
+  const openExperiencesSection = () => {
+    setMenuView("experiences");
+    setDesktopSelectedView("experiences");
+    setDesktopHoverView("experiences");
+  };
+
   return (
-    <main className="relative min-h-screen bg-[#1E2023] text-white pb-16 lg:pb-0">
+    <main className="relative min-h-screen bg-[#1E2023] text-white pb-16 md:pb-0">
       {/* ── Navigation ── */}
       <Navbar />
       <MobileBottomNav />
 
       {/* Main content wrapper with top padding for navbar */}
-      <div className="w-full h-[100svh] flex flex-col lg:flex-row relative pt-[48px] md:pt-[64px] overflow-hidden">
+      <div className="w-full h-[100svh] min-h-0 flex flex-col md:flex-row relative pt-[48px] md:pt-[64px] overflow-hidden">
         {/* LEFT COLUMN: Main Menu */}
-        <div className="flex-1 lg:flex-none lg:w-1/3 relative overflow-hidden h-full z-10 border-r border-transparent lg:border-white/10">
+        <div className="flex-1 min-h-0 md:flex-none md:w-1/3 relative overflow-hidden h-full z-10 border-r border-transparent md:border-white/10">
           <AnimatePresence mode="wait">
             {/* Primary Menu: Always visible on desktop, or if menuView is primary on mobile */}
             {(menuView === "primary" || true) && (
@@ -154,19 +279,17 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className={`absolute inset-0 flex flex-col px-6 md:px-12 py-4 pb-16 overflow-y-auto ${menuView !== "primary" ? "hidden lg:flex" : "flex"}`}
+                className={`absolute inset-0 flex flex-col min-h-0 overflow-hidden px-6 md:px-12 py-4 ${menuView !== "primary" ? "hidden md:flex" : "flex"}`}
               >
                 <span className="text-white/40 text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-5 flex-shrink-0">
                   MENU
                 </span>
 
-                <ul className="flex flex-col space-y-2.5 lg:space-y-3">
+                <div className="flex-1 min-h-0 overflow-y-auto overscroll-y-contain flex flex-col" data-lenis-prevent>
+                <ul className="flex flex-col space-y-2.5 md:space-y-3 pb-4">
                   <li
                     className="flex items-center justify-between cursor-pointer group"
-                    onClick={() => {
-                      setMenuView("villas");
-                      setDesktopSelectedView("villas");
-                    }}
+                    onClick={openVillasSection}
                     onMouseEnter={() => setDesktopHoverView("villas")}
                     onMouseLeave={() =>
                       setDesktopHoverView(desktopSelectedView)
@@ -185,10 +308,7 @@ export default function MenuPage() {
                   </li>
                   <li
                     className="flex items-center justify-between cursor-pointer group"
-                    onClick={() => {
-                      setMenuView("experiences");
-                      setDesktopSelectedView("experiences");
-                    }}
+                    onClick={openExperiencesSection}
                     onMouseEnter={() => setDesktopHoverView("experiences")}
                     onMouseLeave={() =>
                       setDesktopHoverView(desktopSelectedView)
@@ -262,7 +382,7 @@ export default function MenuPage() {
                   </li>
                 </ul>
 
-                <div className="flex gap-3 mt-auto pt-8">
+                <div className="flex gap-3 flex-shrink-0 pt-8 mt-auto">
                   {[
                     {
                       Icon: Facebook,
@@ -294,6 +414,7 @@ export default function MenuPage() {
                     <Phone className="w-4 h-4" />
                   </a>
                 </div>
+                </div>
               </motion.div>
             )}
 
@@ -304,19 +425,26 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="absolute inset-0 flex lg:hidden flex-col px-6 md:px-12 py-4 pb-24 overflow-y-auto bg-[#1E2023]"
+                className="absolute inset-0 flex md:hidden flex-col min-h-0 overflow-hidden px-6 py-4 bg-[#1E2023]"
               >
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-5 hover:text-white transition-colors w-fit"
+                  className="flex-shrink-0 flex items-center gap-2 text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-4 hover:text-white transition-colors w-fit"
                 >
                   <ArrowLeft className="w-4 h-4" /> BACK
                 </button>
-                <h2 className="text-gh-h1 font-philosopher text-white mb-6">
-                  Villas
-                </h2>
-                <div className="space-y-6">
-                  {VILLAS.map((villa) => (
+                <MenuVillasExperiencesSwitcher
+                  active="villas"
+                  onVillas={openVillasSection}
+                  onExperiences={openExperiencesSection}
+                />
+                <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-y-contain pb-24" data-lenis-prevent>
+                <MenuSectionChipTabs
+                  tabs={MENU_VILLA_CATEGORY_TABS}
+                  bleedClassName={MENU_BLEED_RIGHT_MOBILE}
+                />
+                <div className="space-y-6 pr-1">
+                  {MENU_VILLAS.map((villa) => (
                     <Link
                       key={villa.id}
                       href={`/villas/${villa.id}`}
@@ -334,8 +462,8 @@ export default function MenuPage() {
                         </h3>
                         <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
                       </div>
-                      <div className="-mx-6 md:-mx-12 px-6 md:px-12 overflow-x-auto hide-scrollbar">
-                        <div className="flex gap-2 w-max pr-6">
+                      <div className={`${MENU_BLEED_RIGHT_MOBILE} overflow-x-auto hide-scrollbar`}>
+                        <div className="flex gap-2 w-max">
                           {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
                             <div
                               key={`${villa.id}-${imgIdx}`}
@@ -355,6 +483,7 @@ export default function MenuPage() {
                     </Link>
                   ))}
                 </div>
+                </div>
               </motion.div>
             )}
 
@@ -364,22 +493,32 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="absolute inset-0 flex lg:hidden flex-col px-6 md:px-12 py-4 pb-24 overflow-y-auto bg-[#1E2023]"
+                className="absolute inset-0 flex md:hidden flex-col min-h-0 overflow-hidden px-6 py-4 bg-[#1E2023]"
               >
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-5 hover:text-white transition-colors w-fit"
+                  className="flex-shrink-0 flex items-center gap-2 text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-4 hover:text-white transition-colors w-fit"
                 >
                   <ArrowLeft className="w-4 h-4" /> BACK
                 </button>
-                <h2 className="text-gh-h1 font-philosopher text-white mb-6">
-                  Experiences
-                </h2>
+                <MenuVillasExperiencesSwitcher
+                  active="experiences"
+                  onVillas={openVillasSection}
+                  onExperiences={openExperiencesSection}
+                />
 
-                <div className="space-y-6">
-                  {MENU_EXPERIENCES.slice(0, 3).map((exp, idx) => (
-                    <div key={idx} className="flex flex-col group">
+                <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-y-contain pb-24" data-lenis-prevent>
+                <MenuSectionChipTabs
+                  tabs={MENU_EXPERIENCE_TABS}
+                  bleedClassName={MENU_BLEED_RIGHT_MOBILE}
+                />
+                <div className="space-y-6 pr-1">
+                  {MENU_EXPERIENCES.map((exp) => (
+                    <div key={exp.href + exp.title} className="flex flex-col group">
                       <Link href={exp.href} className="cursor-pointer">
+                        <p className="text-white/40 text-[10px] font-manrope font-medium tracking-[0.2em] uppercase mb-1">
+                          {exp.type}
+                        </p>
                         <div className="flex items-center justify-between mb-1">
                           <h3
                             style={{ fontWeight: 200 }}
@@ -390,33 +529,19 @@ export default function MenuPage() {
                           <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
                         </div>
                       </Link>
-                      <Link href={exp.href} className="cursor-pointer">
-                        <p className="text-white/50 text-gh-label font-manrope mb-2.5 leading-relaxed pr-4 group-hover:text-[#EFCD62]/70 transition-colors">
-                          {exp.desc}
-                        </p>
-                      </Link>
-                      <div className="flex gap-2">
-                        <div className="relative h-28 flex-1 aspect-[4/3]">
-                          <Image
-                            src={exp.images[0]}
-                            alt={exp.title}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 1024px) 50vw, 33vw"
-                          />
-                        </div>
-                        <div className="relative h-28 flex-1 aspect-[4/3]">
-                          <Image
-                            src={exp.images[1]}
-                            alt={`${exp.title} 2`}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 1024px) 50vw, 33vw"
-                          />
-                        </div>
-                      </div>
+                      {exp.desc ? (
+                        <Link href={exp.href} className="cursor-pointer">
+                          <p className="text-white/50 text-gh-label font-manrope mb-2.5 leading-relaxed group-hover:text-[#EFCD62]/70 transition-colors">
+                            {exp.desc}
+                          </p>
+                        </Link>
+                      ) : (
+                        <div className="mb-2.5" />
+                      )}
+                      <MenuExperienceImages exp={exp} variant="mobile" />
                     </div>
                   ))}
+                </div>
                 </div>
               </motion.div>
             )}
@@ -427,7 +552,7 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="absolute inset-0 flex lg:hidden flex-col px-6 md:px-12 py-4 pb-24 overflow-y-auto bg-[#1E2023]"
+                className="absolute inset-0 flex md:hidden flex-col min-h-0 overflow-hidden px-6 py-4 bg-[#1E2023]"
               >
                 <button
                   onClick={() => setMenuView("primary")}
@@ -435,11 +560,11 @@ export default function MenuPage() {
                 >
                   <ArrowLeft className="w-4 h-4 cursor-pointer" /> BACK
                 </button>
-                <h2 className="text-gh-h1 font-philosopher text-white mb-8">
+                <h2 className="text-gh-h1 font-philosopher text-white mb-8 flex-shrink-0">
                   More
                 </h2>
 
-                <ul className="flex flex-col space-y-5 pl-4">
+                <ul className="flex-1 min-h-0 overflow-y-auto overscroll-y-contain flex flex-col space-y-5 pl-4 pb-24" data-lenis-prevent>
                   <li>
                     <Link
                       href="/privacy-policy"
@@ -470,8 +595,8 @@ export default function MenuPage() {
           </AnimatePresence>
         </div>
 
-        {/* RIGHT COLUMN: Desktop Hover Previews */}
-        <div className="hidden lg:flex flex-1 relative h-full items-center justify-center p-12 overflow-hidden pointer-events-auto">
+        {/* RIGHT COLUMN: Tablet/desktop previews (md+) */}
+        <div className="hidden md:flex flex-1 min-h-0 relative h-full overflow-hidden pointer-events-auto md:p-8 lg:p-12">
           <AnimatePresence mode="wait">
             {(desktopHoverView === "default"
               ? desktopSelectedView
@@ -507,15 +632,21 @@ export default function MenuPage() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}
                 data-lenis-prevent
-                className="absolute inset-0 flex flex-col px-12 pt-5 pb-12 pointer-events-auto overflow-y-auto hide-scrollbar"
+                className="absolute inset-0 flex flex-col min-h-0 overflow-hidden pointer-events-auto"
               >
+                <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-y-contain px-4 md:px-6 lg:px-8 pt-5 pb-20">
+                <MenuSectionChipTabs
+                  tabs={MENU_VILLA_CATEGORY_TABS}
+                  bleedClassName={MENU_BLEED_RIGHT_DESKTOP}
+                  className="-mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8"
+                />
                 <div className="w-full space-y-12">
-                  {VILLAS.map((villa, idx) => (
+                  {MENU_VILLAS.map((villa, idx) => (
                     <motion.div
                       key={villa.id}
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.1, duration: 0.5 }}
+                      transition={{ delay: Math.min(idx * 0.05, 0.4), duration: 0.35 }}
                       className="w-full flex flex-col group"
                     >
                       <div className="flex justify-between items-start mb-5 pr-2">
@@ -538,8 +669,8 @@ export default function MenuPage() {
                         </Link>
                       </div>
 
-                      <div className="overflow-x-auto hide-scrollbar">
-                        <div className="flex gap-3 w-max pr-4">
+                      <div className={`${MENU_BLEED_RIGHT_DESKTOP} overflow-x-auto hide-scrollbar`}>
+                        <div className="flex gap-3 w-max">
                           {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
                             <Link
                               key={`${villa.id}-desktop-${imgIdx}`}
@@ -560,6 +691,7 @@ export default function MenuPage() {
                     </motion.div>
                   ))}
                 </div>
+                </div>
               </motion.div>
             )}
 
@@ -573,15 +705,21 @@ export default function MenuPage() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}
                 data-lenis-prevent
-                className="absolute inset-0 flex flex-col px-12 pt-5 pb-12 pointer-events-auto overflow-y-auto hide-scrollbar"
+                className="absolute inset-0 flex flex-col min-h-0 overflow-hidden pointer-events-auto"
               >
+                <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-y-contain px-4 md:px-6 lg:px-8 pt-5 pb-20">
+                <MenuSectionChipTabs
+                  tabs={MENU_EXPERIENCE_TABS}
+                  bleedClassName={MENU_BLEED_RIGHT_DESKTOP}
+                  className="-mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8"
+                />
                 <div className="w-full space-y-12">
                   {MENU_EXPERIENCES.map((exp, idx) => (
                     <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, y: 20 }}
+                      key={exp.href + exp.title}
+                      initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.1, duration: 0.5 }}
+                      transition={{ delay: Math.min(idx * 0.05, 0.4), duration: 0.35 }}
                       className="w-full flex flex-col group"
                     >
                       <div className="flex justify-between items-start mb-5 pr-2">
@@ -604,34 +742,10 @@ export default function MenuPage() {
                         </Link>
                       </div>
 
-                      <div className="flex gap-3">
-                        <Link
-                          href={exp.href}
-                          className="relative h-[280px] flex-1 aspect-[4/3] cursor-pointer overflow-hidden group/img"
-                        >
-                          <Image
-                            src={exp.images[0]}
-                            alt={exp.title}
-                            fill
-                            className="object-cover group-hover/img:scale-105 transition-transform duration-700"
-                            sizes="30vw"
-                          />
-                        </Link>
-                        <Link
-                          href={exp.href}
-                          className="relative h-[280px] flex-1 aspect-[4/3] cursor-pointer overflow-hidden group/img"
-                        >
-                          <Image
-                            src={exp.images[1]}
-                            alt="experience"
-                            fill
-                            className="object-cover group-hover/img:scale-105 transition-transform duration-700"
-                            sizes="30vw"
-                          />
-                        </Link>
-                      </div>
+                      <MenuExperienceImages exp={exp} variant="desktop" />
                     </motion.div>
                   ))}
+                </div>
                 </div>
               </motion.div>
             )}

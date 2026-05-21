@@ -90,7 +90,9 @@ export default function AnotherExperienceOnePage() {
         </div>
       </section>
 
-      <AnotherExperienceOneClient />
+      <div data-lenis-prevent>
+        <AnotherExperienceOneClient />
+      </div>
 
       <Footer />
       <MobileBottomNav />

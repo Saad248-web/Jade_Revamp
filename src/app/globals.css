@@ -136,12 +136,78 @@
   display: none !important; /* Chrome / Safari / Opera — hide scrollbar gap */
 }
 
+html {
+  /* Match listing/marketing pages — avoids green flash in safe-area gaps below mobile nav */
+  background: #1a1c1e;
+  scroll-behavior: auto;
+  overflow-x: hidden;
+  touch-action: pan-y;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
 body {
   position: relative; /* Fix: Ensures Framer Motion scroll calculations are accurate */
   overflow-x: hidden;
   max-width: 100%;
   color: theme("colors.jade.text");
-  background: #0b2c23;
+  background: #1a1c1e;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* GPU-promote fixed / sticky site chrome (navbar, bottom nav, etc.) */
+.jade-scroll-chrome {
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  contain: layout style;
+}
+
+[class*="backdrop-blur"] {
+  contain: paint;
+}
+
+/* Inner scroll panels — stop wheel bubbling to Lenis */
+[data-lenis-prevent],
+.modal-body,
+.dropdown-menu,
+.panel-content,
+[data-radix-scroll-area-viewport],
+[data-scroll-area] {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+html,
+body,
+main {
+  scroll-snap-type: none;
+}
+
+/* Defer off-screen sections — never pin / scroll-jack tracks */
+main > section:not([data-scroll-pin]),
+main > div:not([data-scroll-pin]) > section:not([data-scroll-pin]) {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
+/* Pin sections (Featured Villas, horizontal scroll, etc.) — limit layout thrash while scrolling */
+[data-scroll-pin] {
+  contain: layout style;
+}
+
+[data-scroll-pin] .sticky {
+  will-change: transform;
 }
 
 /* Split-hero carousel copy — legibility over bright photos */

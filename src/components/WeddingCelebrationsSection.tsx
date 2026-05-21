@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect, useMemo } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import JadeImage from "@/components/ui/JadeImage";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -68,19 +68,16 @@ export default function WeddingCelebrationsSection() {
     target: targetRef,
   });
 
-  // Smooth scroll spring
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
   const totalSteps = CELEBRATIONS.length + 1;
 
   const celebrations = CELEBRATIONS;
 
   return (
-    <section ref={targetRef} className="relative h-[600vh] bg-[#1A1C1E]">
+    <section
+      ref={targetRef}
+      data-scroll-pin
+      className="relative h-[600vh] bg-[#1A1C1E]"
+    >
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#1A1C1E]">
         {/* Top Label & Counter - Global */}
         <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(38.4px,4.8vh,64px)] pb-8">
@@ -92,7 +89,7 @@ export default function WeddingCelebrationsSection() {
             PRE WEDDING CELEBRATIONS
           </span>
           <GlobalCounter
-            progress={smoothProgress}
+            progress={scrollYProgress}
             total={CELEBRATIONS.length}
             totalSteps={totalSteps}
           />
@@ -105,11 +102,11 @@ export default function WeddingCelebrationsSection() {
               key={celebration.id}
               data={celebration}
               index={i}
-              globalProgress={smoothProgress}
+              globalProgress={scrollYProgress}
               totalSteps={totalSteps}
             />
           ))}
-          <EndButton globalProgress={smoothProgress} />
+          <EndButton globalProgress={scrollYProgress} />
         </div>
       </div>
     </section>

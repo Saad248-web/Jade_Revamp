@@ -1,151 +1,266 @@
 # Jade Hospitainment — ReVamp
 
-Marketing and booking platform for **Jade Hospitainment** — luxury private retreats, destination weddings, corporate offsites, and curated experiences near Bangalore. Built as a performance- and SEO-first **Next.js 14** application with typed retreat data, PostgreSQL-backed bookings, and Razorpay payments.
+Marketing and booking platform for **Jade Hospitainment**: luxury private retreats, destination weddings, corporate offsites, and curated experiences near Bangalore. The site is a **Next.js 14** App Router application with typed retreat data in the repo, **PostgreSQL** for bookings and leads, optional **Razorpay** checkout, and a strong **SEO / GEO** layer (`sitemap`, `robots`, JSON-LD, `llms.txt`).
 
-## Features
+**Revision:** 2026-05-20
 
-- **Retreat portfolio** — Villa and experience pages driven by typed data in `src/data/retreats/`
-- **Booking flow** — Availability checks, enquiry capture, admin management (`/admin`, `/book`)
-- **Payments** — Razorpay order creation and webhook handling
-- **Leads & careers** — Contact, partner, and multipart career applications (optional Resend email)
-- **SEO / GEO** — Dynamic metadata, JSON-LD, `sitemap.ts` / `robots.ts`, and `public/llms.txt` for AI crawlers
-- **Motion & UX** — GSAP, Framer Motion, Lenis smooth scroll, Rive where used
+---
+
+## What this repo delivers
+
+| Area | Summary |
+|------|---------|
+| **Marketing** | Home, villa directory + detail, experience category pages, blogs, about, contact, careers |
+| **Conversion** | Global enquire overlay, wedding/Rathaa/partner flows, `/book` + success + Razorpay |
+| **Operations** | Password-gated `/admin`, booking APIs, optional Resend notifications |
+| **Discovery** | Per-villa metadata, spaces galleries, IndexNow hook, AI-oriented `public/llms.txt` |
+| **UX** | Lenis smooth scroll, GSAP/Framer sections, venue overlays with section tabs + scroll spy |
+
+---
 
 ## Stack
 
 | Layer | Technology |
 |-------|------------|
-| Framework | Next.js 14 (App Router), React 18, TypeScript |
-| Styling | Tailwind CSS |
-| Animation | GSAP, Framer Motion, Lenis |
-| Database | PostgreSQL (`pg`) — local via Docker |
-| Payments | Razorpay |
-| Observability | Sentry (optional) |
-| Tests | Vitest (unit), Playwright (E2E) |
+| Framework | Next.js **14.2.4** (App Router), React 18, TypeScript 5 |
+| Styling | Tailwind CSS 3, container queries |
+| Motion | GSAP, Framer Motion (`MotionConfig` + `prefers-reduced-motion`), Lenis |
+| Media | `next/image`, prebuild blur manifest (`sharp` in scripts) |
+| Database | PostgreSQL via `pg` (local Docker Compose) |
+| Payments | Razorpay (order API + signed webhook) |
+| Email | Resend (optional) |
+| Observability | Sentry (`@sentry/nextjs`, optional DSN) |
+| Tests | Vitest (unit), Playwright (E2E smoke) |
+| CI | GitHub Actions — `npm test` + `npm run build` |
+
+---
 
 ## Project structure
 
 ```text
+Jade_ReVamp/
 ├── src/
-│   ├── app/              # Routes, layouts, metadata, API handlers
-│   │   └── api/          # Bookings, leads, payments, webhooks, IndexNow
-│   ├── components/       # UI (sections, forms, analytics)
-│   ├── lib/              # DB, API clients, payment helpers
-│   ├── data/             # Retreats, blogs, static content models
-│   └── context/          # Client state (animation, UI)
-├── public/               # Images, video, llms.txt (large asset tree)
-├── scripts/              # Media manifest, image/video optimization, setup checks
-├── schema.sql            # PostgreSQL schema (applied on first Docker DB start)
-├── NEXUS_v4_APEX/        # AI agent engine skills (see AGENTS.md)
-├── AGENTS.md             # Orchestrator routing for AI-assisted development
-└── .env.example          # Environment variable template
+│   ├── app/                    # App Router: pages, layouts, metadata routes
+│   │   ├── api/                # REST handlers (bookings, leads, payments, media, IndexNow)
+│   │   ├── book/               # Booking wizard + success (Razorpay hand-off)
+│   │   ├── villas/[id]/        # Villa detail + /spaces gallery
+│   │   ├── template.tsx        # Per-navigation remount; manual scroll restoration
+│   │   ├── providers.tsx       # Lenis, overlays, booking/wishlist context, GA
+│   │   ├── layout.tsx          # Global metadata, fonts, JSON-LD graph
+│   │   ├── robots.ts / sitemap.ts
+│   │   └── …                   # Category pages, blogs, legal, admin, menu
+│   ├── components/             # UI (~88 TSX modules)
+│   │   ├── experience/         # Villa overlay layout, pricing blocks, FAQ
+│   │   ├── villa/              # Detail sections, sticky tabs, carousels
+│   │   ├── menu/               # MenuPanelTabs (villa directory UX)
+│   │   ├── ui/                 # JadeImage, MeanderStrip, carousels, EmptyState
+│   │   └── booking/            # Shared booking form fields
+│   ├── lib/                    # DB, payments, scroll spy, Lenis, validation, SEO helpers
+│   ├── data/                   # Retreats, blogs, overlay pricing/villa maps
+│   ├── context/                # Animation, booking, wishlist
+│   └── generated/              # mediaManifest.ts (prebuild; gitignored output pattern)
+├── public/                     # Large WebP/image tree + llms.txt + og-default.jpg
+├── scripts/                    # Media manifest, favicons, OG, DB reset, setup checks
+├── e2e/                        # Playwright smoke + lead-surface specs
+├── schema.sql                  # Base Postgres schema (Docker first boot)
+├── schema_migration_leads_rathaa_partner_payments.sql
+├── docker-compose.db.yml
+├── next.config.mjs             # Security headers, images, Sentry wrapper
+├── src/middleware.ts           # Edge guard for /api/*
+├── AGENTS.md / NEXUS_v4_APEX/  # AI agent orchestration (optional for humans)
+├── audit-report.md             # Stakeholder audit (status + backlog)
+└── WEBDEV-Audit.md             # Engineering audit (APIs, limits, evidence)
 ```
+
+---
+
+## Architecture highlights
+
+### Scroll and navigation (2026-05)
+
+- **`SmoothScroll`** — single global Lenis instance in `providers.tsx`; respects `prefers-reduced-motion`.
+- **`ScrollToTopOnNavigate`** — resets scroll on route/search changes and browser back/forward (`scrollToPageTopWithRetries`).
+- **`src/app/template.tsx`** — sets `history.scrollRestoration = "manual"` (avoids fighting Lenis).
+- **Venue overlays** (`VenueOverlay`, `PartyVenueOverlay`, `CorporateVenueOverlay`) — shared hooks: `useVenueOverlaySectionNav`, `useSectionScrollSpy`, `useScrollTabIntoView`, `scrollToOverlaySection`.
+- **Villa detail** — `VillaDetailStickyTabs` + `villaDetailSectionNav` + section scroll spy on `/villas/[id]`.
+- **Chrome hide on scroll** — `useScrollHide` / `useOverlayScrollChromeHide` + `batchScrollUpdate` for batched listeners.
+
+### Data model
+
+- Villas and experiences are **TypeScript modules** under `src/data/retreats/` (not CMS-driven).
+- `src/data/retreats/index.ts` exports `VILLAS`, `CATEGORIES`, and per-property records used by listings, overlays, and booking allowlists.
+- Overlay-specific villa/pricing maps live under `src/data/overlays_data/{wedding,party,corporate,weekend}/`.
+
+### Global overlays (client)
+
+Mounted once in `providers.tsx`:
+
+- `EnquireOverlay` → `POST /api/leads` (`general_enquiry`)
+- `RathaaOverlay` → `POST /api/leads` (`rathaa_enquiry`)
+- `PartnerOverlay` → `POST /api/leads/partner` (multipart)
+
+Booking UI uses `/book` and `ReservationOverlay` on the villas carousel — not a legacy monolithic booking overlay.
+
+---
 
 ## Getting started
 
 ### Prerequisites
 
-- **Node.js** 20 LTS (or current LTS)
-- **Docker Desktop** — for local PostgreSQL (`npm run db:up`)
-- Copy **`.env.example`** → **`.env.local`** and fill in values (never commit `.env.local`)
+- **Node.js 20** LTS (CI uses 20)
+- **Docker Desktop** for local PostgreSQL (`npm run db:up`)
+- Copy **`.env.example`** → **`.env.local`** (never commit `.env.local`)
 
 ### Install and run
 
 ```bash
 npm install
-npm run db:up          # start Postgres (first run applies schema.sql)
+npm run db:up          # Postgres; first start applies schema.sql via compose mount
 npm run dev            # http://localhost:3000
 ```
 
-Verify your machine is ready:
+Verify local setup:
 
 ```bash
 npm run setup:check    # Node, deps, .env.local, DB port
-npm run setup:guide    # opens docs/local-dev-setup-guide.html
+npm run setup:guide    # Opens docs/local-dev-setup-guide.html
 ```
 
-Production build (runs media manifest generation via `prebuild`):
+Production build (runs `prebuild` media manifest):
 
 ```bash
 npm run build
 npm start
 ```
 
+---
+
 ## Environment variables
 
-See [`.env.example`](.env.example) for the full list. Common groups:
+Full template: [`.env.example`](.env.example).
 
-| Group | Purpose |
-|-------|---------|
-| `POSTGRES_*` | Local or hosted PostgreSQL for bookings |
-| `RAZORPAY_*` | Order API and webhook signing |
-| `ADMIN_PASSWORD` | `x-admin-password` header for admin booking APIs |
-| `RESEND_*` | Optional transactional email |
-| `NEXT_PUBLIC_GA_ID` | Google Analytics |
-| `NEXT_PUBLIC_SENTRY_DSN` | Error reporting (optional locally) |
-| `INDEXNOW_*` | Search-engine URL submission hook |
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `POSTGRES_*` | For bookings | Connection used by `src/lib/db.ts` |
+| `ADMIN_PASSWORD` | Admin APIs | `x-admin-password` on GET/PATCH/DELETE bookings |
+| `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` | Payments | `POST /api/payments/razorpay-order` |
+| `RAZORPAY_WEBHOOK_SECRET` | Webhook | HMAC verify on `POST /api/webhooks/razorpay` |
+| `NEXT_PUBLIC_PAYMENT_GATEWAY_KEY` | Checkout UI | Razorpay Checkout on `/book/success` |
+| `RESEND_API_KEY` + `RESEND_FROM` | Optional email | Lead/career/booking notifications |
+| `LEADS_NOTIFY_EMAIL` / `CAREERS_NOTIFY_EMAIL` / `BOOKING_NOTIFY_EMAIL` | Optional | Inbox routing |
+| `NEXT_PUBLIC_GA_ID` | Optional | `GoogleAnalytics` in providers |
+| `NEXT_PUBLIC_SENTRY_DSN` | Optional | Sentry client + server |
+| `INDEXNOW_KEY` / `INDEXNOW_HOST` / `INDEXNOW_API_SECRET` | IndexNow | Production Bearer on `POST /api/indexnow` |
+| `NEXT_PUBLIC_API_BASE_URL` | Future | Reserved in `lib/api.ts` for external API switch |
+
+---
 
 ## NPM scripts
 
 | Script | Description |
 |--------|-------------|
 | `dev` | Next.js development server |
-| `build` / `start` | Production build and server |
-| `lint` | ESLint (Next.js config) |
-| `test` | Vitest unit tests |
-| `test:e2e` | Playwright against dev server |
-| `test:e2e:ci` | Build + Playwright (CI-style) |
+| `build` / `start` | Production build and server (`prebuild` → media manifest) |
+| `lint` | `next lint` |
+| `test` | Vitest — `bookingDetailsValidation`, `paymentService` |
+| `test:e2e` | Playwright vs dev server |
+| `test:e2e:ci` | `build` + production server + Playwright (`CI=true`) |
 | `db:up` / `db:down` / `db:reset` | Docker Compose PostgreSQL |
-| `db:reset:schema` | Reset schema via script |
+| `db:reset:schema` | `scripts/reset-local-db.mjs` |
 | `setup:check` / `setup:guide` | Local environment verification |
-| `optimize-images` | Compress images under `public/` |
-| `optimize-hero-video` | Hero video optimization |
-| `generate-favicons` | Regenerate favicon assets |
+| `optimize-images` / `optimize-images:dry-run` | `scripts/optimize_public_images.mjs` |
+| `generate-favicons` | `scripts/generate_favicons.mjs` |
+
+---
+
+## Routes (App Router)
+
+| Path | Role |
+|------|------|
+| `/` | Landing (splash + scroll sections) |
+| `/villas`, `/villas/[id]`, `/villas/[id]/spaces` | Directory, detail, gallery |
+| `/weddings`, `/corporate-retreats`, `/weekend-getaways`, `/party-villas` | Experience category + venue overlays |
+| `/experiences`, `/experiences/another-experience-1` | Experiences hub + scroll demo page |
+| `/caravans` | Caravan experience + Rathaa CTA |
+| `/blogs`, `/blogs/[slug]` | Editorial |
+| `/book`, `/book/success` | Booking + payment |
+| `/menu` | Full-screen villa/experience directory |
+| `/about`, `/contact`, `/careers` | Brand, contact, hiring |
+| `/wishlist` | Saved villas (`noindex`) |
+| `/admin` | Booking admin UI (`noindex`) |
+| `/privacy-policy`, `/terms-conditions`, `/refund-policy` | Legal |
+
+Metadata routes: `robots.ts`, `sitemap.ts`, `manifest.ts`.
+
+---
 
 ## API routes (overview)
 
-| Route | Purpose |
-|-------|---------|
-| `POST /api/bookings` | Create booking / enquiry |
-| `GET /api/bookings/availability` | Date availability |
-| `GET/PATCH/DELETE /api/bookings/[id]` | Admin booking operations |
-| `POST /api/payments/razorpay-order` | Create Razorpay order |
-| `POST /api/webhooks/razorpay` | Payment webhook |
-| `POST /api/leads` | General lead capture |
-| `POST /api/leads/partner` | Partner enquiries |
-| `POST /api/careers/apply` | Career applications |
-| `POST /api/indexnow` | IndexNow URL submission |
-| `GET /api/villas/[id]/media` | Villa media manifest |
-| `GET /api/experiences/[slug]/media` | Experience media manifest |
+| Method | Route | Purpose |
+|--------|-------|---------|
+| `POST` | `/api/bookings` | Create booking + overlap check |
+| `GET` | `/api/bookings` | Admin list (`x-admin-password`) |
+| `GET` / `PATCH` / `DELETE` | `/api/bookings/[id]` | Admin CRUD |
+| `GET` | `/api/bookings/availability` | Monthly occupancy by villa |
+| `POST` | `/api/leads` | `general_enquiry`, `rathaa_enquiry`, `wedding_enquiry` |
+| `POST` | `/api/leads/partner` | Partner multipart + photos |
+| `POST` | `/api/careers/apply` | Résumé multipart |
+| `POST` | `/api/payments/razorpay-order` | Create order; links `booking_uuid` |
+| `POST` | `/api/webhooks/razorpay` | Signed payment events |
+| `POST` | `/api/indexnow` | URL submission (Bearer in prod) |
+| `GET` | `/api/instagram/oembed` | Bounded oEmbed proxy |
+| `GET` | `/api/villas/[id]/media` | Villa media JSON |
+| `GET` | `/api/experiences/[slug]/media` | Experience media JSON |
 
-Booking and payment flows require a running database and valid Razorpay credentials for full end-to-end testing.
+Edge middleware on **`/api/*`**: verb allowlist, **600 req / 60 s / IP**, `Cross-Origin-Resource-Policy: same-site`. Per-route limits are documented in [`WEBDEV-Audit.md`](./WEBDEV-Audit.md).
+
+---
 
 ## Testing
 
 ```bash
-npm test                 # Vitest
-npm run test:e2e         # Playwright (starts dev server)
+npm test                 # Vitest unit tests
+npm run test:e2e         # Playwright (starts dev)
 npm run test:e2e:ci      # build + start + Playwright
 ```
 
-Optional: `PLAYWRIGHT_BASE_URL` in `.env.local` for a custom base URL.
+E2E coverage today:
+
+- `e2e/smoke.spec.ts` — home title, `/book` shell
+- `e2e/lead-surfaces.spec.ts` — `/careers`, `/contact` heroes
+
+CI (`.github/workflows/ci.yml`): `npm ci` → `npm test` → `npm run build` on `main` / `master` PRs and pushes. Playwright is local/optional in CI (not in workflow) due to weight.
+
+---
 
 ## Performance and assets
 
-- Images served as WebP/AVIF where configured in `next.config.mjs`
-- `prebuild` generates a media manifest: `scripts/generate_media_manifest.mjs`
-- Heavy UI (carousels, GSAP sections) uses dynamic imports where applied in code
-- Run `npm run optimize-images` before large media commits when adding assets
+- `prebuild` writes `src/generated/mediaManifest.ts` with LQIP blur data for gallery performance.
+- `next.config.mjs` enables AVIF/WebP, remote patterns, long-cache `_next/image`, production security headers (HSTS, COOP, Permissions-Policy).
+- `public/` is large by design; use `npm run optimize-images` before big media commits; consider CDN/object storage at scale.
+
+---
+
+## Documentation and audits
+
+| File | Audience |
+|------|----------|
+| [`audit-report.md`](./audit-report.md) | Stakeholders — shipped vs backlog, SEO story, risks |
+| [`WEBDEV-Audit.md`](./WEBDEV-Audit.md) | Engineers — API truth, rate limits, evidence paths |
+
+---
 
 ## AI-assisted development
 
-This repo uses **NEXUS APEX v4.0** under `NEXUS_v4_APEX/`. If you use Cursor or other AI agents:
+This repo uses **NEXUS APEX v4.0** (`NEXUS_v4_APEX/`, [`AGENTS.md`](./AGENTS.md)):
 
-1. Read [`AGENTS.md`](AGENTS.md) for the engine loop and Jade-specific routing.
-2. Load the relevant `NEXUS_v4_APEX/<ENGINE>/SKILL.md` before UI, API, or SEO changes.
-3. Run `npm run gate` from `NEXUS_v4_APEX/` when changing framework contracts (if configured).
+1. Run the engine loop in `AGENTS.md` before non-trivial changes.
+2. Read the relevant `NEXUS_v4_APEX/<ENGINE>/SKILL.md` (UI → `07_COMPONENTS`, API → `10_API`, SEO → `21_SEO`, etc.).
+3. Apply `0A_ANTISLOP` guardrails before finishing.
 
-Human backlog and API inventory notes live in `audit-report.md` and `WEBDEV-Audit.md`.
+Note: NEXUS `09_BUILD` targets Next.js 15 patterns; **this project stays on Next 14** — follow existing `src/` conventions.
+
+---
 
 ## License
 

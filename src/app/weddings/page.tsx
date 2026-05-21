@@ -3,9 +3,9 @@ import WeddingHero from "@/components/WeddingHero";
 import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import Footer from "@/components/Footer";
-import SmoothScroll from "@/components/SmoothScroll";
 import JsonLd from "@/components/seo/JsonLd";
 import dynamic from "next/dynamic";
+import MeanderStrip from "@/components/ui/MeanderStrip";
 
 const WeddingScrollSection = dynamic(
   () => import("@/components/WeddingScrollSection"),
@@ -83,7 +83,6 @@ const eventSchema = {
 
 export default function WeddingPage() {
   return (
-    <SmoothScroll>
       <main className="relative bg-[#1A1C1E] min-h-screen">
         <JsonLd schema={breadcrumbSchema} />
         <JsonLd schema={eventSchema} />
@@ -94,14 +93,15 @@ export default function WeddingPage() {
         <div className="relative z-10">
           <WeddingScrollSection />
           <WeddingVillasCarousel />
+          <MeanderStrip accentLine="green" />
           <WeddingServicesSection />
           <WhyJadeWeddings />
+          <MeanderStrip track="green" />
           <WeddingCelebrationsSection />
         </div>
 
         <Footer />
         <MobileBottomNav />
       </main>
-    </SmoothScroll>
   );
 }

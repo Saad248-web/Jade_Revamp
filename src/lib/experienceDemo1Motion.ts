@@ -1,5 +1,5 @@
 /**
- * Demo 1 motion math (PROMPT_DEMO1_EXTRACTION.md) for JS-driven fallback
+ * Scroll-driven panel motion math for JS-driven fallback
  * when CSS scroll-driven animations are unavailable (Safari, Firefox, etc.).
  */
 

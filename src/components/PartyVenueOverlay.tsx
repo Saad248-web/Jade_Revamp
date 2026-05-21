@@ -124,6 +124,8 @@ import {
   EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS,
   EXPERIENCE_OVERLAY_ROOT_CLASS,
 } from "@/lib/experienceOverlayTheme";
+import { useOverlayScrollChromeHide } from "@/lib/useOverlayScrollChromeHide";
+import { useVenueOverlaySectionNav } from "@/lib/useVenueOverlaySectionNav";
 import {
   VillaExperienceBookingBottomBar,
   VillaExperienceHeroCarousel,
@@ -133,6 +135,7 @@ import {
   isExperienceOverlayMdUp,
 } from "@/components/experience/VillaExperienceOverlayLayout";
 import AmenityHighlightTile from "@/components/villa/AmenityHighlightTile";
+import MeanderStrip from "@/components/ui/MeanderStrip";
 import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
 import VillaPricingBlocks, {
   buildPartyOverlayPricingBlocks,
@@ -162,18 +165,12 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const reducedMotion = useReducedMotion();
-  const [isCloseButtonHidden, setIsCloseButtonHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const { isHidden: isCloseButtonHidden, onScroll: handleScrollBase } =
+    useOverlayScrollChromeHide(150);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     if (!isExperienceOverlayMdUp()) return;
-    const currentScrollY = e.currentTarget.scrollTop;
-    if (currentScrollY > lastScrollY && currentScrollY > 150) {
-      setIsCloseButtonHidden(true);
-    } else {
-      setIsCloseButtonHidden(false);
-    }
-    setLastScrollY(currentScrollY);
+    handleScrollBase(e);
   };
   const overlayCarouselCustom: HeroSplitCustom = {
     dir: direction,
@@ -234,65 +231,12 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
 
   const tabs = ["Amenities", "Pricing", "Location", "Walkthrough", "FAQ"];
 
-  const handleTabClick = (tabName: string) => {
-    setActiveTab(tabName);
-  };
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id.toLowerCase());
-    if (element) {
-      const container = element.closest(".overflow-y-auto");
-      if (container) {
-        const offset = 80;
-        const elementPosition = element.offsetTop;
-        container.scrollTo({
-          top: elementPosition - offset,
-          behavior: "smooth",
-        });
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (!isOpen || !mounted) return;
-    const container = overlayScrollRef.current;
-    if (!container) return;
-
-    const sectionIds = [
-      "amenities",
-      "pricing",
-      "location",
-      "walkthrough",
-      "faq",
-    ];
-
-    const observerOptions = {
-      root: container,
-      rootMargin: "-20% 0px -40% 0px",
-      threshold: 0,
-    };
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          setActiveTab(id.charAt(0).toUpperCase() + id.slice(1));
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(
-      observerCallback,
-      observerOptions,
-    );
-
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [isOpen, mounted, villa?.id, overlayScrollRootGen]);
+  const { scrollToSection } = useVenueOverlaySectionNav(
+    overlayScrollRef.current,
+    setActiveTab,
+    isOpen && mounted,
+    overlayScrollRootGen,
+  );
 
   if (!mounted || !isOpen || !villa) return null;
 
@@ -308,6 +252,11 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
       <VillaExperienceOverlayCloseFramer
         MotionButton={MotionButton}
         onClose={onClose}
+        variant="above-sheet"
+      />
+      <VillaExperienceOverlayCloseFramer
+        MotionButton={MotionButton}
+        onClose={onClose}
         isHidden={isCloseButtonHidden}
         variant="fixed"
       />
@@ -316,11 +265,13 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
         scrollRef={overlayScrollRef}
         onScroll={handleScroll}
         onScrollRootUpdated={() => setOverlayScrollRootGen((g) => g + 1)}
-        mobileTopChrome={
-          <VillaExperienceOverlayCloseFramer
-            MotionButton={MotionButton}
-            onClose={onClose}
-            variant="in-sheet"
+        onBackdropClick={onClose}
+        mobileFooter={
+          <VillaExperienceBookingBottomBar
+            placement="sheet"
+            villaId={v.id}
+            onwardPrice={displayPrice}
+            onEnquireClick={() => scrollToSection("enquiry")}
           />
         }
         pinnedTop={
@@ -434,6 +385,8 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
               </div>
             </section>
 
+            {partyPricingBlocks.length > 0 ? <MeanderStrip accentLine="green" /> : null}
+
             {/* ── CHARCOAL: Pricing ────────────────────────────────────────── */}
             {partyPricingBlocks.length > 0 && (
               <section id="pricing" className="w-full bg-jade-green text-white">
@@ -449,6 +402,8 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                 </div>
               </section>
             )}
+
+            {partyPricingBlocks.length > 0 ? <MeanderStrip track="green" /> : null}
 
             {/* ── GREEN: Location ───────────────────────────────────────────── */}
             <section id="location" className="w-full bg-jade-charcoal text-white">

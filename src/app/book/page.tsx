@@ -772,7 +772,7 @@ function SuccessScreen({
   };
 
   return (
-    <div className="h-[100svh] bg-[#0B2C23] flex flex-col items-center justify-center px-6 text-center overflow-y-auto py-8">
+    <div className="h-[100svh] bg-[#0B2C23] flex flex-col items-center justify-center px-6 text-center overflow-y-auto py-8" data-lenis-prevent>
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}

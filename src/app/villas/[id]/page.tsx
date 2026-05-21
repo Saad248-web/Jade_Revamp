@@ -5,7 +5,9 @@ import Image from "next/image";
 import JadeImage from "@/components/ui/JadeImage";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { useSectionScrollSpy } from "@/lib/useSectionScrollSpy";
+import { VILLA_DETAIL_SECTION_IDS } from "@/lib/villaDetailSectionNav";
 import {
   ArrowLeft,
   ArrowRight,
@@ -90,8 +92,12 @@ import {
   VILLA_DETAIL_SPACING,
 } from "@/components/villa/villaDetailSpacing";
 import clsx from "clsx";
-import { usePreloadNeighborImages } from "@/lib/carouselMotion";
+import {
+  useCarouselAutoAdvance,
+  usePreloadNeighborImages,
+} from "@/lib/carouselMotion";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
+import VillaDetailImageFrame from "@/components/villa/VillaDetailImageFrame";
 
 const vd = VILLA_DETAIL_SPACING;
 
@@ -315,6 +321,24 @@ export default function VillaDetailsPage() {
   );
   usePreloadNeighborImages(activityImageUrls, currentActivityIndex);
 
+  const spaceSlideCount = derivedSpaces.length;
+  const activitySlideCount = derivedActivities.length;
+
+  const handleNextSpaceRef = useRef(() => {});
+  const handleNextActivityRef = useRef(() => {});
+
+  const { pause: pauseSpaceAuto, resume: resumeSpaceAuto } =
+    useCarouselAutoAdvance({
+      onNext: () => handleNextSpaceRef.current(),
+      enabled: spaceSlideCount > 1,
+    });
+
+  const { pause: pauseActivityAuto, resume: resumeActivityAuto } =
+    useCarouselAutoAdvance({
+      onNext: () => handleNextActivityRef.current(),
+      enabled: activitySlideCount > 1,
+    });
+
   const handlePrevImage = () => {
     if (imagesList.length <= 1) return;
     setCurrentImageIndex((prev) =>
@@ -327,8 +351,21 @@ export default function VillaDetailsPage() {
     setCurrentImageIndex((prev) => (prev + 1) % imagesList.length);
   };
 
+  const advanceSpace = () => {
+    if (derivedSpaces.length > 0) {
+      setCurrentSpaceIndex((prev) => (prev + 1) % derivedSpaces.length);
+    }
+  };
+
+  const advanceActivity = () => {
+    if (derivedActivities.length > 0) {
+      setCurrentActivityIndex((prev) => (prev + 1) % derivedActivities.length);
+    }
+  };
+
   const handlePrevSpace = () => {
-    if (derivedSpaces && derivedSpaces.length > 0) {
+    pauseSpaceAuto();
+    if (derivedSpaces.length > 0) {
       setCurrentSpaceIndex((prev) =>
         prev === 0 ? derivedSpaces.length - 1 : prev - 1,
       );
@@ -336,13 +373,13 @@ export default function VillaDetailsPage() {
   };
 
   const handleNextSpace = () => {
-    if (derivedSpaces && derivedSpaces.length > 0) {
-      setCurrentSpaceIndex((prev) => (prev + 1) % derivedSpaces.length);
-    }
+    pauseSpaceAuto();
+    advanceSpace();
   };
 
   const handlePrevActivity = () => {
-    if (derivedActivities && derivedActivities.length > 0) {
+    pauseActivityAuto();
+    if (derivedActivities.length > 0) {
       setCurrentActivityIndex((prev) =>
         prev === 0 ? derivedActivities.length - 1 : prev - 1,
       );
@@ -350,10 +387,12 @@ export default function VillaDetailsPage() {
   };
 
   const handleNextActivity = () => {
-    if (derivedActivities && derivedActivities.length > 0) {
-      setCurrentActivityIndex((prev) => (prev + 1) % derivedActivities.length);
-    }
+    pauseActivityAuto();
+    advanceActivity();
   };
+
+  handleNextSpaceRef.current = advanceSpace;
+  handleNextActivityRef.current = advanceActivity;
 
   const currentSpace =
     derivedSpaces && derivedSpaces.length > 0
@@ -370,75 +409,22 @@ export default function VillaDetailsPage() {
     setIsDrawerOpen(true);
   };
 
-  const scrollToSection = (id: string) => {
+  const scrollToSection = useCallback((id: string) => {
     setActiveTab(id);
     const element = document.getElementById(id);
-    if (element) {
-      const offset = 80; // Reverted to 80 as header now scrolls away
-      const elementPosition =
-        element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - offset;
+    if (!element) return;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  // Scroll-Spy Effect for Navigation Tabs
-  const visibleSections = useRef<Set<string>>(new Set());
-
-  useEffect(() => {
-    const sectionIds = [
-      "spaces",
-      "experiences",
-      "details",
-      "video-walkthrough",
-      "services",
-      "amenities",
-      "pricing",
-      "location",
-      "perfect-for",
-      "faq",
-    ];
-
-    const observerOptions = {
-      root: null,
-      rootMargin: "-20% 0px -35% 0px",
-      threshold: 0,
-    };
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          visibleSections.current.add(entry.target.id);
-        } else {
-          visibleSections.current.delete(entry.target.id);
-        }
-      });
-
-      // Pick the topmost visible section (earliest in DOM order)
-      for (const id of sectionIds) {
-        if (visibleSections.current.has(id)) {
-          setActiveTab(id);
-          break;
-        }
-      }
-    };
-
-    const observer = new IntersectionObserver(
-      observerCallback,
-      observerOptions,
-    );
-
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
+    const offset = 88;
+    const top =
+      element.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
   }, []);
+
+  useSectionScrollSpy({
+    sectionIds: VILLA_DETAIL_SECTION_IDS,
+    onActiveSection: setActiveTab,
+    rootMargin: "-12% 0px -55% 0px",
+  });
 
   useEffect(() => {
     // Only start auto-scroll if the URL parameter is present
@@ -809,28 +795,32 @@ export default function VillaDetailsPage() {
                 )}
               </div>
               {currentSpace ? (
-                <div className="relative aspect-[3/4] md:aspect-[16/9] w-full rounded-none overflow-hidden group bg-black/30">
-                  {(validImg(currentSpace.image) || validImg(villa.image)) && (
-                    <JadeImage src={validImg(currentSpace.image) ? currentSpace.image : villa.image} alt={currentSpace.name || "Space"} fill className="object-cover object-center transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-jade-charcoal/80 via-transparent to-transparent opacity-90" />
-                  <CarouselSwipeLayer
-                    onPrev={handlePrevSpace}
-                    onNext={handleNextSpace}
-                    slideCount={derivedSpaces?.length ?? 0}
-                    className="absolute inset-0 z-[10] touch-pan-y"
-                  />
-                  <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center">
-                    <h4 className="text-white text-sm md:text-base uppercase tracking-[0.2em] font-bold mb-3 font-manrope">{currentSpace.name || "Lawn"}</h4>
-                    {derivedSpaces && derivedSpaces.length > 1 && (
+                <VillaDetailImageFrame
+                  imageKey={`${currentSpaceIndex}-${validImg(currentSpace.image) ? currentSpace.image : villa.image}`}
+                  src={
+                    validImg(currentSpace.image) ? currentSpace.image : villa.image
+                  }
+                  alt={currentSpace.name || "Space"}
+                  onPrev={handlePrevSpace}
+                  onNext={handleNextSpace}
+                  slideCount={spaceSlideCount}
+                  onPauseAuto={pauseSpaceAuto}
+                  onResumeAuto={resumeSpaceAuto}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-jade-charcoal/80 via-transparent to-transparent opacity-90 z-[5] pointer-events-none" />
+                  <div className="absolute bottom-8 left-0 w-full text-center flex flex-col items-center z-20 pointer-events-none">
+                    <h4 className="text-white text-sm md:text-base uppercase tracking-[0.2em] font-bold mb-3 font-manrope">
+                      {currentSpace.name || "Lawn"}
+                    </h4>
+                    {spaceSlideCount > 1 && (
                       <div className="flex items-center justify-center gap-2.5 text-white text-gh-label font-bold tracking-widest">
                         <span>{currentSpaceIndex + 1}</span>
                         <div className="w-12 h-[1px] bg-white/60" />
-                        <span className="text-white/60">{derivedSpaces.length}</span>
+                        <span className="text-white/60">{spaceSlideCount}</span>
                       </div>
                     )}
                   </div>
-                </div>
+                </VillaDetailImageFrame>
               ) : (
                 <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden bg-emerald-900/20 flex items-center justify-center text-white/40 italic">Loading spaces…</div>
               )}
@@ -846,10 +836,13 @@ export default function VillaDetailsPage() {
       {currentActivity ? (
         <VillaDetailExperienceCarousel
           activity={currentActivity}
-          slideCount={derivedActivities?.length ?? 0}
+          slideCount={activitySlideCount}
+          activityIndex={currentActivityIndex}
           fallbackImage={villa.image}
           onPrev={handlePrevActivity}
           onNext={handleNextActivity}
+          onPauseAuto={pauseActivityAuto}
+          onResumeAuto={resumeActivityAuto}
           onEnquire={() => setEnquireOverlayOpen(true)}
           isValidImage={(url) => Boolean(validImg(url))}
         />
@@ -1014,7 +1007,7 @@ export default function VillaDetailsPage() {
 
       {/* FOOTER */}
       <Footer stickyBottomBar />
-      <div className="fixed bottom-0 left-0 z-50 flex w-full justify-center border-t border-white/10 bg-transparent py-4 backdrop-blur-2xl transition-all shadow-[0_-8px_32px_rgba(0,0,0,0.12)]">
+      <div className="jade-scroll-chrome fixed bottom-0 left-0 z-50 flex w-full justify-center border-t border-white/10 bg-transparent py-4 backdrop-blur-2xl transition-all shadow-[0_-8px_32px_rgba(0,0,0,0.12)]">
         <div className={clsx(vd.page, vd.gutterX, "flex justify-between items-center gap-4")}>
           <div className="flex flex-col font-manrope leading-tight">
             <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">Starting from</span>

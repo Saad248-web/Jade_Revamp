@@ -1,317 +1,342 @@
-# Jade_ReVamp — End-to-End Project Audit (Concise + Detailed)
+# Jade_ReVamp — End-to-End Project Audit
 
-Generated / revised: **2026-05-04** · **SEO + GEO uplift (2026-05-01)** · **Checkout + QA + CI pass (2026-05-04)**  
-Workspace: `c:\Users\Admin\Desktop\Jade_ReVamp`  
-Stack: **Next.js 14 (App Router) + TypeScript + Tailwind + GSAP/Framer/Rive + PostgreSQL (`pg`)**
+**Generated / revised:** 2026-05-20  
+**Workspace:** `Jade_ReVamp`  
+**Stack:** Next.js **14.2.4** (App Router) · TypeScript · Tailwind · GSAP / Framer Motion / Lenis · PostgreSQL (`pg`) · Razorpay · Resend (optional)
 
 ### Report packs (which file to open)
 
-| Pack | Files | Audience |
-|------|-------|----------|
-| **Client / stakeholder confirmation** | [`audit-report.md`](./audit-report.md), [`audit-report.html`](./audit-report.html) | Directional status, SEO story, backlog in plain language. |
-| **Engineering / WEBDEV audit** | [`WEBDEV-Audit.md`](./WEBDEV-Audit.md), [`WEBDEV-Audit.html`](./WEBDEV-Audit.html) | Full API inventory, funnel verification, diagrams, mobile-first HTML. Alias stem: **`WEBDEVAudit`** → canonical hyphenated filenames (Windows-safe). |
+| Pack | File | Audience |
+|------|------|----------|
+| **Client / stakeholder confirmation** | [`audit-report.md`](./audit-report.md) (this document) | Directional status, SEO story, UX wins, prioritized backlog. |
+| **Engineering / WEBDEV** | [`WEBDEV-Audit.md`](./WEBDEV-Audit.md) | Full API inventory, rate limits, scroll architecture, evidence paths. |
+| **Developer onboarding** | [`README.md`](./README.md) | Install, env, scripts, route map. |
+
+> HTML audit exports were removed from the repo (2026-05-20); **Markdown is canonical.**
 
 ---
 
-## Executive summary (what’s done vs what’s missing)
+## Executive summary
 
-### What’s already done (high confidence)
-- **Modern app foundation**: Next.js 14 App Router structure (`src/app/*`) with typed TS config.
-- **Core pages implemented**: Home, Villas, Villa Details, Blogs, Weddings, Experiences, Corporate Retreats, Weekend Getaways, Party Villas, Caravans, About, Contact, Careers, Wishlist, Menu, Booking flow (`/book`, `/book/success`), plus legal pages (`/privacy-policy`, `/terms-conditions`, `/refund-policy`).
-- **SEO basics implemented**:
-  - **Metadata base + OG/Twitter config** in `src/app/layout.tsx`.
-  - **robots** + **sitemap** via metadata routes (`src/app/robots.ts`, `src/app/sitemap.ts`).
-  - **Blog sitemap integration** using `getPublishedPosts()` from `src/data/blogs.ts`.
-  - JSON-LD helper components (`src/components/SchemaMarkup.tsx`, `src/components/seo/JsonLd.tsx`).
-- **Elite SEO + LLM / GEO layer (2026-05-01)**:
-  - **`public/llms.txt`**: machine-facing site map, brand facts, assistant routing rules (`/`, `/villas`, category pages, blogs), and citation guidance (prefer villa canonical URLs for capacity/amenities).
-  - **`robots.txt`**: explicit **AI assistant user-agents** (GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-Web, PerplexityBot, Google-Extended) mirrored to the global policy — **disallow** transactional/sensitive zones: **`/api/`**, **`/book`**, **`/menu`**, **`/admin`**, **`/wishlist`** (plus existing patterns).
-  - **Sitemap** now lists **every villa** (`/villas/{id}`) and **`/spaces` gallery** sibling URLs plus **privacy / terms / refund**.
-  - **Global JSON-LD graph**: **`WebSite`** with `@id` + `inLanguage: en-IN` + **`publisher`** link; **`Organization`** + **`LodgingBusiness`** with **`@id`**, **`sameAs`**, **`knowsAbout`**, **`parentOrganization`** wiring for entity clarity.
-  - **Per-villa server layouts** (`src/app/villas/[id]/layout.tsx`): unique **title/description/keywords**, **canonical**, **OG/Twitter** previews from hero imagery; **`VacationRental`** JSON-LD (address/coords when known, brand linkage); segment uses **`dynamic = "force-dynamic"`** so the client villa page’s **`useSearchParams()`** hook does not break the production build—**metadata + JSON-LD are still emitted server-side on every request** (healthy for crawlers).
-  - **Spaces galleries** (`src/app/villas/[id]/spaces/layout.tsx`): canonical + **`BreadcrumbList`** JSON-LD (same **force-dynamic** rationale).
-  - **Legal + utility**: **`terms`** / **`refund`** layout metadata; **`privacy-policy`** richer meta; **`wishlist`** + **`admin`** **`noindex`** (aligned with crawler policy).
-- **Bookings backend**:
-  - `POST /api/bookings` creates bookings with conflict checking.
-  - `GET /api/bookings/availability` returns booked dates by month.
-  - `GET /api/bookings` admin listing (protected via `x-admin-password` header).
-  - PostgreSQL pool + query wrapper in `src/lib/db.ts`.
-- **Indexing support**: `POST /api/indexnow` pings IndexNow endpoints; key file exists in `public/` (`a8f9c1b2d4e64f789012345678abcdef.txt`). Production requires **`INDEXNOW_API_SECRET`** + Bearer auth; URLs restricted to configured host (**https** only).
-- **Lead capture + hiring (API-backed)**:
-  - `POST /api/leads` (**`general_enquiry`**, **`rathaa_enquiry`**, **`wedding_enquiry`**) + `POST /api/leads/partner` (multipart) + **`LEADS_NOTIFY_EMAIL`** / Resend when configured.
-  - `POST /api/careers/apply` (multipart résumé) wired from **`/careers`**.
-- **GA4 readiness**: **`src/components/analytics/GoogleAnalytics.tsx`** mounted from **`providers.tsx`** when **`NEXT_PUBLIC_GA_ID`** is set.
-- **Payments (server rails)**: `POST /api/payments/razorpay-order` with optional **`booking_uuid`** / **`bookingId`** metadata on Razorpay orders; **`POST /api/webhooks/razorpay`** verifies signatures and updates **`payment_gateway_state`** when `notes.booking_uuid` is present.
-- **Operational resilience UX**: **`src/app/error.tsx`**, **`src/app/global-error.tsx`** (Sentry capture when DSN set); **`npm run test`** → Vitest (`bookingDetailsValidation`, `paymentService`); Playwright smoke (`e2e/smoke.spec.ts`, `e2e/lead-surfaces.spec.ts`); **`npm run test:e2e:ci`** for production-server e2e; **GitHub Actions** **`.github/workflows/ci.yml`** runs test + build on push/PR.
-- **Media/asset organization work started**:
-  - Large curated `public/` media library (villas, experiences, home page sections).
-  - A dedicated **Villa Retreats folder tree audit** already present: `public/Villa_Retreats_Tree.html`.
-  - Build step generates `MEDIA_MANIFEST` (`scripts/generate_media_manifest.mjs` referenced in `package.json`).
+Jade_ReVamp is a **production-shaped luxury hospitality marketing site** with a real booking backend, lead capture, optional payments, and an unusually strong **SEO + GEO** layer for a brochure-class product. The application code for core funnels is **largely complete**; remaining work is mostly **operations** (database migrations, Razorpay live config, notification inboxes) and **scale/polish** (CDN, CSP, broader automated QA, accessibility pass).
 
-### What’s missing / risky (prioritized) — **updated 2026-05-04**
+### At a glance
 
-- **Checkout hand-off**: **Shipped in repo** — booking success screen calls **`initiatePayment(..., { bookingUuid })`**, opens Razorpay Checkout when keys exist; **Ops** still wires live Razorpay keys + webhook URL + **`RAZORPAY_WEBHOOK_SECRET`**, and applies **Postgres migrations** on production.  
-- **Policy**: reconcile **`bookings.status`** vs **`payment_gateway_state`** with finance/ops (not enforced by code alone).  
-
-### What remains risky or incomplete (infra + polish)
-- **Redirect strategy**: policy + `/blog/:slug` → `/blogs/:slug` are mapped; extend `next.config.mjs` once more legacy URLs are confirmed.
-- **Security — next tier** (baseline is strong): JWT/session admin or IP allowlist + audit logging; Redis/Upstash for rate limiting across instances; optional **strict CSP with nonces** (HSTS + COOP already in prod).
-- **Performance at scale**: very large `public/` tree — optional CDN/object storage for heavy media.
+| Dimension | Status |
+|-----------|--------|
+| Marketing routes & brand UX | **Strong** — full page set, motion, overlays, villa depth |
+| Booking persistence | **Strong** — Postgres, conflict checks, admin UI |
+| Lead & careers capture | **Strong** — APIs wired from UI |
+| Payments | **Code-complete** — needs live keys + webhook + policy on status fields |
+| SEO / LLM discovery | **Strong** — sitemap, robots, JSON-LD, `llms.txt`, per-villa metadata |
+| Automated tests | **Baseline** — Vitest on critical libs; light Playwright smoke |
+| Code hygiene | **Improved (2026-05-20)** — large unused overlay and orphan components removed |
 
 ---
 
-## Holistic backlog (what needs doing)
+## What’s already done (high confidence)
 
-Lead capture overlays, Rathaa/Partner endpoints, Careers apply multipart, Razorpay order + webhook scaffolding, **`GoogleAnalytics`** in `providers.tsx`, **`error.tsx`** / **`global-error.tsx`**, and **booking notifications** (`notifyBookingCreated`) are **implemented in code** subject to migrations and secrets (see subsection *Requires manual setup* below). The narrative below focuses on **what is still intentionally open**.
+### Application foundation
 
-### Already differentiated (keep investing here)
-| Area | Why it counts |
+- **Next.js 14 App Router** under `src/app/*` with TypeScript, Tailwind, and shared design tokens in `globals.css`.
+- **~88 React components** focused on marketing sections, villa detail, venue overlays, and booking — after removal of legacy/unused modules (see [Code hygiene](#code-hygiene-2026-05-20)).
+- **Typed content** in `src/data/retreats/` (16+ villa records + categories) and `src/data/blogs.ts` for editorial.
+
+### Core pages (live routes)
+
+- **Home** — Splash, landing scroll sections, featured villas, experiences.
+- **Villas** — Directory, detail (`/villas/[id]`), spaces gallery (`/villas/[id]/spaces`).
+- **Experiences** — Weddings, corporate retreats, weekend getaways, party villas, caravans, experiences hub, demo scroll page (`/experiences/another-experience-1`).
+- **Utility** — Menu directory, wishlist, about, contact, careers.
+- **Booking** — `/book`, `/book/success` (Razorpay hand-off when configured).
+- **Legal** — Privacy, terms, refund.
+- **Admin** — `/admin` (password-gated; `noindex`).
+
+### UX and navigation (2026-05 uplift)
+
+- **Lenis smooth scroll** globally via `SmoothScroll` in `providers.tsx`, with **`prefers-reduced-motion`** respect.
+- **Scroll-to-top on every navigation** — `ScrollToTopOnNavigate` + `template.tsx` manual `scrollRestoration` so route changes always open at the hero/first section (fixes back/forward and deep-link residue).
+- **Venue “know more” overlays** (wedding/party/corporate) — sticky section tabs, scroll spy, and programmatic section jumps (`MeanderStrip` dividers using `Sep_bar_design.svg`).
+- **Villa detail** — sticky in-page tabs aligned to amenities, pricing, location, walkthrough, FAQ-style blocks.
+- **Menu page** — dedicated villa/experience directory with category chips (`MenuPanelTabs`).
+
+### SEO and GEO (elite tier for this category)
+
+- **Metadata** — Root `layout.tsx` title template, `metadataBase`, OG/Twitter with **`/og-default.jpg`** (1200×630).
+- **Robots + sitemap** — `src/app/robots.ts`, `src/app/sitemap.ts` (static routes, all villas, `/spaces`, blogs, legal).
+- **JSON-LD** — Global `WebSite` / `Organization` / `LodgingBusiness`; per-villa `VacationRental`; breadcrumbs on spaces layouts.
+- **`public/llms.txt`** — Machine-facing site map and citation rules for AI assistants.
+- **AI crawler rules** — Dedicated `robots` entries for GPTBot, Claude, Perplexity, Google-Extended, etc., aligned with marketing allow/disallow policy.
+- **IndexNow** — API route + key file; production Bearer auth.
+- **Crawler policy** — `noindex` on `/wishlist`, `/admin`; disallow on `/api/`, `/book`, `/menu`, etc., as intentional.
+
+### Backend and integrations
+
+- **Bookings** — `POST /api/bookings` with overlap detection; availability by month; admin list/get/patch/delete with timing-safe password check.
+- **Leads** — General, Rathaa, wedding enquiry types; partner multipart with photo storage.
+- **Careers** — Multipart résumé upload from `/careers`.
+- **Payments** — Razorpay order creation with `booking_uuid` notes; webhook signature verification updating gateway fields.
+- **Email** — Optional Resend notifications for leads, careers, bookings when env is set.
+- **Analytics** — GA4 component when `NEXT_PUBLIC_GA_ID` is set.
+- **Errors** — `error.tsx` / `global-error.tsx`; optional Sentry when DSN is set.
+
+### Operational resilience
+
+- **Security baseline** — Edge middleware on APIs, security headers in `next.config.mjs`, safe JSON parsing, villa allowlists, IndexNow URL allowlist.
+- **CI** — GitHub Actions runs unit tests + production build on `main` / `master`.
+- **Local DX** — Docker Postgres, `setup:check`, setup guide script, `.env.example`.
+
+### Media and build pipeline
+
+- Large curated **`public/`** library (villas, experiences, home sections) — **not pruned** in this pass (by design).
+- **`prebuild`** generates blur manifest for faster image paint (`scripts/generate_media_manifest.mjs`).
+- Optional **`npm run optimize-images`** for compression before heavy commits.
+
+---
+
+## Code hygiene (2026-05-20)
+
+A dedicated cleanup removed **dead code and stale artefacts** without touching `public/` assets:
+
+- Deleted **legacy `GlobalBookingOverlay`** (~52 KB) — booking now flows through `/book` and carousel `ReservationOverlay`.
+- Removed **orphan components** never imported (old menu overlay, unused carousels/sections, duplicate UI primitives).
+- Removed **unused libs** (`overlayPricing`, `siteAssets`) and **Pages Router** `_document.tsx`.
+- Removed **one-off Python/shell migration scripts** and **generated HTML audit files** from the repo root.
+- **Retained** engineering Markdown audits and NEXUS agent docs.
+
+**Result:** Smaller `src/components` surface, clearer ownership of booking UX, successful `npm run build` after cleanup.
+
+---
+
+## What’s missing, risky, or ops-dependent
+
+### Requires environment / dashboard (not “more app code”)
+
+| Item | Owner | Notes |
+|------|-------|-------|
+| **Production Postgres** | DevOps | Run `schema.sql` or `schema_migration_leads_rathaa_partner_payments.sql` |
+| **Razorpay live** | Finance/DevOps | Keys, webhook URL, `RAZORPAY_WEBHOOK_SECRET` |
+| **Resend / notify emails** | Ops | `RESEND_*`, `LEADS_NOTIFY_EMAIL`, `BOOKING_NOTIFY_EMAIL`, etc. |
+| **IndexNow secret** | Ops | `INDEXNOW_API_SECRET` for production POST |
+| **Sentry DSN** | Ops | Optional `NEXT_PUBLIC_SENTRY_DSN` |
+| **Booking status policy** | Business | When `bookings.status` vs `payment_gateway_state` means “confirmed” |
+
+### Technical risks (prioritized)
+
+| Risk | Severity | Mitigation |
+|------|----------|------------|
+| **In-memory rate limits** | Medium at scale | Redis/Upstash when running multiple instances |
+| **Large `public/` tree** | Medium for deploy/LCP | CDN or object storage; keep `optimize-images` discipline |
+| **`next/image` unoptimized flags** | Low–medium | Audit intentional bypass vs transfer size |
+| **Limited E2E coverage** | Medium | Expand Playwright beyond smoke/lead surfaces |
+| **Accessibility on overlays** | Medium | Planned WCAG 2.2 pass (focus, labels, motion) |
+| **No strict CSP yet** | Low–medium | Add nonce CSP when threat model requires |
+
+### Policy / legal (human decisions)
+
+- Partner photo retention, marketing consent, refund semantics, and lead SLAs remain **business/legal** — not enforced by code alone.
+
+---
+
+## Holistic backlog
+
+### Already differentiated (keep investing)
+
+| Area | Why it matters |
 |------|----------------|
-| **Booking → PostgreSQL** | Real **`POST /api/bookings`**, conflict checks, availability endpoint, hardened validation — this is production-shaped. |
-| **Admin surface** | Password-gated **`/admin`** wired to **`x-admin-password`** APIs (UX is basic but functional). |
-| **SEO / GEO** | **`llms.txt`**, crawler-specific **`robots`**, villa **`VacationRental`** + **`/spaces`** breadcrumbs, expansive **sitemap** — unusually strong vs typical brochure sites. |
-| **Defense in depth** | Middleware on **`/api/*`**, safe JSON ingestion, timing-safe admin, IndexNow Bearer + URL allowlist. |
+| **Booking → PostgreSQL** | Real availability and conflict logic — rare for marketing rebuilds. |
+| **Admin surface** | Functional `/admin` on password APIs. |
+| **SEO / GEO** | `llms.txt`, villa graphs, AI robots mirrors — ahead of typical competitors. |
+| **Section-aware overlays** | Wedding/party/corporate know-more UX with tab sync — supports long-form conversion. |
 
-### Previously P0 funnel items — status (**2026-05-04**)
+### P0 — resolved in code (historical → current)
+
 | Gap (historical) | Current status |
 |------------------|----------------|
-| General enquiry / wedding forms “UI-only” | **Resolved** — `fetch("/api/leads")` from `EnquireOverlay` / `WeddingVenueEnquiryForm`. |
-| Careers apply fake upload | **Resolved** — `POST /api/careers/apply` + success path in `careers/page.tsx`. |
-| No booking transactional email | **Implemented when Resend env set** — `notifyBookingCreated` from `POST /api/bookings`. |
+| Enquiry forms “UI only” | **Resolved** — `EnquireOverlay`, wedding form → `/api/leads` |
+| Careers fake upload | **Resolved** — `POST /api/careers/apply` |
+| No booking email | **Resolved when Resend set** — `notifyBookingCreated` |
+| Monolithic booking overlay | **Resolved** — removed; `/book` is canonical |
+| Scroll position on navigation | **Resolved (2026-05)** — `ScrollToTopOnNavigate` + template |
 
-### P1 — Revenue checkout + measurement + observability  
-| Gap | Notes |
-|-----|--------|
-| **Paid checkout UX** | **Done (code)** — **`/book`** success screen → **`initiatePayment`** with **`bookingUuid`** → Razorpay Checkout; align **`status`** vs **`payment_gateway_state`** with ops. |
-| **Payment helper** | **Done** — `paymentService.ts` sends **`booking_uuid`** when `opts.bookingUuid` is set. |
-| **Analytics maturity** | GA4 via **`NEXT_PUBLIC_GA_ID`**; add conversions + consent mode when campaigns expand. |
-| **APM / errors** | **Sentry optional** — **`@sentry/nextjs`** + **`NEXT_PUBLIC_SENTRY_DSN`**; errors captured in **`error.tsx`** / **`global-error.tsx`** when configured. |
+### P1 — Revenue, measurement, observability
+
+| Item | Status | Notes |
+|------|--------|-------|
+| Paid checkout UX | **Done (code)** | Success screen → Razorpay Checkout |
+| Payment ↔ booking link | **Done (code)** | `booking_uuid` on order + webhook notes |
+| GA4 | **Ready** | Set `NEXT_PUBLIC_GA_ID`; add conversions/consent when campaigns scale |
+| Sentry | **Optional** | DSN-driven |
+| Status vs payment fields | **Ops** | Define with finance |
 
 ### P2 — Engineering durability
-| Gap | Notes |
-|-----|--------|
-| **Automated tests** | Vitest (`bookingDetailsValidation`, `paymentService`); Playwright **`smoke`** + **`lead-surfaces`**; **`test:e2e:ci`**; CI workflow runs test + build. |
-| **Error boundaries** | Root **`error.tsx`** + **`global-error.tsx`** + optional Sentry. |
-| **Legacy `src/pages/_document.tsx`** | Keep only if Pages Router artefacts required; clarify and delete if unused. |
+
+| Item | Status | Notes |
+|------|--------|-------|
+| Unit tests | **Baseline** | Validation + payment service |
+| E2E | **Light** | Home, book shell, careers, contact |
+| CI build gate | **Done** | GitHub Actions |
+| CI Playwright | **Stretch** | Not in workflow (weight) |
+| Dead code | **Improved** | 2026-05-20 cleanup |
 
 ### P3 — UX, accessibility, compliance
-| Gap | Notes |
-|-----|--------|
-| **Accessibility** | Heavy motion, overlays, custom inputs — plan a **WCAG 2.2** pass (focus traps, labels, contrast, `prefers-reduced-motion`). |
-| **Cookie / consent** | If analytics/marketing pixels ship later, add **consent banner** aligned with privacy policy regions you serve. |
-| **i18n** | Single-locale today (`en` / `en-IN` implied) — fine until you expand markets. |
 
-### Implemented automatically in-repo (holistic backlog — code)
-
-Updates below were **implemented in application code**; they still rely on DB migrations and secrets (next subsection).
-
-| Item | Behaviour |
-|------|-----------|
-| **Lead API** | `POST /api/leads` accepts `general_enquiry`, **`rathaa_enquiry`**, and `wedding_enquiry`; persists to `leads` and notifies **`LEADS_NOTIFY_EMAIL`** when Resend is configured. |
-| **Partner uploads** | `POST /api/leads/partner` accepts multipart `meta` + `photos[]` → **`partner_leads`** + **`partner_lead_photos`**; **`PartnerOverlay`** submits end-to-end. |
-| **Rathaa overlay** | **`RathaaOverlay`** posts **`rathaa_enquiry`** to `/api/leads`. |
-| **Razorpay order link** | `POST /api/payments/razorpay-order` accepts **`booking_uuid`** / **`bookingId`**, attaches **`notes.booking_uuid`** on the Razorpay order, and updates the booking row with **`razorpay_order_id`** + **`payment_gateway_state`** when columns exist. |
-| **Razorpay webhook** | `POST /api/webhooks/razorpay` verifies **`X-Razorpay-Signature`** with **`RAZORPAY_WEBHOOK_SECRET`**; handles **`payment.captured`** / **`payment.failed`** when payment **`notes`** include **`booking_uuid`**. |
-
-### Requires manual setup, keys, or human judgment (cannot be “just code”)
-
-| Item | Why a human / operator is required |
-|------|-------------------------------------|
-| **Database** | Apply **`schema.sql`** on a new database, or run **`schema_migration_leads_rathaa_partner_payments.sql`** (or equivalent) on **existing** Postgres so `leads.source`, partner tables, and booking payment columns match the app. |
-| **Razorpay dashboard** | Create/configure the **webhook URL** (production host + `/api/webhooks/razorpay`), paste the **webhook signing secret** into **`RAZORPAY_WEBHOOK_SECRET`**, and align **test vs live** keys. |
-| **Checkout / policy** | **UI path is implemented** (success screen pays with **`booking_uuid`**). **You** still define what **`bookings.status`** vs **`payment_gateway_state`** mean operationally (e.g. hold vs confirmed). |
-| **Policy / compliance** | Partner photo **retention**, **GDPR** / marketing consent wording, refund rules, and lead SLAs remain **business and legal** decisions—not enforced by this repo alone. |
-
-### Work that genuinely needs ongoing human input
-
-- Operational follow-up tone and timing for partner and Rathaa leads, stakeholder sign-off on payment vs confirmation semantics, and periodic review of notify inboxes (`LEADS_NOTIFY_EMAIL`, etc.).
-
-### What you are *not* fundamentally lacking
-- **Route coverage** and **visual experience** for a luxury hospitality brand.
-- **Core booking persistence** and **admin read/update** path.
-- **Technical SEO + LLM discovery** depth most competitors skip.
+| Item | Notes |
+|------|-------|
+| **WCAG 2.2** | Overlays, carousels, custom inputs, motion |
+| **Cookie consent** | If additional marketing pixels ship |
+| **i18n** | Single locale (`en-IN`) today |
 
 ---
 
-## Route inventory (what the app claims to serve)
+## Route inventory
 
-Detected App Router routes (from `src/app/**/page.tsx`):
+Detected App Router pages (`src/app/**/page.tsx`):
 
-- `/`, `/villas`, `/villas/[id]`, `/villas/[id]/spaces`
-- `/blogs`, `/blogs/[slug]`
-- `/weddings`, `/experiences`, `/corporate-retreats`, `/weekend-getaways`, `/party-villas`, `/caravans`
-- `/about`, `/contact`, `/careers`
-- `/book`, `/book/success`
-- `/wishlist`, `/menu`, `/admin`
-- `/privacy-policy`, `/terms-conditions`, `/refund-policy`
-
----
-
-## Broken links, missing files, and redirect gaps
-
-### Broken internal routes / missing assets
-Status: **Fixed** (internal scan now reports `missingAssets=0` and `brokenRoutes=0`).
-
-What was fixed:
-- Menu links: `/privacy`, `/terms`, `/refund` now point to canonical routes.
-- Added 301 redirects for `/privacy`, `/terms`, `/refund` in `next.config.mjs`.
-- Removed all `/X/...` image references (since `public/X` doesn’t exist) and replaced with real images under `public/Villa_Retreats/...`.
-- **Global social preview:** dedicated **`public/og-default.jpg`** (1200×630) is generated and referenced from **`src/app/layout.tsx`** Open Graph / Twitter (replaces prior placeholder-style references).
+| Route | Purpose |
+|-------|---------|
+| `/` | Landing |
+| `/villas`, `/villas/[id]`, `/villas/[id]/spaces` | Portfolio |
+| `/blogs`, `/blogs/[slug]` | Editorial |
+| `/weddings`, `/corporate-retreats`, `/weekend-getaways`, `/party-villas` | Experience marketing |
+| `/experiences`, `/experiences/another-experience-1` | Experiences + scroll demo |
+| `/caravans` | Caravan + Rathaa |
+| `/about`, `/contact`, `/careers` | Brand & conversion |
+| `/book`, `/book/success` | Booking & payment |
+| `/menu` | Directory overlay page |
+| `/wishlist` | Saved villas (`noindex`) |
+| `/admin` | Operations (`noindex`) |
+| `/privacy-policy`, `/terms-conditions`, `/refund-policy` | Legal |
 
 ---
 
-## SEO + Indexing audit
+## Broken links and assets
+
+**Current status:** Internal marketing links and policy routes point at canonical paths (`/privacy-policy`, etc.). Redirects for legacy `/privacy`, `/terms`, `/refund` and `/blog/*` → `/blogs/*` live in `next.config.mjs`.
+
+**Ongoing:** Villa media naming consistency is tracked in `public/Villa_Retreats_Tree.html` (artefact in `public/` — not removed in hygiene pass).
+
+**Global social preview:** `public/og-default.jpg` + root Open Graph metadata.
+
+---
+
+## SEO + indexing (detail)
 
 ### Implemented
-- **Sitemap**: `src/app/sitemap.ts` outputs static routes (**including villas, villa `/spaces`, legal URLs**) + dynamic blog posts.
-- **Robots**: `src/app/robots.ts` allows `/` for indexable marketing; **`disallow`**: `/book`, `/menu`, `/api/`, **`/admin`**, **`/wishlist`**; **dedicated duplicate rules for major AI crawlers** (see GEO section).
-- **Structured data**: **`WebSite` + `Organization` + `LodgingBusiness`** in `src/app/layout.tsx`; Home still emits supplemental **Organization** via `JsonLd`; **vacation rental** schema per villa; **breadcrumb** schema on **`/spaces`**.
-- **IndexNow**: `POST /api/indexnow` + key file in `public/`. Bearer **`INDEXNOW_API_SECRET`** + **`INDEXNOW_HOST`** allowlist (**see `.env.example`**).
-- **OG/social**: Root defaults retained; **villa routes** inherit **large-image** previews from villa hero URLs (relative paths resolved via **`metadataBase`**).
-- **`llms.txt`**: Served at **`/llms.txt`** for crawler and assistant discovery (**`public/llms.txt`**).
 
-### Missing / improvements (next polish)
-- **OG master asset**: **Done** — **`public/og-default.jpg`** (1200×630) + root metadata (per-villa shares still use hero imagery).
-- **Redirects**: Expand beyond policy + **`/blog` → `/blogs`** when legacy slugs are confirmed.
-- **`hreflang`**: Only **`en-IN`** is implied today; add explicit alternates only if multi-locale rollout happens.
-- **Passage tuning for AI**: Blogs and long guides are your best quotable corpus — periodically add/update **FAQ** blocks (`FAQPage` JSON-LD) on high-intent URLs when copy exists.
+- Dynamic **sitemap** with villas, spaces, blogs, legal URLs.
+- **Robots** disallow for transactional/sensitive paths; AI bot mirrors.
+- **Canonical** discipline on villas, spaces, legal layouts.
+- **Structured data** at site and property level.
+- **`llms.txt`** for assistant routing and anti-hallucination guidance.
+- **Villa layouts** use `dynamic = "force-dynamic"` where client hooks require it — metadata and JSON-LD still emit server-side per request.
+
+### Next polish (optional)
+
+- More **`FAQPage`** JSON-LD on blogs/guides where FAQ copy exists.
+- Additional **301 redirects** as legacy URLs are confirmed.
+- Explicit **`hreflang`** only if multi-locale launch.
+- **VideoObject** schema if hero video becomes a primary citation target.
 
 ---
 
-## GEO / LLM citation optimization (elite technical tier)
-
-Traditional SEO fixes rankings; **GEO** fixes **whether models can cite you accurately**. Implemented items target **SSR HTML** (already App Router defaults), **crawler clarity**, **entity graphs**, and **machine-readable intent**.
+## GEO / LLM citation optimization
 
 | Signal | Implementation |
-|--------|------------------|
-| **`llms.txt`** | **`public/llms.txt`** maps assistants to canonical marketing URLs, spells **what not to hallucinate** (live price/availability), and points at **`sitemap.xml` / `robots.txt`** |
-| **AI crawlers (`robots.txt`)** | Parallel rules for **`GPTBot`**, **`OAI-SearchBot`**, **`ChatGPT-User`**, **`ClaudeBot`**, **`Claude-Web`**, **`PerplexityBot`**, **`Google-Extended`** aligned to the site policy (no accidental blanket blocks) |
-| **Entity graph** | **`@id`-linked** `Organization` ↔ `LodgingBusiness` ↔ `WebSite` in `layout.tsx` + property-level **`VacationRental`** |
-| **Quotable detail pages** | Each villa is a **standalone URL** with **unique `<title>` + meta description + hero OG image** distilled from **`Villa.description`** |
-| **Gallery depth** | `/villas/[id]/spaces` gains **breadcrumb JSON-LD** + metadata for secondary long-tail retrieval |
-| **Utility hygiene** | **`/wishlist`** + **`/admin`** **`noindex`** and blocked in **`robots.txt`** → fewer thin or sensitive URLs competing for embeddings |
-| **Build-safe SSR metadata** | **`dynamic = "force-dynamic"`** on villa + spaces layouts (client **`useSearchParams()`** compatibility); **`<head>` + JSON-LD still render on each request** |
+|--------|----------------|
+| **`llms.txt`** | Canonical URLs, “do not hallucinate pricing” guidance, sitemap pointers |
+| **AI robots** | Parallel rules for major crawlers |
+| **Entity graph** | Linked Organization ↔ LodgingBusiness ↔ WebSite |
+| **Quotable pages** | Each villa = unique URL + title + description + hero OG |
+| **Gallery depth** | `/spaces` breadcrumbs + metadata |
+| **Hygiene** | `noindex` + robots block on wishlist/admin |
 
-### Off-site GEO (not in repo)
-
-Studies through early 2026 still show outsized citation lift from **YouTube**, **Reddit**, and **Wikipedia-class** corroboration. Treat this codebase as **making on-site retrieval unambiguous**; **brand mentions elsewhere** remain a separate roadmap.
-
-### Optional futures
-
-- **`FAQPage`** / **`HowTo`** JSON-LD on blogs and pillar pages.
-- **`RSL 1.0`-style licensing** headers if/when hosting supports them.
-- **VideoObject** markup for pinned hero YouTube assets on villas.
+**Off-site GEO:** YouTube, Reddit, Wikipedia-class mentions still dominate third-party citation studies — this codebase makes **on-site facts unambiguous**; brand mentions elsewhere remain a separate marketing workstream.
 
 ---
 
-## Performance + UX audit
+## Performance and UX
+
+### Strengths
+
+- Image formats (AVIF/WebP) configured in Next.
+- Prebuild blur manifest for galleries.
+- Dynamic imports on heavy home sections where applied.
+- Lenis + batched scroll listeners to avoid jank on chrome hide/show.
+
+### Watch items
+
+- Very large **`public/`** footprint — monitor deploy time and LCP on hero assets.
+- Some **`unoptimized`** `next/image` usages — validate against already-compressed WebP sources.
+- Motion-heavy pages — ensure reduced-motion path is tested on key flows.
+
+---
+
+## Data and backend (bookings)
 
 ### Implemented
-- Next.js image optimization settings in `next.config.mjs` (AVIF/WebP, breakpoints, remotePatterns).
-- Many local images use `next/image` with explicit sizes and `loading="lazy"` patterns.
-- Prebuild step generating media manifest suggests work toward stable, fast galleries.
 
-### Risks / missing
-- Many `next/image` usages set **`unoptimized`**, which can bypass Next’s image pipeline and increase transfer size. If intentional (because assets are already optimized), enforce and verify.
-- Large `public/` assets (media library) can affect repo size and CI/CD times; consider an object storage + CDN for heavy media.
+- PostgreSQL pool, overlap prevention, admin CRUD with timing-safe auth.
+- Server validation aligned with booking UI (`bookingDetailsValidation`).
+- Edge + per-route rate limits (see WEBDEV audit table).
+- Razorpay order + webhook updating gateway columns when notes include `booking_uuid`.
 
----
+### Optional next steps
 
-## Data + backend audit (bookings)
-
-### Implemented
-- PostgreSQL-backed booking create + availability.
-- Conflict detection query prevents overlapping bookings.
-- Admin list / single-record **GET**, **PATCH**, **DELETE** use **`verifyAdminPassword`** (`timingSafeStringEqual`); **`ADMIN_PASSWORD` required** — otherwise **503** for admin endpoints.
-- **POST `/api/bookings`**: JSON body capped (~48KB), **`application/json`** enforced; **`villaId` allowlisted** via `src/lib/mockData` villas; contact fields validated with **`bookingDetailsFieldErrors`** (aligned with the booking UI); `Cache-Control: no-store` on JSON responses where appropriate.
-- **GET `/api/bookings/availability`**: **`villaId`** must match a registered villa; **year/month** range validated.
-- **Edge middleware** (`src/middleware.ts`): **`/api/*`** verb allowlist **+** coarse per-IP rate limit **+** `Cross-Origin-Resource-Policy: same-site`; per-route rate limits still apply in handlers.
-
-### Missing / improvements
-- **Auth model**: Shared secret header hardened (timing-safe, misconfig detection); optional next steps: JWT/admin session **or** IP allowlist + audit log.
-- **Validation**: Extended on server for name/phone/email/notes, villa existence, bounded add-ons array. Optional: max stay length, guest caps tied to villa rules.
-- **Payments (ops)**: **Checkout UX shipped** — success screen passes UUID and opens Checkout when Razorpay env is set; **production** still needs keys, webhook URL, DB migration; reconcile **`bookings.status`** with **`payment_gateway_state`** for your policy.
+- JWT/session admin or IP allowlist + audit log.
+- Max stay length / guest caps tied to villa rules in data model.
+- Horizontal rate-limit store (Redis).
 
 ---
 
-## Content + media hygiene audit
+## Content and media
 
-### Implemented
-- Strong content modeling for blogs (`src/data/blogs.ts` includes sections, CTA, FAQ, tables).
-- Villa asset organization work tracked via `public/Villa_Retreats_Tree.html` and scripts/logs.
-
-### Missing / improvements
-- Asset naming consistency and folder completeness is still an open issue (as documented in `public/Villa_Retreats_Tree.html`).
-- Ensure every route has “finished” copy: CTAs, hero sections, and consistent brand assets (logos/OG).
+- **Blogs** support rich sections, CTAs, FAQ blocks in `src/data/blogs.ts`.
+- **Villas** use structured retreat modules with spaces, experiences, perfect-for tags.
+- **Brochure PDF** referenced inline on villa CTAs: `/All Properties - Jade Hospitainment.pdf` (in `public/`).
 
 ---
 
-## Action plan (end-to-end, minimal-to-complete)
+## Action plan (phased)
 
-### P0 (today) — stop 404s
-- **Done**: Menu links fixed and redirects added for `/privacy`, `/terms`, `/refund`.
-- **Done**: Removed `/X/...` image references and replaced with existing `public/Villa_Retreats/...` images.
-- **Done**: Global **`og-default.jpg`** (1200×630) + layout metadata for link previews.
+### Done (foundation)
 
-### P1 (this week) — SEO + migrations
-- **Done (common case)**: `/blog/:slug*` → `/blogs/:slug*` redirect added.
-- **Done (elite SEO)**: Sitemap expanded with **villas**, **`/spaces`**, **legal URLs** + **`public/llms.txt`** + **AI crawler `robots` mirrors**.
-- Populate real redirects in `next.config.mjs` for any other legacy URL patterns beyond blog + legal shortcuts.
-- **Done**: **Canonical discipline** on **villas + spaces**, **legal layouts**, **`wishlist`**, **`admin`** (homepage + keyed layouts already had paths).
+- Core routes, booking API, leads, careers, partner flow.
+- SEO/GEO layer, IndexNow hook, security header baseline.
+- Post-book Razorpay Checkout path.
+- Scroll/navigation consistency (2026-05).
+- Dead-code cleanup (2026-05-20).
+- CI: test + build.
 
-### P2 (next) — security + reliability
-- **Done (2026-05-01 — elite baseline)**: Middleware + hardened `next.config` headers (production **HSTS**, **COOP** `same-origin-allow-popups`, expanded Permissions-Policy, **`productionBrowserSourceMaps: false`**); safe JSON ingestion; villa allowlists; timing-safe admin password; IndexNow Bearer + URL allowlist; tighter Instagram/availability payloads.
-- Optional uplift: JWT/session admin, IP allowlist, audit log for admin actions.
-- **Rate limiting storage**: global + route limits remain **in-memory**; migrate to Redis/Upstash when scaling horizontally.
-- **CSP**: add a **nonce-based** Content-Security-Policy when ready (HSTS already set in prod via `next.config`).
+### This sprint (ops)
 
----
+1. Apply DB schema/migration on production.  
+2. Configure Razorpay live + webhook secret.  
+3. Set Resend + notify inboxes.  
+4. Confirm `INDEXNOW_API_SECRET` and GA/Sentry DSNs per environment.  
+5. Document booking **status** semantics with operations team.
 
-## Security hardening (reference — implemented 2026-05-01)
+### Next quarter (stretch)
 
-| Layer | Implementation |
-|--------|------------------|
-| Config | `next.config.mjs`: security headers + production HSTS + COOP + DNS prefetch control + cross-domain policy |
-| Edge | `src/middleware.ts`: matcher `/api/*`, verb filter, coarse rate limit, CORP |
-| Parsing | `src/lib/security/safeJson.ts`: `readJsonBody` max bytes + JSON Content-Type |
-| Admin | `src/lib/security/adminAuth.ts` + `timingSafe.ts` |
-| Booking input | Villa registry check (`src/lib/security/villaId.ts`), booking id hygiene (`ids.ts`) |
-| API routes | Booking create/admin/availability/indexnow/oembed tightened as above |
-
----
-
-## Other remaining issues (recommended next)
-
-**(For P0–P3 prioritized gaps — especially lead capture, payments, and analytics — see [Holistic backlog](#holistic-backlog-what-needs-doing) above.)**
-
-### Security
-- **Admin auth**: shared secret is timing-safe and required for admin APIs; JWT/session remains optional hardening for teams and revocation.
-- **Rate limiting storage**: in-memory limiter won’t converge across multi-instance/serverless regions; use Redis/Upstash.
-- **Strict CSP**: add nonce/hash-based CSP in addition to current headers if threat model warrants it.
-
-### SEO / Social
-- **OG image quality**: **Done** — `public/og-default.jpg` (1200×630) for global shares; villas still use **hero-based** previews on detail routes.
-- **Redirect mapping**: extend redirects beyond policy + blog legacy once old URLs are known.
-- **FAQ / HowTo structured data**: add on top blogs guides when FAQs exist in copy (**not yet automated**).
-
-### Backend reliability
-- **Payments flow**: webhook verification + gateway fields are coded; **ops** confirms live Razorpay + DB; define **status** transitions with finance.
-- **Validation additions** (done on API): aligned phone/name/email notes with booking form validators; **`villaId`** registered-villa allowlist. Optional extras: max stay length, tighter guest caps.
-
-### Performance / Ops
-- **Media delivery**: consider object storage + CDN for the large `public/` library.
-- **Monitoring**: **Sentry optional** — set **`NEXT_PUBLIC_SENTRY_DSN`** for client/server error capture (see **WEBDEV-Audit** for file paths).
+1. CDN for `public/` heavy media.  
+2. Expand Playwright + optional CI job.  
+3. WCAG audit on overlays and booking.  
+4. CSP with nonces; Redis rate limits if multi-region.  
+5. FAQ/HowTo schema on top blog URLs.
 
 ---
 
 ## Evidence (key files reviewed)
-- `package.json`, `next.config.mjs`, `tsconfig.json`, `src/middleware.ts`, **`.github/workflows/ci.yml`**
-- Funnel + booking pay: **`src/app/book/page.tsx`**, **`src/lib/paymentService.ts`**, **`src/lib/payments/razorpayCheckout.ts`**, **`src/components/EnquireOverlay.tsx`**, **`src/components/experience/WeddingVenueEnquiryForm.tsx`**, **`src/app/careers/page.tsx`**, **`src/app/api/bookings/route.ts`**
-- Tests: **`src/lib/*.test.ts`**, **`e2e/smoke.spec.ts`**, **`e2e/lead-surfaces.spec.ts`**, **`playwright.config.ts`**
-- GEO / SEO: **`public/llms.txt`**, `src/app/robots.ts`, `src/app/sitemap.ts`, `src/app/layout.tsx`, `src/app/villas/[id]/layout.tsx`, `src/app/villas/[id]/spaces/layout.tsx`, `src/lib/seo/meta.ts`, legal **`layout.tsx`** segments, **`wishlist`**, **`admin`** layouts
-- Routes: `src/app/**/page.tsx`
-- Booking APIs: `src/app/api/bookings/**`, DB: `src/lib/db.ts`
-- Security helpers: `src/lib/security/*.ts`, `src/lib/bookingDetailsValidation.ts`, `src/lib/rateLimit.ts`
-- Blog data: `src/data/blogs.ts`
-- Existing media audit artifact: `public/Villa_Retreats_Tree.html`
 
+- **Config:** `package.json`, `next.config.mjs`, `tsconfig.json`, `.env.example`, `.github/workflows/ci.yml`
+- **App shell:** `src/app/layout.tsx`, `providers.tsx`, `template.tsx`, `middleware.ts`
+- **Booking / pay:** `src/app/book/**`, `src/lib/paymentService.ts`, `src/lib/payments/razorpayCheckout.ts`
+- **Funnel:** `EnquireOverlay`, `RathaaOverlay`, `PartnerOverlay`, `WeddingVenueEnquiryForm`, `careers/page.tsx`
+- **Scroll:** `ScrollToTopOnNavigate`, `scrollToPageTop.ts`, `useVenueOverlaySectionNav.ts`, `MeanderStrip.tsx`
+- **SEO / GEO:** `public/llms.txt`, `robots.ts`, `sitemap.ts`, villa/spaces layouts, `src/lib/seo/meta.ts`
+- **DB:** `schema.sql`, `schema_migration_leads_rathaa_partner_payments.sql`, `src/lib/db.ts`
+- **Tests:** `*.test.ts`, `e2e/*.spec.ts`, `playwright.config.ts`
+
+---
+
+*For rate limits, API parameters, and module-level evidence, use [`WEBDEV-Audit.md`](./WEBDEV-Audit.md). For install and env setup, use [`README.md`](./README.md).*

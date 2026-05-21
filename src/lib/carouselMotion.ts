@@ -1,7 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
-import { useTransform, type MotionValue } from "framer-motion";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useSyncExternalStore,
+} from "react";
+import { useReducedMotion, useTransform, type MotionValue } from "framer-motion";
 import type { PanInfo } from "framer-motion";
 
 /** Tailwind `lg` — swipe enabled below this width (mobile + tablet). */
@@ -124,6 +130,61 @@ export const CAROUSEL_CROSSFADE = {
   duration: 0.8,
   ease: [0.32, 0.72, 0, 1] as const,
 };
+
+/** Villa detail spaces / experiences — snappy crossfade */
+export const CAROUSEL_CROSSFADE_FAST = {
+  duration: 0.35,
+  ease: [0.32, 0.72, 0, 1] as const,
+};
+
+/** Auto-advance interval for villa detail media carousels */
+export const VILLA_DETAIL_CAROUSEL_INTERVAL_MS = 1800;
+
+type CarouselAutoAdvanceOptions = {
+  onNext: () => void;
+  enabled: boolean;
+  intervalMs?: number;
+};
+
+/** Timed advance; pauses on hover, while tab is hidden, and when reduced motion is on. */
+export function useCarouselAutoAdvance({
+  onNext,
+  enabled,
+  intervalMs = VILLA_DETAIL_CAROUSEL_INTERVAL_MS,
+}: CarouselAutoAdvanceOptions) {
+  const reducedMotion = useReducedMotion();
+  const pausedRef = useRef(false);
+  const onNextRef = useRef(onNext);
+  onNextRef.current = onNext;
+
+  const pause = useCallback(() => {
+    pausedRef.current = true;
+  }, []);
+
+  const resume = useCallback(() => {
+    pausedRef.current = false;
+  }, []);
+
+  useEffect(() => {
+    if (!enabled || reducedMotion) return;
+
+    const onVisibility = () => {
+      pausedRef.current = document.hidden;
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    const id = window.setInterval(() => {
+      if (!pausedRef.current) onNextRef.current();
+    }, intervalMs);
+
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.clearInterval(id);
+    };
+  }, [enabled, intervalMs, reducedMotion]);
+
+  return { pause, resume };
+}
 
 type SlidePair = { bgImage?: string; cardImage?: string };
 

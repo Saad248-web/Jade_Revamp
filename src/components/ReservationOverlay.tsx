@@ -160,7 +160,7 @@ export default function ReservationOverlay({
               </div>
 
               {/* CONTENT AREA */}
-              <div className="flex-1 bg-[#0B2C23] overflow-y-auto px-5 md:px-6 py-5 overflow-x-hidden scrollbar-hide">
+              <div className="flex-1 bg-[#0B2C23] overflow-y-auto px-5 md:px-6 py-5 overflow-x-hidden scrollbar-hide" data-lenis-prevent>
                 {view === "dates" && (
                   <div className="flex flex-col gap-4">
                     <h2 className="text-white text-gh-h2 font-philosopher leading-none mb-1">

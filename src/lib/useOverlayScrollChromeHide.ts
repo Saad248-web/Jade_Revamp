@@ -1,0 +1,26 @@
+"use client";
+
+import { useCallback, useRef, useState } from "react";
+import { scheduleScrollUpdate } from "@/lib/batchScrollUpdate";
+
+/** Hide overlay close chrome when scrolling down inside a nested scroll panel. */
+export function useOverlayScrollChromeHide(threshold = 150) {
+  const [isHidden, setIsHidden] = useState(false);
+  const lastScrollY = useRef(0);
+
+  const onScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      const currentScrollY = e.currentTarget.scrollTop;
+      scheduleScrollUpdate(() => {
+        const previous = lastScrollY.current;
+        const nextHidden =
+          currentScrollY > previous && currentScrollY > threshold;
+        setIsHidden((prev) => (prev === nextHidden ? prev : nextHidden));
+        lastScrollY.current = currentScrollY;
+      });
+    },
+    [threshold],
+  );
+
+  return { isHidden, onScroll };
+}

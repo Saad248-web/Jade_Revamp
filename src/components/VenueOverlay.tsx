@@ -116,7 +116,7 @@ const getIcon = (iconName?: string, title?: string) => {
 };
 import { usePathname } from "next/navigation";
 import PrimaryButton from "@/components/PrimaryButton";
-import { buildVillaGalleryItems } from "@/lib/villaGallery";
+import { useVillaListingImages } from "@/lib/useVillaListingImages";
 import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
 import type { OverlayPageKey } from "@/lib/overlayVillaData";
 import { getOverlayVillaData } from "@/lib/overlayVillaData";
@@ -130,6 +130,8 @@ import ExperienceFaqAccordion, {
 } from "@/components/experience/ExperienceFaqAccordion";
 import WeddingVenueEnquiryForm from "@/components/experience/WeddingVenueEnquiryForm";
 import { EXPERIENCE_OVERLAY_ROOT_CLASS } from "@/lib/experienceOverlayTheme";
+import { useOverlayScrollChromeHide } from "@/lib/useOverlayScrollChromeHide";
+import { useVenueOverlaySectionNav } from "@/lib/useVenueOverlaySectionNav";
 import {
   VillaExperienceBookingBottomBar,
   VillaExperienceHeroCarousel,
@@ -139,6 +141,7 @@ import {
   isExperienceOverlayMdUp,
 } from "@/components/experience/VillaExperienceOverlayLayout";
 import AmenityHighlightTile from "@/components/villa/AmenityHighlightTile";
+import MeanderStrip from "@/components/ui/MeanderStrip";
 import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
 
 interface VenueOverlayProps {
@@ -164,18 +167,12 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const reducedMotion = useReducedMotion();
-  const [isCloseButtonHidden, setIsCloseButtonHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const { isHidden: isCloseButtonHidden, onScroll: handleScrollBase } =
+    useOverlayScrollChromeHide(150);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     if (!isExperienceOverlayMdUp()) return;
-    const currentScrollY = e.currentTarget.scrollTop;
-    if (currentScrollY > lastScrollY && currentScrollY > 150) {
-      setIsCloseButtonHidden(true);
-    } else {
-      setIsCloseButtonHidden(false);
-    }
-    setLastScrollY(currentScrollY);
+    handleScrollBase(e);
   };
 
   const overlayCarouselCustom: HeroSplitCustom = {
@@ -201,6 +198,9 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
   const overlayVilla = getOverlayVillaData(resolvedPage, villa?.id);
   const v = overlayVilla ?? villa;
   const mapsHref = getVillaGoogleMapsUrl(v);
+  const { images: listingImages, primaryImage } = useVillaListingImages(
+    v?.id ? { id: v.id, name: v.name, image: v.image } : villa,
+  );
 
   useEffect(() => {
     setMounted(true);
@@ -221,12 +221,11 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
     setView("form");
   }, [isOpen, villa?.id]);
 
-  const images = (() => {
-    const gallery = buildVillaGalleryItems(v, 8);
-    if (gallery.length > 0) return gallery;
-    if (v?.spaces?.length > 0) return v.spaces;
-    return [{ name: "Main", image: v?.image }];
-  })();
+  const images =
+    listingImages.filter((i) => i.image).length > 0
+      ? listingImages.filter((i) => i.image)
+      : [{ name: "Main", image: v?.image || "" }];
+  const walkthroughCover = primaryImage || v?.image || "";
 
   const nextImage = () => {
     setDirection(1);
@@ -240,61 +239,12 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
 
   const tabs = ["Amenities", "Pricing", "Location", "Walkthrough", "FAQ"];
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id.toLowerCase());
-    if (element) {
-      const container = element.closest(".overflow-y-auto");
-      if (container) {
-        const offset = 80;
-        const elementPosition = element.offsetTop;
-        container.scrollTo({
-          top: elementPosition - offset,
-          behavior: "smooth",
-        });
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (!isOpen || !mounted) return;
-    const container = overlayScrollRef.current;
-    if (!container) return;
-
-    const sectionIds = [
-      "amenities",
-      "pricing",
-      "location",
-      "walkthrough",
-      "faq",
-    ];
-
-    const observerOptions = {
-      root: container,
-      rootMargin: "-20% 0px -40% 0px",
-      threshold: 0,
-    };
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          setActiveTab(id.charAt(0).toUpperCase() + id.slice(1));
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(
-      observerCallback,
-      observerOptions,
-    );
-
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [isOpen, mounted, villa?.id, overlayScrollRootGen]);
+  const { scrollToSection } = useVenueOverlaySectionNav(
+    overlayScrollRef.current,
+    setActiveTab,
+    isOpen && mounted,
+    overlayScrollRootGen,
+  );
 
   const price = (overlayVilla as any)?.overlay?.onwardsPrice ?? null;
 
@@ -312,6 +262,11 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
       <VillaExperienceOverlayCloseFramer
         MotionButton={MotionButton}
         onClose={onClose}
+        variant="above-sheet"
+      />
+      <VillaExperienceOverlayCloseFramer
+        MotionButton={MotionButton}
+        onClose={onClose}
         isHidden={isCloseButtonHidden}
         variant="fixed"
       />
@@ -320,11 +275,13 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
         scrollRef={overlayScrollRef}
         onScroll={handleScroll}
         onScrollRootUpdated={() => setOverlayScrollRootGen((g) => g + 1)}
-        mobileTopChrome={
-          <VillaExperienceOverlayCloseFramer
-            MotionButton={MotionButton}
-            onClose={onClose}
-            variant="in-sheet"
+        onBackdropClick={onClose}
+        mobileFooter={
+          <VillaExperienceBookingBottomBar
+            placement="sheet"
+            villaId={v.id}
+            onwardPrice={price}
+            onEnquireClick={() => scrollToSection("enquiry")}
           />
         }
         pinnedTop={
@@ -450,6 +407,8 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
               </div>
             </section>
 
+            <MeanderStrip accentLine="green" />
+
             {/* ── CHARCOAL: Pricing ────────────────────────────────────────── */}
             <section id="pricing" className="w-full bg-jade-green text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
@@ -463,6 +422,8 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
               </div>
             </section>
 
+            <MeanderStrip track="green" />
+
             {/* ── GREEN: Location ───────────────────────────────────────────── */}
             <section id="location" className="w-full bg-jade-charcoal text-white">
               <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
@@ -472,7 +433,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                     <a href={mapsHref} target="_blank" rel="noopener noreferrer"
                       className="relative block w-full h-64 md:h-80 cursor-pointer outline-none transition-opacity hover:opacity-95"
                       aria-label="Open location in Google Maps">
-                      <Image src={v.locationDetails?.mapImage || "/Villa_Retreats/Magnolia/Spaces/Villa.webp"} alt="Map Location" fill className="object-cover opacity-80" sizes="100vw" loading="lazy" />
+                      <Image src={v.locationDetails?.mapImage || primaryImage || "/Villa_Retreats/Magnolia/Spaces/Villa.webp"} alt="Map Location" fill className="object-cover opacity-80" sizes="100vw" loading="lazy" />
                     </a>
                     <div className="p-5 md:p-6 border-t border-white/10">
                       <a href={mapsHref} target="_blank" rel="noopener noreferrer"
@@ -515,7 +476,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                 <div className="max-w-4xl mx-auto">
                   <h3 className="text-gh-h2 font-philosopher mb-6">Video Walkthrough</h3>
                   <div className="relative aspect-video w-full overflow-hidden bg-black/40 border border-white/10 group cursor-pointer">
-                    <Image src="/Villa_Retreats/Magnolia/Hero/hero.webp" alt="Video Cover" fill className="object-cover opacity-60 group-hover:opacity-40 transition-opacity" />
+                    <Image src={walkthroughCover || "/Villa_Retreats/Magnolia/Hero/hero.webp"} alt="Video Cover" fill className="object-cover opacity-60 group-hover:opacity-40 transition-opacity" />
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hover:bg-white/30 transition-all">
                         <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />

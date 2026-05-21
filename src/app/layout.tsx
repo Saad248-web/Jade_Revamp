@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Philosopher, Manrope } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
@@ -18,6 +18,13 @@ const manrope = Manrope({
   variable: "--font-manrope",
   display: "swap", // Prevent FOIT — show fallback font until Manrope loads
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#1A1C1E",
+};
 
 // ─── Base metadata — inherited & extended by every page ──────────────────────
 export const metadata: Metadata = {
@@ -156,6 +163,11 @@ export default function RootLayout({
           "font-manrope antialiased overflow-x-hidden",
         )}
       >
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);if(location.hash)history.replaceState(history.state,'',location.pathname+location.search);})();`,
+          }}
+        />
         <Providers>{children}</Providers>
         <SchemaMarkup schema={organizationSchema} />
         <SchemaMarkup schema={websiteSchema} />

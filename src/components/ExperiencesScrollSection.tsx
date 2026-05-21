@@ -27,7 +27,7 @@ const PANELS = [
     subtext:
       "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
-    href: "/party-villas#spaces-for-celebrations",
+    href: "/party-villas",
     image: "/Home Page/2-Experiences/celebrations & parties.webp",
     mobileImage: "/Website Ratio Changes/POOL PARTY.webp",
   },
@@ -90,7 +90,11 @@ export default function ExperiencesScrollSection() {
   const panelCount = PANELS.length;
 
   return (
-    <section ref={targetRef} className="relative h-[800vh] bg-[#1A1C1E]">
+    <section
+      ref={targetRef}
+      data-scroll-pin
+      className="relative h-[800vh] bg-[#1A1C1E]"
+    >
       <motion.div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#1A1C1E] isolation isolate">
         <motion.div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(32px,4vh,51.2px)] pb-[clamp(4px,0.8vh,9.6px)] shrink-0">
           <span className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-jade-gold drop-shadow-lg block">

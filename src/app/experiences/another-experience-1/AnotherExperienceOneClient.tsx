@@ -25,7 +25,7 @@ const PANELS = [
     subtext:
       "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
-    href: "/party-villas#spaces-for-celebrations",
+    href: "/party-villas",
     image: "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
   },
   {
@@ -292,6 +292,7 @@ function ScrollDrivenCarousel({
         <div
           ref={scrollerRef}
           id="experience-sda-scroller"
+          data-page-scroll-root
           className="experience-sda-scrollbar-hidden absolute inset-0 -z-10 overflow-x-hidden overflow-y-auto overscroll-y-contain scroll-smooth pointer-events-auto snap-y snap-mandatory [touch-action:pan-y]"
         >
           {/* One full-viewport block per scene — explicit height avoids Firefox collapsing flex/% min-height tracks */}

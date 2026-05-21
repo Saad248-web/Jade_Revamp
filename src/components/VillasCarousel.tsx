@@ -9,6 +9,7 @@ import VillaCard from "./VillaCard";
 import BookingBanner from "./BookingBanner";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useBooking } from "@/context/BookingContext";
+import { useScrollHide } from "@/lib/useScrollHide";
 
 // Navbar height to offset the sticky filter bar
 const NAVBAR_HEIGHT = 72;
@@ -36,7 +37,8 @@ const NEXT_AVAILABLE = [
 
 export default function VillasCarousel() {
   const [activeCategory, setActiveCategory] = useState("All");
-  const [navbarVisible, setNavbarVisible] = useState(true);
+  const navbarHidden = useScrollHide(150);
+  const navbarVisible = !navbarHidden;
   const searchParams = useSearchParams();
 
   // Read category from URL on mount
@@ -88,22 +90,6 @@ export default function VillasCarousel() {
       str += `, ${guests.pets} Pet${guests.pets > 1 ? "s" : ""}`;
     return str;
   };
-
-  // Mirror the same hide/show logic used in Navbar.tsx
-  useEffect(() => {
-    let lastY = window.scrollY;
-    const onScroll = () => {
-      const current = window.scrollY;
-      if (current > lastY && current > 150) {
-        setNavbarVisible(false);
-      } else {
-        setNavbarVisible(true);
-      }
-      lastY = current;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const { dateRange, setDateRange, guests: contextGuests } = useBooking();
 
@@ -166,7 +152,7 @@ export default function VillasCarousel() {
     <section id="villas-carousel" className="relative bg-[#1A1C1E]">
       {/* STICKY FILTERS BAR */}
       <div
-        className="sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/10 transition-all duration-300 ease-in-out"
+        className="jade-scroll-chrome sticky z-30 bg-[#1A1C1E]/98 border-b border-white/10 transition-transform duration-300 ease-in-out"
         style={{ top: navbarVisible ? `${NAVBAR_HEIGHT}px` : "0px" }}
       >
         <div className="max-w-[1920px] mx-auto px-2 md:px-8 lg:px-16 pt-3 md:pt-5 pb-3">
