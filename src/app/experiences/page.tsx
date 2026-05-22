@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Curated Experiences | Jade Hospitainment",
     description:
-      "Curated luxury experiences: poolside mornings, bonfire nights, outdoor dining, and more at exclusive Jade Private Villa Retreats.",
+      "Curated luxury experiences: poolside mornings, bonfire nights, outdoor dining, and more at exclusive Jade Private Villas.",
     url: "https://jadehospitainment.com/experiences",
   },
 };
@@ -48,7 +48,7 @@ const tripSchema = {
   "@type": "TouristTrip",
   name: "Curated Luxury Experiences by Jade Hospitainment",
   description:
-    "Bespoke curated experiences — poolside retreats, bonfire nights, private dining, and wellness — at exclusive villa retreats near Bangalore.",
+    "Bespoke curated experiences — poolside retreats, bonfire nights, private dining, and wellness — at exclusive VILLAS near Bangalore.",
   provider: {
     "@type": "Organization",
     name: "Jade Hospitainment",

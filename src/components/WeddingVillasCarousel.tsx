@@ -8,7 +8,7 @@ import { AnimatePresence } from "framer-motion";
 
 // Filter VILLAS to specifically show all 6 Wedding related venues
 const WEDDING_VILLA_IDS = [
-  "dome-villa-retreats",
+  "dome-villas",
   "haven",
   "retreat-on-the-ridge",
   "tranquil",

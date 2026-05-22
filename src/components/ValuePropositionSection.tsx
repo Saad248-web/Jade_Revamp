@@ -31,24 +31,24 @@ const SLIDES = [
   {
     id: 1,
     label: "THE VALUE JADE PROVIDES",
-    heading: ["Private Villa Retreats", "around Bangalore"],
+    heading: ["Private Villas", "around Bangalore"],
     subtext:
       "Located in serene yet accessible pockets around Bangalore, offering privacy without disconnect.",
     bgImage:
-      "/Home Page/The Value Jade Provides/Private Villa Retreats aroundBangalore 1.webp",
+      "/Home Page/The Value Jade Provides/Private Villas aroundBangalore 1.webp",
     cardImage:
-      "/Home Page/The Value Jade Provides/Private Villa Retreats around Bangalore 2.webp",
+      "/Home Page/The Value Jade Provides/Private Villas around Bangalore 2.webp",
   },
   {
     id: 2,
     label: "THE VALUE JADE PROVIDES",
     heading: ["Distinctive,", "themed stays"],
     subtext:
-      "From luxury pool villa retreats and glass homes to landscaped farm estates — each space chosen for its character and versatility.",
+      "From luxury pool VILLAS and glass homes to landscaped farm estates — each space chosen for its character and versatility.",
     bgImage:
-      "/Home Page/The Value Jade Provides/Distinctive Themed Villa Retreats 1.webp",
+      "/Home Page/The Value Jade Provides/Distinctive Themed Villas 1.webp",
     cardImage:
-      "/Home Page/The Value Jade Provides/Distinctive Themed Villa Retreats 2.webp",
+      "/Home Page/The Value Jade Provides/Distinctive Themed Villas 2.webp",
   },
   {
     id: 3,

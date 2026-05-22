@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Jade Hospitainment",
     short_name: "Jade",
-    description: "Luxury Villa Retreats, Weddings & Experiences",
+    description: "Luxury Villas, Weddings & Experiences",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

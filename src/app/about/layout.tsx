@@ -5,12 +5,12 @@ import JsonLd from "@/components/seo/JsonLd";
 export const metadata: Metadata = {
   title: "About Jade Hospitainment",
   description:
-    "Founded in 2011, Jade Hospitainment operates curated luxury Private Villa Retreats and retreat experiences near Bangalore — trusted by Google, Microsoft, IBM & more.",
+    "Founded in 2011, Jade Hospitainment operates curated luxury Private Villas and retreat experiences near Bangalore — trusted by Google, Microsoft, IBM & more.",
   alternates: { canonical: "https://jadehospitainment.com/about" },
   openGraph: {
     title: "About Jade Hospitainment",
     description:
-      "16 Luxury Villa Retreats, 7500+ check-ins, 100+ events hosted. The story behind India's premium private retreat operator.",
+      "16 Luxury Villas, 7500+ check-ins, 100+ events hosted. The story behind India's premium private retreat operator.",
     url: "https://jadehospitainment.com/about",
   },
 };

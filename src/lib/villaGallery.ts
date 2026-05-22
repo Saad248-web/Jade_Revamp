@@ -5,7 +5,7 @@ import {
 
 export type { VillaGalleryItem };
 
-/** Manifest-only gallery (no API). Prefer `useVillaListingImages` for listing parity with `/villa-retreats`. */
+/** Manifest-only gallery (no API). Prefer `useVillaListingImages` for listing parity with `/villas`. */
 export function buildVillaGalleryItems(villa: any, max = 8): VillaGalleryItem[] {
   const items = buildVillaListingImages(
     villa?.id

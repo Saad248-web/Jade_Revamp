@@ -13,7 +13,7 @@ export const INSTAGRAM_POSTS: InstagramPost[] = [
   {
     id: "DCRJKQozm9F",
     type: "p",
-    fallbackImage: "/Experiences/Party Villa Retreats/2-Party Type/Pool Parties.webp",
+    fallbackImage: "/Experiences/Party Villas/2-Party Type/Pool Parties.webp",
     handle: "@jadehospitainment",
     caption: "Paradise found @jade 💗🌸",
     likes: "2.4k",
@@ -40,7 +40,7 @@ export const INSTAGRAM_POSTS: InstagramPost[] = [
     id: "DOJYFnEAWz4",
     type: "p",
     fallbackImage:
-      "/Experiences/Party Villa Retreats/2-Party Type/Birthdays & Anniversaries.webp",
+      "/Experiences/Party Villas/2-Party Type/Birthdays & Anniversaries.webp",
     handle: "@jadehospitainment",
     caption: "Celebrations, but make it Jade.",
     likes: "1.9k",
@@ -54,9 +54,9 @@ export const INSTAGRAM_POSTS: InstagramPost[] = [
     id: "DPNzH4ACZnp",
     type: "p",
     fallbackImage:
-      "/Experiences/Party Villa Retreats/2-Party Type/Bachelor_Bachelorette Parties.webp",
+      "/Experiences/Party Villas/2-Party Type/Bachelor_Bachelorette Parties.webp",
     handle: "@jadehospitainment",
-    caption: "Party Villa Retreats. Big energy.",
+    caption: "Party Villas. Big energy.",
     likes: "2.1k",
     comments: "71",
     commentPreview: [
@@ -68,7 +68,7 @@ export const INSTAGRAM_POSTS: InstagramPost[] = [
     id: "C_aq1_qya_e",
     type: "reel",
     fallbackImage:
-      "/Experiences/Party Villa Retreats/2-Party Type/Reunions & Graduation Parties.webp",
+      "/Experiences/Party Villas/2-Party Type/Reunions & Graduation Parties.webp",
     handle: "@jadehospitainment",
     caption: "Poolside scenes, unforgettable nights.",
     likes: "3.2k",
@@ -134,9 +134,9 @@ export const INSTAGRAM_POSTS: InstagramPost[] = [
     id: "Cxp7fnkvZm9",
     type: "reel",
     fallbackImage:
-      "/Home Page/The Value Jade Provides/Private Villa Retreats around Bangalore 2.webp",
+      "/Home Page/The Value Jade Provides/Private Villas around Bangalore 2.webp",
     handle: "@jadehospitainment",
-    caption: "Private Villa Retreats around Bangalore.",
+    caption: "Private Villas around Bangalore.",
     likes: "2.0k",
     comments: "68",
     commentPreview: [

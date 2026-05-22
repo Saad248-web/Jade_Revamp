@@ -18,14 +18,14 @@ function breadcrumbJsonLd(villa: Villa, canonical: string) {
       {
         "@type": "ListItem",
         position: 1,
-        name: "Villa Retreats",
-        item: `${SITE_ORIGIN}/villa-retreats`,
+        name: "Villas",
+        item: `${SITE_ORIGIN}/villas`,
       },
       {
         "@type": "ListItem",
         position: 2,
         name: villa.name,
-        item: `${SITE_ORIGIN}/villa-retreats/${villa.id}`,
+        item: `${SITE_ORIGIN}/villas/${villa.id}`,
       },
       {
         "@type": "ListItem",
@@ -43,7 +43,7 @@ export function generateMetadata({ params }: Props): Metadata {
     return { title: "Spaces", robots: { index: false, follow: false } };
   }
 
-  const canonical = `${SITE_ORIGIN}/villa-retreats/${villa.id}/spaces`;
+  const canonical = `${SITE_ORIGIN}/villas/${villa.id}/spaces`;
   const title = `${villa.name} — Spaces, rooms & event areas`;
   const description = trimMetaDescription(
     `Photo tour of spaces at ${villa.name} (${villa.location}): layouts, lawns, pools, and event zones for stays and celebrations. ${villa.description}`,
@@ -86,7 +86,7 @@ export default function VillaSpacesLayout({ children, params }: Props) {
   const villa = VILLAS.find((v) => v.id === params.id) as Villa | undefined;
   if (!villa) notFound();
 
-  const canonical = `${SITE_ORIGIN}/villa-retreats/${villa.id}/spaces`;
+  const canonical = `${SITE_ORIGIN}/villas/${villa.id}/spaces`;
 
   return (
     <>

@@ -2,10 +2,6 @@
 
 import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { useBatchedScrollHide } from "@/lib/useBatchedScrollHide";
-import {
-  NAVBAR_SCROLL_CHROME_TRANSITION,
-  navbarScrollChromeAnimate,
-} from "@/lib/scrollChromeMotion";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -31,7 +27,7 @@ export default function Navbar() {
   if (pathname === "/" && !isSplashComplete) return null;
 
   // Check if it's a detail page for VILLAS or weddings (resorts)
-  const isDetailPage = /^\/(?:villa-retreats|weddings)\/[^/]+$/.test(pathname);
+  const isDetailPage = /^\/(?:VILLAS|weddings)\/[^/]+$/.test(pathname);
 
   return (
     <>
@@ -49,9 +45,11 @@ export default function Navbar() {
       <motion.nav
         className="jade-nav-chrome fixed top-0 left-0 w-full z-50 mt-[4px]"
         initial={false}
-        animate={navbarScrollChromeAnimate(isHidden)}
+        animate={{ y: isHidden ? "-100%" : "0%" }}
         transition={
-          reduceMotion ? { duration: 0 } : NAVBAR_SCROLL_CHROME_TRANSITION
+          reduceMotion
+            ? { duration: 0 }
+            : { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
         }
         aria-hidden={isHidden}
         style={{ pointerEvents: isHidden ? "none" : "auto" }}
@@ -83,7 +81,7 @@ export default function Navbar() {
             <nav className="flex items-center gap-6">
               {[
                 { name: "Experiences", href: "/experiences" },
-                { name: "Villa Retreats", href: "/villa-retreats" },
+                { name: "Villas", href: "/villas" },
                 { name: "About", href: "/about" },
                 { name: "Careers", href: "/careers" },
               ].map((item) => (

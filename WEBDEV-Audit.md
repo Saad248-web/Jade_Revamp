@@ -91,7 +91,7 @@ Per-route limits below **stack** with this edge bucket.
 | `POST /api/indexnow` | Index ping | **20** · 10 min | Bearer + host allowlist | **`INDEXNOW_API_SECRET`** in prod. |
 | `GET /api/instagram/oembed` | oEmbed proxy | **60** · 10 min | — | Bounded params. |
 | `GET /api/experiences/[slug]/media` | Media JSON | *Edge only* | — | No handler limiter. |
-| `GET /api/villa-retreats/[id]/media` | Media JSON | *Edge only* | — | No handler limiter. |
+| `GET /api/villas/[id]/media` | Media JSON | *Edge only* | — | No handler limiter. |
 
 ---
 
@@ -131,7 +131,7 @@ Per-route limits below **stack** with this edge bucket.
 | `src/components/ui/MeanderStrip.tsx` | Section divider (`Sep_bar_design.svg`) |
 | `src/components/menu/MenuPanelTabs.tsx` | Menu page chip tabs + villa/experience switcher |
 
-**Consumers:** `VenueOverlay`, `PartyVenueOverlay`, `CorporateVenueOverlay`, `VillaExperienceOverlayLayout`, `VillaDetailStickyTabs`, `src/app/villa-retreats/[id]/page.tsx`, `Navbar` / `VillasCarousel` (`useScrollHide`).
+**Consumers:** `VenueOverlay`, `PartyVenueOverlay`, `CorporateVenueOverlay`, `VillaExperienceOverlayLayout`, `VillaDetailStickyTabs`, `src/app/villas/[id]/page.tsx`, `Navbar` / `VillasCarousel` (`useScrollHide`).
 
 ---
 
@@ -227,7 +227,7 @@ Per-route limits below **stack** with this edge bucket.
 | Funnel UI | `src/components/EnquireOverlay.tsx`, `RathaaOverlay.tsx`, `PartnerOverlay.tsx`, `experience/WeddingVenueEnquiryForm.tsx`, `src/app/careers/page.tsx` |
 | Scroll | `src/app/providers.tsx`, `template.tsx`, `ScrollToTopOnNavigate.tsx`, `src/lib/scrollToPageTop.ts`, `useVenueOverlaySectionNav.ts`, `useSectionScrollSpy.ts` |
 | Email | `src/lib/email/*` |
-| SEO / GEO | `public/llms.txt`, `src/app/robots.ts`, `src/app/sitemap.ts`, `src/app/layout.tsx`, `src/app/villa-retreats/[id]/layout.tsx` |
+| SEO / GEO | `public/llms.txt`, `src/app/robots.ts`, `src/app/sitemap.ts`, `src/app/layout.tsx`, `src/app/villas/[id]/layout.tsx` |
 | Observability | `src/instrumentation.ts`, `src/instrumentation-client.ts`, `sentry.*.config.ts`, `withSentryConfig` in `next.config.mjs` |
 | Types | `src/lib/types.ts` (shared booking/enquiry contracts) |
 | CI | `.github/workflows/ci.yml`, `vitest.config.ts`, `playwright.config.ts` |

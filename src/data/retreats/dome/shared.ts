@@ -173,11 +173,11 @@ const DOME_AMENITIES = [
   { label: "Parking", icon: "Car" },
 ];
 
-/** Estate-wide capacity (dome-villa-retreats listing + detail). */
+/** Estate-wide capacity (dome-villas listing + detail). */
 export const DOME_ESTATE_STATS: VillaStats = {
   stay: "18 Guests",
   events: "25 Guests",
-  bhk: "3 Villa Retreats",
+  bhk: "3 Villas",
   lawn: "Landscaped Pathways",
   villaArea: "Private Estate",
 };
@@ -233,7 +233,7 @@ const DOME_SINGLE_UNIT_PRICING = {
 } as const;
 
 export const DOME_ESTATE_SHARED = {
-  type: "HOBBIT THEMED VILLA RETREAT",
+  type: "HOBBIT THEMED VILLA",
   location: "Shoolagiri · Near Bangalore",
   stats: DOME_ESTATE_STATS,
   categories: ["Nature Retreats", "Weekend Getaways", "Luxury Stays"],
@@ -305,7 +305,7 @@ export function buildSingleDomeVilla(color: DomeColorKey) {
     type: `HOBBIT THEMED · ${meta.categoryLabel.toUpperCase()}`,
     stats: DOME_SINGLE_UNIT_STATS,
     pricing: DOME_SINGLE_UNIT_PRICING,
-    description: `The ${meta.shortLabel} is one of three Hobbit-themed Dome Villa Retreats at the Dome Villa Retreats private estate near Bangalore. Book the full estate for exclusive use of all three domes, or explore this dome’s spaces, pool areas, and landscaped sit-outs in detail below.`,
+    description: `The ${meta.shortLabel} is one of three Hobbit-themed Dome Villas at the Dome Villas private estate near Bangalore. Book the full estate for exclusive use of all three domes, or explore this dome’s spaces, pool areas, and landscaped sit-outs in detail below.`,
     thumbnail: heroes[0] ?? colorImages[0],
     image: heroes[0] ?? colorImages[0],
     images: colorImages,
@@ -324,7 +324,7 @@ export function buildSingleDomeVilla(color: DomeColorKey) {
       {
         label: meta.shortLabel,
         description:
-          "A standalone dome villa within the private Dome Villa Retreats estate, with its own bedroom, bath, and outdoor sit-out.",
+          "A standalone dome villa within the private Dome Villas estate, with its own bedroom, bath, and outdoor sit-out.",
         icon: "Building",
       },
       {
@@ -361,7 +361,7 @@ export function buildSingleDomeVilla(color: DomeColorKey) {
       {
         question: "Can I book only this dome?",
         answer:
-          "Dome Villa Retreats is booked as a private estate with all three domes for one group. This page showcases the spaces and layout of this dome.",
+          "Dome Villas is booked as a private estate with all three domes for one group. This page showcases the spaces and layout of this dome.",
       },
       {
         question: "How many guests can the estate accommodate?",

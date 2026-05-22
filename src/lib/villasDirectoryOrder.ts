@@ -1,6 +1,6 @@
 import { DOME_VILLA_IDS } from "@/lib/domeVillaIds";
 
-/** Serial showcase order on `/villa-retreats` (and other directory listings). */
+/** Serial showcase order on `/villas` (and other directory listings). */
 export const VILLAS_DIRECTORY_ORDER: readonly string[] = [
   "jade-735",
   "magnolia",

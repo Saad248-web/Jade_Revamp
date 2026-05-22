@@ -24,7 +24,7 @@ export async function getVillas(filters?: {
 }): Promise<Villa[]> {
   await delay();
   const directoryVillas = sortVillasForDirectory(
-    VILLAS.filter((v) => !(v as Villa).hideFromVillaRetreatsDirectory),
+    VILLAS.filter((v) => !(v as Villa).hideFromVillasDirectory),
   );
   if (!filters?.category || filters.category === "All") {
     return directoryVillas as unknown as Villa[];

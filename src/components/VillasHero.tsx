@@ -49,7 +49,7 @@ export default function VillasHero() {
           transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
           className="font-manrope text-white/70 text-gh-body max-w-xl leading-relaxed"
         >
-          A curated collection of fully Private Villa Retreats across Bangalore, each
+          A curated collection of fully private villa retreats across Bangalore, each
           offering a distinct theme for stays, celebrations and bespoke
           experiences.
         </motion.p>

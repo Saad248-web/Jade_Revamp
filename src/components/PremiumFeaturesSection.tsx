@@ -17,7 +17,7 @@ interface PremiumFeaturesSectionProps {
   onCtaClick?: () => void;
   cardClassName?: string;
   alternateGold?: boolean;
-  /** Edge-to-edge horizontal scroll rail (e.g. Party Villa Retreats); default is responsive grid. */
+  /** Edge-to-edge horizontal scroll rail (e.g. Party Villas); default is responsive grid. */
   cardsLayout?: "grid" | "scroll";
 }
 

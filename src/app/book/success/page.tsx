@@ -101,7 +101,7 @@ function BookingSuccessContent() {
               HOME
             </Link>
             <Link
-              href="/villa-retreats"
+              href="/villas"
               className="flex-1 bg-jade-gold text-[#0B2C23] font-manrope font-bold text-gh-label tracking-widest uppercase text-center py-3.5 hover:bg-white transition-colors flex items-center justify-center gap-2"
             >
               EXPLORE MORE <ArrowRight className="w-4 h-4" />

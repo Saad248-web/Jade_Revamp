@@ -108,8 +108,8 @@ export default function VillasCarousel() {
   const filteredVillas = sortVillasForDirectory(
     VILLAS.filter(
       (villa) =>
-        !(villa as { hideFromVillaRetreatsDirectory?: boolean })
-          .hideFromVillaRetreatsDirectory &&
+        !(villa as { hideFromVillasDirectory?: boolean })
+          .hideFromVillasDirectory &&
         (activeCategory === "All" ||
           villa.categories?.some(
             (c: string) => c.toLowerCase() === activeCategory.toLowerCase(),
@@ -302,13 +302,13 @@ export default function VillasCarousel() {
           ) : (
             <div className="flex flex-col items-center justify-center h-[50vh] text-center">
               <span className="text-white/40 font-manrope text-gh-body">
-                No villa retreats found for &quot;{activeCategory}&quot;.
+                No VILLAS found for &quot;{activeCategory}&quot;.
               </span>
               <button
                 onClick={() => setActiveCategory("All")}
                 className="mt-3 text-[#EFCD62] font-manrope underline underline-offset-4"
               >
-                View All Villa Retreats
+                View All Villas
               </button>
             </div>
           )}

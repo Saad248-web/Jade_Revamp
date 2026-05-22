@@ -95,13 +95,13 @@ export default function WeekendGetawaysPage() {
             In Bangalore
           </>
         }
-        description="Private Villa Retreats designed for relaxed escapes, small celebrations, and memorable weekends with friends and family."
+        description="Private Villas designed for relaxed escapes, small celebrations, and memorable weekends with friends and family."
         buttons={[
           {
             icon: <Calendar className="w-5 h-5" />,
             label: "VENUES",
             onClick: () => {
-              const venuesSection = document.getElementById("themed-villa-retreats");
+              const venuesSection = document.getElementById("themed-villas");
               if (venuesSection)
                 venuesSection.scrollIntoView({ behavior: "smooth" });
             },
@@ -140,7 +140,7 @@ export default function WeekendGetawaysPage() {
       {/* SECTION 5: WHY CHOOSE JADE */}
       <WhyChooseJadeSection />
 
-      {/* SECTION 6: THEMED VILLA RETREATS */}
+      {/* SECTION 6: Themed Villas */}
       <WeekendThemedVillasSection />
 
       {/* SECTION 4: CTA */}
@@ -153,7 +153,7 @@ export default function WeekendGetawaysPage() {
             Want a curated weekend escape?
           </h2>
           <p className="text-white/60 font-manrope text-gh-body leading-relaxed mb-8">
-            Reach out and we&apos;ll suggest the best villa retreats for your group
+            Reach out and we&apos;ll suggest the best Villas for your group
             size, occasion, and preferred vibe.
           </p>
           <PrimaryButton
@@ -181,8 +181,8 @@ function WhyChooseJadeSection() {
       cards={[
         {
           tag: "provide",
-          title: "Private Villa Retreats",
-          desc: "Stay in fully Private Villa Retreats designed for relaxed getaways, with no shared spaces and complete freedom to enjoy your time.",
+          title: "Private Villas",
+          desc: "Stay in fully Private Villas designed for relaxed getaways, with no shared spaces and complete freedom to enjoy your time.",
         },
         {
           tag: "create",
@@ -200,7 +200,7 @@ function WhyChooseJadeSection() {
           desc: "From check-in to curated experiences, our team ensures your weekend getaway is effortless and well taken care of.",
         },
       ]}
-      footerText="Private Villa Retreats and curated experiences designed to make every weekend feel like an escape."
+      footerText="Private Villas and curated experiences designed to make every weekend feel like an escape."
       ctaText="PLAN YOUR WEEKEND ESCAPE"
       onCtaClick={() => setEnquireOverlayOpen(true)}
       cardClassName="bg-[#363A45]"

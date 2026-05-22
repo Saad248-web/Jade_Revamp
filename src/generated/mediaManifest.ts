@@ -3,7 +3,7 @@
 // Do not edit manually.
 
 export const MEDIA_MANIFEST = {
-  "generatedAt": "2026-05-22T07:50:03.174Z",
+  "generatedAt": "2026-05-22T12:12:16.188Z",
   "villasByFolder": {
     "Diamond": {
       "hero": [
@@ -1994,46 +1994,46 @@ export const MEDIA_MANIFEST = {
         }
       ]
     },
-    "Party Villa Retreats": {
-      "root": "/Experiences/Party Villa Retreats",
+    "Party Villas": {
+      "root": "/Experiences/Party Villas",
       "all": [
-        "/Experiences/Party Villa Retreats/1-Hero/Pool Parties.webp",
-        "/Experiences/Party Villa Retreats/2-Party Type/Bachelor_Bachelorette Parties.webp",
-        "/Experiences/Party Villa Retreats/2-Party Type/Birthdays & Anniversaries.webp",
-        "/Experiences/Party Villa Retreats/2-Party Type/Pool Parties.webp",
-        "/Experiences/Party Villa Retreats/2-Party Type/Reunions & Graduation Parties.webp",
-        "/Experiences/Party Villa Retreats/3-Addons/BBQ & Live Grills.webp",
-        "/Experiences/Party Villa Retreats/3-Addons/Bonfire Nights.webp",
-        "/Experiences/Party Villa Retreats/3-Addons/Cocktail Bar Setup.webp",
-        "/Experiences/Party Villa Retreats/3-Addons/DJ & Music Setup.webp",
-        "/Experiences/Party Villa Retreats/3-Addons/Movie Under The Stars-2.webp",
-        "/Experiences/Party Villa Retreats/3-Addons/Themed Decor and Styling.webp"
+        "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
+        "/Experiences/Party Villas/2-Party Type/Bachelor_Bachelorette Parties.webp",
+        "/Experiences/Party Villas/2-Party Type/Birthdays & Anniversaries.webp",
+        "/Experiences/Party Villas/2-Party Type/Pool Parties.webp",
+        "/Experiences/Party Villas/2-Party Type/Reunions & Graduation Parties.webp",
+        "/Experiences/Party Villas/3-Addons/BBQ & Live Grills.webp",
+        "/Experiences/Party Villas/3-Addons/Bonfire Nights.webp",
+        "/Experiences/Party Villas/3-Addons/Cocktail Bar Setup.webp",
+        "/Experiences/Party Villas/3-Addons/DJ & Music Setup.webp",
+        "/Experiences/Party Villas/3-Addons/Movie Under The Stars-2.webp",
+        "/Experiences/Party Villas/3-Addons/Themed Decor and Styling.webp"
       ],
       "groups": [
         {
           "folder": "1-Hero",
           "images": [
-            "/Experiences/Party Villa Retreats/1-Hero/Pool Parties.webp"
+            "/Experiences/Party Villas/1-Hero/Pool Parties.webp"
           ]
         },
         {
           "folder": "2-Party Type",
           "images": [
-            "/Experiences/Party Villa Retreats/2-Party Type/Bachelor_Bachelorette Parties.webp",
-            "/Experiences/Party Villa Retreats/2-Party Type/Birthdays & Anniversaries.webp",
-            "/Experiences/Party Villa Retreats/2-Party Type/Pool Parties.webp",
-            "/Experiences/Party Villa Retreats/2-Party Type/Reunions & Graduation Parties.webp"
+            "/Experiences/Party Villas/2-Party Type/Bachelor_Bachelorette Parties.webp",
+            "/Experiences/Party Villas/2-Party Type/Birthdays & Anniversaries.webp",
+            "/Experiences/Party Villas/2-Party Type/Pool Parties.webp",
+            "/Experiences/Party Villas/2-Party Type/Reunions & Graduation Parties.webp"
           ]
         },
         {
           "folder": "3-Addons",
           "images": [
-            "/Experiences/Party Villa Retreats/3-Addons/BBQ & Live Grills.webp",
-            "/Experiences/Party Villa Retreats/3-Addons/Bonfire Nights.webp",
-            "/Experiences/Party Villa Retreats/3-Addons/Cocktail Bar Setup.webp",
-            "/Experiences/Party Villa Retreats/3-Addons/DJ & Music Setup.webp",
-            "/Experiences/Party Villa Retreats/3-Addons/Movie Under The Stars-2.webp",
-            "/Experiences/Party Villa Retreats/3-Addons/Themed Decor and Styling.webp"
+            "/Experiences/Party Villas/3-Addons/BBQ & Live Grills.webp",
+            "/Experiences/Party Villas/3-Addons/Bonfire Nights.webp",
+            "/Experiences/Party Villas/3-Addons/Cocktail Bar Setup.webp",
+            "/Experiences/Party Villas/3-Addons/DJ & Music Setup.webp",
+            "/Experiences/Party Villas/3-Addons/Movie Under The Stars-2.webp",
+            "/Experiences/Party Villas/3-Addons/Themed Decor and Styling.webp"
           ]
         }
       ]
@@ -2494,9 +2494,9 @@ export const MEDIA_MANIFEST = {
     "/Experiences/Caravan/2-Spaces/1.webp": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAQCdASoKAAcABIByJZQCdADcUoIf4AD+7FhM7GFni68DhqI6gsEq7PcKS0iAAAA=",
     "/Experiences/Corporate Retreats/1-Hero/xhero.webp": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADQAQCdASoKAAoABIByJbACdADZYrD7IAD943h+koMzhTPqEroYt3u2pJnztS1LJhsh33rHV9cuXODdJEIB2Iatsr037getkLgAAA==",
     "/Experiences/Corporate Retreats/2-Formats/Conference and....webp": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAACwAQCdASoKAAcABIByJZQAAsbQ8U5AAPysho+C+X4PIuWZlrNFdh1sf4vZahi2erF1z+1JDIQKAAAA",
-    "/Experiences/Party Villa Retreats/1-Hero/Pool Parties.webp": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAQCdASoKAAcABIByJagCdADZmERAAOAuJPjG1m3J7X6NgvMtPx1eifN5/zU8Rf/XQyIwxET6nSnsxZlU2vTmU+AAAA==",
-    "/Experiences/Party Villa Retreats/2-Party Type/Bachelor_Bachelorette Parties.webp": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAADQAQCdASoKAA8ABIByJQBOgB+ER31XMAD5EEtL28xRmZ8mOlxJyTi96LVBSlGFlibdsCqdx9k9tTyhI9jcwSAA9tPMAA==",
-    "/Experiences/Party Villa Retreats/3-Addons/BBQ & Live Grills.webp": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADQAQCdASoKAAcABIByJQBOgCfIU/kOMAD+qfJUum1bc3uzAjjtFxj6vl0D2HKU/4BrHBje30jzUAAA",
+    "/Experiences/Party Villas/1-Hero/Pool Parties.webp": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAQCdASoKAAcABIByJagCdADZmERAAOAuJPjG1m3J7X6NgvMtPx1eifN5/zU8Rf/XQyIwxET6nSnsxZlU2vTmU+AAAA==",
+    "/Experiences/Party Villas/2-Party Type/Bachelor_Bachelorette Parties.webp": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAADQAQCdASoKAA8ABIByJQBOgB+ER31XMAD5EEtL28xRmZ8mOlxJyTi96LVBSlGFlibdsCqdx9k9tTyhI9jcwSAA9tPMAA==",
+    "/Experiences/Party Villas/3-Addons/BBQ & Live Grills.webp": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADQAQCdASoKAAcABIByJQBOgCfIU/kOMAD+qfJUum1bc3uzAjjtFxj6vl0D2HKU/4BrHBje30jzUAAA",
     "/Experiences/Weddings/1-Hero/2 (1).webp": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAADQAQCdASoKAAcABIByJQBOgCBXjlUXAAD9316qi4v8t1gA9XSV22afi21HbcAqdKKSmkQTMYKAAA==",
     "/Experiences/Weddings/1-Hero/3.webp": "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAACwAQCdASoKAAYABIByJQBOgCFoTYUAAP7O71Qg3GwSeQMp60Occxo00+AONE4C3lCfbvWwAAA=",
     "/Experiences/Weddings/2-Venue Images/DIAMOND/1.webp": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADQAQCdASoKAAYABIByJYwC7AD0j/PcsAD+3PnYJKl5OQyJHGQHL0FAy2LHeSgA",

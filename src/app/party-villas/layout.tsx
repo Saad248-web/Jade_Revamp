@@ -3,15 +3,15 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
-  title: "Party Villa Retreats",
+  title: "Party Villas",
   description:
-    "Host unforgettable birthday parties, pool parties, bachelor/bachelorette events, and milestone celebrations at exclusive Jade Private Villa Retreats near Bangalore.",
-  alternates: { canonical: "https://jadehospitainment.com/party-villa-retreats" },
+    "Host unforgettable birthday parties, pool parties, bachelor/bachelorette events, and milestone celebrations at exclusive Jade private villas near Bangalore.",
+  alternates: { canonical: "https://jadehospitainment.com/party-villas" },
   openGraph: {
-    title: "Party Villa Retreats | Jade Hospitainment",
+    title: "Party Villas | Jade Hospitainment",
     description:
-      "Exclusive Jade villa retreats for birthdays, pool parties, bachelor celebrations, and reunions near Bangalore. Private. Curated. Unforgettable.",
-    url: "https://jadehospitainment.com/party-villa-retreats",
+      "Exclusive Jade villas for birthdays, pool parties, bachelor celebrations, and reunions near Bangalore. Private. Curated. Unforgettable.",
+    url: "https://jadehospitainment.com/party-villas",
   },
 };
 
@@ -28,8 +28,8 @@ const breadcrumbSchema = {
     {
       "@type": "ListItem",
       position: 2,
-      name: "Party Villa Retreats",
-      item: "https://jadehospitainment.com/party-villa-retreats",
+      name: "Party Villas",
+      item: "https://jadehospitainment.com/party-villas",
     },
   ],
 };
@@ -37,7 +37,7 @@ const breadcrumbSchema = {
 const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
-  name: "Party Villa Retreats — Jade Hospitainment",
+  name: "Party Villas — Jade Hospitainment",
   description:
     "Private villa spaces near Bangalore for birthdays, pool parties, bachelor events, and curated celebrations.",
   provider: {

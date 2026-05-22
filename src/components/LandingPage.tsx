@@ -170,10 +170,10 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="text-gh-label tracking-[0.3em] text-jade-gold uppercase font-manrope font-bold"
+              className="text-gh-label tracking-[0.25em] text-jade-gold uppercase font-manrope font-bold"
               style={{ marginBottom: "clamp(4px, 0.96vw, 8px)" }}
             >
-              JADE HOSPITAINMENT
+              VILLA RETREATS
             </motion.p>
 
             {/* Title — tight to label above, tight to subtext below */}

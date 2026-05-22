@@ -43,10 +43,10 @@ const OFFERINGS = [
     image: "/Experiences/Weddings/1-Hero/2 (1).webp",
   },
   {
-    title: "Party Villa Retreats",
+    title: "Party Villas",
     description:
-      "Host birthdays, pool parties, reunions or milestone celebrations in exclusive Jade villa retreats.",
-    image: "/Experiences/Party Villa Retreats/1-Hero/Pool Parties.webp",
+      "Host birthdays, pool parties, reunions or milestone celebrations in exclusive Jade VILLAS.",
+    image: "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
   },
 ];
 
@@ -122,7 +122,7 @@ export default function AboutPage() {
           </h2>
 
           <h1 className="text-gh-h1 font-philosopher text-white mb-3 leading-tight">
-            Curated Villa Retreats.
+            Curated VILLAS.
             <br />
             Thoughtfully Operated.
           </h1>
@@ -161,7 +161,7 @@ export default function AboutPage() {
               Founded in 2011 under Jade Retreats, Jade Hospitainment created
               exclusive private retreat experiences, starting with one of
               Bengaluru's most sought-after vacation homes. Jade expanded beyond
-              stays, transforming villa retreats and farmhouses into curated retreats
+              stays, transforming VILLAS and farmhouses into curated retreats
               across hospitality and experience. Today, Jade operates a growing
               portfolio of private retreats for getaways, celebrations, and
               corporate offsites.
@@ -206,7 +206,7 @@ export default function AboutPage() {
           {
             tag: "operate",
             title: "BY INTENT",
-            desc: "Private Villa Retreats are thoughtfully positioned and operated with clarity around how they are meant to be experienced, whether for stays, celebrations, or retreats.",
+            desc: "Private Villas are thoughtfully positioned and operated with clarity around how they are meant to be experienced, whether for stays, celebrations, or retreats.",
           },
           {
             tag: "curate",
@@ -224,7 +224,7 @@ export default function AboutPage() {
             desc: "Spaces are managed with long-term care in mind, balancing guest experience with respect for the property, its surroundings, and its people.",
           },
         ]}
-        footerText="Bringing unique villa retreats and curated experiences together under one standard of hospitality."
+        footerText="Bringing unique VILLAS and curated experiences together under one standard of hospitality."
         ctaText="PARTNER WITH JADE"
         onCtaClick={() => setEnquireOverlayOpen(true)}
         alternateGold={true}

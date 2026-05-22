@@ -33,15 +33,15 @@ export const metadata: Metadata = {
 
   // Every page gets " | Jade Hospitainment" appended automatically
   title: {
-    default: "Jade Hospitainment — Luxury Villa Retreats, Weddings & Experiences",
+    default: "Jade Hospitainment — Luxury Villas, Weddings & Experiences",
     template: "%s | Jade Hospitainment",
   },
 
   description:
-    "Discover curated Luxury Villa Retreats, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore with Jade Hospitainment.",
+    "Discover curated Luxury Villas, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore with Jade Hospitainment.",
 
   keywords: [
-    "Luxury Villa Retreats Bangalore",
+    "Luxury Villas Bangalore",
     "destination weddings",
     "corporate retreats Bangalore",
     "weekend getaways",
@@ -60,9 +60,9 @@ export const metadata: Metadata = {
     siteName: "Jade Hospitainment",
     locale: "en_IN",
     url: "https://jadehospitainment.com",
-    title: "Jade Hospitainment — Luxury Villa Retreats, Weddings & Experiences",
+    title: "Jade Hospitainment — Luxury Villas, Weddings & Experiences",
     description:
-      "Discover curated Luxury Villa Retreats, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore.",
+      "Discover curated Luxury Villas, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore.",
     images: [
       {
         url: "/og-default.jpg",
@@ -75,9 +75,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Jade Hospitainment — Luxury Villa Retreats, Weddings & Experiences",
+    title: "Jade Hospitainment — Luxury Villas, Weddings & Experiences",
     description:
-      "Discover curated Luxury Villa Retreats, bespoke destination weddings, and immersive experiences near Bangalore.",
+      "Discover curated Luxury Villas, bespoke destination weddings, and immersive experiences near Bangalore.",
     images: ["/og-default.jpg"],
   },
 
@@ -107,7 +107,7 @@ const organizationSchema = {
   url: "https://jadehospitainment.com",
   logo: "https://jadehospitainment.com/assets/Golden_Logo.png",
   description:
-    "Discover curated Luxury Villa Retreats, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore.",
+    "Discover curated Luxury Villas, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore.",
   sameAs: [
     "https://www.instagram.com/jadehospitainment",
     "https://www.facebook.com/jadehospitainment",
@@ -117,7 +117,7 @@ const organizationSchema = {
     "Destination weddings",
     "Corporate retreats",
     "Weekend getaways Bangalore",
-    "Party Villa Retreats Karnataka",
+    "Party Villas Karnataka",
   ],
 };
 
@@ -145,7 +145,7 @@ const websiteSchema = {
   name: "Jade Hospitainment",
   inLanguage: "en-IN",
   description:
-    "Discover curated Luxury Villa Retreats, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore.",
+    "Discover curated Luxury Villas, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore.",
   publisher: { "@id": "https://jadehospitainment.com/#organization" },
 };
 

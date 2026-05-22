@@ -7,7 +7,7 @@ import {
 } from "@/data/retreats";
 
 export const CORPORATE_VILLAS_OVERLAY_DATA = {
-  "dome-villa-retreats": {
+  "dome-villas": {
     ...domeVillas,
     overlay: { onwardsPrice: "₹75,000" },
   },

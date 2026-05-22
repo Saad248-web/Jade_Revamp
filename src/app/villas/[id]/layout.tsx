@@ -7,8 +7,8 @@ import type { Villa } from "@/lib/types";
 import {
   SITE_ORIGIN,
   absoluteSiteUrl,
+  trimMetaDescription,
 } from "@/lib/seo/meta";
-import { buildVillaMetaDescription } from "@/lib/seo/villaMetaDescription";
 
 type Props = { children: ReactNode; params: { id: string } };
 
@@ -62,9 +62,9 @@ export function generateMetadata({ params }: Props): Metadata {
     return { title: "Villa", robots: { index: false, follow: false } };
   }
 
-  const canonical = `${SITE_ORIGIN}/villa-retreats/${villa.id}`;
+  const canonical = `${SITE_ORIGIN}/villas/${villa.id}`;
   const title = `${villa.name} — ${villa.type} near ${villa.location.replace(/\s*[·\.]\s*.+$/, "").trim()}`;
-  const description = buildVillaMetaDescription(villa);
+  const description = trimMetaDescription(villa.description);
   const ogPath = villa.image;
 
   return {
@@ -110,7 +110,7 @@ export default function VillaSegmentLayout({ children, params }: Props) {
   const villa = VILLAS.find((v) => v.id === params.id) as Villa | undefined;
   if (!villa) notFound();
 
-  const canonical = `${SITE_ORIGIN}/villa-retreats/${villa.id}`;
+  const canonical = `${SITE_ORIGIN}/villas/${villa.id}`;
 
   return (
     <>

@@ -8,7 +8,7 @@ import { AnimatePresence } from "framer-motion";
 
 // Filter VILLAS to specifically show corporate related venues
 const CORPORATE_VILLA_IDS = [
-  "dome-villa-retreats",
+  "dome-villas",
   "magnolia",
   "diamond",
   "retreat-on-the-ridge",

@@ -17,12 +17,12 @@ export const EXPERIENCE_SCROLL_SECTIONS: Record<
 > = {
   weekend: {
     label: "A DIFFERENT KIND OF WEEKEND ESCAPE",
-    body: "Jade's Private Villa Retreats offer space, privacy, and comfort just outside the city. Whether you're planning a relaxed stay with friends, a family getaway, or a small celebration, each retreat is designed to let you slow down and enjoy the moment.",
+    body: "Jade's Private Villas offer space, privacy, and comfort just outside the city. Whether you're planning a relaxed stay with friends, a family getaway, or a small celebration, each retreat is designed to let you slow down and enjoy the moment.",
     height: "250vh",
   },
   party: {
     label: "CELEBRATIONS, REIMAGINED",
-    body: "Jade's Private Villa Retreats offer the perfect setting for unforgettable celebrations. Whether it's a birthday, anniversary, pool party, or reunion with friends, each space is designed for private gatherings with curated setups, great music, and moments worth celebrating.",
+    body: "Jade's Private Villas offer the perfect setting for unforgettable celebrations. Whether it's a birthday, anniversary, pool party, or reunion with friends, each space is designed for private gatherings with curated setups, great music, and moments worth celebrating.",
     height: "250vh",
   },
   caravans: {

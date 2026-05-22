@@ -1,5 +1,5 @@
 /**
- * Shared layout for experience-category heroes (Corporate, Party Villa Retreats,
+ * Shared layout for experience-category heroes (Corporate, Party Villas,
  * Weekend Getaways, Weddings via WeddingHero — all use ExperienceHero).
  * Mobile/tablet: stats + CTAs use the full padded hero width (Image 2 alignment).
  * Large screens: cap width for readability and center the chrome stack.
