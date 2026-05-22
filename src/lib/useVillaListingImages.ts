@@ -27,7 +27,7 @@ export function useVillaListingImages(
     let cancelled = false;
     async function load() {
       try {
-        const res = await fetch(`/api/villas/${villa!.id}/media?v=4`);
+        const res = await fetch(`/api/villa-retreats/${villa!.id}/media?v=4`);
         if (!res.ok) return;
         const data = (await res.json()) as VillaListingServerMedia;
         if (!cancelled) setServerMedia(data);

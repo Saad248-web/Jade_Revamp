@@ -9,11 +9,11 @@ import {
 } from "./shared";
 
 export const domeVillas = {
-  id: "dome-villas",
-  hideFromVillasDirectory: true,
-  name: "Dome Villas",
+  id: "dome-villa-retreats",
+  hideFromVillaRetreatsDirectory: true,
+  name: "Dome Villa Retreats",
   description:
-    "Dome Villas is a private estate with three independent dome-shaped villas, booked exclusively by one group. The Hobbit-themed design features distributed living spaces, landscaped pathways connecting each dome, and a private plunge pool. Each dome has its own bedroom, bath, and sit-out area, offering a unique blend of fantasy architecture and nature immersion suited for small groups and intimate celebrations.",
+    "Dome Villa Retreats is a private estate with three independent dome-shaped villa retreats, booked exclusively by one group. The Hobbit-themed design features distributed living spaces, landscaped pathways connecting each dome, and a private plunge pool. Each dome has its own bedroom, bath, and sit-out area, offering a unique blend of fantasy architecture and nature immersion suited for small groups and intimate celebrations.",
   thumbnail: "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
   image: "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
   images: [
@@ -56,9 +56,9 @@ export const domeVillas = {
   ],
   propertyDetails: [
     {
-      label: "Three Dome Villas (Private Estate)",
+      label: "Three Dome Villa Retreats (Private Estate)",
       description:
-        "Entire property includes three independent villas booked together.",
+        "Entire property includes three independent villa retreats booked together.",
       icon: "Building",
     },
     {
@@ -97,12 +97,12 @@ export const domeVillas = {
     {
       question: "Is the property shared with other guests?",
       answer:
-        "The full Dome Villas estate is booked exclusively for one group, including all three domes.",
+        "The full Dome Villa Retreats estate is booked exclusively for one group, including all three domes.",
     },
     {
-      question: "How many villas are included?",
+      question: "How many villa retreats are included?",
       answer:
-        "The property includes three dome villas within one private estate.",
+        "The property includes three Dome Villa Retreats within one private estate.",
     },
     {
       question: "How many guests can stay overnight?",

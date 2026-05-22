@@ -30,6 +30,11 @@ import {
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import { stickyCategoryTabClass } from "@/lib/stickyTabGlass";
 import { OVERLAY_GLASS_TOP_8PX_SHADE_CLASS } from "@/lib/scrollChromeGlass";
+import {
+  SCROLL_CHROME_FRAMER_INITIAL,
+  SCROLL_CHROME_FRAMER_TRANSITION,
+  scrollChromeAnimate,
+} from "@/lib/scrollChromeMotion";
 import { useScrollTabIntoView } from "@/lib/useScrollTabIntoView";
 
 export type VillaExperienceCarouselImage = { name?: string; image: string };
@@ -171,13 +176,15 @@ export function VillaExperienceOverlayCloseFramer({
 }) {
   const button = (
     <MotionButton
-      initial={{ opacity: 0, scale: 0.9, y: 0 }}
-      animate={{
-        opacity: variant === "above-sheet" ? 1 : isHidden ? 0 : 1,
-        scale: variant === "above-sheet" ? 1 : isHidden ? 0.8 : 1,
-        y: variant === "above-sheet" ? 0 : isHidden ? -80 : 0,
-      }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+      initial={
+        variant === "above-sheet" ? { opacity: 0, scale: 0.9, y: 0 } : SCROLL_CHROME_FRAMER_INITIAL
+      }
+      animate={
+        variant === "above-sheet"
+          ? { opacity: 1, scale: 1, y: 0 }
+          : scrollChromeAnimate(isHidden)
+      }
+      transition={SCROLL_CHROME_FRAMER_TRANSITION}
       onClick={onClose}
       aria-label="Close"
       className={EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS}

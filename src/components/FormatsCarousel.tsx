@@ -22,7 +22,7 @@ const FORMATS: Format[] = [
   {
     title: "Corporate Team Outings",
     description:
-      "Private pool villas with sprawling lawns designed for structured activities, team engagement, and relaxed downtime. Suitable for both intimate groups and larger gatherings.",
+      "Private pool VILLAS with sprawling lawns designed for structured activities, team engagement, and relaxed downtime. Suitable for both intimate groups and larger gatherings.",
     image1:
       "/Experiences/Corporate Retreats/2-Formats/corporate team outings.webp",
     image2:

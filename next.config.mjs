@@ -102,6 +102,68 @@ const nextConfig = {
         permanent: true,
       },
 
+      // Villas → Villa Retreats (legacy URLs)
+      {
+        source: "/villas/dome-villas/:path*",
+        destination: "/villa-retreats/dome-villa-retreats/:path*",
+        permanent: true,
+      },
+      {
+        source: "/villas/dome-villas",
+        destination: "/villa-retreats/dome-villa-retreats",
+        permanent: true,
+      },
+      {
+        source: "/villa-retreats/dome-villas/:path*",
+        destination: "/villa-retreats/dome-villa-retreats/:path*",
+        permanent: true,
+      },
+      {
+        source: "/villa-retreats/dome-villas",
+        destination: "/villa-retreats/dome-villa-retreats",
+        permanent: true,
+      },
+      {
+        source: "/villas/dome-villas-blue",
+        destination: "/villa-retreats/dome-villa-retreats-blue",
+        permanent: true,
+      },
+      {
+        source: "/villas/dome-villas-red",
+        destination: "/villa-retreats/dome-villa-retreats-red",
+        permanent: true,
+      },
+      {
+        source: "/villas/dome-villas-yellow",
+        destination: "/villa-retreats/dome-villa-retreats-yellow",
+        permanent: true,
+      },
+      {
+        source: "/villas/:path*",
+        destination: "/villa-retreats/:path*",
+        permanent: true,
+      },
+      {
+        source: "/villas",
+        destination: "/villa-retreats",
+        permanent: true,
+      },
+      {
+        source: "/party-villas/:path*",
+        destination: "/party-villa-retreats/:path*",
+        permanent: true,
+      },
+      {
+        source: "/party-villas",
+        destination: "/party-villa-retreats",
+        permanent: true,
+      },
+      {
+        source: "/api/villas/:path*",
+        destination: "/api/villa-retreats/:path*",
+        permanent: true,
+      },
+
       // Example pattern — update with actual old URLs when migrating
       // {
       //   source: "/blog/:slug",

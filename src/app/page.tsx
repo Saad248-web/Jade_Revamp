@@ -4,9 +4,9 @@ import LandingPage from "@/components/LandingPage";
 import JsonLd from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
-  title: "Jade Hospitainment — Luxury Villas, Weddings & Experiences",
+  title: "Jade Hospitainment — Luxury Villa Retreats, Weddings & Experiences",
   description:
-    "Discover curated luxury villas, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore with Jade Hospitainment.",
+    "Discover curated Luxury Villa Retreats, bespoke destination weddings, caravans, corporate retreats, and immersive experiences near Bangalore with Jade Hospitainment.",
   alternates: { canonical: "https://jadehospitainment.com" },
 };
 

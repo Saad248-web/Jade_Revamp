@@ -1,4 +1,4 @@
-/** Villas shown in the directory but not available for online booking. */
+/** VILLAS shown in the directory but not available for online booking. */
 export const NON_BOOKABLE_VILLA_IDS = new Set<string>(["royalty", "palatio"]);
 
 export function isVillaBookable(villaId: string | null | undefined): boolean {

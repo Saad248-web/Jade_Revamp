@@ -38,7 +38,7 @@ export default function VillaSpacesPage() {
     let cancelled = false;
     async function load() {
       try {
-        const res = await fetch(`/api/villas/${id}/media?v=2`);
+        const res = await fetch(`/api/villa-retreats/${id}/media?v=2`);
         if (!res.ok) return;
         const data = await res.json();
         if (!cancelled && Array.isArray(data?.categorizedSpaces)) {
@@ -59,7 +59,7 @@ export default function VillaSpacesPage() {
     const cats = Array.from(
       new Set(base.map((s: VillaSpaceGroup) => s.category)),
     ).filter((c) => typeof c === "string" && c.length > 0) as string[];
-    // Dome Villas: no "All" — only the three dome color tabs plus Video.
+    // Dome Villa Retreats: no "All" — only the three dome color tabs plus Video.
     if (isDomeEstate) return [...cats, "Video"];
     // Prefer predictable ordering: show "All", then category groups, then Video
     return ["All", ...cats, "Video"];

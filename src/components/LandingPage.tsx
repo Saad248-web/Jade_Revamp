@@ -195,7 +195,7 @@ export default function LandingPage() {
               transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
               className="text-gh-body font-light text-[#FAFAFA] max-w-xl font-manrope leading-relaxed"
             >
-              Private themed farmhouse villas in serene locations of Bangalore,
+              Private themed farmhouse villa retreats in serene locations of Bangalore,
               curated for gatherings and getaways.
             </motion.p>
             </motion.div>

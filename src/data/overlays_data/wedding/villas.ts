@@ -8,7 +8,7 @@ import {
 } from "@/data/retreats";
 
 export const WEDDING_VILLAS_OVERLAY_DATA = {
-  "dome-villas": {
+  "dome-villa-retreats": {
     ...domeVillas,
     overlay: { onwardsPrice: "₹75,000", parking: "80" },
   },

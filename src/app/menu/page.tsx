@@ -23,29 +23,29 @@ import {
   type MenuTabItem,
 } from "@/components/menu/MenuPanelTabs";
 
-/** Villas hidden from menu villa section only (still bookable via direct URL). */
+/** VILLAS hidden from menu villa section only (still bookable via direct URL). */
 const MENU_VILLA_EXCLUDED_IDS = new Set(["vannani", "lemon-tree"]);
 const MENU_VILLAS = sortVillasForDirectory(
   VILLAS.filter(
     (v) =>
       !MENU_VILLA_EXCLUDED_IDS.has(v.id) &&
-      !(v as { hideFromVillasDirectory?: boolean }).hideFromVillasDirectory,
+      !(v as { hideFromVillaRetreatsDirectory?: boolean }).hideFromVillaRetreatsDirectory,
   ),
 );
 
 /** Canonical landing route per villa directory category (matches site experience pages). */
 function villaCategoryHref(category: string): string {
   const dedicated: Record<string, string> = {
-    All: "/villas",
+    All: "/villa-retreats",
     Weddings: "/weddings",
     "Pre-wedding": "/weddings",
     "Corporate Retreats": "/corporate-retreats",
     "Weekend Getaways": "/weekend-getaways",
-    "Party Venues": "/party-villas",
-    "Wellness Retreats": "/villas?category=Wellness Retreats",
+    "Party Venues": "/party-villa-retreats",
+    "Wellness Retreats": "/villa-retreats?category=Wellness Retreats",
   };
   if (dedicated[category]) return dedicated[category];
-  return `/villas?category=${encodeURIComponent(category)}`;
+  return `/villa-retreats?category=${encodeURIComponent(category)}`;
 }
 
 const MENU_VILLA_CATEGORY_TABS: MenuTabItem[] = CATEGORIES.filter(
@@ -83,11 +83,11 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
   {
     title: "Celebrations & Parties",
     type: "LUXURY PRIVATE STAYS",
-    href: "/party-villas",
-    desc: "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
+    href: "/party-villa-retreats",
+    desc: "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villa retreats with pools, open lawns, and entertainment-ready spaces.",
     images: [
-      "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
-      "/Experiences/Party Villas/3-Addons/Movie Under The Stars-2.webp",
+      "/Experiences/Party Villa Retreats/1-Hero/Pool Parties.webp",
+      "/Experiences/Party Villa Retreats/3-Addons/Movie Under The Stars-2.webp",
     ],
   },
   {
@@ -113,7 +113,7 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
   {
     title: "Wellness Retreats",
     type: "PURE REJUVENATION",
-    href: "/villas?category=Wellness Retreats",
+    href: "/villa-retreats?category=Wellness Retreats",
     desc: "Element-led wellness restoration through mud baths, massages, spa and aroma therapies, designed for deep rejuvenation.",
     images: [
       "/Home Page/2-Experiences/Wellness.webp",
@@ -131,9 +131,9 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
     ],
   },
   {
-    title: "Private Villas",
+    title: "Private Villa Retreats",
     type: "CURATED COLLECTION",
-    href: "/villas",
+    href: "/villa-retreats",
     desc: "A curated collection of fully private farmhouses, suited for everything from quiet stays to vibrant celebrations and bespoke experiences.",
     images: [
       "/Villa_Retreats/Magnolia/Hero/hero.webp",
@@ -302,7 +302,7 @@ export default function MenuPage() {
                       <span
                         className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${ desktopSelectedView === "villas" ? "bg-left text-[#EFCD62]" : "bg-right" }`}
                       >
-                        Villas
+                        Villa Retreats
                       </span>
                       <ChevronRight
                         className={`w-4 h-4 transition-colors ${ desktopSelectedView === "villas" ? "text-[#EFCD62]" : "text-white/50 group-hover:text-[#EFCD62]" }`}
@@ -450,7 +450,7 @@ export default function MenuPage() {
                   {MENU_VILLAS.map((villa) => (
                     <Link
                       key={villa.id}
-                      href={`/villas/${villa.id}`}
+                      href={`/villa-retreats/${villa.id}`}
                       className="flex flex-col cursor-pointer group"
                     >
                       <p className="text-white/40 text-[10px] font-manrope font-medium tracking-[0.2em] uppercase mb-1">
@@ -629,7 +629,7 @@ export default function MenuPage() {
               ? desktopSelectedView
               : desktopHoverView) === "villas" && (
               <motion.div
-                key="desktop-villas"
+                key="desktop-VILLAS"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -654,7 +654,7 @@ export default function MenuPage() {
                     >
                       <div className="flex justify-between items-start mb-5 pr-2">
                         <Link
-                          href={`/villas/${villa.id}`}
+                          href={`/villa-retreats/${villa.id}`}
                           className="flex flex-col cursor-pointer"
                         >
                           <p className="text-white/40 text-gh-label uppercase font-manrope font-medium tracking-[0.2em] mb-1.5">
@@ -677,7 +677,7 @@ export default function MenuPage() {
                           {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
                             <Link
                               key={`${villa.id}-desktop-${imgIdx}`}
-                              href={`/villas/${villa.id}`}
+                              href={`/villa-retreats/${villa.id}`}
                               className="relative h-[280px] w-[420px] shrink-0 overflow-hidden cursor-pointer group/img"
                             >
                               <Image

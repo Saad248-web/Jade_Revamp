@@ -39,7 +39,7 @@ const NEXT_AVAILABLE = [
 
 export default function VillasCarousel() {
   const [activeCategory, setActiveCategory] = useState("All");
-  const navbarVisible = !useBatchedScrollHide(150);
+  const navbarVisible = !useBatchedScrollHide();
   const searchParams = useSearchParams();
 
   // Read category from URL on mount
@@ -54,7 +54,7 @@ export default function VillasCarousel() {
         setActiveCategory(validCategory);
         // Scroll to the carousel when a category is specified
         setTimeout(() => {
-          const el = document.getElementById("villas-carousel");
+          const el = document.getElementById("VILLAS-carousel");
           if (el) {
             scrollToElement(el, { offset: -(NAVBAR_HEIGHT + 20) });
           }
@@ -108,8 +108,8 @@ export default function VillasCarousel() {
   const filteredVillas = sortVillasForDirectory(
     VILLAS.filter(
       (villa) =>
-        !(villa as { hideFromVillasDirectory?: boolean })
-          .hideFromVillasDirectory &&
+        !(villa as { hideFromVillaRetreatsDirectory?: boolean })
+          .hideFromVillaRetreatsDirectory &&
         (activeCategory === "All" ||
           villa.categories?.some(
             (c: string) => c.toLowerCase() === activeCategory.toLowerCase(),
@@ -124,21 +124,21 @@ export default function VillasCarousel() {
   // Auto-scroll to the carousel section when there is a date conflict
   useEffect(() => {
     if (!hasDateConflict) return;
-    const el = document.getElementById("villas-carousel");
+    const el = document.getElementById("VILLAS-carousel");
     if (!el) return;
     scrollToElement(el, { offset: 0 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasDateConflict]);
 
   const handleSearch = () => {
-    const el = document.getElementById("villas-carousel");
+    const el = document.getElementById("VILLAS-carousel");
     if (el) {
       scrollToElement(el, { offset: -(NAVBAR_HEIGHT + 20) });
     }
   };
 
   return (
-    <section id="villas-carousel" className="relative bg-[#1A1C1E]">
+    <section id="VILLAS-carousel" className="relative bg-[#1A1C1E]">
       {/* STICKY FILTERS BAR */}
       <div
         className="sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/10 transition-all duration-300 ease-in-out"
@@ -302,13 +302,13 @@ export default function VillasCarousel() {
           ) : (
             <div className="flex flex-col items-center justify-center h-[50vh] text-center">
               <span className="text-white/40 font-manrope text-gh-body">
-                No villas found for &quot;{activeCategory}&quot;.
+                No villa retreats found for &quot;{activeCategory}&quot;.
               </span>
               <button
                 onClick={() => setActiveCategory("All")}
                 className="mt-3 text-[#EFCD62] font-manrope underline underline-offset-4"
               >
-                View All Villas
+                View All Villa Retreats
               </button>
             </div>
           )}

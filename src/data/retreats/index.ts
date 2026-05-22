@@ -38,7 +38,7 @@ export {
   palatio,
 };
 
-/** Estate dome + hidden villas stay in VILLAS for detail/booking; directory filters `hideFromVillasDirectory`. */
+/** Estate dome + hidden VILLAS stay in VILLAS for detail/booking; directory filters `hideFromVillaRetreatsDirectory`. */
 export const VILLAS = [
   magnolia,
   tranquil,

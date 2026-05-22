@@ -89,7 +89,7 @@ export default function BookingBanner({ onSearch }: { onSearch?: () => void }) {
         <button
           onClick={onSearch}
           className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shrink-0 hover:bg-white/5 transition-colors rounded-none"
-          aria-label="Search Villas"
+          aria-label="Search Villa Retreats"
         >
           <Search className="w-[17px] h-[17px] text-white/70 hover:text-white transition-colors" />
         </button>

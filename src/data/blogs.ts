@@ -82,11 +82,11 @@ export const BLOG_POSTS: BlogPost[] = [
     id: 99,
     slug: "corporate-team-outing-bangalore-guide",
     title:
-      "Elevate Your Corporate Team Outing in Bangalore: Exclusive Luxury Villas & Private Retreats",
+      "Elevate Your Corporate Team Outing in Bangalore: Exclusive Luxury Villa Retreats & Private Retreats",
     excerpt:
       "Planning a company offsite? Step away from generic hotels and discover why a private luxury villa buyout is the ultimate canvas for team bonding and productivity.",
     description:
-      "Discover why Jade Hospitainment's private luxury villas near Bangalore are the ultimate venue for corporate team outings, offsites, and workcations. Exclusive buyouts, bespoke catering, and inspiring spaces.",
+      "Discover why Jade Hospitainment's private Luxury Villa Retreats near Bangalore are the ultimate venue for corporate team outings, offsites, and workcations. Exclusive buyouts, bespoke catering, and inspiring spaces.",
     image: "/Villa_Retreats/Jade%20735/Hero/Hero 1.webp",
     link: "/blogs/corporate-team-outing-bangalore-guide",
     date: "2024-03-20",
@@ -113,23 +113,23 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "cta",
         ctas: [
           { label: "Plan Your Offsite", link: "/contact", variant: "primary" },
-          { label: "Explore Retreats", link: "/villas", variant: "outline" },
+          { label: "Explore Retreats", link: "/villa-retreats", variant: "outline" },
         ],
       },
       {
         type: "heading",
         level: 2,
-        content: "The Jade Difference: Private Villas vs. Shared Hotels",
+        content: "The Jade Difference: Private Villa Retreats vs. Shared Hotels",
       },
       {
         type: "text",
         content:
-          "When searching for private corporate retreat locations, decision-makers frequently default to standard luxury hotels out of habit. However, standard hotels dilute the offsite experience through shared infrastructure and rigid operational hours. A private villa buyout shifts the paradigm, ensuring your team building luxury villas cater entirely to your schedule, your culture, and your objectives.",
+          "When searching for private corporate retreat locations, decision-makers frequently default to standard luxury hotels out of habit. However, standard hotels dilute the offsite experience through shared infrastructure and rigid operational hours. A private villa buyout shifts the paradigm, ensuring your team building Luxury Villa Retreats cater entirely to your schedule, your culture, and your objectives.",
       },
       {
         type: "table",
         tableData: {
-          headers: ["Traditional Shared Resorts", "Jade Private Villas"],
+          headers: ["Traditional Shared Resorts", "Jade Private Villa Retreats"],
           rows: [
             [
               "Shared Infrastructure: Navigating common areas, shared buffets, and lobbies with hundreds of other strangers.",
@@ -188,7 +188,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "heading",
         level: 3,
-        content: "Dome Villas",
+        content: "Dome Villa Retreats",
       },
       {
         type: "text",
@@ -262,7 +262,7 @@ export const BLOG_POSTS: BlogPost[] = [
     excerpt:
       "Welcome to Jade Hospitainment. Discover our unique approach to hosting and why taking time to disconnect is essential for modern wellbeing.",
     description:
-      "Escape the always-on culture and embrace slow living at Jade Hospitainment's luxury private villas near Bangalore. A guide to intentional rest, digital detox, and the art of truly unwinding.",
+      "Escape the always-on culture and embrace slow living at Jade Hospitainment's luxury Private Villa Retreats near Bangalore. A guide to intentional rest, digital detox, and the art of truly unwinding.",
     image: "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
     link: "/blogs/the-art-of-slow-living",
     date: "2024-03-15",
@@ -283,7 +283,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "text",
         content:
-          "In an era of relentless notifications and 'always-on' culture, the art of slow living has become a revolutionary act. At Jade, we design our villas as sanctuaries where the digital world fades into the background. It's about reclaiming your time and refocusing your senses on the immediate environment.",
+          "In an era of relentless notifications and 'always-on' culture, the art of slow living has become a revolutionary act. At Jade, we design our villa retreats as sanctuaries where the digital world fades into the background. It's about reclaiming your time and refocusing your senses on the immediate environment.",
       },
       {
         type: "quote",
@@ -327,7 +327,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: 3,
     slug: "ultimate-guide-private-villas",
-    title: "The Ultimate Guide to Booking Private Villas",
+    title: "The Ultimate Guide to Booking Private Villa Retreats",
     excerpt: "Find out what makes a private villa the best choice for your next vacation or staycation.",
     description: "Discover the unparalleled privacy and luxury of booking a private villa for your next getaway.",
     image: "/Villa_Retreats/Magnolia/Hero/hero.webp",
@@ -343,7 +343,7 @@ export const BLOG_POSTS: BlogPost[] = [
     sections: [
       {
         type: "text",
-        content: "Choosing the right accommodation can make or break your vacation. While hotels offer convenience, private villas provide an unmatched level of privacy, space, and personalized service.",
+        content: "Choosing the right accommodation can make or break your vacation. While hotels offer convenience, Private Villa Retreats provide an unmatched level of privacy, space, and personalized service.",
       }
     ],
   },

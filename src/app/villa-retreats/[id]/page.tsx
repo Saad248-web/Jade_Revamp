@@ -180,7 +180,7 @@ export default function VillaDetailsPage() {
     let cancelled = false;
     async function load() {
       try {
-        const res = await fetch(`/api/villas/${id}/media?v=2`);
+        const res = await fetch(`/api/villa-retreats/${id}/media?v=2`);
         if (!res.ok) return;
         const data = await res.json();
         if (!cancelled) setMedia(data);
@@ -642,7 +642,7 @@ export default function VillaDetailsPage() {
                   <div className="w-16 md:w-28 h-px bg-gradient-to-r from-transparent via-[#EFCD62] to-transparent opacity-90" />
                 </div>
                 <Link
-                  href={`/villas/${id}/spaces`}
+                  href={`/villa-retreats/${id}/spaces`}
                   className="inline-flex w-auto max-w-full shrink-0 items-center justify-center gap-1.5 border border-white/30 bg-black/40 backdrop-blur-md px-3 py-2.5 md:px-4 md:py-3 text-white text-[9px] md:text-[11px] font-bold tracking-[0.18em] md:tracking-[0.25em] uppercase whitespace-nowrap hover:bg-white hover:text-black transition-all"
                 >
                   <LayoutGrid className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" strokeWidth={1.5} />
@@ -673,11 +673,11 @@ export default function VillaDetailsPage() {
         <div className={vd.stackTight}>
           {domeColor ? (
             <Link
-              href="/villas/dome-villas"
+              href="/villa-retreats/dome-villa-retreats"
               className="text-[#EFCD62]/90 text-[10px] md:text-gh-label font-bold tracking-[0.2em] uppercase hover:text-[#EFCD62] inline-flex items-center gap-1.5 w-fit"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              Dome Villas Estate
+              Dome Villa Retreats Estate
             </Link>
           ) : null}
           <span className="text-[#EFCD62] text-[10px] md:text-gh-label font-bold tracking-[0.2em] uppercase">
@@ -774,7 +774,7 @@ export default function VillaDetailsPage() {
               ].map((dome, idx) => (
                 <Link
                   key={idx}
-                  href={`/villas/${DOME_COLOR_META[DOME_COLOR_ORDER[idx]].id}`}
+                  href={`/villa-retreats/${DOME_COLOR_META[DOME_COLOR_ORDER[idx]].id}`}
                   className="relative flex-shrink-0 w-[240px] h-[240px] md:w-[280px] md:h-[280px] snap-start group overflow-hidden rounded-sm border border-white/10"
                 >
                   {/* Background Image with Hover Zoom */}
@@ -887,7 +887,7 @@ export default function VillaDetailsPage() {
               ) : (
                 <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden bg-emerald-900/20 flex items-center justify-center text-white/40 italic">Loading spaces…</div>
               )}
-              <Link href={`/villas/${id}/spaces`} className="w-full border border-white/20 bg-white/5 py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2">
+              <Link href={`/villa-retreats/${id}/spaces`} className="w-full border border-white/20 bg-white/5 py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2">
                 VIEW ALL SPACES
                 <LayoutGrid className="w-3.5 h-3.5" strokeWidth={1.5} />
               </Link>

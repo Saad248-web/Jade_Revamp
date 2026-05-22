@@ -16,16 +16,16 @@ const sectionVars = {
 export default function WeekendThemedVillasSection() {
   return (
     <section
-      id="themed-villas"
+      id="themed-villa-retreats"
       className="bg-[#141517] border-t border-white/5 overflow-hidden flex flex-col min-h-[80dvh] max-h-[85dvh] h-[85dvh] lg:min-h-[100dvh] lg:max-h-[100dvh] lg:h-[100dvh]"
       style={sectionVars}
     >
       <header className="shrink-0 text-center px-6 pt-5 md:pt-8 pb-3 md:pb-4">
         <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-2">
-          OUR VILLAS
+          OUR VILLA RETREATS
         </p>
         <h2 className="text-gh-h2 font-philosopher text-white leading-tight">
-          Themed Villas By Jade
+          Themed Villa Retreats By Jade
         </h2>
       </header>
 
@@ -67,7 +67,7 @@ export default function WeekendThemedVillasSection() {
       </div>
 
       <div className="shrink-0 px-6 pb-5 md:pb-6 pt-3 md:pt-4 flex justify-center">
-        <PrimaryButton className="w-full max-w-xl text-gh-label" href="/villas">
+        <PrimaryButton className="w-full max-w-xl text-gh-label" href="/villa-retreats">
           VIEW ALL VILLA RETREATS
         </PrimaryButton>
       </div>

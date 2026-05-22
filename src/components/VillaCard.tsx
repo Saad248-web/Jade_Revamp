@@ -285,7 +285,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
           {/* Buttons */}
           <div className="flex items-stretch gap-2 md:gap-2.5 shrink-0 h-[clamp(44px,5vw,52px)]">
             <Link
-              href={`/villas/${villa.id}?autoScroll=true`}
+              href={`/villa-retreats/${villa.id}?autoScroll=true`}
               className="h-full inline-flex items-center justify-center border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-3 md:px-5 font-manrope font-bold text-gh-villa-footer-row tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
             >
               VIEW VILLA

@@ -79,7 +79,7 @@ const JOBS = [
     id: "photographer",
     title: "PHOTOGRAPHER",
     purpose:
-      "Capture the essence of our villas and experiences through high-end photography.",
+      "Capture the essence of our VILLAS and experiences through high-end photography.",
     lookingFor: [
       "Experience in architectural or lifestyle photography",
       "Proficient in Adobe Lightroom and Photoshop",
@@ -386,7 +386,7 @@ export default function CareersPage() {
               same energy we bring to the job.
             </p>
             <p className="text-white/40 italic text-center">
-              Bringing unique villas and curated experiences together under one
+              Bringing unique VILLAS and curated experiences together under one
               standard of hospitality.
             </p>
           </div>

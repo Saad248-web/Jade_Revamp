@@ -1,7 +1,11 @@
 "use client";
 
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { useBatchedScrollHide } from "@/lib/useBatchedScrollHide";
+import {
+  NAVBAR_SCROLL_CHROME_TRANSITION,
+  navbarScrollChromeAnimate,
+} from "@/lib/scrollChromeMotion";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,7 +17,8 @@ export default function Navbar() {
   const pathname = usePathname() ?? "";
   const { isSplashComplete, navbarTheme } = useAnimation();
   const { count: wishlistCount } = useWishlist();
-  const isHidden = useBatchedScrollHide(150);
+  const isHidden = useBatchedScrollHide();
+  const reduceMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -25,8 +30,8 @@ export default function Navbar() {
   // Only hide navbar on home page if splash isn't complete
   if (pathname === "/" && !isSplashComplete) return null;
 
-  // Check if it's a detail page for villas or weddings (resorts)
-  const isDetailPage = /^\/(?:villas|weddings)\/[^/]+$/.test(pathname);
+  // Check if it's a detail page for VILLAS or weddings (resorts)
+  const isDetailPage = /^\/(?:villa-retreats|weddings)\/[^/]+$/.test(pathname);
 
   return (
     <>
@@ -41,9 +46,15 @@ export default function Navbar() {
       {/* ═══════════════════════════════════════════
            NAVBAR
       ══════════════════════════════════════════ */}
-      <nav
-        className={`jade-nav-chrome fixed top-0 left-0 w-full z-50 mt-[4px]${isHidden ? " jade-nav-chrome--hidden" : ""}`}
+      <motion.nav
+        className="jade-nav-chrome fixed top-0 left-0 w-full z-50 mt-[4px]"
+        initial={false}
+        animate={navbarScrollChromeAnimate(isHidden)}
+        transition={
+          reduceMotion ? { duration: 0 } : NAVBAR_SCROLL_CHROME_TRANSITION
+        }
         aria-hidden={isHidden}
+        style={{ pointerEvents: isHidden ? "none" : "auto" }}
       >
         {/* Glass bar */}
         <div className="w-full bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm">
@@ -72,7 +83,7 @@ export default function Navbar() {
             <nav className="flex items-center gap-6">
               {[
                 { name: "Experiences", href: "/experiences" },
-                { name: "Villas", href: "/villas" },
+                { name: "Villa Retreats", href: "/villa-retreats" },
                 { name: "About", href: "/about" },
                 { name: "Careers", href: "/careers" },
               ].map((item) => (
@@ -225,7 +236,7 @@ export default function Navbar() {
           </div>
           </div>
         </div>
-      </nav>
+      </motion.nav>
     </>
   );
 }

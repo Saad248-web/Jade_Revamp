@@ -39,7 +39,7 @@ const CELEBRATIONS = [
     subtext:
       "Fully private estates for carefree celebrations—poolside moments, music, décor, and late nights with friends.",
     image: "/Experiences/Weddings/5-Pre Wedding/Bachelorette.webp",
-    href: "/party-villas",
+    href: "/party-villa-retreats",
     cta: "LEARN MORE",
   },
   {
@@ -165,11 +165,11 @@ function EndButton({ globalProgress }: { globalProgress: any }) {
     >
       <div className="pointer-events-auto">
         <PrimaryButton
-          href="/villas"
+          href="/villa-retreats"
           className="shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-transform duration-300 hover:scale-[1.03]"
         >
           <span className="font-bold whitespace-nowrap text-center">
-            See All Wedding Villas
+            See All Wedding Villa Retreats
           </span>
         </PrimaryButton>
       </div>

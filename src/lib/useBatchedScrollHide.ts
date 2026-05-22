@@ -1,60 +1,97 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { subscribeLenisScroll } from "@/lib/lenisScrollBridge";
-import { scheduleScrollUpdate } from "@/lib/batchScrollUpdate";
+import { useEffect, useSyncExternalStore } from "react";
+import { getLenis } from "@/lib/lenis";
+import { subscribeLenisScrollImmediate } from "@/lib/lenisScrollBridge";
 
-/**
- * Hide fixed/sticky chrome after scrolling down (max 1 React update per frame).
- * Uses Lenis scroll position + direction when velocity is meaningful.
- */
-export function useBatchedScrollHide(threshold = 150) {
-  const [isHidden, setIsHidden] = useState(false);
-  const lastY = useRef(0);
-  const hiddenRef = useRef(false);
+type HideListener = (hidden: boolean) => void;
 
+let hidden = false;
+const listeners = new Set<HideListener>();
+let subscriberCount = 0;
+let disposeEngine: (() => void) | undefined;
+
+function emit(next: boolean) {
+  if (next === hidden) return;
+  hidden = next;
+  listeners.forEach((fn) => fn(hidden));
+}
+
+/** Instant direction reflex — no px threshold, no rAF batch. */
+function attachScrollHideEngine(): () => void {
+  let lastY = getLenis()?.scroll ?? window.scrollY;
+
+  const evaluate = (y: number, direction?: number) => {
+    if (y <= 0) {
+      lastY = y;
+      emit(false);
+      return;
+    }
+
+    const previous = lastY;
+    lastY = y;
+
+    if (direction != null && direction !== 0) {
+      emit(direction > 0);
+      return;
+    }
+
+    const delta = y - previous;
+    if (delta > 0) emit(true);
+    else if (delta < 0) emit(false);
+  };
+
+  const unsubLenis = subscribeLenisScrollImmediate(({ scroll, direction }) => {
+    evaluate(scroll, direction);
+  });
+
+  const onWindowScroll = () => {
+    if (getLenis()) return;
+    evaluate(window.scrollY);
+  };
+
+  window.addEventListener("scroll", onWindowScroll, { passive: true });
+  evaluate(lastY);
+
+  return () => {
+    unsubLenis();
+    window.removeEventListener("scroll", onWindowScroll);
+  };
+}
+
+function subscribeHide(listener: HideListener): () => void {
+  listeners.add(listener);
+  listener(hidden);
+  return () => listeners.delete(listener);
+}
+
+function acquireEngine() {
+  subscriberCount += 1;
+  if (subscriberCount === 1) {
+    disposeEngine = attachScrollHideEngine();
+  }
+}
+
+function releaseEngine() {
+  subscriberCount = Math.max(0, subscriberCount - 1);
+  if (subscriberCount === 0) {
+    disposeEngine?.();
+    disposeEngine = undefined;
+    hidden = false;
+    listeners.forEach((fn) => fn(false));
+  }
+}
+
+/** Navbar: hide on any scroll down, show on any scroll up (immediate). */
+export function useBatchedScrollHide(): boolean {
   useEffect(() => {
-    const apply = (shouldHide: boolean) => {
-      if (shouldHide !== hiddenRef.current) {
-        hiddenRef.current = shouldHide;
-        setIsHidden(shouldHide);
-      }
-    };
+    acquireEngine();
+    return releaseEngine;
+  }, []);
 
-    const evaluate = (y: number, direction?: number, velocity?: number) => {
-      const prev = lastY.current;
-      lastY.current = y;
-
-      if (y <= threshold) {
-        apply(false);
-        return;
-      }
-
-      const moving = velocity != null && Math.abs(velocity) > 0.15;
-      if (moving && direction != null && direction !== 0) {
-        apply(direction > 0);
-        return;
-      }
-
-      if (y > prev) apply(true);
-      else if (y < prev) apply(false);
-    };
-
-    const onWindowScroll = () => {
-      scheduleScrollUpdate(() => evaluate(window.scrollY));
-    };
-
-    const unsubLenis = subscribeLenisScroll(({ scroll, direction, velocity }) => {
-      evaluate(scroll, direction, velocity);
-    });
-
-    window.addEventListener("scroll", onWindowScroll, { passive: true });
-
-    return () => {
-      unsubLenis();
-      window.removeEventListener("scroll", onWindowScroll);
-    };
-  }, [threshold]);
-
-  return isHidden;
+  return useSyncExternalStore(
+    subscribeHide,
+    () => hidden,
+    () => false,
+  );
 }

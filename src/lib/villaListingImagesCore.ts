@@ -52,7 +52,7 @@ export function getVillaManifestEntry(villa: { name?: string; image?: string }) 
   }
 }
 
-/** Same carousel sources as `/villas` VillaCard (manifest + optional API media). */
+/** Same carousel sources as `/villa-retreats` VillaCard (manifest + optional API media). */
 export function buildVillaListingImages(
   villa: VillaListingImagesInput | null | undefined,
   serverMedia?: VillaListingServerMedia | null,

@@ -17,7 +17,7 @@ const SLUG_TO_FOLDER: Record<string, string> = {
   "corporate-retreats": "Corporate Retreats",
   caravans: "Caravan",
   "weekend-getaways": "Weekend Getaways",
-  "party-villas": "Party Villas",
+  "party-villa-retreats": "Party Villa Retreats",
 };
 
 export async function GET(

@@ -56,7 +56,7 @@ export function MenuVillasExperiencesSwitcher({
     <div
       className={`flex gap-2 flex-shrink-0 mb-5 ${className}`}
       role="tablist"
-      aria-label="Villas and experiences"
+      aria-label="Villa Retreats and experiences"
     >
       <button
         type="button"
@@ -65,7 +65,7 @@ export function MenuVillasExperiencesSwitcher({
         className={itemClass(active === "villas")}
         onClick={onVillas}
       >
-        Villas
+        Villa Retreats
       </button>
       <button
         type="button"

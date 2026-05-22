@@ -107,8 +107,8 @@ export interface VillaFAQ {
 
 export interface Villa {
   id: string;
-  /** When true, excluded from `/villas` listing only (deep links unchanged). */
-  hideFromVillasDirectory?: boolean;
+  /** When true, excluded from `/villa-retreats` listing only (deep links unchanged). */
+  hideFromVillaRetreatsDirectory?: boolean;
   /** When false, hide book flow and show enquire-only (default: bookable). */
   bookable?: boolean;
   name: string;

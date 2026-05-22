@@ -5,7 +5,7 @@ import type { LucideIcon } from "lucide-react";
 
 /**
  * Amenity “stats block” system — root 120×106 in globals.css (`--amenity-root-*`,
- * `--amenity-tile-gap-icon`, `--fs-amenity-*`). Icon↔text gap: fixed-responsive clamp.
+ * `--amenity-tile-gap-*`, `--fs-amenity-*`). 5-row grid aligns icon, title, and subtitle across tiles.
  */
 export const AMENITY_HIGHLIGHT_TILE_SYSTEM = {
   rootWidthPx: 120,
@@ -35,9 +35,15 @@ export default function AmenityHighlightTile({
   sublabel,
   className,
 }: Props) {
+  const hasSublabel = Boolean(sublabel?.trim());
+
   return (
     <div
-      className={clsx(AMENITY_HIGHLIGHT_TILE_CLASS, className)}
+      className={clsx(
+        AMENITY_HIGHLIGHT_TILE_CLASS,
+        !hasSublabel && "amenity-highlight-tile--no-sublabel",
+        className,
+      )}
     >
       {/* Fixed-height row keeps every Lucide glyph on the same baseline regardless of label wrap */}
       <div className="amenity-highlight-tile__icon-row flex shrink-0 items-center justify-center">
@@ -51,7 +57,7 @@ export default function AmenityHighlightTile({
         <span className="amenity-highlight-tile__label w-full min-w-0 break-words text-center font-manrope font-semibold text-white">
           {label}
         </span>
-        {sublabel ? (
+        {hasSublabel ? (
           <span className="amenity-highlight-tile__sublabel w-full min-w-0 break-words text-center font-manrope font-normal text-white/65">
             {sublabel}
           </span>

@@ -62,7 +62,7 @@ export function generateMetadata({ params }: Props): Metadata {
     return { title: "Villa", robots: { index: false, follow: false } };
   }
 
-  const canonical = `${SITE_ORIGIN}/villas/${villa.id}`;
+  const canonical = `${SITE_ORIGIN}/villa-retreats/${villa.id}`;
   const title = `${villa.name} — ${villa.type} near ${villa.location.replace(/\s*[·\.]\s*.+$/, "").trim()}`;
   const description = buildVillaMetaDescription(villa);
   const ogPath = villa.image;
@@ -110,7 +110,7 @@ export default function VillaSegmentLayout({ children, params }: Props) {
   const villa = VILLAS.find((v) => v.id === params.id) as Villa | undefined;
   if (!villa) notFound();
 
-  const canonical = `${SITE_ORIGIN}/villas/${villa.id}`;
+  const canonical = `${SITE_ORIGIN}/villa-retreats/${villa.id}`;
 
   return (
     <>

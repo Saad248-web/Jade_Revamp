@@ -45,7 +45,7 @@ Jade_ReVamp is a **production-shaped luxury hospitality marketing site** with a 
 ### Core pages (live routes)
 
 - **Home** — Splash, landing scroll sections, featured villas, experiences.
-- **Villas** — Directory, detail (`/villas/[id]`), spaces gallery (`/villas/[id]/spaces`).
+- **Villa Retreats** — Directory, detail (`/villa-retreats/[id]`), spaces gallery (`/villa-retreats/[id]/spaces`).
 - **Experiences** — Weddings, corporate retreats, weekend getaways, party villas, caravans, experiences hub, demo scroll page (`/experiences/another-experience-1`).
 - **Utility** — Menu directory, wishlist, about, contact, careers.
 - **Booking** — `/book`, `/book/success` (Razorpay hand-off when configured).
@@ -196,9 +196,9 @@ Detected App Router pages (`src/app/**/page.tsx`):
 | Route | Purpose |
 |-------|---------|
 | `/` | Landing |
-| `/villas`, `/villas/[id]`, `/villas/[id]/spaces` | Portfolio |
+| `/villa-retreats`, `/villa-retreats/[id]`, `/villa-retreats/[id]/spaces` | Portfolio |
 | `/blogs`, `/blogs/[slug]` | Editorial |
-| `/weddings`, `/corporate-retreats`, `/weekend-getaways`, `/party-villas` | Experience marketing |
+| `/weddings`, `/corporate-retreats`, `/weekend-getaways`, `/party-villa-retreats` | Experience marketing |
 | `/experiences`, `/experiences/another-experience-1` | Experiences + scroll demo |
 | `/caravans` | Caravan + Rathaa |
 | `/about`, `/contact`, `/careers` | Brand & conversion |
@@ -292,7 +292,7 @@ Detected App Router pages (`src/app/**/page.tsx`):
 ## Content and media
 
 - **Blogs** support rich sections, CTAs, FAQ blocks in `src/data/blogs.ts`.
-- **Villas** use structured retreat modules with spaces, experiences, perfect-for tags.
+- **Villa Retreats** use structured retreat modules with spaces, experiences, perfect-for tags.
 - **Brochure PDF** referenced inline on villa CTAs: `/All Properties - Jade Hospitainment.pdf` (in `public/`).
 
 ---

@@ -1,6 +1,6 @@
 import { DOME_VILLA_IDS } from "@/lib/domeVillaIds";
 
-/** Serial showcase order on `/villas` (and other directory listings). */
+/** Serial showcase order on `/villa-retreats` (and other directory listings). */
 export const VILLAS_DIRECTORY_ORDER: readonly string[] = [
   "jade-735",
   "magnolia",
@@ -24,10 +24,10 @@ const directoryRank = new Map(
 );
 
 export function sortVillasForDirectory<T extends { id: string }>(
-  villas: T[],
+  VILLAS: T[],
 ): T[] {
   const fallback = VILLAS_DIRECTORY_ORDER.length;
-  return [...villas].sort(
+  return [...VILLAS].sort(
     (a, b) =>
       (directoryRank.get(a.id) ?? fallback) -
       (directoryRank.get(b.id) ?? fallback),

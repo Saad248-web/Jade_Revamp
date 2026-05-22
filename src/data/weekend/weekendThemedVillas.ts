@@ -1,4 +1,4 @@
-/** Simple villa cards for the Weekend Getaways themed-villas section. */
+/** Simple villa cards for the Weekend Getaways themed-villa-retreats section. */
 
 import { domeVillas } from "@/data/retreats/dome";
 import { magnolia } from "@/data/retreats/magnolia";
@@ -17,24 +17,24 @@ export const WEEKEND_THEMED_VILLAS: WeekendThemedVillaCard[] = [
     name: "Dome Villa",
     tag: "HOBBIT-INSPIRED PRIVATE RETREAT",
     image: domeVillas.image,
-    href: `/villas/${domeVillas.id}`,
+    href: `/villa-retreats/${domeVillas.id}`,
   },
   {
     name: magnolia.name,
     tag: "CONTEMPORARY GLASS FARM VILLA",
     image: magnolia.image,
-    href: `/villas/${magnolia.id}`,
+    href: `/villa-retreats/${magnolia.id}`,
   },
   {
     name: haven.name,
     tag: "BOUTIQUE LUXURY VILLA",
     image: haven.image,
-    href: `/villas/${haven.id}`,
+    href: `/villa-retreats/${haven.id}`,
   },
   {
     name: tranquil.name,
     tag: "FOREST RETREAT",
     image: tranquil.image,
-    href: `/villas/${tranquil.id}`,
+    href: `/villa-retreats/${tranquil.id}`,
   },
 ];

@@ -10,7 +10,7 @@ const vannaniPerfectForLegacy = [
 
 const vannaniBase = {
   id: "vannani",
-  hideFromVillasDirectory: true,
+  hideFromVillaRetreatsDirectory: true,
   name: "Vannani",
   type: "PRIVATE FARMHOUSE RETREAT",
   location: "Outskirts of Bangalore",

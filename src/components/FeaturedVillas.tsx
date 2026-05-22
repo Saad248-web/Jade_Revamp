@@ -35,16 +35,16 @@ const VILLAS = [
     description:
       "A hobbit-home inspired retreat set amidst rolling hills, defined by its iconic dome architecture, private pool and immersive connection to nature. Ideal for intimate getaways and quiet celebrations.",
     images: [
-      "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/1-4.webp",
-      "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/Dome Villas by Jade - Blue v3_Page_01_Image_0001.webp",
-      "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/domeye.webp",
+      "/Home Page/Featured Villa Retreats/HOBBIT THEMED FARMHOUSE/1-4.webp",
+      "/Home Page/Featured Villa Retreats/HOBBIT THEMED FARMHOUSE/Dome Villa Retreats by Jade - Blue v3_Page_01_Image_0001.webp",
+      "/Home Page/Featured Villa Retreats/HOBBIT THEMED FARMHOUSE/domeye.webp",
     ],
     mobileImages: [
       "/Website Ratio Changes/dome.webp",
-      "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/Dome Villas by Jade - Blue v3_Page_01_Image_0001.webp",
-      "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/domeye.webp",
+      "/Home Page/Featured Villa Retreats/HOBBIT THEMED FARMHOUSE/Dome Villa Retreats by Jade - Blue v3_Page_01_Image_0001.webp",
+      "/Home Page/Featured Villa Retreats/HOBBIT THEMED FARMHOUSE/domeye.webp",
     ],
-    link: "/villas/dome-villa",
+    link: "/villa-retreats/dome-villa-retreats",
   },
   {
     id: 2,
@@ -53,16 +53,16 @@ const VILLAS = [
     description:
       "A hill-facing private villa known for panoramic views, sunset backdrops, and a serene pool setting—designed for group getaways, nature-led retreats, and slow weekends away from the city.",
     images: [
-      "/Home Page/Featured Villas/HILL VIEW VILLA/1.webp",
-      "/Home Page/Featured Villas/HILL VIEW VILLA/2.webp",
-      "/Home Page/Featured Villas/HILL VIEW VILLA/3.webp",
+      "/Home Page/Featured Villa Retreats/HILL VIEW VILLA/1.webp",
+      "/Home Page/Featured Villa Retreats/HILL VIEW VILLA/2.webp",
+      "/Home Page/Featured Villa Retreats/HILL VIEW VILLA/3.webp",
     ],
     mobileImages: [
       "/Website Ratio Changes/ror.webp",
-      "/Home Page/Featured Villas/HILL VIEW VILLA/2.webp",
-      "/Home Page/Featured Villas/HILL VIEW VILLA/3.webp",
+      "/Home Page/Featured Villa Retreats/HILL VIEW VILLA/2.webp",
+      "/Home Page/Featured Villa Retreats/HILL VIEW VILLA/3.webp",
     ],
-    link: "/villas/retreat-on-ridge",
+    link: "/villa-retreats/retreat-on-ridge",
   },
   {
     id: 3,
@@ -71,16 +71,16 @@ const VILLAS = [
     description:
       "A modern glass-walled estate with expansive lawns, a private pool, and an in-house theatre—crafted for vibrant celebrations, social gatherings, and large-format experiences with complete privacy.",
     images: [
-      "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/1.webp",
-      "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/2.webp",
-      "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/3.webp",
+      "/Home Page/Featured Villa Retreats/CONTEMPORARY GLASS VILLA/1.webp",
+      "/Home Page/Featured Villa Retreats/CONTEMPORARY GLASS VILLA/2.webp",
+      "/Home Page/Featured Villa Retreats/CONTEMPORARY GLASS VILLA/3.webp",
     ],
     mobileImages: [
       "/Website Ratio Changes/Magnoliaa.webp",
-      "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/2.webp",
-      "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/3.webp",
+      "/Home Page/Featured Villa Retreats/CONTEMPORARY GLASS VILLA/2.webp",
+      "/Home Page/Featured Villa Retreats/CONTEMPORARY GLASS VILLA/3.webp",
     ],
-    link: "/villas/magnolia",
+    link: "/villa-retreats/magnolia",
   },
 ];
 
@@ -177,7 +177,7 @@ function IntroPanel({
       <div className="relative w-full max-w-4xl mx-auto flex flex-col items-center text-center">
         <motion.div style={{ y: textY }} className="z-10 relative">
           <span className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-3 font-bold block">
-            FEATURED VILLAS
+            FEATURED VILLA RETREATS
           </span>
           <h2 className="font-philosopher text-gh-h1 text-white leading-tight mb-5">
             Spaces That Hold
@@ -479,10 +479,10 @@ function EndButton({ globalProgress }: { globalProgress: any }) {
     >
       <div style={{ pointerEvents: pointerEvents as any }} className="pointer-events-auto">
         <PrimaryButton
-          href="/villas"
+          href="/villa-retreats"
           className="rounded-none shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-transform duration-300 hover:scale-[1.03]"
         >
-          <span className="font-bold whitespace-nowrap">Explore All Villas</span>
+          <span className="font-bold whitespace-nowrap">Explore All Villa Retreats</span>
         </PrimaryButton>
       </div>
     </motion.div>

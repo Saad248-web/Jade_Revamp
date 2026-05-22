@@ -273,7 +273,7 @@ export async function GET(
 
   const domeColor = getDomeColorFromVillaId(id);
 
-  // Dome Villas: pin Experiences/Perfect For to their dedicated folders, and
+  // Dome Villa Retreats: pin Experiences/Perfect For to their dedicated folders, and
   // build dome-color grouped sub-categorized spaces (Blue / Red / Yellow each
   // containing Bedrooms, Pool & Water, Living & Dining, etc.).
   if (isDomeVillaId(id)) {

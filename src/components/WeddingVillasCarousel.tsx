@@ -6,9 +6,9 @@ import WeddingVillaCard from "./WeddingVillaCard";
 import VenueOverlay from "./VenueOverlay";
 import { AnimatePresence } from "framer-motion";
 
-// Filter villas to specifically show all 6 Wedding related venues
+// Filter VILLAS to specifically show all 6 Wedding related venues
 const WEDDING_VILLA_IDS = [
-  "dome-villas",
+  "dome-villa-retreats",
   "haven",
   "retreat-on-the-ridge",
   "tranquil",

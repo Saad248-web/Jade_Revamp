@@ -25,9 +25,9 @@ const PANELS = [
     id: "celebrations",
     title: "Celebrations & Parties",
     subtext:
-      "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
+      "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villa retreats with pools, open lawns, and entertainment-ready spaces.",
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
-    href: "/party-villas",
+    href: "/party-villa-retreats",
     image: "/Home Page/2-Experiences/celebrations & parties.webp",
     mobileImage: "/Website Ratio Changes/POOL PARTY.webp",
     type: "full",
@@ -58,7 +58,7 @@ const PANELS = [
     subtext:
       "Element-led wellness restoration through mud baths, massages, spa and aroma therapies, designed for deep rejuvenation.",
     cta: "SEE HOW RETREAT TAKES SHAPE",
-    href: "/villas?category=Wellness Retreats",
+    href: "/villa-retreats?category=Wellness Retreats",
     image: "/Home Page/2-Experiences/Wellness.webp",
     type: "full",
   },
@@ -76,9 +76,9 @@ const PANELS = [
     id: "private-getaways",
     title: "Private Getaways",
     subtext:
-      "Exclusive-use villas for intimate escapes—curated privacy, refined comfort, and the freedom to unwind on your own terms.",
+      "Exclusive-use villa retreats for intimate escapes—curated privacy, refined comfort, and the freedom to unwind on your own terms.",
     cta: "SEE PRIVATE GETAWAYS",
-    href: "/villas",
+    href: "/villa-retreats",
     image: "/Home Page/2-Experiences/casual stays.webp",
     mobileImage: "/Website Ratio Changes/Weekend_GetAways.webp",
     type: "full",

@@ -30,9 +30,9 @@ export default function MobileBottomNav() {
       href: "/experiences",
     },
     {
-      label: "Villas",
+      label: "Villa Retreats",
       icon: Warehouse,
-      href: "/villas",
+      href: "/villa-retreats",
     },
     {
       label: "Menu",

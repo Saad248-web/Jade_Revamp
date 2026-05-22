@@ -12,15 +12,15 @@ const VillasCarousel = dynamic(() => import("@/components/VillasCarousel"), {
 const Footer = dynamic(() => import("@/components/Footer"), { ssr: false });
 
 export const metadata: Metadata = {
-  title: "Luxury Private Villas",
+  title: "Luxury Private Villa Retreats",
   description:
-    "Explore Jade Hospitainment's portfolio of exclusive private villas near Bangalore — perfect for group getaways, celebrations, and corporate offsites.",
-  alternates: { canonical: "https://jadehospitainment.com/villas" },
+    "Explore Jade Hospitainment's portfolio of exclusive Private Villa Retreats near Bangalore — perfect for group getaways, celebrations, and corporate offsites.",
+  alternates: { canonical: "https://jadehospitainment.com/villa-retreats" },
   openGraph: {
-    title: "Luxury Private Villas | Jade Hospitainment",
+    title: "Luxury Private Villa Retreats | Jade Hospitainment",
     description:
       "Exclusive private villa estates near Bangalore for groups, celebrations, and corporate teams.",
-    url: "https://jadehospitainment.com/villas",
+    url: "https://jadehospitainment.com/villa-retreats",
   },
 };
 
@@ -37,8 +37,8 @@ const breadcrumbSchema = {
     {
       "@type": "ListItem",
       position: 2,
-      name: "Villas",
-      item: "https://jadehospitainment.com/villas",
+      name: "Villa Retreats",
+      item: "https://jadehospitainment.com/villa-retreats",
     },
   ],
 };
@@ -46,8 +46,8 @@ const breadcrumbSchema = {
 const lodgingSchema = {
   "@context": "https://schema.org",
   "@type": "LodgingBusiness",
-  name: "Jade Hospitainment — Luxury Villas",
-  url: "https://jadehospitainment.com/villas",
+  name: "Jade Hospitainment — Luxury Villa Retreats",
+  url: "https://jadehospitainment.com/villa-retreats",
   description:
     "Exclusive private villa estates near Bangalore ideal for group stays, corporate retreats, and celebrations.",
   address: {

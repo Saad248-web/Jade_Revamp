@@ -17,14 +17,14 @@ import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
 // ─── Simulate async latency (remove when using real API) ─────────────────────
 const delay = (ms = 400) => new Promise((res) => setTimeout(res, ms));
 
-// ─── Villas ───────────────────────────────────────────────────────────────────
+// ─── VILLAS ───────────────────────────────────────────────────────────────────
 
 export async function getVillas(filters?: {
   category?: string;
 }): Promise<Villa[]> {
   await delay();
   const directoryVillas = sortVillasForDirectory(
-    VILLAS.filter((v) => !(v as Villa).hideFromVillasDirectory),
+    VILLAS.filter((v) => !(v as Villa).hideFromVillaRetreatsDirectory),
   );
   if (!filters?.category || filters.category === "All") {
     return directoryVillas as unknown as Villa[];

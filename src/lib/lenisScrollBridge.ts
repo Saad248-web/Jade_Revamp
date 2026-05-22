@@ -9,17 +9,27 @@ export type LenisScrollPayload = {
 
 type LenisScrollListener = (payload: LenisScrollPayload) => void;
 
-const listeners = new Set<LenisScrollListener>();
+const batchedListeners = new Set<LenisScrollListener>();
+const immediateListeners = new Set<LenisScrollListener>();
 
 /** Subscribe to Lenis scroll (rAF-batched). Returns unsubscribe. */
 export function subscribeLenisScroll(listener: LenisScrollListener): () => void {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
+  batchedListeners.add(listener);
+  return () => batchedListeners.delete(listener);
+}
+
+/** Same feed as {@link subscribeLenisScroll} but fires on every Lenis tick (navbar reflex). */
+export function subscribeLenisScrollImmediate(
+  listener: LenisScrollListener,
+): () => void {
+  immediateListeners.add(listener);
+  return () => immediateListeners.delete(listener);
 }
 
 function emit(payload: LenisScrollPayload) {
+  immediateListeners.forEach((fn) => fn(payload));
   scheduleScrollUpdate(() => {
-    listeners.forEach((fn) => fn(payload));
+    batchedListeners.forEach((fn) => fn(payload));
   });
 }
 
@@ -35,7 +45,7 @@ type LenisEmitter = {
   ) => () => void;
 };
 
-/** Wire Lenis instance → batched scroll subscribers (chrome hide, analytics hooks). */
+/** Wire Lenis instance → scroll subscribers (chrome hide, analytics hooks). */
 export function attachLenisScrollBridge(lenis: LenisEmitter): () => void {
   return lenis.on("scroll", (instance) => {
     emit({

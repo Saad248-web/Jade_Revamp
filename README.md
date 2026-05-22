@@ -82,7 +82,7 @@ Jade_ReVamp/
 - **`ScrollToTopOnNavigate`** — resets scroll on route/search changes and browser back/forward (`scrollToPageTopWithRetries`).
 - **`src/app/template.tsx`** — sets `history.scrollRestoration = "manual"` (avoids fighting Lenis).
 - **Venue overlays** (`VenueOverlay`, `PartyVenueOverlay`, `CorporateVenueOverlay`) — shared hooks: `useVenueOverlaySectionNav`, `useSectionScrollSpy`, `useScrollTabIntoView`, `scrollToOverlaySection`.
-- **Villa detail** — `VillaDetailStickyTabs` + `villaDetailSectionNav` + section scroll spy on `/villas/[id]`.
+- **Villa detail** — `VillaDetailStickyTabs` + `villaDetailSectionNav` + section scroll spy on `/villa-retreats/[id]`.
 - **Chrome hide on scroll** — `useScrollHide` / `useOverlayScrollChromeHide` + `batchScrollUpdate` for batched listeners.
 
 ### Data model
@@ -178,8 +178,8 @@ Full template: [`.env.example`](.env.example).
 | Path | Role |
 |------|------|
 | `/` | Landing (splash + scroll sections) |
-| `/villas`, `/villas/[id]`, `/villas/[id]/spaces` | Directory, detail, gallery |
-| `/weddings`, `/corporate-retreats`, `/weekend-getaways`, `/party-villas` | Experience category + venue overlays |
+| `/villa-retreats`, `/villa-retreats/[id]`, `/villa-retreats/[id]/spaces` | Directory, detail, gallery |
+| `/weddings`, `/corporate-retreats`, `/weekend-getaways`, `/party-villa-retreats` | Experience category + venue overlays |
 | `/experiences`, `/experiences/another-experience-1` | Experiences hub + scroll demo page |
 | `/caravans` | Caravan experience + Rathaa CTA |
 | `/blogs`, `/blogs/[slug]` | Editorial |
@@ -209,7 +209,7 @@ Metadata routes: `robots.ts`, `sitemap.ts`, `manifest.ts`.
 | `POST` | `/api/webhooks/razorpay` | Signed payment events |
 | `POST` | `/api/indexnow` | URL submission (Bearer in prod) |
 | `GET` | `/api/instagram/oembed` | Bounded oEmbed proxy |
-| `GET` | `/api/villas/[id]/media` | Villa media JSON |
+| `GET` | `/api/villa-retreats/[id]/media` | Villa media JSON |
 | `GET` | `/api/experiences/[slug]/media` | Experience media JSON |
 
 Edge middleware on **`/api/*`**: verb allowlist, **600 req / 60 s / IP**, `Cross-Origin-Resource-Policy: same-site`. Per-route limits are documented in [`WEBDEV-Audit.md`](./WEBDEV-Audit.md).

@@ -194,7 +194,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
   };
 
   const LINKS_COLUMN_1 = [
-    { label: "VILLAS", href: "/villas" },
+    { label: "VILLA RETREATS", href: "/villa-retreats" },
     { label: "EXPERIENCES", href: "/experiences" },
     { label: "ABOUT", href: "/about" },
   ];

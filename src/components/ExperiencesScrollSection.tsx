@@ -25,9 +25,9 @@ const PANELS = [
     id: "celebrations",
     title: "Celebrations & Parties",
     subtext:
-      "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
+      "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villa retreats with pools, open lawns, and entertainment-ready spaces.",
     cta: "SEE HOW CELEBRATIONS COME ALIVE",
-    href: "/party-villas",
+    href: "/party-villa-retreats",
     image: "/Home Page/2-Experiences/celebrations & parties.webp",
     mobileImage: "/Website Ratio Changes/POOL PARTY.webp",
   },
@@ -55,7 +55,7 @@ const PANELS = [
     subtext:
       "Element-led wellness restoration through mud baths, massages, spa and aroma therapies, designed for deep rejuvenation.",
     cta: "SEE HOW RETREAT TAKES SHAPE",
-    href: "/villas?category=Wellness Retreats",
+    href: "/villa-retreats?category=Wellness Retreats",
     image:
       "/Experiences/Weekend Getaways/2-What Weekends Look like/Nature & Nearby Escapes.webp",
   },
@@ -69,12 +69,12 @@ const PANELS = [
     image: "/Experiences/Caravan/1-Hero/6.webp",
   },
   {
-    id: "private-villas",
-    title: "Private Villas",
+    id: "private-villa-retreats",
+    title: "Private Villa Retreats",
     subtext:
       "A curated collection of fully private farmhouses, suited for everything from quiet stays to vibrant celebrations and bespoke experiences.",
-    cta: "SEE THE VILLAS THAT HOST IT ALL",
-    href: "/villas",
+    cta: "SEE THE VILLA RETREATS THAT HOST IT ALL",
+    href: "/villa-retreats",
     image: "/Villa_Retreats/Magnolia/Hero/hero.webp",
     mobileImage: "/Website Ratio Changes/Magnoliaa.webp",
   },
@@ -128,11 +128,11 @@ function EndButton({ globalProgress }: { globalProgress: MotionValue<number> }) 
     >
       <motion.div className="pointer-events-auto">
         <PrimaryButton
-          href="/villas"
+          href="/villa-retreats"
           className="shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-transform duration-300 hover:scale-[1.03]"
         >
           <span className="font-bold whitespace-nowrap text-center">
-            See Best Experience Villas
+            See Best Experience Villa Retreats
           </span>
         </PrimaryButton>
       </motion.div>

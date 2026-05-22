@@ -44,25 +44,25 @@ const partySlides = [
   {
     title: "Pool Parties",
     desc: "Celebrate poolside with loungers, BBQ setups, cocktail stations, and vibrant lighting.",
-    image: "/Experiences/Party Villas/2-Party Type/Pool Parties.webp",
+    image: "/Experiences/Party Villa Retreats/2-Party Type/Pool Parties.webp",
   },
   {
     title: "Bachelor/Bachelorette Parties",
-    desc: "Private villas designed for pre-wedding celebrations with music, entertainment, and curated dining.",
+    desc: "Private Villa Retreats designed for pre-wedding celebrations with music, entertainment, and curated dining.",
     image:
-      "/Experiences/Party Villas/2-Party Type/Bachelor_Bachelorette Parties.webp",
+      "/Experiences/Party Villa Retreats/2-Party Type/Bachelor_Bachelorette Parties.webp",
   },
   {
     title: "Reunions & Graduation Parties",
-    desc: "Spacious villas perfect for reconnecting, celebrating milestones, and hosting memorable gatherings.",
+    desc: "Spacious Villa Retreats perfect for reconnecting, celebrating milestones, and hosting memorable gatherings.",
     image:
-      "/Experiences/Party Villas/2-Party Type/Reunions & Graduation Parties.webp",
+      "/Experiences/Party Villa Retreats/2-Party Type/Reunions & Graduation Parties.webp",
   },
   {
     title: "Birthdays & Anniversaries",
-    desc: "Host memorable celebrations in beautifully curated villas with décor, dining, music, and private pools.",
+    desc: "Host memorable celebrations in beautifully curated villa retreats with décor, dining, music, and private pools.",
     image:
-      "/Experiences/Party Villas/2-Party Type/Birthdays & Anniversaries.webp",
+      "/Experiences/Party Villa Retreats/2-Party Type/Birthdays & Anniversaries.webp",
   },
 ];
 
@@ -76,16 +76,16 @@ export default function PartyVillasPage() {
 
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
-        backgroundImage="/Experiences/Party Villas/1-Hero/Pool Parties.webp"
-        backgroundAlt="Party Villas"
+        backgroundImage="/Experiences/Party Villa Retreats/1-Hero/Pool Parties.webp"
+        backgroundAlt="Party Villa Retreats"
         heading={
           <>
             Celebrate in Style with
             <br />
-            Jade Party Villas
+            Jade Party Villa Retreats
           </>
         }
-        description="Host birthdays, pool parties, reunions or milestone celebrations in exclusive Jade villas with private pools, curated setups & personalized experiences."
+        description="Host birthdays, pool parties, reunions or milestone celebrations in exclusive Jade villa retreats with private pools, curated setups & personalized experiences."
         buttons={[
           {
             icon: <Calendar className="w-5 h-5" />,
@@ -128,29 +128,29 @@ export default function PartyVillasPage() {
         experiences={[
           {
             title: "DJ & Music Setup",
-            image: "/Experiences/Party Villas/3-Addons/DJ & Music Setup.webp",
+            image: "/Experiences/Party Villa Retreats/3-Addons/DJ & Music Setup.webp",
           },
           {
             title: "BBQ & Live Grills",
-            image: "/Experiences/Party Villas/3-Addons/BBQ & Live Grills.webp",
+            image: "/Experiences/Party Villa Retreats/3-Addons/BBQ & Live Grills.webp",
           },
           {
             title: "Cocktail Bar Setup",
-            image: "/Experiences/Party Villas/3-Addons/Cocktail Bar Setup.webp",
+            image: "/Experiences/Party Villa Retreats/3-Addons/Cocktail Bar Setup.webp",
           },
           {
             title: "Bonfire Nights",
-            image: "/Experiences/Party Villas/3-Addons/Bonfire Nights.webp",
+            image: "/Experiences/Party Villa Retreats/3-Addons/Bonfire Nights.webp",
           },
           {
             title: "Movie Under the Stars",
             image:
-              "/Experiences/Party Villas/3-Addons/Movie Under The Stars-2.webp",
+              "/Experiences/Party Villa Retreats/3-Addons/Movie Under The Stars-2.webp",
           },
           {
             title: "Themed Decor & Styling",
             image:
-              "/Experiences/Party Villas/3-Addons/Themed Decor and Styling.webp",
+              "/Experiences/Party Villa Retreats/3-Addons/Themed Decor and Styling.webp",
           },
         ]}
       />
@@ -160,7 +160,7 @@ export default function PartyVillasPage() {
         <SpacesForCelebrationsSection />
       </div>
 
-      {/* SECTION 6: FEATURED PARTY VILLAS */}
+      {/* SECTION 6: FEATURED Party Villa Retreats */}
       <PartyVillasCarousel />
 
       <Footer />
@@ -179,8 +179,8 @@ function SpacesForCelebrationsSection() {
       cards={[
         {
           tag: "enjoy",
-          title: "PRIVATE PARTY VILLAS",
-          desc: "Exclusive villas with private pools and spacious outdoor areas designed for unforgettable celebrations.",
+          title: "PRIVATE Party Villa Retreats",
+          desc: "Exclusive Villa Retreats with private pools and spacious outdoor areas designed for unforgettable celebrations.",
         },
         {
           tag: "customize",
@@ -198,7 +198,7 @@ function SpacesForCelebrationsSection() {
           desc: "Private pools, entertainment zones, music systems, BBQ setups, and spacious lounges.",
         },
       ]}
-      footerText="Private villas and curated experiences designed to make every celebration a masterpiece."
+      footerText="Private Villa Retreats and curated experiences designed to make every celebration a masterpiece."
       ctaText="PLAN YOUR CELEBRATION"
       onCtaClick={() => setEnquireOverlayOpen(true)}
       alternateGold={true}

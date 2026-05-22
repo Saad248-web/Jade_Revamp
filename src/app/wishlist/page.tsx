@@ -30,7 +30,7 @@ export default function WishlistPage() {
             YOUR SAVED RETREATS
           </span>
           <h1 className="font-philosopher text-gh-h1 text-white mt-2 leading-tight flex items-baseline gap-2.5">
-            <span>Saved Villas</span>
+            <span>Saved Villa Retreats</span>
             {count > 0 && (
               <span className="text-white/30 font-manrope text-gh-body font-normal">
                 ({count})
@@ -43,10 +43,10 @@ export default function WishlistPage() {
         {count === 0 && (
           <EmptyState
             icon={<Heart className="w-full h-full fill-current" />}
-            headline="No saved villas yet"
-            subtext="Save villas to compare options, revisit details, and plan your stay more easily."
-            ctaLabel="EXPLORE VILLAS"
-            onCta={() => router.push("/villas")}
+            headline="No saved villa retreats yet"
+            subtext="Save villa retreats to compare options, revisit details, and plan your stay more easily."
+            ctaLabel="EXPLORE VILLA RETREATS"
+            onCta={() => router.push("/villa-retreats")}
           />
         )}
 
@@ -184,7 +184,7 @@ export default function WishlistPage() {
 
                         <div className="flex gap-2.5">
                           <Link
-                            href={`/villas/${item.id}`}
+                            href={`/villa-retreats/${item.id}`}
                             className="flex-1 border border-white/20 text-white font-manrope font-bold text-gh-label tracking-widest uppercase text-center py-2.5 hover:bg-white hover:text-black hover:border-white transition-all rounded-sm duration-300"
                           >
                             VIEW VILLA
@@ -219,10 +219,10 @@ export default function WishlistPage() {
         {count > 0 && (
           <div className="mt-12 text-center border-t border-white/5 pt-8">
             <Link
-              href="/villas"
+              href="/villa-retreats"
               className="inline-flex items-center gap-2 text-white/60 hover:text-white font-manrope text-gh-body transition-all group hover:gap-2.5"
             >
-              <span>Continue exploring our collection of villas</span>
+              <span>Continue exploring our collection of villa retreats</span>
               <ArrowRight className="w-4 h-4 text-[#EFCD62] transform group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>

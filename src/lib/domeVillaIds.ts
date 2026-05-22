@@ -1,11 +1,11 @@
 import { DOME_VIDEO_URLS, type DomeVideoKey } from "@/lib/videoUtils";
 
-export const DOME_ESTATE_ID = "dome-villas" as const;
+export const DOME_ESTATE_ID = "dome-villa-retreats" as const;
 
 export const DOME_VILLA_IDS = {
-  blue: "dome-villas-blue",
-  red: "dome-villas-red",
-  yellow: "dome-villas-yellow",
+  blue: "dome-villa-retreats-blue",
+  red: "dome-villa-retreats-red",
+  yellow: "dome-villa-retreats-yellow",
 } as const;
 
 export type DomeColorKey = DomeVideoKey;

@@ -942,7 +942,7 @@ function BookPageContent() {
   }, [villaBookingDisabled, villaParam]);
 
   // After hydration: if villa is pre-selected and context already has dates + guests
-  // (user came through the flow: /book → dates → guests → /villas → BOOK VILLA),
+  // (user came through the flow: /book → dates → guests → /villa-retreats → BOOK VILLA),
   // jump straight to details. Safe to do in useEffect (client-only).
   useEffect(() => {
     if (
@@ -994,7 +994,7 @@ function BookPageContent() {
     } else {
       // No villa pre-selected — send to villa listing so user can pick one.
       // VillaCard will detect the filled context and link to step=details.
-      router.push("/villas");
+      router.push("/villa-retreats");
     }
   };
 
@@ -1002,8 +1002,8 @@ function BookPageContent() {
     if (isVillaPreSelected) {
       setStep("guests");
     } else {
-      // Came from villas listing — go back there
-      router.push("/villas");
+      // Came from VILLAS listing — go back there
+      router.push("/villa-retreats");
     }
   };
 

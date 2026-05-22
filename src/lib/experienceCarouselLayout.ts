@@ -1,6 +1,6 @@
 /**
  * Shared layout for “Section 3” experience carousels:
- * Party Villas · Weekend Getaways · Caravans
+ * Party Villa Retreats · Weekend Getaways · Caravans
  *
  * Keeps frame height, section padding, and CTA inset consistent with design frames.
  */

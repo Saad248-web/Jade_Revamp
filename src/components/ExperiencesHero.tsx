@@ -51,7 +51,7 @@ export default function ExperiencesHero() {
           className="font-manrope text-white/70 text-gh-body max-w-xl leading-relaxed"
         >
           A collection of curated experiences designed across Jade’s private
-          villas and distinctive settings.
+          VILLAS and distinctive settings.
         </motion.p>
       </div>
 

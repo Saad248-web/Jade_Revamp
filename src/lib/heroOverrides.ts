@@ -1,17 +1,17 @@
 export const HERO_OVERRIDES: Record<string, string[]> = {
   diamond: ["/Villa_Retreats/Diamond/Hero/Hero 2.webp"],
-  "dome-villas": [
+  "dome-villa-retreats": [
     "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
     "/Villa_Retreats/Dome/Hero Main/Hero 2.webp",
   ],
-  "dome-villas-blue": [
+  "dome-villa-retreats-blue": [
     "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp",
     "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 2.webp",
     "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 3.webp",
     "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 4.webp",
     "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 5.webp",
   ],
-  "dome-villas-red": [
+  "dome-villa-retreats-red": [
     "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 1.webp",
     "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 2.webp",
     "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 3.webp",
@@ -19,7 +19,7 @@ export const HERO_OVERRIDES: Record<string, string[]> = {
     "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 5.webp",
     "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 6.webp",
   ],
-  "dome-villas-yellow": [
+  "dome-villa-retreats-yellow": [
     "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/Hero_evening_View.webp",
     "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/hero.webp",
   ],

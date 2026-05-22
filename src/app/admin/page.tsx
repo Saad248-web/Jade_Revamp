@@ -941,7 +941,7 @@ function Dashboard({
                 setPage(1);
               }}
             >
-              <option value="all">All Villas</option>
+              <option value="all">All Villa Retreats</option>
               {villaNames.map((n) => (
                 <option key={n} value={n}>
                   {n}

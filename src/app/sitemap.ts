@@ -14,7 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
-      url: `${BASE}/villas`,
+      url: `${BASE}/villa-retreats`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
@@ -50,7 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${BASE}/party-villas`,
+      url: `${BASE}/party-villa-retreats`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.75,
@@ -107,13 +107,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const villaRoutes: MetadataRoute.Sitemap = VILLAS.flatMap((v) => [
     {
-      url: `${BASE}/villas/${v.id}`,
+      url: `${BASE}/villa-retreats/${v.id}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.88,
     },
     {
-      url: `${BASE}/villas/${v.id}/spaces`,
+      url: `${BASE}/villa-retreats/${v.id}/spaces`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.72,

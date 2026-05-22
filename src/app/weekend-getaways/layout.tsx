@@ -5,12 +5,12 @@ import JsonLd from "@/components/seo/JsonLd";
 export const metadata: Metadata = {
   title: "Weekend Getaways",
   description:
-    "Escape the city to Jade's private luxury villas near Bangalore — poolside mornings, bonfire nights, outdoor dining, and peaceful weekend getaways with friends and family.",
+    "Escape the city to Jade's private Luxury Villa Retreats near Bangalore — poolside mornings, bonfire nights, outdoor dining, and peaceful weekend getaways with friends and family.",
   alternates: { canonical: "https://jadehospitainment.com/weekend-getaways" },
   openGraph: {
     title: "Weekend Getaways | Jade Hospitainment",
     description:
-      "Private villas for relaxed weekend escapes, small celebrations, and memorable getaways near Bangalore.",
+      "Private Villa Retreats for relaxed weekend escapes, small celebrations, and memorable getaways near Bangalore.",
     url: "https://jadehospitainment.com/weekend-getaways",
   },
 };

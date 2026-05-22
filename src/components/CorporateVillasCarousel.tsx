@@ -6,9 +6,9 @@ import CorporateVillaCard from "./CorporateVillaCard";
 import CorporateVenueOverlay from "./CorporateVenueOverlay";
 import { AnimatePresence } from "framer-motion";
 
-// Filter villas to specifically show corporate related venues
+// Filter VILLAS to specifically show corporate related venues
 const CORPORATE_VILLA_IDS = [
-  "dome-villas",
+  "dome-villa-retreats",
   "magnolia",
   "diamond",
   "retreat-on-the-ridge",
