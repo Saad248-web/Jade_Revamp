@@ -7,8 +7,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import PrimaryButton from "@/components/PrimaryButton";
 import {
+  EXPERIENCE_OVERLAY_BOOKING_BAR_SPACER_CLASS,
   EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS,
   EXPERIENCE_OVERLAY_BOTTOM_BAR_SHEET_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS,
   EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS,
   EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS,
   EXPERIENCE_OVERLAY_DESKTOP_BODY_CLASS,
@@ -27,6 +29,7 @@ import {
 } from "@/lib/heroSplitCarouselVariants";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import { stickyCategoryTabClass } from "@/lib/stickyTabGlass";
+import { OVERLAY_GLASS_TOP_8PX_SHADE_CLASS } from "@/lib/scrollChromeGlass";
 import { useScrollTabIntoView } from "@/lib/useScrollTabIntoView";
 
 export type VillaExperienceCarouselImage = { name?: string; image: string };
@@ -101,6 +104,9 @@ export function VillaExperienceOverlayBody({
     <>
       <div className="relative z-[1]">{pinnedTop}</div>
       <div className={EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS}>{children}</div>
+      {mobileFooter ? (
+        <div className={EXPERIENCE_OVERLAY_BOOKING_BAR_SPACER_CLASS} aria-hidden />
+      ) : null}
     </>
   );
 
@@ -118,6 +124,10 @@ export function VillaExperienceOverlayBody({
           <div className={EXPERIENCE_OVERLAY_MOBILE_SHEET_SCRIM_CLASS} aria-hidden />
           <div className={EXPERIENCE_OVERLAY_MOBILE_SHEET_FRAME_CLASS}>
             <div
+              className={EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS}
+              aria-hidden
+            />
+            <div
               ref={mobileScrollEl}
               className={EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS}
               data-lenis-prevent
@@ -126,7 +136,9 @@ export function VillaExperienceOverlayBody({
               {scrollContent}
             </div>
             {mobileFooter ? (
-              <div className="shrink-0 relative">{mobileFooter}</div>
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[60]">
+                <div className="pointer-events-auto">{mobileFooter}</div>
+              </div>
             ) : null}
           </div>
         </div>
@@ -364,7 +376,8 @@ export function VillaExperienceBookingBottomBar({
       : EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS;
   return (
     <div className={barClass}>
-      <div className="max-w-7xl mx-auto w-full flex justify-between items-center gap-3 px-4 md:px-12">
+      <div className={OVERLAY_GLASS_TOP_8PX_SHADE_CLASS} aria-hidden />
+      <div className="relative z-[3] max-w-7xl mx-auto w-full flex justify-between items-center gap-3 px-4 md:px-12">
         <div className="flex flex-col font-manrope leading-tight">
           <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">
             Starting from

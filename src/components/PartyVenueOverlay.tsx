@@ -325,11 +325,8 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
 
                 {/* Horizontal amenity cards (Categories UI) — perfectly matches splitting & style of detail page */}
                 {villa.amenities && villa.amenities.length > 0 && (
-                  <div
-                    className={
-                      VILLA_DETAIL_SPACING.amenityHighlightTrackOverlay
-                    }
-                  >
+                  <div className={VILLA_DETAIL_SPACING.amenityHighlightViewportShell}>
+                    <div className={VILLA_DETAIL_SPACING.amenityHighlightTrackFullBleed}>
                     {villa.amenities.map((amenity: any, idx: number) => {
                       const IconComponent = getIcon(amenity.icon, amenity.label);
                       const words = (amenity.label || "").split(" ");
@@ -345,6 +342,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                         />
                       );
                     })}
+                    </div>
                   </div>
                 )}
 

@@ -1,6 +1,5 @@
 "use client";
 
-import type { CSSProperties } from "react";
 import clsx from "clsx";
 import type { VillaAmenityHighlight } from "@/lib/types";
 import { getVillaDetailIcon } from "@/lib/villaDetailIcons";
@@ -21,15 +20,13 @@ export default function VillaDetailAmenityHighlights({
   if (!highlights?.length) return null;
 
   return (
-    <div className={vd.amenityHighlightViewportShell}>
-      <div
-        className={clsx(vd.amenityHighlightTrackFullBleed, className)}
-        style={
-          {
-            "--amenity-highlight-count": highlights.length,
-          } as CSSProperties
-        }
-      >
+    <div
+      className={clsx(
+        vd.amenityHighlightViewportShell,
+        vd.amenityHighlightViewportInset,
+      )}
+    >
+      <div className={clsx(vd.amenityHighlightTrackFullBleed, className)}>
         {highlights.map((amenity, idx) => {
           const Icon = getVillaDetailIcon(amenity.icon);
           return (

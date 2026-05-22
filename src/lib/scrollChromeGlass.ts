@@ -22,3 +22,14 @@ export const OVERLAY_SCROLL_CHROME_GLASS =
 export const OVERLAY_STICKY_TABS_CHROME_CLASS = `border-b ${OVERLAY_SCROLL_CHROME_GLASS} ${GLASS_SHADOW_TOP}`;
 
 export const OVERLAY_PRICING_BOTTOM_BAR_CHROME_CLASS = `border-t ${OVERLAY_SCROLL_CHROME_GLASS} ${GLASS_SHADOW_BOTTOM}`;
+
+/** 30% black on top 8px (full width). */
+export const OVERLAY_GLASS_TOP_8PX_SHADE_CLASS =
+  "pointer-events-none absolute inset-x-0 top-0 z-[2] h-2 bg-gradient-to-b from-black/30 to-transparent";
+
+/**
+ * 30% black on upper 8px + fade through sheet top radius (32px) for corner depth.
+ * Parent must be `relative` with `rounded-t-[32px]`.
+ */
+export const OVERLAY_SHEET_TOP_RADIUS_EDGE_SHADE_CLASS =
+  "pointer-events-none absolute inset-x-0 top-0 z-[70] h-8 rounded-t-[32px] bg-[linear-gradient(to_bottom,rgba(0,0,0,0.3)_0px,rgba(0,0,0,0.3)_8px,transparent_32px)]";

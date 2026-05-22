@@ -254,11 +254,8 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
                 {/* Horizontal amenity cards — same as Villa Detail page */}
                 {v.amenities && v.amenities.length > 0 && (
-                  <div
-                    className={
-                      VILLA_DETAIL_SPACING.amenityHighlightTrackOverlay
-                    }
-                  >
+                  <div className={VILLA_DETAIL_SPACING.amenityHighlightViewportShell}>
+                    <div className={VILLA_DETAIL_SPACING.amenityHighlightTrackFullBleed}>
                     {v.amenities.map((amenity: any, idx: number) => {
                       const IconComponent = getVillaDetailIcon(amenity.icon);
                       const words = (amenity.label || "").split(" ");
@@ -273,6 +270,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         />
                       );
                     })}
+                    </div>
                   </div>
                 )}
 

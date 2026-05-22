@@ -700,9 +700,9 @@ export default function VillaDetailsPage() {
 
         {/* AMENITY SUMMARY LINE */}
         <div className={clsx("flex flex-nowrap overflow-x-auto scrollbar-none gap-x-4 items-center text-white/90 text-[10px] md:text-[12px] lg:text-[14px] font-normal font-manrope tracking-wide pb-2")}>
-          <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
+          <div className="flex items-center gap-2 whitespace-nowrap shrink-0">
             <Bed
-              className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]"
+              className="w-4 h-4 md:w-5 md:h-5 shrink-0 text-[#EFCD62]"
               strokeWidth={1.5}
             />
             <span>
@@ -714,9 +714,9 @@ export default function VillaDetailsPage() {
 
           <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
 
-          <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
+          <div className="flex items-center gap-2 whitespace-nowrap shrink-0">
             <Users
-              className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]"
+              className="w-4 h-4 md:w-5 md:h-5 shrink-0 text-[#EFCD62]"
               strokeWidth={1.5}
             />
             <span>
@@ -728,17 +728,19 @@ export default function VillaDetailsPage() {
 
           <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
 
-          <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
+          <div className="flex items-center gap-2 whitespace-nowrap shrink-0">
             <Home
-              className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]"
+              className="w-4 h-4 md:w-5 md:h-5 shrink-0 text-[#EFCD62]"
               strokeWidth={1.5}
             />
             <span>{villa.stats.bhk}</span>
           </div>
         </div>
+        </div>
 
         <VillaDetailAmenityHighlights highlights={villa.amenityHighlights ?? []} />
 
+        <div className={clsx(vd.content, vd.stack)}>
         <p className="font-manrope text-white/70 text-gh-body leading-relaxed whitespace-pre-line text-justify">
           {villa.description}
         </p>

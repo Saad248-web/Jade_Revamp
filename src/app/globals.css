@@ -46,15 +46,23 @@
     --amenity-root-h: 6.625rem; /* 106px */
     --amenity-tile-w-scroll: clamp(6.5rem, 5.25rem + 6.5vw, 9.25rem);
     --amenity-tile-h-grid: clamp(6.75rem, 5.5rem + 7vw, 9.5rem);
-    --amenity-tile-pad: clamp(0.5rem, 0.35rem + 0.55vw, 0.875rem);
-    --amenity-tile-gap-icon: clamp(0.5rem, 0.3rem + 0.5vw, 0.75rem);
-    --amenity-tile-gap-lines: clamp(0.2rem, 0.12rem + 0.25vw, 0.35rem);
+    /* Grid: min column width — auto-fill wraps instead of 1×N squeeze */
+    --amenity-grid-col-min: 7.5rem;
+    /*
+     Fixed-responsive spacing (clamp min/max — scales smoothly, no breakpoint jumps).
+     Icon → text: 10px–14px · title → subtitle: 4px–6px
+     */
+    --amenity-tile-pad-y: clamp(0.625rem, 0.55rem + 0.35vw, 0.75rem);
+    --amenity-tile-pad-x: clamp(0.5rem, 0.42rem + 0.3vw, 0.625rem);
+    --amenity-tile-gap-icon: clamp(0.625rem, 0.5rem + 0.45vw, 0.875rem);
+    --amenity-tile-gap-lines: clamp(0.25rem, 0.2rem + 0.2vw, 0.375rem);
     --fs-amenity-primary: clamp(0.625rem, 0.5rem + 0.38vw, 0.875rem);
     --fs-amenity-secondary: clamp(0.5625rem, 0.45rem + 0.3vw, 0.75rem);
-    --amenity-icon-size: clamp(1.25rem, 1rem + 0.55vw, 1.75rem);
-    --amenity-icon-row: clamp(1.625rem, 1.25rem + 0.85vw, 2.25rem);
-    /* Matches villa `sectionShell` gutters: px-3 (12px) · sm:px-5 (20px) */
-    --amenity-scroll-inset: 0.75rem;
+    --amenity-icon-size: clamp(1.375rem, 1.25rem + 0.35vw, 1.5rem);
+    --amenity-icon-row: clamp(1.625rem, 1.5rem + 0.4vw, 1.75rem);
+    /* Inner track inset — matches villa sectionShell px-3 (12px) on mobile */
+    --amenity-scroll-inset-mobile: 0.75rem;
+    --amenity-scroll-inset: 0;
     --amenity-scroll-inset-sm: 1.25rem;
   }
 }
@@ -147,17 +155,31 @@
     container-type: inline-size;
     container-name: amenity-tile;
     width: var(--amenity-tile-w, var(--amenity-tile-w-scroll));
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Viewport clamp + tile-width (cqi) — balanced icon ↔ copy on scroll + grid */
+    gap: max(
+      var(--amenity-tile-gap-icon),
+      clamp(0.625rem, 0.48rem + 5cqi, 0.875rem)
+    );
+    padding: var(--amenity-tile-pad-y) var(--amenity-tile-pad-x);
+    /* Scroll rail only — grid overrides below */
     aspect-ratio: 120 / 106;
-    padding: var(--amenity-tile-pad);
+    min-height: var(--amenity-root-h);
   }
 
   .amenity-highlight-tile__icon-row {
-    height: max(var(--amenity-icon-row), clamp(1.5rem, 24cqi, 2.25rem));
+    height: var(--amenity-icon-row);
+    min-height: var(--amenity-icon-row);
+    flex-shrink: 0;
   }
 
   .amenity-highlight-tile__icon {
-    width: max(var(--amenity-icon-size), clamp(1.125rem, 20cqi, 1.875rem));
-    height: max(var(--amenity-icon-size), clamp(1.125rem, 20cqi, 1.875rem));
+    width: var(--amenity-icon-size);
+    height: var(--amenity-icon-size);
   }
 
   .amenity-highlight-tile__label {
@@ -165,6 +187,7 @@
       var(--fs-amenity-primary),
       clamp(0.625rem, 10.5cqi, 0.9375rem)
     );
+    line-height: 1.25;
   }
 
   .amenity-highlight-tile__sublabel {
@@ -172,22 +195,29 @@
       var(--fs-amenity-secondary),
       clamp(0.5625rem, 8.5cqi, 0.8125rem)
     );
+    line-height: 1.3;
   }
 
   .amenity-highlight-tile__copy {
-    margin-top: var(--amenity-tile-gap-icon);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: var(--amenity-tile-gap-lines);
+    width: 100%;
+    min-width: 0;
+    flex-shrink: 0;
   }
 
-  /* Container width decides scroll vs grid (works with OS display scaling). */
+  /* Always horizontal scroll (mobile-style row) at every breakpoint. */
   .amenity-highlight-rail {
-    container-type: inline-size;
-    container-name: amenity-rail;
+    width: 100%;
+    min-width: 0;
   }
 
-  /* Narrow rail: mobile-style horizontal scroll */
   .amenity-highlight-track--responsive {
     display: flex;
+    flex-wrap: nowrap;
     min-width: 0;
     width: 100%;
     gap: clamp(0.5rem, 0.35rem + 0.65vw, 0.875rem);
@@ -201,180 +231,90 @@
     scrollbar-width: none;
   }
 
-  @container amenity-rail (max-width: 35.99rem) {
+  .amenity-highlight-track--responsive .amenity-highlight-tile {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    width: var(--amenity-tile-w, var(--amenity-tile-w-scroll));
+  }
+
+  .amenity-highlight-tile__label,
+  .amenity-highlight-tile__sublabel {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .amenity-highlight-track--responsive::after {
+    content: "";
+    flex: 0 0 var(--amenity-scroll-inset);
+    scroll-snap-align: end;
+  }
+
+  /* Mobile: full-bleed frame; inner left gutter on the scroll track. */
+  @media (max-width: 639px) {
+    .amenity-highlight-viewport {
+      width: 100vw;
+      max-width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+    }
+
     .amenity-highlight-track--responsive {
-      width: 100%;
-      position: static;
-      left: auto;
-      transform: none;
+      padding-left: max(
+        var(--amenity-scroll-inset-mobile),
+        env(safe-area-inset-left, 0px)
+      );
+      padding-right: 0;
+      scroll-padding-left: max(
+        var(--amenity-scroll-inset-mobile),
+        env(safe-area-inset-left, 0px)
+      );
+      scroll-padding-right: max(
+        var(--amenity-scroll-inset-mobile),
+        env(safe-area-inset-right, 0px)
+      );
     }
 
-    .amenity-highlight-track--responsive .amenity-highlight-tile {
-      flex-shrink: 0;
-      scroll-snap-align: start;
-      width: var(--amenity-tile-w, var(--amenity-tile-w-scroll));
-    }
-
-    .amenity-highlight-tile__label,
-    .amenity-highlight-tile__sublabel {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-    }
-
-    /* Trailing inset when scrolled to the end */
     .amenity-highlight-track--responsive::after {
-      content: "";
-      flex: 0 0 var(--amenity-scroll-inset);
-      scroll-snap-align: end;
-    }
-
-    /*
-     Mobile only (< 640px): scroll frame bleeds to device edges;
-     inner left padding lines first tile up with sectionShell copy.
-     */
-    @media (max-width: 639px) {
-      .amenity-highlight-viewport {
-        width: 100vw;
-        max-width: 100vw;
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-
-      .amenity-highlight-track--responsive {
-        padding-left: max(
-          var(--amenity-scroll-inset),
-          env(safe-area-inset-left, 0px)
-        );
-        padding-right: 0;
-        scroll-padding-left: max(
-          var(--amenity-scroll-inset),
-          env(safe-area-inset-left, 0px)
-        );
-        scroll-padding-right: max(
-          var(--amenity-scroll-inset),
-          env(safe-area-inset-right, 0px)
-        );
-      }
-    }
-
-    /* Tablet+ narrow scroll: keep frame inside page gutters (no edge bleed) */
-    @media (min-width: 640px) {
-      .amenity-highlight-viewport {
-        width: 100%;
-        max-width: none;
-        position: static;
-        left: auto;
-        transform: none;
-      }
-
-      .amenity-highlight-track--responsive {
-        padding-left: 0;
-        padding-right: 0;
-        scroll-padding-left: 0;
-        scroll-padding-right: max(
-          var(--amenity-scroll-inset-sm),
-          env(safe-area-inset-right, 0px)
-        );
-      }
-
-      .amenity-highlight-track--responsive::after {
-        flex-basis: var(--amenity-scroll-inset-sm);
-      }
+      flex: 0 0 max(
+        var(--amenity-scroll-inset-mobile),
+        env(safe-area-inset-right, 0px)
+      );
     }
   }
 
-  @container amenity-rail (min-width: 36rem) {
+  /* Tablet/desktop: same horizontal row, normal page gutters. */
+  @media (min-width: 640px) {
     .amenity-highlight-viewport {
       width: 100%;
       max-width: none;
-      position: static;
-      left: auto;
-      transform: none;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .amenity-highlight-viewport--content-inset {
+      max-width: 56rem;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .amenity-highlight-track--responsive {
-      display: grid;
-      grid-template-columns: repeat(
-        var(--amenity-highlight-count, 9),
-        minmax(0, 1fr)
-      );
-      gap: clamp(0.5rem, 0.4rem + 0.5vw, 0.875rem);
-      overflow: visible;
-      width: 100%;
-      position: static;
-      left: auto;
-      transform: none;
-      translate: none;
       padding-left: 0;
       padding-right: 0;
-      scroll-padding: 0;
-      scroll-snap-type: none;
+      scroll-padding-left: 0;
+      scroll-padding-right: max(
+        var(--amenity-scroll-inset-sm),
+        env(safe-area-inset-right, 0px)
+      );
     }
 
-    .amenity-highlight-track--responsive .amenity-highlight-tile {
-      --amenity-tile-w: 100%;
-      width: 100%;
-      max-width: none;
-      min-width: 0;
-      aspect-ratio: auto;
-      min-height: var(--amenity-tile-h-grid);
-      flex-shrink: 1;
-      scroll-snap-align: none;
+    .amenity-highlight-viewport--content-inset .amenity-highlight-track--responsive {
+      scroll-padding-left: var(--amenity-scroll-inset-sm);
     }
 
-    .amenity-highlight-track--responsive .amenity-highlight-tile__label {
-      font-size: clamp(0.6875rem, 0.5rem + 0.42vw, 0.9375rem);
-      line-clamp: unset;
-      -webkit-line-clamp: unset;
-      display: block;
-      overflow: visible;
-    }
-
-    .amenity-highlight-track--responsive .amenity-highlight-tile__sublabel {
-      font-size: clamp(0.625rem, 0.45rem + 0.34vw, 0.8125rem);
-      line-clamp: unset;
-      -webkit-line-clamp: unset;
-      display: block;
-      overflow: visible;
-    }
-
-    .amenity-highlight-track--responsive .amenity-highlight-tile__icon {
-      width: clamp(1.375rem, 1rem + 0.5vw, 1.875rem);
-      height: clamp(1.375rem, 1rem + 0.5vw, 1.875rem);
-    }
-
-    .amenity-highlight-track--responsive .amenity-highlight-tile__icon-row {
-      height: clamp(1.75rem, 1.25rem + 0.75vw, 2.375rem);
-    }
-  }
-
-  /* Fallback when container queries are unavailable (still beats viewport-only lg) */
-  @supports not (container-type: inline-size) {
-    @media (min-width: 40rem) {
-      .amenity-highlight-rail .amenity-highlight-track--responsive {
-        display: grid;
-        grid-template-columns: repeat(
-          var(--amenity-highlight-count, 9),
-          minmax(0, 1fr)
-        );
-        overflow: visible;
-        scroll-snap-type: none;
-        width: 100%;
-        position: static;
-        left: auto;
-        transform: none;
-        padding-left: 0;
-        padding-right: 0;
-      }
-
-      .amenity-highlight-rail .amenity-highlight-track--responsive .amenity-highlight-tile {
-        width: 100%;
-        aspect-ratio: auto;
-        min-height: var(--amenity-tile-h-grid);
-      }
+    .amenity-highlight-track--responsive::after {
+      flex-basis: var(--amenity-scroll-inset-sm);
     }
   }
 }

@@ -5,7 +5,7 @@ import type { LucideIcon } from "lucide-react";
 
 /**
  * Amenity “stats block” system — root 120×106 in globals.css (`--amenity-root-*`,
- * `--amenity-root-*`, `--fs-amenity-*`). Mobile: horizontal scroll; lg+: grid.
+ * `--amenity-tile-gap-icon`, `--fs-amenity-*`). Icon↔text gap: fixed-responsive clamp.
  */
 export const AMENITY_HIGHLIGHT_TILE_SYSTEM = {
   rootWidthPx: 120,
@@ -17,7 +17,7 @@ export const AMENITY_HIGHLIGHT_TILE_SYSTEM = {
 /** Shell: aspect-ratio box; gradient anchored on #505059 + blur. */
 export const AMENITY_HIGHLIGHT_TILE_CLASS =
   [
-    "amenity-highlight-tile relative flex flex-col items-stretch overflow-hidden rounded-none",
+    "amenity-highlight-tile relative rounded-none",
     "bg-[linear-gradient(135deg,rgba(98,98,106,0.48)_0%,rgba(80,80,89,0.58)_40%,rgba(52,52,60,0.72)_100%)]",
     "text-center shadow-none backdrop-blur-md jade-hscroll-view-item",
   ].join(" ");
@@ -47,12 +47,12 @@ export default function AmenityHighlightTile({
           aria-hidden
         />
       </div>
-      <div className="amenity-highlight-tile__copy flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center">
-        <span className="amenity-highlight-tile__label w-full min-w-0 break-words text-center font-manrope font-semibold leading-snug text-white">
+      <div className="amenity-highlight-tile__copy">
+        <span className="amenity-highlight-tile__label w-full min-w-0 break-words text-center font-manrope font-semibold text-white">
           {label}
         </span>
         {sublabel ? (
-          <span className="amenity-highlight-tile__sublabel w-full min-w-0 break-words text-center font-manrope font-normal leading-snug text-white/65">
+          <span className="amenity-highlight-tile__sublabel w-full min-w-0 break-words text-center font-manrope font-normal text-white/65">
             {sublabel}
           </span>
         ) : null}

@@ -21,11 +21,14 @@ export const VILLA_DETAIL_SPACING = {
   hScrollBleed: "-mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8",
   hScrollTrack: "flex gap-4 overflow-x-auto pb-2 snap-x scrollbar-none",
   /**
-   * Narrow rail: mobile-only edge-to-edge scroll; tablet stays inset; wide = grid.
-   * See `.amenity-highlight-rail` + `.amenity-highlight-viewport` in globals.css.
+   * Horizontal scroll rail — edge-to-edge on mobile; inset gutters at md+.
+   * See `.amenity-highlight-*` in globals.css.
    */
   amenityHighlightViewportShell:
-    "amenity-highlight-rail amenity-highlight-viewport w-full min-w-0",
+    "amenity-highlight-rail amenity-highlight-viewport w-full min-w-0 py-1",
+  /** Villa detail md+: align row with max-w-4xl content gutters. */
+  amenityHighlightViewportInset:
+    "amenity-highlight-viewport--content-inset",
   /** Villa detail amenity row — layout mode is container-driven, not viewport lg. */
   amenityHighlightTrackFullBleed:
     "amenity-highlight-track--responsive scrollbar-none",

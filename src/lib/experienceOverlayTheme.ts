@@ -7,8 +7,13 @@
 
 import {
   OVERLAY_PRICING_BOTTOM_BAR_CHROME_CLASS,
+  OVERLAY_SHEET_TOP_RADIUS_EDGE_SHADE_CLASS,
   OVERLAY_STICKY_TABS_CHROME_CLASS,
 } from "@/lib/scrollChromeGlass";
+
+/** Mobile sheet lip — 30% black on top 8px + rounded corner edges (matches `rounded-t-[32px]`). */
+export const EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS =
+  OVERLAY_SHEET_TOP_RADIUS_EDGE_SHADE_CLASS;
 
 export const OVERLAY_SECTION_CHARCOAL = "w-full bg-jade-charcoal text-white";
 export const OVERLAY_SECTION_GREEN = "w-full bg-jade-green text-white";
@@ -49,14 +54,17 @@ export const EXPERIENCE_OVERLAY_MOBILE_SHEET_FRAME_CLASS =
 
 export const EXPERIENCE_OVERLAY_STICKY_TABS_CLASS = `sticky top-0 z-[60] mb-0 w-full ${OVERLAY_STICKY_TABS_CHROME_CLASS}`;
 
-const EXPERIENCE_OVERLAY_BOTTOM_BAR_BASE = `w-full ${OVERLAY_PRICING_BOTTOM_BAR_CHROME_CLASS} pt-4 pb-6 md:pb-4 transition-all flex justify-center`;
+/** Scroll-end spacer so content clears the overlaid mobile booking bar. */
+export const EXPERIENCE_OVERLAY_BOOKING_BAR_SPACER_CLASS = "h-[5.75rem] shrink-0 md:hidden";
 
-/** Pinned inside 80vh mobile sheet. */
-export const EXPERIENCE_OVERLAY_BOTTOM_BAR_SHEET_CLASS =
-  `${EXPERIENCE_OVERLAY_BOTTOM_BAR_BASE} relative shrink-0 z-[20]`;
+/** Glass chrome — same tokens as {@link OVERLAY_STICKY_TABS_CHROME_CLASS}. */
+const EXPERIENCE_OVERLAY_BOTTOM_BAR_CHROME = `jade-scroll-chrome relative w-full ${OVERLAY_PRICING_BOTTOM_BAR_CHROME_CLASS} pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] md:pb-4 transition-all flex justify-center`;
+
+/** Overlaid on mobile sheet scroll (absolute bottom of sheet frame). */
+export const EXPERIENCE_OVERLAY_BOTTOM_BAR_SHEET_CLASS = EXPERIENCE_OVERLAY_BOTTOM_BAR_CHROME;
 
 /** Fixed to viewport (desktop). */
-export const EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS = `${EXPERIENCE_OVERLAY_BOTTOM_BAR_BASE} fixed bottom-0 left-0 z-[150] hidden md:flex`;
+export const EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS = `${EXPERIENCE_OVERLAY_BOTTOM_BAR_CHROME} fixed bottom-0 left-0 z-[150] hidden md:flex`;
 
 export const EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS =
   "pointer-events-auto w-full h-full flex items-center justify-center rounded-full border border-white/15 bg-transparent text-white backdrop-blur-2xl shadow-lg transition-colors hover:border-white/35";
