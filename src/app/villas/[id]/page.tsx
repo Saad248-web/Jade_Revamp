@@ -76,6 +76,7 @@ import { useAnimation } from "@/context/AnimationContext";
 import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
 import { getHeroOverrideForId } from "@/lib/heroOverrides";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
+import { isVillaRecordBookable } from "@/lib/villaBooking";
 import VillaPricingBlocks, {
   buildDetailPagePricingBlocks,
 } from "@/components/experience/VillaPricingBlocks";
@@ -122,6 +123,7 @@ export default function VillaDetailsPage() {
   const id = params?.id as string;
   const villa = VILLAS.find((v) => v.id === id) as Villa | undefined;
   const { setEnquireOverlayOpen } = useAnimation();
+  const villaBookable = villa ? isVillaRecordBookable(villa) : false;
 
   const [media, setMedia] = useState<{
     hero: string[];
@@ -1081,7 +1083,9 @@ export default function VillaDetailsPage() {
           </div>
           <div className="flex items-center gap-3 md:gap-5">
             <button onClick={() => setEnquireOverlayOpen(true)} className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap">ENQUIRE</button>
-            <PrimaryButton href={`/book?villa=${villa.id}`} withArrow={false} className="whitespace-nowrap">BOOK VILLA</PrimaryButton>
+            {villaBookable ? (
+              <PrimaryButton href={`/book?villa=${villa.id}`} withArrow={false} className="whitespace-nowrap">BOOK VILLA</PrimaryButton>
+            ) : null}
           </div>
         </div>
       </div>

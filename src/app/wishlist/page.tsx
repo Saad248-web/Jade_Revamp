@@ -11,10 +11,13 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import EmptyState from "@/components/ui/EmptyState";
 import { VILLAS } from "@/lib/mockData";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
+import { isVillaBookable } from "@/lib/villaBooking";
+import { useAnimation } from "@/context/AnimationContext";
 
 export default function WishlistPage() {
   const router = useRouter();
   const { wishlist, removeFromWishlist, count } = useWishlist();
+  const { setEnquireOverlayOpen } = useAnimation();
 
   return (
     <main className="min-h-screen bg-[#1A1C1E]">
@@ -186,12 +189,22 @@ export default function WishlistPage() {
                           >
                             VIEW VILLA
                           </Link>
-                          <Link
-                            href={`/book?villa=${item.id}`}
-                            className="flex-1 bg-[#EFCD62] text-[#0B2C23] font-manrope font-bold text-gh-label tracking-widest uppercase text-center py-2.5 hover:bg-white hover:text-black transition-all flex items-center justify-center gap-1 rounded-sm duration-300"
-                          >
-                            BOOK VILLA <ArrowRight className="w-3.5 h-3.5" />
-                          </Link>
+                          {isVillaBookable(item.id) ? (
+                            <Link
+                              href={`/book?villa=${item.id}`}
+                              className="flex-1 bg-[#EFCD62] text-[#0B2C23] font-manrope font-bold text-gh-label tracking-widest uppercase text-center py-2.5 hover:bg-white hover:text-black transition-all flex items-center justify-center gap-1 rounded-sm duration-300"
+                            >
+                              BOOK VILLA <ArrowRight className="w-3.5 h-3.5" />
+                            </Link>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setEnquireOverlayOpen(true)}
+                              className="flex-1 bg-[#EFCD62] text-[#0B2C23] font-manrope font-bold text-gh-label tracking-widest uppercase text-center py-2.5 hover:bg-white hover:text-black transition-all flex items-center justify-center gap-1 rounded-sm duration-300"
+                            >
+                              ENQUIRE
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

@@ -12,6 +12,7 @@ import type {
   EnquiryResponse,
 } from "@/lib/types";
 import { VILLAS, BLOGS } from "@/lib/mockData";
+import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
 
 // ─── Simulate async latency (remove when using real API) ─────────────────────
 const delay = (ms = 400) => new Promise((res) => setTimeout(res, ms));
@@ -22,8 +23,8 @@ export async function getVillas(filters?: {
   category?: string;
 }): Promise<Villa[]> {
   await delay();
-  const directoryVillas = VILLAS.filter(
-    (v) => !(v as Villa).hideFromVillasDirectory,
+  const directoryVillas = sortVillasForDirectory(
+    VILLAS.filter((v) => !(v as Villa).hideFromVillasDirectory),
   );
   if (!filters?.category || filters.category === "All") {
     return directoryVillas as unknown as Villa[];

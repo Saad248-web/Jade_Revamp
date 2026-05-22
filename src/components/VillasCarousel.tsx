@@ -11,6 +11,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 import { useBooking } from "@/context/BookingContext";
 import { scrollToElement } from "@/lib/lenis";
 import { useBatchedScrollHide } from "@/lib/useBatchedScrollHide";
+import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
 
 // Navbar height to offset the sticky filter bar
 const NAVBAR_HEIGHT = 72;
@@ -104,12 +105,16 @@ export default function VillasCarousel() {
     return false;
   })();
 
-  const filteredVillas = VILLAS.filter((villa) =>
-    !(villa as { hideFromVillasDirectory?: boolean }).hideFromVillasDirectory &&
-      (activeCategory === "All" ||
-        villa.categories?.some(
-          (c: string) => c.toLowerCase() === activeCategory.toLowerCase(),
-        )),
+  const filteredVillas = sortVillasForDirectory(
+    VILLAS.filter(
+      (villa) =>
+        !(villa as { hideFromVillasDirectory?: boolean })
+          .hideFromVillasDirectory &&
+        (activeCategory === "All" ||
+          villa.categories?.some(
+            (c: string) => c.toLowerCase() === activeCategory.toLowerCase(),
+          )),
+    ),
   );
 
   const handleCategoryChange = (category: string) => {

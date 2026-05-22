@@ -22,6 +22,7 @@ const royaltyPerfectForCards = [
 
 const royaltyBase = {
   id: "royalty",
+  bookable: false,
   name: "Royalty",
   type: "EQUESTRIAN HILL VIEW RETREAT",
   location: "Chikkaballapur · Near Nandi Hills",

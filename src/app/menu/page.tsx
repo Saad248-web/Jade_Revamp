@@ -14,6 +14,7 @@ import {
   Phone,
 } from "lucide-react";
 import { VILLAS, CATEGORIES } from "@/lib/mockData";
+import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
 import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import {
@@ -24,10 +25,12 @@ import {
 
 /** Villas hidden from menu villa section only (still bookable via direct URL). */
 const MENU_VILLA_EXCLUDED_IDS = new Set(["vannani", "lemon-tree"]);
-const MENU_VILLAS = VILLAS.filter(
-  (v) =>
-    !MENU_VILLA_EXCLUDED_IDS.has(v.id) &&
-    !(v as { hideFromVillasDirectory?: boolean }).hideFromVillasDirectory,
+const MENU_VILLAS = sortVillasForDirectory(
+  VILLAS.filter(
+    (v) =>
+      !MENU_VILLA_EXCLUDED_IDS.has(v.id) &&
+      !(v as { hideFromVillasDirectory?: boolean }).hideFromVillasDirectory,
+  ),
 );
 
 /** Canonical landing route per villa directory category (matches site experience pages). */

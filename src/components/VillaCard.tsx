@@ -18,6 +18,8 @@ import { VILLAS } from "@/lib/mockData";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useBooking } from "@/context/BookingContext";
 import { useWishlist } from "@/context/WishlistContext";
+import { useAnimation } from "@/context/AnimationContext";
+import { isVillaRecordBookable } from "@/lib/villaBooking";
 import { useVillaListingImages } from "@/lib/useVillaListingImages";
 import {
   liquidCarouselBgVariants,
@@ -37,6 +39,8 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const router = useRouter();
   const { dateRange, guests } = useBooking();
   const { toggleWishlist, isWishlisted } = useWishlist();
+  const { setEnquireOverlayOpen } = useAnimation();
+  const bookable = isVillaRecordBookable(villa);
   const { images } = useVillaListingImages(villa);
 
   const wishlisted = isWishlisted(villa.id);
@@ -57,7 +61,6 @@ export default function VillaCard({ villa }: VillaCardProps) {
       villa.pricing?.stay?.packages?.[0]?.price?.split(" ")[0] ?? null,
   };
 
-  // If user already picked dates + guests (came through booking flow), jump straight to details
   const bookHref = (() => {
     const hasDates = dateRange.checkIn && dateRange.checkOut;
     const hasGuests = guests.adults > 0;
@@ -287,13 +290,23 @@ export default function VillaCard({ villa }: VillaCardProps) {
             >
               VIEW VILLA
             </Link>
-            <PrimaryButton
-              withArrow={false}
-              onClick={() => router.push(bookHref)}
-              className="h-full py-0 whitespace-nowrap text-gh-villa-footer-row"
-            >
-              BOOK VILLA
-            </PrimaryButton>
+            {bookable ? (
+              <PrimaryButton
+                withArrow={false}
+                onClick={() => router.push(bookHref)}
+                className="h-full py-0 whitespace-nowrap text-gh-villa-footer-row"
+              >
+                BOOK VILLA
+              </PrimaryButton>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setEnquireOverlayOpen(true)}
+                className="h-full inline-flex items-center justify-center bg-[#EFCD62] text-[#0B2C23] hover:bg-white hover:text-black transition-colors px-3 md:px-5 font-manrope font-bold text-gh-villa-footer-row tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
+              >
+                ENQUIRE
+              </button>
+            )}
           </div>
         </div>
       </div>

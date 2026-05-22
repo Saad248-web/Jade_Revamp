@@ -22,6 +22,7 @@ const palatioPerfectForCards = [
 
 const palatioBase = {
   id: "palatio",
+  bookable: false,
   name: "Palatio",
   type: "PRIVATE NATURE RETREAT VILLA",
   location: "Harohalli · South Bangalore",

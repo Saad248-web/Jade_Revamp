@@ -28,6 +28,7 @@ import { useBooking, DateRange, Guests } from "@/context/BookingContext";
 import BookingDetailsFormFields from "@/components/booking/BookingDetailsFormFields";
 import { initiatePayment } from "@/lib/paymentService";
 import { openRazorpayCheckout } from "@/lib/payments/razorpayCheckout";
+import { isVillaBookable } from "@/lib/villaBooking";
 
 /* ─────────────────────────────────────────────────────────────────────
    Types
@@ -152,10 +153,12 @@ function StepDates({
   dateRange,
   setDateRange,
   villaId,
+  bookingDisabled = false,
 }: {
   dateRange: DateRange;
   setDateRange: (d: DateRange) => void;
   villaId: string | null;
+  bookingDisabled?: boolean;
 }) {
   // `mounted` defers all Date-based logic to the client only, preventing
   // server/client HTML mismatches (hydration errors).
@@ -205,6 +208,7 @@ function StepDates({
   })();
 
   const handleDayClick = (year: number, month: number, day: number) => {
+    if (bookingDisabled) return;
     const iso = toISO(year, month, day);
     if (
       bookedDates.has(iso) ||
@@ -270,6 +274,21 @@ function StepDates({
 
   return (
     <div className="flex flex-col h-full">
+      {bookingDisabled && (
+        <div className="shrink-0 mx-5 mt-4 mb-1 flex items-start gap-2 rounded-sm border border-white/15 bg-white/5 px-4 py-3 text-[#A6C0B5] text-gh-label font-manrope leading-relaxed">
+          <AlertCircle className="w-4 h-4 shrink-0 text-[#EFCD62] mt-0.5" />
+          <span>
+            Online booking is not available for this villa. Please use{" "}
+            <a
+              href="tel:08970663366"
+              className="text-[#EFCD62] font-bold hover:text-white transition-colors"
+            >
+              Enquire
+            </a>{" "}
+            to plan your stay.
+          </span>
+        </div>
+      )}
       {/* Day headers */}
       <div className="shrink-0 border-b border-white/10 py-3 px-5">
         <div className="grid grid-cols-7 text-center">
@@ -317,7 +336,7 @@ function StepDates({
                   todayRef.m,
                   todayRef.d,
                 );
-                const unavail = booked || past;
+                const unavail = bookingDisabled || booked || past;
                 const sel = isSelected(month, day);
                 const inRange = isInRange(year, month, day);
 
@@ -327,7 +346,13 @@ function StepDates({
                     disabled={unavail}
                     onClick={() => handleDayClick(year, month, day)}
                     title={
-                      booked ? "Already booked" : past ? "Past date" : undefined
+                      bookingDisabled
+                        ? "Online booking unavailable"
+                        : booked
+                          ? "Already booked"
+                          : past
+                            ? "Past date"
+                            : undefined
                     }
                     className={`w-[35px] h-[35px] mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-[3px] relative overflow-hidden ${sel ? "bg-[#EFCD62] text-[#0B2C23] font-bold" : ""} ${inRange ? "bg-[#EFCD62]/20 text-white" : ""} ${!sel && !inRange && !unavail ? "bg-[#165040] text-white hover:bg-[#1e6050]" : ""} ${unavail ? "bg-[#165040]/50 text-white/25 cursor-not-allowed" : ""}`}
                   >
@@ -896,6 +921,9 @@ function BookPageContent() {
   );
   const [detailsForceErrors, setDetailsForceErrors] = useState(false);
 
+  const villaBookingDisabled =
+    selectedVillaId !== null && !isVillaBookable(selectedVillaId);
+
   useEffect(() => {
     if (villaParam) setSelectedVillaId(villaParam);
   }, [villaParam]);
@@ -904,12 +932,22 @@ function BookPageContent() {
     if (step !== "details") setDetailsForceErrors(false);
   }, [step]);
 
+  useEffect(() => {
+    if (!villaBookingDisabled) return;
+    if (step !== "dates") setStep("dates");
+    if (dateRange.checkIn || dateRange.checkOut) {
+      setDateRange({ checkIn: null, checkOut: null });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [villaBookingDisabled, villaParam]);
+
   // After hydration: if villa is pre-selected and context already has dates + guests
   // (user came through the flow: /book → dates → guests → /villas → BOOK VILLA),
   // jump straight to details. Safe to do in useEffect (client-only).
   useEffect(() => {
     if (
       villaParam &&
+      isVillaBookable(villaParam) &&
       !stepParam &&
       dateRange.checkIn &&
       dateRange.checkOut &&
@@ -950,6 +988,7 @@ function BookPageContent() {
   };
 
   const goNextFromGuests = () => {
+    if (villaBookingDisabled) return;
     if (isVillaPreSelected) {
       setStep("details");
     } else {
@@ -971,6 +1010,12 @@ function BookPageContent() {
   /* ── Submit booking to API ── */
   const handlePayNow = useCallback(async () => {
     if (!selectedVilla || !dateRange.checkIn || !dateRange.checkOut) return;
+    if (!isVillaBookable(selectedVilla.id)) {
+      setSubmitError(
+        "Online booking is not available for this villa. Please enquire instead.",
+      );
+      return;
+    }
     if (!isBookingDetailsValid(details)) {
       setDetailsForceErrors(true);
       setSubmitError("Please correct your contact details before paying.");
@@ -1059,21 +1104,39 @@ function BookPageContent() {
   /* ── Bottom action bar ── */
   const renderBottomBar = () => {
     if (step === "dates") {
-      const canNext = !!(dateRange.checkIn && dateRange.checkOut);
+      const canNext =
+        !villaBookingDisabled && !!(dateRange.checkIn && dateRange.checkOut);
       return (
-        <div className="flex items-center justify-between">
-          <div className="text-white/60 text-gh-body font-manrope">
-            <span>{formatDate(dateRange.checkIn)}</span>
-            <span className="mx-2 text-white/30">to</span>
-            <span>{formatDate(dateRange.checkOut)}</span>
+        <div className="flex items-center justify-between gap-3">
+          <div className="text-white/60 text-gh-body font-manrope min-w-0">
+            {villaBookingDisabled ? (
+              <span className="text-white/45 text-gh-label">
+                Booking unavailable for this villa
+              </span>
+            ) : (
+              <>
+                <span>{formatDate(dateRange.checkIn)}</span>
+                <span className="mx-2 text-white/30">to</span>
+                <span>{formatDate(dateRange.checkOut)}</span>
+              </>
+            )}
           </div>
-          <button
-            disabled={!canNext}
-            onClick={() => setStep("guests")}
-            className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${canNext ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
-          >
-            NEXT
-          </button>
+          {villaBookingDisabled ? (
+            <a
+              href="tel:08970663366"
+              className="shrink-0 px-6 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope bg-[#EFCD62] text-[#0B2C23] hover:bg-white"
+            >
+              ENQUIRE
+            </a>
+          ) : (
+            <button
+              disabled={!canNext}
+              onClick={() => setStep("guests")}
+              className={`shrink-0 px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${canNext ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
+            >
+              NEXT
+            </button>
+          )}
         </div>
       );
     }
@@ -1266,6 +1329,7 @@ function BookPageContent() {
                 dateRange={dateRange}
                 setDateRange={setDateRange}
                 villaId={selectedVillaId}
+                bookingDisabled={villaBookingDisabled}
               />
             </motion.div>
           )}

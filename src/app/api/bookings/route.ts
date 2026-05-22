@@ -5,6 +5,7 @@ import { getClientIpFromHeaders, rateLimit } from "@/lib/rateLimit";
 import { readJsonBody, SafeJsonError } from "@/lib/security/safeJson";
 import { verifyAdminPassword } from "@/lib/security/adminAuth";
 import { isRegisteredVillaId } from "@/lib/security/villaId";
+import { isVillaBookable } from "@/lib/villaBooking";
 import { notifyBookingCreated } from "@/lib/email/bookingNotifications";
 
 const MAX_JSON_BYTES = 48 * 1024;
@@ -111,6 +112,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { error: "Invalid or unknown villa" },
         { status: 400, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
+    if (!isVillaBookable(villaId)) {
+      return NextResponse.json(
+        { error: "Online booking is not available for this villa" },
+        { status: 403, headers: { "Cache-Control": "no-store" } },
       );
     }
 

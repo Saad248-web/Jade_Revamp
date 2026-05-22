@@ -109,6 +109,8 @@ export interface Villa {
   id: string;
   /** When true, excluded from `/villas` listing only (deep links unchanged). */
   hideFromVillasDirectory?: boolean;
+  /** When false, hide book flow and show enquire-only (default: bookable). */
+  bookable?: boolean;
   name: string;
   /** One-line trust signal shown under villa name on detail page */
   socialProof?: string;
