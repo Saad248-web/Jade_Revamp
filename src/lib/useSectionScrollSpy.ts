@@ -12,8 +12,8 @@ export type SectionScrollSpyOptions = {
   /** Called with the topmost visible section id. */
   onActiveSection: (sectionId: string) => void;
   /** Scroll container; omit for viewport (window / Lenis). */
-  root?: Element | null;
-  rootRef?: RefObject<Element | null>;
+  root?: HTMLElement | null;
+  rootRef?: RefObject<HTMLElement | null>;
   enabled?: boolean;
   /** Bump when scroll root ref is attached (overlay layout sync). */
   rootVersion?: number;
