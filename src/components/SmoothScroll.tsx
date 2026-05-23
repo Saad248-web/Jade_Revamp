@@ -15,7 +15,10 @@ import {
   type SmoothScrollPreset,
 } from "@/lib/lenisConfig";
 import { attachLenisScrollBridge } from "@/lib/lenisScrollBridge";
-import { routeLenisVirtualScrollOverHorizontalRail } from "@/lib/hscrollLenisRouting";
+import {
+  preventLenisOnHorizontalRail,
+  routeLenisVirtualScrollOverHorizontalRail,
+} from "@/lib/hscrollLenisRouting";
 import { markDisplayRefreshRate } from "@/lib/displayRefreshRate";
 
 export type { LenisScrollPreset, SmoothScrollPreset };
@@ -76,6 +79,7 @@ export default function SmoothScroll({
       syncTouch: runtime.syncTouch,
       syncTouchLerp: runtime.syncTouchLerp,
       allowNestedScroll: true,
+      prevent: preventLenisOnHorizontalRail,
       virtualScroll: routeLenisVirtualScrollOverHorizontalRail,
       easing: runtime.easing,
       autoResize: true,
