@@ -108,7 +108,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const startingPrice = getStartingPrice();
 
   return (
-    <motion.div className="flex w-full flex-col gap-4 md:flex-row md:items-start md:gap-6 pointer-events-auto">
+    <motion.div className="pointer-events-auto flex w-full flex-col gap-4 md:flex-row md:items-start md:gap-6 lg:gap-8">
       {/* IMAGE CONTAINER — wider aspect + max height so listing cards do not dominate the viewport */}
       <div
         className="relative w-full md:w-[45%] md:flex-shrink-0 aspect-[16/9] md:max-h-[min(360px,42dvh)] overflow-hidden rounded-md group bg-white/5"
@@ -203,42 +203,36 @@ export default function VillaCard({ villa }: VillaCardProps) {
         </div>
       </div>
 
-      {/* DETAILS CONTAINER */}
-      <div className="flex min-w-0 flex-1 flex-col text-left md:py-1">
-        <span
-          className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase"
-          style={{ marginBottom: "clamp(4px, 0.64vw, 8px)" }}
-        >
-          {villa.type}
-        </span>
-        <h2
-          className="font-philosopher text-gh-h2 text-white leading-snug"
-          style={{ marginBottom: "clamp(4px, 0.512vw, 8px)" }}
-        >
-          {villa.name}
-        </h2>
-        <a
-          href={getVillaGoogleMapsUrl(villa)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 text-white/60 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
-          style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
-        >
-          <MapPin className="w-4 h-4 shrink-0" />
-          <span className="font-manrope text-gh-body hover:underline underline-offset-4">{villa.location}</span>
-        </a>
+      {/* DETAILS CONTAINER — inset right so copy/CTAs don’t hug the page edge (cardless layout) */}
+      <div className="flex min-w-0 flex-1 flex-col gap-3.5 text-left max-md:pr-1 md:gap-4 md:py-1 md:pl-1 md:pr-8 lg:pr-10 xl:pr-12">
+        <div className="flex flex-col gap-2 md:gap-2.5">
+          <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase">
+            {villa.type}
+          </span>
+          <h2 className="font-philosopher text-gh-h2 text-white leading-snug">
+            {villa.name}
+          </h2>
+          <a
+            href={getVillaGoogleMapsUrl(villa)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-white/60 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+          >
+            <MapPin className="w-4 h-4 shrink-0" />
+            <span className="font-manrope text-gh-body hover:underline underline-offset-4">
+              {villa.location}
+            </span>
+          </a>
 
-        <p
-          className="font-manrope text-white/70 leading-relaxed text-gh-desc line-clamp-3"
-          style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
-        >
-          {villa.description}
-        </p>
+          <p className="font-manrope text-white/70 leading-relaxed text-gh-desc line-clamp-3">
+            {villa.description}
+          </p>
+        </div>
 
         {/* Stats Row */}
         <div
           data-jade-hscroll
-          className="jade-hscroll-track flex flex-nowrap overflow-x-auto items-center gap-x-4 mb-3 text-white/80 font-manrope text-gh-label [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
+          className="jade-hscroll-track flex flex-nowrap overflow-x-auto items-center gap-x-4 scroll-pr-6 md:scroll-pr-8 text-white/80 font-manrope text-gh-label [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
         >
           <div className="flex shrink-0 items-center gap-2">
             <Bed className="w-4 h-4 text-[#EFCD62]" />
@@ -267,7 +261,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
         {/* Perfect For Tags */}
         <div
           data-jade-hscroll
-          className="jade-hscroll-track flex flex-nowrap overflow-x-auto items-center gap-2 mb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
+          className="jade-hscroll-track flex flex-nowrap overflow-x-auto items-center gap-2 scroll-pr-6 md:scroll-pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
         >
           <span className="shrink-0 text-white/40 text-gh-label font-manrope font-bold uppercase tracking-wider mr-1">
             Perfect for:
@@ -283,9 +277,9 @@ export default function VillaCard({ villa }: VillaCardProps) {
         </div>
 
         {/* Action Row */}
-        <div className="flex flex-row items-center justify-between gap-2 md:gap-3">
+        <div className="mt-auto flex flex-col gap-3.5 pt-2 sm:flex-row sm:items-center sm:justify-between sm:gap-5 md:pt-4">
           {/* Price */}
-          <div className="text-white font-manrope font-bold text-gh-villa-footer-row tracking-wide line-clamp-2 md:line-clamp-1">
+          <div className="min-w-0 text-white font-manrope font-bold text-gh-villa-footer-row tracking-wide line-clamp-2 sm:line-clamp-1 sm:flex-1 sm:pr-4">
             {startingPrice || "Upon Request"}{" "}
             <span className="text-white/80 font-normal md:font-bold md:text-white inline-block">
               onwards
@@ -293,7 +287,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
           </div>
 
           {/* Buttons */}
-          <div className="flex items-stretch gap-2 md:gap-2.5 shrink-0 h-[clamp(44px,5vw,52px)]">
+          <div className="flex w-full shrink-0 items-stretch justify-end gap-2 sm:w-auto md:gap-2.5 h-[clamp(44px,5vw,52px)]">
             <Link
               href={`${villaDetailPath(villa.id)}?autoScroll=true`}
               onClick={() => rememberListingReturn()}

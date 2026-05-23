@@ -300,7 +300,7 @@ export default function VillasCarousel() {
                 <div key={villa.id}>
                   <VillaCard villa={villa} />
                   {index < filteredVillas.length - 1 && (
-                    <hr className="border-0 border-t border-white/10 my-10" />
+                    <hr className="my-10 border-0 border-t border-white/10" />
                   )}
                 </div>
               ))}
