@@ -20,15 +20,10 @@ import {
 import {
   fetchInstagramOembed,
   getCachedInstagramOembed,
-  waitForInstagramFallbackImages,
   type InstagramOembedItem,
 } from "@/lib/instagramOembedCache";
-import { subscribeLenisScroll } from "@/lib/lenisScrollBridge";
 
 type OembedItem = InstagramOembedItem;
-
-const SCROLL_VELOCITY_PAUSE = 0.65;
-const SCROLL_IDLE_MS = 140;
 
 const InstagramFramedCard = memo(function InstagramFramedCard({
   post,
@@ -135,9 +130,7 @@ export default function InstagramCarousel() {
   );
   const [showTrack, setShowTrack] = useState(false);
   const [inView, setInView] = useState(false);
-  const [imagesReady, setImagesReady] = useState(false);
   const [marqueeLoop, setMarqueeLoop] = useState(false);
-  const [pageScrolling, setPageScrolling] = useState(false);
 
   const postsForTrack = useMemo(
     () =>
@@ -145,54 +138,23 @@ export default function InstagramCarousel() {
     [marqueeLoop],
   );
 
-  const marqueeAnimating =
-    marqueeLoop && inView && !pageScrolling;
+  const marqueeAnimating = marqueeLoop && inView;
 
   useEffect(() => {
     let cancelled = false;
-    const id = requestAnimationFrame(() => {
-      if (!cancelled) setShowTrack(true);
+    const raf1 = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (!cancelled) setShowTrack(true);
+      });
     });
     return () => {
       cancelled = true;
-      cancelAnimationFrame(id);
+      cancelAnimationFrame(raf1);
     };
   }, []);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        setInView(Boolean(entry?.isIntersecting));
-        if (reduced && entry?.isIntersecting) {
-          setMarqueeLoop(true);
-        }
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
-    );
-    io.observe(section);
-    return () => io.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!showTrack || !inView || imagesReady) return;
-
-    let cancelled = false;
-    void waitForInstagramFallbackImages().then(() => {
-      if (!cancelled) setImagesReady(true);
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [showTrack, inView, imagesReady]);
-
-  useEffect(() => {
-    if (!imagesReady || marqueeLoop) return;
+    if (!showTrack || marqueeLoop) return;
 
     let idleId: number | undefined;
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -209,9 +171,9 @@ export default function InstagramCarousel() {
             opts?: { timeout: number },
           ) => number;
         }
-      ).requestIdleCallback(enableLoop, { timeout: 400 });
+      ).requestIdleCallback(enableLoop, { timeout: 600 });
     } else {
-      timeoutId = setTimeout(enableLoop, 250);
+      timeoutId = setTimeout(enableLoop, 400);
     }
 
     return () => {
@@ -224,7 +186,25 @@ export default function InstagramCarousel() {
       }
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [imagesReady, marqueeLoop]);
+  }, [showTrack, marqueeLoop]);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setInView(Boolean(entry?.isIntersecting));
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -10% 0px" },
+    );
+    io.observe(section);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     if (Object.keys(mediaMap).length > 0) return;
@@ -264,18 +244,6 @@ export default function InstagramCarousel() {
       clearTimeout(t);
     };
   }, [mediaMap]);
-
-  useEffect(() => {
-    let idleTimer: ReturnType<typeof setTimeout> | undefined;
-
-    return subscribeLenisScroll(({ velocity }) => {
-      if (Math.abs(velocity) > SCROLL_VELOCITY_PAUSE) {
-        setPageScrolling(true);
-        if (idleTimer) clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => setPageScrolling(false), SCROLL_IDLE_MS);
-      }
-    });
-  }, []);
 
   return (
     <SectionWrapper

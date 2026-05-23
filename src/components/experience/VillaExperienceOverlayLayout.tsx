@@ -19,7 +19,6 @@ import {
   EXPERIENCE_OVERLAY_MOBILE_SHEET_ZONE_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH,
-  EXPERIENCE_OVERLAY_MOBILE_CLOSE_FRAME_GAP_REM,
 } from "@/lib/experienceOverlayTheme";
 import {
   VILLA_DETAIL_PRICING_BOTTOM_BAR_CHROME_CLASS,
@@ -206,11 +205,12 @@ export function VillaExperienceOverlayCloseFramer({
   );
 
   if (variant === "above-sheet") {
+    const bandCenterTop = `calc(${EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH / 2}vh - 1.5rem)`;
     return (
       <div
-        className="md:hidden fixed left-1/2 -translate-x-1/2 z-[210] w-12 h-12 pointer-events-none"
+        className="md:hidden fixed left-0 right-0 mx-auto z-[210] w-12 h-12 pointer-events-none"
         style={{
-          top: `calc(${EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH}vh - 3.25rem - ${EXPERIENCE_OVERLAY_MOBILE_CLOSE_FRAME_GAP_REM}rem)`,
+          top: `max(0.5rem, ${bandCenterTop})`,
         }}
       >
         {button}
@@ -219,7 +219,7 @@ export function VillaExperienceOverlayCloseFramer({
   }
 
   return (
-    <div className="hidden md:block fixed top-6 right-6 z-[200] w-12 h-12 pointer-events-none">
+    <div className="hidden md:block fixed left-0 right-0 mx-auto top-6 z-[200] w-12 h-12 pointer-events-none">
       {button}
     </div>
   );

@@ -25,22 +25,35 @@ export function findHorizontalScrollRailInPath(
 }
 
 /**
- * When the finger/cursor is on a horizontal rail, Lenis must not capture the gesture.
- * Returning false leaves native scrolling: vertical → page, horizontal → the rail.
- * (If Lenis runs syncTouch + preventDefault here, iOS/Android feel "stuck".)
+ * Lenis virtualScroll routing over horizontal rails.
+ *
+ * - Touch (mobile): return false → native vertical page + native horizontal rail.
+ * - Wheel vertical (desktop): return true → Lenis only (avoids native/Lenis fight = stutter).
+ * - Wheel horizontal: return false → native rail scroll.
  */
 export function routeLenisVirtualScrollOverHorizontalRail(data: {
   deltaX: number;
   deltaY: number;
   event: WheelEvent | TouchEvent;
 }): boolean {
-  if (findHorizontalScrollRailInPath(data.event)) {
+  if (!findHorizontalScrollRailInPath(data.event)) {
+    return true;
+  }
+
+  if (data.event.type.startsWith("touch")) {
     return false;
   }
-  return true;
-}
 
-/** Lenis `prevent` — same rule as virtualScroll for nodes in the rail subtree. */
-export function preventLenisOnHorizontalRail(node: HTMLElement): boolean {
-  return closestHorizontalScrollRail(node) != null;
+  const absY = Math.abs(data.deltaY);
+  const absX = Math.abs(data.deltaX);
+
+  if (absY > absX) {
+    return true;
+  }
+
+  if (absX > 0) {
+    return false;
+  }
+
+  return true;
 }

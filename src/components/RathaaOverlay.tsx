@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
+import { OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS } from "@/lib/overlayDismissButton";
 import { useAnimation } from "@/context/AnimationContext";
 import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
 import { sanitizeGuestCountInput } from "@/lib/guestCountInput";
@@ -120,28 +121,27 @@ export default function RathaaOverlay() {
           />
 
           {/* Centering wrapper */}
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={handleClose}
+            className={OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS}
+          >
+            <X className="w-6 h-6 stroke-[1.5]" />
+          </motion.button>
+
           <div
-            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center px-4 md:px-0"
+            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center px-4 md:px-0 pointer-events-none"
             onWheel={(e) => e.stopPropagation()}
           >
-            {/* Floating close button */}
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              onClick={handleClose}
-              className="w-12 h-12 mb-2.5 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0 z-[102]"
-            >
-              <X className="w-6 h-6 stroke-[1.5]" />
-            </motion.button>
-
             {/* Modal */}
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full md:w-[600px] h-[80vh] md:h-[82vh] md:max-h-[760px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
+              className="relative pointer-events-auto w-full md:w-[600px] h-[80vh] md:h-[82vh] md:max-h-[760px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
             >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
               {/* CONTENT AREA */}

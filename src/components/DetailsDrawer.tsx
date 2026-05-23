@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS } from "@/lib/overlayDismissButton";
 import {
   X,
   Wifi,
@@ -124,28 +125,27 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
           />
 
           {/* Centering wrapper */}
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={onClose}
+            className={OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS}
+          >
+            <X className="w-6 h-6 stroke-[1.5]" />
+          </motion.button>
+
           <div
-            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center px-4 md:px-0"
+            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center px-4 md:px-0 pointer-events-none"
             onWheel={(e) => e.stopPropagation()}
           >
-            {/* Floating close button */}
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              onClick={onClose}
-              className="w-12 h-12 mb-2.5 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0 z-[102]"
-            >
-              <X className="w-6 h-6 stroke-[1.5]" />
-            </motion.button>
-
             {/* Modal */}
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full md:w-[600px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 max-h-[80vh] md:max-h-[85vh] overflow-hidden"
+              className="relative pointer-events-auto w-full md:w-[600px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 max-h-[80vh] md:max-h-[85vh] overflow-hidden"
             >
               {/* Header */}
               <div className="flex items-center px-6 pt-5 pb-2 border-b border-white/5">

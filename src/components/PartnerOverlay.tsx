@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
+import { OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS } from "@/lib/overlayDismissButton";
 import { useAnimation } from "@/context/AnimationContext";
 import Link from "next/link";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
@@ -196,25 +197,25 @@ export default function PartnerOverlay() {
           />
 
           {/* Centering wrapper — stops Lenis seeing wheel events */}
+          <button
+            type="button"
+            onClick={handleClose}
+            className={OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS}
+          >
+            <X className="w-6 h-6 stroke-[1.5]" />
+          </button>
+
           <div
-            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center"
+            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center pointer-events-none"
             onWheel={(e) => e.stopPropagation()}
           >
-            {/* Floating close button — sits above the panel */}
-            <button
-              onClick={handleClose}
-              className="w-12 h-12 mb-2.5 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0"
-            >
-              <X className="w-6 h-6 stroke-[1.5]" />
-            </button>
-
             {/* Modal */}
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className={`relative w-full md:w-[600px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 ${view === "success" ? "h-[80vh] md:h-[650px]" : "max-h-[calc(100dvh-8rem)]"}`}
+              className={`relative pointer-events-auto w-full md:w-[600px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 ${view === "success" ? "h-[80vh] md:h-[650px]" : "max-h-[calc(100dvh-8rem)]"}`}
             >
               {/* Header */}
               {view === "form" && (

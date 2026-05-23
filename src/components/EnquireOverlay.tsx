@@ -6,6 +6,7 @@ import { X, Check, Facebook, Instagram, Youtube, Calendar } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
+import { OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS } from "@/lib/overlayDismissButton";
 import { useAnimation } from "@/context/AnimationContext";
 import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
 import { sanitizeGuestCountInput } from "@/lib/guestCountInput";
@@ -137,22 +138,21 @@ export default function EnquireOverlay() {
           />
 
           {/* Centering wrapper */}
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={handleClose}
+            className={OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS}
+          >
+            <X className="w-6 h-6 stroke-[1.5]" />
+          </motion.button>
+
           <div
-            className="fixed inset-0 z-[101] flex items-center justify-center px-4 md:px-0"
+            className="fixed inset-0 z-[101] flex items-center justify-center px-4 md:px-0 pointer-events-none"
             onWheel={(e) => e.stopPropagation()}
           >
-            <div className="relative w-full md:w-[600px] flex flex-col items-center">
-              {/* Floating close button */}
-              <motion.button
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                onClick={handleClose}
-                className="absolute -top-16 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl z-[102]"
-              >
-                <X className="w-6 h-6 stroke-[1.5]" />
-              </motion.button>
-
+            <div className="relative w-full md:w-[600px] flex flex-col items-center pointer-events-auto">
               {/* Modal */}
               <motion.div
                 initial={{ y: "100%" }}

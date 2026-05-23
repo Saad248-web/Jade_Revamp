@@ -19,6 +19,14 @@ interface PremiumFeaturesSectionProps {
   alternateGold?: boolean;
   /** Edge-to-edge horizontal scroll rail (e.g. Party Villas); default is responsive grid. */
   cardsLayout?: "grid" | "scroll";
+  /** Extra margin below subheading + heading (before cards). Grid layout only. */
+  headerBlockClassName?: string;
+  /** Extra margin below card rail/grid (before footer copy). Grid layout only. */
+  cardsBlockClassName?: string;
+  /** Symmetric vertical padding on scroll rail (top = bottom, avoids margin collapse). */
+  cardRailSpacingClassName?: string;
+  /** Tight layout for subheading + heading (e.g. flex flex-col items-center gap-1.5). */
+  headerGroupClassName?: string;
 }
 
 export default function PremiumFeaturesSection({
@@ -32,10 +40,18 @@ export default function PremiumFeaturesSection({
   cardClassName = "bg-[#121417]",
   alternateGold = false,
   cardsLayout = "grid",
+  headerBlockClassName = "mb-fluid-md",
+  cardsBlockClassName = "mb-fluid-md",
+  cardRailSpacingClassName,
+  headerGroupClassName,
 }: PremiumFeaturesSectionProps) {
+  const scrollRailVerticalSpacing =
+    cardRailSpacingClassName ?? cardsBlockClassName;
   /* Narrow: justify-start avoids centered-rail clipping. xl+: centered row when viewport fits ~4×269 + gaps. */
-  const scrollOuterClasses =
-    "w-full mb-fluid-md flex justify-start xl:justify-center overflow-x-auto overflow-y-clip pb-3 scrollbar-none jade-hscroll-track scroll-pl-4 md:scroll-pl-6 lg:scroll-pl-8 xl:scroll-pl-6";
+  const scrollOuterClasses = [
+    "w-full flex justify-start xl:justify-center overflow-x-auto overflow-y-clip scrollbar-none jade-hscroll-track scroll-pl-4 md:scroll-pl-6 lg:scroll-pl-8 xl:scroll-pl-6",
+    cardRailSpacingClassName ? scrollRailVerticalSpacing : `pb-3 ${scrollRailVerticalSpacing}`,
+  ].join(" ");
   const scrollTrackClasses =
     "inline-flex gap-[clamp(10px,2vw,14px)] snap-x snap-mandatory scroll-smooth pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] md:pl-8 md:pr-8 lg:pl-12 lg:pr-10 xl:pl-8 xl:pr-8";
   /** Narrower than ~82dvw so the next card peeks and total height stays comfortable on phones. */
@@ -45,17 +61,31 @@ export default function PremiumFeaturesSection({
   return (
     <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
       <div className="max-w-7xl mx-auto px-4 w-full flex flex-col items-center">
-        <div className="text-center mb-fluid-md">
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-[11.2px] font-manrope">
+        <div
+          className={`text-center ${
+            headerGroupClassName ?? ""
+          } ${
+            cardsLayout === "scroll" && cardRailSpacingClassName
+              ? ""
+              : headerBlockClassName
+          }`}
+        >
+          <p
+            className={`text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope ${
+              headerGroupClassName ? "mb-0" : "mb-[11.2px]"
+            }`}
+          >
             {subheading}
           </p>
-          <h2 className="text-gh-h2 font-philosopher text-white leading-tight">
+          <h2 className="text-gh-h2 font-philosopher text-white leading-[1.1] m-0">
             {heading}
           </h2>
         </div>
 
         {cardsLayout === "grid" ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[clamp(9.6px,1.6vw,11.2px)] mb-fluid-md w-full px-fluid-sm md:px-fluid-md">
+          <div
+            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[clamp(9.6px,1.6vw,11.2px)] w-full px-fluid-sm md:px-fluid-md ${cardsBlockClassName}`}
+          >
             {cards.map((card, idx) => (
               <PremiumFeatureCard
                 key={idx}
@@ -96,12 +126,22 @@ export default function PremiumFeaturesSection({
       ) : null}
 
       <div className="max-w-7xl mx-auto px-4 w-full flex flex-col items-center">
-        <div className="flex flex-col items-center">
-          <p className="text-white/60 font-philosopher italic text-gh-body text-center max-w-3xl leading-relaxed mb-[19.2px]">
+        <div
+          className={`flex flex-col items-center w-full ${
+            cardRailSpacingClassName ? "max-w-3xl gap-4" : ""
+          }`}
+        >
+          <p
+            className={`text-white/60 font-philosopher italic text-gh-body text-center max-w-3xl leading-relaxed ${
+              cardRailSpacingClassName ? "mb-0" : "mb-[19.2px]"
+            }`}
+          >
             {footerText}
           </p>
 
-          <div className="w-full max-w-3xl mx-auto">
+          <div
+            className={`w-full ${cardRailSpacingClassName ? "" : "max-w-3xl mx-auto"}`}
+          >
             <PrimaryButton
               href={ctaLink}
               onClick={onCtaClick}

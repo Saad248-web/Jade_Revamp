@@ -11,26 +11,30 @@ export type SmoothScrollPreset = LenisScrollPreset | "weddings";
  */
 export const LENIS_LERP = 0.09;
 
-/** Desktop wheel — silk with follow (see `getLenisRuntimeOptions`). */
-export const EXTREME_LENIS_LERP_DESKTOP = 0.05;
-/** Phone/tablet touch — smoother than desktop but not floaty. */
-export const EXTREME_LENIS_LERP_TOUCH = 0.088;
+/**
+ * Buttery-smooth + fast: lerp ~0.09–0.1 (Lenis sweet spot).
+ * Too low (0.03–0.05) = pretty but slow; too high (>0.12) = harsh, not butter.
+ */
+export const EXTREME_LENIS_LERP_DESKTOP = 0.092;
+/** If syncTouch is ever enabled on a tablet + mouse. */
+export const EXTREME_LENIS_LERP_TOUCH = 0.1;
 /** @deprecated Base preset table; runtime picks desktop vs touch lerp. */
 export const EXTREME_LENIS_LERP = EXTREME_LENIS_LERP_DESKTOP;
-export const EXTREME_LENIS_WHEEL_MULTIPLIER = 0.98;
-export const EXTREME_LENIS_TOUCH_MULTIPLIER = 0.86;
-export const EXTREME_LENIS_SYNC_TOUCH_LERP = 0.078;
-export const EXTREME_LENIS_ANCHOR_DURATION = 2.1;
-export const EXTREME_LENIS_SCROLL_TO_DURATION = 1.9;
-export const EXTREME_LENIS_EASING = (t: number) => 1 - Math.pow(1 - t, 6);
+/** Slight boost — more section travel per wheel tick, still smoothed by lerp. */
+export const EXTREME_LENIS_WHEEL_MULTIPLIER = 1.1;
+export const EXTREME_LENIS_TOUCH_MULTIPLIER = 1;
+export const EXTREME_LENIS_SYNC_TOUCH_LERP = 0.1;
+export const EXTREME_LENIS_ANCHOR_DURATION = 1.4;
+export const EXTREME_LENIS_SCROLL_TO_DURATION = 1.25;
+export const EXTREME_LENIS_EASING = (t: number) => 1 - Math.pow(1 - t, 4.5);
 
-/** `/book` — premium but tighter for forms and payment steps. */
-export const BALANCED_LENIS_LERP_DESKTOP = 0.075;
-export const BALANCED_LENIS_LERP_TOUCH = 0.08;
+/** `/book` — same butter, slightly tighter for forms. */
+export const BALANCED_LENIS_LERP_DESKTOP = 0.088;
+export const BALANCED_LENIS_LERP_TOUCH = 0.1;
 export const BALANCED_LENIS_LERP = BALANCED_LENIS_LERP_DESKTOP;
-export const BALANCED_LENIS_WHEEL_MULTIPLIER = 0.92;
-export const BALANCED_LENIS_TOUCH_MULTIPLIER = 0.88;
-export const BALANCED_LENIS_SYNC_TOUCH_LERP = 0.072;
+export const BALANCED_LENIS_WHEEL_MULTIPLIER = 1.04;
+export const BALANCED_LENIS_TOUCH_MULTIPLIER = 1;
+export const BALANCED_LENIS_SYNC_TOUCH_LERP = 0.09;
 export const BALANCED_LENIS_ANCHOR_DURATION = 1.35;
 export const BALANCED_LENIS_SCROLL_TO_DURATION = 1.35;
 export const BALANCED_LENIS_EASING = (t: number) => 1 - Math.pow(1 - t, 5);
@@ -133,7 +137,9 @@ export type LenisRuntimeOptions = LenisPresetConfig & {
 };
 
 /**
- * Best-feel Lenis per viewport: desktop wheel silk, touch devices controlled sync.
+ * Per viewport:
+ * - Phone/tablet: **native vertical touch** (syncTouch off) — OS momentum, one swipe clears height.
+ * - Desktop: Lenis smooth wheel with higher lerp — silk without dragging through sections.
  * Never override touchInertiaExponent — Lenis default (1.7) is correct.
  */
 export function getLenisRuntimeOptions(preset: LenisScrollPreset): LenisRuntimeOptions {
@@ -141,30 +147,24 @@ export function getLenisRuntimeOptions(preset: LenisScrollPreset): LenisRuntimeO
   const profile = getLenisPointerProfile();
 
   if (profile === "coarse") {
-    if (preset === "balanced") {
-      return {
-        ...base,
-        lerp: BALANCED_LENIS_LERP_TOUCH,
-        touchMultiplier: BALANCED_LENIS_TOUCH_MULTIPLIER,
-        syncTouchLerp: BALANCED_LENIS_SYNC_TOUCH_LERP,
-        syncTouch: true,
-      };
-    }
-    if (preset === "extreme") {
-      return {
-        ...base,
-        lerp: EXTREME_LENIS_LERP_TOUCH,
-        touchMultiplier: EXTREME_LENIS_TOUCH_MULTIPLIER,
-        syncTouchLerp: EXTREME_LENIS_SYNC_TOUCH_LERP,
-        syncTouch: true,
-      };
-    }
+    const touchLerp =
+      preset === "balanced"
+        ? BALANCED_LENIS_LERP_TOUCH
+        : preset === "extreme"
+          ? EXTREME_LENIS_LERP_TOUCH
+          : LENIS_LERP;
+    const touchMult =
+      preset === "balanced"
+        ? BALANCED_LENIS_TOUCH_MULTIPLIER
+        : EXTREME_LENIS_TOUCH_MULTIPLIER;
+
     return {
       ...base,
-      lerp: LENIS_LERP,
-      touchMultiplier: 0.9,
-      syncTouchLerp: LENIS_SYNC_TOUCH_LERP,
-      syncTouch: true,
+      lerp: touchLerp,
+      touchMultiplier: touchMult,
+      syncTouchLerp: EXTREME_LENIS_SYNC_TOUCH_LERP,
+      /** Native finger scroll — free + full section travel per swipe (no Lenis drag lag). */
+      syncTouch: false,
     };
   }
 
@@ -172,6 +172,7 @@ export function getLenisRuntimeOptions(preset: LenisScrollPreset): LenisRuntimeO
     return {
       ...base,
       lerp: BALANCED_LENIS_LERP_DESKTOP,
+      wheelMultiplier: BALANCED_LENIS_WHEEL_MULTIPLIER,
       syncTouch: false,
     };
   }

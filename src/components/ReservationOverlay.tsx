@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Phone, Minus, Plus, ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
+import { OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS } from "@/lib/overlayDismissButton";
 import { useEffect, useState } from "react";
 
 interface ReservationOverlayProps {
@@ -81,28 +82,27 @@ export default function ReservationOverlay({
           />
 
           {/* Centering wrapper */}
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={onClose}
+            className={OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS}
+          >
+            <X className="w-6 h-6 stroke-[1.5]" />
+          </motion.button>
+
           <div
-            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center px-4 md:px-0"
+            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center px-4 md:px-0 pointer-events-none"
             onWheel={(e) => e.stopPropagation()}
           >
-            {/* Floating close button */}
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              onClick={onClose}
-              className="w-12 h-12 mb-2.5 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl flex-shrink-0 z-[102]"
-            >
-              <X className="w-6 h-6 stroke-[1.5]" />
-            </motion.button>
-
             {/* Modal */}
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full md:w-[600px] h-[80vh] md:h-auto bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden md:max-h-[85vh]"
+              className="relative pointer-events-auto w-full md:w-[600px] h-[80vh] md:h-auto bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden md:max-h-[85vh]"
             >
               {/* NEW GLOBAL HEADER (Matches Mockup 2 - Two Tone Green) */}
               <div className="flex bg-[#0A3527] items-center justify-between px-5 md:px-6 py-4 border-b border-white/5 shrink-0 relative">

@@ -147,7 +147,7 @@ export default function AboutPage() {
       <TrustedBySection />
 
       {/* 3. OUR STORY SECTION */}
-      <section className="py-fluid-lg md:py-fluid-xl bg-[#0B2C23] relative overflow-hidden">
+      <section className="py-fluid-lg md:py-fluid-xl bg-jade-charcoal relative overflow-hidden">
         {/* Background Pattern Overlay (Optional subtle texture) */}
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]" />
 
@@ -196,11 +196,9 @@ export default function AboutPage() {
       {/* 4. WHY JADE SECTION */}
       <PremiumFeaturesSection
         subheading="WHY JADE"
-        heading={
-          <>
-            Because how you <br className="hidden md:block" /> operate matters
-          </>
-        }
+        heading="Because how you operate matters"
+        headerGroupClassName="flex flex-col items-center gap-1.5"
+        cardRailSpacingClassName="jade-premium-rail-gap-y"
         cardsLayout="scroll"
         cards={[
           {

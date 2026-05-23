@@ -84,6 +84,8 @@
     --jade-hscroll-fade-width-glass: 3.75rem;
     /* jade-charcoal #25282C — fade tints for glass chrome on tab bars */
     --jade-charcoal-rgb: 37, 40, 44;
+    /* Premium feature / themed-villa rails — 40px header↔cards↔footer */
+    --jade-premium-rail-gap: 2.5rem;
   }
 }
 
@@ -92,6 +94,11 @@
   .villa-section-pad-block {
     padding-top: var(--villa-section-pad-block);
     padding-bottom: var(--villa-section-pad-block);
+  }
+
+  .jade-premium-rail-gap-y {
+    padding-top: var(--jade-premium-rail-gap);
+    padding-bottom: var(--jade-premium-rail-gap);
   }
 
   @media (min-width: 1024px) {
