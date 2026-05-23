@@ -8,6 +8,7 @@ import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import SectionWrapper from "./SectionWrapper";
 import { JADE_GREEN } from "@/lib/jadeSectionColors";
 import CarouselHeroScrim from "./CarouselHeroScrim";
+import SectionSeamFeather from "./SectionSeamFeather";
 import {
   carouselHeroCopyRoot,
   carouselHeroHeadlineClass,
@@ -35,9 +36,9 @@ const SLIDES = [
     subtext:
       "Located in serene yet accessible pockets around Bangalore, offering privacy without disconnect.",
     bgImage:
-      "/Home Page/The Value Jade Provides/Private Villas aroundBangalore 1.webp",
+      "/Home Page/The Value Jade Provides/Private Villa Retreats aroundBangalore 1.webp",
     cardImage:
-      "/Home Page/The Value Jade Provides/Private Villas around Bangalore 2.webp",
+      "/Home Page/The Value Jade Provides/Private Villa Retreats around Bangalore 2.webp",
   },
   {
     id: 2,
@@ -46,9 +47,9 @@ const SLIDES = [
     subtext:
       "From luxury pool VILLAS and glass homes to landscaped farm estates — each space chosen for its character and versatility.",
     bgImage:
-      "/Home Page/The Value Jade Provides/Distinctive Themed Villas 1.webp",
+      "/Home Page/The Value Jade Provides/Distinctive Themed Villa Retreats 1.webp",
     cardImage:
-      "/Home Page/The Value Jade Provides/Distinctive Themed Villas 2.webp",
+      "/Home Page/The Value Jade Provides/Distinctive Themed Villa Retreats 2.webp",
   },
   {
     id: 3,
@@ -102,68 +103,72 @@ export default function ValuePropositionSection() {
         slideCount={SLIDES.length}
       />
 
-      {/* ── TOP AREA (75vh mobile / 80vh desktop) — background image ── */}
-      <div
-        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0 bg-jade-green"
-        style={{ perspective: "1500px" }}
-      >
-        <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
-          <motion.div
-            key={`bg-${currentIndex}`}
-            custom={carouselCustom}
-            variants={heroSplitBgVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            className="absolute inset-0 w-full h-full"
-            style={{
-              transformStyle: "preserve-3d",
-              backfaceVisibility: "hidden",
-            }}
-          >
-            <Image
-              src={currentSlide.bgImage}
-              alt="Background"
-              fill
-              className="object-cover"
-              sizes="100vw"
-              priority={currentIndex === 0}
-            />
-          </motion.div>
-        </AnimatePresence>
+      {/* Split-hero stack — mobile uses SectionSeamFeather across image + lower band */}
+      <div className="relative w-full shrink-0">
+        <div
+          className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden bg-jade-green"
+          style={{ perspective: "1500px" }}
+        >
+          <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
+            <motion.div
+              key={`bg-${currentIndex}`}
+              custom={carouselCustom}
+              variants={heroSplitBgVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="absolute inset-0 w-full h-full"
+              style={{
+                transformStyle: "preserve-3d",
+                backfaceVisibility: "hidden",
+              }}
+            >
+              <Image
+                src={currentSlide.bgImage}
+                alt="Background"
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority={currentIndex === 0}
+              />
+            </motion.div>
+          </AnimatePresence>
 
-        <CarouselHeroScrim variant="value" />
+          <CarouselHeroScrim variant="value" />
 
-        {/* ── TEXT — sits inside the image zone ── */}
-        <div className={carouselHeroCopyRoot}>
-          <motion.p
-            key={`label-${currentIndex}`}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={carouselHeroLabelClass}
-            style={{ marginBottom: "clamp(4px, 0.64vw, 8px)" }}
-          >
-            {currentSlide.label}
-          </motion.p>
-          <div style={{ marginBottom: "clamp(4px, 0.96vw, 8px)" }}>
-            <h2 className={carouselHeroHeadlineClass}>
-              {currentSlide.heading.join(" ")}
-            </h2>
+          {/* ── TEXT — sits inside the image zone ── */}
+          <div className={carouselHeroCopyRoot}>
+            <motion.p
+              key={`label-${currentIndex}`}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={carouselHeroLabelClass}
+              style={{ marginBottom: "clamp(4px, 0.64vw, 8px)" }}
+            >
+              {currentSlide.label}
+            </motion.p>
+            <div style={{ marginBottom: "clamp(4px, 0.96vw, 8px)" }}>
+              <h2 className={carouselHeroHeadlineClass}>
+                {currentSlide.heading.join(" ")}
+              </h2>
+            </div>
+            <motion.p
+              key={`sub-${currentIndex}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.08, duration: CAROUSEL_CROSSFADE.duration }}
+              className={carouselHeroSubtextClass}
+            >
+              {currentSlide.subtext}
+            </motion.p>
           </div>
-          <motion.p
-            key={`sub-${currentIndex}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.08, duration: CAROUSEL_CROSSFADE.duration }}
-            className={carouselHeroSubtextClass}
-          >
-            {currentSlide.subtext}
-          </motion.p>
         </div>
-      </div>
 
-      {/* ── BOTTOM AREA ── */}
-      <div className="relative w-full h-[12vh] md:h-[20vh] z-10 bg-jade-green" />
+        {/* ── BOTTOM AREA ── */}
+        <div className="relative w-full h-[12vh] md:h-[20vh] z-0 bg-jade-green" />
+
+        <SectionSeamFeather />
+      </div>
 
       {/* ── SPACER — exactly 40px gap ── */}
       <div className="hidden md:block h-[40px] bg-jade-green shrink-0" />

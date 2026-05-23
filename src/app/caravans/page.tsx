@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import CorporateHeader from "@/components/CorporateHeader";
+import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import Footer from "@/components/Footer";
 import ExperienceHero from "@/components/ExperienceHero";
@@ -110,7 +110,7 @@ export default function CaravansPage() {
 
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
-      <CorporateHeader />
+      <Navbar />
       <MobileBottomNav />
 
       {/* SECTION 1: HERO SECTION */}

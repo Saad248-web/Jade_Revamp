@@ -1,6 +1,7 @@
 "use client";
 
 import ScrollSectionComposer, { ScrollSlide } from "./ScrollSectionComposer";
+import LiveBackground from "./LiveBackground";
 
 const slides: ScrollSlide[] = [
   {
@@ -18,6 +19,8 @@ export default function UnifiedScrollSection() {
       slides={slides}
       height="260vh"
       fadeTiming="early"
+      scrollEffects="performance"
+      background={<LiveBackground variant="static" />}
       showScrollIndicator={true}
       scrollIndicatorText="SCROLL TO EXPERIENCES"
     />

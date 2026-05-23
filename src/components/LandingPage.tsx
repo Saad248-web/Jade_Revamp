@@ -230,7 +230,10 @@ export default function LandingPage() {
       >
         <InstagramCarousel />
       </LazyWhenNear>
-      <LazyWhenNear minHeight="100vh">
+      <LazyWhenNear
+        minHeight="calc(75vh + 12vh)"
+        className="bg-jade-green"
+      >
         <ValuePropositionSection />
       </LazyWhenNear>
       <FeaturedVillas />

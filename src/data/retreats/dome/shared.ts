@@ -354,7 +354,12 @@ export function buildSingleDomeVilla(color: DomeColorKey) {
     ],
     video: {
       youtubeUrl: DOME_VIDEO_URLS[color],
-      thumbnail: "",
+      thumbnail:
+        color === "blue"
+          ? "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp"
+          : color === "red"
+            ? "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 1.webp"
+            : "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/Hero_evening_View.webp",
       duration: "1:21",
     },
     faq: [

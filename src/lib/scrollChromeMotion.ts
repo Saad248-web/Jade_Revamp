@@ -8,16 +8,43 @@ export const SCROLL_CHROME_FRAMER_TRANSITION = {
   ease: "easeInOut" as const,
 };
 
-/** Global navbar — fast slide reflex, no fade lag. */
-export const NAVBAR_SCROLL_CHROME_TRANSITION = {
-  duration: 0.18,
-  ease: [0.4, 0, 0.2, 1] as const,
+/**
+ * Global Navbar + page action chrome (View Villa, Spaces, etc.).
+ * Single source — same duration and ease-in-out curve everywhere.
+ */
+export const SCROLL_CHROME_HIDE_TRANSITION = {
+  duration: 0.4,
+  ease: [0.22, 1, 0.36, 1] as const,
 };
 
-export function navbarScrollChromeAnimate(isHidden: boolean) {
+/** @deprecated Use SCROLL_CHROME_HIDE_TRANSITION */
+export const NAVBAR_SCROLL_CHROME_TRANSITION = SCROLL_CHROME_HIDE_TRANSITION;
+
+export function scrollChromeHideAnimate(isHidden: boolean) {
   return {
     y: isHidden ? "-100%" : "0%",
   };
+}
+
+export function scrollChromeHideMotionProps(
+  isHidden: boolean,
+  reduceMotion: boolean | null | undefined,
+) {
+  return {
+    initial: false as const,
+    animate: scrollChromeHideAnimate(isHidden),
+    transition: reduceMotion
+      ? { duration: 0 }
+      : SCROLL_CHROME_HIDE_TRANSITION,
+    "aria-hidden": isHidden,
+    style: {
+      pointerEvents: (isHidden ? "none" : "auto") as "none" | "auto",
+    },
+  };
+}
+
+export function navbarScrollChromeAnimate(isHidden: boolean) {
+  return scrollChromeHideAnimate(isHidden);
 }
 
 export const SCROLL_CHROME_FRAMER_INITIAL = {

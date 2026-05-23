@@ -14,6 +14,7 @@ import {
   Phone,
 } from "lucide-react";
 import { VILLAS, CATEGORIES } from "@/lib/mockData";
+import { categoryToListingPath } from "@/lib/appRoutes";
 import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
 import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
@@ -33,21 +34,6 @@ const MENU_VILLAS = sortVillasForDirectory(
   ),
 );
 
-/** Canonical landing route per villa directory category (matches site experience pages). */
-function villaCategoryHref(category: string): string {
-  const dedicated: Record<string, string> = {
-    All: "/villas",
-    Weddings: "/weddings",
-    "Pre-wedding": "/weddings",
-    "Corporate Retreats": "/corporate-retreats",
-    "Weekend Getaways": "/weekend-getaways",
-    "Party Venues": "/party-villas",
-    "Wellness Retreats": "/villas?category=Wellness Retreats",
-  };
-  if (dedicated[category]) return dedicated[category];
-  return `/villas?category=${encodeURIComponent(category)}`;
-}
-
 const MENU_VILLA_CATEGORY_TABS: MenuTabItem[] = CATEGORIES.filter(
   (cat) =>
     cat === "All" ||
@@ -57,7 +43,7 @@ const MENU_VILLA_CATEGORY_TABS: MenuTabItem[] = CATEGORIES.filter(
 ).map((cat) => ({
   id: cat,
   label: cat,
-  href: villaCategoryHref(cat),
+  href: categoryToListingPath(cat),
 }));
 
 type MenuExperienceItem = {
@@ -465,7 +451,12 @@ export default function MenuPage() {
                         </h3>
                         <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
                       </div>
-                      <div className={`${MENU_BLEED_RIGHT_MOBILE} overflow-x-auto hide-scrollbar`}>
+                      <div
+                        data-lenis-prevent
+                        data-jade-hscroll
+                        className={`${MENU_BLEED_RIGHT_MOBILE} jade-hscroll-track min-w-0 overflow-x-auto hide-scrollbar`}
+                        onTouchStart={(e) => e.stopPropagation()}
+                      >
                         <div className="flex gap-2 w-max">
                           {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
                             <div
@@ -672,7 +663,12 @@ export default function MenuPage() {
                         </Link>
                       </div>
 
-                      <div className={`${MENU_BLEED_RIGHT_DESKTOP} overflow-x-auto hide-scrollbar`}>
+                      <div
+                        data-lenis-prevent
+                        data-jade-hscroll
+                        className={`${MENU_BLEED_RIGHT_DESKTOP} jade-hscroll-track min-w-0 overflow-x-auto hide-scrollbar`}
+                        onTouchStart={(e) => e.stopPropagation()}
+                      >
                         <div className="flex gap-3 w-max">
                           {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
                             <Link

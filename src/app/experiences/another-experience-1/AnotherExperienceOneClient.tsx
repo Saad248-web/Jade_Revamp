@@ -293,6 +293,7 @@ function ScrollDrivenCarousel({
           ref={scrollerRef}
           id="experience-sda-scroller"
           data-page-scroll-root
+          data-lenis-prevent
           className="experience-sda-scrollbar-hidden absolute inset-0 -z-10 overflow-x-hidden overflow-y-auto overscroll-y-contain scroll-smooth pointer-events-auto snap-y snap-mandatory [touch-action:pan-y]"
         >
           {/* One full-viewport block per scene — explicit height avoids Firefox collapsing flex/% min-height tracks */}
@@ -311,6 +312,7 @@ function ScrollDrivenCarousel({
         <div
           ref={scrollerRef}
           id="experience-sda-scroller"
+          data-lenis-prevent
           className="experience-sda-scrollbar-hidden absolute inset-0 -z-10 flex snap-x snap-mandatory overflow-x-auto overflow-y-hidden scroll-smooth pointer-events-auto [touch-action:pan-x]"
         >
           <div className="grid h-full min-h-0 w-fit grid-flow-col auto-cols-[70cqw] pr-[30cqw]">

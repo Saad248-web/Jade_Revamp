@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Calendar, Download } from "lucide-react";
-import CorporateHeader from "@/components/CorporateHeader";
+import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import PrimaryButton from "@/components/PrimaryButton";
@@ -81,7 +81,7 @@ export default function WeekendGetawaysPage() {
 
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
-      <CorporateHeader />
+      <Navbar />
       <MobileBottomNav />
 
       {/* SECTION 1: HERO SECTION */}
@@ -142,28 +142,6 @@ export default function WeekendGetawaysPage() {
 
       {/* SECTION 6: Themed Villas */}
       <WeekendThemedVillasSection />
-
-      {/* SECTION 4: CTA */}
-      <section className="py-fluid-lg md:py-fluid-xl bg-[#141517] border-t border-white/5">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.3em] uppercase mb-5">
-            PLAN YOUR WEEKEND
-          </p>
-          <h2 className="text-gh-h1 font-philosopher text-white mb-5">
-            Want a curated weekend escape?
-          </h2>
-          <p className="text-white/60 font-manrope text-gh-body leading-relaxed mb-8">
-            Reach out and we&apos;ll suggest the best Villas for your group
-            size, occasion, and preferred vibe.
-          </p>
-          <PrimaryButton
-            onClick={() => setEnquireOverlayOpen(true)}
-            className="w-full max-w-md mx-auto"
-          >
-            ENQUIRE
-          </PrimaryButton>
-        </div>
-      </section>
 
       <Footer />
     </main>

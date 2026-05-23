@@ -3,32 +3,33 @@ name: Mobile scroll and experience UX
 overview: Fix mobile horizontal scrolling via globals.css scroll contract + Lenis/touch routing, add right-edge fade on category/tab rails, align villa detail carousel chrome with VillaCard hero pattern, unify experience page headers with global Navbar, and apply Weekend page fixes.
 todos:
   - id: globals-hscroll-contract
-    content: "globals.css audit — unify amenity-highlight-track + jade-hscroll-track, touch-action pan-x, horizontal data-lenis-prevent rules, jade-scroll-chrome vs contain, body overflow-x + 100vw bleed"
-    status: pending
+    content: globals.css audit — unify amenity-highlight-track + jade-hscroll-track, touch-action pan-x, horizontal data-lenis-prevent rules, jade-scroll-chrome vs contain, body overflow-x + 100vw bleed
+    status: completed
   - id: lenis-hscroll-foundation
-    content: "SmoothScroll allowNestedScroll or Lenis bump; shared HorizontalScrollRail component with right fade; wire components to globals contract"
-    status: pending
+    content: SmoothScroll allowNestedScroll or Lenis bump; shared HorizontalScrollRail component with right fade; wire components to globals contract
+    status: completed
   - id: amenity-highlights-scroll
-    content: "VillaDetailAmenityHighlights + overlay amenity rails — data-lenis-prevent, jade-hscroll-track, touch-action on scroll root"
-    status: pending
+    content: VillaDetailAmenityHighlights + overlay amenity rails — data-lenis-prevent, jade-hscroll-track, touch-action on scroll root
+    status: completed
   - id: category-bars-fade-scroll
-    content: "Fade + scroll fix on VillaDetailStickyTabs, VillaExperienceStickyTabs, spaces page category nav"
-    status: pending
+    content: Fade + scroll fix on VillaDetailStickyTabs, VillaExperienceStickyTabs, spaces page category nav
+    status: completed
   - id: spaces-gallery-scroll
-    content: "Spaces page image rows — Lenis prevent + touch-action; verify min-width overflow"
-    status: pending
+    content: Spaces page image rows — Lenis prevent + touch-action; verify min-width overflow
+    status: completed
   - id: carousel-chrome-unify
-    content: "Extract VillaCard-style in-frame prev/next bar; apply to Spaces + Experiences on villa detail (remove header-outside arrows)"
-    status: pending
+    content: Extract VillaCard-style in-frame prev/next bar; apply to Spaces + Experiences on villa detail (remove header-outside arrows)
+    status: completed
   - id: experience-navbar
-    content: "Replace CorporateHeader with Navbar on corporate/weekend/party/caravans pages; match weddings layout padding"
-    status: pending
+    content: Replace CorporateHeader with Navbar on corporate/weekend/party/caravans pages; match weddings layout padding
+    status: completed
   - id: weekend-page-fixes
-    content: "WeekendThemedVillasSection scroll fix; remove PLAN YOUR WEEKEND CTA section"
-    status: pending
+    content: WeekendThemedVillasSection scroll fix; remove PLAN YOUR WEEKEND CTA section
+    status: completed
   - id: mobile-qa-matrix
-    content: "Test iOS Safari + Android on all listed rails and carousels"
-    status: pending
+    content: Test iOS Safari + Android on all listed rails and carousels
+    status: completed
+isProject: false
 ---
 
 # Mobile scroll, category fades, carousel chrome, and experience pages

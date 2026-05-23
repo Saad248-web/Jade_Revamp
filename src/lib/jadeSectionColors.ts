@@ -20,7 +20,10 @@ export function carouselUpperCharcoalScrim(): string {
   ].join(" ");
 }
 
-/** Home §5 — soft charcoal/green tints; photo visible in the middle. */
+/**
+ * Hero scrim gradient — charcoal wash at top, jade-green bloom at bottom.
+ * Used by `CarouselHeroScrim` (variant `value`) and mobile `SectionSeamFeather`.
+ */
 export function carouselHeroFadeScrim(): string {
   return [
     "linear-gradient(180deg,",
@@ -33,5 +36,16 @@ export function carouselHeroFadeScrim(): string {
     "transparent 66%,",
     "rgba(11, 44, 35, 0.28) 88%,",
     "rgba(11, 44, 35, 0.55) 100%)",
+  ].join(" ");
+}
+
+/** Mobile split-hero lower band — jade-green bloom only (matches scrim tail, no charcoal). */
+export function sectionSeamFeatherGreen(): string {
+  return [
+    "linear-gradient(180deg,",
+    "rgba(11, 44, 35, 0.32) 0%,",
+    "rgba(11, 44, 35, 0.55) 50%,",
+    "rgba(11, 44, 35, 0.85) 85%,",
+    "rgba(11, 44, 35, 1) 100%)",
   ].join(" ");
 }

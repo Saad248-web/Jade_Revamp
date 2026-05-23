@@ -27,6 +27,8 @@ import type { UserDetails } from "@/lib/types";
 import { useBooking, DateRange, Guests } from "@/context/BookingContext";
 import BookingDetailsFormFields from "@/components/booking/BookingDetailsFormFields";
 import { initiatePayment } from "@/lib/paymentService";
+import { villaListingPath } from "@/lib/appRoutes";
+import { useSafeBack } from "@/lib/safeBackNavigation";
 import { openRazorpayCheckout } from "@/lib/payments/razorpayCheckout";
 import { isVillaBookable } from "@/lib/villaBooking";
 
@@ -975,7 +977,7 @@ function BookPageContent() {
     0,
   );
 
-  const handleClose = () => router.back();
+  const handleClose = useSafeBack(villaListingPath());
 
   const handleReset = () => {
     setStep("dates");

@@ -4,10 +4,30 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useAnimation } from "@/context/AnimationContext";
+import {
+  lockSplashScroll,
+  scheduleSplashScrollLock,
+  unlockSplashScroll,
+} from "@/lib/splashScrollLock";
 
 export default function SplashScreen() {
   const { isSplashComplete, setSplashComplete } = useAnimation();
   const [stage, setStage] = useState(0);
+
+  // Lock page scroll until curtain animation completes (stage 4 → setSplashComplete).
+  useEffect(() => {
+    if (isSplashComplete) {
+      unlockSplashScroll();
+      return;
+    }
+
+    const cancelRetries = scheduleSplashScrollLock();
+
+    return () => {
+      cancelRetries();
+      unlockSplashScroll();
+    };
+  }, [isSplashComplete]);
 
   // --- Sequence Logic ---
   useEffect(() => {
@@ -33,8 +53,9 @@ export default function SplashScreen() {
   }, []);
 
   // --- Completion Handler ---
-  const handleAnimationComplete = (definition: any) => {
+  const handleAnimationComplete = () => {
     if (stage === 4) {
+      unlockSplashScroll();
       setSplashComplete(true);
     }
   };

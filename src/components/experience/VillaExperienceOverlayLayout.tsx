@@ -8,8 +8,6 @@ import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import PrimaryButton from "@/components/PrimaryButton";
 import {
   EXPERIENCE_OVERLAY_BOOKING_BAR_SPACER_CLASS,
-  EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS,
-  EXPERIENCE_OVERLAY_BOTTOM_BAR_SHEET_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS,
   EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS,
   EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS,
@@ -21,21 +19,30 @@ import {
   EXPERIENCE_OVERLAY_MOBILE_SHEET_ZONE_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH,
-  EXPERIENCE_OVERLAY_STICKY_TABS_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_CLOSE_FRAME_GAP_REM,
 } from "@/lib/experienceOverlayTheme";
+import {
+  VILLA_DETAIL_PRICING_BOTTOM_BAR_CHROME_CLASS,
+  VILLA_DETAIL_STICKY_TABS_CHROME_CLASS,
+} from "@/lib/scrollChromeGlass";
 import {
   liquidCarouselBgVariants,
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import { stickyCategoryTabClass } from "@/lib/stickyTabGlass";
-import { OVERLAY_GLASS_TOP_8PX_SHADE_CLASS } from "@/lib/scrollChromeGlass";
+import CategoryTabRail from "@/components/ui/CategoryTabRail";
+import MeanderStrip from "@/components/ui/MeanderStrip";
+import clsx from "clsx";
 import {
   SCROLL_CHROME_FRAMER_INITIAL,
   SCROLL_CHROME_FRAMER_TRANSITION,
   scrollChromeAnimate,
 } from "@/lib/scrollChromeMotion";
 import { useScrollTabIntoView } from "@/lib/useScrollTabIntoView";
+import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
+
+const vd = VILLA_DETAIL_SPACING;
 
 export type VillaExperienceCarouselImage = { name?: string; image: string };
 
@@ -108,7 +115,12 @@ export function VillaExperienceOverlayBody({
   const scrollContent = (
     <>
       <div className="relative z-[1]">{pinnedTop}</div>
-      <div className={EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS}>{children}</div>
+      <div
+        className={EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS}
+        data-experience-overlay-content
+      >
+        {children}
+      </div>
       {mobileFooter ? (
         <div className={EXPERIENCE_OVERLAY_BOOKING_BAR_SPACER_CLASS} aria-hidden />
       ) : null}
@@ -197,7 +209,9 @@ export function VillaExperienceOverlayCloseFramer({
     return (
       <div
         className="md:hidden fixed left-1/2 -translate-x-1/2 z-[210] w-12 h-12 pointer-events-none"
-        style={{ top: `calc(${EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH}vh - 3.25rem)` }}
+        style={{
+          top: `calc(${EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH}vh - 3.25rem - ${EXPERIENCE_OVERLAY_MOBILE_CLOSE_FRAME_GAP_REM}rem)`,
+        }}
       >
         {button}
       </div>
@@ -338,13 +352,30 @@ export function VillaExperienceStickyTabs({
   const trackRef = useScrollTabIntoView(activeTab);
 
   return (
-    <div className={EXPERIENCE_OVERLAY_STICKY_TABS_CLASS}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto w-full">
-          <div
+    <>
+      {/* Static meander scrolls away; tabs sticky at sheet top (no site header offset). */}
+      <MeanderStrip layout="fullBleed" track="charcoal" className="relative z-40" />
+      {/* Full-width chrome (like booking bottom bar); tabs align to page gutters inside. */}
+      <div
+        className={clsx(
+          "jade-hscroll-chrome sticky top-0 z-40 mb-0 w-full min-w-0",
+          VILLA_DETAIL_STICKY_TABS_CHROME_CLASS,
+          "border-b-0",
+        )}
+      >
+        <div
+          data-experience-overlay-tabs
+          className={clsx(
+            vd.overlayCategoryRailViewport,
+            "md:mx-auto md:max-w-7xl md:px-4 lg:px-8",
+          )}
+        >
+          <CategoryTabRail
             ref={trackRef}
-            data-lenis-prevent
-            className="jade-hscroll-track flex gap-2 sm:gap-3 overflow-x-auto py-4 scrollbar-none overscroll-x-contain"
+            fadeFrom="#1A1C1E"
+            patternFade
+            trackPreset="amenityParity"
+            trackAriaLabel="Experience sections"
           >
             {tabs.map((tab) => (
               <button
@@ -352,16 +383,19 @@ export function VillaExperienceStickyTabs({
                 type="button"
                 data-tab-key={tab}
                 onClick={() => onTabClick(tab)}
-                className={stickyCategoryTabClass(activeTab === tab)}
+                className={clsx(
+                  stickyCategoryTabClass(activeTab === tab),
+                  "flex-shrink-0 snap-start",
+                )}
                 aria-current={activeTab === tab ? "true" : undefined}
               >
                 {tab}
               </button>
             ))}
-          </div>
+          </CategoryTabRail>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -377,14 +411,24 @@ export function VillaExperienceBookingBottomBar({
   placement?: "viewport" | "sheet";
 }) {
   const priceMain = onwardPrice?.trim() || "Enquire";
-  const barClass =
-    placement === "sheet"
-      ? EXPERIENCE_OVERLAY_BOTTOM_BAR_SHEET_CLASS
-      : EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS;
   return (
-    <div className={barClass}>
-      <div className={OVERLAY_GLASS_TOP_8PX_SHADE_CLASS} aria-hidden />
-      <div className="relative z-[3] max-w-7xl mx-auto w-full flex justify-between items-center gap-3 px-4 md:px-12">
+    <div
+      className={clsx(
+        "jade-scroll-chrome flex w-full justify-center transition-all",
+        placement === "sheet"
+          ? "relative"
+          : "fixed bottom-0 left-0 z-[150] hidden md:flex",
+        VILLA_DETAIL_PRICING_BOTTOM_BAR_CHROME_CLASS,
+        "pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:pb-4",
+      )}
+    >
+      <div
+        className={clsx(
+          vd.page,
+          vd.gutterX,
+          "relative z-[3] flex w-full justify-between items-center gap-4 md:gap-6",
+        )}
+      >
         <div className="flex flex-col font-manrope leading-tight">
           <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">
             Starting from
@@ -393,7 +437,7 @@ export function VillaExperienceBookingBottomBar({
             {priceMain}
           </span>
         </div>
-        <div className="flex items-center gap-3 md:gap-5">
+        <div className="flex items-center gap-4 md:gap-6">
           <button
             type="button"
             onClick={onEnquireClick}

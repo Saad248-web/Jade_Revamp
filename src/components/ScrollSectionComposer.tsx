@@ -6,6 +6,7 @@ import { ArrowLeft, MessageCircle } from "lucide-react";
 import LiveBackground from "./LiveBackground";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import PrimaryButton from "./PrimaryButton";
+import { useSafeBack } from "@/lib/safeBackNavigation";
 
 export interface ScrollSlide {
   label?: string;
@@ -23,7 +24,14 @@ interface ScrollSectionComposerProps {
   height?: string; // e.g. "400vh"
   /** "early" — copy in by ~50% scroll, then holds locked before exit (philosophy) */
   fadeTiming?: "default" | "early";
+  /**
+   * `performance` — opacity/transform/scale only (no scroll-linked blur).
+   * Blur filters force main-thread repaints and break 60fps with Lenis.
+   */
+  scrollEffects?: "full" | "performance";
   showNavigation?: boolean;
+  /** Safe back target when showNavigation is enabled */
+  backFallbackPath?: string;
   showScrollIndicator?: boolean;
   scrollIndicatorText?: string;
 }
@@ -64,6 +72,7 @@ const SlideLines = ({
   end,
   index,
   fadeTiming,
+  scrollEffects,
 }: {
   slide: ScrollSlide;
   progress: MotionValue<number>;
@@ -72,6 +81,7 @@ const SlideLines = ({
   index: number;
   totalSlides: number;
   fadeTiming: "default" | "early";
+  scrollEffects: "full" | "performance";
 }) => {
   const span = end - start;
   const early = fadeTiming === "early";
@@ -94,11 +104,13 @@ const SlideLines = ({
     [start, start + span * (early ? 0.12 : 0.2), fadeOut, end],
     [0.985, 1, 1, 0.995],
   );
+  const useBlur = scrollEffects === "full";
   const blurPx = useTransform(
     progress,
     [start, start + span * (early ? 0.12 : 0.2), fadeOut, end],
-    [6, 0, 0, 4],
+    useBlur ? [6, 0, 0, 4] : [0, 0, 0, 0],
   );
+  const blurFilter = useTransform(blurPx, (v) => `blur(${v}px)`);
 
   // Per-line fade-in: early = quick reveal, then idle until slide fade-out.
   const labelOffset = early ? (slide.label ? 0.06 : 0.03) : slide.label ? 0.15 : 0.05;
@@ -137,8 +149,8 @@ const SlideLines = ({
         style={{
           opacity,
           scale,
-          filter: useTransform(blurPx, (v) => `blur(${v}px)`),
-          willChange: "transform, filter, opacity",
+          filter: useBlur ? blurFilter : undefined,
+          willChange: useBlur ? "transform, filter, opacity" : "transform, opacity",
         }}
       >
         {slide.label && (
@@ -188,11 +200,14 @@ export default function ScrollSectionComposer({
   background = <LiveBackground />,
   height = "400vh",
   fadeTiming = "default",
+  scrollEffects = "full",
   showNavigation = false,
+  backFallbackPath = "/experiences",
   showScrollIndicator = true,
   scrollIndicatorText,
 }: ScrollSectionComposerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const goBack = useSafeBack(backFallbackPath);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -214,8 +229,10 @@ export default function ScrollSectionComposer({
         {showNavigation && (
           <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-6 md:p-12">
             <button
-              onClick={() => window.history.back()}
+              type="button"
+              onClick={goBack}
               className="w-10 h-10 flex items-center justify-center text-white/60 hover:text-white transition-colors"
+              aria-label="Go back"
             >
               <ArrowLeft className="w-6 h-6" />
             </button>
@@ -240,6 +257,7 @@ export default function ScrollSectionComposer({
                 index={i}
                 totalSlides={total}
                 fadeTiming={fadeTiming}
+                scrollEffects={scrollEffects}
               />
             );
           })}

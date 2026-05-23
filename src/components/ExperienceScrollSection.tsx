@@ -1,6 +1,7 @@
 "use client";
 
 import ScrollSectionComposer from "./ScrollSectionComposer";
+import LiveBackground from "./LiveBackground";
 import {
   EXPERIENCE_SCROLL_SECTIONS,
   type ExperienceScrollVariant,
@@ -17,10 +18,16 @@ export default function ExperienceScrollSection({
 }: ExperienceScrollSectionProps) {
   const { label, body, height } = EXPERIENCE_SCROLL_SECTIONS[variant];
 
+  const isWedding = variant === "wedding";
+
   return (
     <ScrollSectionComposer
       slides={[{ label, lines: [body] }]}
       height={heightOverride ?? height ?? "250vh"}
+      scrollEffects={isWedding ? "performance" : "full"}
+      background={
+        isWedding ? <LiveBackground variant="static" /> : <LiveBackground />
+      }
     />
   );
 }

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 const tabBase =
-  "shrink-0 px-4 py-2 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold font-manrope whitespace-nowrap rounded-none border transition-all";
+  "shrink-0 inline-flex items-center min-h-[44px] px-4 py-2 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] font-bold font-manrope whitespace-nowrap rounded-none border transition-all touch-manipulation";
 
 /** Active: match PrimaryButton (BOOK VILLA) — solid gold, dark text, inset-style stroke color. */
 const tabActive =

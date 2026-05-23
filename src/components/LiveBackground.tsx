@@ -2,7 +2,35 @@
 
 import { motion } from "framer-motion";
 
-export default function LiveBackground() {
+/** Static gradients only — compositor-friendly for Lenis + scroll-linked motion (60fps). */
+function LiveBackgroundStatic() {
+  return (
+    <div className="absolute inset-0 bg-transparent overflow-hidden pointer-events-none">
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_25%,rgba(239,205,98,0.2)_0%,transparent_45%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_30%,rgba(100,180,220,0.15)_0%,transparent_45%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_70%,rgba(180,120,200,0.12)_0%,transparent_45%)]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[rgba(239,205,98,0.15)] via-transparent to-[rgba(100,180,220,0.1)]" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-[rgba(255,255,255,0.02)] to-transparent" />
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-[rgba(239,205,98,0.04)] to-transparent"
+          style={{ height: "25%" }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default function LiveBackground({
+  variant = "full",
+}: {
+  /** `static` — no infinite motion (weddings / Lenis pages). */
+  variant?: "full" | "static";
+}) {
+  if (variant === "static") {
+    return <LiveBackgroundStatic />;
+  }
+
   return (
     <div className="absolute inset-0 bg-transparent overflow-hidden">
       <div className="absolute inset-0">

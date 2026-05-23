@@ -17,8 +17,7 @@ export const AMENITY_HIGHLIGHT_TILE_SYSTEM = {
 /** Shell: aspect-ratio box; gradient anchored on #505059 + blur. */
 export const AMENITY_HIGHLIGHT_TILE_CLASS =
   [
-    "amenity-highlight-tile relative rounded-none",
-    "bg-[linear-gradient(135deg,rgba(98,98,106,0.48)_0%,rgba(80,80,89,0.58)_40%,rgba(52,52,60,0.72)_100%)]",
+    "amenity-highlight-tile relative rounded-none border-0",
     "text-center shadow-none backdrop-blur-md jade-hscroll-view-item",
   ].join(" ");
 

@@ -1,8 +1,8 @@
 /** Global Lenis instance (set in SmoothScroll). */
 
 import {
-  LENIS_EASING,
-  LENIS_SCROLL_TO_DURATION,
+  getLenisPresetConfig,
+  getLenisPresetFromPathname,
 } from "@/lib/lenisConfig";
 import { smoothScrollTo } from "@/lib/smoothScrollTo";
 
@@ -44,10 +44,13 @@ export function getLenis(): LenisInstance | null {
   );
 }
 
-const defaultScrollToOpts = (): LenisScrollToOptions => ({
-  duration: LENIS_SCROLL_TO_DURATION,
-  easing: LENIS_EASING,
-});
+const defaultScrollToOpts = (): LenisScrollToOptions => {
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "/";
+  const preset = getLenisPresetFromPathname(pathname);
+  const { scrollToDuration, easing } = getLenisPresetConfig(preset);
+  return { duration: scrollToDuration, easing };
+};
 
 /** Smooth scroll window via Lenis, or eased RAF fallback. */
 export function scrollToY(
@@ -55,11 +58,12 @@ export function scrollToY(
   options?: { immediate?: boolean; duration?: number },
 ) {
   const lenis = getLenis();
+  const scrollOpts = defaultScrollToOpts();
   if (lenis) {
     lenis.scrollTo(top, {
-      ...defaultScrollToOpts(),
+      ...scrollOpts,
       immediate: options?.immediate,
-      duration: options?.duration ?? LENIS_SCROLL_TO_DURATION,
+      duration: options?.duration ?? scrollOpts.duration,
     });
     return;
   }
@@ -79,13 +83,14 @@ export function scrollToElement(
 ) {
   const offset = options?.offset ?? 0;
   const lenis = getLenis();
+  const scrollOpts = defaultScrollToOpts();
 
   if (lenis) {
     lenis.scrollTo(element, {
-      ...defaultScrollToOpts(),
+      ...scrollOpts,
       offset,
       immediate: options?.immediate,
-      duration: options?.duration ?? LENIS_SCROLL_TO_DURATION,
+      duration: options?.duration ?? scrollOpts.duration,
     });
     return;
   }

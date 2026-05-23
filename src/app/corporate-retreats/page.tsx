@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import CorporateHeader from "@/components/CorporateHeader";
+import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { Calendar, Download, ArrowRight } from "lucide-react";
 import { useScroll, useTransform } from "framer-motion";
@@ -23,7 +23,7 @@ export default function CorporateRetreatsPage() {
 
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
-      <CorporateHeader />
+      <Navbar />
       <MobileBottomNav />
 
       {/* SECTION 1: HERO SECTION */}

@@ -8,12 +8,12 @@ import {
   useSpring,
   AnimatePresence,
   useReducedMotion,
+  type MotionValue,
 } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
-import LuxuryPattern from "./LuxuryPattern";
 import SectionWrapper from "./SectionWrapper";
 import { JADE_GREEN } from "@/lib/jadeSectionColors";
 import PrimaryButton from "@/components/PrimaryButton";
@@ -26,6 +26,10 @@ import {
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
+import { domeVillas } from "@/data/retreats/dome";
+import { magnolia } from "@/data/retreats/magnolia";
+import { retreatOnTheRidge } from "@/data/retreats/retreat-on-the-ridge";
+import { villaDetailPath, villaListingPath } from "@/lib/appRoutes";
 
 const VILLAS = [
   {
@@ -44,7 +48,7 @@ const VILLAS = [
       "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/Dome VILLAS by Jade - Blue v3_Page_01_Image_0001.webp",
       "/Home Page/Featured Villas/HOBBIT THEMED FARMHOUSE/domeye.webp",
     ],
-    link: "/villas/dome-villa",
+    link: villaDetailPath(domeVillas.id),
   },
   {
     id: 2,
@@ -62,7 +66,7 @@ const VILLAS = [
       "/Home Page/Featured Villas/HILL VIEW VILLA/2.webp",
       "/Home Page/Featured Villas/HILL VIEW VILLA/3.webp",
     ],
-    link: "/villas/retreat-on-ridge",
+    link: villaDetailPath(retreatOnTheRidge.id),
   },
   {
     id: 3,
@@ -80,9 +84,29 @@ const VILLAS = [
       "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/2.webp",
       "/Home Page/Featured Villas/CONTEMPORARY GLASS VILLA/3.webp",
     ],
-    link: "/villas/magnolia",
+    link: villaDetailPath(magnolia.id),
   },
 ];
+
+/** CTA image frame — 2×2 grid of Villa_Retreats hero photography. */
+const CTA_VILLA_HERO_GRID = [
+  {
+    src: "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
+    alt: "Dome Villa",
+  },
+  {
+    src: "/Villa_Retreats/Retreat on the ridge/1-Hero/Hero.webp",
+    alt: "Retreat on the Ridge",
+  },
+  {
+    src: "/Villa_Retreats/Magnolia/Hero/hero.webp",
+    alt: "Magnolia",
+  },
+  {
+    src: "/Villa_Retreats/Emerald/Hero/hero.webp",
+    alt: "Emerald",
+  },
+] as const;
 
 export default function FeaturedVillas() {
   const targetRef = useRef<HTMLDivElement>(null);
@@ -117,16 +141,16 @@ export default function FeaturedVillas() {
     <SectionWrapper
       ref={targetRef}
       bg={JADE_GREEN}
-      className="h-[650vh]"
+      className="h-[720vh]"
       pattern={{
         opacity: 0.09,
         strokeColor: "#EFCD62",
         edgeFade: "18vh",
+        parallaxFixed: true,
       }}
     >
       <NavbarThemeTrigger theme="white" sectionRef={targetRef} />
       <div className="sticky top-0 h-screen overflow-hidden">
-        {/* Background Overlay Pattern */}
         {/* Sections */}
         <div className="relative w-full h-full z-10">
           {/* Panel 0: Intro */}
@@ -142,11 +166,61 @@ export default function FeaturedVillas() {
             />
           ))}
 
-          <EndButton globalProgress={snappedProgress} />
+          <CtaSlide
+            globalProgress={snappedProgress}
+            totalSteps={totalSteps}
+            index={totalVillas + 1}
+          />
         </div>
       </div>
     </SectionWrapper>
   );
+}
+
+/** Shared horizontal snap offset — same math for villa cards and the CTA panel. */
+function useFeaturedCarouselX(
+  globalProgress: MotionValue<number>,
+  totalSteps: number,
+  index: number,
+  measureRef: React.RefObject<HTMLElement | null>,
+) {
+  const [offsetPx, setOffsetPx] = useState(1000);
+  const [vw, setVw] = useState(1920);
+
+  useEffect(() => {
+    const computeOffset = () => {
+      const w = window.innerWidth;
+      const actualWidth = measureRef.current
+        ? measureRef.current.offsetWidth
+        : Math.min(768, w - 48);
+      const visibleGap = 56;
+      return Math.ceil(w / 2 + actualWidth / 2 + visibleGap);
+    };
+    const handleResize = () => {
+      setOffsetPx(computeOffset());
+      setVw(window.innerWidth);
+    };
+    handleResize();
+    const t = setTimeout(handleResize, 100);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(t);
+    };
+  }, [measureRef]);
+
+  return useTransform(globalProgress, (p: number) => {
+    const slideTime = p * totalSteps;
+
+    let villa1Pos;
+    if (slideTime <= 1) {
+      villa1Pos = vw - slideTime * vw;
+    } else {
+      villa1Pos = -(slideTime - 1) * offsetPx;
+    }
+
+    return villa1Pos + (index - 1) * offsetPx;
+  });
 }
 
 function IntroPanel({
@@ -202,7 +276,7 @@ function VillaSlide({
 }: {
   data: any;
   index: number;
-  globalProgress: any;
+  globalProgress: MotionValue<number>;
   totalSteps: number;
 }) {
   const innerRef = useRef<HTMLAnchorElement>(null);
@@ -249,47 +323,7 @@ function VillaSlide({
     );
   };
 
-  // Zoom-safe offset: half-viewport + half-panel + 56px off-screen gap.
-  // Ensures exactly one panel is visible at any zoom level (100/125/140/150%).
-  const [offsetPx, setOffsetPx] = useState(1000);
-  const [vw, setVw] = useState(1920);
-
-  useEffect(() => {
-    const computeOffset = () => {
-      const w = window.innerWidth;
-      const actualWidth = innerRef.current ? innerRef.current.offsetWidth : Math.min(768, w - 48);
-      const visibleGap = 56;
-      return Math.ceil(w / 2 + actualWidth / 2 + visibleGap);
-    };
-    const handleResize = () => {
-      setOffsetPx(computeOffset());
-      setVw(window.innerWidth);
-    };
-    handleResize();
-    const t = setTimeout(handleResize, 100);
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      clearTimeout(t);
-    };
-  }, []);
-
-  const x = useTransform(globalProgress, (p: number) => {
-    const slideTime = p * totalSteps;
-
-    // Position of Villa 1 (index=1)
-    let villa1Pos;
-    if (slideTime <= 1) {
-      // During Intro (slideTime 0 to 1), Villa 1 flies in from off-screen right (vw) to center (0)
-      villa1Pos = vw - slideTime * vw;
-    } else {
-      // After Intro, Villa 1 moves left into negative offset continuously
-      villa1Pos = -(slideTime - 1) * offsetPx;
-    }
-
-    // Every other villa just mathematically locks into exactly offsetPx distance from Villa 1
-    return villa1Pos + (index - 1) * offsetPx;
-  });
+  const x = useFeaturedCarouselX(globalProgress, totalSteps, index, innerRef);
 
   return (
     <motion.div
@@ -462,28 +496,73 @@ function VillaSlide({
   );
 }
 
-function EndButton({ globalProgress }: { globalProgress: any }) {
-  const opacity = useTransform(globalProgress, [0.85, 1.0], [0, 1]);
-  const scale = useTransform(globalProgress, [0.85, 1.0], [0.8, 1]);
-  const y = useTransform(globalProgress, [0.85, 1.0], [60, 0]);
-  const pointerEvents = useTransform(
-    globalProgress,
-    [0.85, 0.9],
-    ["none", "auto"],
+function VillaHeroGridImages() {
+  return (
+    <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-1 sm:gap-1.5 bg-[#0f2a1f] p-1 sm:p-1.5">
+      {CTA_VILLA_HERO_GRID.map((hero, i) => (
+        <div
+          key={hero.alt}
+          className="relative min-h-0 overflow-hidden border border-white/10 bg-black"
+        >
+          <Image
+            src={hero.src}
+            alt={hero.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 45vw, (max-width: 1024px) 40vw, 420px"
+            priority={i < 2}
+          />
+        </div>
+      ))}
+    </div>
   );
+}
+
+function CtaSlide({
+  globalProgress,
+  totalSteps,
+  index,
+}: {
+  globalProgress: MotionValue<number>;
+  totalSteps: number;
+  index: number;
+}) {
+  const innerRef = useRef<HTMLDivElement>(null);
+  const x = useFeaturedCarouselX(globalProgress, totalSteps, index, innerRef);
 
   return (
     <motion.div
-      style={{ opacity, scale, y, zIndex: 110 }}
-      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+      style={{ x, zIndex: index * 10 }}
+      className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none bg-transparent"
     >
-      <div style={{ pointerEvents: pointerEvents as any }} className="pointer-events-auto">
-        <PrimaryButton
-          href="/villas"
-          className="rounded-none shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-transform duration-300 hover:scale-[1.03]"
+      <div className="pointer-events-none relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-20 lg:px-32 xl:px-48 pb-[64px] sm:pb-0">
+        <div
+          ref={innerRef}
+          className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-stretch justify-center gap-3 lg:gap-5 rounded-sm"
         >
-          <span className="font-bold whitespace-nowrap">Explore All Villas</span>
-        </PrimaryButton>
+          <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-[#0f2a1f] shrink-0">
+            <VillaHeroGridImages />
+          </div>
+
+          <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 pb-8">
+            <p className="font-manrope text-gh-label tracking-[0.2em] uppercase text-[#EFCD62] mb-2 font-bold">
+              Explore All Villas
+            </p>
+            <h2 className="font-philosopher text-gh-h2 text-white leading-none mb-3">
+              Find Your Retreat
+            </h2>
+            <p className="font-manrope text-gh-body text-white/80 leading-relaxed mb-5 lg:mb-6">
+              Browse the full collection of private Jade estates—each chosen for
+              atmosphere, space, and the experiences they hold.
+            </p>
+            <PrimaryButton
+              href={villaListingPath()}
+              className="rounded-none shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-transform duration-300 hover:scale-[1.03]"
+            >
+              <span className="font-bold whitespace-nowrap">Explore All Villas</span>
+            </PrimaryButton>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

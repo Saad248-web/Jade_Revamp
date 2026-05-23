@@ -1,8 +1,15 @@
 "use client";
 
+import clsx from "clsx";
 import { stickyCategoryTabClass } from "@/lib/stickyTabGlass";
 import { VILLA_DETAIL_STICKY_TABS_CHROME_CLASS } from "@/lib/scrollChromeGlass";
+import { VILLA_DETAIL_ACTION_STICKY_TOP_VISIBLE_CLASS } from "@/lib/scrollChromeLayout";
+import { useBatchedScrollHide } from "@/lib/useBatchedScrollHide";
 import { useScrollTabIntoView } from "@/lib/useScrollTabIntoView";
+import CategoryTabRail from "@/components/ui/CategoryTabRail";
+import MeanderStrip from "@/components/ui/MeanderStrip";
+import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
+const vd = VILLA_DETAIL_SPACING;
 
 const TAB_LABELS = [
   "Spaces",
@@ -35,44 +42,54 @@ export default function VillaDetailStickyTabs({
   sectionIds,
 }: VillaDetailStickyTabsProps) {
   const trackRef = useScrollTabIntoView(activeTab);
+  const actionChromeHidden = useBatchedScrollHide();
 
-  const visibleTabs = TAB_LABELS.filter((tab) => {
-    const sectionId = tabToSectionId(tab);
+  const visibleTabs = TAB_LABELS.filter((tab) => {    const sectionId = tabToSectionId(tab);
     return sectionIds ? sectionIds.includes(sectionId) : true;
   });
 
   return (
-    <div className="jade-scroll-chrome sticky top-0 z-50 w-full">
-      <div className={VILLA_DETAIL_STICKY_TABS_CHROME_CLASS}>
-        <div
-          className="w-full md:max-w-7xl md:mx-auto px-4 sm:px-5 lg:px-6"
-        >
-          <div className="w-full md:max-w-4xl md:mx-auto">
-            <div
-              ref={trackRef}
-              data-lenis-prevent
-              className="jade-hscroll-track flex gap-2 sm:gap-3 overflow-x-auto py-4 scrollbar-none overscroll-x-contain scroll-pl-0 scroll-pr-3 sm:scroll-pr-5"
-            >
-              {visibleTabs.map((tab) => {
-                const sectionId = tabToSectionId(tab);
-                const isActive = activeTab === sectionId;
-                return (
-                  <button
-                    key={tab}
-                    type="button"
-                    data-tab-key={sectionId}
-                    onClick={() => onTabClick(sectionId)}
-                    className={stickyCategoryTabClass(isActive)}
-                    aria-current={isActive ? "true" : undefined}
-                  >
-                    {tab === "Details" ? "Property Details" : tab}
-                  </button>
-                );
-              })}
-            </div>
+    <>
+      {/* Greek-key band — static in document flow (scrolls away); tabs alone stay sticky */}
+      <MeanderStrip layout="pageGutter" track="charcoal" className="relative z-40" />
+      <div
+        className={clsx(
+          "jade-hscroll-chrome sticky z-40 w-full",
+          actionChromeHidden ? "top-0" : VILLA_DETAIL_ACTION_STICKY_TOP_VISIBLE_CLASS,
+          vd.hScrollViewportEdge,
+        )}
+      >        <div className={vd.stickyChromeShell}>
+          <div className={VILLA_DETAIL_STICKY_TABS_CHROME_CLASS}>
+            <CategoryTabRail
+            ref={trackRef}
+            fadeFrom="#1A1C1E"
+            patternFade
+            mobileTrackGutter
+            trackAriaLabel="Villa sections"
+          >
+          {visibleTabs.map((tab) => {
+            const sectionId = tabToSectionId(tab);
+            const isActive = activeTab === sectionId;
+            return (
+              <button
+                key={tab}
+                type="button"
+                data-tab-key={sectionId}
+                onClick={() => onTabClick(sectionId)}
+                className={clsx(
+                  stickyCategoryTabClass(isActive),
+                  "flex-shrink-0",
+                )}
+                aria-current={isActive ? "true" : undefined}
+              >
+                {tab === "Details" ? "Property Details" : tab}
+              </button>
+            );
+          })}
+            </CategoryTabRail>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

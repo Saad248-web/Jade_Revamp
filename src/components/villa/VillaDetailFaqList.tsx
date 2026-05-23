@@ -15,8 +15,8 @@ export default function VillaDetailFaqList({ items }: { items: FaqItem[] }) {
   const visible = expanded ? items : items.slice(0, INITIAL_VISIBLE);
 
   return (
-    <div className="flex flex-col gap-8">
-      <dl className="flex flex-col gap-8 m-0">
+    <div className="flex flex-col gap-6">
+      <dl className="flex flex-col gap-6 m-0">
         {visible.map((item, i) => (
           <div key={i} className="m-0">
             <dt className="flex gap-2.5 items-start m-0">

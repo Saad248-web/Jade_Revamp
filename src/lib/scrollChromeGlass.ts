@@ -13,6 +13,10 @@ export const VILLA_DETAIL_SCROLL_CHROME_GLASS =
 
 export const VILLA_DETAIL_STICKY_TABS_CHROME_CLASS = `border-b ${VILLA_DETAIL_SCROLL_CHROME_GLASS} bg-transparent ${GLASS_SHADOW_TOP}`;
 
+/** Greek-key band above sticky tabs — blurred so it floats over scrolling content. */
+export const STICKY_TABS_MEANDER_TRACK_CLASS =
+  "bg-jade-charcoal/35 backdrop-blur-2xl";
+
 export const VILLA_DETAIL_PRICING_BOTTOM_BAR_CHROME_CLASS = `border-t ${VILLA_DETAIL_SCROLL_CHROME_GLASS} bg-transparent ${GLASS_SHADOW_BOTTOM}`;
 
 /** Wedding / corporate / party overlays — white fill @ 5% on green sections. */

@@ -330,7 +330,7 @@ const magnoliaBase = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=HkWkA_5op30",
-    thumbnail: "/Villa_Retreats/Magnolia/Hero/Hero 1.webp",
+    thumbnail: "/Villa_Retreats/Magnolia/Hero/hero.webp",
     duration: "1:41",
   },
   faq: [

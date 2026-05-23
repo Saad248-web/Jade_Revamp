@@ -14,6 +14,47 @@ export function getCachedInstagramOembed(): Record<string, InstagramOembedItem> 
   return cache;
 }
 
+/** Resolve when card fallbacks are decoded (caps wait so mount never hangs). */
+export function waitForInstagramFallbackImages(
+  timeoutMs = 2800,
+): Promise<void> {
+  if (typeof window === "undefined") return Promise.resolve();
+
+  return new Promise((resolve) => {
+    const urls = INSTAGRAM_POSTS.map((p) => p.fallbackImage);
+    if (urls.length === 0) {
+      resolve();
+      return;
+    }
+
+    let settled = false;
+    let done = 0;
+
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      resolve();
+    };
+
+    const timer = window.setTimeout(finish, timeoutMs);
+
+    for (const src of urls) {
+      const img = new Image();
+      img.decoding = "async";
+      const onDone = () => {
+        done += 1;
+        if (done >= urls.length) {
+          window.clearTimeout(timer);
+          finish();
+        }
+      };
+      img.onload = onDone;
+      img.onerror = onDone;
+      img.src = src;
+    }
+  });
+}
+
 /** Decode fallback WebP/JPEG before the section mounts (cheap vs 20 cards at once). */
 export function prefetchInstagramFallbackImages(): void {
   if (typeof window === "undefined" || imagesPrefetched) return;

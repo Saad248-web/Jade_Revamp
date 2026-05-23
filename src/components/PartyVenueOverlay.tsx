@@ -6,7 +6,6 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Share2,
-  MapPin,
   Users,
   Home,
   Play,
@@ -134,15 +133,24 @@ import {
   VillaExperienceStickyTabs,
   isExperienceOverlayMdUp,
 } from "@/components/experience/VillaExperienceOverlayLayout";
-import AmenityHighlightTile from "@/components/villa/AmenityHighlightTile";
-import MeanderStrip from "@/components/ui/MeanderStrip";
-import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
+import VillaDetailIntroSection from "@/components/villa/VillaDetailIntroSection";
+import OverlayIntroAmenityHighlights from "@/components/villa/OverlayIntroAmenityHighlights";
+import clsx from "clsx";
+import {
+  VILLA_DETAIL_CHARCOAL,
+  VILLA_DETAIL_GREEN,
+  VILLA_DETAIL_SPACING,
+} from "@/components/villa/villaDetailSpacing";
 import VillaPricingBlocks, {
   buildPartyOverlayPricingBlocks,
 } from "@/components/experience/VillaPricingBlocks";
-import ExperienceFaqAccordion, {
-  ExperiencePolicyCompactList,
-} from "@/components/experience/ExperienceFaqAccordion";
+import { ExperiencePolicyCompactList } from "@/components/experience/ExperienceFaqAccordion";
+import VillaDetailAmenityGrid from "@/components/villa/VillaDetailAmenityGrid";
+import VillaDetailFaqList from "@/components/villa/VillaDetailFaqList";
+import VillaDetailLocationBlock from "@/components/villa/VillaDetailLocationBlock";
+import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip";
+
+const vd = VILLA_DETAIL_SPACING;
 
 interface PartyVenueOverlayProps {
   isOpen: boolean;
@@ -285,165 +293,132 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
           />
         }
       >
-            {/* ── CHARCOAL: Title / Info / Stats / Description ─────────── */}
-            <div className="w-full bg-[#25282C]">
-              <div className="px-6 py-6 md:px-12 md:py-12 max-w-7xl mx-auto">
-                {/* Header info sitting directly in max-w-7xl for full-width alignment like detail page */}
-                <div className="flex flex-col gap-2 mb-6">
-                  <span className="text-[#EFCD62] text-[10px] md:text-gh-label font-bold tracking-[0.2em] uppercase">
-                    {villa.type || "PARTY VILLA"}
-                  </span>
-                  <h1 className="text-[28px] md:text-[32px] font-philosopher text-white mb-1 leading-tight">
-                    {villa.name}
-                  </h1>
-                  <a href={mapsHref} target="_blank" rel="noopener noreferrer"
-                    className="group flex items-center gap-2 text-white/90 mt-2 w-fit hover:text-[#EFCD62] transition-colors"
-                    aria-label="Open location in Google Maps">
-                    <MapPin className="w-5 h-5 text-white/70 shrink-0" />
-                    <span className="font-manrope text-[15px] md:text-[18px] underline-offset-4 group-hover:underline">
-                      {v.location?.split("·")[0]}
-                    </span>
-                  </a>
-                </div>
-
-                <div className="flex flex-nowrap overflow-x-auto scrollbar-none gap-x-4 items-center text-white/90 mb-8 text-[10px] md:text-[12px] lg:text-[14px] font-normal font-manrope tracking-wide pb-2 -mr-6 pr-6 md:-mr-12 md:pr-12">
-                  <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
-                    <Users className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                    <span>{getEventCapacity(villa)?.toString() || villa.stats?.events || "30 Guests"}</span>
-                  </div>
-                  <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
-                  <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
-                    <Home className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                    <span>{getBhk(villa)?.toString() || villa.stats?.bhk || "4 BHK"}</span>
-                  </div>
-                  <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
-                  <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
-                    <Home className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                    <span>{getStayCapacity(villa)?.toString() || villa.stats?.stay || "15 Stay"}</span>
-                  </div>
-                </div>
-
-                {/* Horizontal amenity cards (Categories UI) — perfectly matches splitting & style of detail page */}
-                {villa.amenities && villa.amenities.length > 0 && (
-                  <div className={VILLA_DETAIL_SPACING.amenityHighlightViewportShell}>
-                    <div className={VILLA_DETAIL_SPACING.amenityHighlightTrackFullBleed}>
-                    {villa.amenities.map((amenity: any, idx: number) => {
-                      const IconComponent = getIcon(amenity.icon, amenity.label);
-                      const words = (amenity.label || "").split(" ");
-                      const label = words.length > 2 ? words.slice(0, 2).join(" ") : words[0] || "";
-                      const sublabel = words.length > 2 ? words.slice(2).join(" ") : words.slice(1).join(" ");
-
-                      return (
-                        <AmenityHighlightTile
-                          key={idx}
-                          icon={IconComponent}
-                          label={label}
-                          sublabel={sublabel || null}
-                        />
-                      );
-                    })}
+            <div className={VILLA_DETAIL_CHARCOAL}>
+              <div className={vd.sectionShell}>
+                <VillaDetailIntroSection
+                  eyebrow={villa.type || "PARTY VILLA"}
+                  title={villa.name}
+                  mapsHref={mapsHref}
+                  locationLabel={villa.location?.split("·")[0] ?? ""}
+                  statsRow={
+                    <div className={VILLA_DETAIL_SPACING.introStatsRow}>
+                      <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+                        <Users className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
+                        <span>{getEventCapacity(villa)?.toString() || villa.stats?.events || "30 Guests"}</span>
+                      </div>
+                      <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
+                      <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+                        <Home className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
+                        <span>{getBhk(villa)?.toString() || villa.stats?.bhk || "4 BHK"}</span>
+                      </div>
+                      <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
+                      <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+                        <Home className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
+                        <span>{getStayCapacity(villa)?.toString() || villa.stats?.stay || "15 Stay"}</span>
+                      </div>
+                    </div>
+                  }
+                  amenityHighlights={
+                    villa.amenities?.length ? (
+                      <OverlayIntroAmenityHighlights
+                        amenities={villa.amenities}
+                        getIcon={getIcon}
+                      />
+                    ) : undefined
+                  }
+                >
+                  <p className={VILLA_DETAIL_SPACING.introDescription}>{villa.description}</p>
+                  <div className={VILLA_DETAIL_SPACING.stackSm}>
+                    <h4 className="text-white font-manrope font-medium text-gh-body">
+                      Perfect for:
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {["Birthdays", "Anniversaries", "Pool Parties", "Reunions"].map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-4 py-2 bg-white/5 border border-white/15 text-white/90 text-[11px] md:text-gh-label font-manrope"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   </div>
-                )}
-
-                <p className="font-manrope text-white/80 text-gh-body leading-relaxed mb-8 whitespace-pre-line text-justify">
-                  {villa.description}
-                </p>
-
-                <div className="mb-3">
-                  <h4 className="text-white font-manrope font-bold text-gh-label uppercase tracking-widest mb-3">PERFECT FOR:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {["Birthdays", "Anniversaries", "Pool Parties", "Reunions"].map((tag) => (
-                      <span key={tag} className="px-4 py-2 bg-white/5 border border-white/10 text-white/80 text-gh-label font-manrope">{tag}</span>
-                    ))}
-                  </div>
-                </div>
+                </VillaDetailIntroSection>
               </div>
             </div>
 
             {/* ── STICKY TABS ─────────────────────────────────────────────── */}
             <VillaExperienceStickyTabs tabs={tabs} activeTab={activeTab} onTabClick={(tab) => scrollToSection(tab)} />
 
-            {/* ── GREEN: Amenities ─────────────────────────────────────────── */}
-            <section id="amenities" className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
-                <div className="max-w-4xl mx-auto">
-                  <h2 className="text-gh-h2 font-philosopher mb-6">Villa Amenities</h2>
-                  <div className="space-y-5">
-                    {(villa.amenities || [
-                      { label: "Private Pool" }, { label: "Music System" },
-                      { label: "BBQ Setup" }, { label: "Indoor Games" }, { label: "Kitchen Access" },
-                    ]).map((item: any, idx: number) => (
-                      <div key={idx} className="flex items-center gap-2.5 sm:gap-3">
-                        <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rotate-45 bg-[#EFCD62] shrink-0" />
-                        <span className="text-white font-manrope font-bold text-gh-body uppercase tracking-wider">{item.label}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </section>
+            <VillaDetailAmenityGrid
+              amenities={
+                villa.amenities || [
+                  { label: "Private Pool" },
+                  { label: "Music System" },
+                  { label: "BBQ Setup" },
+                  { label: "Indoor Games" },
+                  { label: "Kitchen Access" },
+                ]
+              }
+              title="Villa Amenities"
+              showSeeMore={false}
+              meanderBottom={partyPricingBlocks.length > 0}
+            />
 
-            {partyPricingBlocks.length > 0 ? <MeanderStrip accentLine="green" /> : null}
-
-            {/* ── CHARCOAL: Pricing ────────────────────────────────────────── */}
-            {partyPricingBlocks.length > 0 && (
-              <section id="pricing" className="w-full bg-jade-green text-white">
-                <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
-                  <div className="max-w-4xl mx-auto">
+            {partyPricingBlocks.length > 0 ? (
+              <section id="pricing" className={VILLA_DETAIL_GREEN}>
+                <div className={vd.sectionShell}>
+                  <div className={clsx(vd.content, vd.stack)}>
                     <VillaPricingBlocks
                       variant="villa-detail"
                       sectionTitle="Party Pricing"
                       blocks={partyPricingBlocks}
-                      footnote={<p className="mt-5 text-gh-label text-white/30 leading-relaxed italic">Note: All party pricing is exclusive of GST. Custom packages available.</p>}
+                      footnote={
+                        <p className={vd.pricingFootnote}>
+                          Note: All party pricing is exclusive of GST. Custom packages available.
+                        </p>
+                      }
                     />
                   </div>
                 </div>
+                <VillaDetailMeanderStrip track="green" />
               </section>
-            )}
+            ) : null}
 
-            {partyPricingBlocks.length > 0 ? <MeanderStrip track="green" /> : null}
-
-            {/* ── GREEN: Location ───────────────────────────────────────────── */}
-            <section id="location" className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
-                <div className="max-w-4xl mx-auto">
-                  <h2 className="text-gh-h2 font-philosopher mb-6">Location</h2>
-                  <div className="overflow-hidden mb-6 border border-white/10">
-                    <a href={mapsHref} target="_blank" rel="noopener noreferrer"
-                      className="relative block w-full h-64 md:h-80 cursor-pointer outline-none transition-opacity hover:opacity-95"
-                      aria-label="Open location in Google Maps">
-                      <Image src={v.locationDetails?.mapImage || "/Villa_Retreats/Magnolia/Spaces/Villa.webp"} alt="Map" fill className="object-cover opacity-70" sizes="100vw" loading="lazy" />
-                    </a>
-                    <div className="p-5 md:p-6 border-t border-white/10">
-                      <a href={mapsHref} target="_blank" rel="noopener noreferrer"
-                        className="group flex items-start gap-3 outline-none hover:text-[#EFCD62] transition-colors">
-                        <MapPin className="w-5 h-5 text-[#EFCD62] shrink-0 mt-1" aria-hidden />
-                        <p className="text-white text-gh-body font-manrope font-medium leading-relaxed group-hover:underline underline-offset-4">
-                          {v.locationDetails?.address || v.location}
-                        </p>
-                      </a>
-                      <div className="w-full bg-white/[0.03] border border-white/5 px-4 py-3 mt-5">
-                        <p className="text-white/60 text-[12px] md:text-[13px] font-manrope">
-                          {v.locationDetails?.distance || "Approximately 45 minutes from Bangalore City Center"}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+            <section id="location" className={VILLA_DETAIL_CHARCOAL}>
+              <div className={vd.sectionShell}>
+                <div className={clsx(vd.content, vd.stack)}>
+                  <h3 className={vd.heading}>Location</h3>
+                  <VillaDetailLocationBlock
+                    mapsHref={mapsHref}
+                    locationDetails={{
+                      mapImage: v.locationDetails?.mapImage,
+                      address: v.locationDetails?.address || v.location,
+                      distance:
+                        v.locationDetails?.distance ||
+                        "Approximately 45 minutes from Bangalore City Center",
+                    }}
+                    fallbackMapImage="/Villa_Retreats/Magnolia/Spaces/Villa.webp"
+                  />
                 </div>
               </div>
             </section>
 
-            {/* ── CHARCOAL: Walkthrough ────────────────────────────────────── */}
-            <section id="walkthrough" className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
-                <div className="max-w-4xl mx-auto">
-                  <h2 className="text-gh-h2 font-philosopher mb-6">Video Walkthrough</h2>
-                  <div className="relative aspect-video w-full overflow-hidden bg-black/40 border border-white/10 group cursor-pointer">
-                    <Image src="/Villa_Retreats/Magnolia/Hero/hero.webp" alt="Video Cover" fill className="object-cover opacity-60 group-hover:opacity-40 transition-opacity" />
+            <section id="walkthrough" className={VILLA_DETAIL_CHARCOAL}>
+              <div className={vd.sectionShell}>
+                <div className={clsx(vd.content, vd.stack)}>
+                  <h3 className={vd.heading}>Video Walkthrough</h3>
+                  <div className="group relative aspect-video w-full cursor-pointer overflow-hidden border border-white/10 bg-gray-900">
+                    <Image
+                      src="/Villa_Retreats/Magnolia/Hero/hero.webp"
+                      alt="Video Cover"
+                      fill
+                      className="object-cover opacity-80 transition-opacity group-hover:opacity-60"
+                      sizes="(max-width: 768px) 100vw, 800px"
+                    />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hover:bg-white/30 transition-all">
-                        <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition-all hover:bg-white/30 sm:h-20 sm:w-20">
+                        <div className="ml-1 h-0 w-0 border-b-[10px] border-l-[18px] border-t-[10px] border-b-transparent border-l-white border-t-transparent" />
                       </div>
                     </div>
                   </div>
@@ -451,35 +426,48 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
               </div>
             </section>
 
-            {/* ── GREEN: FAQ + Policies ─────────────────────────────────────── */}
-            <section id="faq" className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
-                <div className="max-w-4xl mx-auto">
-                  <h2 className="text-gh-h2 font-philosopher mb-6">FAQ</h2>
-                  <ExperienceFaqAccordion items={(villa.faq || []).map((item: any) => ({ question: item.question, answer: item.answer }))} />
-                  <div className="mt-10 pt-6 border-t border-white/5">
-                    <h3 className="text-gh-h2 font-philosopher mb-5">Key Policies</h3>
-                    <ExperiencePolicyCompactList policies={[
-                      { title: "Check-in / Check-out", desc: "Standard check-in at 2:00 PM and check-out at 11:00 AM. Early check-in subject to availability." },
-                      { title: "Music & Noise", desc: "Outdoor music allowed till 10:00 PM as per local regulations. Indoor music can continue at moderate levels." },
-                      { title: "Refund Policy", desc: "Full refund for cancellations made 15 days prior to check-in. No refunds within 7 days of booking." },
-                    ]} />
+            <section id="faq" className={VILLA_DETAIL_CHARCOAL}>
+              <div className={vd.sectionShell}>
+                <div className={clsx(vd.content, vd.stack)}>
+                  <h3 className={vd.heading}>FAQ</h3>
+                  {(villa.faq || []).length > 0 ? (
+                    <VillaDetailFaqList
+                      items={(villa.faq || []).map((item: any) => ({
+                        question: item.question,
+                        answer: item.answer,
+                      }))}
+                    />
+                  ) : null}
+                  <div className={vd.stackSm}>
+                    <h3 className={vd.heading}>Key Policies</h3>
+                    <ExperiencePolicyCompactList
+                      policies={[
+                        {
+                          title: "Check-in / Check-out",
+                          desc: "Standard check-in at 2:00 PM and check-out at 11:00 AM. Early check-in subject to availability.",
+                        },
+                        {
+                          title: "Music & Noise",
+                          desc: "Outdoor music allowed till 10:00 PM as per local regulations. Indoor music can continue at moderate levels.",
+                        },
+                        {
+                          title: "Refund Policy",
+                          desc: "Full refund for cancellations made 15 days prior to check-in. No refunds within 7 days of booking.",
+                        },
+                      ]}
+                    />
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* ── CHARCOAL: Enquiry Form ────────────────────────────────────── */}
-            <div className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
-                <div className="max-w-4xl mx-auto">
-                  <div id="enquiry" ref={formRef}>
+            <div className={VILLA_DETAIL_CHARCOAL}>
+              <div className={vd.sectionShell}>
+                <div className={clsx(vd.content, vd.stack)} id="enquiry" ref={formRef}>
                     {view === "form" ? (
                       <>
-                        <h2 className="text-gh-h1 font-philosopher mb-3">
-                          Plan Your Celebration
-                        </h2>
-                        <p className="text-white/50 text-gh-body mb-10">
+                        <h2 className={vd.heading}>Plan Your Celebration</h2>
+                        <p className="text-white/50 text-gh-body">
                           Share a few details. Our concierge team will help you pick
                           the perfect villa for your party.
                         </p>
@@ -713,7 +701,6 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                         </div>
                       </div>
                     )}
-                  </div>
                 </div>
               </div>
             </div>

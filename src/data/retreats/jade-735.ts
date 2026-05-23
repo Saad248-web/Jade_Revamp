@@ -268,7 +268,7 @@ const jade735Base = {
   },
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=tDHkITeT3HU",
-    thumbnail: "/Villa_Retreats/Jade%20735/Hero/Hero 1.webp",
+    thumbnail: "/Villa_Retreats/Jade 735/Hero/hero.webp",
     duration: "5:44",
   },
   faq: [

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 
 export interface LuxuryPatternProps {
   /** Controls the size of each repeating tile in px. Default: 300 */
@@ -16,12 +16,13 @@ export interface LuxuryPatternProps {
   /** Unique id — unused in CSS-tile mode but kept for API compat */
   patternId?: string;
   /**
-   * Vertical edge fade distance so the pattern blends into the parent
-   * background at the section's top/bottom edges (eliminates visible seams
-   * against adjacent same-color sections without a pattern overlay).
-   * Default: undefined (no mask).
+   * Pattern edge feather — mask distance so the motif softens into the section
+   * background at top/bottom (CSS `mask-image` linear gradient). Featured Villas
+   * uses `"18vh"`. Design term: pattern edge feather / edge vignette.
    */
   edgeFade?: string;
+  /** Keep pattern fixed to viewport (Featured Villas static parallax). */
+  parallaxFixed?: boolean;
   /** @deprecated use patternSize */
   tileSize?: number;
   width?: number;
@@ -42,9 +43,24 @@ const LuxuryPattern = memo(
     backgroundColor = "transparent",
     opacity = 1,
     edgeFade,
+    parallaxFixed = false,
     className = "",
   }: LuxuryPatternProps) => {
     const size = tileSize ?? patternSize;
+
+    const [fixedAttachment, setFixedAttachment] = useState(parallaxFixed);
+
+    useEffect(() => {
+      if (parallaxFixed) {
+        setFixedAttachment(true);
+        return;
+      }
+      const finePointer = window.matchMedia("(pointer: fine)").matches;
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      setFixedAttachment(finePointer && !reducedMotion);
+    }, [parallaxFixed]);
 
     const fadeMask = edgeFade
       ? `linear-gradient(to bottom, transparent 0, black ${edgeFade}, black calc(100% - ${edgeFade}), transparent 100%)`
@@ -60,7 +76,7 @@ const LuxuryPattern = memo(
           backgroundImage: "url(/assets/Design.png)",
           backgroundRepeat: "repeat",
           backgroundSize: `${size}px ${size}px`,
-          backgroundAttachment: "fixed",
+          backgroundAttachment: fixedAttachment ? "fixed" : "scroll",
           ...(fadeMask
             ? {
                 WebkitMaskImage: fadeMask,

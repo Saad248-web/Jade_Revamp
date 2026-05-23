@@ -90,7 +90,7 @@ export const domeVillas = {
   ],
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=k0-1rTGdowk",
-    thumbnail: "",
+    thumbnail: "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
     duration: "1:21",
   },
   faq: [

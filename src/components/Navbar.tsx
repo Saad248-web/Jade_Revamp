@@ -8,6 +8,8 @@ import Image from "next/image";
 import { Heart } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
 import { useWishlist } from "@/context/WishlistContext";
+import CallToEnquireLink from "@/components/ui/CallToEnquireLink";
+import { scrollChromeHideMotionProps } from "@/lib/scrollChromeMotion";
 
 export default function Navbar() {
   const pathname = usePathname() ?? "";
@@ -15,6 +17,7 @@ export default function Navbar() {
   const { count: wishlistCount } = useWishlist();
   const isHidden = useBatchedScrollHide();
   const reduceMotion = useReducedMotion();
+  const chromeMotion = scrollChromeHideMotionProps(isHidden, reduceMotion);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -27,7 +30,7 @@ export default function Navbar() {
   if (pathname === "/" && !isSplashComplete) return null;
 
   // Check if it's a detail page for VILLAS or weddings (resorts)
-  const isDetailPage = /^\/(?:VILLAS|weddings)\/[^/]+$/.test(pathname);
+  const isDetailPage = /^\/(?:villas|weddings)\/[^/]+$/.test(pathname);
 
   return (
     <>
@@ -44,15 +47,7 @@ export default function Navbar() {
       ══════════════════════════════════════════ */}
       <motion.nav
         className="jade-nav-chrome fixed top-0 left-0 w-full z-50 mt-[4px]"
-        initial={false}
-        animate={{ y: isHidden ? "-100%" : "0%" }}
-        transition={
-          reduceMotion
-            ? { duration: 0 }
-            : { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
-        }
-        aria-hidden={isHidden}
-        style={{ pointerEvents: isHidden ? "none" : "auto" }}
+        {...chromeMotion}
       >
         {/* Glass bar */}
         <div className="w-full bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm">
@@ -141,39 +136,14 @@ export default function Navbar() {
             {isDetailPage ? (
               <Link
                 href="/book"
-                className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center min-h-[44px]"
+                className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-11 shrink-0"
               >
                 BOOK NOW
               </Link>
             ) : (
               <div className="flex items-center gap-2">
-                {/* Headset: mobile & tablet → call; desktop → contact */}
-                <a
-                  href="tel:08970663366"
-                  className="lg:hidden bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] min-h-[44px] rounded-none border border-white/20 transition-all duration-300 group shrink-0"
-                  aria-label="Call to enquire"
-                  title="Call us"
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.25"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="transition-colors drop-shadow-sm"
-                    aria-hidden
-                  >
-                    <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3V11z" />
-                    <path d="M21 11h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3v-7z" />
-                    <path d="M3 11V9a9 9 0 0 1 18 0v2" />
-                    <path d="M21 16v2a4 4 0 0 1-4 4h-5" />
-                    <path d="M9 10h6v4H9z" />
-                    <path d="M10 12h.01M12 12h.01M14 12h.01" />
-                  </svg>
-                </a>
+                {/* Phone: mobile & tablet → call; desktop → contact */}
+                <CallToEnquireLink className="lg:hidden bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] h-11 rounded-none border border-white/20 transition-all duration-300 shrink-0" />
                 <Link
                   href="/contact"
                   className="hidden lg:flex bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black items-center justify-center min-w-[44px] min-h-[44px] rounded-none border border-white/20 transition-all duration-300 group shrink-0"
@@ -204,7 +174,7 @@ export default function Navbar() {
                 {/* Wishlist icon with badge */}
                 <Link
                   href="/wishlist"
-                  className="relative bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] min-h-[44px] rounded-none border border-white/20 transition-all duration-300 shrink-0"
+                  className="relative bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] h-11 rounded-none border border-white/20 transition-all duration-300 shrink-0"
                   aria-label="Wishlist"
                 >
                   <Heart className="w-[18px] h-[18px]" strokeWidth={1.25} />
@@ -217,14 +187,14 @@ export default function Navbar() {
                 {pathname?.startsWith("/experiences") ? (
                   <Link
                     href="/book"
-                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center min-h-[44px] whitespace-nowrap"
+                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-11 whitespace-nowrap shrink-0"
                   >
                     BOOK NOW
                   </Link>
                 ) : (
                   <Link
                     href="/book"
-                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center min-h-[44px] whitespace-nowrap"
+                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-11 whitespace-nowrap shrink-0"
                   >
                     BOOK
                   </Link>

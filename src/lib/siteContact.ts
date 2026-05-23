@@ -1,0 +1,2 @@
+export const JADE_ENQUIRY_PHONE_RAW = "08970663366";
+export const JADE_ENQUIRY_TEL = `tel:${JADE_ENQUIRY_PHONE_RAW}`;

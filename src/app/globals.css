@@ -23,6 +23,8 @@
     --fs-body: clamp(14px, 0.4vw + 11px, 18px);
     --fs-desc: clamp(12px, 0.25vw + 10px, 14px);
     --fs-label: clamp(10px, 0.15vw + 8.5px, 12px);
+    /* Villa detail pricing disclaimer — ~8px, scales gently with viewport */
+    --fs-pricing-footnote: clamp(0.5rem, 0.47rem + 0.12vw, 0.5625rem);
     /*
      Villa card footer: price ↔ KNOW MORE / VIEW VILLA.
      Same fluid size + line-height — uppercase CTA reads larger at matching px,
@@ -63,14 +65,42 @@
     /* Two-line slots — keeps title/subtitle baselines aligned across tiles in a row */
     --amenity-label-min-h: calc(2 * 1.25 * var(--fs-amenity-primary));
     --amenity-sublabel-min-h: calc(2 * 1.3 * var(--fs-amenity-secondary));
-    /* Inner track inset — matches villa sectionShell px-3 (12px) on mobile */
-    --amenity-scroll-inset-mobile: 0.75rem;
+    /* Inner track inset — matches villa sectionShell px-4 (16px) on mobile */
+    --amenity-scroll-inset-mobile: 1rem;
     --amenity-scroll-inset: 0;
     --amenity-scroll-inset-sm: 1.25rem;
+    /* Tile fill — Figma anchor #505059, 135° lighter → darker */
+    --amenity-fill-light: #62626a;
+    --amenity-fill-mid: #505059;
+    --amenity-fill-dark: #34343c;
+
+    /* Villa detail — symmetric section inset (8pt × 5 mobile, × 8 desktop) */
+    --villa-section-pad-block: 2.5rem; /* 40px top + bottom */
+    --villa-section-pad-block-lg: 4rem; /* 64px top + bottom at lg */
+
+    /* Gallery / default rails — 24px edge */
+    --jade-hscroll-fade-width: 1.5rem;
+    /* Tab bars — width ≈ blur radius for extreme glass falloff */
+    --jade-hscroll-fade-width-glass: 3.75rem;
+    /* jade-charcoal #25282C — fade tints for glass chrome on tab bars */
+    --jade-charcoal-rgb: 37, 40, 44;
   }
 }
 
 @layer utilities {
+  /* Equal top/bottom padding on every villa detail section shell */
+  .villa-section-pad-block {
+    padding-top: var(--villa-section-pad-block);
+    padding-bottom: var(--villa-section-pad-block);
+  }
+
+  @media (min-width: 1024px) {
+    .villa-section-pad-block {
+      padding-top: var(--villa-section-pad-block-lg);
+      padding-bottom: var(--villa-section-pad-block-lg);
+    }
+  }
+
   .text-gh-h1 {
     font-size: var(--fs-h1) !important;
   }
@@ -141,6 +171,10 @@
   .text-gh-label {
     font-size: var(--fs-label) !important;
   }
+  .text-gh-pricing-footnote {
+    font-size: var(--fs-pricing-footnote) !important;
+    line-height: 1.45 !important;
+  }
   /* After .text-gh-label: same font-size can override PrimaryButton’s label on villa cards */
   .text-gh-villa-footer-row {
     font-size: var(--fs-villa-footer-row) !important;
@@ -159,6 +193,13 @@
     container-name: amenity-tile;
     width: var(--amenity-tile-w, var(--amenity-tile-w-scroll));
     box-sizing: border-box;
+    border: none;
+    background: linear-gradient(
+      135deg,
+      var(--amenity-fill-light) 0%,
+      var(--amenity-fill-mid) 40%,
+      var(--amenity-fill-dark) 100%
+    );
     display: grid;
     grid-template-rows:
       var(--amenity-icon-row)
@@ -250,6 +291,7 @@
     scroll-behavior: smooth;
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     scrollbar-width: none;
   }
 
@@ -273,16 +315,22 @@
     scroll-snap-align: end;
   }
 
-  /* Mobile: full-bleed frame; inner left gutter on the scroll track. */
+  /* Mobile: viewport edge-to-edge shell; track keeps 16px inner gutter via padding + ::after */
   @media (max-width: 639px) {
     .amenity-highlight-viewport {
+      overflow: visible;
+    }
+
+    .amenity-highlight-viewport--edge,
+    .jade-hscroll-viewport--edge {
       width: 100vw;
       max-width: 100vw;
       margin-left: calc(50% - 50vw);
       margin-right: calc(50% - 50vw);
     }
 
-    .amenity-highlight-track--responsive {
+    .amenity-highlight-track--responsive,
+    .jade-hscroll-track--mobile-gutter {
       padding-left: max(
         var(--amenity-scroll-inset-mobile),
         env(safe-area-inset-left, 0px)
@@ -298,11 +346,14 @@
       );
     }
 
-    .amenity-highlight-track--responsive::after {
+    .amenity-highlight-track--responsive::after,
+    .jade-hscroll-track--mobile-gutter::after {
+      content: "";
       flex: 0 0 max(
         var(--amenity-scroll-inset-mobile),
         env(safe-area-inset-right, 0px)
       );
+      scroll-snap-align: end;
     }
   }
 
@@ -321,7 +372,8 @@
       margin-right: auto;
     }
 
-    .amenity-highlight-track--responsive {
+    .amenity-highlight-track--responsive,
+    .jade-hscroll-track--mobile-gutter {
       padding-left: 0;
       padding-right: 0;
       scroll-padding-left: 0;
@@ -335,9 +387,74 @@
       scroll-padding-left: var(--amenity-scroll-inset-sm);
     }
 
-    .amenity-highlight-track--responsive::after {
+    .amenity-highlight-track--responsive::after,
+    .jade-hscroll-track--mobile-gutter::after {
       flex-basis: var(--amenity-scroll-inset-sm);
     }
+  }
+}
+
+/* Mobile edge bleed — category / tab bars (same contract as amenity highlight row) */
+@media (max-width: 639px) {
+  .jade-hscroll-viewport--edge {
+    overflow: visible;
+  }
+}
+
+/* Experience overlay — last section (enquiry) + scroll clearance (mobile booking bar) */
+@media (max-width: 767px) {
+  [data-experience-overlay-content] .villa-section-pad-block:has(#enquiry) {
+    padding-bottom: 1rem;
+  }
+}
+
+/* Experience overlay category bar — same scroll shell as intro amenity highlight tiles */
+@media (max-width: 767px) {
+  [data-experience-overlay-tabs].amenity-highlight-viewport {
+    overflow: visible;
+  }
+
+  [data-experience-overlay-tabs] {
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  [data-experience-overlay-tabs] .amenity-highlight-track--responsive,
+  [data-experience-overlay-tabs] .jade-hscroll-track {
+    padding-left: max(
+      var(--amenity-scroll-inset-mobile),
+      env(safe-area-inset-left, 0px)
+    );
+    padding-right: 0;
+    scroll-padding-left: max(
+      var(--amenity-scroll-inset-mobile),
+      env(safe-area-inset-left, 0px)
+    );
+    scroll-padding-right: max(
+      var(--amenity-scroll-inset-mobile),
+      env(safe-area-inset-right, 0px)
+    );
+  }
+
+  [data-experience-overlay-tabs] .amenity-highlight-track--responsive::after,
+  [data-experience-overlay-tabs] .jade-hscroll-track::after {
+    content: "";
+    flex: 0 0 max(
+      var(--amenity-scroll-inset-mobile),
+      env(safe-area-inset-right, 0px)
+    );
+    scroll-snap-align: end;
+  }
+}
+
+@media (min-width: 768px) {
+  [data-experience-overlay-tabs] {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 
@@ -363,6 +480,32 @@ html.lenis {
   scroll-behavior: auto;
 }
 
+/* Lenis layout contract (mirrors lenis/dist/lenis.css + prevents scroll chaining fights) */
+html.lenis.lenis-smooth,
+html.lenis.lenis-smooth body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth body {
+  overscroll-behavior-y: none;
+}
+
+html.lenis.lenis-scrolling main {
+  pointer-events: auto;
+}
+
+/* Home splash — block native scroll / touch until curtain completes */
+html.jade-splash-locked,
+html.jade-splash-locked body {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+html.jade-splash-locked main {
+  pointer-events: none;
+}
+
 /* ============================================================
    SCROLL PERFORMANCE — defer off-screen paint, lighten chrome
    ============================================================ */
@@ -373,6 +516,11 @@ html.lenis {
 
 .jade-scroll-chrome {
   contain: layout style;
+  isolation: isolate;
+}
+
+/* Sticky chip/tab rails — no layout contain (nested overflow-x must receive touch) */
+.jade-hscroll-chrome {
   isolation: isolate;
 }
 
@@ -395,28 +543,75 @@ html.lenis {
   }
 }
 
-/* Instagram marquee — keyframes moved off inline mount */
+/* Tier 3c — horizontal rails (category chips, amenity row, galleries) */
+[data-lenis-prevent].overflow-x-auto,
+[data-lenis-prevent].jade-hscroll-track,
+[data-lenis-prevent].amenity-highlight-track--responsive,
+[data-lenis-prevent-touch].overflow-x-auto,
+[data-lenis-prevent-touch].jade-hscroll-track,
+[data-lenis-prevent-touch].amenity-highlight-track--responsive,
+[data-jade-hscroll],
+[data-jade-hscroll].overflow-x-auto {
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+}
+
+/* Coarse pointers: guarantee touch pans the rail, not the Lenis page */
+@media (pointer: coarse) {
+  .jade-hscroll-track,
+  .amenity-highlight-track--responsive,
+  [data-jade-hscroll],
+  [data-jade-tab-rail] .jade-hscroll-track {
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+}
+
+/* Category / section tab rails — swipeable at every viewport */
+.jade-tab-rail {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.jade-tab-rail .jade-hscroll-track {
+  flex-wrap: nowrap;
+}
+
+.jade-tab-rail [data-tab-key],
+.jade-tab-rail [role="tab"],
+.jade-tab-rail a[href] {
+  flex-shrink: 0;
+  touch-action: manipulation;
+}
+
+/* Instagram marquee — GPU layer; cards stay fully painted (no content-visibility thrash) */
 @keyframes jade-instagram-marquee {
   0% {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   100% {
-    transform: translateX(calc(-50% - 0.75rem));
+    transform: translate3d(calc(-50% - 0.75rem), 0, 0);
   }
 }
 
 .jade-instagram-marquee-track {
   animation: jade-instagram-marquee 48s linear infinite;
-  contain: layout style;
+  contain: layout style paint;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .jade-instagram-marquee-track.is-paused {
   animation-play-state: paused;
+  will-change: auto;
 }
 
-.jade-instagram-card {
-  content-visibility: auto;
-  contain-intrinsic-size: 360px 520px;
+.jade-instagram-marquee-track .jade-instagram-card {
+  content-visibility: visible;
+  contain: layout style paint;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -548,13 +743,78 @@ body {
 }
 
 /* ============================================================
-   HORIZONTAL SCROLL TRACK — every browser (iOS momentum, containment)
+   HORIZONTAL SCROLL TRACK — iOS momentum, touch routing, flex-safe
+   Contract (every marketing rail): jade-hscroll-track + data-lenis-prevent-touch
+   Tab bars: <CategoryTabRail> → data-jade-tab-rail + shared track spacing (all viewports).
+   Optional: data-jade-hscroll (HorizontalScrollRail sets both).
+   Runtime: HScrollTouchAssurance backfills data-lenis-prevent on mount/DOM changes.
+   Prefer <HorizontalScrollRail> for galleries; <CategoryTabRail> for section tabs.
    ============================================================ */
 .jade-hscroll-track {
+  min-width: 0;
+  touch-action: pan-x;
   scroll-behavior: smooth;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   backface-visibility: hidden;
+}
+
+.jade-hscroll-fade {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  width: var(--jade-hscroll-fade-width);
+  overflow: hidden;
+}
+
+/*
+ * Tab / category bars — extreme charcoal glass fade (sticky chrome + #25282C).
+ * 60px blur + wide edge so tabs dissolve smoothly off the right.
+ */
+.jade-hscroll-fade--grey-white {
+  width: var(--jade-hscroll-fade-width-glass);
+  backdrop-filter: blur(60px) saturate(1.1);
+  -webkit-backdrop-filter: blur(60px) saturate(1.1);
+  background: linear-gradient(
+    to left,
+    rgba(var(--jade-charcoal-rgb), 0.92) 0%,
+    rgba(var(--jade-charcoal-rgb), 0.72) 18%,
+    rgba(var(--jade-charcoal-rgb), 0.42) 42%,
+    rgba(var(--jade-charcoal-rgb), 0.16) 68%,
+    rgba(255, 255, 255, 0.04) 88%,
+    transparent 100%
+  );
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.08);
+  -webkit-mask-image: linear-gradient(to left, #000 0%, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to left, #000 0%, #000 55%, transparent 100%);
+}
+
+.jade-hscroll-fade__pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  -webkit-mask-image: linear-gradient(to left, #000 0%, transparent 100%);
+  mask-image: linear-gradient(to left, #000 0%, transparent 100%);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  pointer-events: none;
+}
+
+.jade-hscroll-fade--grey-white .jade-hscroll-fade__pattern {
+  opacity: 0.04;
+  -webkit-mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.35) 0%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.35) 0%,
+    transparent 100%
+  );
 }
 
 @media (prefers-reduced-motion: reduce) {

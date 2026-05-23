@@ -28,6 +28,11 @@ import {
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 import { usePreloadNeighborImages } from "@/lib/carouselMotion";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
+import {
+  bookPath,
+  rememberListingReturn,
+  villaDetailPath,
+} from "@/lib/appRoutes";
 
 interface VillaCardProps {
   villa: (typeof VILLAS)[0];
@@ -64,9 +69,8 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const bookHref = (() => {
     const hasDates = dateRange.checkIn && dateRange.checkOut;
     const hasGuests = guests.adults > 0;
-    return hasDates && hasGuests
-      ? `/book?villa=${villa.id}&step=details`
-      : `/book?villa=${villa.id}`;
+    const base = bookPath(villa.id);
+    return hasDates && hasGuests ? `${base}&step=details` : base;
   })();
 
   const validImage = (img: string | undefined) => img && img.length > 0;
@@ -232,7 +236,11 @@ export default function VillaCard({ villa }: VillaCardProps) {
         </p>
 
         {/* Stats Row */}
-        <div className="flex flex-nowrap overflow-x-auto items-center gap-x-4 mb-3 text-white/80 font-manrope text-gh-label [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+        <div
+          data-lenis-prevent-touch
+          data-jade-hscroll
+          className="jade-hscroll-track flex flex-nowrap overflow-x-auto items-center gap-x-4 mb-3 text-white/80 font-manrope text-gh-label [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
+        >
           <div className="flex shrink-0 items-center gap-2">
             <Bed className="w-4 h-4 text-[#EFCD62]" />
             <span className="whitespace-nowrap">{villa.stats.stay}</span>
@@ -258,7 +266,11 @@ export default function VillaCard({ villa }: VillaCardProps) {
         </div>
 
         {/* Perfect For Tags */}
-        <div className="flex flex-nowrap overflow-x-auto items-center gap-2 mb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
+        <div
+          data-lenis-prevent-touch
+          data-jade-hscroll
+          className="jade-hscroll-track flex flex-nowrap overflow-x-auto items-center gap-2 mb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
+        >
           <span className="shrink-0 text-white/40 text-gh-label font-manrope font-bold uppercase tracking-wider mr-1">
             Perfect for:
           </span>
@@ -285,7 +297,8 @@ export default function VillaCard({ villa }: VillaCardProps) {
           {/* Buttons */}
           <div className="flex items-stretch gap-2 md:gap-2.5 shrink-0 h-[clamp(44px,5vw,52px)]">
             <Link
-              href={`/villas/${villa.id}?autoScroll=true`}
+              href={`${villaDetailPath(villa.id)}?autoScroll=true`}
+              onClick={() => rememberListingReturn()}
               className="h-full inline-flex items-center justify-center border border-white/20 text-white hover:bg-white hover:text-black transition-colors px-3 md:px-5 font-manrope font-bold text-gh-villa-footer-row tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
             >
               VIEW VILLA

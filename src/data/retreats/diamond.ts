@@ -319,7 +319,7 @@ const diamondBase = {
   ],
   video: {
     youtubeUrl: "https://www.youtube.com/watch?v=t-VX-VDkXj4",
-    thumbnail: "/Villa_Retreats/Diamond/Hero/Hero 1.webp",
+    thumbnail: "/Villa_Retreats/Diamond/Hero/Hero 2.webp",
     duration: "1:41",
   },
   faq: [

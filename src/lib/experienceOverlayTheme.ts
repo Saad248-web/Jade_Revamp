@@ -25,9 +25,12 @@ export const EXPERIENCE_OVERLAY_BG_CLASS = EXPERIENCE_SHELL_BG_CLASS;
 
 export const EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS = "bg-jade-charcoal";
 
-/** Scrim behind sheet only — rounded-corner edges (70% black). */
+/** Mobile chrome behind sheet — matches top 8vh band (corner radius wedges). */
+export const EXPERIENCE_OVERLAY_MOBILE_CHROME_BG_CLASS = "bg-black/60";
+
+/** Scrim behind sheet — same tone as top band so radius gaps are not solid black. */
 export const EXPERIENCE_OVERLAY_MOBILE_SCRIM_CLASS =
-  "bg-black/70 backdrop-blur-sm";
+  `${EXPERIENCE_OVERLAY_MOBILE_CHROME_BG_CLASS} backdrop-blur-sm`;
 
 /** Phone: top 8vh clear; scrim only under sheet. Desktop: full bleed. */
 export const EXPERIENCE_OVERLAY_ROOT_CLASS =
@@ -37,13 +40,16 @@ export const EXPERIENCE_OVERLAY_ROOT_CLASS =
 export const EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH = 8;
 export const EXPERIENCE_OVERLAY_MOBILE_SHEET_VH = 92;
 
-/** Top 8vh tap-to-dismiss band — transparent; scrim shows through from root. */
+/** Top 8vh tap-to-dismiss band — solid 60% black (not transparent). */
 export const EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_CLASS =
-  "h-[8vh] min-h-[8vh] shrink-0 bg-transparent";
+  `h-[8vh] min-h-[8vh] shrink-0 ${EXPERIENCE_OVERLAY_MOBILE_CHROME_BG_CLASS}`;
 
-/** 92vh zone — scrim layer sits here (not in top 8vh). */
+/** Gap between mobile close button and sheet top edge (below the 8vh band). */
+export const EXPERIENCE_OVERLAY_MOBILE_CLOSE_FRAME_GAP_REM = 1;
+
+/** 92vh zone — fills rounded-corner wedges with same chrome as top band. */
 export const EXPERIENCE_OVERLAY_MOBILE_SHEET_ZONE_CLASS =
-  "h-[92vh] min-h-0 shrink-0 relative";
+  `h-[92vh] min-h-0 shrink-0 relative ${EXPERIENCE_OVERLAY_MOBILE_CHROME_BG_CLASS}`;
 
 /** Scrim fill for sheet zone (corner wedges). */
 export const EXPERIENCE_OVERLAY_MOBILE_SHEET_SCRIM_CLASS = `absolute inset-0 pointer-events-none ${EXPERIENCE_OVERLAY_MOBILE_SCRIM_CLASS}`;
@@ -54,8 +60,11 @@ export const EXPERIENCE_OVERLAY_MOBILE_SHEET_FRAME_CLASS =
 
 export const EXPERIENCE_OVERLAY_STICKY_TABS_CLASS = `sticky top-0 z-[60] mb-0 w-full ${OVERLAY_STICKY_TABS_CHROME_CLASS}`;
 
-/** Scroll-end spacer so content clears the overlaid mobile booking bar. */
-export const EXPERIENCE_OVERLAY_BOOKING_BAR_SPACER_CLASS = "h-[5.75rem] shrink-0 md:hidden";
+/**
+ * Scroll-end spacer — matches mobile booking bar (pt-4 + row + pb), not extra section pad.
+ */
+export const EXPERIENCE_OVERLAY_BOOKING_BAR_SPACER_CLASS =
+  "h-[calc(4rem+env(safe-area-inset-bottom,0px))] shrink-0 md:hidden";
 
 /** Glass chrome — same tokens as {@link OVERLAY_STICKY_TABS_CHROME_CLASS}. */
 const EXPERIENCE_OVERLAY_BOTTOM_BAR_CHROME = `jade-scroll-chrome relative w-full ${OVERLAY_PRICING_BOTTOM_BAR_CHROME_CLASS} pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] md:pb-4 transition-all flex justify-center`;
@@ -69,9 +78,9 @@ export const EXPERIENCE_OVERLAY_BOTTOM_BAR_CLASS = `${EXPERIENCE_OVERLAY_BOTTOM_
 export const EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS =
   "pointer-events-auto w-full h-full flex items-center justify-center rounded-full border border-white/15 bg-transparent text-white backdrop-blur-2xl shadow-lg transition-colors hover:border-white/35";
 
-/** Body continues inside clipped sheet; padding for in-sheet footer on mobile. */
+/** Body inside sheet — mobile clearance via booking-bar spacer only; desktop keeps scroll pad. */
 export const EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS =
-  "w-full pb-6 max-md:pb-8 md:pb-20 bg-jade-charcoal max-md:rounded-none md:rounded-none";
+  "w-full max-md:pb-0 pb-6 md:pb-20 bg-jade-charcoal max-md:rounded-none md:rounded-none";
 
 /** Full-viewport mobile host — no fill; top band stays clear (hidden at md+). */
 export const EXPERIENCE_OVERLAY_MOBILE_HOST_CLASS =
@@ -84,3 +93,4 @@ export const EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS =
 /** Desktop full-bleed scroll (unchanged). */
 export const EXPERIENCE_OVERLAY_DESKTOP_BODY_CLASS =
   "hidden md:block absolute inset-0 overflow-y-auto overscroll-y-contain scrollbar-none touch-pan-y [overscroll-behavior:contain]";
+

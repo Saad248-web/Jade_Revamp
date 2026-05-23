@@ -134,7 +134,7 @@ export const INSTAGRAM_POSTS: InstagramPost[] = [
     id: "Cxp7fnkvZm9",
     type: "reel",
     fallbackImage:
-      "/Home Page/The Value Jade Provides/Private Villas around Bangalore 2.webp",
+      "/Home Page/The Value Jade Provides/Private Villa Retreats around Bangalore 2.webp",
     handle: "@jadehospitainment",
     caption: "Private Villas around Bangalore.",
     likes: "2.0k",

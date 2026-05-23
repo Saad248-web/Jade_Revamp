@@ -23,10 +23,15 @@ export default function VillaDetailAmenityHighlights({
     <div
       className={clsx(
         vd.amenityHighlightViewportShell,
+        vd.amenityHighlightViewportEdge,
         vd.amenityHighlightViewportInset,
       )}
     >
-      <div className={clsx(vd.amenityHighlightTrackFullBleed, className)}>
+      <div
+        className={clsx(vd.amenityHighlightTrackFullBleed, className)}
+        data-lenis-prevent-touch
+        data-jade-hscroll
+      >
         {highlights.map((amenity, idx) => {
           const Icon = getVillaDetailIcon(amenity.icon);
           return (

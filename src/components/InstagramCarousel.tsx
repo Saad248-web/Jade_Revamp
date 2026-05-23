@@ -20,10 +20,15 @@ import {
 import {
   fetchInstagramOembed,
   getCachedInstagramOembed,
+  waitForInstagramFallbackImages,
   type InstagramOembedItem,
 } from "@/lib/instagramOembedCache";
+import { subscribeLenisScroll } from "@/lib/lenisScrollBridge";
 
 type OembedItem = InstagramOembedItem;
+
+const SCROLL_VELOCITY_PAUSE = 0.65;
+const SCROLL_IDLE_MS = 140;
 
 const InstagramFramedCard = memo(function InstagramFramedCard({
   post,
@@ -70,6 +75,7 @@ const InstagramFramedCard = memo(function InstagramFramedCard({
             className="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
             decoding="async"
+            fetchPriority="low"
             referrerPolicy="no-referrer"
           />
           {post.type === "reel" ? (
@@ -124,40 +130,74 @@ const InstagramFramedCard = memo(function InstagramFramedCard({
 
 export default function InstagramCarousel() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [mediaMap] = useState<Record<string, OembedItem>>(() =>
+  const [mediaMap, setMediaMap] = useState<Record<string, OembedItem>>(() =>
     getCachedInstagramOembed() ?? {},
   );
   const [showTrack, setShowTrack] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [imagesReady, setImagesReady] = useState(false);
   const [marqueeLoop, setMarqueeLoop] = useState(false);
-  const [marqueeActive, setMarqueeActive] = useState(false);
+  const [pageScrolling, setPageScrolling] = useState(false);
 
   const postsForTrack = useMemo(
-    () => (marqueeLoop ? [...INSTAGRAM_POSTS, ...INSTAGRAM_POSTS] : INSTAGRAM_POSTS),
+    () =>
+      marqueeLoop ? [...INSTAGRAM_POSTS, ...INSTAGRAM_POSTS] : INSTAGRAM_POSTS,
     [marqueeLoop],
   );
 
-  /* Phase 1: header only. Phase 2: 10 cards. Phase 3: duplicate + animate. */
+  const marqueeAnimating =
+    marqueeLoop && inView && !pageScrolling;
+
   useEffect(() => {
     let cancelled = false;
-    const raf1 = requestAnimationFrame(() => {
-      const raf2 = requestAnimationFrame(() => {
-        if (!cancelled) setShowTrack(true);
-      });
+    const id = requestAnimationFrame(() => {
+      if (!cancelled) setShowTrack(true);
     });
-
     return () => {
       cancelled = true;
-      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(id);
     };
   }, []);
 
   useEffect(() => {
-    if (!showTrack) return;
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setInView(Boolean(entry?.isIntersecting));
+        if (reduced && entry?.isIntersecting) {
+          setMarqueeLoop(true);
+        }
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+    );
+    io.observe(section);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!showTrack || !inView || imagesReady) return;
+
+    let cancelled = false;
+    void waitForInstagramFallbackImages().then(() => {
+      if (!cancelled) setImagesReady(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [showTrack, inView, imagesReady]);
+
+  useEffect(() => {
+    if (!imagesReady || marqueeLoop) return;
 
     let idleId: number | undefined;
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
-    const duplicate = () => {
+    const enableLoop = () => {
       startTransition(() => setMarqueeLoop(true));
     };
 
@@ -169,9 +209,9 @@ export default function InstagramCarousel() {
             opts?: { timeout: number },
           ) => number;
         }
-      ).requestIdleCallback(duplicate, { timeout: 600 });
+      ).requestIdleCallback(enableLoop, { timeout: 400 });
     } else {
-      timeoutId = setTimeout(duplicate, 400);
+      timeoutId = setTimeout(enableLoop, 250);
     }
 
     return () => {
@@ -184,14 +224,19 @@ export default function InstagramCarousel() {
       }
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [showTrack]);
+  }, [imagesReady, marqueeLoop]);
 
-  /* oEmbed after first paint — fallbacks already shown; avoid mass re-render on mount */
   useEffect(() => {
     if (Object.keys(mediaMap).length > 0) return;
 
+    let cancelled = false;
+
     const run = () => {
-      void fetchInstagramOembed();
+      void fetchInstagramOembed().then((items) => {
+        if (!cancelled && Object.keys(items).length > 0) {
+          setMediaMap(items);
+        }
+      });
     };
 
     if ("requestIdleCallback" in window) {
@@ -202,8 +247,9 @@ export default function InstagramCarousel() {
             opts?: { timeout: number },
           ) => number;
         }
-      ).requestIdleCallback(run, { timeout: 2000 });
+      ).requestIdleCallback(run, { timeout: 2500 });
       return () => {
+        cancelled = true;
         (
           window as Window & {
             cancelIdleCallback: (id: number) => void;
@@ -212,26 +258,23 @@ export default function InstagramCarousel() {
       };
     }
 
-    const t = setTimeout(run, 1200);
-    return () => clearTimeout(t);
+    const t = setTimeout(run, 1500);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
   }, [mediaMap]);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
+    let idleTimer: ReturnType<typeof setTimeout> | undefined;
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        setMarqueeActive(Boolean(entry?.isIntersecting));
-      },
-      { threshold: 0.08, rootMargin: "0px 0px -10% 0px" },
-    );
-    io.observe(section);
-    return () => io.disconnect();
+    return subscribeLenisScroll(({ velocity }) => {
+      if (Math.abs(velocity) > SCROLL_VELOCITY_PAUSE) {
+        setPageScrolling(true);
+        if (idleTimer) clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => setPageScrolling(false), SCROLL_IDLE_MS);
+      }
+    });
   }, []);
 
   return (
@@ -259,12 +302,7 @@ export default function InstagramCarousel() {
         <div className="relative w-full overflow-hidden pb-4 min-h-[420px] sm:min-h-[460px]">
           {showTrack ? (
             <div
-              className={`flex w-max gap-5 jade-instagram-marquee-track hover:[animation-play-state:paused]${marqueeActive && marqueeLoop ? "" : " is-paused"}`}
-              style={
-                marqueeActive && marqueeLoop
-                  ? { willChange: "transform" }
-                  : undefined
-              }
+              className={`flex w-max gap-5 jade-instagram-marquee-track hover:[animation-play-state:paused]${marqueeAnimating ? "" : " is-paused"}`}
             >
               {postsForTrack.map((post, index) => (
                 <div

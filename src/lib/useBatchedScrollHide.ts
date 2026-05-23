@@ -17,7 +17,7 @@ function emit(next: boolean) {
   listeners.forEach((fn) => fn(hidden));
 }
 
-/** Instant direction reflex — no px threshold, no rAF batch. */
+/** Instant direction reflex — no px threshold, no delay (same as global Navbar). */
 function attachScrollHideEngine(): () => void {
   let lastY = getLenis()?.scroll ?? window.scrollY;
 

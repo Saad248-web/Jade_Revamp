@@ -12,6 +12,7 @@ import { useBooking } from "@/context/BookingContext";
 import { scrollToElement } from "@/lib/lenis";
 import { useBatchedScrollHide } from "@/lib/useBatchedScrollHide";
 import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
+import HorizontalScrollRail from "@/components/ui/HorizontalScrollRail";
 
 // Navbar height to offset the sticky filter bar
 const NAVBAR_HEIGHT = 72;
@@ -152,20 +153,25 @@ export default function VillasCarousel() {
             </div>
 
             {/* CATEGORIES - Right Side on Desktop (Scrollable, edge-to-edge) */}
-            <div
-              data-lenis-prevent
-              className="order-2 lg:order-2 flex-1 min-w-0 flex overflow-x-auto items-center gap-2 md:gap-2.5 pb-1 -mr-2 md:-mr-8 lg:-mr-16 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
+            <HorizontalScrollRail
+              fadeFrom="#1A1C1E"
+              patternFade
+              mobileViewportEdge
+              mobileTrackGutter
+              className="order-2 lg:order-2 flex-1 min-w-0 md:-mr-8 lg:-mr-16"
+              trackClassName="items-center gap-2 md:gap-2.5 pb-1 md:scroll-pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
             >
               {CATEGORIES.map((category) => (
                 <button
                   key={category}
+                  type="button"
                   onClick={() => handleCategoryChange(category)}
                   className={`whitespace-nowrap flex-shrink-0 px-4 py-2 text-gh-label font-manrope font-medium transition-all duration-300 ${ activeCategory === category ? "bg-[#EFCD62] text-[#1A1C1E] border border-[#EFCD62]" : "bg-transparent text-white/60 border border-white/20 hover:border-white/50 hover:text-white" }`}
                 >
                   {category}
                 </button>
               ))}
-            </div>
+            </HorizontalScrollRail>
           </div>
         </div>
       </div>

@@ -11,6 +11,8 @@ import {
 type LazyWhenNearProps = {
   children: ReactNode;
   minHeight?: string;
+  /** Wrapper classes — use `bg-jade-green` when defer shell must match section bg. */
+  className?: string;
   approachMargin?: string;
   mountMargin?: string;
   shell?: ReactNode;
@@ -26,6 +28,7 @@ type LazyWhenNearProps = {
 export default function LazyWhenNear({
   children,
   minHeight = "70vh",
+  className = "",
   approachMargin = "600px 0px",
   mountMargin = "100px 0px",
   shell,
@@ -91,7 +94,11 @@ export default function LazyWhenNear({
   }, [approachMargin, mountMargin, onApproach, mountDeferMs]);
 
   return (
-    <div ref={ref} className="jade-defer-paint" style={{ minHeight }}>
+    <div
+      ref={ref}
+      className={`jade-defer-paint ${className}`.trim()}
+      style={{ minHeight, containIntrinsicSize: minHeight }}
+    >
       {mounted ? children : approached && shell ? shell : null}
     </div>
   );

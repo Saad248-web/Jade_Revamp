@@ -6,7 +6,6 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Share2,
-  MapPin,
   Users,
   Home,
   ArrowRight,
@@ -29,9 +28,11 @@ import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 import VillaPricingBlocks, {
   buildCorporateOverlayPricingBlocks,
 } from "@/components/experience/VillaPricingBlocks";
-import ExperienceFaqAccordion, {
-  ExperiencePolicyCompactList,
-} from "@/components/experience/ExperienceFaqAccordion";
+import { ExperiencePolicyCompactList } from "@/components/experience/ExperienceFaqAccordion";
+import VillaDetailAmenityGrid from "@/components/villa/VillaDetailAmenityGrid";
+import VillaDetailFaqList from "@/components/villa/VillaDetailFaqList";
+import VillaDetailLocationBlock from "@/components/villa/VillaDetailLocationBlock";
+import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip";
 import {
   EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS,
   EXPERIENCE_OVERLAY_ROOT_CLASS,
@@ -47,10 +48,17 @@ import {
   VillaExperienceStickyTabs,
   isExperienceOverlayMdUp,
 } from "@/components/experience/VillaExperienceOverlayLayout";
-import AmenityHighlightTile from "@/components/villa/AmenityHighlightTile";
-import MeanderStrip from "@/components/ui/MeanderStrip";
-import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
+import VillaDetailIntroSection from "@/components/villa/VillaDetailIntroSection";
+import OverlayIntroAmenityHighlights from "@/components/villa/OverlayIntroAmenityHighlights";
+import clsx from "clsx";
+import {
+  VILLA_DETAIL_CHARCOAL,
+  VILLA_DETAIL_GREEN,
+  VILLA_DETAIL_SPACING,
+} from "@/components/villa/villaDetailSpacing";
 import { getVillaDetailIcon } from "@/lib/villaDetailIcons";
+
+const vd = VILLA_DETAIL_SPACING;
 
 interface CorporateVenueOverlayProps {
   isOpen: boolean;
@@ -213,90 +221,66 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
           />
         }
       >
-            {/* ── CHARCOAL: Title / Info / Stats / Amenity Cards / Description ─── */}
-            <div className="w-full bg-[#25282C]">
-              <div className="px-6 py-6 md:px-12 md:py-12 max-w-7xl mx-auto">
-                {/* Header */}
-                <div className="flex flex-col gap-2 mb-6">
-                  <span className="text-[#EFCD62] text-[10px] md:text-gh-label font-bold tracking-[0.2em] uppercase">
-                    {villa.type || "CORPORATE RETREAT"}
-                  </span>
-                  <h1 className="text-[28px] md:text-[32px] font-philosopher text-white mb-1 leading-tight">
-                    {villa.name}
-                  </h1>
-                  <a href={mapsHref} target="_blank" rel="noopener noreferrer"
-                    className="group flex items-center gap-2 text-white/90 mt-2 w-fit hover:text-[#EFCD62] transition-colors"
-                    aria-label="Open location in Google Maps">
-                    <MapPin className="w-5 h-5 text-white/70 shrink-0" />
-                    <span className="font-manrope text-[15px] md:text-[18px] underline-offset-4 group-hover:underline">
-                      {v.location?.split("·")[0]}
-                    </span>
-                  </a>
-                </div>
-
-                {/* Stats pill row — same as Villa Detail page */}
-                <div className="flex flex-nowrap overflow-x-auto scrollbar-none gap-x-4 items-center text-white/90 mb-8 text-[10px] md:text-[12px] lg:text-[14px] font-normal font-manrope tracking-wide pb-2 -mr-6 pr-6 md:-mr-12 md:pr-12">
-                  <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
-                    <Users className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                    <span>{getEventCapacity(villa)?.toString() || villa.stats?.events || "500 Guests"}</span>
-                  </div>
-                  <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
-                  <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
-                    <Home className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                    <span>{getStayCapacity(villa)?.toString() || villa.stats?.stay || "20 Stay"}</span>
-                  </div>
-                  <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
-                  <div className="flex items-center gap-2 whitespace-nowrap flex-shrink-0">
-                    <Calendar className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                    <span>{villa.stats?.lawn || villa.stats?.villaArea || "Private Lawn"}</span>
-                  </div>
-                </div>
-
-                {/* Horizontal amenity cards — same as Villa Detail page */}
-                {v.amenities && v.amenities.length > 0 && (
-                  <div className={VILLA_DETAIL_SPACING.amenityHighlightViewportShell}>
-                    <div className={VILLA_DETAIL_SPACING.amenityHighlightTrackFullBleed}>
-                    {v.amenities.map((amenity: any, idx: number) => {
-                      const IconComponent = getVillaDetailIcon(amenity.icon);
-                      const words = (amenity.label || "").split(" ");
-                      const label = words.length > 2 ? words.slice(0, 2).join(" ") : words[0] || "";
-                      const sublabel = words.length > 2 ? words.slice(2).join(" ") : words.slice(1).join(" ");
-                      return (
-                        <AmenityHighlightTile
-                          key={idx}
-                          icon={IconComponent}
-                          label={label}
-                          sublabel={sublabel || null}
-                        />
-                      );
-                    })}
+            <div className={VILLA_DETAIL_CHARCOAL}>
+              <div className={vd.sectionShell}>
+                <VillaDetailIntroSection
+                  eyebrow={villa.type || "CORPORATE RETREAT"}
+                  title={villa.name}
+                  mapsHref={mapsHref}
+                  locationLabel={v.location?.split("·")[0] ?? ""}
+                  statsRow={
+                    <div className={VILLA_DETAIL_SPACING.introStatsRow}>
+                      <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+                        <Users className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
+                        <span>{getEventCapacity(villa)?.toString() || villa.stats?.events || "500 Guests"}</span>
+                      </div>
+                      <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
+                      <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+                        <Home className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
+                        <span>{getStayCapacity(villa)?.toString() || villa.stats?.stay || "20 Stay"}</span>
+                      </div>
+                      <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
+                      <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
+                        <Calendar className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
+                        <span>{villa.stats?.lawn || villa.stats?.villaArea || "Private Lawn"}</span>
+                      </div>
+                    </div>
+                  }
+                  amenityHighlights={
+                    v.amenities?.length ? (
+                      <OverlayIntroAmenityHighlights
+                        amenities={v.amenities}
+                        getIcon={(icon) => getVillaDetailIcon(icon)}
+                      />
+                    ) : undefined
+                  }
+                >
+                  <p className={VILLA_DETAIL_SPACING.introDescription}>
+                    {villa.description ||
+                      `${villa.name} by Jade is an expansive corporate retreat featuring private spaces, lush lawns, and dedicated outdoor areas. Designed for corporate offsites, team celebrations, and immersive workations, the venue balances structured productivity with open-air engagement.`}
+                  </p>
+                  <div className={VILLA_DETAIL_SPACING.stackSm}>
+                    <h4 className="text-white font-manrope font-medium text-gh-body">
+                      Perfect for:
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        "Corporate Offsites",
+                        "Leadership Retreats",
+                        "Team Outings",
+                        "Workations",
+                        "Recognition Events",
+                      ].map((tag: string) => (
+                        <span
+                          key={tag}
+                          className="px-4 py-2 bg-white/5 border border-white/15 text-white/90 text-[11px] md:text-gh-label font-manrope"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   </div>
-                )}
-
-                {/* Description */}
-                <p className="text-white/80 text-gh-body leading-relaxed mb-8 text-justify">
-                  {villa.description ||
-                    `${villa.name} by Jade is an expansive corporate retreat featuring private spaces, lush lawns, and dedicated outdoor areas. Designed for corporate offsites, team celebrations, and immersive workations, the venue balances structured productivity with open-air engagement.`}
-                </p>
-
-                {/* Perfect For tags */}
-                <div className="mb-3">
-                  <h4 className="text-white font-manrope font-bold text-gh-label uppercase tracking-widest mb-3">Perfect for:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {[
-                      "Corporate Offsites",
-                      "Leadership Retreats",
-                      "Team Outings",
-                      "Workations",
-                      "Recognition Events",
-                    ].map((tag: string) => (
-                      <span key={tag} className="px-4 py-2 bg-white/5 border border-white/10 text-white/80 text-gh-label font-manrope">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                </VillaDetailIntroSection>
               </div>
             </div>
 
@@ -307,95 +291,77 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
             />
 
 
-            {/* ── GREEN: Amenities ─────────────────────────────────────────── */}
-            <section id="amenities" className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
-                <div className="max-w-4xl mx-auto">
-                  <h3 className="text-gh-h2 font-philosopher mb-6">Corporate Amenities</h3>
-                  <div className="space-y-5">
-                    {(villa.amenities || [
-                      { label: "Conference Room" },
-                      { label: "High-speed Wi-Fi" },
-                      { label: "AV Equipment" },
-                      { label: "Team Building Areas" },
-                      { label: "Dining Hall" },
-                    ]).map((item: any, idx: number) => (
-                      <div key={idx} className="flex items-center gap-2.5 sm:gap-3">
-                        <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rotate-45 bg-[#EFCD62] shrink-0" />
-                        <span className="text-white font-manrope font-bold text-gh-body uppercase tracking-wider">
-                          {item.label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </section>
+            <VillaDetailAmenityGrid
+              amenities={
+                villa.amenities || [
+                  { label: "Conference Room" },
+                  { label: "High-speed Wi-Fi" },
+                  { label: "AV Equipment" },
+                  { label: "Team Building Areas" },
+                  { label: "Dining Hall" },
+                ]
+              }
+              title="Corporate Amenities"
+              showSeeMore={false}
+              meanderBottom={corporatePricingBlocks.length > 0}
+            />
 
-            {corporatePricingBlocks.length > 0 ? <MeanderStrip accentLine="green" /> : null}
-
-            {/* ── CHARCOAL: Pricing ────────────────────────────────────────── */}
-            {corporatePricingBlocks.length > 0 && (
-              <section id="pricing" className="w-full bg-jade-green text-white">
-                <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
-                  <div className="max-w-4xl mx-auto">
+            {corporatePricingBlocks.length > 0 ? (
+              <section id="pricing" className={VILLA_DETAIL_GREEN}>
+                <div className={vd.sectionShell}>
+                  <div className={clsx(vd.content, vd.stack)}>
                     <VillaPricingBlocks
                       variant="villa-detail"
                       sectionTitle="Corporate Pricing"
                       blocks={corporatePricingBlocks}
                       footnote={
-                        <p className="mt-5 text-gh-label text-white/30 leading-relaxed italic">
+                        <p className={vd.pricingFootnote}>
                           Note: All corporate pricing is exclusive of GST. Custom packages for team building activities available.
                         </p>
                       }
                     />
                   </div>
                 </div>
+                <VillaDetailMeanderStrip track="green" />
               </section>
-            )}
+            ) : null}
 
-            {corporatePricingBlocks.length > 0 ? <MeanderStrip track="green" /> : null}
-
-            {/* ── GREEN: Location ───────────────────────────────────────────── */}
-            <section id="location" className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
-                <div className="max-w-4xl mx-auto">
-                  <h3 className="text-gh-h2 font-philosopher mb-6">Location</h3>
-                  <div className="overflow-hidden mb-6 border border-white/10">
-                    <a href={mapsHref} target="_blank" rel="noopener noreferrer"
-                      className="relative block w-full h-64 md:h-80 cursor-pointer outline-none transition-opacity hover:opacity-95"
-                      aria-label="Open location in Google Maps">
-                      <Image src={v.locationDetails?.mapImage || primaryImage || "/Villa_Retreats/Magnolia/Spaces/Villa.webp"} alt="Map" fill className="object-cover opacity-70" sizes="100vw" loading="lazy" />
-                    </a>
-                    <div className="p-5 md:p-6 border-t border-white/10">
-                      <a href={mapsHref} target="_blank" rel="noopener noreferrer"
-                        className="group flex items-start gap-3 outline-none hover:text-[#EFCD62] transition-colors">
-                        <MapPin className="w-5 h-5 text-[#EFCD62] shrink-0 mt-1" aria-hidden />
-                        <p className="text-white text-gh-body font-manrope font-medium leading-relaxed group-hover:underline underline-offset-4">
-                          {v.locationDetails?.address || v.location}
-                        </p>
-                      </a>
-                      <div className="w-full bg-white/[0.03] border border-white/5 px-4 py-3 mt-5">
-                        <p className="text-white/60 text-[12px] md:text-[13px] font-manrope">
-                          {v.locationDetails?.distance || "Approximately 45 minutes from Bangalore City Center"}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+            <section id="location" className={VILLA_DETAIL_CHARCOAL}>
+              <div className={vd.sectionShell}>
+                <div className={clsx(vd.content, vd.stack)}>
+                  <h3 className={vd.heading}>Location</h3>
+                  <VillaDetailLocationBlock
+                    mapsHref={mapsHref}
+                    locationDetails={{
+                      mapImage: v.locationDetails?.mapImage,
+                      address: v.locationDetails?.address || v.location,
+                      distance:
+                        v.locationDetails?.distance ||
+                        "Approximately 45 minutes from Bangalore City Center",
+                    }}
+                    fallbackMapImage={
+                      primaryImage || "/Villa_Retreats/Magnolia/Spaces/Villa.webp"
+                    }
+                  />
                 </div>
               </div>
             </section>
 
-            {/* ── CHARCOAL: Walkthrough ────────────────────────────────────── */}
-            <section id="walkthrough" className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
-                <div className="max-w-4xl mx-auto">
-                  <h3 className="text-gh-h2 font-philosopher mb-6">Video Walkthrough</h3>
-                  <div className="relative aspect-video w-full overflow-hidden bg-black/40 border border-white/10 group cursor-pointer">
-                    <Image src={walkthroughCover || "/Villa_Retreats/Magnolia/Hero/hero.webp"} alt="Video Cover" fill className="object-cover opacity-60 group-hover:opacity-40 transition-opacity" />
+            <section id="walkthrough" className={VILLA_DETAIL_CHARCOAL}>
+              <div className={vd.sectionShell}>
+                <div className={clsx(vd.content, vd.stack)}>
+                  <h3 className={vd.heading}>Video Walkthrough</h3>
+                  <div className="group relative aspect-video w-full cursor-pointer overflow-hidden border border-white/10 bg-gray-900">
+                    <Image
+                      src={walkthroughCover || "/Villa_Retreats/Magnolia/Hero/hero.webp"}
+                      alt="Video Cover"
+                      fill
+                      className="object-cover opacity-80 transition-opacity group-hover:opacity-60"
+                      sizes="(max-width: 768px) 100vw, 800px"
+                    />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center hover:bg-white/30 transition-all">
-                        <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition-all hover:bg-white/30 sm:h-20 sm:w-20">
+                        <div className="ml-1 h-0 w-0 border-b-[10px] border-l-[18px] border-t-[10px] border-b-transparent border-l-white border-t-transparent" />
                       </div>
                     </div>
                   </div>
@@ -403,36 +369,48 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
               </div>
             </section>
 
-            {/* ── GREEN: FAQ + Policies ─────────────────────────────────────── */}
-            <section id="faq" className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
-                <div className="max-w-4xl mx-auto">
-                  <h3 className="text-gh-h2 font-philosopher mb-6">FAQ</h3>
-                  <ExperienceFaqAccordion items={(villa.faq || []).map((item: any) => ({ question: item.question, answer: item.answer }))} />
-                  <div className="mt-10 pt-6 border-t border-white/5">
-                    <h3 className="text-gh-h2 font-philosopher mb-5">Key Policies</h3>
-                    <ExperiencePolicyCompactList policies={[
-                      { title: "AV Equipment", desc: "Projectors, screens, and basic sound systems are included. Specialized equipment on request." },
-                      { title: "Catering", desc: "In-house culinary team provides all meals. Customized corporate menus available." },
-                      { title: "Booking Policy", desc: "50% advance required to block dates. Full payment due week before the event." },
-                    ]} />
+            <section id="faq" className={VILLA_DETAIL_CHARCOAL}>
+              <div className={vd.sectionShell}>
+                <div className={clsx(vd.content, vd.stack)}>
+                  <h3 className={vd.heading}>FAQ</h3>
+                  {(villa.faq || []).length > 0 ? (
+                    <VillaDetailFaqList
+                      items={(villa.faq || []).map((item: any) => ({
+                        question: item.question,
+                        answer: item.answer,
+                      }))}
+                    />
+                  ) : null}
+                  <div className={vd.stackSm}>
+                    <h3 className={vd.heading}>Key Policies</h3>
+                    <ExperiencePolicyCompactList
+                      policies={[
+                        {
+                          title: "AV Equipment",
+                          desc: "Projectors, screens, and basic sound systems are included. Specialized equipment on request.",
+                        },
+                        {
+                          title: "Catering",
+                          desc: "In-house culinary team provides all meals. Customized corporate menus available.",
+                        },
+                        {
+                          title: "Booking Policy",
+                          desc: "50% advance required to block dates. Full payment due week before the event.",
+                        },
+                      ]}
+                    />
                   </div>
                 </div>
               </div>
             </section>
 
-
-            {/* ── CHARCOAL: Enquiry Form ────────────────────────────────────── */}
-            <div className="w-full bg-jade-charcoal text-white">
-              <div className="px-6 md:px-12 max-w-7xl mx-auto py-8 md:py-12">
-                <div className="max-w-4xl mx-auto">
-                  <div id="enquiry" ref={formRef}>
+            <div className={VILLA_DETAIL_CHARCOAL}>
+              <div className={vd.sectionShell}>
+                <div className={clsx(vd.content, vd.stack)} id="enquiry" ref={formRef}>
                 {view === "form" ? (
                   <>
-                    <h2 className="text-gh-h1 font-philosopher mb-3">
-                      Plan Your Corporate Retreat
-                    </h2>
-                    <p className="text-white/60 text-gh-body mb-10">
+                    <h2 className={vd.heading}>Plan Your Corporate Retreat</h2>
+                    <p className="text-white/60 text-gh-body">
                       Share a few details. Our corporate team will guide you
                       through venues &amp; pricing.
                     </p>
@@ -815,7 +793,6 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                 </div>
               </div>
             </div>
-          </div>
       </VillaExperienceOverlayBody>
 
       <VillaExperienceBookingBottomBar

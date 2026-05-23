@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import clsx from "clsx";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 
@@ -52,12 +52,6 @@ export default function BlogSection() {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 450, behavior: "smooth" });
-    }
-  };
-
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollContainerRef.current) return;
     setIsDragging(true);
@@ -90,7 +84,7 @@ export default function BlogSection() {
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       <div className="max-w-[1920px] mx-auto w-full px-6 md:px-12 lg:px-24">
         {/* Header Area */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 lg:mb-10 gap-3 md:gap-6">
+        <div className="mb-6 lg:mb-10">
           <div className="max-w-2xl">
             <p
               className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]"
@@ -99,30 +93,26 @@ export default function BlogSection() {
               BLOG
             </p>
             <h2
-              className="font-philosopher text-gh-h2 sm:text-gh-h1 text-white"
+              className="leading-tight"
               style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
             >
-              From the Journal
+              <Link
+                href="/blogs"
+                className="group inline-flex items-center gap-2 sm:gap-2.5 text-white hover:text-[#EFCD62] transition-colors"
+              >
+                <span className="font-philosopher text-gh-h2 sm:text-gh-h1">
+                  From the Journal
+                </span>
+                <ChevronRight
+                  className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 stroke-[1.25] transition-transform duration-300 group-hover:translate-x-0.5"
+                  aria-hidden
+                />
+              </Link>
             </h2>
             <p className="font-manrope text-white/60 text-[0.9rem] sm:text-gh-body leading-relaxed max-w-md">
               Thoughts on hosting, travel, and creating meaningful experiences
               through space.
             </p>
-          </div>
-
-          <div className="flex items-center gap-4 md:gap-5">
-            <Link
-              href="/blogs"
-              className="font-manrope text-[0.75rem] sm:text-gh-label text-[#EFCD62] tracking-widest uppercase border-b border-[#EFCD62]/30 hover:border-[#EFCD62] transition-colors pb-1"
-            >
-              View All
-            </Link>
-            <button
-              onClick={scrollRight}
-              className="hidden md:flex items-center justify-center w-11 h-11 lg:w-12 lg:h-12 rounded-full border border-white/20 hover:border-[#EFCD62] hover:bg-[#EFCD62]/10 transition-all text-white hover:text-[#EFCD62]"
-            >
-              <ArrowRight className="w-5 h-5" />
-            </button>
           </div>
         </div>
       </div>
@@ -131,7 +121,8 @@ export default function BlogSection() {
       <div className="max-w-[1920px] mx-auto w-full min-w-0">
         <div
           ref={scrollContainerRef}
-          data-lenis-prevent
+          data-lenis-prevent-touch
+          data-jade-hscroll
           onMouseDown={handleMouseDown}
           onMouseLeave={handleMouseLeave}
           onMouseUp={handleMouseUp}
@@ -146,14 +137,12 @@ export default function BlogSection() {
             <div
               key={post.id}
               className={clsx(
-                "snap-start flex-shrink-0 jade-hscroll-view-item pointer-events-none",
+                "snap-start flex-shrink-0 jade-hscroll-view-item",
                 index === 0 && "pl-6 md:pl-12 lg:pl-24",
                 index === BLOG_POSTS.length - 1 && "pr-6 md:pr-12 lg:pr-24"
               )}
             >
-              <div className="pointer-events-auto">
-                <BlogCard post={post} />
-              </div>
+              <BlogCard post={post} />
             </div>
           ))}
         </div>

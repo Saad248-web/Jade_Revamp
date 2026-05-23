@@ -3,6 +3,7 @@
 import { Suspense } from "react";
 import { AnimationProvider } from "@/context/AnimationContext";
 import SmoothScroll from "@/components/SmoothScroll";
+import HScrollTouchAssurance from "@/components/HScrollTouchAssurance";
 import ScrollToTopOnNavigate from "@/components/ScrollToTopOnNavigate";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import PartnerOverlay from "@/components/PartnerOverlay";
@@ -20,6 +21,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <BookingProvider>
           <WishlistProvider>
             <SmoothScroll>
+              <HScrollTouchAssurance />
               <Suspense fallback={null}>
                 <ScrollToTopOnNavigate />
               </Suspense>

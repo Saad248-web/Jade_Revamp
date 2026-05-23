@@ -8,7 +8,7 @@ import {
   useTransform,
   AnimatePresence,
 } from "framer-motion";
-import CorporateHeader from "@/components/CorporateHeader";
+import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import PrimaryButton from "@/components/PrimaryButton";
@@ -88,7 +88,7 @@ export default function PartyVillasPage() {
 
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-20 lg:pb-0">
-      <CorporateHeader />
+      <Navbar />
       <MobileBottomNav />
 
       {/* SECTION 1: HERO SECTION */}

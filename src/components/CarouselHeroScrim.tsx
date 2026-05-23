@@ -12,17 +12,20 @@ type CarouselHeroScrimVariant = "upper" | "value";
 export interface CarouselHeroScrimProps {
   /** `upper` = charcoal top only · `value` = home §5 charcoal→green blend */
   variant?: CarouselHeroScrimVariant;
+  className?: string;
 }
 
+/** Hero scrim — charcoal→jade linear gradient + radial text vignette (+ soft bloom). */
 export default function CarouselHeroScrim({
   variant = "upper",
+  className = "",
 }: CarouselHeroScrimProps) {
   const reducedMotion = useReducedMotion();
   const background =
     variant === "value" ? carouselHeroFadeScrim() : carouselUpperCharcoalScrim();
 
   return (
-    <>
+    <div className={`absolute inset-0 ${className}`}>
       <div
         aria-hidden
         className="absolute inset-0 z-[5] pointer-events-none"
@@ -44,6 +47,6 @@ export default function CarouselHeroScrim({
           }}
         />
       )}
-    </>
+    </div>
   );
 }
