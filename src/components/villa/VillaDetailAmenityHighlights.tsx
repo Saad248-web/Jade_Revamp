@@ -29,7 +29,6 @@ export default function VillaDetailAmenityHighlights({
     >
       <div
         className={clsx(vd.amenityHighlightTrackFullBleed, className)}
-        data-lenis-prevent-touch
         data-jade-hscroll
       >
         {highlights.map((amenity, idx) => {

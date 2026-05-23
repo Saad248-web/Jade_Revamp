@@ -1,22 +1,39 @@
 "use client";
 
-import { ReactNode, useEffect, useMemo } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import type { LenisInstance } from "@/lib/lenis";
 import {
-  getLenisPresetConfig,
+  getLenisPointerProfile,
   getLenisPresetFromPathname,
-  lenisSyncTouchEnabledForPreset,
+  getLenisRuntimeOptions,
   normalizeLenisPreset,
+  type LenisPointerProfile,
   type LenisScrollPreset,
   type SmoothScrollPreset,
 } from "@/lib/lenisConfig";
 import { attachLenisScrollBridge } from "@/lib/lenisScrollBridge";
+import { routeLenisVirtualScrollOverHorizontalRail } from "@/lib/hscrollLenisRouting";
 import { markDisplayRefreshRate } from "@/lib/displayRefreshRate";
 
 export type { LenisScrollPreset, SmoothScrollPreset };
+
+function useLenisPointerProfile(): LenisPointerProfile {
+  const [profile, setProfile] = useState<LenisPointerProfile>("fine");
+
+  useEffect(() => {
+    const mq = window.matchMedia("(pointer: coarse)");
+    const apply = () =>
+      setProfile(mq.matches ? "coarse" : "fine");
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  return profile;
+}
 
 export default function SmoothScroll({
   children,
@@ -27,14 +44,12 @@ export default function SmoothScroll({
   preset?: SmoothScrollPreset;
 }) {
   const pathname = usePathname();
+  const pointerProfile = useLenisPointerProfile();
+
   const preset: LenisScrollPreset = useMemo(() => {
     if (presetProp != null) return normalizeLenisPreset(presetProp);
     return getLenisPresetFromPathname(pathname ?? "/");
   }, [pathname, presetProp]);
-
-  const config = useMemo(() => getLenisPresetConfig(preset), [preset]);
-  const syncTouch = lenisSyncTouchEnabledForPreset(preset);
-  const useTouchInertia = preset === "extreme";
 
   useEffect(() => {
     if (
@@ -44,28 +59,30 @@ export default function SmoothScroll({
       return;
     }
 
+    const runtime = getLenisRuntimeOptions(preset);
+    const profile = getLenisPointerProfile();
+
     const root = document.documentElement;
     root.classList.add("lenis", "lenis-smooth");
     root.dataset.jadeLenisPreset = preset;
+    root.dataset.jadeLenisProfile = profile;
     markDisplayRefreshRate(root);
 
     const lenis = new Lenis({
-      lerp: config.lerp,
+      lerp: runtime.lerp,
       smoothWheel: true,
-      wheelMultiplier: config.wheelMultiplier,
-      touchMultiplier: config.touchMultiplier,
-      syncTouch,
-      syncTouchLerp: config.syncTouchLerp,
-      ...(useTouchInertia && config.touchInertiaExponent != null
-        ? { touchInertiaExponent: config.touchInertiaExponent }
-        : {}),
+      wheelMultiplier: runtime.wheelMultiplier,
+      touchMultiplier: runtime.touchMultiplier,
+      syncTouch: runtime.syncTouch,
+      syncTouchLerp: runtime.syncTouchLerp,
       allowNestedScroll: true,
-      easing: config.easing,
+      virtualScroll: routeLenisVirtualScrollOverHorizontalRail,
+      easing: runtime.easing,
       autoResize: true,
       autoRaf: true,
       anchors: {
-        duration: config.anchorDuration,
-        easing: config.easing,
+        duration: runtime.anchorDuration,
+        easing: runtime.easing,
         offset: -88,
       },
     });
@@ -95,8 +112,9 @@ export default function SmoothScroll({
       root.classList.remove("lenis", "lenis-smooth", "jade-hrr");
       delete root.dataset.jadeDisplayHz;
       delete root.dataset.jadeLenisPreset;
+      delete root.dataset.jadeLenisProfile;
     };
-  }, [config, preset, syncTouch, useTouchInertia]);
+  }, [preset, pointerProfile]);
 
   return <>{children}</>;
 }

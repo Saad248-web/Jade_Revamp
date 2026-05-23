@@ -4,10 +4,7 @@ import clsx from "clsx";
 import { forwardRef, type AriaRole, type ReactNode } from "react";
 import LuxuryPattern from "@/components/LuxuryPattern";
 import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
-import {
-  JADE_HSCROLL_DATA_ATTR,
-  JADE_LENIS_PREVENT_TOUCH,
-} from "@/lib/horizontalScrollClasses";
+import { JADE_HSCROLL_DATA_ATTR } from "@/lib/horizontalScrollClasses";
 
 const vd = VILLA_DETAIL_SPACING;
 
@@ -57,7 +54,6 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
           role={trackRole}
           aria-label={trackAriaLabel}
           {...{ [JADE_HSCROLL_DATA_ATTR]: "" }}
-          {...{ [JADE_LENIS_PREVENT_TOUCH]: "" }}
           className={clsx(
             "jade-hscroll-track flex overflow-x-auto min-w-0 overscroll-x-contain",
             mobileTrackGutter && vd.hScrollTrackMobileGutter,

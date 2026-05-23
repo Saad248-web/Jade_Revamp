@@ -54,7 +54,6 @@ export default function VillaDetailIntroSection({
         </a>
         <div
           className={clsx(vd.statsTagsRail, vd.introStats)}
-          data-lenis-prevent-touch
           data-jade-hscroll
         >
           {statsRow}

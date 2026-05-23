@@ -121,7 +121,6 @@ export default function BlogSection() {
       <div className="max-w-[1920px] mx-auto w-full min-w-0">
         <div
           ref={scrollContainerRef}
-          data-lenis-prevent-touch
           data-jade-hscroll
           onMouseDown={handleMouseDown}
           onMouseLeave={handleMouseLeave}

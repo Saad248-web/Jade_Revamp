@@ -1,21 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
-import { JADE_LENIS_PREVENT_TOUCH } from "@/lib/horizontalScrollClasses";
-
-/** Horizontal marketing rails — touch-only Lenis opt-out (wheel still scrolls page). */
-const HSCROLL_TOUCH_ONLY_SELECTOR =
-  ".jade-hscroll-track, .amenity-highlight-track--responsive, [data-jade-hscroll], [data-jade-tab-rail] .jade-hscroll-track";
+import { HORIZONTAL_SCROLL_RAIL_SELECTOR } from "@/lib/hscrollLenisRouting";
 
 /** Own scroll roots (SDA demo) — full Lenis prevent. */
 const FULL_LENIS_PREVENT_SELECTOR =
   "#experience-sda-scroller, [data-page-scroll-root]";
 
-function applyHorizontalRailTouchPrevent(el: HTMLElement) {
+function clearLenisBlocksOnHorizontalRail(el: HTMLElement) {
   el.removeAttribute("data-lenis-prevent");
-  if (!el.hasAttribute(JADE_LENIS_PREVENT_TOUCH)) {
-    el.setAttribute(JADE_LENIS_PREVENT_TOUCH, "");
-  }
+  el.removeAttribute("data-lenis-prevent-touch");
+  el.removeAttribute("data-lenis-prevent-wheel");
 }
 
 function applyFullLenisPrevent(el: HTMLElement) {
@@ -25,15 +20,16 @@ function applyFullLenisPrevent(el: HTMLElement) {
 }
 
 /**
- * Horizontal rails: data-lenis-prevent-touch (vertical wheel keeps working over blog/tabs).
- * SDA scroller: data-lenis-prevent (dedicated scroll timeline).
+ * Marketing horizontal rails must NOT use data-lenis-prevent* — that locks vertical
+ * scroll when the finger/cursor is on the row. Lenis allowNestedScroll + virtualScroll
+ * routing handles axis choice. SDA scroller keeps full prevent.
  */
 export default function HScrollTouchAssurance() {
   useEffect(() => {
     const apply = () => {
       document
-        .querySelectorAll<HTMLElement>(HSCROLL_TOUCH_ONLY_SELECTOR)
-        .forEach(applyHorizontalRailTouchPrevent);
+        .querySelectorAll<HTMLElement>(HORIZONTAL_SCROLL_RAIL_SELECTOR)
+        .forEach(clearLenisBlocksOnHorizontalRail);
 
       document
         .querySelectorAll<HTMLElement>(FULL_LENIS_PREVENT_SELECTOR)
@@ -49,7 +45,12 @@ export default function HScrollTouchAssurance() {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ["data-lenis-prevent", JADE_LENIS_PREVENT_TOUCH],
+      attributeFilter: [
+        "data-lenis-prevent",
+        "data-lenis-prevent-touch",
+        "data-lenis-prevent-wheel",
+        "class",
+      ],
     });
 
     return () => observer.disconnect();

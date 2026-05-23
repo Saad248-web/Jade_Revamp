@@ -237,7 +237,6 @@ export default function VillaCard({ villa }: VillaCardProps) {
 
         {/* Stats Row */}
         <div
-          data-lenis-prevent-touch
           data-jade-hscroll
           className="jade-hscroll-track flex flex-nowrap overflow-x-auto items-center gap-x-4 mb-3 text-white/80 font-manrope text-gh-label [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
         >
@@ -267,7 +266,6 @@ export default function VillaCard({ villa }: VillaCardProps) {
 
         {/* Perfect For Tags */}
         <div
-          data-lenis-prevent-touch
           data-jade-hscroll
           className="jade-hscroll-track flex flex-nowrap overflow-x-auto items-center gap-2 mb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
         >

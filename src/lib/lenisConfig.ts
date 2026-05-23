@@ -11,23 +11,26 @@ export type SmoothScrollPreset = LenisScrollPreset | "weddings";
  */
 export const LENIS_LERP = 0.09;
 
-/**
- * Site-wide premium silk — 0.042 balances glide + follow (0.03 feels stuck, not smooth).
- */
-export const EXTREME_LENIS_LERP = 0.042;
-export const EXTREME_LENIS_WHEEL_MULTIPLIER = 1;
-export const EXTREME_LENIS_TOUCH_MULTIPLIER = 0.96;
-export const EXTREME_LENIS_SYNC_TOUCH_LERP = 0.034;
-export const EXTREME_LENIS_TOUCH_INERTIA_EXPONENT = 50;
+/** Desktop wheel — silk with follow (see `getLenisRuntimeOptions`). */
+export const EXTREME_LENIS_LERP_DESKTOP = 0.05;
+/** Phone/tablet touch — smoother than desktop but not floaty. */
+export const EXTREME_LENIS_LERP_TOUCH = 0.088;
+/** @deprecated Base preset table; runtime picks desktop vs touch lerp. */
+export const EXTREME_LENIS_LERP = EXTREME_LENIS_LERP_DESKTOP;
+export const EXTREME_LENIS_WHEEL_MULTIPLIER = 0.98;
+export const EXTREME_LENIS_TOUCH_MULTIPLIER = 0.86;
+export const EXTREME_LENIS_SYNC_TOUCH_LERP = 0.078;
 export const EXTREME_LENIS_ANCHOR_DURATION = 2.1;
 export const EXTREME_LENIS_SCROLL_TO_DURATION = 1.9;
 export const EXTREME_LENIS_EASING = (t: number) => 1 - Math.pow(1 - t, 6);
 
 /** `/book` — premium but tighter for forms and payment steps. */
-export const BALANCED_LENIS_LERP = 0.07;
+export const BALANCED_LENIS_LERP_DESKTOP = 0.075;
+export const BALANCED_LENIS_LERP_TOUCH = 0.08;
+export const BALANCED_LENIS_LERP = BALANCED_LENIS_LERP_DESKTOP;
 export const BALANCED_LENIS_WHEEL_MULTIPLIER = 0.92;
-export const BALANCED_LENIS_TOUCH_MULTIPLIER = 0.94;
-export const BALANCED_LENIS_SYNC_TOUCH_LERP = 0.06;
+export const BALANCED_LENIS_TOUCH_MULTIPLIER = 0.88;
+export const BALANCED_LENIS_SYNC_TOUCH_LERP = 0.072;
 export const BALANCED_LENIS_ANCHOR_DURATION = 1.35;
 export const BALANCED_LENIS_SCROLL_TO_DURATION = 1.35;
 export const BALANCED_LENIS_EASING = (t: number) => 1 - Math.pow(1 - t, 5);
@@ -37,8 +40,6 @@ export const WEDDINGS_LENIS_LERP = EXTREME_LENIS_LERP;
 export const WEDDINGS_LENIS_WHEEL_MULTIPLIER = EXTREME_LENIS_WHEEL_MULTIPLIER;
 export const WEDDINGS_LENIS_TOUCH_MULTIPLIER = EXTREME_LENIS_TOUCH_MULTIPLIER;
 export const WEDDINGS_LENIS_SYNC_TOUCH_LERP = EXTREME_LENIS_SYNC_TOUCH_LERP;
-export const WEDDINGS_LENIS_TOUCH_INERTIA_EXPONENT =
-  EXTREME_LENIS_TOUCH_INERTIA_EXPONENT;
 export const WEDDINGS_LENIS_ANCHOR_DURATION = EXTREME_LENIS_ANCHOR_DURATION;
 export const WEDDINGS_LENIS_SCROLL_TO_DURATION = EXTREME_LENIS_SCROLL_TO_DURATION;
 export const WEDDINGS_LENIS_EASING = EXTREME_LENIS_EASING;
@@ -76,10 +77,11 @@ export function getLenisPresetFromPathname(pathname: string): LenisScrollPreset 
   return "extreme";
 }
 
-export function lenisSyncTouchEnabledForPreset(preset: LenisScrollPreset): boolean {
-  if (preset === "extreme") return true;
-  if (preset === "balanced") return lenisSyncTouchEnabled();
-  return lenisSyncTouchEnabled();
+export type LenisPointerProfile = "fine" | "coarse";
+
+export function getLenisPointerProfile(): LenisPointerProfile {
+  if (typeof window === "undefined") return "fine";
+  return window.matchMedia("(pointer: coarse)").matches ? "coarse" : "fine";
 }
 
 export type LenisPresetConfig = {
@@ -87,7 +89,6 @@ export type LenisPresetConfig = {
   wheelMultiplier: number;
   touchMultiplier: number;
   syncTouchLerp: number;
-  touchInertiaExponent?: number;
   anchorDuration: number;
   scrollToDuration: number;
   easing: (t: number) => number;
@@ -111,7 +112,6 @@ export function getLenisPresetConfig(preset: LenisScrollPreset): LenisPresetConf
       wheelMultiplier: EXTREME_LENIS_WHEEL_MULTIPLIER,
       touchMultiplier: EXTREME_LENIS_TOUCH_MULTIPLIER,
       syncTouchLerp: EXTREME_LENIS_SYNC_TOUCH_LERP,
-      touchInertiaExponent: EXTREME_LENIS_TOUCH_INERTIA_EXPONENT,
       anchorDuration: EXTREME_LENIS_ANCHOR_DURATION,
       scrollToDuration: EXTREME_LENIS_SCROLL_TO_DURATION,
       easing: EXTREME_LENIS_EASING,
@@ -126,6 +126,69 @@ export function getLenisPresetConfig(preset: LenisScrollPreset): LenisPresetConf
     scrollToDuration: LENIS_SCROLL_TO_DURATION,
     easing: LENIS_EASING,
   };
+}
+
+export type LenisRuntimeOptions = LenisPresetConfig & {
+  syncTouch: boolean;
+};
+
+/**
+ * Best-feel Lenis per viewport: desktop wheel silk, touch devices controlled sync.
+ * Never override touchInertiaExponent — Lenis default (1.7) is correct.
+ */
+export function getLenisRuntimeOptions(preset: LenisScrollPreset): LenisRuntimeOptions {
+  const base = getLenisPresetConfig(preset);
+  const profile = getLenisPointerProfile();
+
+  if (profile === "coarse") {
+    if (preset === "balanced") {
+      return {
+        ...base,
+        lerp: BALANCED_LENIS_LERP_TOUCH,
+        touchMultiplier: BALANCED_LENIS_TOUCH_MULTIPLIER,
+        syncTouchLerp: BALANCED_LENIS_SYNC_TOUCH_LERP,
+        syncTouch: true,
+      };
+    }
+    if (preset === "extreme") {
+      return {
+        ...base,
+        lerp: EXTREME_LENIS_LERP_TOUCH,
+        touchMultiplier: EXTREME_LENIS_TOUCH_MULTIPLIER,
+        syncTouchLerp: EXTREME_LENIS_SYNC_TOUCH_LERP,
+        syncTouch: true,
+      };
+    }
+    return {
+      ...base,
+      lerp: LENIS_LERP,
+      touchMultiplier: 0.9,
+      syncTouchLerp: LENIS_SYNC_TOUCH_LERP,
+      syncTouch: true,
+    };
+  }
+
+  if (preset === "balanced") {
+    return {
+      ...base,
+      lerp: BALANCED_LENIS_LERP_DESKTOP,
+      syncTouch: false,
+    };
+  }
+  if (preset === "extreme") {
+    return {
+      ...base,
+      lerp: EXTREME_LENIS_LERP_DESKTOP,
+      wheelMultiplier: EXTREME_LENIS_WHEEL_MULTIPLIER,
+      syncTouch: false,
+    };
+  }
+  return { ...base, syncTouch: false };
+}
+
+/** @deprecated Use getLenisRuntimeOptions */
+export function lenisSyncTouchEnabledForPreset(_preset: LenisScrollPreset): boolean {
+  return getLenisRuntimeOptions(_preset).syncTouch;
 }
 
 /** @deprecated Use getLenisPresetFromPathname + getLenisPresetConfig */

@@ -9,7 +9,7 @@ export const HORIZONTAL_SCROLL_TRACK_CLASSES =
 export const JADE_HSCROLL_DATA_ATTR = "data-jade-hscroll" as const;
 
 /**
- * Horizontal-only rails: block Lenis touch capture, NOT wheel — so vertical page
- * scroll continues when the cursor hovers the blog / tab / amenity row.
+ * @deprecated Do not put on horizontal rails — blocks vertical scroll on mobile/desktop.
+ * HScrollTouchAssurance strips this from `.jade-hscroll-track` at runtime.
  */
 export const JADE_LENIS_PREVENT_TOUCH = "data-lenis-prevent-touch" as const;

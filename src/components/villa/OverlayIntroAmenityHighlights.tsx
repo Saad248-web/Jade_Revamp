@@ -30,7 +30,6 @@ export default function OverlayIntroAmenityHighlights({
     >
       <div
         className={vd.amenityHighlightTrackFullBleed}
-        data-lenis-prevent-touch
         data-jade-hscroll
       >
         {amenities.map((amenity, idx) => {

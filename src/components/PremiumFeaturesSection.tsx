@@ -72,7 +72,6 @@ export default function PremiumFeaturesSection({
 
       {cardsLayout === "scroll" ? (
         <div
-          data-lenis-prevent-touch
           data-jade-hscroll
           className={scrollOuterClasses}
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}

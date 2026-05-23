@@ -543,29 +543,27 @@ html.jade-splash-locked main {
   }
 }
 
-/* Tier 3c — horizontal rails (category chips, amenity row, galleries) */
+/* Tier 3c — horizontal scroll roots only (both axes: vertical passes to page) */
 [data-lenis-prevent].overflow-x-auto,
 [data-lenis-prevent].jade-hscroll-track,
 [data-lenis-prevent].amenity-highlight-track--responsive,
-[data-lenis-prevent-touch].overflow-x-auto,
-[data-lenis-prevent-touch].jade-hscroll-track,
-[data-lenis-prevent-touch].amenity-highlight-track--responsive,
-[data-jade-hscroll],
-[data-jade-hscroll].overflow-x-auto {
+.jade-hscroll-track,
+.amenity-highlight-track--responsive {
   overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
+  /* pan-x alone blocks vertical scroll when finger/cursor is on the rail */
+  touch-action: pan-x pan-y;
 }
 
-/* Coarse pointers: guarantee touch pans the rail, not the Lenis page */
 @media (pointer: coarse) {
   .jade-hscroll-track,
   .amenity-highlight-track--responsive,
-  [data-jade-hscroll],
   [data-jade-tab-rail] .jade-hscroll-track {
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
+    overscroll-behavior-y: auto;
   }
 }
 
@@ -744,15 +742,14 @@ body {
 
 /* ============================================================
    HORIZONTAL SCROLL TRACK — iOS momentum, touch routing, flex-safe
-   Contract (every marketing rail): jade-hscroll-track + data-lenis-prevent-touch
-   Tab bars: <CategoryTabRail> → data-jade-tab-rail + shared track spacing (all viewports).
-   Optional: data-jade-hscroll (HorizontalScrollRail sets both).
-   Runtime: HScrollTouchAssurance backfills data-lenis-prevent on mount/DOM changes.
+   Contract: `.jade-hscroll-track` only — NO data-lenis-prevent* on marketing rails.
+   Tab bars: <CategoryTabRail> → data-jade-tab-rail. Lenis: allowNestedScroll + virtualScroll routing.
+   Runtime: HScrollTouchAssurance strips mistaken prevent attrs from horizontal tracks.
    Prefer <HorizontalScrollRail> for galleries; <CategoryTabRail> for section tabs.
    ============================================================ */
 .jade-hscroll-track {
   min-width: 0;
-  touch-action: pan-x;
+  touch-action: pan-x pan-y;
   scroll-behavior: smooth;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
