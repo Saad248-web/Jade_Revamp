@@ -219,7 +219,7 @@ export function VillaExperienceOverlayCloseFramer({
   }
 
   return (
-    <div className="hidden md:block fixed left-0 right-0 mx-auto top-6 z-[200] w-12 h-12 pointer-events-none">
+    <div className="hidden md:block fixed top-[max(1.5rem,env(safe-area-inset-top,0px))] right-[max(1.5rem,env(safe-area-inset-right,0px))] z-[200] w-12 h-12 pointer-events-none">
       {button}
     </div>
   );
@@ -296,18 +296,9 @@ export function VillaExperienceHeroCarousel({
           </button>
 
           <div className="flex flex-col items-center justify-center flex-1 min-w-0 px-1 pointer-events-auto">
-            <span className="text-white font-manrope text-gh-label font-bold tracking-[0.25em] md:tracking-[0.3em] uppercase mb-2 text-center line-clamp-2">
+            <span className="text-white font-manrope text-gh-label font-bold tracking-[0.25em] md:tracking-[0.3em] uppercase text-center line-clamp-2">
               {slideLabel}
             </span>
-            <div className="flex items-center gap-3">
-              <span className="text-white font-philosopher text-gh-gallery-pagination tabular-nums leading-none">
-                {currentImageIndex + 1}
-              </span>
-              <div className="w-12 h-[1px] bg-white/40 shrink-0" />
-              <span className="text-white/60 font-philosopher text-gh-gallery-pagination tabular-nums leading-none">
-                {images.length}
-              </span>
-            </div>
           </div>
 
           <button
@@ -321,7 +312,7 @@ export function VillaExperienceHeroCarousel({
         </div>
       ) : (
         <div className="absolute bottom-4 md:bottom-6 left-4 right-4 z-20 flex flex-col items-center pointer-events-none">
-          <span className="pointer-events-none text-white font-manrope text-gh-label font-bold tracking-[0.25em] md:tracking-[0.3em] uppercase mb-2 text-center line-clamp-2">
+          <span className="pointer-events-none text-white font-manrope text-gh-label font-bold tracking-[0.25em] md:tracking-[0.3em] uppercase text-center line-clamp-2">
             {slideLabel}
           </span>
         </div>

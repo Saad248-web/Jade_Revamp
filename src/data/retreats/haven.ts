@@ -1,4 +1,4 @@
-import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+import { amenityHighlightsFrom } from "@/lib/villaDetailData";
 
 const havenPerfectForCards = [
     {
@@ -23,19 +23,19 @@ const havenPerfectForCards = [
 const havenBase = {
   id: "haven",
   name: "Haven",
-  type: "PRIVATE LUXURY VILLA · SOCIAL GATHERINGS",
-  location: "Marenahalli · North Bangalore",
+  type: "PRIVATE LUXURY VILLA",
+  location: "Marenahalli, Bengaluru",
   stats: {
-    stay: "20 Guests",
+    stay: "Up to 20 Guests",
     events: "100 Guests",
     bhk: "4 BHK",
     lawn: "Lawn Area Outdoor Space",
     villaArea: "Private Standalone Property",
   },
   description:
-    "Haven is a contemporary 4-bedroom private villa offering modern design and residential comfort. Ideal for family stays and medium-scale gatherings, it features clean architectural style with emphasis on natural light. With a private pool, jacuzzi, terrace space, and large shared areas, the villa supports both relaxed stays and larger gatherings in a controlled, private setting.",
+    "Haven is a 4-bedroom private villa designed for group stays and social gatherings, combining modern interiors with open outdoor spaces. With a private pool, lawn, and large shared areas, the villa supports both relaxed stays and larger gatherings in a controlled, private setting.",
   perfectForCards: havenPerfectForCards,
-  perfectForTags: perfectForTagsFromCards(havenPerfectForCards),
+  perfectForTags: ["Private Celebrations", "Couple Retreat"],
   categories: ["Luxury Stays", "Party Venues", "Weekend Getaways", "Weddings"],
   image: "/Villa_Retreats/Haven/Hero/hero.webp",
   images: [

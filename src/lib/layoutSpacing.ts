@@ -40,3 +40,11 @@ export const MOBILE_BOTTOM_NAV_CONTENT_GAP = "clamp(1.25rem, 3.5vw, 1.5rem)";
  */
 export const MOBILE_BOTTOM_NAV_CLEARANCE_CLASS =
   "max-lg:pb-[calc(0.5rem+2.75rem+max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))+clamp(1.25rem,3.5vw,1.5rem))]";
+
+/** Floating scroll-line indicator — clears fixed {@link MobileBottomNav} on mobile/tablet */
+export const SCROLL_LINE_INDICATOR_BOTTOM_CLASS =
+  "max-lg:bottom-[calc(0.5rem+2.75rem+max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))+clamp(1.25rem,3.5vw,1.5rem))] lg:bottom-10";
+
+/** In-flow hero CTA (margin above mobile nav) */
+export const SCROLL_LINE_INDICATOR_MB_CLASS =
+  "max-lg:mb-[calc(0.5rem+2.75rem+max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))+clamp(1.25rem,3.5vw,1.5rem))] lg:mb-8";

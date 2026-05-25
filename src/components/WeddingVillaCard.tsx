@@ -61,7 +61,11 @@ export default function WeddingVillaCard({
         "600",
       icon: Users,
     },
-    { label: "Parking", value: "80", icon: Car },
+    {
+      label: "Parking",
+      value: (villa as { overlay?: { parking?: string } })?.overlay?.parking ?? "80",
+      icon: Car,
+    },
     {
       label: "Stay",
       value:
@@ -72,7 +76,11 @@ export default function WeddingVillaCard({
     },
   ];
 
-  const onwards = (getOverlayVillaData("wedding", villa?.id) as any)?.overlay?.onwardsPrice ?? null;
+  const onwards =
+    (villa as { overlay?: { onwardsPrice?: string } })?.overlay?.onwardsPrice ??
+    (getOverlayVillaData("wedding", villa?.id) as { overlay?: { onwardsPrice?: string } } | null)
+      ?.overlay?.onwardsPrice ??
+    null;
 
   return (
     <div className="flex flex-col lg:flex-row gap-5 lg:gap-10 xl:gap-11 w-full pb-6 lg:py-8 border-b border-white/5 last:border-b-0 bg-[#25282C]">

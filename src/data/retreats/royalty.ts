@@ -25,7 +25,7 @@ const royaltyBase = {
   bookable: false,
   name: "Royalty",
   type: "EQUESTRIAN HILL VIEW RETREAT",
-  location: "Chikkaballapur · Near Nandi Hills",
+  location: "Chikkaballapur",
   stats: {
     stay: "15 Guests",
     events: "30 Guests",
@@ -34,7 +34,7 @@ const royaltyBase = {
     villaArea: "Hilltop Glasshouse",
   },
   description:
-    "Royalty is a private equestrian 5-bedroom glasshouse villa set against the Varlakonda hills. The property features indoor living with expansive outdoor spaces, including a private pool with a waterfall, a riding arena, and a horse stable. The property combines rustic hillside experiences with modern comforts, creating a unique retreat experience.",
+    "Royalty by Jade is a private equestrian villa set against the Varlakonda hills, designed for stays and small-format gatherings. The 5-bedroom glasshouse villa combines indoor living with expansive outdoor spaces and uninterrupted hill views. With a private pool, riding arena, horse stable, and landscaped lawn, the property offers a mix of relaxation and activity-led experiences. Built for privacy, it supports group stays, celebrations, and retreat-style experiences.",
   perfectForCards: royaltyPerfectForCards,
   perfectForTags: perfectForTagsFromCards(royaltyPerfectForCards),
   categories: [

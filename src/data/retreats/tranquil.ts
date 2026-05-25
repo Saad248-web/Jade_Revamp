@@ -1,4 +1,4 @@
-import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+import { amenityHighlightsFrom } from "@/lib/villaDetailData";
 
 const tranquilPerfectForCards = [
     {
@@ -24,19 +24,19 @@ const tranquilPerfectForCards = [
 const tranquilBase = {
   id: "tranquil",
   name: "Tranquil Woods",
-  type: "LUXURY GARDEN RETREAT · WEDDING VENUE",
-  location: "Kanakapura Road · South Bangalore",
+  type: "LUXURY GARDEN RETREAT",
+  location: "Near Art of Living, Kanakapura Road, Bangalore",
   stats: {
-    stay: "15 Guests",
+    stay: "15-35 Guests",
     events: "500 Guests",
     bhk: "6 BHK",
     lawn: "Multi-layered Garden",
     villaArea: "6 Bedrooms · Glass Villa & Suites",
   },
   description:
-    "Tranquil Woods is a 6-bedroom private pool estate within an expansive multi-layered garden layout — a 2-bedroom glass pool villa paired with four garden-facing family suites. Close to the Art of Living International Centre, the property features glass-walled living areas and undulating lawns. Designed for both overnight luxury stays and large-format weddings and events, it holds capacity for up to 500 guests in its outdoor event spaces while offering villa and suite accommodation across the grounds.",
+    "Tranquil Woods is a six-bedroom private pool estate set within an expansive landscaped property designed for both stays and large-format events. The estate sits within a multi-layered garden layout — a glass pool villa and four garden-facing family suites — creating a natural flow between indoor spaces and open grounds. With a large pool, glass-walled living area, and undulating lawns, the property supports everything from relaxed stays to weddings and corporate gatherings. Located close to the Art of Living, it offers a balance of accessibility and seclusion.",
   perfectForCards: tranquilPerfectForCards,
-  perfectForTags: perfectForTagsFromCards(tranquilPerfectForCards),
+  perfectForTags: ["Weddings", "Corporate Retreats", "Private Celebrations"],
   categories: ["Weddings", "Pre-wedding", "Luxury Stays", "Nature Retreats"],
   thumbnail: "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
   image: "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
@@ -70,13 +70,13 @@ const tranquilBase = {
     {
       label: "6-Bedroom Estate",
       description:
-        "Two bedrooms in the glass pool villa plus four garden-facing family suites across the grounds.",
+        "Six bedrooms across the glass pool villa and four garden-facing family suites across the grounds.",
       icon: "Bed",
     },
     {
       label: "Glass Pool Villa",
       description:
-        "2-bedroom glass-walled villa with private pool access, living areas, and event-ready interiors.",
+        "Glass-walled pool villa with private pool access, living areas, and event-ready interiors within the six-bedroom estate.",
       icon: "Home",
     },
     {
@@ -314,12 +314,12 @@ const tranquilBase = {
     {
       question: "How many bedrooms does the property have?",
       answer:
-        "Six bedrooms in total — two in the glass pool villa and four garden-facing family suites.",
+        "Six bedrooms in total across the glass pool villa and garden-facing family suites.",
     },
     {
       question: "How many guests can stay overnight?",
       answer:
-        "Up to 15 guests can be accommodated across the six bedrooms and shared living areas.",
+        "Between 15 and 35 guests can be accommodated across the six bedrooms and shared living areas.",
     },
     {
       question: "Is the property suitable for weddings?",

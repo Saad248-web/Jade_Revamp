@@ -8,6 +8,18 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import PrimaryButton from "@/components/PrimaryButton";
+import {
+  scrollLinkedPanelAreaClass,
+  scrollLinkedPanelOuterClass,
+  scrollLinkedPanelImageFrameClass,
+  scrollLinkedPanelSlideClass,
+  scrollLinkedPanelSlideInteractiveClass,
+  scrollLinkedPanelStackWideClass,
+  scrollLinkedPanelStackWrapClass,
+  scrollLinkedSectionHeaderTallClass,
+  scrollLinkedStickyStageClass,
+  scrollLinkedStickyStageInnerClass,
+} from "@/lib/scrollLinkedPanelLayout";
 
 function pick(images: string[], idx: number) {
   if (!images.length) return "";
@@ -81,9 +93,11 @@ export default function WeddingCelebrationsSection() {
 
   return (
     <section ref={targetRef} className="relative h-[600vh] bg-[#1A1C1E]">
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#1A1C1E]">
+      <div
+        className={`${scrollLinkedStickyStageClass} ${scrollLinkedStickyStageInnerClass} bg-[#1A1C1E]`}
+      >
         {/* Top Label & Counter - Global */}
-        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(38.4px,4.8vh,64px)] pb-8">
+        <div className={scrollLinkedSectionHeaderTallClass}>
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/90 to-transparent -z-10" />
           <span
             className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-[#EFCD62] drop-shadow-lg block"
@@ -99,7 +113,7 @@ export default function WeddingCelebrationsSection() {
         </div>
 
         {/* Panels Interactive Area */}
-        <div className="relative w-full flex-1 min-h-0 z-10">
+        <div className={scrollLinkedPanelAreaClass}>
           {celebrations.map((celebration, i) => (
             <CelebrationPanelSlide
               key={celebration.id}
@@ -214,16 +228,17 @@ function CelebrationPanelSlide({
   return (
     <motion.div
       style={{ x, zIndex: index * 10 }}
-      className="absolute inset-0 w-full h-full flex items-center justify-center bg-transparent pointer-events-none"
+      className={`${scrollLinkedPanelSlideClass} bg-transparent`}
     >
-      <div className="pointer-events-auto flex items-center justify-center w-full h-full">
+      <div className={scrollLinkedPanelSlideInteractiveClass}>
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
         <div
           ref={panelRef}
-          className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-24 pb-[64px] sm:pb-0"
+          className={`${scrollLinkedPanelOuterClass} px-6 md:px-24`}
         >
-          <div className="relative w-full sm:h-full max-w-xl mx-auto flex flex-col items-stretch sm:justify-center gap-3 lg:gap-5">
-            <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none bg-black shrink-0">
+          <div className={`${scrollLinkedPanelStackWrapClass} max-w-xl`}>
+            <div className={scrollLinkedPanelStackWideClass}>
+            <div className={scrollLinkedPanelImageFrameClass}>
               <div className="w-full h-full relative">
                 {data.image ? (
                   <JadeImage
@@ -273,6 +288,7 @@ function CelebrationPanelSlide({
                   {data.cta} <ArrowRight className="w-5 h-5" />
                 </Link>
               </motion.div>
+            </div>
             </div>
           </div>
         </div>

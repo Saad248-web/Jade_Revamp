@@ -197,8 +197,6 @@ export default function AboutPage() {
       <PremiumFeaturesSection
         subheading="WHY JADE"
         heading="Because how you operate matters"
-        headerGroupClassName="flex flex-col items-center gap-1.5"
-        cardRailSpacingClassName="jade-premium-rail-gap-y"
         cardsLayout="scroll"
         cards={[
           {

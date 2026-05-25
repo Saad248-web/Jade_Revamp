@@ -91,7 +91,7 @@ export default function WeddingPage() {
         <WeddingHero />
 
         <div className="relative z-10">
-          <WeddingScrollSection />
+          <WeddingScrollSection id="wedding-philosophy" />
           <WeddingVillasCarousel />
           <MeanderStrip accentLine="green" />
           <WeddingServicesSection />

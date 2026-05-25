@@ -29,6 +29,11 @@ interface PremiumFeaturesSectionProps {
   headerGroupClassName?: string;
 }
 
+/** Canonical scroll-rail layout (About page reference). */
+export const PREMIUM_SCROLL_HEADER_GROUP =
+  "flex flex-col items-center gap-1.5";
+export const PREMIUM_SCROLL_RAIL_GAP = "jade-premium-rail-gap-y";
+
 export default function PremiumFeaturesSection({
   subheading,
   heading,
@@ -45,12 +50,21 @@ export default function PremiumFeaturesSection({
   cardRailSpacingClassName,
   headerGroupClassName,
 }: PremiumFeaturesSectionProps) {
+  const resolvedHeaderGroupClassName =
+    headerGroupClassName ??
+    (cardsLayout === "scroll" ? PREMIUM_SCROLL_HEADER_GROUP : undefined);
+  const resolvedCardRailSpacingClassName =
+    cardRailSpacingClassName ??
+    (cardsLayout === "scroll" ? PREMIUM_SCROLL_RAIL_GAP : undefined);
+
   const scrollRailVerticalSpacing =
-    cardRailSpacingClassName ?? cardsBlockClassName;
+    resolvedCardRailSpacingClassName ?? cardsBlockClassName;
   /* Narrow: justify-start avoids centered-rail clipping. xl+: centered row when viewport fits ~4×269 + gaps. */
   const scrollOuterClasses = [
     "w-full flex justify-start xl:justify-center overflow-x-auto overflow-y-clip scrollbar-none jade-hscroll-track scroll-pl-4 md:scroll-pl-6 lg:scroll-pl-8 xl:scroll-pl-6",
-    cardRailSpacingClassName ? scrollRailVerticalSpacing : `pb-3 ${scrollRailVerticalSpacing}`,
+    resolvedCardRailSpacingClassName
+      ? scrollRailVerticalSpacing
+      : `pb-3 ${scrollRailVerticalSpacing}`,
   ].join(" ");
   const scrollTrackClasses =
     "inline-flex gap-[clamp(10px,2vw,14px)] snap-x snap-mandatory scroll-smooth pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] md:pl-8 md:pr-8 lg:pl-12 lg:pr-10 xl:pl-8 xl:pr-8";
@@ -63,16 +77,16 @@ export default function PremiumFeaturesSection({
       <div className="max-w-7xl mx-auto px-4 w-full flex flex-col items-center">
         <div
           className={`text-center ${
-            headerGroupClassName ?? ""
+            resolvedHeaderGroupClassName ?? ""
           } ${
-            cardsLayout === "scroll" && cardRailSpacingClassName
+            cardsLayout === "scroll" && resolvedCardRailSpacingClassName
               ? ""
               : headerBlockClassName
           }`}
         >
           <p
             className={`text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope ${
-              headerGroupClassName ? "mb-0" : "mb-[11.2px]"
+              resolvedHeaderGroupClassName ? "mb-0" : "mb-[11.2px]"
             }`}
           >
             {subheading}
@@ -128,19 +142,19 @@ export default function PremiumFeaturesSection({
       <div className="max-w-7xl mx-auto px-4 w-full flex flex-col items-center">
         <div
           className={`flex flex-col items-center w-full ${
-            cardRailSpacingClassName ? "max-w-3xl gap-4" : ""
+            resolvedCardRailSpacingClassName ? "max-w-3xl gap-4" : ""
           }`}
         >
           <p
             className={`text-white/60 font-philosopher italic text-gh-body text-center max-w-3xl leading-relaxed ${
-              cardRailSpacingClassName ? "mb-0" : "mb-[19.2px]"
+              resolvedCardRailSpacingClassName ? "mb-0" : "mb-[19.2px]"
             }`}
           >
             {footerText}
           </p>
 
           <div
-            className={`w-full ${cardRailSpacingClassName ? "" : "max-w-3xl mx-auto"}`}
+            className={`w-full ${resolvedCardRailSpacingClassName ? "" : "max-w-3xl mx-auto"}`}
           >
             <PrimaryButton
               href={ctaLink}

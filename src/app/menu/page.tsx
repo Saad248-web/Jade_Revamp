@@ -13,16 +13,11 @@ import {
   Youtube,
   Phone,
 } from "lucide-react";
-import { VILLAS, CATEGORIES } from "@/lib/mockData";
-import { categoryToListingPath } from "@/lib/appRoutes";
+import { VILLAS } from "@/lib/mockData";
 import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
 import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
-import {
-  MenuSectionChipTabs,
-  MenuVillasExperiencesSwitcher,
-  type MenuTabItem,
-} from "@/components/menu/MenuPanelTabs";
+import { MenuVillasExperiencesSwitcher } from "@/components/menu/MenuPanelTabs";
 
 /** VILLAS hidden from menu villa section only (still bookable via direct URL). */
 const MENU_VILLA_EXCLUDED_IDS = new Set(["vannani", "lemon-tree"]);
@@ -33,18 +28,6 @@ const MENU_VILLAS = sortVillasForDirectory(
       !(v as { hideFromVillasDirectory?: boolean }).hideFromVillasDirectory,
   ),
 );
-
-const MENU_VILLA_CATEGORY_TABS: MenuTabItem[] = CATEGORIES.filter(
-  (cat) =>
-    cat === "All" ||
-    MENU_VILLAS.some((v) =>
-      v.categories?.some((c: string) => c.toLowerCase() === cat.toLowerCase()),
-    ),
-).map((cat) => ({
-  id: cat,
-  label: cat,
-  href: categoryToListingPath(cat),
-}));
 
 type MenuExperienceItem = {
   title: string;
@@ -126,15 +109,6 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
       "/Villa_Retreats/Magnolia/Hero/Hero 1.webp",
     ],
   },
-];
-
-const MENU_EXPERIENCE_TABS: MenuTabItem[] = [
-  { id: "all", label: "All", href: "/experiences" },
-  ...MENU_EXPERIENCES.map((exp) => ({
-    id: exp.href,
-    label: exp.title,
-    href: exp.href,
-  })),
 ];
 
 const FALLBACK_MENU_IMAGE = "/Villa_Retreats/Magnolia/Hero/Hero 1.webp";
@@ -428,10 +402,6 @@ export default function MenuPage() {
                   onExperiences={openExperiencesSection}
                 />
                 <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-y-contain pb-24" data-lenis-prevent>
-                <MenuSectionChipTabs
-                  tabs={MENU_VILLA_CATEGORY_TABS}
-                  bleedClassName={MENU_BLEED_RIGHT_MOBILE}
-                />
                 <div className="space-y-6 pr-1">
                   {MENU_VILLAS.map((villa) => (
                     <Link
@@ -502,10 +472,6 @@ export default function MenuPage() {
                 />
 
                 <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-y-contain pb-24" data-lenis-prevent>
-                <MenuSectionChipTabs
-                  tabs={MENU_EXPERIENCE_TABS}
-                  bleedClassName={MENU_BLEED_RIGHT_MOBILE}
-                />
                 <div className="space-y-6 pr-1">
                   {MENU_EXPERIENCES.map((exp) => (
                     <div key={exp.href + exp.title} className="flex flex-col group">
@@ -629,11 +595,6 @@ export default function MenuPage() {
                 className="absolute inset-0 flex flex-col min-h-0 overflow-hidden pointer-events-auto"
               >
                 <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-y-contain px-4 md:px-6 lg:px-8 pt-5 pb-20">
-                <MenuSectionChipTabs
-                  tabs={MENU_VILLA_CATEGORY_TABS}
-                  bleedClassName={MENU_BLEED_RIGHT_DESKTOP}
-                  className="-mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8"
-                />
                 <div className="w-full space-y-12">
                   {MENU_VILLAS.map((villa, idx) => (
                     <motion.div
@@ -707,11 +668,6 @@ export default function MenuPage() {
                 className="absolute inset-0 flex flex-col min-h-0 overflow-hidden pointer-events-auto"
               >
                 <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-y-contain px-4 md:px-6 lg:px-8 pt-5 pb-20">
-                <MenuSectionChipTabs
-                  tabs={MENU_EXPERIENCE_TABS}
-                  bleedClassName={MENU_BLEED_RIGHT_DESKTOP}
-                  className="-mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8"
-                />
                 <div className="w-full space-y-12">
                   {MENU_EXPERIENCES.map((exp, idx) => (
                     <motion.div

@@ -94,6 +94,8 @@ import clsx from "clsx";
 import { usePreloadNeighborImages } from "@/lib/carouselMotion";
 import { villaListingPath } from "@/lib/appRoutes";
 import { useSafeBack } from "@/lib/safeBackNavigation";
+import { getVillaRetreatLogoSrc } from "@/lib/villaRetreatLogos";
+import VillaRetreatHeroLogo from "@/components/villa/VillaRetreatHeroLogo";
 
 const vd = VILLA_DETAIL_SPACING;
 
@@ -194,6 +196,7 @@ export default function VillaDetailsPage() {
   const searchParams = useSearchParams();
   const id = params?.id as string;
   const villa = VILLAS.find((v) => v.id === id) as Villa | undefined;
+  const retreatLogoSrc = getVillaRetreatLogoSrc(id);
   const { setEnquireOverlayOpen } = useAnimation();
   const goBack = useSafeBack(villaListingPath());
 
@@ -644,9 +647,16 @@ export default function VillaDetailsPage() {
               <div className="pointer-events-auto absolute left-1/2 bottom-0 z-10 flex w-[min(100%,calc(100vw-8.5rem))] sm:w-[min(100%,calc(100vw-10rem))] -translate-x-1/2 flex-col items-center gap-3 md:gap-4 md:max-w-md px-4 sm:px-6">
                 <div className="flex w-full flex-col items-center gap-2">
                   <div className="w-16 md:w-28 h-px bg-gradient-to-r from-transparent via-[#EFCD62] to-transparent opacity-90" />
-                  <h2 className="text-[#EFCD62] font-philosopher text-xl sm:text-2xl md:text-4xl uppercase tracking-[0.28em] md:tracking-[0.35em] text-center drop-shadow-lg leading-tight px-1">
-                    {villa.name}
-                  </h2>
+                  {retreatLogoSrc ? (
+                    <VillaRetreatHeroLogo
+                      src={retreatLogoSrc}
+                      alt={`${villa.name} logo`}
+                    />
+                  ) : (
+                    <h2 className="text-[#EFCD62] font-philosopher text-xl sm:text-2xl md:text-4xl uppercase tracking-[0.28em] md:tracking-[0.35em] text-center drop-shadow-lg leading-tight px-1">
+                      {villa.name}
+                    </h2>
+                  )}
                   <div className="w-16 md:w-28 h-px bg-gradient-to-r from-transparent via-[#EFCD62] to-transparent opacity-90" />
                 </div>
                 <Link

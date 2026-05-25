@@ -32,7 +32,7 @@ const magnoliaBase = {
     villaArea: "7,000 sq.ft Built-up",
   },
   description:
-    "Magnolia is a contemporary private luxury villa designed for immersive stays and large-scale gatherings. This modern three-bedroom glass villa brings together luxury, scale, and ambience, making it ideal for weekend getaways, private parties, corporate outings, and wedding celebrations. Featuring a massive private pool, bar and lounge, personal home theatre, conference hall, and a basketball court, it offers a rare balance of accessibility and complete privacy.",
+    "Magnolia is a contemporary private villa designed for immersive stays and large-scale gatherings. This modern three-bedroom glass villa brings together luxury, scale, and ambience, making it ideal for weekend getaways, private parties, corporate outings, and wedding celebrations. Featuring a massive private pool, bar and lounge, personal home theatre, conference hall, and a basketball court, the property also includes a 25,000 sq. ft. landscaped lawn. Located 20 minutes from the Art of Living International Centre and opposite Pyramid Valley, it offers a rare balance of accessibility and complete privacy.",
   perfectForCards: magnoliaPerfectForCards,
   perfectForTags: perfectForTagsFromCards(magnoliaPerfectForCards),
   categories: [

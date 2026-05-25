@@ -22,8 +22,8 @@ const jade_735PerfectForCards = [
 const jade735Base = {
   id: "jade-735",
   name: "Jade 735",
-  type: "PRIVATE BOUTIQUE VILLA · EXPERIENTIAL RETREAT",
-  location: "Sadahalli · North Bangalore",
+  type: "BOUTIQUE PRIVATE RETREAT VILLA",
+  location: "Jade Gardens, near club Kabana",
   stats: {
     stay: "20 Guests",
     events: "30 Guests",
@@ -32,7 +32,7 @@ const jade735Base = {
     villaArea: "10ft Waterfall Pool",
   },
   description:
-    "Jade 735 is a private boutique villa designed as a personal retreat within a resort-like setting. The 4+1 bedroom layout combines curated interiors with multiple experiential zones, creating a space suited for both stays and hosted gatherings. Featuring a private pool with a 10 ft waterfall, jacuzzi lounge, gazebo seating, and multiple indoor-outdoor zones, the property offers a layered experience across spaces.",
+    "Jade 735 is a private boutique villa designed as a personal retreat within a resort-like setting. The 4+1 bedroom layout combines curated interiors with multiple experiential zones, creating a space suited for both stays and hosted gatherings. With a private pool featuring a 10 ft waterfall, jacuzzi lounge, gazebo seating, and multiple indoor-outdoor zones, the property offers a layered experience across spaces. Designed for privacy, it supports celebrations, retreats, and social stays within a controlled environment.",
   perfectForCards: jade_735PerfectForCards,
   perfectForTags: perfectForTagsFromCards(jade_735PerfectForCards),
   categories: ["Luxury Stays", "Weekend Getaways", "Corporate Retreats"],

@@ -276,18 +276,20 @@ export default function VillaCard({ villa }: VillaCardProps) {
             ))}
         </div>
 
-        {/* Action Row */}
-        <div className="mt-auto flex flex-col gap-3.5 pt-2 sm:flex-row sm:items-center sm:justify-between sm:gap-5 md:pt-4">
-          {/* Price */}
-          <div className="min-w-0 text-white font-manrope font-bold text-gh-villa-footer-row tracking-wide line-clamp-2 sm:line-clamp-1 sm:flex-1 sm:pr-4">
-            {startingPrice || "Upon Request"}{" "}
-            <span className="text-white/80 font-normal md:font-bold md:text-white inline-block">
+        {/* Action Row — price left, CTAs right, space-between fills the row */}
+        <div className="mt-auto flex w-full flex-row items-center justify-between gap-4 pt-2 md:pt-4">
+          {/* Price: stacked on mobile, single line from md up */}
+          <div className="flex min-w-0 shrink-0 flex-col md:flex-row md:items-baseline md:gap-1.5">
+            <span className="text-white font-manrope font-bold text-gh-villa-footer-row tracking-wide leading-tight">
+              {startingPrice || "Upon Request"}
+            </span>
+            <span className="text-white/80 font-manrope font-normal text-gh-villa-footer-row tracking-wide leading-tight md:font-bold md:text-white">
               onwards
             </span>
           </div>
 
           {/* Buttons */}
-          <div className="flex w-full shrink-0 items-stretch justify-end gap-2 sm:w-auto md:gap-2.5 h-[clamp(44px,5vw,52px)]">
+          <div className="flex shrink-0 items-stretch justify-end gap-2 md:gap-2.5 h-[clamp(44px,5vw,52px)]">
             <Link
               href={`${villaDetailPath(villa.id)}?autoScroll=true`}
               onClick={() => rememberListingReturn()}

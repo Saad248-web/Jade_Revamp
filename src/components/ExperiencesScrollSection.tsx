@@ -13,6 +13,18 @@ import {
   experiencePanelHref,
   villaListingPath,
 } from "@/lib/appRoutes";
+import {
+  scrollLinkedPanelAreaClass,
+  scrollLinkedPanelOuterClass,
+  scrollLinkedPanelImageFrameClass,
+  scrollLinkedPanelSlideClass,
+  scrollLinkedPanelSlideInteractiveClass,
+  scrollLinkedPanelStackClass,
+  scrollLinkedPanelStackWrapClass,
+  scrollLinkedSectionHeaderClass,
+  scrollLinkedStickyStageClass,
+  scrollLinkedStickyStageInnerClass,
+} from "@/lib/scrollLinkedPanelLayout";
 
 const PANELS = [
   {
@@ -95,14 +107,16 @@ export default function ExperiencesScrollSection() {
 
   return (
     <section ref={targetRef} className="relative h-[800vh] bg-[#1A1C1E]">
-      <motion.div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#1A1C1E] isolation isolate">
-        <motion.div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(32px,4vh,51.2px)] pb-[clamp(4px,0.8vh,9.6px)] shrink-0">
+      <motion.div
+        className={`${scrollLinkedStickyStageClass} ${scrollLinkedStickyStageInnerClass} bg-[#1A1C1E]`}
+      >
+        <motion.div className={scrollLinkedSectionHeaderClass}>
           <span className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-jade-gold drop-shadow-lg block">
             WAYS JADE IS EXPERIENCED
           </span>
         </motion.div>
 
-        <motion.div className="relative w-full flex-1 min-h-0 z-10">
+        <motion.div className={scrollLinkedPanelAreaClass}>
           {PANELS.map((panel, i) => (
             <PanelSlide
               key={panel.id}
@@ -198,13 +212,14 @@ function PanelSlide({
   return (
     <motion.div
       style={{ x, zIndex, willChange: "transform" }}
-      className="absolute inset-0 w-full h-full flex items-center justify-center bg-transparent pointer-events-none"
+      className={`${scrollLinkedPanelSlideClass} bg-transparent`}
     >
-      <motion.div className="pointer-events-auto flex items-center justify-center w-full h-full">
+      <motion.div className={scrollLinkedPanelSlideInteractiveClass}>
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
-        <motion.div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 pb-[64px] sm:pb-8">
-          <motion.div className="relative w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto flex flex-col items-stretch gap-2.5 lg:gap-4">
-            <motion.div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none shrink-0 bg-black">
+        <motion.div className={scrollLinkedPanelOuterClass}>
+          <motion.div className={scrollLinkedPanelStackWrapClass}>
+            <motion.div className={scrollLinkedPanelStackClass}>
+            <motion.div className={scrollLinkedPanelImageFrameClass}>
               <motion.div className="w-full h-full relative">
                 <JadeImage
                   src={panelImageSrc}
@@ -243,6 +258,7 @@ function PanelSlide({
                   {data.cta} <ArrowRight className="w-5 h-5" />
                 </Link>
               </motion.div>
+            </motion.div>
             </motion.div>
           </motion.div>
         </motion.div>

@@ -115,6 +115,7 @@ export default function CaravansPage() {
 
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
+        scrollTargetId="caravans-philosophy"
         key={heroSlide}
         backgroundImage={heroSlide}
         backgroundAlt="Caravans"
@@ -145,7 +146,7 @@ export default function CaravansPage() {
       />
 
       {/* SECTION 2: ANIMATED TEXT SECTION */}
-      <ExperienceScrollSection variant="caravans" />
+      <ExperienceScrollSection variant="caravans" id="caravans-philosophy" />
 
       {/* SECTION 3: THE CARAVAN CAROUSEL */}
       <div id="the-caravan">
@@ -202,7 +203,6 @@ export default function CaravansPage() {
         footerText="Rathaa turns every road into an experience for those who travel beyond the ordinary."
         ctaText="PLAN YOUR JOURNEY"
         onCtaClick={() => setRathaaOverlayOpen(true)}
-        cardClassName="bg-[#363A45]"
         alternateGold={true}
       />
 

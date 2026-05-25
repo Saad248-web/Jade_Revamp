@@ -13,7 +13,7 @@ export const domeVillas = {
   hideFromVillasDirectory: true,
   name: "Dome Villas",
   description:
-    "Dome Villas is a private estate with three independent dome-shaped villas, booked exclusively by one group. The Hobbit-themed design features distributed living spaces, landscaped pathways connecting each dome, and a private plunge pool. Each dome has its own bedroom, bath, and sit-out area, offering a unique blend of fantasy architecture and nature immersion suited for small groups and intimate celebrations.",
+    "A private estate featuring three dome villas designed for group stays and shared experiences. The property is booked entirely by one group, offering uninterrupted access across all villas and outdoor spaces. With distributed living across three structures, landscaped pathways, and a private plunge pool, the space balances privacy and togetherness. Designed for gatherings, celebrations, and extended stays.",
   thumbnail: "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
   image: "/Villa_Retreats/Dome/Hero Main/Hero 1.webp",
   images: [

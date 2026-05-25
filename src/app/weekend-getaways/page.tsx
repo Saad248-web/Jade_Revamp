@@ -86,6 +86,7 @@ export default function WeekendGetawaysPage() {
 
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
+        scrollTargetId="weekend-philosophy"
         backgroundImage="/Experiences/Weekend Getaways/1-Hero/casual stays.webp"
         backgroundAlt="Weekend Getaways"
         heading={
@@ -115,7 +116,7 @@ export default function WeekendGetawaysPage() {
       />
 
       {/* SECTION 2: ANIMATED TEXT SECTION */}
-      <ExperienceScrollSection variant="weekend" />
+      <ExperienceScrollSection variant="weekend" id="weekend-philosophy" />
 
       {/* SECTION 3: WEEKEND TYPES CAROUSEL */}
       <ExperienceCarouselSection
@@ -181,7 +182,6 @@ function WhyChooseJadeSection() {
       footerText="Private Villas and curated experiences designed to make every weekend feel like an escape."
       ctaText="PLAN YOUR WEEKEND ESCAPE"
       onCtaClick={() => setEnquireOverlayOpen(true)}
-      cardClassName="bg-[#363A45]"
       alternateGold={true}
     />
   );

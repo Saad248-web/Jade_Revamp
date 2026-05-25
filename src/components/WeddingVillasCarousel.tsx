@@ -2,23 +2,16 @@
 
 import { useState } from "react";
 import { VILLAS } from "@/lib/mockData";
+import { getOverlayVillaData } from "@/lib/overlayVillaData";
+import { WEDDING_VILLA_IDS } from "@/data/overlays_data/wedding/villas/index";
 import WeddingVillaCard from "./WeddingVillaCard";
 import VenueOverlay from "./VenueOverlay";
 import { AnimatePresence } from "framer-motion";
 
-// Filter VILLAS to specifically show all 6 Wedding related venues
-const WEDDING_VILLA_IDS = [
-  "dome-villas",
-  "haven",
-  "retreat-on-the-ridge",
-  "tranquil",
-  "magnolia",
-  "diamond",
-];
-
-const WEDDING_VILLAS = VILLAS.filter((villa) =>
-  WEDDING_VILLA_IDS.includes(villa.id),
-);
+const WEDDING_VILLAS = WEDDING_VILLA_IDS.map((id) => {
+  const base = VILLAS.find((v) => v.id === id);
+  return getOverlayVillaData("wedding", id) ?? base ?? null;
+}).filter(Boolean);
 
 export default function WeddingVillasCarousel() {
   const [selectedVilla, setSelectedVilla] = useState<any>(null);

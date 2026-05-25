@@ -10,24 +10,32 @@ import {
 interface ExperienceScrollSectionProps {
   variant: ExperienceScrollVariant;
   height?: string;
+  /** Anchor for hero scroll CTA (e.g. corporate section 3) */
+  id?: string;
 }
 
 export default function ExperienceScrollSection({
   variant,
   height: heightOverride,
+  id,
 }: ExperienceScrollSectionProps) {
   const { label, body, height } = EXPERIENCE_SCROLL_SECTIONS[variant];
 
   const isWedding = variant === "wedding";
 
   return (
-    <ScrollSectionComposer
-      slides={[{ label, lines: [body] }]}
-      height={heightOverride ?? height ?? "250vh"}
-      scrollEffects={isWedding ? "performance" : "full"}
-      background={
-        isWedding ? <LiveBackground variant="static" /> : <LiveBackground />
-      }
-    />
+    <div id={id} className="relative">
+      <ScrollSectionComposer
+        slides={[{ label, lines: [body] }]}
+        height={heightOverride ?? height ?? "250vh"}
+        fadeTiming="early"
+        scrollEffects={isWedding ? "performance" : "full"}
+        background={
+          isWedding ? <LiveBackground variant="static" /> : <LiveBackground />
+        }
+        showScrollIndicator
+        scrollIndicatorText="SCROLL TO EXPERIENCES"
+      />
+    </div>
   );
 }

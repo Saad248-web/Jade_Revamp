@@ -148,7 +148,6 @@ import { ExperiencePolicyCompactList } from "@/components/experience/ExperienceF
 import VillaDetailAmenityGrid from "@/components/villa/VillaDetailAmenityGrid";
 import VillaDetailFaqList from "@/components/villa/VillaDetailFaqList";
 import VillaDetailLocationBlock from "@/components/villa/VillaDetailLocationBlock";
-import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip";
 
 const vd = VILLA_DETAIL_SPACING;
 
@@ -381,7 +380,6 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                     />
                   </div>
                 </div>
-                <VillaDetailMeanderStrip track="green" />
               </section>
             ) : null}
 

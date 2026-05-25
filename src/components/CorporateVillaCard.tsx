@@ -79,7 +79,11 @@ export default function CorporateVillaCard({
     },
   ];
 
-  const onwards = (getOverlayVillaData("corporate", villa?.id) as any)?.overlay?.onwardsPrice ?? null;
+  const onwards =
+    (villa as { overlay?: { onwardsPrice?: string } })?.overlay?.onwardsPrice ??
+    (getOverlayVillaData("corporate", villa?.id) as { overlay?: { onwardsPrice?: string } } | null)
+      ?.overlay?.onwardsPrice ??
+    null;
 
   return (
     <div className="flex flex-col lg:flex-row gap-5 lg:gap-10 xl:gap-11 w-full pb-6 lg:py-8 border-b border-white/5 last:border-b-0 bg-[#1A1C1E]">

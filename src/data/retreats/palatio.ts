@@ -1,4 +1,4 @@
-import { amenityHighlightsFrom, perfectForTagsFromCards, splitLegacyPerfectFor } from "@/lib/villaDetailData";
+import { amenityHighlightsFrom } from "@/lib/villaDetailData";
 
 const palatioPerfectForCards = [
     {
@@ -25,18 +25,18 @@ const palatioBase = {
   bookable: false,
   name: "Palatio",
   type: "PRIVATE NATURE RETREAT VILLA",
-  location: "Harohalli · South Bangalore",
+  location: "Harohalli, Bangalore",
   stats: {
-    stay: "15 Guests",
+    stay: "Up to 15 Guests",
     events: "60 Guests",
     bhk: "2 BHK",
     lawn: "Landscaped Gardens",
     villaArea: "Nature Retreat",
   },
   description:
-    "Palatio is a sprawling nature retreat set within large landscaped grounds in Harohalli. The 2-bedroom villa combines rustic charm with traditional architecture, providing a serene environment removed from the city. With a private pool, open lawns, and dedicated event spaces, it offers a balanced experience for both peaceful stays and intimate social gatherings.",
+    "Palatio is a 2-bedroom private villa set on a 2-acre estate, designed with stone architecture and open natural elements. The layout integrates indoor and outdoor spaces through courtyards, water features, and expansive greens. With a stone pool, inner courtyard, and large lawn, the property is suited for intimate stays as well as larger social gatherings in a natural setting.",
   perfectForCards: palatioPerfectForCards,
-  perfectForTags: perfectForTagsFromCards(palatioPerfectForCards),
+  perfectForTags: ["Private Celebrations", "Couple Retreat"],
   categories: [
     "Nature Retreats",
     "Wellness Retreats",

@@ -7,6 +7,7 @@ import LiveBackground from "./LiveBackground";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import PrimaryButton from "./PrimaryButton";
 import { useSafeBack } from "@/lib/safeBackNavigation";
+import { ScrollLineIndicator } from "./ScrollLineIndicator";
 
 export interface ScrollSlide {
   label?: string;
@@ -222,7 +223,7 @@ export default function ScrollSectionComposer({
     <div ref={containerRef} className="relative" style={{ height }}>
       <NavbarThemeTrigger theme={theme} sectionRef={containerRef} />
 
-      <div className="sticky top-0 min-h-screen w-full overflow-hidden pb-8">
+      <div className="sticky top-0 relative min-h-[100dvh] min-h-screen w-full overflow-hidden">
         {background}
 
         {/* Floating Icons - Only if showNavigation is true */}
@@ -265,14 +266,14 @@ export default function ScrollSectionComposer({
 
         {/* Scroll Indicator at the bottom */}
         {showScrollIndicator && (
-          <div className="absolute max-lg:bottom-[calc(6rem+env(safe-area-inset-bottom))] lg:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-5">
-            <div className="h-16 md:h-24 w-[1px] bg-gradient-to-b from-transparent to-white/40" />
-            {scrollIndicatorText && (
-              <span className="font-manrope text-[12px] tracking-[0.2em] uppercase text-white/50 whitespace-nowrap">
-                {scrollIndicatorText}
-              </span>
-            )}
-          </div>
+          <ScrollLineIndicator
+            floating
+            label={scrollIndicatorText ?? "SCROLL TO EXPERIENCES"}
+            className="z-30 gap-5 pointer-events-none [&_button]:pointer-events-auto"
+            trackClassName="h-16 md:h-20"
+            barClassName="bg-white"
+            labelClassName="text-white/50"
+          />
         )}
       </div>
     </div>

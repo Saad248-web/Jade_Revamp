@@ -23,7 +23,7 @@ const emeraldBase = {
   id: "emerald",
   name: "Emerald",
   type: "GLASSHOUSE COURTYARD RETREAT",
-  location: "Sulikunte · Near Embassy Riding School",
+  location: "Near Embassy Riding School, Bangalore",
   stats: {
     stay: "10 Guests",
     events: "30 Guests",

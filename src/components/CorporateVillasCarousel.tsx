@@ -2,22 +2,16 @@
 
 import { useState } from "react";
 import { VILLAS } from "@/lib/mockData";
+import { getOverlayVillaData } from "@/lib/overlayVillaData";
+import { CORPORATE_VILLA_IDS } from "@/data/overlays_data/corporate/villas/index";
 import CorporateVillaCard from "./CorporateVillaCard";
 import CorporateVenueOverlay from "./CorporateVenueOverlay";
 import { AnimatePresence } from "framer-motion";
 
-// Filter VILLAS to specifically show corporate related venues
-const CORPORATE_VILLA_IDS = [
-  "dome-villas",
-  "magnolia",
-  "diamond",
-  "retreat-on-the-ridge",
-  "haven",
-];
-
-const CORPORATE_VILLAS = VILLAS.filter((villa) =>
-  CORPORATE_VILLA_IDS.includes(villa.id),
-);
+const CORPORATE_VILLAS = CORPORATE_VILLA_IDS.map((id) => {
+  const base = VILLAS.find((v) => v.id === id);
+  return getOverlayVillaData("corporate", id) ?? base ?? null;
+}).filter(Boolean);
 
 export default function CorporateVillasCarousel() {
   const [selectedVilla, setSelectedVilla] = useState<any>(null);

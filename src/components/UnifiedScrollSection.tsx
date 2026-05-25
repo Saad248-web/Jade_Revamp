@@ -13,6 +13,7 @@ const slides: ScrollSlide[] = [
   },
 ];
 
+/** Home page section 2 — philosophy scroll panel (OUR PHILOSOPHY). */
 export default function UnifiedScrollSection() {
   return (
     <ScrollSectionComposer
@@ -21,7 +22,7 @@ export default function UnifiedScrollSection() {
       fadeTiming="early"
       scrollEffects="performance"
       background={<LiveBackground variant="static" />}
-      showScrollIndicator={true}
+      showScrollIndicator
       scrollIndicatorText="SCROLL TO EXPERIENCES"
     />
   );

@@ -13,6 +13,18 @@ import {
   experiencePanelHref,
   experiencesListingPath,
 } from "@/lib/appRoutes";
+import {
+  scrollLinkedPanelAreaClass,
+  scrollLinkedPanelOuterClass,
+  scrollLinkedPanelImageFrameClass,
+  scrollLinkedPanelSlideClass,
+  scrollLinkedPanelSlideInteractiveClass,
+  scrollLinkedPanelStackClass,
+  scrollLinkedPanelStackWrapClass,
+  scrollLinkedSectionHeaderClass,
+  scrollLinkedStickyStageClass,
+  scrollLinkedStickyStageInnerClass,
+} from "@/lib/scrollLinkedPanelLayout";
 
 const PANELS = [
   {
@@ -100,15 +112,17 @@ export default function HorizontalScrollSection() {
 
   return (
     <section ref={targetRef} className="relative h-[800vh] bg-[#25282C]">
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col bg-[#25282C] isolation isolate">
-        <div className="relative w-full z-50 flex flex-col items-center pointer-events-none pt-[clamp(32px,4vh,51.2px)] pb-[clamp(4px,0.8vh,9.6px)] shrink-0">
+      <div
+        className={`${scrollLinkedStickyStageClass} ${scrollLinkedStickyStageInnerClass} bg-[#25282C]`}
+      >
+        <div className={scrollLinkedSectionHeaderClass}>
           <span className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-jade-gold drop-shadow-lg block">
             WAYS JADE IS EXPERIENCED
           </span>
         </div>
 
         {/* Panels Interactive Area */}
-        <div className="relative w-full flex-1 min-h-0 z-10">
+        <div className={scrollLinkedPanelAreaClass}>
           {PANELS.map((panel, i) => (
             <StackedPanel
               key={panel.id}
@@ -221,15 +235,15 @@ function StackedPanel({
   return (
     <motion.div
       style={{ x, zIndex, willChange: "transform" }}
-      className="absolute inset-0 w-full h-full flex items-center justify-center bg-transparent pointer-events-none"
+      className={`${scrollLinkedPanelSlideClass} bg-transparent`}
     >
-      <div className="pointer-events-auto flex items-center justify-center w-full h-full">
+      <div className={scrollLinkedPanelSlideInteractiveClass}>
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
-        <div className="relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 xl:px-24 pb-[64px] sm:pb-8">
-          {/* Layout Container - vertically centered in the available space so it adapts to any viewport (incl. 125-150% Windows scaling) */}
-          <div className="relative w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto flex flex-col items-stretch gap-2.5 lg:gap-4">
+        <div className={scrollLinkedPanelOuterClass}>
+          <div className={scrollLinkedPanelStackWrapClass}>
+            <div className={scrollLinkedPanelStackClass}>
             {/* Image Section - adaptive max-height so the CTA button stays visible at high Windows scaling */}
-            <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[16/9] max-h-[clamp(240px,55vh,600px)] overflow-hidden shadow-2xl rounded-none shrink-0 bg-black">
+            <div className={scrollLinkedPanelImageFrameClass}>
               <div className="w-full h-full relative">
                 <JadeImage
                   src={panelImageSrc}
@@ -284,6 +298,7 @@ function StackedPanel({
                 </Link>
               </motion.div>
             </motion.div>
+            </div>
           </div>
         </div>
       </div>

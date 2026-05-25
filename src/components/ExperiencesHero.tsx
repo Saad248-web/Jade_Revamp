@@ -4,13 +4,14 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 import LiveBackground from "./LiveBackground";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import { ScrollLineIndicator } from "./ScrollLineIndicator";
 
 export default function ExperiencesHero() {
   const sectionRef = useRef<HTMLElement>(null);
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen w-full overflow-hidden bg-[#050505] flex flex-col justify-center items-center text-center px-6"
+      className="relative min-h-[100dvh] h-screen w-full overflow-hidden bg-[#050505] flex flex-col items-center justify-center text-center px-6"
     >
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       {/* Background Elements - Minimal & Deep */}
@@ -55,22 +56,24 @@ export default function ExperiencesHero() {
         </motion.p>
       </div>
 
-      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1, ease: "easeOut" }}
-        onClick={() => {
-          document.getElementById("experiences-list")?.scrollIntoView({
-            behavior: "smooth",
-          });
-        }}
-        className="absolute inset-x-0 mx-auto w-fit flex flex-col items-center gap-3 z-20 cursor-pointer hover:opacity-80 transition-opacity max-lg:bottom-[calc(7rem+env(safe-area-inset-bottom))] lg:bottom-12"
+        className="absolute inset-x-0 bottom-0 z-30 flex justify-center pointer-events-none"
       >
-        <div className="w-[1px] h-12 bg-white/20" />
-        <span className="text-gh-label text-white/40 font-manrope tracking-[0.2em] uppercase">
-          SCROLL TO EXPERIENCES
-        </span>
+        <ScrollLineIndicator
+          floating
+          label="SCROLL TO EXPERIENCES"
+          labelClassName="text-gh-label text-white/40"
+          barClassName="bg-white"
+          className="pointer-events-auto"
+          onClick={() => {
+            document.getElementById("experiences-list")?.scrollIntoView({
+              behavior: "smooth",
+            });
+          }}
+        />
       </motion.div>
     </section>
   );

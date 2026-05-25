@@ -17,6 +17,7 @@ import { getLenis, scrollToY } from "@/lib/lenis";
 import LazyWhenNear from "@/components/ui/LazyWhenNear";
 import { InstagramCarouselShell } from "@/components/InstagramCarouselShell";
 import { prefetchInstagramOembed } from "@/lib/instagramOembedCache";
+import { ScrollLineIndicator } from "./ScrollLineIndicator";
 
 const InstagramCarousel = dynamic(() => import("./InstagramCarousel"), {
   ssr: false,
@@ -161,7 +162,7 @@ export default function LandingPage() {
         {/* Foreground — copy + CTA share the same scroll parallax */}
         <motion.div
           style={{ y: heroContentY }}
-          className="relative z-10 h-full flex flex-col justify-between items-center text-center px-6 md:px-12 max-w-[1920px] mx-auto pointer-events-none"
+          className="relative z-10 h-full flex flex-col justify-center items-center text-center px-6 md:px-12 max-w-[1920px] mx-auto pointer-events-none"
         >
           <motion.div className="flex-1 flex flex-col justify-center items-center w-full">
             <motion.div className="max-w-5xl flex flex-col items-center gap-0 pointer-events-auto">
@@ -201,19 +202,24 @@ export default function LandingPage() {
             </motion.div>
           </motion.div>
 
-          <motion.button
-            type="button"
+        </motion.div>
+
+        {/* Scroll cue — pinned to bottom of hero viewport (above mobile nav) */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
+          className="absolute inset-x-0 z-20 flex justify-center pointer-events-none"
+        >
+          <ScrollLineIndicator
+            floating
+            label="SCROLL TO EXPERIENCE"
+            labelClassName="text-gh-label tracking-[0.2em] text-white/50"
+            trackClassName="h-16 md:h-20"
+            barClassName="bg-white"
+            className="gap-5 pointer-events-auto"
             onClick={() => scrollToY(window.innerHeight, { duration: 1.1 })}
-            initial={{ opacity: 0, y: 20 }}
-            animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
-            className="pointer-events-auto w-fit flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity mb-[calc(7rem+env(safe-area-inset-bottom))] lg:mb-8"
-          >
-            <span className="text-gh-label tracking-[0.2em] font-manrope text-white/60 uppercase">
-              Scroll to Experience
-            </span>
-            <div className="h-16 w-[1px] bg-gradient-to-b from-white/50 to-transparent" />
-          </motion.button>
+          />
         </motion.div>
       </div>
 

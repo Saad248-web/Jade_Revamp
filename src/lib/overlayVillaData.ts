@@ -1,6 +1,6 @@
-import { CORPORATE_VILLAS_OVERLAY_DATA } from "@/data/overlays_data/corporate/villas";
+import { CORPORATE_VILLAS_OVERLAY_DATA } from "@/data/overlays_data/corporate/villas/index";
 import { PARTY_VILLAS_OVERLAY_DATA } from "@/data/overlays_data/party/villas";
-import { WEDDING_VILLAS_OVERLAY_DATA } from "@/data/overlays_data/wedding/villas";
+import { WEDDING_VILLAS_OVERLAY_DATA } from "@/data/overlays_data/wedding/villas/index";
 
 export type OverlayPageKey = "wedding" | "weekend" | "corporate" | "party";
 

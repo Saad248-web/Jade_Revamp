@@ -93,6 +93,7 @@ export default function PartyVillasPage() {
 
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
+        scrollTargetId="party-philosophy"
         backgroundImage="/Experiences/Party Villas/1-Hero/Pool Parties.webp"
         backgroundAlt="Party Villas"
         heading={
@@ -124,7 +125,16 @@ export default function PartyVillasPage() {
       />
 
       {/* SECTION 2: ANIMATED TEXT SECTION */}
-      <ScrollSectionComposer slides={animatedSlides} height="250vh" />
+      <div id="party-philosophy" className="relative">
+        <ScrollSectionComposer
+          slides={animatedSlides}
+          height="250vh"
+          fadeTiming="early"
+          scrollEffects="performance"
+          showScrollIndicator
+          scrollIndicatorText="SCROLL TO EXPERIENCES"
+        />
+      </div>
 
       {/* SECTION 3: PARTY TYPES CAROUSEL */}
       <ExperienceCarouselSection

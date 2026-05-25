@@ -128,7 +128,6 @@ import { ExperiencePolicyCompactList } from "@/components/experience/ExperienceF
 import VillaDetailAmenityGrid from "@/components/villa/VillaDetailAmenityGrid";
 import VillaDetailFaqList from "@/components/villa/VillaDetailFaqList";
 import VillaDetailLocationBlock from "@/components/villa/VillaDetailLocationBlock";
-import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip";
 import WeddingVenueEnquiryForm from "@/components/experience/WeddingVenueEnquiryForm";
 import { EXPERIENCE_OVERLAY_ROOT_CLASS } from "@/lib/experienceOverlayTheme";
 import { useOverlayScrollChromeHide } from "@/lib/useOverlayScrollChromeHide";
@@ -391,11 +390,9 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                   />
                 </div>
               </div>
-              <VillaDetailMeanderStrip track="green" />
             </section>
 
             <section id="location" className={VILLA_DETAIL_CHARCOAL}>
-              <VillaDetailMeanderStrip />
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
                   <h3 className={vd.heading}>Location</h3>

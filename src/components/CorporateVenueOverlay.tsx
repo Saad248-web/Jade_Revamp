@@ -32,7 +32,6 @@ import { ExperiencePolicyCompactList } from "@/components/experience/ExperienceF
 import VillaDetailAmenityGrid from "@/components/villa/VillaDetailAmenityGrid";
 import VillaDetailFaqList from "@/components/villa/VillaDetailFaqList";
 import VillaDetailLocationBlock from "@/components/villa/VillaDetailLocationBlock";
-import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip";
 import {
   EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS,
   EXPERIENCE_OVERLAY_ROOT_CLASS,
@@ -206,7 +205,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
           <VillaExperienceBookingBottomBar
             placement="sheet"
             villaId={v.id}
-            onwardPrice={(overlayVilla as any)?.overlay?.onwardsPrice ?? null}
+            onwardPrice={(v as { overlay?: { onwardsPrice?: string } })?.overlay?.onwardsPrice ?? null}
             onEnquireClick={() => scrollToSection("enquiry")}
           />
         }
@@ -224,25 +223,25 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
             <div className={VILLA_DETAIL_CHARCOAL}>
               <div className={vd.sectionShell}>
                 <VillaDetailIntroSection
-                  eyebrow={villa.type || "CORPORATE RETREAT"}
-                  title={villa.name}
+                  eyebrow={v.type || "CORPORATE RETREAT"}
+                  title={v.name}
                   mapsHref={mapsHref}
-                  locationLabel={v.location?.split("·")[0] ?? ""}
+                  locationLabel={v.location?.split("·")[0] ?? v.location ?? ""}
                   statsRow={
                     <div className={VILLA_DETAIL_SPACING.introStatsRow}>
                       <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
                         <Users className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                        <span>{getEventCapacity(villa)?.toString() || villa.stats?.events || "500 Guests"}</span>
+                        <span>{getEventCapacity(v)?.toString() || v.stats?.events || "500 Guests"}</span>
                       </div>
                       <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
                       <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
                         <Home className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                        <span>{getStayCapacity(villa)?.toString() || villa.stats?.stay || "20 Stay"}</span>
+                        <span>{getStayCapacity(v)?.toString() || v.stats?.stay || "20 Stay"}</span>
                       </div>
                       <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
                       <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
                         <Calendar className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                        <span>{villa.stats?.lawn || villa.stats?.villaArea || "Private Lawn"}</span>
+                        <span>{v.stats?.lawn || v.stats?.villaArea || "Private Lawn"}</span>
                       </div>
                     </div>
                   }
@@ -256,21 +255,24 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                   }
                 >
                   <p className={VILLA_DETAIL_SPACING.introDescription}>
-                    {villa.description ||
-                      `${villa.name} by Jade is an expansive corporate retreat featuring private spaces, lush lawns, and dedicated outdoor areas. Designed for corporate offsites, team celebrations, and immersive workations, the venue balances structured productivity with open-air engagement.`}
+                    {v.description ||
+                      `${v.name} by Jade is an expansive corporate retreat featuring private spaces, lush lawns, and dedicated outdoor areas. Designed for corporate offsites, team celebrations, and immersive workations, the venue balances structured productivity with open-air engagement.`}
                   </p>
                   <div className={VILLA_DETAIL_SPACING.stackSm}>
                     <h4 className="text-white font-manrope font-medium text-gh-body">
                       Perfect for:
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                      {[
-                        "Corporate Offsites",
-                        "Leadership Retreats",
-                        "Team Outings",
-                        "Workations",
-                        "Recognition Events",
-                      ].map((tag: string) => (
+                      {(v.perfectForTags?.length
+                        ? v.perfectForTags
+                        : [
+                            "Corporate Offsites",
+                            "Leadership Retreats",
+                            "Team Outings",
+                            "Workations",
+                            "Recognition Events",
+                          ]
+                      ).map((tag: string) => (
                         <span
                           key={tag}
                           className="px-4 py-2 bg-white/5 border border-white/15 text-white/90 text-[11px] md:text-gh-label font-manrope"
@@ -293,7 +295,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
 
             <VillaDetailAmenityGrid
               amenities={
-                villa.amenities || [
+                v.amenities || [
                   { label: "Conference Room" },
                   { label: "High-speed Wi-Fi" },
                   { label: "AV Equipment" },
@@ -322,7 +324,6 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                     />
                   </div>
                 </div>
-                <VillaDetailMeanderStrip track="green" />
               </section>
             ) : null}
 

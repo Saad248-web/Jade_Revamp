@@ -28,6 +28,7 @@ export default function CorporateRetreatsPage() {
 
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
+        scrollTargetId="corporate-philosophy"
         backgroundImage="/Experiences/Corporate Retreats/1-Hero/xhero.webp"
         backgroundAlt="Corporate Retreats"
         heading={
@@ -64,7 +65,7 @@ export default function CorporateRetreatsPage() {
       {/* SECTION 2: TRUSTED BY SECTION */}
       <TrustedBySection />
       {/* SECTION 3: ANIMATED TEXT SECTION */}
-      <ExperienceScrollSection variant="corporate" />
+      <ExperienceScrollSection variant="corporate" id="corporate-philosophy" />
 
       {/* SECTION 4: py-12 (48px) for tighter flow */}
       <section className="py-10 bg-[#1A1C1E] border-t border-white/5">

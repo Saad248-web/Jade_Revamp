@@ -4,7 +4,6 @@ import {
   magnolia,
   tranquil,
   wonderland,
-  vannani,
 } from "@/data/retreats";
 
 export const PARTY_VILLAS_OVERLAY_DATA = {
@@ -27,10 +26,6 @@ export const PARTY_VILLAS_OVERLAY_DATA = {
   wonderland: {
     ...wonderland,
     overlay: { onwardsPrice: "₹30,000 per night onwards" },
-  },
-  vannani: {
-    ...vannani,
-    overlay: { onwardsPrice: "₹20,000 per night onwards" },
   },
 } as const;
 

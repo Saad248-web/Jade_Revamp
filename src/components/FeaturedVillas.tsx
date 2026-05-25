@@ -30,6 +30,17 @@ import { domeVillas } from "@/data/retreats/dome";
 import { magnolia } from "@/data/retreats/magnolia";
 import { retreatOnTheRidge } from "@/data/retreats/retreat-on-the-ridge";
 import { villaDetailPath, villaListingPath } from "@/lib/appRoutes";
+import {
+  scrollLinkedFeaturedVillaImageFrameClass,
+  scrollLinkedPanelAreaClass,
+  scrollLinkedPanelOuterFeaturedClass,
+  scrollLinkedPanelSlideClass,
+  scrollLinkedPanelSlideInteractiveClass,
+  scrollLinkedPanelStackWideClass,
+  scrollLinkedPanelStackWrapClass,
+  scrollLinkedStickyStageClass,
+  scrollLinkedStickyStageInnerClass,
+} from "@/lib/scrollLinkedPanelLayout";
 
 const VILLAS = [
   {
@@ -150,9 +161,11 @@ export default function FeaturedVillas() {
       }}
     >
       <NavbarThemeTrigger theme="white" sectionRef={targetRef} />
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div
+        className={`${scrollLinkedStickyStageClass} ${scrollLinkedStickyStageInnerClass}`}
+      >
         {/* Sections */}
-        <div className="relative w-full h-full z-10">
+        <div className={scrollLinkedPanelAreaClass}>
           {/* Panel 0: Intro */}
           <IntroPanel globalProgress={snappedProgress} totalSteps={totalSteps} />
 
@@ -328,17 +341,18 @@ function VillaSlide({
   return (
     <motion.div
       style={{ x, zIndex: index * 10 }}
-      className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none bg-transparent"
+      className={`${scrollLinkedPanelSlideClass} bg-transparent`}
     >
-      <div className="pointer-events-none relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-20 lg:px-32 xl:px-48 pb-[64px] sm:pb-0">
-        {/* Layout Container: Stacked universally on all screen sizes */}
+      <div className={`${scrollLinkedPanelSlideInteractiveClass} pointer-events-none`}>
+        <div className={scrollLinkedPanelOuterFeaturedClass}>
         <Link
           href={data.link}
           ref={innerRef}
-          className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-stretch justify-center gap-3 lg:gap-5 group rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EFCD62]"
+          className={`${scrollLinkedPanelStackWrapClass} pointer-events-auto max-w-3xl group rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EFCD62]`}
         >
+          <div className={scrollLinkedPanelStackWideClass}>
           <div
-            className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-black shrink-0"
+            className={scrollLinkedFeaturedVillaImageFrameClass}
             style={{ perspective: "1500px" }}
           >
             <div className="w-full h-full relative">
@@ -490,7 +504,9 @@ function VillaSlide({
               </span>
             </motion.div>
           </div>
+          </div>
         </Link>
+        </div>
       </div>
     </motion.div>
   );
@@ -533,14 +549,16 @@ function CtaSlide({
   return (
     <motion.div
       style={{ x, zIndex: index * 10 }}
-      className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none bg-transparent"
+      className={`${scrollLinkedPanelSlideClass} bg-transparent`}
     >
-      <div className="pointer-events-none relative w-full h-full max-w-[1920px] mx-auto flex flex-col items-center justify-center px-6 md:px-20 lg:px-32 xl:px-48 pb-[64px] sm:pb-0">
+      <div className={`${scrollLinkedPanelSlideInteractiveClass} pointer-events-none`}>
+        <div className={scrollLinkedPanelOuterFeaturedClass}>
         <div
           ref={innerRef}
-          className="pointer-events-auto relative w-full max-w-3xl mx-auto flex flex-col items-stretch justify-center gap-3 lg:gap-5 rounded-sm"
+          className={`${scrollLinkedPanelStackWrapClass} pointer-events-auto max-w-3xl rounded-sm`}
         >
-          <div className="relative w-full aspect-[343/420] sm:aspect-[4/3] md:aspect-[21/10] lg:h-[48vh] overflow-hidden shadow-2xl rounded-none bg-[#0f2a1f] shrink-0">
+          <div className={scrollLinkedPanelStackWideClass}>
+          <div className={`${scrollLinkedFeaturedVillaImageFrameClass} bg-[#0f2a1f]`}>
             <VillaHeroGridImages />
           </div>
 
@@ -562,6 +580,8 @@ function CtaSlide({
               <span className="font-bold whitespace-nowrap">Explore All Villas</span>
             </PrimaryButton>
           </div>
+          </div>
+        </div>
         </div>
       </div>
     </motion.div>

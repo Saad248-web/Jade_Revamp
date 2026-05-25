@@ -9,6 +9,7 @@ import {
   EXPERIENCE_HERO_CHROME_WIDTH_CLASS,
   EXPERIENCE_HERO_SAFE_BOTTOM_CLASS,
 } from "@/lib/experienceHeroLayout";
+import { ScrollLineIndicator } from "./ScrollLineIndicator";
 
 export interface HeroButton {
   icon: React.ReactNode;
@@ -36,6 +37,10 @@ interface ExperienceHeroProps {
   stats?: HeroStat[];
   /** Optional extra content between description and buttons */
   children?: React.ReactNode;
+  showScrollIndicator?: boolean;
+  scrollIndicatorLabel?: string;
+  /** Element id of the next section (philosophy panel) */
+  scrollTargetId?: string;
 }
 
 const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
@@ -48,9 +53,24 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
       buttons,
       stats,
       children,
+      showScrollIndicator = false,
+      scrollIndicatorLabel = "SCROLL TO EXPLORE",
+      scrollTargetId,
     },
     ref,
   ) => {
+    const scrollToNext = () => {
+      if (scrollTargetId) {
+        document.getElementById(scrollTargetId)?.scrollIntoView({
+          behavior: "smooth",
+        });
+        return;
+      }
+      if (ref && typeof ref !== "function") {
+        ref.current?.nextElementSibling?.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+
     return (
       <section
         ref={ref}
@@ -136,6 +156,15 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
             </div>
           </div>
         </div>
+
+        {showScrollIndicator && (
+          <ScrollLineIndicator
+            floating
+            label={scrollIndicatorLabel}
+            className="pointer-events-none [&_button]:pointer-events-auto"
+            onClick={scrollToNext}
+          />
+        )}
       </section>
     );
   },

@@ -11,17 +11,17 @@ const loungeFlyPerfectForLegacy = [
 const loungeFlyBase = {
   id: "lounge-fly",
   name: "Lounge Fly",
-  type: "LUXURY APARTMENT SUITE · BHARTIYA CITY",
-  location: "Bhartiya City · North Bangalore",
+  type: "LUXURY APARTMENT SUITE",
+  location: "Bhartiya City, Bangalore",
   stats: {
-    stay: "4 Guests",
+    stay: "4 Guests Stay",
     events: "20 Guests",
     bhk: "1 BHK Suite",
     lawn: "Dual Balcony Views",
     villaArea: "High-Floor Living",
   },
   description:
-    "Lounge Fly is a luxury 1-bedroom apartment suite located in the heart of Bhartiya City, designed for short stays and private escapes. The 1-bedroom layout combines compact living with elevated, curated lounge-style interiors. With dual balconies, direct access to the mall and Leela Hotel, and city-facing views, the space offers a premium urban stay experience. Designed for comfort and privacy, it suits couples, solo stays, and small groups.",
+    "Lounge Fly is a luxury apartment suite located in the heart of Bhartiya City, designed for short stays and private escapes. The 1-bedroom layout combines compact living with elevated interiors and city-facing views. With dual balconies, direct access to the mall and Leela Hotel, and curated lounge-style interiors, the space offers a premium urban stay experience. Designed for comfort and privacy, it suits couples, solo stays, and small groups.",
   categories: ["Luxury Stays", "Weekend Getaways", "Corporate Retreats"],
   thumbnail: "/Villa_Retreats/Lounge Fly/1-Hero/Hero.webp",
   image: "/Villa_Retreats/Lounge Fly/1-Hero/Hero.webp",

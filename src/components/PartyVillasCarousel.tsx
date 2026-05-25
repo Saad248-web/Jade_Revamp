@@ -6,14 +6,13 @@ import PartyVillaCard from "./PartyVillaCard";
 import PartyVenueOverlay from "./PartyVenueOverlay";
 import { AnimatePresence } from "framer-motion";
 
-// Filter VILLAS for Party page: Dome, Emerald, Magnolia, Tranquil Woods, Wonderland Treehouse, Vannani
+// Filter VILLAS for Party page: Dome, Emerald, Magnolia, Tranquil Woods, Wonderland Treehouse
 const PARTY_VILLA_IDS = [
   "dome-villas",
   "emerald",
   "magnolia",
   "tranquil",
   "wonderland",
-  "vannani",
 ];
 
 const PARTY_VILLAS = VILLAS.filter((villa) =>

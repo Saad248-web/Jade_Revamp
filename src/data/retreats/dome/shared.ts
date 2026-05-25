@@ -175,7 +175,7 @@ const DOME_AMENITIES = [
 
 /** Estate-wide capacity (dome-villas listing + detail). */
 export const DOME_ESTATE_STATS: VillaStats = {
-  stay: "18 Guests",
+  stay: "Up to 18 Guests",
   events: "25 Guests",
   bhk: "3 Villas",
   lawn: "Landscaped Pathways",
@@ -233,8 +233,8 @@ const DOME_SINGLE_UNIT_PRICING = {
 } as const;
 
 export const DOME_ESTATE_SHARED = {
-  type: "HOBBIT THEMED VILLA",
-  location: "Shoolagiri · Near Bangalore",
+  type: "HOBBIT THEMED VILLA RETREAT",
+  location: "Outskirts of Bangalore",
   stats: DOME_ESTATE_STATS,
   categories: ["Nature Retreats", "Weekend Getaways", "Luxury Stays"],
   amenities: DOME_AMENITIES,
