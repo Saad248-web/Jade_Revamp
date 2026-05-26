@@ -15,6 +15,7 @@ import {
 } from "@/lib/appRoutes";
 import {
   scrollLinkedPanelAreaClass,
+  scrollLinkedPanelBodyClass,
   scrollLinkedPanelOuterClass,
   scrollLinkedPanelImageFrameClass,
   scrollLinkedPanelSlideClass,
@@ -280,7 +281,7 @@ function StackedPanel({
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="font-manrope text-gh-body text-white/80 leading-relaxed mb-2.5 lg:mb-4 line-clamp-3 max-w-lg"
+                className={scrollLinkedPanelBodyClass}
               >
                 {data.subtext}
               </motion.p>

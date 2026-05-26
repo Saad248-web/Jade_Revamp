@@ -11,7 +11,8 @@ import PrimaryButton from "@/components/PrimaryButton";
 import {
   scrollLinkedPanelAreaClass,
   scrollLinkedPanelOuterClass,
-  scrollLinkedPanelImageFrameClass,
+  scrollLinkedPanelImageFrameTallHeaderClass,
+  scrollLinkedPanelBodyClass,
   scrollLinkedPanelSlideClass,
   scrollLinkedPanelSlideInteractiveClass,
   scrollLinkedPanelStackWideClass,
@@ -238,7 +239,7 @@ function CelebrationPanelSlide({
         >
           <div className={`${scrollLinkedPanelStackWrapClass} max-w-xl`}>
             <div className={scrollLinkedPanelStackWideClass}>
-            <div className={scrollLinkedPanelImageFrameClass}>
+            <div className={scrollLinkedPanelImageFrameTallHeaderClass}>
               <div className="w-full h-full relative">
                 {data.image ? (
                   <JadeImage
@@ -270,8 +271,7 @@ function CelebrationPanelSlide({
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="font-manrope text-gh-body text-white/80 leading-relaxed line-clamp-3 max-w-lg"
-                style={{ marginBottom: "clamp(8px, 1.92vw, 15.4px)" }}
+                className={scrollLinkedPanelBodyClass}
               >
                 {data.subtext}
               </motion.p>

@@ -7,15 +7,17 @@ type VillaRetreatHeroLogoProps = {
 
 export default function VillaRetreatHeroLogo({ src, alt }: VillaRetreatHeroLogoProps) {
   return (
-    <div className="relative w-full max-w-[min(100%,20rem)] h-[clamp(2.5rem,8vw,4.5rem)] mx-auto px-1">
-      <JadeImage
-        src={src}
-        alt={alt}
-        fill
-        priority
-        sizes="(max-width: 768px) 70vw, 320px"
-        className="object-contain object-center drop-shadow-lg"
-      />
+    <div className="relative z-10 w-full max-w-[min(100%,28rem)] mx-auto rounded-sm bg-black/50 backdrop-blur-sm border border-white/10 px-4 py-3 sm:px-6 sm:py-4">
+      <div className="relative w-full h-[clamp(3.5rem,11vw,7rem)]">
+        <JadeImage
+          src={src}
+          alt={alt}
+          fill
+          priority
+          sizes="(max-width: 768px) 75vw, 448px"
+          className="object-contain object-center drop-shadow-[0_2px_12px_rgba(0,0,0,0.65)]"
+        />
+      </div>
     </div>
   );
 }

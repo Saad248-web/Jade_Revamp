@@ -15,6 +15,7 @@ import {
 } from "@/lib/appRoutes";
 import {
   scrollLinkedPanelAreaClass,
+  scrollLinkedPanelBodyClass,
   scrollLinkedPanelOuterClass,
   scrollLinkedPanelImageFrameClass,
   scrollLinkedPanelSlideClass,
@@ -247,7 +248,7 @@ function PanelSlide({
               >
                 {data.title}
               </motion.h2>
-              <motion.p className="font-manrope text-gh-body text-white/80 leading-relaxed mb-2.5 lg:mb-4 line-clamp-3 max-w-lg">
+              <motion.p className={scrollLinkedPanelBodyClass}>
                 {data.subtext}
               </motion.p>
               <motion.div className="w-full max-w-md">

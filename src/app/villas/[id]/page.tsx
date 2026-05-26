@@ -644,7 +644,7 @@ export default function VillaDetailsPage() {
                 <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
               </button>
 
-              <div className="pointer-events-auto absolute left-1/2 bottom-0 z-10 flex w-[min(100%,calc(100vw-8.5rem))] sm:w-[min(100%,calc(100vw-10rem))] -translate-x-1/2 flex-col items-center gap-3 md:gap-4 md:max-w-md px-4 sm:px-6">
+              <div className="pointer-events-auto absolute left-1/2 bottom-0 z-10 flex w-[min(100%,calc(100vw-8.5rem))] sm:w-[min(100%,calc(100vw-10rem))] -translate-x-1/2 flex-col items-center gap-3 md:gap-4 md:max-w-3xl px-4 sm:px-6">
                 <div className="flex w-full flex-col items-center gap-2">
                   <div className="w-16 md:w-28 h-px bg-gradient-to-r from-transparent via-[#EFCD62] to-transparent opacity-90" />
                   {retreatLogoSrc ? (

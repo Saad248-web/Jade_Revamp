@@ -32,6 +32,8 @@ import { retreatOnTheRidge } from "@/data/retreats/retreat-on-the-ridge";
 import { villaDetailPath, villaListingPath } from "@/lib/appRoutes";
 import {
   scrollLinkedFeaturedVillaImageFrameClass,
+  scrollLinkedIntroSlideClass,
+  scrollLinkedPanelBodyClass,
   scrollLinkedPanelAreaClass,
   scrollLinkedPanelOuterFeaturedClass,
   scrollLinkedPanelSlideClass,
@@ -259,7 +261,7 @@ function IntroPanel({
   return (
     <motion.div
       style={{ x, opacity, zIndex: 5 }}
-      className="absolute inset-0 w-full h-full flex flex-col items-center justify-center px-6 md:px-24 pointer-events-none"
+      className={scrollLinkedIntroSlideClass}
     >
       <div className="relative w-full max-w-4xl mx-auto flex flex-col items-center text-center">
         <motion.div style={{ y: textY }} className="z-10 relative">
@@ -469,7 +471,7 @@ function VillaSlide({
           </div>
 
           {/* Text Section */}
-          <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 pb-8">
+          <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 max-lg:pb-0 pb-8">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -490,7 +492,7 @@ function VillaSlide({
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="font-manrope text-gh-body text-white/80 leading-relaxed mb-5 lg:mb-6 line-clamp-3"
+              className={`${scrollLinkedPanelBodyClass} mb-5 lg:mb-6`}
             >
               {data.description}
             </motion.p>
@@ -562,14 +564,14 @@ function CtaSlide({
             <VillaHeroGridImages />
           </div>
 
-          <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 pb-8">
+          <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 max-lg:pb-0 pb-8">
             <p className="font-manrope text-gh-label tracking-[0.2em] uppercase text-[#EFCD62] mb-2 font-bold">
               Explore All Villas
             </p>
             <h2 className="font-philosopher text-gh-h2 text-white leading-none mb-3">
               Find Your Retreat
             </h2>
-            <p className="font-manrope text-gh-body text-white/80 leading-relaxed mb-5 lg:mb-6">
+            <p className={`${scrollLinkedPanelBodyClass} mb-5 lg:mb-6`}>
               Browse the full collection of private Jade estates—each chosen for
               atmosphere, space, and the experiences they hold.
             </p>

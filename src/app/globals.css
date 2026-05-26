@@ -749,22 +749,49 @@ body {
 }
 
 /* ============================================================
-   Scroll-linked panels — mobile safe stage (excludes fixed chrome)
-   Stage height = 100dvh − navbar − MobileBottomNav; card centers in flex-1.
+   Scroll-linked panels — iOS / mobile safe stage
+   Excludes fixed Navbar + MobileBottomNav; card centers in panel row.
    ============================================================ */
 @media (max-width: 1023px) {
   :root {
+    /* Navbar: py-4 bar + safe-area */
     --jade-mobile-chrome-top: max(
-      3.5rem,
-      calc(env(safe-area-inset-top, 0px) + 3.25rem)
+      3.25rem,
+      calc(env(safe-area-inset-top, 0px) + 2.875rem)
     );
+    /* MobileBottomNav: pt-2 + 44px targets + labels + pb + safe-area */
     --jade-mobile-chrome-bottom: max(
-      4.5rem,
-      calc(env(safe-area-inset-bottom, 0px) + 4.125rem)
+      5.5rem,
+      calc(env(safe-area-inset-bottom, 0px) + 5rem)
     );
     --jade-scroll-stage-mobile-height: calc(
       100dvh - var(--jade-mobile-chrome-top) - var(--jade-mobile-chrome-bottom)
     );
+    /* Portrait frame cap — leaves ~11rem for title + body + CTA */
+    --jade-scroll-card-max-h: min(
+      55dvh,
+      calc(var(--jade-scroll-stage-mobile-height) - 11rem),
+      600px
+    );
+    --jade-scroll-card-max-h-tall-header: min(
+      52dvh,
+      calc(var(--jade-scroll-stage-mobile-height) - 13rem),
+      560px
+    );
+  }
+
+  .jade-scroll-linked-stage {
+    min-height: var(--jade-scroll-stage-mobile-height);
+    height: var(--jade-scroll-stage-mobile-height);
+  }
+}
+
+/* iOS Safari: reinforce dvh stage when dynamic toolbar shifts */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 1023px) {
+    .jade-scroll-linked-stage {
+      min-height: -webkit-fill-available;
+    }
   }
 }
 
