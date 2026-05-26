@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import JadeImage from "@/components/ui/JadeImage";
 import { useMediaMinLg } from "@/lib/useMediaMinLg";
@@ -16,6 +16,7 @@ import {
 import {
   scrollLinkedPanelAreaClass,
   scrollLinkedPanelBodyClass,
+  scrollLinkedPanelCtaClass,
   scrollLinkedPanelOuterClass,
   scrollLinkedPanelImageFrameClass,
   scrollLinkedPanelSlideClass,
@@ -26,6 +27,7 @@ import {
   scrollLinkedStickyStageClass,
   scrollLinkedStickyStageInnerClass,
 } from "@/lib/scrollLinkedPanelLayout";
+import { useScrollLinkedPanelOffset } from "@/lib/useScrollLinkedPanelOffset";
 
 const PANELS = [
   {
@@ -180,22 +182,10 @@ function PanelSlide({
       : data.mobileImage
     : data.image;
 
-  const [offsetPx, setOffsetPx] = useState(1000);
-
-  useEffect(() => {
-    const computeOffset = () => {
-      const vw = window.innerWidth;
-      const panelWidth =
-        vw >= 1280 ? 896 : vw >= 768 ? 672 : vw >= 640 ? 512 : 448;
-      const cappedPanel = Math.min(panelWidth, vw - 48);
-      const visibleGap = 20;
-      return Math.ceil(vw / 2 + cappedPanel / 2 + visibleGap);
-    };
-    const handleResize = () => setOffsetPx(computeOffset());
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const stackWrapRef = useRef<HTMLDivElement>(null);
+  const { offsetPx } = useScrollLinkedPanelOffset(stackWrapRef, {
+    visibleGap: 20,
+  });
 
   const x = useTransform(globalProgress, (p: number) => {
     return (index - p * totalSteps) * offsetPx;
@@ -218,7 +208,7 @@ function PanelSlide({
       <motion.div className={scrollLinkedPanelSlideInteractiveClass}>
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
         <motion.div className={scrollLinkedPanelOuterClass}>
-          <motion.div className={scrollLinkedPanelStackWrapClass}>
+          <motion.div ref={stackWrapRef} className={scrollLinkedPanelStackWrapClass}>
             <motion.div className={scrollLinkedPanelStackClass}>
             <motion.div className={scrollLinkedPanelImageFrameClass}>
               <motion.div className="w-full h-full relative">
@@ -241,7 +231,7 @@ function PanelSlide({
 
             <motion.div
               style={{ opacity: textOpacity }}
-              className="relative w-full flex flex-col items-start text-left mt-1 shrink-0"
+              className="relative w-full flex flex-col items-start text-left shrink-0"
             >
               <motion.h2
                 className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-2.5"
@@ -254,7 +244,7 @@ function PanelSlide({
               <motion.div className="w-full max-w-md">
                 <Link
                   href={data.href || "#"}
-                  className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-3 transition-all"
+                  className={scrollLinkedPanelCtaClass}
                 >
                   {data.cta} <ArrowRight className="w-5 h-5" />
                 </Link>

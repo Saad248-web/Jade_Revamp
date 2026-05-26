@@ -1,6 +1,7 @@
 "use client";
 
 import React, { memo, useEffect, useState } from "react";
+import { supportsFixedBackgroundAttachment } from "@/lib/backgroundAttachmentSupport";
 
 export interface LuxuryPatternProps {
   /** Controls the size of each repeating tile in px. Default: 300 */
@@ -32,9 +33,6 @@ export interface LuxuryPatternProps {
 /**
  * LuxuryPattern — tiles the official `/assets/Design.png` as a transparent
  * geometric background overlay on the Jade Green base.
- *
- * The pattern uses `background-attachment: fixed` so the design stays
- * static while content scrolls over it, creating a parallax-like effect.
  */
 const LuxuryPattern = memo(
   ({
@@ -48,11 +46,11 @@ const LuxuryPattern = memo(
   }: LuxuryPatternProps) => {
     const size = tileSize ?? patternSize;
 
-    const [fixedAttachment, setFixedAttachment] = useState(parallaxFixed);
+    const [fixedAttachment, setFixedAttachment] = useState(false);
 
     useEffect(() => {
       if (parallaxFixed) {
-        setFixedAttachment(true);
+        setFixedAttachment(supportsFixedBackgroundAttachment());
         return;
       }
       const finePointer = window.matchMedia("(pointer: fine)").matches;
@@ -66,10 +64,12 @@ const LuxuryPattern = memo(
       ? `linear-gradient(to bottom, transparent 0, black ${edgeFade}, black calc(100% - ${edgeFade}), transparent 100%)`
       : undefined;
 
+    const scrollClass = fixedAttachment ? "" : "jade-luxury-pattern--scroll";
+
     return (
       <div
         aria-hidden="true"
-        className={`absolute inset-0 w-full h-full pointer-events-none z-0 ${className}`}
+        className={`absolute inset-0 w-full h-full pointer-events-none z-0 ${scrollClass} ${className}`}
         style={{
           opacity,
           backgroundColor,

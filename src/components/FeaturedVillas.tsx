@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import {
   motion,
   useScroll,
@@ -15,6 +15,10 @@ import Link from "next/link";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import SectionWrapper from "./SectionWrapper";
+import LuxuryPattern from "./LuxuryPattern";
+import { shouldDeferParallaxPatternToStickyStage } from "@/lib/backgroundAttachmentSupport";
+import { useScrollLinkedPanelOffset } from "@/lib/useScrollLinkedPanelOffset";
+import { useMediaMinLg } from "@/lib/useMediaMinLg";
 import { JADE_GREEN } from "@/lib/jadeSectionColors";
 import PrimaryButton from "@/components/PrimaryButton";
 import {
@@ -121,7 +125,17 @@ const CTA_VILLA_HERO_GRID = [
   },
 ] as const;
 
+const FEATURED_PATTERN = {
+  opacity: 0.09,
+  strokeColor: "#EFCD62",
+  edgeFade: "18vh",
+  parallaxFixed: true,
+} as const;
+
 export default function FeaturedVillas() {
+  const deferPattern = shouldDeferParallaxPatternToStickyStage(
+    FEATURED_PATTERN.parallaxFixed,
+  );
   const targetRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
@@ -155,17 +169,13 @@ export default function FeaturedVillas() {
       ref={targetRef}
       bg={JADE_GREEN}
       className="h-[720vh]"
-      pattern={{
-        opacity: 0.09,
-        strokeColor: "#EFCD62",
-        edgeFade: "18vh",
-        parallaxFixed: true,
-      }}
+      pattern={deferPattern ? false : FEATURED_PATTERN}
     >
       <NavbarThemeTrigger theme="white" sectionRef={targetRef} />
       <div
-        className={`${scrollLinkedStickyStageClass} ${scrollLinkedStickyStageInnerClass}`}
+        className={`${scrollLinkedStickyStageClass} ${scrollLinkedStickyStageInnerClass} relative`}
       >
+        {deferPattern && <LuxuryPattern {...FEATURED_PATTERN} />}
         {/* Sections */}
         <div className={scrollLinkedPanelAreaClass}>
           {/* Panel 0: Intro */}
@@ -199,30 +209,10 @@ function useFeaturedCarouselX(
   index: number,
   measureRef: React.RefObject<HTMLElement | null>,
 ) {
-  const [offsetPx, setOffsetPx] = useState(1000);
-  const [vw, setVw] = useState(1920);
-
-  useEffect(() => {
-    const computeOffset = () => {
-      const w = window.innerWidth;
-      const actualWidth = measureRef.current
-        ? measureRef.current.offsetWidth
-        : Math.min(768, w - 48);
-      const visibleGap = 56;
-      return Math.ceil(w / 2 + actualWidth / 2 + visibleGap);
-    };
-    const handleResize = () => {
-      setOffsetPx(computeOffset());
-      setVw(window.innerWidth);
-    };
-    handleResize();
-    const t = setTimeout(handleResize, 100);
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      clearTimeout(t);
-    };
-  }, [measureRef]);
+  const { offsetPx, viewportWidth: vw } = useScrollLinkedPanelOffset(
+    measureRef,
+    { visibleGap: 56 },
+  );
 
   return useTransform(globalProgress, (p: number) => {
     const slideTime = p * totalSteps;
@@ -242,16 +232,25 @@ function IntroPanel({
   globalProgress,
   totalSteps,
 }: {
-  globalProgress: any;
+  globalProgress: MotionValue<number>;
   totalSteps: number;
 }) {
   const step = 1 / totalSteps;
+  const isLg = useMediaMinLg();
+  const introMeasureRef = useRef<HTMLDivElement>(null);
+  const { offsetPx } = useScrollLinkedPanelOffset(introMeasureRef, {
+    visibleGap: 56,
+  });
 
-  // Transition: Exit to left after vertical parallax is mostly complete
   const exitStart = step * 0.85;
   const exitEnd = step;
 
-  const x = useTransform(globalProgress, [exitStart, exitEnd], ["0%", "-100%"]);
+  const x = useTransform(globalProgress, (p: number) => {
+    if (p <= exitStart) return isLg ? "0%" : 0;
+    if (p >= exitEnd) return isLg ? "-100%" : -offsetPx;
+    const t = (p - exitStart) / (exitEnd - exitStart);
+    return isLg ? `${-t * 100}%` : -t * offsetPx;
+  });
 
   // Parallax - Text and Image overlap initially (at center) and then separate
   // Vertical animation finishes before horizontal slide starts
@@ -263,7 +262,10 @@ function IntroPanel({
       style={{ x, opacity, zIndex: 5 }}
       className={scrollLinkedIntroSlideClass}
     >
-      <div className="relative w-full max-w-4xl mx-auto flex flex-col items-center text-center">
+      <div
+        ref={introMeasureRef}
+        className="relative w-full max-w-4xl mx-auto flex flex-col items-center text-center"
+      >
         <motion.div style={{ y: textY }} className="z-10 relative">
           <span className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-3 font-bold block">
             FEATURED VILLAS

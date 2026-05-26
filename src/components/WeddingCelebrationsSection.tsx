@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import JadeImage from "@/components/ui/JadeImage";
 import Link from "next/link";
@@ -13,6 +13,7 @@ import {
   scrollLinkedPanelOuterClass,
   scrollLinkedPanelImageFrameTallHeaderClass,
   scrollLinkedPanelBodyClass,
+  scrollLinkedPanelCtaClass,
   scrollLinkedPanelSlideClass,
   scrollLinkedPanelSlideInteractiveClass,
   scrollLinkedPanelStackWideClass,
@@ -21,11 +22,7 @@ import {
   scrollLinkedStickyStageClass,
   scrollLinkedStickyStageInnerClass,
 } from "@/lib/scrollLinkedPanelLayout";
-
-function pick(images: string[], idx: number) {
-  if (!images.length) return "";
-  return images[idx % images.length];
-}
+import { useScrollLinkedPanelOffset } from "@/lib/useScrollLinkedPanelOffset";
 
 const CELEBRATIONS = [
   {
@@ -204,23 +201,10 @@ function CelebrationPanelSlide({
   totalSteps: number;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
-  // Zoom-safe offset — keeps exactly one panel centered at 100/125/140/150%.
-  const [offsetPx, setOffsetPx] = useState(1000);
-
-  useEffect(() => {
-    const computeOffset = () => {
-      const vw = window.innerWidth;
-      const panelWidth =
-        vw >= 1280 ? 576 : vw >= 768 ? 512 : vw >= 640 ? 448 : 384;
-      const cappedPanel = Math.min(panelWidth, vw - 48);
-      const visibleGap = 56;
-      return Math.ceil(vw / 2 + cappedPanel / 2 + visibleGap);
-    };
-    const handleResize = () => setOffsetPx(computeOffset());
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const stackWrapRef = useRef<HTMLDivElement>(null);
+  const { offsetPx } = useScrollLinkedPanelOffset(stackWrapRef, {
+    visibleGap: 56,
+  });
 
   const x = useTransform(globalProgress, (p: number) => {
     return (index - p * totalSteps) * offsetPx;
@@ -233,11 +217,11 @@ function CelebrationPanelSlide({
     >
       <div className={scrollLinkedPanelSlideInteractiveClass}>
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
-        <div
-          ref={panelRef}
-          className={`${scrollLinkedPanelOuterClass} px-6 md:px-24`}
-        >
-          <div className={`${scrollLinkedPanelStackWrapClass} max-w-xl`}>
+        <div className={`${scrollLinkedPanelOuterClass} px-6 md:px-24`}>
+          <div
+            ref={stackWrapRef}
+            className={`${scrollLinkedPanelStackWrapClass} max-w-xl`}
+          >
             <div className={scrollLinkedPanelStackWideClass}>
             <div className={scrollLinkedPanelImageFrameTallHeaderClass}>
               <div className="w-full h-full relative">
@@ -256,8 +240,7 @@ function CelebrationPanelSlide({
               </div>
             </div>
 
-            {/* Text Section — adaptive so CTA never drops below the fold */}
-            <div className="relative w-full flex flex-col items-start text-left mt-1 shrink-0">
+            <div className="relative w-full flex flex-col items-start text-left shrink-0">
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -283,7 +266,7 @@ function CelebrationPanelSlide({
               >
                 <Link
                   href={data.href || "#"}
-                  className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-3 transition-all"
+                  className={scrollLinkedPanelCtaClass}
                 >
                   {data.cta} <ArrowRight className="w-5 h-5" />
                 </Link>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import JadeImage from "@/components/ui/JadeImage";
 import { useMediaMinLg } from "@/lib/useMediaMinLg";
@@ -16,6 +16,7 @@ import {
 import {
   scrollLinkedPanelAreaClass,
   scrollLinkedPanelBodyClass,
+  scrollLinkedPanelCtaClass,
   scrollLinkedPanelOuterClass,
   scrollLinkedPanelImageFrameClass,
   scrollLinkedPanelSlideClass,
@@ -26,6 +27,7 @@ import {
   scrollLinkedStickyStageClass,
   scrollLinkedStickyStageInnerClass,
 } from "@/lib/scrollLinkedPanelLayout";
+import { useScrollLinkedPanelOffset } from "@/lib/useScrollLinkedPanelOffset";
 
 const PANELS = [
   {
@@ -185,35 +187,10 @@ function StackedPanel({
       : data.mobileImage
     : data.image;
 
-  const step = 1 / totalSteps;
-
-  const enterStart = index * step - step;
-  const enterEnd = index * step;
-  const exitStart = index * step;
-  const exitEnd = (index + 1) * step;
-
-  // Offset between adjacent panels, computed so that EXACTLY one panel is visible
-  // at rest, with a consistent visual gap before the next panel peeks in.
-  // Formula: offset = halfViewport + halfPanel + visibleGap
-  // -> when panel N is centered, panel N+1's left edge sits exactly `visibleGap`
-  //    pixels past the right viewport edge (zoom-safe at 100%, 125%, 140%, 150%).
-  const [offsetPx, setOffsetPx] = useState(1000);
-
-  useEffect(() => {
-    const computeOffset = () => {
-      const vw = window.innerWidth;
-      // Match Tailwind max-w-{sm|md|lg|xl} breakpoints used in the panel
-      const panelWidth =
-        vw >= 1280 ? 896 : vw >= 768 ? 672 : vw >= 640 ? 512 : 448;
-      const cappedPanel = Math.min(panelWidth, vw - 48); // account for side padding
-      const visibleGap = 20; // tighter gap between experience panels (Section 3)
-      return Math.ceil(vw / 2 + cappedPanel / 2 + visibleGap);
-    };
-    const handleResize = () => setOffsetPx(computeOffset());
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const stackWrapRef = useRef<HTMLDivElement>(null);
+  const { offsetPx } = useScrollLinkedPanelOffset(stackWrapRef, {
+    visibleGap: 20,
+  });
 
   // X Position: Continuous tracked position instead of clamped keyframes
   // to ensure panels don't pile up at a fixed clamp boundary off-screen.
@@ -241,7 +218,7 @@ function StackedPanel({
       <div className={scrollLinkedPanelSlideInteractiveClass}>
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
         <div className={scrollLinkedPanelOuterClass}>
-          <div className={scrollLinkedPanelStackWrapClass}>
+          <div ref={stackWrapRef} className={scrollLinkedPanelStackWrapClass}>
             <div className={scrollLinkedPanelStackClass}>
             {/* Image Section - adaptive max-height so the CTA button stays visible at high Windows scaling */}
             <div className={scrollLinkedPanelImageFrameClass}>
@@ -267,7 +244,7 @@ function StackedPanel({
             {/* Text Section — fades on horizontal exit to avoid overflow clip */}
             <motion.div
               style={{ opacity: textOpacity }}
-              className="relative w-full flex flex-col items-start text-left mt-1 shrink-0"
+              className="relative w-full flex flex-col items-start text-left shrink-0"
             >
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
@@ -293,7 +270,7 @@ function StackedPanel({
               >
                 <Link
                   href={data.href || "#"}
-                  className="inline-flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:gap-3 transition-all"
+                  className={scrollLinkedPanelCtaClass}
                 >
                   {data.cta} <ArrowRight className="w-5 h-5" />
                 </Link>

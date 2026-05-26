@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import LuxuryPattern, { type LuxuryPatternProps } from "./LuxuryPattern";
+import { shouldDeferParallaxPatternToStickyStage } from "@/lib/backgroundAttachmentSupport";
 
 export interface SectionWrapperProps
   extends Omit<HTMLAttributes<HTMLElement>, "children"> {
@@ -36,6 +37,10 @@ const SectionWrapper = forwardRef<HTMLElement, SectionWrapperProps>(
           ? null
           : { patternId: `jade-lp-${uniqueId}`, ...pattern };
 
+    const deferPattern =
+      patternProps !== null &&
+      shouldDeferParallaxPatternToStickyStage(patternProps.parallaxFixed);
+
     return (
       <section
         ref={ref}
@@ -43,7 +48,9 @@ const SectionWrapper = forwardRef<HTMLElement, SectionWrapperProps>(
         style={shellStyle}
         {...rest}
       >
-        {patternProps !== null && <LuxuryPattern {...patternProps} />}
+        {patternProps !== null && !deferPattern && (
+          <LuxuryPattern {...patternProps} />
+        )}
         {children}
       </section>
     );
@@ -51,5 +58,7 @@ const SectionWrapper = forwardRef<HTMLElement, SectionWrapperProps>(
 );
 
 SectionWrapper.displayName = "SectionWrapper";
+
+export type { LuxuryPatternProps as SectionWrapperPatternProps };
 
 export default SectionWrapper;
