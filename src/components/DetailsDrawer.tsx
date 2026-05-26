@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS } from "@/lib/overlayDismissButton";
+import { OVERLAY_DISMISS_BUTTON_BASE } from "@/lib/overlayDismissButton";
 import {
   X,
   Wifi,
@@ -124,22 +124,20 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
             className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm"
           />
 
-          {/* Centering wrapper */}
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            onClick={onClose}
-            className={OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS}
-          >
-            <X className="w-6 h-6 stroke-[1.5]" />
-          </motion.button>
-
           <div
-            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center px-4 md:px-0 pointer-events-none"
+            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center px-4 md:px-0 pointer-events-none pb-[max(0.5rem,env(safe-area-inset-bottom,0px))]"
             onWheel={(e) => e.stopPropagation()}
           >
-            {/* Modal */}
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              onClick={onClose}
+              className={`pointer-events-auto z-[102] mb-2.5 ${OVERLAY_DISMISS_BUTTON_BASE}`}
+            >
+              <X className="w-6 h-6 stroke-[1.5]" />
+            </motion.button>
+
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}

@@ -227,8 +227,8 @@ export default function AboutPage() {
       />
 
       {/* 5. WHAT WE DO SECTION (Offering Carousel) */}
-      <section className="relative h-screen min-h-[600px] flex flex-col justify-center bg-[#1A1C1E] py-10 md:py-12 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 w-full flex flex-col h-full">
+      <section className="relative bg-[#1A1C1E] py-10 md:py-12 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 w-full flex flex-col">
           {/* Header & Nav */}
           <div className="flex justify-between items-end mb-6 md:mb-10">
             <div>
@@ -257,7 +257,7 @@ export default function AboutPage() {
 
           {/* Carousel Slide */}
           <div
-            className="relative flex-1 max-h-[540px] md:max-h-[700px] lg:max-h-[820px] w-full rounded-none overflow-hidden group min-h-0 mx-auto"
+            className="relative w-full h-[clamp(320px,50svh,540px)] md:h-[clamp(380px,55svh,700px)] lg:h-[clamp(420px,58svh,820px)] rounded-none overflow-hidden group mx-auto"
             style={{ perspective: "1500px" }}
           >
             <AnimatePresence mode="sync" initial={false} custom={offeringCarouselCustom}>
@@ -368,7 +368,7 @@ export default function AboutPage() {
       */}
 
       {/* 7. MEDIA SECTION */}
-      <section className="jade-section bg-[#1A1C1E]">
+      <section className="jade-section bg-[#1A1C1E] !pt-6 md:!pt-8 lg:!pt-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-8 md:mb-10">
             <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3">

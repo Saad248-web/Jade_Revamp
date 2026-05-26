@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
-import { OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS } from "@/lib/overlayDismissButton";
+import { OVERLAY_DISMISS_BUTTON_BASE } from "@/lib/overlayDismissButton";
 import { useAnimation } from "@/context/AnimationContext";
 import Link from "next/link";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
@@ -196,26 +196,27 @@ export default function PartnerOverlay() {
             className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm"
           />
 
-          {/* Centering wrapper — stops Lenis seeing wheel events */}
-          <button
-            type="button"
-            onClick={handleClose}
-            className={OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS}
-          >
-            <X className="w-6 h-6 stroke-[1.5]" />
-          </button>
-
           <div
-            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center pointer-events-none"
+            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center px-4 md:px-0 pointer-events-none pb-[max(0.5rem,env(safe-area-inset-bottom,0px))]"
             onWheel={(e) => e.stopPropagation()}
           >
-            {/* Modal */}
+            <motion.button
+              type="button"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              onClick={handleClose}
+              className={`pointer-events-auto z-[102] mb-2.5 ${OVERLAY_DISMISS_BUTTON_BASE}`}
+            >
+              <X className="w-6 h-6 stroke-[1.5]" />
+            </motion.button>
+
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className={`relative pointer-events-auto w-full md:w-[600px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 ${view === "success" ? "h-[80vh] md:h-[650px]" : "max-h-[calc(100dvh-8rem)]"}`}
+              className={`relative pointer-events-auto w-full md:w-[600px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden ${view === "success" ? "h-[80vh] md:h-[650px]" : "max-h-[min(85dvh,calc(100dvh-4.5rem))]"}`}
             >
               {/* Header */}
               {view === "form" && (
