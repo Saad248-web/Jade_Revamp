@@ -35,6 +35,10 @@ interface ScrollSectionComposerProps {
   backFallbackPath?: string;
   showScrollIndicator?: boolean;
   scrollIndicatorText?: string;
+  /** Horizontal gutters for slide copy (e.g. `px-4 md:px-8` to match premium card rails) */
+  slideGutterClassName?: string;
+  /** Outer width constraint for slide copy (e.g. `w-full max-w-7xl mx-auto`) */
+  contentContainerClassName?: string;
 }
 
 const ScrollButton = ({ href, label }: { href: string; label: string }) => (
@@ -74,6 +78,8 @@ const SlideLines = ({
   index,
   fadeTiming,
   scrollEffects,
+  slideGutterClassName,
+  contentContainerClassName,
 }: {
   slide: ScrollSlide;
   progress: MotionValue<number>;
@@ -83,6 +89,8 @@ const SlideLines = ({
   totalSlides: number;
   fadeTiming: "default" | "early";
   scrollEffects: "full" | "performance";
+  slideGutterClassName: string;
+  contentContainerClassName: string;
 }) => {
   const span = end - start;
   const early = fadeTiming === "early";
@@ -142,11 +150,11 @@ const SlideLines = ({
 
   return (
     <motion.div
-      className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12 pointer-events-none"
+      className={`absolute inset-x-0 flex items-center justify-center pointer-events-none ${slideGutterClassName}`}
       style={{ y }}
     >
       <motion.div
-        className="text-center w-full max-w-[90vw] md:max-w-4xl mx-auto mb-10"
+        className={`text-center w-full mb-10 ${contentContainerClassName}`}
         style={{
           opacity,
           scale,
@@ -206,6 +214,8 @@ export default function ScrollSectionComposer({
   backFallbackPath = "/experiences",
   showScrollIndicator = true,
   scrollIndicatorText,
+  slideGutterClassName = "px-6 md:px-12",
+  contentContainerClassName = "max-w-[90vw] md:max-w-4xl mx-auto",
 }: ScrollSectionComposerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const goBack = useSafeBack(backFallbackPath);
@@ -259,6 +269,8 @@ export default function ScrollSectionComposer({
                 totalSlides={total}
                 fadeTiming={fadeTiming}
                 scrollEffects={scrollEffects}
+                slideGutterClassName={slideGutterClassName}
+                contentContainerClassName={contentContainerClassName}
               />
             );
           })}

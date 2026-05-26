@@ -65,13 +65,13 @@ export default function CorporateRetreatsPage() {
       {/* SECTION 2: TRUSTED BY SECTION */}
       <TrustedBySection />
       {/* SECTION 3: ANIMATED TEXT SECTION */}
-      <ExperienceScrollSection variant="corporate" id="corporate-philosophy" />
+      <section className="jade-section bg-[#1A1C1E] border-t border-white/5">
+        <ExperienceScrollSection variant="corporate" id="corporate-philosophy" />
+      </section>
 
-      {/* SECTION 4: py-12 (48px) for tighter flow */}
-      <section className="py-10 bg-[#1A1C1E] border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <FormatsCarousel />
-        </div>
+      {/* SECTION 4: Formats — 85dvh mobile (above bottom nav); 100dvh desktop/laptop */}
+      <section className="flex flex-col h-[85dvh] min-h-[85dvh] max-h-[85dvh] overflow-hidden bg-[#1A1C1E] border-t border-white/5 lg:h-[100dvh] lg:min-h-[100dvh] lg:max-h-[100dvh]">
+        <FormatsCarousel />
       </section>
 
       {/* SECTION 5: WHY CHOOSE JADE */}
@@ -113,7 +113,7 @@ export default function CorporateRetreatsPage() {
         alternateGold={true}
       />
       {/* SECTION 6: SELECTED VILLAS FOR CORPORET RETREATS */}
-      <section className="py-fluid-lg md:py-fluid-xl bg-[#1A1C1E] border-t border-white/5">
+      <section className="jade-section bg-[#1A1C1E] border-t border-white/5">
         <div className="text-center mb-12 px-8">
           <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3 font-manrope">
             FEATURED VENUES

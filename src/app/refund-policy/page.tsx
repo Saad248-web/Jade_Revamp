@@ -16,7 +16,7 @@ export default function RefundPolicy() {
         </div>
       </section>
 
-      <section className="py-16 px-6 md:px-12 lg:px-24">
+      <section className="jade-section px-6 md:px-12 lg:px-24">
         <div className="max-w-4xl mx-auto space-y-10">
           <section>
             <p className="text-gh-body text-white/70 leading-relaxed mb-6">

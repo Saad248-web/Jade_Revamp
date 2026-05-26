@@ -108,7 +108,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
       </section>
 
       {/* Content Layout */}
-      <section className="px-6 md:px-12 lg:px-24 pb-24">
+      <section className="jade-section px-6 md:px-12 lg:px-24">
         <div className="max-w-[1920px] mx-auto flex flex-col lg:flex-row gap-16">
           {/* Main Article Content */}
           <article className="lg:w-[65%] space-y-10">
@@ -338,7 +338,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
       </section>
 
       {/* Related Reading */}
-      <section className="py-24 bg-[#1E2023] border-t border-white/5">
+      <section className="jade-section bg-[#1E2023] border-t border-white/5">
         <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
           <div className="flex justify-between items-end mb-12">
             <div>

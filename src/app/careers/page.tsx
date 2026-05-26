@@ -369,7 +369,7 @@ export default function CareersPage() {
       </section>
 
       {/* 3. CULTURE SECTION (Optimized for 100vh) */}
-      <section className="relative min-h-[100svh] flex flex-col justify-center bg-[#1A1C1E] border-t border-white/5 py-12 md:py-20 overflow-hidden">
+      <section className="jade-section relative min-h-[100svh] flex flex-col justify-center bg-[#1A1C1E] border-t border-white/5 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 text-center relative z-10 w-full">
           <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3">
             CULTURE

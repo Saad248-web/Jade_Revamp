@@ -35,9 +35,7 @@ import LiveBackground from "@/components/LiveBackground";
 import Footer from "@/components/Footer";
 import PartyVillasCarousel from "@/components/PartyVillasCarousel";
 import ExperienceHero from "@/components/ExperienceHero";
-import ScrollSectionComposer, {
-  ScrollSlide,
-} from "@/components/ScrollSectionComposer";
+import ExperienceScrollSection from "@/components/ExperienceScrollSection";
 import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
 import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
 import { useAnimation } from "@/context/AnimationContext";
@@ -65,21 +63,6 @@ const partySlides = [
     desc: "Host memorable celebrations in beautifully curated villas with décor, dining, music, and private pools.",
     image:
       "/Experiences/Party Villas/2-Party Type/Birthdays & Anniversaries.webp",
-  },
-];
-
-const animatedSlides: ScrollSlide[] = [
-  {
-    label: "CELEBRATIONS, REIMAGINED",
-    lines: [
-      "Jade's private villas offer the perfect",
-      "setting for unforgettable celebrations.",
-      "Whether it's a birthday, anniversary,",
-      "pool party, or reunion with friends,",
-      "each space is designed for private",
-      "gatherings with curated setups, great",
-      "music, and moments worth celebrating.",
-    ],
   },
 ];
 
@@ -125,16 +108,7 @@ export default function PartyVillasPage() {
       />
 
       {/* SECTION 2: ANIMATED TEXT SECTION */}
-      <div id="party-philosophy" className="relative">
-        <ScrollSectionComposer
-          slides={animatedSlides}
-          height="250vh"
-          fadeTiming="early"
-          scrollEffects="performance"
-          showScrollIndicator
-          scrollIndicatorText="SCROLL TO EXPERIENCES"
-        />
-      </div>
+      <ExperienceScrollSection variant="party" id="party-philosophy" />
 
       {/* SECTION 3: PARTY TYPES CAROUSEL */}
       <ExperienceCarouselSection

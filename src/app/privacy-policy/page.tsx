@@ -36,7 +36,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* Content Section */}
-      <section className="py-16 px-6 md:px-12 lg:px-24">
+      <section className="jade-section px-6 md:px-12 lg:px-24">
         <div className="max-w-4xl mx-auto space-y-12">
           {/* Privacy Policy */}
           <div className="space-y-5">

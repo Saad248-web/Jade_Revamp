@@ -22,6 +22,7 @@ export default function ExperienceScrollSection({
   const { label, body, height } = EXPERIENCE_SCROLL_SECTIONS[variant];
 
   const isWedding = variant === "wedding";
+  const isCorporate = variant === "corporate";
 
   return (
     <div id={id} className="relative">
@@ -30,6 +31,10 @@ export default function ExperienceScrollSection({
         height={heightOverride ?? height ?? "250vh"}
         fadeTiming="early"
         scrollEffects={isWedding ? "performance" : "full"}
+        {...(isCorporate && {
+          slideGutterClassName: "px-4 md:px-8",
+          contentContainerClassName: "w-full max-w-7xl mx-auto",
+        })}
         background={
           isWedding ? <LiveBackground variant="static" /> : <LiveBackground />
         }

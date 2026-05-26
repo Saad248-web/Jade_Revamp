@@ -13,7 +13,7 @@ export const experienceCarouselDefaults = {
    * Inner column — horizontal + vertical padding scale with viewport (fluid tokens + steps).
    */
   innerClassName:
-    "w-full max-w-5xl mx-auto flex flex-col px-fluid-sm sm:px-fluid-md md:px-8 lg:px-10 pt-fluid-xl sm:pt-fluid-xl md:pt-fluid-lg lg:pt-fluid-xl pb-fluid-md sm:pb-fluid-lg md:pb-8 lg:pb-10",
+    "w-full max-w-6xl mx-auto flex flex-col px-4 sm:px-6 md:px-8 pt-fluid-xl sm:pt-fluid-xl md:pt-fluid-lg lg:pt-fluid-xl pb-fluid-md sm:pb-fluid-lg md:pb-8 lg:pb-10",
 
   /**
    * Image frame — explicit stepped heights only (avoid `min(dvh,*)` arbitrary classes;
@@ -21,7 +21,7 @@ export const experienceCarouselDefaults = {
    * Portrait-ish rail — stepped heights (raised for more visual presence).
    */
   aspectClass:
-    "relative w-full max-w-5xl mx-auto bg-[#121417] overflow-hidden rounded-sm shadow-2xl h-[456px] sm:h-[480px] md:h-[528px] lg:h-[576px] min-h-[360px]",
+    "relative w-full max-w-6xl mx-auto bg-[#121417] overflow-hidden rounded-sm shadow-2xl h-[456px] sm:h-[480px] md:h-[528px] lg:h-[576px] min-h-[360px]",
 
   /** Frame → CTA: 16px floor on mobile, then scales with viewport (capped for large screens). */
   buttonContainerClassName:

@@ -147,7 +147,7 @@ export default function AboutPage() {
       <TrustedBySection />
 
       {/* 3. OUR STORY SECTION */}
-      <section className="py-fluid-lg md:py-fluid-xl bg-jade-charcoal relative overflow-hidden">
+      <section className="jade-section bg-jade-charcoal relative overflow-hidden">
         {/* Background Pattern Overlay (Optional subtle texture) */}
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]" />
 
@@ -368,9 +368,9 @@ export default function AboutPage() {
       */}
 
       {/* 7. MEDIA SECTION */}
-      <section className="py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
+      <section className="jade-section bg-[#1A1C1E]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 md:mb-10">
             <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3">
               MEDIA
             </h3>
@@ -426,7 +426,7 @@ export default function AboutPage() {
             </div>
 
             {/* Featured Wide Media */}
-            <div className="col-span-1 md:col-span-3 pt-4">
+            <div className="col-span-1 md:col-span-3 pt-3 md:pt-4">
               <div
                 className="relative aspect-video w-full bg-white/5 border border-white/10 rounded-none overflow-hidden group cursor-pointer"
                 onClick={() =>

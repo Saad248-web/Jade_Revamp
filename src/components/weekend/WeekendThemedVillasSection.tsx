@@ -5,20 +5,26 @@ import Image from "next/image";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import HorizontalScrollRail from "@/components/ui/HorizontalScrollRail";
+import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
 import { WEEKEND_THEMED_VILLAS } from "@/data/weekend/weekendThemedVillas";
 
+const vd = VILLA_DETAIL_SPACING;
 const CARD_COUNT = WEEKEND_THEMED_VILLAS.length;
+
+/** Mobile: wide cards with next-card peek; desktop: flex grid in section width. */
+const scrollCardWidthClasses =
+  "w-[max(240px,min(78dvw,340px))] sm:w-[max(260px,min(80dvw,360px))] md:w-[min(300px,42vw)] lg:w-[var(--villa-card-w)] lg:max-w-[360px] lg:min-w-[240px]";
 
 const sectionVars = {
   "--villa-gap": "clamp(14px, 2.2vw, 28px)",
-  "--villa-card-w": `clamp(220px, calc((100% - (${CARD_COUNT} - 1) * var(--villa-gap)) / ${CARD_COUNT}), 320px)`,
+  "--villa-card-w": `clamp(240px, calc((100% - (${CARD_COUNT} - 1) * var(--villa-gap)) / ${CARD_COUNT}), 360px)`,
 } as CSSProperties;
 
 export default function WeekendThemedVillasSection() {
   return (
     <section
       id="themed-villa-retreats"
-      className="bg-[#141517] border-t border-white/5 overflow-hidden flex flex-col min-h-[80dvh] max-h-[85dvh] h-[85dvh] lg:min-h-[100dvh] lg:max-h-[100dvh] lg:h-[100dvh]"
+      className="bg-[#141517] border-t border-white/5 overflow-y-hidden max-sm:overflow-x-visible flex flex-col min-h-[80dvh] max-h-[85dvh] h-[85dvh] lg:min-h-[100dvh] lg:max-h-[100dvh] lg:h-[100dvh]"
       style={sectionVars}
     >
       <header className="shrink-0 text-center px-6 pt-5 md:pt-8 pb-3 md:pb-4">
@@ -30,27 +36,29 @@ export default function WeekendThemedVillasSection() {
         </h2>
       </header>
 
-      <div className="flex-1 min-h-0 w-full px-6 lg:px-10 flex items-center justify-center">
+      <div className="flex-1 min-h-0 w-full flex max-sm:overflow-visible lg:px-10">
         <HorizontalScrollRail
-          fadeFrom="#141517"
-          className="w-full max-w-[1320px] mx-auto lg:overflow-visible"
-          trackClassName="w-full max-w-[1320px] mx-auto items-end justify-start lg:justify-center gap-[var(--villa-gap)] pb-2 scroll-pr-10 lg:overflow-x-visible"
+          showFade={false}
+          mobileViewportEdge
+          mobileTrackGutter
+          className={`w-full h-full lg:max-w-[1320px] lg:mx-auto lg:overflow-visible jade-premium-rail-gap-y ${vd.hScrollViewportEdge}`}
+          trackClassName="w-full h-full min-h-0 items-stretch justify-start lg:max-w-[1320px] lg:mx-auto lg:justify-center gap-[var(--villa-gap)] snap-x snap-mandatory scroll-smooth lg:overflow-x-visible"
         >
           {WEEKEND_THEMED_VILLAS.map((villa) => (
             <article
               key={villa.href}
-              className="group flex flex-col shrink-0 jade-hscroll-view-item w-[clamp(220px,48vw,300px)] lg:shrink lg:w-[var(--villa-card-w)] lg:max-w-[320px] lg:min-w-[220px]"
+              className={`group flex flex-col shrink-0 h-full snap-start jade-hscroll-view-item lg:shrink ${scrollCardWidthClasses}`}
             >
               <Link
                 href={villa.href}
-                className="flex flex-col cursor-pointer"
+                className="flex flex-col flex-1 min-h-0 h-full cursor-pointer"
               >
-                <div className="relative aspect-[5/6] w-full max-h-[min(42dvh,340px)] lg:max-h-[min(48vh,380px)] overflow-hidden border border-white/5 group-hover:border-[#EFCD62]/30 transition-colors mb-2.5 lg:mb-3">
+                <div className="relative flex-1 min-h-[200px] w-full overflow-hidden border border-white/5 group-hover:border-[#EFCD62]/30 transition-colors mb-2.5 lg:mb-3">
                   <Image
                     src={villa.image}
                     alt={villa.name}
                     fill
-                    sizes="(max-width: 1024px) 48vw, 24vw"
+                    sizes="(max-width: 1024px) 80vw, 22vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
@@ -72,8 +80,8 @@ export default function WeekendThemedVillasSection() {
         </HorizontalScrollRail>
       </div>
 
-      <div className="shrink-0 px-6 pb-5 md:pb-6 pt-3 md:pt-4 flex justify-center">
-        <PrimaryButton className="w-full max-w-xl text-gh-label" href="/villas">
+      <div className="shrink-0 max-w-7xl mx-auto px-4 w-full pb-5 md:pb-6 pt-3 md:pt-4">
+        <PrimaryButton className="w-full h-[54px]" href="/villas">
           VIEW ALL VILLA RETREATS
         </PrimaryButton>
       </div>

@@ -149,10 +149,19 @@ function getMenuVillaCarouselImages(villa: any) {
 }
 
 /** < md: full-width phone panels use px-6 */
-const MENU_BLEED_RIGHT_MOBILE = "-mr-6 w-[calc(100%+1.5rem)]";
+// Note: mobile secondary views use `px-6`, and the list wrapper uses a small `pr-1`,
+// so we bleed slightly more on the right to truly hit the edge.
+const MENU_BLEED_X_MOBILE =
+  "-ml-6 -mr-[calc(1.5rem+0.25rem)] w-[calc(100%+3rem+0.25rem)]";
 /** md+ preview column: matches scroll area px-4 / md:px-6 / lg:px-8 */
-const MENU_BLEED_RIGHT_DESKTOP =
-  "-mr-4 md:-mr-6 lg:-mr-8 w-[calc(100%+1rem)] md:w-[calc(100%+1.5rem)] lg:w-[calc(100%+2rem)]";
+// On Windows, the vertical scroll container can reserve a small gutter for the scrollbar,
+// so we bleed a touch more on the right to visually touch the edge.
+const MENU_BLEED_X_DESKTOP =
+  "-ml-4 md:-ml-6 lg:-ml-8 -mr-[calc(1rem+0.5rem)] md:-mr-[calc(1.5rem+0.5rem)] lg:-mr-[calc(2rem+0.5rem)] w-[calc(100%+2rem+0.5rem)] md:w-[calc(100%+3rem+0.5rem)] lg:w-[calc(100%+4rem+0.5rem)]";
+
+/** Right-bleed variant (used by the experience image row). */
+const MENU_BLEED_RIGHT_MOBILE = "pr-6";
+const MENU_BLEED_RIGHT_DESKTOP = "pr-4 md:pr-6 lg:pr-8";
 
 function MenuExperienceImages({
   exp,
@@ -225,13 +234,13 @@ export default function MenuPage() {
   };
 
   return (
-    <main className="relative min-h-screen bg-[#1E2023] text-white pb-16 md:pb-0">
+    <main className="relative flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden bg-[#1E2023] text-white">
       {/* ── Navigation ── */}
       <Navbar />
       <MobileBottomNav />
 
-      {/* Main content wrapper with top padding for navbar */}
-      <div className="w-full h-[100svh] min-h-0 flex flex-col md:flex-row relative pt-[48px] md:pt-[64px] overflow-hidden">
+      {/* Main content — flex height clears navbar + mobile bottom nav */}
+      <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden pt-[48px] pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))] md:flex-row md:pt-[64px] md:pb-0">
         {/* LEFT COLUMN: Main Menu */}
         <div className="flex-1 min-h-0 md:flex-none md:w-1/3 relative overflow-hidden h-full z-10 border-r border-transparent md:border-white/10">
           <AnimatePresence mode="wait">
@@ -242,14 +251,17 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className={`absolute inset-0 flex flex-col min-h-0 overflow-hidden px-6 md:px-12 py-4 ${menuView !== "primary" ? "hidden md:flex" : "flex"}`}
+                className={`absolute inset-0 flex min-h-0 flex-col px-6 py-4 md:px-12 ${menuView !== "primary" ? "hidden md:flex" : "flex"}`}
               >
-                <span className="text-white/40 text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-5 flex-shrink-0">
+                <span className="mb-5 flex-shrink-0 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-white/40">
                   MENU
                 </span>
 
-                <div className="flex-1 min-h-0 overflow-y-auto overscroll-y-contain flex flex-col" data-lenis-prevent>
-                <ul className="flex flex-col space-y-2.5 md:space-y-3 pb-4">
+                <div
+                  className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] touch-pan-y"
+                  data-lenis-prevent
+                >
+                <ul className="flex flex-col space-y-2.5 pb-6 md:space-y-3">
                   <li
                     className="flex items-center justify-between cursor-pointer group"
                     onClick={openVillasSection}
@@ -345,7 +357,7 @@ export default function MenuPage() {
                   </li>
                 </ul>
 
-                <div className="flex gap-3 flex-shrink-0 pt-8 mt-auto">
+                <div className="mt-auto flex flex-shrink-0 gap-3 pt-6 pb-2">
                   {[
                     {
                       Icon: Facebook,
@@ -388,20 +400,23 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="absolute inset-0 flex md:hidden flex-col min-h-0 overflow-hidden px-6 py-4 bg-[#1E2023]"
+                className="absolute inset-0 flex min-h-0 flex-col bg-[#1E2023] px-6 py-4 md:hidden"
               >
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="flex-shrink-0 flex items-center gap-2 text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-4 hover:text-white transition-colors w-fit"
+                  className="mb-4 flex w-fit flex-shrink-0 items-center gap-2 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
                 >
-                  <ArrowLeft className="w-4 h-4" /> BACK
+                  <ArrowLeft className="h-4 w-4" /> BACK
                 </button>
                 <MenuVillasExperiencesSwitcher
                   active="villas"
                   onVillas={openVillasSection}
                   onExperiences={openExperiencesSection}
                 />
-                <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-y-contain pb-24" data-lenis-prevent>
+                <div
+                  className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch] touch-pan-y"
+                  data-lenis-prevent
+                >
                 <div className="space-y-6 pr-1">
                   {MENU_VILLAS.map((villa) => (
                     <Link
@@ -424,10 +439,10 @@ export default function MenuPage() {
                       <div
                         data-lenis-prevent
                         data-jade-hscroll
-                        className={`${MENU_BLEED_RIGHT_MOBILE} jade-hscroll-track min-w-0 overflow-x-auto hide-scrollbar`}
+                        className={`${MENU_BLEED_X_MOBILE} jade-hscroll-track min-w-0 overflow-x-auto hide-scrollbar`}
                         onTouchStart={(e) => e.stopPropagation()}
                       >
-                        <div className="flex gap-2 w-max">
+                        <div className="flex gap-2 w-max px-6">
                           {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
                             <div
                               key={`${villa.id}-${imgIdx}`}
@@ -457,13 +472,13 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="absolute inset-0 flex md:hidden flex-col min-h-0 overflow-hidden px-6 py-4 bg-[#1E2023]"
+                className="absolute inset-0 flex min-h-0 flex-col bg-[#1E2023] px-6 py-4 md:hidden"
               >
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="flex-shrink-0 flex items-center gap-2 text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-4 hover:text-white transition-colors w-fit"
+                  className="mb-4 flex w-fit flex-shrink-0 items-center gap-2 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
                 >
-                  <ArrowLeft className="w-4 h-4" /> BACK
+                  <ArrowLeft className="h-4 w-4" /> BACK
                 </button>
                 <MenuVillasExperiencesSwitcher
                   active="experiences"
@@ -471,7 +486,10 @@ export default function MenuPage() {
                   onExperiences={openExperiencesSection}
                 />
 
-                <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-y-contain pb-24" data-lenis-prevent>
+                <div
+                  className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch] touch-pan-y"
+                  data-lenis-prevent
+                >
                 <div className="space-y-6 pr-1">
                   {MENU_EXPERIENCES.map((exp) => (
                     <div key={exp.href + exp.title} className="flex flex-col group">
@@ -512,19 +530,22 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="absolute inset-0 flex md:hidden flex-col min-h-0 overflow-hidden px-6 py-4 bg-[#1E2023]"
+                className="absolute inset-0 flex min-h-0 flex-col bg-[#1E2023] px-6 py-4 md:hidden"
               >
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase mb-10 hover:text-white transition-colors w-fit"
+                  className="mb-10 flex w-fit items-center gap-2 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
                 >
-                  <ArrowLeft className="w-4 h-4 cursor-pointer" /> BACK
+                  <ArrowLeft className="h-4 w-4 cursor-pointer" /> BACK
                 </button>
-                <h2 className="text-gh-h1 font-philosopher text-white mb-8 flex-shrink-0">
+                <h2 className="mb-8 flex-shrink-0 font-philosopher text-gh-h1 text-white">
                   More
                 </h2>
 
-                <ul className="flex-1 min-h-0 overflow-y-auto overscroll-y-contain flex flex-col space-y-5 pl-4 pb-24" data-lenis-prevent>
+                <ul
+                  className="flex min-h-0 flex-1 flex-col space-y-5 overflow-y-auto overscroll-y-contain pl-4 pb-6 [-webkit-overflow-scrolling:touch] touch-pan-y"
+                  data-lenis-prevent
+                >
                   <li>
                     <Link
                       href="/privacy-policy"
@@ -594,7 +615,7 @@ export default function MenuPage() {
                 data-lenis-prevent
                 className="absolute inset-0 flex flex-col min-h-0 overflow-hidden pointer-events-auto"
               >
-                <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-y-contain px-4 md:px-6 lg:px-8 pt-5 pb-20">
+                <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain px-4 pb-12 pt-5 [-webkit-overflow-scrolling:touch] touch-pan-y md:px-6 lg:px-8">
                 <div className="w-full space-y-12">
                   {MENU_VILLAS.map((villa, idx) => (
                     <motion.div
@@ -627,10 +648,10 @@ export default function MenuPage() {
                       <div
                         data-lenis-prevent
                         data-jade-hscroll
-                        className={`${MENU_BLEED_RIGHT_DESKTOP} jade-hscroll-track min-w-0 overflow-x-auto hide-scrollbar`}
+                        className={`${MENU_BLEED_X_DESKTOP} jade-hscroll-track min-w-0 overflow-x-auto hide-scrollbar`}
                         onTouchStart={(e) => e.stopPropagation()}
                       >
-                        <div className="flex gap-3 w-max">
+                        <div className="flex gap-3 w-max px-4 md:px-6 lg:px-8">
                           {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
                             <Link
                               key={`${villa.id}-desktop-${imgIdx}`}
@@ -667,7 +688,7 @@ export default function MenuPage() {
                 data-lenis-prevent
                 className="absolute inset-0 flex flex-col min-h-0 overflow-hidden pointer-events-auto"
               >
-                <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-y-contain px-4 md:px-6 lg:px-8 pt-5 pb-20">
+                <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain px-4 pb-12 pt-5 [-webkit-overflow-scrolling:touch] touch-pan-y md:px-6 lg:px-8">
                 <div className="w-full space-y-12">
                   {MENU_EXPERIENCES.map((exp, idx) => (
                     <motion.div

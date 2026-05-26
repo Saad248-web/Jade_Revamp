@@ -78,6 +78,11 @@
     --villa-section-pad-block: 2.5rem; /* 40px top + bottom */
     --villa-section-pad-block-lg: 4rem; /* 64px top + bottom at lg */
 
+    /* Global section rhythm — non-Villa pages (mobile target: 40–56px) */
+    --jade-section-pad-y: clamp(2.5rem, 5vw, 3.5rem); /* 40–56px */
+    --jade-section-pad-y-md: clamp(3rem, 4vw, 4rem); /* 48–64px */
+    --jade-section-pad-y-lg: clamp(4rem, 3.5vw, 6rem); /* 64–96px */
+
     /* Gallery / default rails — 24px edge */
     --jade-hscroll-fade-width: 1.5rem;
     /* Tab bars — width ≈ blur radius for extreme glass falloff */
@@ -90,6 +95,12 @@
 }
 
 @layer utilities {
+  /* Global equal top/bottom padding on root-level sections (exclude via routing, not CSS) */
+  .jade-section {
+    padding-top: var(--jade-section-pad-y);
+    padding-bottom: var(--jade-section-pad-y);
+  }
+
   /* Equal top/bottom padding on every villa detail section shell */
   .villa-section-pad-block {
     padding-top: var(--villa-section-pad-block);
@@ -102,9 +113,21 @@
   }
 
   @media (min-width: 1024px) {
+    .jade-section {
+      padding-top: var(--jade-section-pad-y-lg);
+      padding-bottom: var(--jade-section-pad-y-lg);
+    }
+
     .villa-section-pad-block {
       padding-top: var(--villa-section-pad-block-lg);
       padding-bottom: var(--villa-section-pad-block-lg);
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .jade-section {
+      padding-top: var(--jade-section-pad-y-md);
+      padding-bottom: var(--jade-section-pad-y-md);
     }
   }
 

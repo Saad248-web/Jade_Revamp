@@ -36,6 +36,6 @@ export const EXPERIENCE_SCROLL_SECTIONS: Record<
   },
   corporate: {
     body: "At Jade Hospitainment, corporate retreats are thoughtfully designed to balance productivity and relaxation. From strategic planning sessions and workshops to recognition nights and team celebrations, each gathering is structured around your objectives.",
-    height: "250vh",
+    height: "270vh",
   },
 };

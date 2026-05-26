@@ -7,7 +7,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CAROUSEL_CROSSFADE } from "@/lib/carouselMotion";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import {
-  liquidCarouselBgVariants,
+  heroSplitCardVariants,
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 
@@ -88,54 +88,50 @@ export default function FormatsCarousel() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-8">
-      {/* SECTION HEADER: Tightened mb-8 lg:mb-12 */}
-      <div className="flex flex-col mb-3 md:mb-[12.8px]">
-        <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-[11.2px] font-manrope">
+    <div className="flex h-full min-h-0 w-full max-w-7xl flex-col mx-auto px-4 lg:justify-center lg:px-8 lg:py-fluid-md">
+      {/* SECTION HEADER */}
+      <div className="flex shrink-0 flex-col pt-3 pb-2 lg:pb-6">
+        <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-2 font-manrope lg:mb-3">
           CORPORATE EXPERIENCE AT JADE
         </p>
         <div className="flex items-center justify-between w-full">
           <h2 className="text-gh-h1 font-philosopher text-white">Formats</h2>
-          <div className="flex gap-px pt-2">
+          <div className="flex gap-px pt-1 lg:pt-2">
             <button
               onClick={prev}
-              className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center border border-white/10 bg-[#1E2023] hover:bg-white/10 transition-colors"
+              className="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center border border-white/10 bg-[#1E2023] hover:bg-white/10 transition-colors"
             >
-              <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 text-white" />
+              <ArrowLeft className="w-4 h-4 lg:w-5 lg:h-5 text-white" />
             </button>
             <button
               onClick={next}
-              className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center border border-white/10 bg-[#1E2023] hover:bg-white/10 transition-colors"
+              className="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center border border-white/10 bg-[#1E2023] hover:bg-white/10 transition-colors"
             >
-              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-white" />
+              <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5 text-white" />
             </button>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-10 items-start">
-        {/* IMAGES: Optimized for 8pt Spacing grid */}
-        <div className="relative order-1 lg:order-1">
+      <div className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_auto] gap-2 lg:grid-cols-2 lg:grid-rows-none lg:items-center lg:gap-10">
+        {/* Static image frame — size never animates; slides move inside */}
+        <div className="relative order-1 min-h-0 lg:max-h-[min(62dvh,640px)] lg:flex lg:items-center lg:justify-center">
           <div
-            className="relative overflow-hidden aspect-[4/3] md:aspect-[16/9] w-full"
-            style={{ perspective: "1200px" }}
+            className="relative h-full min-h-0 w-full overflow-hidden contain-[layout_paint] lg:aspect-[4/5] lg:h-auto lg:max-h-[min(62dvh,640px)] lg:w-full"
           >
             <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
               <motion.div
                 key={index}
                 custom={carouselCustom}
-                variants={liquidCarouselBgVariants}
+                variants={heroSplitCardVariants}
                 initial="enter"
                 animate="center"
                 exit="exit"
-                style={{
-                  transformStyle: "preserve-3d",
-                  backfaceVisibility: "hidden",
-                }}
+                style={{ willChange: "transform" }}
                 className="absolute inset-0 flex flex-col"
               >
-                <div className="flex flex-col h-full">
-                  <div className="relative flex-1 w-full overflow-hidden">
+                <div className="flex h-full flex-col">
+                  <div className="relative min-h-0 flex-1 w-full overflow-hidden">
                     <Image
                       src={FORMATS[index].image1}
                       alt={FORMATS[index].title}
@@ -145,7 +141,7 @@ export default function FormatsCarousel() {
                       priority={index === 0}
                     />
                   </div>
-                  <div className="relative flex-1 w-full overflow-hidden border-t border-white/5">
+                  <div className="relative min-h-0 flex-1 w-full overflow-hidden border-t border-white/5">
                     <Image
                       src={FORMATS[index].image2}
                       alt={FORMATS[index].title}
@@ -165,24 +161,25 @@ export default function FormatsCarousel() {
           </div>
         </div>
 
-        {/* CONTENT: Balanced Side content - 8pt system */}
-        <div className="flex flex-col justify-start lg:pt-4 order-2 lg:order-2">
-          <div className="space-y-3 md:space-y-5">
+        {/* Copy — fixed min-height; absolute crossfade so layout never shifts */}
+        <div className="relative order-2 min-h-[6.25rem] shrink-0 pb-3 lg:min-h-[11rem] lg:pb-0 lg:pl-2">
+          <div className="relative min-h-[inherit] w-full lg:min-h-[11rem]">
             <AnimatePresence mode="sync" initial={false}>
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{
                   duration: CAROUSEL_CROSSFADE.duration,
                   ease: CAROUSEL_CROSSFADE.ease,
                 }}
+                className="absolute inset-x-0 top-0 w-full lg:top-1/2 lg:-translate-y-1/2"
               >
-                <h3 className="text-gh-scroll font-philosopher text-white mb-2 md:mb-[8px]">
+                <h3 className="text-gh-scroll font-philosopher text-white mb-1.5 lg:mb-3">
                   {FORMATS[index].title}
                 </h3>
-                <p className="text-white/70 font-manrope text-gh-body leading-relaxed max-w-xl">
+                <p className="text-white/70 font-manrope text-gh-body leading-relaxed max-w-xl line-clamp-3 sm:line-clamp-4 lg:line-clamp-none">
                   {FORMATS[index].description}
                 </p>
               </motion.div>
