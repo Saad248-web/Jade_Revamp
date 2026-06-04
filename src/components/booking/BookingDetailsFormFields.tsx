@@ -4,6 +4,10 @@ import { useMemo, useState } from "react";
 import type { UserDetails } from "@/lib/types";
 import { bookingDetailsFieldErrors } from "@/lib/bookingDetailsValidation";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
+import {
+  JadeFloatingField,
+  JadeFloatingTextarea,
+} from "@/components/ui/form";
 
 type TouchedKey = keyof UserDetails;
 
@@ -14,18 +18,6 @@ const initialTouched = (): Record<TouchedKey, boolean> => ({
   notes: false,
 });
 
-function FieldError({ id, message }: { id: string; message: string }) {
-  return (
-    <p
-      id={id}
-      role="alert"
-      className="mt-1.5 text-[11px] md:text-xs text-red-400/95 font-manrope leading-snug"
-    >
-      {message}
-    </p>
-  );
-}
-
 export default function BookingDetailsFormFields({
   details,
   setDetails,
@@ -34,7 +26,6 @@ export default function BookingDetailsFormFields({
 }: {
   details: UserDetails;
   setDetails: (d: UserDetails) => void;
-  /** After a failed submit — show all invalid fields */
   forceShowErrors: boolean;
   idPrefix?: string;
 }) {
@@ -51,110 +42,63 @@ export default function BookingDetailsFormFields({
   const markTouched = (key: TouchedKey) =>
     setTouched((t) => ({ ...t, [key]: true }));
 
-  const border = (key: TouchedKey) =>
-    show(key) ? "border-red-400/70" : "border-white/20";
+  const fieldProps = (key: TouchedKey) => ({
+    invalid: Boolean(errors[key]),
+    showError: show(key),
+    errorMessage: show(key) ? errors[key] : undefined,
+    onBlur: () => markTouched(key),
+    theme: "book" as const,
+  });
 
   return (
-    <div className="space-y-3">
-      <div>
-        <div
-          className={`relative border ${border("fullName")} focus-within:border-[#EFCD62] transition-colors rounded-sm`}
-        >
-          <label
-            htmlFor={`${idPrefix}-fullName`}
-            className="absolute -top-2.5 left-3 bg-[#0B2C23] px-1 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold"
-          >
-            Full Name
-          </label>
-          <input
-            id={`${idPrefix}-fullName`}
-            type="text"
-            name="fullName"
-            autoComplete="name"
-            aria-invalid={show("fullName")}
-            aria-describedby={
-              show("fullName") ? `${idPrefix}-fullName-err` : undefined
-            }
-            value={details.fullName}
-            onBlur={() => markTouched("fullName")}
-            onChange={(e) =>
-              setDetails({ ...details, fullName: e.target.value })
-            }
-            className="w-full bg-transparent px-4 py-3.5 text-white text-gh-body placeholder:text-white/30 focus:outline-none font-manrope"
-          />
-        </div>
-        {show("fullName") && errors.fullName ? (
-          <FieldError id={`${idPrefix}-fullName-err`} message={errors.fullName} />
-        ) : null}
-      </div>
+    <div className="space-y-4">
+      <JadeFloatingField
+        id={`${idPrefix}-fullName`}
+        name="fullName"
+        label="Full Name"
+        autoComplete="name"
+        value={details.fullName}
+        onChange={(v) => setDetails({ ...details, fullName: v })}
+        {...fieldProps("fullName")}
+      />
 
-      <div>
-        <input
-          id={`${idPrefix}-phone`}
-          type="tel"
-          name="phone"
-          placeholder="Phone Number*"
-          inputMode="numeric"
-          autoComplete="tel"
-          aria-invalid={show("phone")}
-          aria-describedby={
-            show("phone") ? `${idPrefix}-phone-err` : undefined
-          }
-          value={details.phone}
-          onBlur={() => markTouched("phone")}
-          onChange={(e) =>
-            setDetails({
-              ...details,
-              phone: sanitizePhoneDigitsInput(e.target.value),
-            })
-          }
-          className={`w-full bg-transparent border ${border("phone")} focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors font-manrope rounded-sm`}
-        />
-        {show("phone") && errors.phone ? (
-          <FieldError id={`${idPrefix}-phone-err`} message={errors.phone} />
-        ) : null}
-      </div>
+      <JadeFloatingField
+        id={`${idPrefix}-phone`}
+        name="phone"
+        label="Phone Number"
+        type="tel"
+        inputMode="numeric"
+        autoComplete="tel"
+        value={details.phone}
+        onChange={(v) =>
+          setDetails({
+            ...details,
+            phone: sanitizePhoneDigitsInput(v),
+          })
+        }
+        {...fieldProps("phone")}
+      />
 
-      <div>
-        <input
-          id={`${idPrefix}-email`}
-          type="email"
-          name="email"
-          placeholder="Email*"
-          autoComplete="email"
-          aria-invalid={show("email")}
-          aria-describedby={
-            show("email") ? `${idPrefix}-email-err` : undefined
-          }
-          value={details.email}
-          onBlur={() => markTouched("email")}
-          onChange={(e) => setDetails({ ...details, email: e.target.value })}
-          className={`w-full bg-transparent border ${border("email")} focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors font-manrope rounded-sm`}
-        />
-        {show("email") && errors.email ? (
-          <FieldError id={`${idPrefix}-email-err`} message={errors.email} />
-        ) : null}
-      </div>
+      <JadeFloatingField
+        id={`${idPrefix}-email`}
+        name="email"
+        label="Email"
+        type="email"
+        autoComplete="email"
+        value={details.email}
+        onChange={(v) => setDetails({ ...details, email: v })}
+        {...fieldProps("email")}
+      />
 
-      <div>
-        <textarea
-          id={`${idPrefix}-notes`}
-          name="notes"
-          rows={4}
-          placeholder="Additional requests or note to the host"
-          aria-invalid={show("notes")}
-          aria-describedby={
-            show("notes") ? `${idPrefix}-notes-err` : undefined
-          }
-          value={details.notes}
-          onBlur={() => markTouched("notes")}
-          onChange={(e) => setDetails({ ...details, notes: e.target.value })}
-          className={`w-full bg-transparent border ${border("notes")} focus:border-[#EFCD62] px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none transition-colors resize-none font-manrope rounded-sm`}
-        />
-        {show("notes") && errors.notes ? (
-          <FieldError id={`${idPrefix}-notes-err`} message={errors.notes} />
-        ) : null}
-      </div>
+      <JadeFloatingTextarea
+        id={`${idPrefix}-notes`}
+        name="notes"
+        label="Additional requests (optional)"
+        value={details.notes}
+        onChange={(v) => setDetails({ ...details, notes: v })}
+        required={false}
+        {...fieldProps("notes")}
+      />
     </div>
   );
 }

@@ -83,10 +83,19 @@
     --jade-section-pad-y-md: clamp(3rem, 4vw, 4rem); /* 48–64px */
     --jade-section-pad-y-lg: clamp(4rem, 3.5vw, 6rem); /* 64–96px */
 
-    /* Gallery / default rails — 24px edge */
-    --jade-hscroll-fade-width: 1.5rem;
-    /* Tab bars — width ≈ blur radius for extreme glass falloff */
+    /* Gallery / default rails — Figma fade band width */
+    --jade-hscroll-fade-width: 3.75rem;
+    /* Tab bars — same Figma fade, wider falloff */
     --jade-hscroll-fade-width-glass: 3.75rem;
+    /* Figma fade: background-tinted (seamless on #1A1C1E), opaque at right → transparent to left */
+    --jade-hscroll-fade-gradient: linear-gradient(
+      to left,
+      rgba(26, 28, 30, 1) 0%,
+      rgba(26, 28, 30, 0.92) 22%,
+      rgba(26, 28, 30, 0.62) 52%,
+      rgba(26, 28, 30, 0.26) 78%,
+      rgba(26, 28, 30, 0) 100%
+    );
     /* jade-charcoal #25282C — fade tints for glass chrome on tab bars */
     --jade-charcoal-rgb: 37, 40, 44;
     /* Premium feature / themed-villa rails — 40px header↔cards↔footer */
@@ -360,6 +369,13 @@
       margin-right: calc(50% - 50vw);
     }
 
+    .jade-hscroll-viewport--edge-all {
+      width: 100vw;
+      max-width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+    }
+
     .amenity-highlight-track--responsive,
     .jade-hscroll-track--mobile-gutter {
       padding-left: max(
@@ -425,11 +441,18 @@
   }
 }
 
-/* Mobile edge bleed — category / tab bars (same contract as amenity highlight row) */
+/* Edge bleed — category / gallery rails */
 @media (max-width: 639px) {
   .jade-hscroll-viewport--edge {
     overflow: visible;
   }
+}
+
+.jade-hscroll-viewport--edge-all {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 /* Experience overlay — last section (enquiry) + scroll clearance (mobile booking bar) */
@@ -500,6 +523,34 @@
   display: none !important; /* Chrome / Safari / Opera — hide scrollbar gap */
 }
 
+/* Enquire overlay: show scrollbar (global * rule hides scrollbars for Lenis) */
+.enquiry-overlay-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(239, 205, 98, 0.5) rgba(255, 255, 255, 0.08) !important;
+  -ms-overflow-style: auto !important;
+}
+
+.enquiry-overlay-scroll::-webkit-scrollbar {
+  display: block !important;
+  width: 8px;
+}
+
+.enquiry-overlay-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+
+.enquiry-overlay-scroll::-webkit-scrollbar-thumb {
+  background: rgba(239, 205, 98, 0.45);
+  border-radius: 4px;
+}
+
+.enquiry-overlay-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(239, 205, 98, 0.7);
+}
+
 html {
   /* Match listing/marketing pages — avoids green flash in safe-area gaps below mobile nav */
   background: #1a1c1e;
@@ -558,6 +609,24 @@ html.jade-splash-locked main {
 /* Navbar shell — slide hide/show driven by Framer Motion in Navbar.tsx */
 .jade-nav-chrome {
   will-change: transform;
+}
+
+/* Global header — balanced horizontal inset (matches page gutter, not oversized xl padding) */
+.jade-nav-inner {
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 640px) {
+  .jade-nav-inner {
+    padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+  }
+}
+@media (min-width: 1024px) {
+  .jade-nav-inner {
+    padding-left: max(2rem, env(safe-area-inset-left, 0px));
+    padding-right: max(2rem, env(safe-area-inset-right, 0px));
+  }
 }
 
 /* Tier 3b — softer wheel/touch inside Lenis-prevent panels only */
@@ -874,53 +943,71 @@ body {
   z-index: 10;
   width: var(--jade-hscroll-fade-width);
   overflow: hidden;
+  background: var(--jade-hscroll-fade-gradient);
 }
 
-/*
- * Tab / category bars — extreme charcoal glass fade (sticky chrome + #25282C).
- * 60px blur + wide edge so tabs dissolve smoothly off the right.
- */
-.jade-hscroll-fade--grey-white {
+/* Tab / category bars — wider Figma fade band */
+.jade-hscroll-fade--wide {
   width: var(--jade-hscroll-fade-width-glass);
-  backdrop-filter: blur(60px) saturate(1.1);
-  -webkit-backdrop-filter: blur(60px) saturate(1.1);
-  background: linear-gradient(
-    to left,
-    rgba(var(--jade-charcoal-rgb), 0.92) 0%,
-    rgba(var(--jade-charcoal-rgb), 0.72) 18%,
-    rgba(var(--jade-charcoal-rgb), 0.42) 42%,
-    rgba(var(--jade-charcoal-rgb), 0.16) 68%,
-    rgba(255, 255, 255, 0.04) 88%,
-    transparent 100%
-  );
-  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.08);
-  -webkit-mask-image: linear-gradient(to left, #000 0%, #000 55%, transparent 100%);
-  mask-image: linear-gradient(to left, #000 0%, #000 55%, transparent 100%);
 }
 
-.jade-hscroll-fade__pattern {
-  position: absolute;
-  inset: 0;
-  opacity: 0.1;
-  -webkit-mask-image: linear-gradient(to left, #000 0%, transparent 100%);
-  mask-image: linear-gradient(to left, #000 0%, transparent 100%);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  pointer-events: none;
+/* Menu desktop preview (#1E2023) — visible right-edge fade on image rails */
+.menu-hscroll-fade {
+  --jade-hscroll-fade-width: 5.5rem;
+  --jade-hscroll-fade-width-glass: 5.5rem;
+  --jade-hscroll-fade-gradient: linear-gradient(
+    to left,
+    rgba(30, 32, 35, 1) 0%,
+    rgba(30, 32, 35, 0.92) 22%,
+    rgba(30, 32, 35, 0.62) 52%,
+    rgba(30, 32, 35, 0.26) 78%,
+    rgba(30, 32, 35, 0) 100%
+  );
+  overflow: visible;
 }
 
-.jade-hscroll-fade--grey-white .jade-hscroll-fade__pattern {
-  opacity: 0.04;
-  -webkit-mask-image: linear-gradient(
-    to left,
-    rgba(0, 0, 0, 0.35) 0%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to left,
-    rgba(0, 0, 0, 0.35) 0%,
-    transparent 100%
-  );
+.menu-hscroll-fade .jade-hscroll-fade {
+  z-index: 20;
+  width: var(--jade-hscroll-fade-width);
+  background: var(--jade-hscroll-fade-gradient);
+}
+
+/* Menu right column — left pad matches vd.gutterX; track bleeds to column right for fade */
+.menu-desktop-hscroll-shell {
+  position: relative;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 0;
+  overflow: visible;
+}
+@media (min-width: 640px) {
+  .menu-desktop-hscroll-shell {
+    padding-left: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .menu-desktop-hscroll-shell {
+    padding-left: 2rem;
+  }
+}
+
+.menu-desktop-preview {
+  overflow-x: visible;
+  overflow-y: hidden;
+}
+
+/* Menu mobile — full-width rail inside unpadded panel; fade at viewport right */
+@media (max-width: 1023px) {
+  .menu-mobile-hscroll-shell {
+    position: relative;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .menu-mobile-hscroll-shell .menu-hscroll-fade .jade-hscroll-fade {
+    right: 0;
+    z-index: 20;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
 import Link from "next/link";
@@ -12,54 +13,29 @@ import {
   Instagram,
   Youtube,
   X,
-  ChevronLeft,
-  ChevronRight,
-  CalendarDays,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
+import EnquiryDateRangePicker from "@/components/enquiry/EnquiryDateRangePicker";
 import { STICKY_BOOKING_BAR_FOOTER_PAD_CLASS } from "@/lib/layoutSpacing";
+import { formatPreferredDateRange } from "@/lib/enquiryDateRange";
 import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
+import { isEnquiryDemoMode, simulateEnquirySubmit } from "@/lib/enquiryDemoMode";
 import { sanitizeGuestCountInput } from "@/lib/guestCountInput";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
-
-// ── Calendar helpers ────────────────────────────────────────────────────────
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-
-function startOfDay(d: Date) {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-}
-function sameDay(a: Date | null, b: Date | null) {
-  if (!a || !b) return false;
-  return startOfDay(a).getTime() === startOfDay(b).getTime();
-}
-function isBetween(d: Date, start: Date | null, end: Date | null) {
-  if (!start || !end) return false;
-  const t = startOfDay(d).getTime();
-  return t > startOfDay(start).getTime() && t < startOfDay(end).getTime();
-}
-function formatDate(d: Date | null) {
-  if (!d) return "";
-  return d.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
+import {
+  footerFieldErrors,
+  isFooterFormValid,
+  type FooterFieldKey,
+} from "@/lib/leadFormValidation";
+import { JADE_FORM_WARN } from "@/lib/jadeFormTokens";
+import { resolveEnquiryOkayReturnPath } from "@/lib/enquiryReturnPath";
+import {
+  JadeFloatingField,
+  JadeFloatingSelect,
+  JadeFloatingTextarea,
+} from "@/components/ui/form";
+import JadeFormFieldError from "@/components/ui/form/JadeFormFieldError";
 
 type FooterProps = {
   /** Tighter bottom padding when a fixed booking bar sits above the footer */
@@ -67,16 +43,11 @@ type FooterProps = {
 };
 
 export default function Footer({ stickyBottomBar = false }: FooterProps) {
-  // Defer new Date() to client-only to prevent hydration mismatches
+  const router = useRouter();
   const [currentYear, setCurrentYear] = useState(2026);
-  const [today, setToday] = useState<Date>(() => new Date(2026, 0, 1));
-  const [calMonth, setCalMonth] = useState<Date>(() => new Date(2026, 0, 1));
 
   useEffect(() => {
-    const t = startOfDay(new Date());
-    setCurrentYear(t.getFullYear());
-    setToday(t);
-    setCalMonth(new Date(t.getFullYear(), t.getMonth(), 1));
+    setCurrentYear(new Date().getFullYear());
   }, []);
 
   const [isSuccess, setIsSuccess] = useState(false);
@@ -92,67 +63,62 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
   });
 
   // ── Calendar state ─────────────────────────────────────────────────────────
-  const [showCalendar, setShowCalendar] = useState(false);
   const [checkIn, setCheckIn] = useState<Date | null>(null);
   const [checkOut, setCheckOut] = useState<Date | null>(null);
-  const [hoverDate, setHoverDate] = useState<Date | null>(null);
-  const calendarRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!showCalendar) return;
-    const handler = (e: MouseEvent) => {
-      if (
-        calendarRef.current &&
-        !calendarRef.current.contains(e.target as Node)
-      )
-        setShowCalendar(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [showCalendar]);
+  const fieldErrors = useMemo(
+    () => footerFieldErrors(formData, checkIn, consent),
+    [formData, checkIn, consent],
+  );
 
-  const handleDayClick = (day: Date) => {
-    if (!checkIn || (checkIn && checkOut)) {
-      setCheckIn(day);
-      setCheckOut(null);
-    } else {
-      if (day < checkIn) {
-        setCheckOut(checkIn);
-        setCheckIn(day);
-      } else {
-        setCheckOut(day);
-        if (!sameDay(day, checkIn)) setShowCalendar(false);
-      }
-    }
+  const onlyConsentMissing = useMemo(() => {
+    const withoutConsent = footerFieldErrors(formData, checkIn, true);
+    return Object.keys(withoutConsent).length === 0 && !consent;
+  }, [formData, checkIn, consent]);
+
+  const showFieldError = (key: FooterFieldKey) => {
+    if (!fieldErrors[key]) return false;
+    if (key === "consent") return onlyConsentMissing;
+    if (key === "preferredDate") return checkIn !== null;
+    if (key === "fullName") return formData.fullName.trim().length > 0;
+    if (key === "phoneNumber") return formData.phoneNumber.trim().length > 0;
+    if (key === "noOfGuests") return formData.noOfGuests.trim().length > 0;
+    if (key === "occasionType") return formData.occasionType.length > 0;
+    if (key === "queries") return formData.queries.trim().length > 0;
+    return false;
   };
 
-  const getDaysInMonth = (year: number, month: number) =>
-    new Date(year, month + 1, 0).getDate();
-  const getFirstDay = (year: number, month: number) =>
-    new Date(year, month, 1).getDay();
+  const formValid = isFooterFormValid(formData, checkIn, consent);
 
-  const dateLabel = checkIn
-    ? checkOut
-      ? `${formatDate(checkIn)} – ${formatDate(checkOut)}`
-      : `${formatDate(checkIn)} – Select checkout`
-    : "";
-
-  const guestsNum = Number.parseInt(formData.noOfGuests, 10);
-  const isFormValid =
-    formData.fullName.trim() !== "" &&
-    formData.phoneNumber.trim() !== "" &&
-    Number.isFinite(guestsNum) &&
-    guestsNum >= 1 &&
-    formData.occasionType.trim() !== "" &&
-    consent;
+  const handleFooterSuccessOkay = () => {
+    const returnPath = resolveEnquiryOkayReturnPath();
+    setIsSuccess(false);
+    router.push(returnPath);
+  };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isFormValid || submitting) return;
+    if (!formValid || submitting) return;
 
     setSubmitting(true);
     setSubmitError(null);
     try {
+      if (isEnquiryDemoMode()) {
+        await simulateEnquirySubmit();
+        setIsSuccess(true);
+        setFormData({
+          fullName: "",
+          phoneNumber: "",
+          noOfGuests: "",
+          occasionType: "",
+          queries: "",
+        });
+        setCheckIn(null);
+        setCheckOut(null);
+        setConsent(false);
+        return;
+      }
+
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -163,7 +129,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
             phoneNumber: formData.phoneNumber,
             guests: formData.noOfGuests,
             occasionType: formData.occasionType,
-            preferredDate: dateLabel || undefined,
+            preferredDate: formatPreferredDateRange(checkIn, checkOut) || undefined,
             queries: formData.queries,
             travelFormat: {},
           },
@@ -247,317 +213,139 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
               </div>
 
               {/* Form Content */}
-              <form className="space-y-5" onSubmit={handleFormSubmit}>
-                {/* Name */}
-                <div className="group relative">
-                  <input
-                    type="text"
-                    id="fullName"
-                    value={formData.fullName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, fullName: e.target.value })
-                    }
-                    placeholder=" "
-                    className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
-                  />
-                  <label
-                    htmlFor="fullName"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
-                  >
-                    Full Name
-                  </label>
-                </div>
+              <form
+                className="flex flex-col gap-4"
+                noValidate
+                onSubmit={handleFormSubmit}
+              >
+                <JadeFloatingField
+                  id="footer-fullName"
+                  label="Full Name"
+                  value={formData.fullName}
+                  onChange={(v) =>
+                    setFormData({ ...formData, fullName: v })
+                  }
+                  theme="footerCharcoal"
+                  invalid={Boolean(fieldErrors.fullName)}
+                  showError={showFieldError("fullName")}
+                  errorMessage={fieldErrors.fullName}
+                />
 
-                {/* Phone */}
-                <div className="group relative">
-                  <input
-                    type="tel"
-                    id="phoneNumber"
+                <JadeFloatingField
+                  id="footer-phone"
+                  label="Phone Number"
+                  type="tel"
+                  inputMode="numeric"
+                  autoComplete="tel"
+                  value={formData.phoneNumber}
+                  onChange={(v) =>
+                    setFormData({
+                      ...formData,
+                      phoneNumber: sanitizePhoneDigitsInput(v),
+                    })
+                  }
+                  theme="footerCharcoal"
+                  invalid={Boolean(fieldErrors.phoneNumber)}
+                  showError={showFieldError("phoneNumber")}
+                  errorMessage={fieldErrors.phoneNumber}
+                />
+
+                <div className="grid grid-cols-2 gap-3 sm:gap-5">
+                  <div className="min-w-0 flex flex-col gap-1.5">
+                    <EnquiryDateRangePicker
+                      label="Check-In & Out Date"
+                      theme="footer"
+                      checkIn={checkIn}
+                      checkOut={checkOut}
+                      onDatesChange={(inDate, outDate) => {
+                        setCheckIn(inDate);
+                        setCheckOut(outDate);
+                      }}
+                      invalid={
+                        Boolean(fieldErrors.preferredDate) &&
+                        showFieldError("preferredDate")
+                      }
+                      className="min-w-0"
+                    />
+                    {showFieldError("preferredDate") &&
+                    fieldErrors.preferredDate ? (
+                      <JadeFormFieldError
+                        id="footer-date-err"
+                        message={fieldErrors.preferredDate}
+                      />
+                    ) : null}
+                  </div>
+
+                  <JadeFloatingField
+                    id="footer-guests"
+                    name="noOfGuests"
+                    label="No. Of Guests"
                     inputMode="numeric"
-                    autoComplete="tel"
-                    value={formData.phoneNumber}
-                    onChange={(e) =>
+                    autoComplete="off"
+                    value={formData.noOfGuests}
+                    onChange={(v) =>
                       setFormData({
                         ...formData,
-                        phoneNumber: sanitizePhoneDigitsInput(e.target.value),
+                        noOfGuests: sanitizeGuestCountInput(v),
                       })
                     }
-                    placeholder=" "
-                    className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
+                    theme="footerCharcoal"
+                    className="min-w-0"
+                    invalid={Boolean(fieldErrors.noOfGuests)}
+                    showError={showFieldError("noOfGuests")}
+                    errorMessage={fieldErrors.noOfGuests}
                   />
-                  <label
-                    htmlFor="phoneNumber"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
-                  >
-                    Phone Number
-                  </label>
                 </div>
 
-                {/* Check-In & Out (left half) + Guests (right half); occasion full-width below */}
-                <div className="relative" ref={calendarRef}>
-                  {/* Always two columns so date + guests match the footer layout reference (narrow screens included) */}
-                  <div className="grid grid-cols-2 gap-3 sm:gap-5">
-                    <div className="relative min-w-0">
-                      <button
-                        type="button"
-                        aria-expanded={showCalendar}
-                        onClick={() => setShowCalendar((v) => !v)}
-                        className={`w-full h-14 bg-white/[0.02] border px-4 text-left transition-colors rounded-none flex items-center justify-between gap-2 min-w-0 ${ showCalendar ? "border-[#EFCD62]/70" : "border-white/15" }`}
-                      >
-                        <span
-                          className={`font-manrope text-gh-label truncate ${ dateLabel ? "text-white/80" : "text-white/35" }`}
-                        >
-                          {dateLabel || "Check-In & Out Date"}
-                        </span>
-                        <CalendarDays
-                          className={`w-4 h-4 shrink-0 transition-colors ${ showCalendar ? "text-[#EFCD62]" : "text-white/25" }`}
-                        />
-                      </button>
-                      {dateLabel && (
-                        <span className="absolute left-4 -top-2.5 text-gh-label text-white/70 bg-[#2E3034] px-2 pointer-events-none">
-                          Check-In & Out Date
-                        </span>
-                      )}
-                    </div>
+                <JadeFloatingSelect
+                  id="footer-occasion"
+                  label="Occasion type"
+                  value={formData.occasionType}
+                  onChange={(v) =>
+                    setFormData({ ...formData, occasionType: v })
+                  }
+                  options={OCCASION_OPTIONS}
+                  theme="footerCharcoal"
+                  invalid={Boolean(fieldErrors.occasionType)}
+                  showError={showFieldError("occasionType")}
+                  errorMessage={fieldErrors.occasionType}
+                />
 
-                    <div className="group relative min-w-0">
-                      <input
-                        type="text"
-                        id="noOfGuests"
-                        name="noOfGuests"
-                        inputMode="numeric"
-                        autoComplete="off"
-                        enterKeyHint="done"
-                        aria-invalid={
-                          formData.noOfGuests !== "" &&
-                          (!Number.isFinite(guestsNum) || guestsNum < 1)
-                        }
-                        value={formData.noOfGuests}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            noOfGuests: sanitizeGuestCountInput(e.target.value),
-                          })
-                        }
-                        placeholder=" "
-                        className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 placeholder-transparent"
-                      />
-                      <label
-                        htmlFor="noOfGuests"
-                        className="absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
-                      >
-                        No. Of Guests
-                      </label>
-                    </div>
-                  </div>
-
-                  <AnimatePresence>
-                    {showCalendar && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8, scale: 0.97 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.97 }}
-                        transition={{ duration: 0.18 }}
-                        className="absolute left-0 sm:w-[calc(200%+1.25rem)] w-full max-w-[min(100vw-3rem,22rem)] top-[calc(100%+8px)] z-50 bg-[#1C1F22] border border-white/10 shadow-2xl p-5"
-                      >
-                        {/* Month nav */}
-                        <div className="flex items-center justify-between mb-3">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setCalMonth(
-                                new Date(
-                                  calMonth.getFullYear(),
-                                  calMonth.getMonth() - 1,
-                                  1,
-                                ),
-                              )
-                            }
-                            className="w-8 h-8 flex items-center justify-center text-white/50 hover:text-[#EFCD62] transition-colors"
-                          >
-                            <ChevronLeft className="w-4 h-4" />
-                          </button>
-                          <p className="font-manrope text-gh-body font-semibold text-white tracking-widest uppercase">
-                            {MONTHS[calMonth.getMonth()]}{" "}
-                            {calMonth.getFullYear()}
-                          </p>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setCalMonth(
-                                new Date(
-                                  calMonth.getFullYear(),
-                                  calMonth.getMonth() + 1,
-                                  1,
-                                ),
-                              )
-                            }
-                            className="w-8 h-8 flex items-center justify-center text-white/50 hover:text-[#EFCD62] transition-colors"
-                          >
-                            <ChevronRight className="w-4 h-4" />
-                          </button>
-                        </div>
-
-                        {/* Day headers */}
-                        <div className="grid grid-cols-7 mb-2">
-                          {DAYS.map((d) => (
-                            <div
-                              key={d}
-                              className="text-center font-manrope text-gh-label text-white/30 tracking-widest py-1"
-                            >
-                              {d}
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Day cells */}
-                        <div className="grid grid-cols-7">
-                          {/* offset */}
-                          {Array.from({
-                            length: getFirstDay(
-                              calMonth.getFullYear(),
-                              calMonth.getMonth(),
-                            ),
-                          }).map((_, i) => (
-                            <div key={`e-${i}`} />
-                          ))}
-
-                          {Array.from({
-                            length: getDaysInMonth(
-                              calMonth.getFullYear(),
-                              calMonth.getMonth(),
-                            ),
-                          }).map((_, i) => {
-                            const day = new Date(
-                              calMonth.getFullYear(),
-                              calMonth.getMonth(),
-                              i + 1,
-                            );
-                            const isStart = sameDay(day, checkIn);
-                            const isEnd = sameDay(day, checkOut);
-                            const isToday = sameDay(day, today);
-                            const isPast = day < today;
-                            const effectiveEnd = checkOut ?? hoverDate;
-                            const inRange =
-                              checkIn && !checkOut
-                                ? isBetween(day, checkIn, effectiveEnd)
-                                : isBetween(day, checkIn, checkOut);
-
-                            return (
-                              <button
-                                key={i}
-                                type="button"
-                                disabled={isPast}
-                                onClick={() => !isPast && handleDayClick(day)}
-                                onMouseEnter={() => setHoverDate(day)}
-                                onMouseLeave={() => setHoverDate(null)}
-                                className={`relative h-9 w-full font-manrope text-gh-label transition-all duration-150 ${ isPast ? "text-white/15 cursor-not-allowed" : isStart || isEnd ? "bg-[#EFCD62] text-[#1C1F22] font-bold z-10" : inRange ? "bg-[#EFCD62]/15 text-white" : isToday ? "text-[#EFCD62] font-semibold hover:bg-white/10" : "text-white/70 hover:bg-white/10" }`}
-                              >
-                                {i + 1}
-                              </button>
-                            );
-                          })}
-                        </div>
-
-                        {/* Footer hint */}
-                        <div className="mt-3 pt-4 border-t border-white/10 flex items-center justify-between">
-                          <p className="font-manrope text-gh-label text-white/30">
-                            {!checkIn
-                              ? "Select check-in date"
-                              : !checkOut
-                                ? "Select check-out date"
-                                : `${formatDate(checkIn)} → ${formatDate(checkOut)}`}
-                          </p>
-                          {(checkIn || checkOut) && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setCheckIn(null);
-                                setCheckOut(null);
-                              }}
-                              className="font-manrope text-gh-label text-white/30 hover:text-[#EFCD62] transition-colors tracking-widest uppercase"
-                            >
-                              Clear
-                            </button>
-                          )}
-                        </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  <div className="group relative min-w-0">
-                    <select
-                      id="occasionType"
-                      value={formData.occasionType}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          occasionType: e.target.value,
-                        })
-                      }
-                      className={`peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none h-14 appearance-none ${
-                        formData.occasionType ? "text-white" : "text-transparent"
-                      }`}
-                    >
-                      <option value="" disabled hidden>
-                        {"\u00A0"}
-                      </option>
-                      {OCCASION_OPTIONS.map((opt) => (
-                        <option
-                          key={opt}
-                          value={opt}
-                          className="bg-[#2E3034] text-white"
-                        >
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
-                    <label
-                      htmlFor="occasionType"
-                      className={`absolute left-4 z-10 transition-all duration-300 pointer-events-none px-2 text-gh-label bg-[#2E3034] ${
-                        formData.occasionType
-                          ? "-top-2.5 translate-y-0 text-white/75"
-                          : "top-1/2 -translate-y-1/2 text-white/45 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75"
-                      }`}
-                    >
-                      Occasion type
-                    </label>
-                  </div>
-
-                {submitError && (
-                  <p role="alert" className="text-sm text-red-300 border border-red-400/40 rounded-sm px-3 py-2">
+                {submitError ? (
+                  <p
+                    role="alert"
+                    className="text-sm font-manrope border border-[#D32C55]/40 rounded-sm px-3 py-2"
+                    style={{ color: JADE_FORM_WARN }}
+                  >
                     {submitError}
                   </p>
-                )}
+                ) : null}
 
-                {/* Queries */}
-                <div className="group relative">
-                  <textarea
-                    id="queries"
-                    rows={4}
-                    value={formData.queries}
-                    onChange={(e) =>
-                      setFormData({ ...formData, queries: e.target.value })
-                    }
-                    placeholder=" "
-                    className="peer w-full bg-white/[0.02] border border-white/15 px-4 py-4 text-white focus:border-[#EFCD62]/55 focus:outline-none transition-all duration-300 rounded-none resize-none placeholder-transparent"
-                  />
-                  <label
-                    htmlFor="queries"
-                    className="absolute left-4 top-6 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]"
-                  >
-                    Your Queries
-                  </label>
-                </div>
+                <JadeFloatingTextarea
+                  id="footer-queries"
+                  label="Your Queries"
+                  value={formData.queries}
+                  onChange={(v) =>
+                    setFormData({ ...formData, queries: v })
+                  }
+                  theme="footerCharcoal"
+                  required={false}
+                  invalid={Boolean(fieldErrors.queries)}
+                  showError={showFieldError("queries")}
+                  errorMessage={fieldErrors.queries}
+                />
 
-                {/* Consent */}
                 <label className="flex items-start gap-2.5 pt-1 select-none">
                   <input
                     type="checkbox"
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
-                    className="mt-1 h-4 w-4 rounded-[2px] border border-white/25 bg-transparent text-[#EFCD62] focus:ring-[#EFCD62]/50 focus:ring-2"
+                    aria-invalid={showFieldError("consent")}
+                    className={`mt-1 h-4 w-4 rounded-[2px] border bg-transparent text-[#EFCD62] focus:ring-[#EFCD62]/50 focus:ring-2 ${
+                      showFieldError("consent")
+                        ? "border-2 border-[#D32C55]"
+                        : "border border-white/25"
+                    }`}
                   />
                   <span className="font-manrope text-gh-label text-white/40 leading-relaxed">
                     Welcome to Jade Hospitainment, where hospitality meets
@@ -565,11 +353,22 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                     two decades of experience.
                   </span>
                 </label>
+                {showFieldError("consent") && fieldErrors.consent ? (
+                  <JadeFormFieldError
+                    id="footer-consent-err"
+                    message={fieldErrors.consent}
+                  />
+                ) : null}
 
                 <button
                   type="submit"
-                  disabled={!isFormValid || submitting}
-                  className={`w-full py-4 mt-3 font-manrope tracking-[0.25em] text-gh-label transition-all duration-300 uppercase border ${ isFormValid && !submitting ? "bg-transparent border-[#EFCD62]/40 text-[#EFCD62] hover:bg-[#EFCD62] hover:text-black hover:border-[#EFCD62]" : "bg-white/[0.03] border-white/10 text-white/15 cursor-not-allowed" }`}
+                  disabled={!formValid || submitting}
+                  aria-disabled={!formValid || submitting}
+                  className={`w-full py-4 mt-1 font-manrope tracking-[0.25em] text-gh-label transition-all duration-300 uppercase border ${
+                    formValid && !submitting
+                      ? "bg-transparent border-[#EFCD62]/40 text-[#EFCD62] hover:bg-[#EFCD62] hover:text-black hover:border-[#EFCD62]"
+                      : "bg-white/[0.03] border-white/10 text-white/15 cursor-not-allowed"
+                  }`}
                 >
                   {submitting ? "SENDING…" : "CONTACT US"}
                 </button>
@@ -582,34 +381,19 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                 <div className="grid grid-cols-2 gap-x-4 sm:gap-x-10 gap-y-12">
                   <div className="flex flex-col gap-3 items-start">
                     {LINKS_COLUMN_1.map((link) => (
-                      <div key={link.label} className="flex flex-col gap-3 items-start">
-                        <Link
-                          href={link.href}
-                          className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors inline-flex items-center gap-2"
+                      <Link
+                        key={link.label}
+                        href={link.href}
+                        className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors inline-flex items-center gap-2"
+                      >
+                        <span>{link.label}</span>
+                        <span
+                          aria-hidden
+                          className="shrink-0 text-[0.65em] leading-none translate-y-px select-none"
                         >
-                          <span>{link.label}</span>
-                          <span
-                            aria-hidden
-                            className="shrink-0 text-[0.65em] leading-none translate-y-px select-none"
-                          >
-                            ▸
-                          </span>
-                        </Link>
-                        {link.label === "EXPERIENCES" && (
-                          <Link
-                            href="/experiences/another-experience-1"
-                            className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors inline-flex items-center gap-2"
-                          >
-                            <span>ANOTHER EXPERIENCE</span>
-                            <span
-                              aria-hidden
-                              className="shrink-0 text-[0.65em] leading-none translate-y-px select-none"
-                            >
-                              ▸
-                            </span>
-                          </Link>
-                        )}
-                      </div>
+                          ▸
+                        </span>
+                      </Link>
                     ))}
                   </div>
 
@@ -860,7 +644,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                       <PrimaryButton
                         withArrow={false}
                         className="w-full"
-                        onClick={() => setIsSuccess(false)}
+                        onClick={handleFooterSuccessOkay}
                       >
                         OKAY
                       </PrimaryButton>

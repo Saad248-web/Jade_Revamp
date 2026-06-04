@@ -46,7 +46,7 @@ Jade_ReVamp is a **production-shaped luxury hospitality marketing site** with a 
 
 - **Home** — Splash, landing scroll sections, featured villas, experiences.
 - **Villas** — Directory, detail (`/villas/[id]`), spaces gallery (`/villas/[id]/spaces`). Hero copy on home and `/villas` uses “Villa Retreats” branding only in those hero sections.
-- **Experiences** — Weddings, corporate retreats, weekend getaways, party villas, caravans, experiences hub, demo scroll page (`/experiences/another-experience-1`).
+- **Experiences** — Weddings, corporate retreats, weekend getaways, party villas, caravans, experiences hub (`/experiences`).
 - **Utility** — Menu directory, wishlist, about, contact, careers.
 - **Booking** — `/book`, `/book/success` (Razorpay hand-off when configured).
 - **Legal** — Privacy, terms, refund.
@@ -199,7 +199,7 @@ Detected App Router pages (`src/app/**/page.tsx`):
 | `/villas`, `/villas/[id]`, `/villas/[id]/spaces` | Portfolio |
 | `/blogs`, `/blogs/[slug]` | Editorial |
 | `/weddings`, `/corporate-retreats`, `/weekend-getaways`, `/party-villas` | Experience marketing |
-| `/experiences`, `/experiences/another-experience-1` | Experiences + scroll demo |
+| `/experiences` | Experiences hub |
 | `/caravans` | Caravan + Rathaa |
 | `/about`, `/contact`, `/careers` | Brand & conversion |
 | `/book`, `/book/success` | Booking & payment |

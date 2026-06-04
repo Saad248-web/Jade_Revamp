@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
   ChevronDown,
   ChevronUp,
-  Upload,
   X,
   CheckCircle2,
   Facebook,
@@ -20,108 +20,48 @@ import LiveBackground from "@/components/LiveBackground";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
-import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
-
-const JOBS = [
-  {
-    id: "sales",
-    title: "SALES EXECUTIVES",
-    purpose: "Drive growth and build relationships with our clients.",
-    lookingFor: [
-      "2+ years experience in luxury sales",
-      "Excellent communication skills",
-      "Goal-oriented mindset",
-    ],
-  },
-  {
-    id: "content-creator",
-    title: "CONTENT CREATOR",
-    purpose:
-      "As a Content Creator Intern, you'll play a key role in telling our brand story online from showcasing our design work to capturing everyday studio moments. You'll work closely with the marketing and design teams to create content that's relevant, engaging, and aligned with what people love to see and share.",
-    lookingFor: [
-      "0-2 years of hands-on experience with content creation — personal pages/projects count too!",
-      "Strong interest in social media trends, storytelling, and visual content",
-      "Familiarity with editing tools like CapCut, InShot, Canva, or basic video software",
-      "Good understanding of what works across Instagram, LinkedIn, YouTube Shorts, etc.",
-      "Excellent written and verbal communication skills",
-      "Proactive, detail-oriented, and comfortable working in a fast-paced creative environment",
-      "Bonus: If you've run your own page, grown a following, or had content go viral — tell us about it!",
-      "Must share your Instagram / LinkedIn profiles or a portfolio showcasing your past work",
-    ],
-    purposeToTeam: [
-      "Create and share content that highlights our design work, studio culture, and team wins",
-      "Pitch and produce ideas for reels, stories, carousels, and short-form videos",
-      "Capture behind-the-scenes moments and everyday interactions at the studio",
-      "Bring awareness to our work by staying current with trends and tailoring them to fit our brand",
-    ],
-  },
-  {
-    id: "marketing-intern",
-    title: "MARKETING INTERN",
-    purpose: "Assist our marketing team in executing campaigns and strategies.",
-    lookingFor: [
-      "Currently pursuing or recently completed a degree in Marketing",
-      "Strong writing and research skills",
-      "Familiarity with digital marketing tools",
-    ],
-  },
-  {
-    id: "content-writer",
-    title: "CONTENT WRITER",
-    purpose: "Craft compelling narratives and copy for our brand.",
-    lookingFor: [
-      "Strong portfolio of written work",
-      "Ability to write in a premium, editorial voice",
-      "Experience with SEO is a plus",
-    ],
-  },
-  {
-    id: "photographer",
-    title: "PHOTOGRAPHER",
-    purpose:
-      "Capture the essence of our VILLAS and experiences through high-end photography.",
-    lookingFor: [
-      "Experience in architectural or lifestyle photography",
-      "Proficient in Adobe Lightroom and Photoshop",
-      "Keen eye for detail and composition",
-    ],
-  },
-  {
-    id: "video-editor",
-    title: "VIDEO EDITOR",
-    purpose: "Create cinematic video content for our social platforms.",
-    lookingFor: [
-      "Expertise in Premiere Pro or DaVinci Resolve",
-      "Experience with short-form and high-production content",
-      "Strong sense of pacing and music integration",
-    ],
-  },
-  {
-    id: "social-media-intern",
-    title: "SOCIAL MEDIA INTERN",
-    purpose: "Engage with our community and manage our social presence.",
-    lookingFor: [
-      "Deep understanding of current social trends",
-      "Creative mindset for community engagement",
-      "Basic design/video skills for social stories",
-    ],
-  },
-];
+import {
+  validateCareerResumeFile,
+  validateCareerResumeRequired,
+} from "@/lib/careerResumeValidation";
+import CareersApplyFormFields from "@/components/careers/CareersApplyFormFields";
+import {
+  isCareersDemoMode,
+  simulateCareersApplySubmit,
+} from "@/lib/careersDemoMode";
+import { isCareersApplyFormValid } from "@/lib/leadFormValidation";
+import {
+  buildCareersApplyContext,
+  type CareersApplyEntryPoint,
+} from "@/lib/careersApplyContext";
+import {
+  CAREERS_JOBS,
+  OPEN_APPLICATION_JOB_ID,
+  resolveCareerJobTitle,
+} from "@/data/careersJobs";
+import { resolveEnquiryOkayReturnPath } from "@/lib/enquiryReturnPath";
 
 export default function CareersPage() {
+  const pathname = usePathname();
+  const router = useRouter();
   const [expandedJob, setExpandedJob] = useState<string | null>(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
-  const [applyJobId, setApplyJobId] = useState("open-application");
+  const [applyJobId, setApplyJobId] = useState(OPEN_APPLICATION_JOB_ID);
+  const [applyEntryPoint, setApplyEntryPoint] =
+    useState<CareersApplyEntryPoint>("send-cv");
   const [apFullName, setApFullName] = useState("");
   const [apEmail, setApEmail] = useState("");
   const [apPhone, setApPhone] = useState("");
   const [apCompany, setApCompany] = useState("");
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [resumeError, setResumeError] = useState<string | null>(null);
   const [applySubmitting, setApplySubmitting] = useState(false);
   const [applyError, setApplyError] = useState<string | null>(null);
+  const resumeInputMobileRef = useRef<HTMLInputElement>(null);
+  const resumeInputDesktopRef = useRef<HTMLInputElement>(null);
 
   const [canClose, setCanClose] = useState(false);
 
@@ -132,14 +72,39 @@ export default function CareersPage() {
     setApCompany("");
     setResumeFile(null);
     setSelectedFileName(null);
+    setResumeError(null);
     setApplyError(null);
     setApplySubmitting(false);
+    setIsSuccess(false);
+    if (resumeInputMobileRef.current) resumeInputMobileRef.current.value = "";
+    if (resumeInputDesktopRef.current) resumeInputDesktopRef.current.value = "";
+  };
+
+  const clearResume = () => {
+    setResumeFile(null);
+    setSelectedFileName(null);
+    setResumeError(null);
+    if (resumeInputMobileRef.current) resumeInputMobileRef.current.value = "";
+    if (resumeInputDesktopRef.current) resumeInputDesktopRef.current.value = "";
   };
 
   const closeApplyModal = () => {
     resetApplicationForm();
     setIsApplyModalOpen(false);
     setIsSuccess(false);
+  };
+
+  /** Success: only OKAY / intentional close — not backdrop or stray X (matches Enquire). */
+  const handleApplyModalDismiss = () => {
+    if (isSuccess) return;
+    if (!canClose) return;
+    closeApplyModal();
+  };
+
+  const handleApplySuccessOkay = () => {
+    const returnPath = resolveEnquiryOkayReturnPath();
+    closeApplyModal();
+    router.push(returnPath);
   };
 
   useEffect(() => {
@@ -164,16 +129,46 @@ export default function CareersPage() {
 
   const handleApply = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const resumeErr = validateCareerResumeRequired(resumeFile);
+    if (resumeErr) setResumeError(resumeErr);
+
+    if (
+      !isCareersApplyFormValid(
+        { fullName: apFullName, email: apEmail, phone: apPhone },
+        resumeErr,
+        resumeFile,
+      )
+    ) {
+      return;
+    }
+
+    const applyContext = buildCareersApplyContext({
+      jobId: applyJobId,
+      clientPath: pathname ?? "/careers",
+      entryPoint: applyEntryPoint,
+    });
+
     setApplySubmitting(true);
     setApplyError(null);
     try {
+      if (isCareersDemoMode()) {
+        await simulateCareersApplySubmit();
+        setIsSuccess(true);
+        return;
+      }
+
       const fd = new FormData();
-      fd.append("jobId", applyJobId);
+      fd.append("jobId", applyContext.jobId);
+      fd.append("jobTitle", applyContext.jobTitle);
+      fd.append("sourcePage", applyContext.sourcePage);
+      fd.append("applyContext", applyContext.applyContext);
+      fd.append("clientPath", applyContext.clientPath);
       fd.append("fullName", apFullName.trim());
       fd.append("email", apEmail.trim());
       fd.append("phone", apPhone.trim());
       fd.append("company", apCompany.trim());
-      if (resumeFile) fd.append("resume", resumeFile);
+      fd.append("resume", resumeFile!);
 
       const res = await fetch("/api/careers/apply", {
         method: "POST",
@@ -196,10 +191,16 @@ export default function CareersPage() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
-    if (f) {
-      setResumeFile(f);
-      setSelectedFileName(f.name);
+    if (!f) return;
+    const err = validateCareerResumeFile(f);
+    setResumeError(err);
+    if (err) {
+      setResumeFile(null);
+      setSelectedFileName(null);
+      return;
     }
+    setResumeFile(f);
+    setSelectedFileName(f.name);
   };
 
   return (
@@ -284,7 +285,7 @@ export default function CareersPage() {
           </div>
 
           <div className="space-y-1">
-            {JOBS.map((job) => (
+            {CAREERS_JOBS.map((job) => (
               <div key={job.id} className="border-b border-white/10">
                 <button
                   onClick={() => toggleJob(job.id)}
@@ -353,6 +354,7 @@ export default function CareersPage() {
                             e.preventDefault();
                             resetApplicationForm();
                             setApplyJobId(job.id);
+                            setApplyEntryPoint("job-card");
                             setIsApplyModalOpen(true);
                           }}
                         >
@@ -398,7 +400,8 @@ export default function CareersPage() {
                 e.stopPropagation();
                 e.preventDefault();
                 resetApplicationForm();
-                setApplyJobId("open-application");
+                setApplyJobId(OPEN_APPLICATION_JOB_ID);
+                setApplyEntryPoint("send-cv");
                 setIsApplyModalOpen(true);
               }}
             >
@@ -419,10 +422,8 @@ export default function CareersPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                onClick={() => {
-                  if (!isSuccess && canClose) closeApplyModal();
-                }}
-                className={`fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm ${!canClose ? "pointer-events-none" : ""}`}
+                onClick={handleApplyModalDismiss}
+                className={`fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm ${!canClose || isSuccess ? "pointer-events-none" : ""}`}
               />
             </div>
 
@@ -433,10 +434,8 @@ export default function CareersPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                onClick={() => {
-                  if (!isSuccess && canClose) closeApplyModal();
-                }}
-                className="fixed inset-0 z-[46] bg-black/70 backdrop-blur-[2px]"
+                onClick={handleApplyModalDismiss}
+                className={`fixed inset-0 z-[46] bg-black/70 backdrop-blur-[2px] ${isSuccess ? "pointer-events-none" : ""}`}
               />
             </div>
 
@@ -454,8 +453,14 @@ export default function CareersPage() {
                 <div className="absolute -top-[72px] left-1/2 -translate-x-1/2 flex items-center z-10">
                   <button
                     type="button"
-                    onClick={closeApplyModal}
-                    className="w-12 h-12 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl"
+                    onClick={handleApplyModalDismiss}
+                    disabled={isSuccess}
+                    aria-disabled={isSuccess}
+                    className={`w-12 h-12 rounded-full flex items-center justify-center text-white transition-colors shadow-2xl ${
+                      isSuccess
+                        ? "bg-[#124131]/40 cursor-not-allowed opacity-50"
+                        : "bg-[#124131] hover:bg-[#1f5c48]"
+                    }`}
                   >
                     <X className="w-6 h-6 stroke-[1.5]" />
                   </button>
@@ -472,111 +477,44 @@ export default function CareersPage() {
                           Apply Now
                         </h3>
                       </div>
+                      <p className="text-[#EFCD62]/80 text-gh-label font-bold tracking-widest uppercase mb-2">
+                        {resolveCareerJobTitle(applyJobId)}
+                      </p>
                       <p className="text-white/60 text-gh-desc mb-6 leading-relaxed">
                         Share a few details. Our team will get back to you
                         shortly
                       </p>
 
-                      {applyError ? (
-                        <p
-                          className="text-red-400 text-sm mb-5 font-manrope"
-                          role="alert"
-                        >
-                          {applyError}
+                      {isCareersDemoMode() ? (
+                        <p className="text-white/45 text-xs mb-4 -mt-2">
+                          Demo mode: application is not saved. Set{" "}
+                          <span className="text-white/60">
+                            NEXT_PUBLIC_CAREERS_DEMO_MODE=false
+                          </span>{" "}
+                          when Postgres is live.
                         </p>
                       ) : null}
 
-                      <form className="space-y-3 w-full" onSubmit={handleApply}>
-                        {/* Full Name */}
-                        <div className="relative w-full">
-                          <label className="absolute -top-2.5 left-4 bg-[#0B2C23] px-2 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold z-10">
-                            Full Name
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            value={apFullName}
-                            onChange={(e) => setApFullName(e.target.value)}
-                            className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors"
-                          />
-                        </div>
-
-                        {/* Email */}
-                        <input
-                          type="email"
-                          required
-                          value={apEmail}
-                          onChange={(e) => setApEmail(e.target.value)}
-                          placeholder="Email"
-                          className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
-                          autoComplete="email"
-                        />
-
-                        {/* Phone */}
-                        <input
-                          type="tel"
-                          required
-                          inputMode="numeric"
-                          value={apPhone}
-                          onChange={(e) =>
-                            setApPhone(sanitizePhoneDigitsInput(e.target.value))
-                          }
-                          placeholder="Phone Number"
-                          className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
-                          autoComplete="tel"
-                        />
-
-                        {/* Company */}
-                        <input
-                          type="text"
-                          value={apCompany}
-                          onChange={(e) => setApCompany(e.target.value)}
-                          placeholder="Company/Organization"
-                          className="w-full bg-transparent border border-white/20 px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/40"
-                        />
-
-                        {/* Upload CV */}
-                        <div className="flex flex-col items-center gap-2.5 py-3">
-                          <label className="cursor-pointer flex items-center gap-2 text-[#EFCD62]">
-                            <span className="uppercase tracking-[0.2em] text-gh-label font-bold">
-                              UPLOAD CV
-                            </span>
-                            <Upload className="w-4 h-4" />
-                            <input
-                              type="file"
-                              className="hidden"
-                              onChange={handleFileChange}
-                            />
-                          </label>
-
-                          {selectedFileName && (
-                            <div className="flex items-center gap-2.5 bg-white/5 border border-white/10 px-4 py-2 text-gh-label text-white/60 max-w-full overflow-hidden">
-                              <span className="truncate">
-                                {selectedFileName}
-                              </span>
-                              <button
-                                type="button"
-                                className="shrink-0"
-                                onClick={() => {
-                                  setSelectedFileName(null);
-                                  setResumeFile(null);
-                                }}
-                              >
-                                <X className="w-3 h-3 hover:text-white" />
-                              </button>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Submit */}
-                        <PrimaryButton
-                          type="submit"
-                          disabled={applySubmitting}
-                          className="w-full disabled:opacity-60"
-                        >
-                          {applySubmitting ? "SUBMITTING…" : "SUBMIT APPLICATION"}
-                        </PrimaryButton>
-                      </form>
+                      <CareersApplyFormFields
+                        idPrefix="apply-mobile"
+                        fullName={apFullName}
+                        email={apEmail}
+                        phone={apPhone}
+                        company={apCompany}
+                        onFullNameChange={setApFullName}
+                        onEmailChange={setApEmail}
+                        onPhoneChange={setApPhone}
+                        onCompanyChange={setApCompany}
+                        selectedFileName={selectedFileName}
+                        resumeFile={resumeFile}
+                        resumeError={resumeError}
+                        resumeInputRef={resumeInputMobileRef}
+                        onResumeChange={handleFileChange}
+                        onResumeClear={clearResume}
+                        applyError={applyError}
+                        submitting={applySubmitting}
+                        onSubmit={handleApply}
+                      />
                     </div>
                   ) : (
                     /* SUCCESS VIEW */
@@ -694,7 +632,7 @@ export default function CareersPage() {
                       <PrimaryButton
                         withArrow={false}
                         className="w-full"
-                        onClick={closeApplyModal}
+                        onClick={handleApplySuccessOkay}
                       >
                         OKAY
                       </PrimaryButton>
@@ -718,12 +656,15 @@ export default function CareersPage() {
                 {/* The Close button centered at top, outside the modal */}
                 <div className="absolute -top-[72px] left-1/2 -translate-x-1/2 flex items-center z-10">
                   <button
-                    onClick={() => {
-                      setIsApplyModalOpen(false);
-                      setIsSuccess(false);
-                      setSelectedFileName(null);
-                    }}
-                    className="w-12 h-12 rounded-full bg-[#124131] flex items-center justify-center text-white hover:bg-[#1f5c48] transition-colors shadow-2xl"
+                    type="button"
+                    onClick={handleApplyModalDismiss}
+                    disabled={isSuccess}
+                    aria-disabled={isSuccess}
+                    className={`w-12 h-12 rounded-full flex items-center justify-center text-white transition-colors shadow-2xl ${
+                      isSuccess
+                        ? "bg-[#124131]/40 cursor-not-allowed opacity-50"
+                        : "bg-[#124131] hover:bg-[#1f5c48]"
+                    }`}
                   >
                     <X className="w-6 h-6 stroke-[1.5]" />
                   </button>
@@ -735,98 +676,44 @@ export default function CareersPage() {
                       <h3 className="text-gh-h1 font-philosopher text-white mb-3 pr-16">
                         Apply Now
                       </h3>
+                      <p className="text-[#EFCD62]/80 text-gh-label font-bold tracking-widest uppercase mb-2">
+                        {resolveCareerJobTitle(applyJobId)}
+                      </p>
                       <p className="text-white/60 text-gh-desc mb-8">
                         Share a few details. Our team will get back to you
                         shortly
                       </p>
 
-                      {applyError ? (
-                        <p
-                          className="text-red-400 text-sm mb-5 font-manrope"
-                          role="alert"
-                        >
-                          {applyError}
+                      {isCareersDemoMode() ? (
+                        <p className="text-white/45 text-xs mb-6 -mt-4">
+                          Demo mode: application is not saved. Set{" "}
+                          <span className="text-white/60">
+                            NEXT_PUBLIC_CAREERS_DEMO_MODE=false
+                          </span>{" "}
+                          when Postgres is live.
                         </p>
                       ) : null}
 
-                      <form className="space-y-5" onSubmit={handleApply}>
-                        <div className="relative">
-                          <label className="absolute -top-3 left-4 bg-[#0B2C23] px-2 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold">
-                            Full Name
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            value={apFullName}
-                            onChange={(e) => setApFullName(e.target.value)}
-                            className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors"
-                          />
-                        </div>
-                        <input
-                          type="email"
-                          required
-                          value={apEmail}
-                          onChange={(e) => setApEmail(e.target.value)}
-                          placeholder="Email"
-                          className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
-                          autoComplete="email"
-                        />
-                        <input
-                          type="tel"
-                          required
-                          inputMode="numeric"
-                          value={apPhone}
-                          onChange={(e) =>
-                            setApPhone(sanitizePhoneDigitsInput(e.target.value))
-                          }
-                          placeholder="Phone Number"
-                          className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
-                          autoComplete="tel"
-                        />
-                        <input
-                          type="text"
-                          value={apCompany}
-                          onChange={(e) => setApCompany(e.target.value)}
-                          placeholder="Company/Organization"
-                          className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/30"
-                        />
-
-                        <div className="flex flex-col items-center gap-3 py-4">
-                          <label className="cursor-pointer flex items-center gap-2 text-[#EFCD62] hover:text-white transition-colors">
-                            <span className="uppercase tracking-[0.2em] text-gh-label font-bold">
-                              UPLOAD CV
-                            </span>
-                            <Upload className="w-4 h-4" />
-                            <input
-                              type="file"
-                              className="hidden"
-                              onChange={handleFileChange}
-                            />
-                          </label>
-                          {selectedFileName && (
-                            <div className="flex items-center gap-2.5 bg-white/5 border border-white/10 px-4 py-2 text-gh-label text-white/60">
-                              {selectedFileName}
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setSelectedFileName(null);
-                                  setResumeFile(null);
-                                }}
-                              >
-                                <X className="w-3 h-3 hover:text-white" />
-                              </button>
-                            </div>
-                          )}
-                        </div>
-
-                        <PrimaryButton
-                          type="submit"
-                          disabled={applySubmitting}
-                          className="w-full mt-3 disabled:opacity-60"
-                        >
-                          {applySubmitting ? "SUBMITTING…" : "SUBMIT APPLICATION"}
-                        </PrimaryButton>
-                      </form>
+                      <CareersApplyFormFields
+                        idPrefix="apply-desktop"
+                        fullName={apFullName}
+                        email={apEmail}
+                        phone={apPhone}
+                        company={apCompany}
+                        onFullNameChange={setApFullName}
+                        onEmailChange={setApEmail}
+                        onPhoneChange={setApPhone}
+                        onCompanyChange={setApCompany}
+                        selectedFileName={selectedFileName}
+                        resumeFile={resumeFile}
+                        resumeError={resumeError}
+                        resumeInputRef={resumeInputDesktopRef}
+                        onResumeChange={handleFileChange}
+                        onResumeClear={clearResume}
+                        applyError={applyError}
+                        submitting={applySubmitting}
+                        onSubmit={handleApply}
+                      />
                     </>
                   ) : (
                     <div className="text-center pb-10">
@@ -922,7 +809,7 @@ export default function CareersPage() {
                       <PrimaryButton
                         withArrow={false}
                         className="w-full"
-                        onClick={closeApplyModal}
+                        onClick={handleApplySuccessOkay}
                       >
                         OKAY
                       </PrimaryButton>

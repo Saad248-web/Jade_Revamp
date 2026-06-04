@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -18,12 +18,24 @@ import { useAnimation } from "@/context/AnimationContext";
 import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
 import { sanitizeGuestCountInput } from "@/lib/guestCountInput";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
+import {
+  isRathaaFormValid,
+  rathaaFieldErrors,
+  type RathaaFieldKey,
+} from "@/lib/leadFormValidation";
+import {
+  JadeFloatingField,
+  JadeFloatingSelect,
+  JadeFloatingTextarea,
+} from "@/components/ui/form";
+import JadeFormFieldError from "@/components/ui/form/JadeFormFieldError";
 
 export default function RathaaOverlay() {
   const { isRathaaOverlayOpen, setRathaaOverlayOpen } = useAnimation();
   const [view, setView] = useState<"form" | "success">("form");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -46,6 +58,7 @@ export default function RathaaOverlay() {
       setView("form");
       setSubmitting(false);
       setSubmitError(null);
+      setAttemptedSubmit(false);
       setFormData({
         fullName: "",
         phoneNumber: "",
@@ -63,36 +76,21 @@ export default function RathaaOverlay() {
     }, 500);
   };
 
-  const isFormValid = () => {
-    const {
-      fullName,
-      phoneNumber,
-      email,
-      guests,
-      preferredDate,
-      travelFormat,
-      occasionType,
-    } = formData;
-    const guestCount = Number.parseInt(guests, 10);
-    const hasFormat =
-      travelFormat.oneDay || travelFormat.overnight || travelFormat.multiDay;
-    return (
-      fullName.trim() !== "" &&
-      phoneNumber.trim() !== "" &&
-      email.trim() !== "" &&
-      Number.isFinite(guestCount) &&
-      guestCount >= 1 &&
-      preferredDate.trim() !== "" &&
-      occasionType.trim() !== "" &&
-      hasFormat
-    );
-  };
+  const fieldErrors = useMemo(
+    () => rathaaFieldErrors(formData),
+    [formData],
+  );
+
+  const showFieldError = (key: RathaaFieldKey) =>
+    attemptedSubmit && Boolean(fieldErrors[key]);
+
+  const formValid = isRathaaFormValid(formData);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isFormValid()) {
-      setView("success");
-    }
+    setAttemptedSubmit(true);
+    if (!formValid) return;
+    setView("success");
   };
 
   const toggleFormat = (key: keyof typeof formData.travelFormat) => {
@@ -164,81 +162,82 @@ export default function RathaaOverlay() {
                     </p>
 
                     <div className="flex flex-col gap-4 flex-1">
-                      {/* Floating Label Input - Full Name */}
-                      <div className="relative border border-white/20 focus-within:border-[#EFCD62] transition-colors rounded-sm group">
-                        <label className="absolute -top-3 left-4 bg-[#123A2D] px-1 text-white text-gh-label">
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.fullName}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              fullName: e.target.value,
-                            })
-                          }
-                          className="w-full bg-transparent px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none focus:border-transparent font-manrope"
-                        />
-                      </div>
-
-                      <input
+                      <JadeFloatingField
+                        id="rathaa-fullName"
+                        label="Full Name"
+                        value={formData.fullName}
+                        onChange={(v) =>
+                          setFormData({ ...formData, fullName: v })
+                        }
+                        theme="overlayGreen"
+                        invalid={Boolean(fieldErrors.fullName)}
+                        showError={showFieldError("fullName")}
+                        errorMessage={fieldErrors.fullName}
+                      />
+                      <JadeFloatingField
+                        id="rathaa-phone"
+                        label="Phone Number"
                         type="tel"
                         inputMode="numeric"
                         autoComplete="tel"
-                        placeholder="Phone Number"
                         value={formData.phoneNumber}
-                        onChange={(e) =>
+                        onChange={(v) =>
                           setFormData({
                             ...formData,
-                            phoneNumber: sanitizePhoneDigitsInput(e.target.value),
+                            phoneNumber: sanitizePhoneDigitsInput(v),
                           })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] transition-colors"
+                        theme="overlayGreen"
+                        invalid={Boolean(fieldErrors.phoneNumber)}
+                        showError={showFieldError("phoneNumber")}
+                        errorMessage={fieldErrors.phoneNumber}
                       />
-
-                      <input
+                      <JadeFloatingField
+                        id="rathaa-email"
+                        label="Email"
                         type="email"
-                        placeholder="Email"
                         value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
+                        onChange={(v) =>
+                          setFormData({ ...formData, email: v })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] transition-colors"
+                        theme="overlayGreen"
+                        invalid={Boolean(fieldErrors.email)}
+                        showError={showFieldError("email")}
+                        errorMessage={fieldErrors.email}
                       />
-
-                      <input
-                        type="text"
+                      <JadeFloatingField
+                        id="rathaa-guests"
+                        label="Number of Guests"
                         inputMode="numeric"
-                        autoComplete="off"
-                        placeholder="Number of Guests"
                         value={formData.guests}
-                        onChange={(e) =>
+                        onChange={(v) =>
                           setFormData({
                             ...formData,
-                            guests: sanitizeGuestCountInput(e.target.value),
+                            guests: sanitizeGuestCountInput(v),
                           })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] transition-colors"
+                        theme="overlayGreen"
+                        invalid={Boolean(fieldErrors.guests)}
+                        showError={showFieldError("guests")}
+                        errorMessage={fieldErrors.guests}
                       />
-
                       <div className="relative">
-                        <input
-                          type="text"
-                          placeholder="Preferred Date"
+                        <JadeFloatingField
+                          id="rathaa-date"
+                          label="Preferred Date"
                           value={formData.preferredDate}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              preferredDate: e.target.value,
-                            })
+                          onChange={(v) =>
+                            setFormData({ ...formData, preferredDate: v })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] transition-colors pr-12"
+                          theme="overlayGreen"
+                          invalid={Boolean(fieldErrors.preferredDate)}
+                          showError={showFieldError("preferredDate")}
+                          errorMessage={fieldErrors.preferredDate}
+                          className="[&_input]:pr-12"
                         />
-                        <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+                        <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60 pointer-events-none" />
                       </div>
 
-                      {/* Travel Format Checkboxes */}
                       <div className="mt-2 text-white">
                         <h3 className="text-white text-gh-body mb-3">
                           Travel Format:
@@ -287,44 +286,41 @@ export default function RathaaOverlay() {
                           ))}
                         </div>
                       </div>
-
-                      <select
-                        value={formData.occasionType}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            occasionType: e.target.value,
-                          })
-                        }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body focus:outline-none focus:border-[#EFCD62] transition-colors"
-                      >
-                        <option value="" className="bg-[#123A2D] text-white/60">
-                          Occasion type
-                        </option>
-                        {OCCASION_OPTIONS.map((opt) => (
-                          <option
-                            key={opt}
-                            value={opt}
-                            className="bg-[#123A2D] text-white"
-                          >
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
-
-                      <div className="mt-2 text-white">
-                        <textarea
-                          placeholder="Special requests (optional)"
-                          value={formData.specialRequests}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              specialRequests: e.target.value,
-                            })
-                          }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-4 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope transition-colors"
+                      {showFieldError("travelFormat") &&
+                      fieldErrors.travelFormat ? (
+                        <JadeFormFieldError
+                          id="rathaa-travel-err"
+                          message={fieldErrors.travelFormat}
                         />
-                      </div>
+                      ) : null}
+
+                      <JadeFloatingSelect
+                        id="rathaa-occasion"
+                        label="Occasion type"
+                        value={formData.occasionType}
+                        onChange={(v) =>
+                          setFormData({ ...formData, occasionType: v })
+                        }
+                        options={OCCASION_OPTIONS}
+                        theme="overlayGreen"
+                        invalid={Boolean(fieldErrors.occasionType)}
+                        showError={showFieldError("occasionType")}
+                        errorMessage={fieldErrors.occasionType}
+                      />
+
+                      <JadeFloatingTextarea
+                        id="rathaa-notes"
+                        label="Special requests (optional)"
+                        required={false}
+                        value={formData.specialRequests}
+                        onChange={(v) =>
+                          setFormData({ ...formData, specialRequests: v })
+                        }
+                        theme="overlayGreen"
+                        invalid={Boolean(fieldErrors.specialRequests)}
+                        showError={showFieldError("specialRequests")}
+                        errorMessage={fieldErrors.specialRequests}
+                      />
                     </div>
 
                     <div className="mt-6 border-t border-white/10 pt-5">
@@ -364,8 +360,8 @@ export default function RathaaOverlay() {
                       </p>
                       <button
                         type="submit"
-                        disabled={!isFormValid() || submitting}
-                        className={`w-full py-4 font-manrope font-bold text-gh-label tracking-[0.3em] uppercase transition-all border ${ isFormValid() && !submitting ? "bg-[#EFCD62] hover:bg-white text-black border-transparent" : "bg-transparent border-white/10 text-white/40 cursor-not-allowed" }`}
+                        disabled={!formValid || submitting}
+                        className={`w-full py-4 font-manrope font-bold text-gh-label tracking-[0.3em] uppercase transition-all border ${ formValid && !submitting ? "bg-[#EFCD62] hover:bg-white text-black border-transparent" : "bg-transparent border-white/10 text-white/40 cursor-not-allowed" }`}
                       >
                         {submitting ? "SENDING…" : "SEND INQUIRY"}
                       </button>

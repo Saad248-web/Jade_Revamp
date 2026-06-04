@@ -19,7 +19,8 @@ These use Framer `useScroll` + tall section height for vertical pin/progress —
 - `FeaturedVillas`
 - `ExperiencesScrollSection`
 - `WeddingCelebrationsSection`
-- `AnotherExperienceOneClient` + `experience-sda.css`
+
+Elements with `[data-page-scroll-root]` get full Lenis prevent via `HScrollTouchAssurance`.
 
 ## Safe `data-lenis-prevent` targets
 

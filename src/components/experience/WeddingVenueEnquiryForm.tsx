@@ -1,10 +1,20 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Calendar, Check } from "lucide-react";
-import { EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS } from "@/lib/experienceOverlayTheme";
+import { getFieldShellClass } from "@/lib/jadeFormTokens";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
+import {
+  validateEmail,
+  validateFullName,
+  validatePhone,
+} from "@/lib/leadFormValidation";
+import {
+  JadeFloatingField,
+  JadeFloatingTextarea,
+} from "@/components/ui/form";
+import JadeFormFieldError from "@/components/ui/form/JadeFormFieldError";
 
 type Props = {
   onSuccess: () => void;
@@ -87,7 +97,7 @@ export default function WeddingVenueEnquiryForm({
   const [events, setEvents] = useState<Set<string>>(new Set());
   const [setting, setSetting] = useState<Set<string>>(new Set());
   const [notes, setNotes] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [attemptedSubmit, setAttemptedSubmit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const dateRef = useRef<HTMLInputElement>(null);
@@ -99,26 +109,19 @@ export default function WeddingVenueEnquiryForm({
     return next;
   };
 
-  const validate = (): boolean => {
-    if (!fullName.trim()) {
-      setError("Please enter your full name.");
-      return false;
-    }
-    if (!/^[\d\s+()-]{10,}$/.test(phone.trim())) {
-      setError("Please enter a valid phone number (at least 10 digits).");
-      return false;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setError("Please enter a valid email address.");
-      return false;
-    }
-    if (!eventDate) {
-      setError("Please choose an event date.");
-      return false;
-    }
-    setError(null);
-    return true;
-  };
+  const fieldErrors = useMemo(() => {
+    const errs: Record<string, string | undefined> = {};
+    errs.fullName = validateFullName(fullName);
+    errs.phone = validatePhone(phone);
+    errs.email = validateEmail(email);
+    if (!eventDate) errs.eventDate = "Please choose an event date.";
+    return errs;
+  }, [fullName, phone, email, eventDate]);
+
+  const showErr = (key: string) =>
+    attemptedSubmit && Boolean(fieldErrors[key]);
+
+  const isValid = !Object.values(fieldErrors).some(Boolean);
 
   const openCalendar = () => {
     dateRef.current?.showPicker?.();
@@ -130,7 +133,8 @@ export default function WeddingVenueEnquiryForm({
       className="space-y-5"
       onSubmit={async (e) => {
         e.preventDefault();
-        if (!validate()) return;
+        setAttemptedSubmit(true);
+        if (!isValid) return;
         setSubmitting(true);
         setSubmitError(null);
         try {
@@ -168,58 +172,58 @@ export default function WeddingVenueEnquiryForm({
       }}
       noValidate
     >
-      {error ? (
-        <p className="text-red-400 text-gh-label font-manrope" role="alert">
-          {error}
-        </p>
-      ) : null}
       {submitError ? (
         <p className="text-red-400 text-gh-label font-manrope" role="alert">
           {submitError}
         </p>
       ) : null}
 
-      <div className="relative">
-        <label
-          className={`absolute -top-3 left-4 ${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS} px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope`}
-        >
-          Full Name *
-        </label>
-        <input
-          required
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          className="w-full bg-transparent border border-white/20 rounded-[4px] px-6 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors"
-        />
-      </div>
+      <JadeFloatingField
+        id="wedding-fullName"
+        label="Full Name"
+        value={fullName}
+        onChange={setFullName}
+        theme="experienceCharcoal"
+        invalid={Boolean(fieldErrors.fullName)}
+        showError={showErr("fullName")}
+        errorMessage={fieldErrors.fullName}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <input
+        <JadeFloatingField
+          id="wedding-phone"
+          label="Phone Number"
           type="tel"
           inputMode="numeric"
-          placeholder="Phone Number *"
-          value={phone}
-          onChange={(e) => setPhone(sanitizePhoneDigitsInput(e.target.value))}
-          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/35"
           autoComplete="tel"
+          value={phone}
+          onChange={(v) => setPhone(sanitizePhoneDigitsInput(v))}
+          theme="experienceCharcoal"
+          invalid={Boolean(fieldErrors.phone)}
+          showError={showErr("phone")}
+          errorMessage={fieldErrors.phone}
         />
-        <input
+        <JadeFloatingField
+          id="wedding-email"
+          label="Email"
           type="email"
-          placeholder="Email *"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/35"
           autoComplete="email"
+          value={email}
+          onChange={setEmail}
+          theme="experienceCharcoal"
+          invalid={Boolean(fieldErrors.email)}
+          showError={showErr("email")}
+          errorMessage={fieldErrors.email}
         />
       </div>
 
-      <div className="relative">
-        <label
-          htmlFor="wedding-event-date"
-          className={`absolute -top-3 left-4 ${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS} px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope`}
-        >
-          Event date *
-        </label>
+      <div
+        className={`relative ${getFieldShellClass({
+          invalid: Boolean(fieldErrors.eventDate),
+          showError: showErr("eventDate"),
+          variant: "standard",
+        })}`}
+      >
         <input
           ref={dateRef}
           id="wedding-event-date"
@@ -227,7 +231,8 @@ export default function WeddingVenueEnquiryForm({
           value={eventDate}
           min={new Date().toISOString().slice(0, 10)}
           onChange={(e) => setEventDate(e.target.value)}
-          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 pr-12 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors [color-scheme:dark]"
+          aria-invalid={showErr("eventDate")}
+          className="w-full bg-transparent px-4 py-3.5 pr-12 text-white text-gh-body focus:outline-none [color-scheme:dark] font-manrope rounded-sm"
         />
         <button
           type="button"
@@ -237,7 +242,22 @@ export default function WeddingVenueEnquiryForm({
         >
           <Calendar className="w-5 h-5" />
         </button>
+        <label
+          htmlFor="wedding-event-date"
+          className="absolute -top-3 left-4 bg-jade-charcoal px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope pointer-events-none"
+        >
+          Event date
+          {showErr("eventDate") ? (
+            <span className="ml-1 text-[#D32C55]">*</span>
+          ) : null}
+        </label>
       </div>
+      {showErr("eventDate") && fieldErrors.eventDate ? (
+        <JadeFormFieldError
+          id="wedding-date-err"
+          message={fieldErrors.eventDate}
+        />
+      ) : null}
 
       <div className="space-y-2.5">
         <p className="text-white/60 text-gh-label font-bold uppercase tracking-widest">
@@ -272,15 +292,14 @@ export default function WeddingVenueEnquiryForm({
         />
       </div>
 
-      <div>
-        <textarea
-          placeholder="Additional requests"
-          rows={4}
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/35"
-        />
-      </div>
+      <JadeFloatingTextarea
+        id="wedding-notes"
+        label="Additional requests"
+        required={false}
+        value={notes}
+        onChange={setNotes}
+        theme="experienceCharcoal"
+      />
 
       <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
         By proceeding, you agree to our{" "}

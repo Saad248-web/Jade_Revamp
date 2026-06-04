@@ -18,12 +18,22 @@ import { OVERLAY_DISMISS_BUTTON_BASE } from "@/lib/overlayDismissButton";
 import { useAnimation } from "@/context/AnimationContext";
 import Link from "next/link";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
+import {
+  validateEmail,
+  validateFullName,
+  validatePhone,
+} from "@/lib/leadFormValidation";
+import {
+  JadeFloatingField,
+  JadeFloatingTextarea,
+} from "@/components/ui/form";
 
 export default function PartnerOverlay() {
   const { isPartnerOverlayOpen, setPartnerOverlayOpen } = useAnimation();
   const [view, setView] = useState<"form" | "success">("form");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [attemptedSubmit, setAttemptedSubmit] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImages, setSelectedImages] = useState<
     { file: File; preview: string }[]
@@ -62,6 +72,7 @@ export default function PartnerOverlay() {
       setView("form");
       setSubmitting(false);
       setSubmitError(null);
+      setAttemptedSubmit(false);
       setSelectedImages([]); // Clear previews on close
       setFormData({
         fullName: "",
@@ -92,23 +103,17 @@ export default function PartnerOverlay() {
   };
 
   const handleSubmit = async () => {
+    setAttemptedSubmit(true);
     setSubmitError(null);
     const hasPartnership = Object.values(formData.partnershipType).some(Boolean);
+    const nameErr = validateFullName(formData.fullName);
+    const phoneErr = validatePhone(formData.phoneNumber);
+    const emailErr = validateEmail(formData.email);
     if (!hasPartnership) {
       setSubmitError("Please select at least one partnership interest.");
       return;
     }
-    if (formData.fullName.trim().length < 2) {
-      setSubmitError("Please enter your name.");
-      return;
-    }
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-      formData.email.trim().toLowerCase(),
-    );
-    if (!emailOk) {
-      setSubmitError("Please enter a valid email address.");
-      return;
-    }
+    if (nameErr || phoneErr || emailErr) return;
 
     setSubmitting(true);
     try {
@@ -239,62 +244,67 @@ export default function PartnerOverlay() {
                     </p>
 
                     <div className="flex flex-col gap-3">
-                      {/* Floating Label Input - Full Name */}
-                      <div className="relative">
-                        <input
-                          type="text"
-                          id="fullName"
-                          value={formData.fullName}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              fullName: e.target.value,
-                            })
-                          }
-                          className="block w-full bg-transparent border border-white/20 rounded-sm px-4 pt-4 pb-2 text-white text-gh-body focus:outline-none focus:border-[#EFCD62] peer"
-                          placeholder=" "
-                        />
-                        <label
-                          htmlFor="fullName"
-                          className="absolute text-white/80 text-gh-label duration-300 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-gh-body peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:text-white bg-jade-green px-1"
-                        >
-                          Full Name
-                        </label>
-                      </div>
-
-                      <input
+                      <JadeFloatingField
+                        id="partner-fullName"
+                        label="Full Name"
+                        value={formData.fullName}
+                        onChange={(v) =>
+                          setFormData({ ...formData, fullName: v })
+                        }
+                        theme="overlayGreen"
+                        invalid={Boolean(validateFullName(formData.fullName))}
+                        showError={
+                          attemptedSubmit &&
+                          Boolean(validateFullName(formData.fullName))
+                        }
+                        errorMessage={validateFullName(formData.fullName)}
+                      />
+                      <JadeFloatingField
+                        id="partner-phone"
+                        label="Phone Number"
                         type="tel"
                         inputMode="numeric"
                         autoComplete="tel"
-                        placeholder="Phone Number"
                         value={formData.phoneNumber}
-                        onChange={(e) =>
+                        onChange={(v) =>
                           setFormData({
                             ...formData,
-                            phoneNumber: sanitizePhoneDigitsInput(e.target.value),
+                            phoneNumber: sanitizePhoneDigitsInput(v),
                           })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
+                        theme="overlayGreen"
+                        invalid={Boolean(validatePhone(formData.phoneNumber))}
+                        showError={
+                          attemptedSubmit &&
+                          Boolean(validatePhone(formData.phoneNumber))
+                        }
+                        errorMessage={validatePhone(formData.phoneNumber)}
                       />
-
-                      <input
+                      <JadeFloatingField
+                        id="partner-email"
+                        label="Email"
                         type="email"
-                        placeholder="Email"
                         value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
+                        onChange={(v) =>
+                          setFormData({ ...formData, email: v })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
+                        theme="overlayGreen"
+                        invalid={Boolean(validateEmail(formData.email))}
+                        showError={
+                          attemptedSubmit &&
+                          Boolean(validateEmail(formData.email))
+                        }
+                        errorMessage={validateEmail(formData.email)}
                       />
-
-                      <input
-                        type="text"
-                        placeholder="Company/Organization"
+                      <JadeFloatingField
+                        id="partner-company"
+                        label="Company/Organization"
+                        required={false}
                         value={formData.company}
-                        onChange={(e) =>
-                          setFormData({ ...formData, company: e.target.value })
+                        onChange={(v) =>
+                          setFormData({ ...formData, company: v })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
+                        theme="overlayGreen"
                       />
 
                       {/* Partnership Type Checkboxes */}
@@ -343,16 +353,16 @@ export default function PartnerOverlay() {
                             </label>
                           ))}
                         </div>
-                        <textarea
-                          placeholder="Other"
+                        <JadeFloatingTextarea
+                          id="partner-partnership-other"
+                          label="Other"
+                          required={false}
                           value={formData.partnershipOther}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              partnershipOther: e.target.value,
-                            })
+                          onChange={(v) =>
+                            setFormData({ ...formData, partnershipOther: v })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3 mt-3 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope"
+                          theme="overlayGreen"
+                          className="mt-3"
                         />
                       </div>
 
@@ -399,16 +409,16 @@ export default function PartnerOverlay() {
                             </label>
                           ))}
                         </div>
-                        <textarea
-                          placeholder="Other"
+                        <JadeFloatingTextarea
+                          id="partner-property-other"
+                          label="Other"
+                          required={false}
                           value={formData.propertyOther}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              propertyOther: e.target.value,
-                            })
+                          onChange={(v) =>
+                            setFormData({ ...formData, propertyOther: v })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3 mt-3 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope"
+                          theme="overlayGreen"
+                          className="mt-3"
                         />
                       </div>
 
@@ -417,50 +427,53 @@ export default function PartnerOverlay() {
                         <h3 className="text-white text-gh-body mb-0">
                           Property Details
                         </h3>
-                        <input
-                          type="text"
-                          placeholder="Location"
+                        <JadeFloatingField
+                          id="partner-location"
+                          label="Location"
+                          required={false}
                           value={formData.propertyDetails.location}
-                          onChange={(e) =>
+                          onChange={(v) =>
                             setFormData({
                               ...formData,
                               propertyDetails: {
                                 ...formData.propertyDetails,
-                                location: e.target.value,
+                                location: v,
                               },
                             })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
+                          theme="overlayGreen"
                         />
-                        <input
-                          type="text"
-                          placeholder="Number of Bedrooms"
+                        <JadeFloatingField
+                          id="partner-bedrooms"
+                          label="Number of Bedrooms"
+                          required={false}
                           value={formData.propertyDetails.bedrooms}
-                          onChange={(e) =>
+                          onChange={(v) =>
                             setFormData({
                               ...formData,
                               propertyDetails: {
                                 ...formData.propertyDetails,
-                                bedrooms: e.target.value,
+                                bedrooms: v,
                               },
                             })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
+                          theme="overlayGreen"
                         />
-                        <input
-                          type="text"
-                          placeholder="Outdoor Event Capacity"
+                        <JadeFloatingField
+                          id="partner-capacity"
+                          label="Outdoor Event Capacity"
+                          required={false}
                           value={formData.propertyDetails.eventCapacity}
-                          onChange={(e) =>
+                          onChange={(v) =>
                             setFormData({
                               ...formData,
                               propertyDetails: {
                                 ...formData.propertyDetails,
-                                eventCapacity: e.target.value,
+                                eventCapacity: v,
                               },
                             })
                           }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62]"
+                          theme="overlayGreen"
                         />
                       </div>
 

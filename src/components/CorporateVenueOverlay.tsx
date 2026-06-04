@@ -40,6 +40,17 @@ import { useOverlayScrollChromeHide } from "@/lib/useOverlayScrollChromeHide";
 import { useVenueOverlaySectionNav } from "@/lib/useVenueOverlaySectionNav";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
 import {
+  validateEmail,
+  validateFullName,
+  validatePhone,
+} from "@/lib/leadFormValidation";
+import { getFieldShellClass } from "@/lib/jadeFormTokens";
+import {
+  JadeFloatingField,
+  JadeFloatingTextarea,
+} from "@/components/ui/form";
+import JadeFormFieldError from "@/components/ui/form/JadeFormFieldError";
+import {
   VillaExperienceBookingBottomBar,
   VillaExperienceHeroCarousel,
   VillaExperienceOverlayCloseFramer,
@@ -107,6 +118,10 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
   const [corpPref, setCorpPref] = useState<Set<string>>(new Set());
   const [corpNotes, setCorpNotes] = useState("");
   const [corpError, setCorpError] = useState<string | null>(null);
+  const [corpAttempted, setCorpAttempted] = useState(false);
+  const [corpFieldErrors, setCorpFieldErrors] = useState<
+    Record<string, string | undefined>
+  >({});
 
   const corpToggle = (
     setFn: React.Dispatch<React.SetStateAction<Set<string>>>,
@@ -421,34 +436,23 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                       noValidate
                       onSubmit={(e) => {
                         e.preventDefault();
-                        if (!corpFullName.trim()) {
-                          setCorpError("Please enter your full name.");
-                          return;
-                        }
-                        if (!corpCompany.trim()) {
-                          setCorpError("Please enter your company name.");
-                          return;
-                        }
-                        if (!/^[\d\s+()-]{10,}$/.test(corpPhone.trim())) {
-                          setCorpError(
-                            "Please enter a valid phone number (at least 10 digits).",
-                          );
-                          return;
-                        }
-                        if (
-                          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(corpEmail.trim())
-                        ) {
-                          setCorpError("Please enter a valid email address.");
-                          return;
-                        }
-                        if (!corpTeamSize.trim()) {
-                          setCorpError("Please enter an approximate team size.");
-                          return;
-                        }
-                        if (!corpDate) {
-                          setCorpError("Please choose an event date.");
-                          return;
-                        }
+                        setCorpAttempted(true);
+                        const errs: Record<string, string | undefined> = {
+                          fullName: validateFullName(corpFullName),
+                          company: !corpCompany.trim()
+                            ? "Please enter your company name."
+                            : undefined,
+                          phone: validatePhone(corpPhone),
+                          email: validateEmail(corpEmail),
+                          teamSize: !corpTeamSize.trim()
+                            ? "Please enter an approximate team size."
+                            : undefined,
+                          eventDate: !corpDate
+                            ? "Please choose an event date."
+                            : undefined,
+                        };
+                        setCorpFieldErrors(errs);
+                        if (Object.values(errs).some(Boolean)) return;
                         setCorpError(null);
                         setView("success");
                       }}
@@ -459,64 +463,75 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         </p>
                       ) : null}
 
-                      <div className="relative">
-                        <label
-                          className={`absolute -top-3 left-4 ${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS} px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope`}
-                        >
-                          Full Name *
-                        </label>
-                        <input
-                          type="text"
-                          value={corpFullName}
-                          onChange={(e) => setCorpFullName(e.target.value)}
-                          className="w-full bg-transparent border border-white/20 rounded-[4px] px-6 py-4 focus:border-[#EFCD62] outline-none transition-colors text-white text-gh-body"
-                        />
-                      </div>
-
+                      <JadeFloatingField
+                        id="corp-fullName"
+                        label="Full Name"
+                        value={corpFullName}
+                        onChange={setCorpFullName}
+                        theme="experienceCharcoal"
+                        invalid={Boolean(corpFieldErrors.fullName)}
+                        showError={corpAttempted && Boolean(corpFieldErrors.fullName)}
+                        errorMessage={corpFieldErrors.fullName}
+                      />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <input
-                          placeholder="Company Name *"
+                        <JadeFloatingField
+                          id="corp-company"
+                          label="Company Name"
                           value={corpCompany}
-                          onChange={(e) => setCorpCompany(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors placeholder:text-white/35"
+                          onChange={setCorpCompany}
+                          theme="experienceCharcoal"
+                          invalid={Boolean(corpFieldErrors.company)}
+                          showError={corpAttempted && Boolean(corpFieldErrors.company)}
+                          errorMessage={corpFieldErrors.company}
                         />
-                        <input
+                        <JadeFloatingField
+                          id="corp-phone"
+                          label="Phone Number"
                           type="tel"
                           inputMode="numeric"
-                          placeholder="Phone Number *"
-                          value={corpPhone}
-                          onChange={(e) =>
-                            setCorpPhone(sanitizePhoneDigitsInput(e.target.value))
-                          }
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors placeholder:text-white/35"
                           autoComplete="tel"
+                          value={corpPhone}
+                          onChange={(v) =>
+                            setCorpPhone(sanitizePhoneDigitsInput(v))
+                          }
+                          theme="experienceCharcoal"
+                          invalid={Boolean(corpFieldErrors.phone)}
+                          showError={corpAttempted && Boolean(corpFieldErrors.phone)}
+                          errorMessage={corpFieldErrors.phone}
                         />
                       </div>
-
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <input
+                        <JadeFloatingField
+                          id="corp-email"
+                          label="Email"
                           type="email"
-                          placeholder="Email *"
-                          value={corpEmail}
-                          onChange={(e) => setCorpEmail(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors placeholder:text-white/35"
                           autoComplete="email"
+                          value={corpEmail}
+                          onChange={setCorpEmail}
+                          theme="experienceCharcoal"
+                          invalid={Boolean(corpFieldErrors.email)}
+                          showError={corpAttempted && Boolean(corpFieldErrors.email)}
+                          errorMessage={corpFieldErrors.email}
                         />
-                        <input
-                          placeholder="Team Size *"
+                        <JadeFloatingField
+                          id="corp-teamSize"
+                          label="Team Size"
                           value={corpTeamSize}
-                          onChange={(e) => setCorpTeamSize(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors placeholder:text-white/35"
+                          onChange={setCorpTeamSize}
+                          theme="experienceCharcoal"
+                          invalid={Boolean(corpFieldErrors.teamSize)}
+                          showError={corpAttempted && Boolean(corpFieldErrors.teamSize)}
+                          errorMessage={corpFieldErrors.teamSize}
                         />
                       </div>
-
-                      <div className="relative">
-                        <label
-                          htmlFor="corp-event-date"
-                          className={`absolute -top-3 left-4 ${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS} px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope`}
-                        >
-                          Event date *
-                        </label>
+                      <div
+                        className={`relative ${getFieldShellClass({
+                          invalid: Boolean(corpFieldErrors.eventDate),
+                          showError:
+                            corpAttempted && Boolean(corpFieldErrors.eventDate),
+                          variant: "standard",
+                        })}`}
+                      >
                         <input
                           ref={corpDateRef}
                           id="corp-event-date"
@@ -524,7 +539,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           value={corpDate}
                           min={new Date().toISOString().slice(0, 10)}
                           onChange={(e) => setCorpDate(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 pr-12 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors [color-scheme:dark]"
+                          className="w-full bg-transparent px-4 py-3.5 pr-12 text-white text-gh-body focus:outline-none [color-scheme:dark] font-manrope rounded-sm"
                         />
                         <button
                           type="button"
@@ -537,7 +552,22 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         >
                           <Calendar className="w-5 h-5" />
                         </button>
+                        <label
+                          htmlFor="corp-event-date"
+                          className="absolute -top-3 left-4 bg-jade-charcoal px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope pointer-events-none"
+                        >
+                          Event date
+                          {corpAttempted && corpFieldErrors.eventDate ? (
+                            <span className="ml-1 text-[#D32C55]">*</span>
+                          ) : null}
+                        </label>
                       </div>
+                      {corpAttempted && corpFieldErrors.eventDate ? (
+                        <JadeFormFieldError
+                          id="corp-date-err"
+                          message={corpFieldErrors.eventDate}
+                        />
+                      ) : null}
 
                       <div className="py-5">
                         <h4 className="text-white font-bold text-gh-body mb-3">
@@ -674,15 +704,15 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         </div>
                       </div>
 
-                      <div className="relative py-5">
-                        <textarea
-                          placeholder="Additional requests"
-                          rows={4}
-                          value={corpNotes}
-                          onChange={(e) => setCorpNotes(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-[4px] px-4 py-4 focus:border-[#EFCD62] outline-none text-white text-gh-body transition-colors placeholder:text-white/35"
-                        />
-                      </div>
+                      <JadeFloatingTextarea
+                        id="corp-notes"
+                        label="Additional requests"
+                        required={false}
+                        value={corpNotes}
+                        onChange={setCorpNotes}
+                        theme="experienceCharcoal"
+                        className="py-5"
+                      />
 
                       <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
                         By proceeding, you agree to our{" "}

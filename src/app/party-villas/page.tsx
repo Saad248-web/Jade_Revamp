@@ -39,6 +39,7 @@ import ExperienceScrollSection from "@/components/ExperienceScrollSection";
 import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
 import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
 import { useAnimation } from "@/context/AnimationContext";
+import { EXPERIENCE_PAGE_PATHS } from "@/lib/enquiryReturnPath";
 
 const partySlides = [
   {
@@ -123,7 +124,9 @@ export default function PartyVillasPage() {
         label="PERSONALIZE YOUR CELEBRATION"
         title="Curated Experiences"
         ctaText="PLAN YOUR CELEBRATION"
-        onCtaClick={() => setEnquireOverlayOpen(true)}
+        onCtaClick={() =>
+          setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.partyVillas)
+        }
         innerClassName="max-w-6xl mx-auto px-4 sm:px-6 md:px-8"
         ctaContainerClassName="w-full max-w-xl mx-auto"
         experiences={[
@@ -201,7 +204,9 @@ function SpacesForCelebrationsSection() {
       ]}
       footerText="Private villas and curated experiences designed to make every celebration a masterpiece."
       ctaText="PLAN YOUR CELEBRATION"
-      onCtaClick={() => setEnquireOverlayOpen(true)}
+      onCtaClick={() =>
+        setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.partyVillas)
+      }
       alternateGold={true}
     />
   );

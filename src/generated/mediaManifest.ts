@@ -3,7 +3,7 @@
 // Do not edit manually.
 
 export const MEDIA_MANIFEST = {
-  "generatedAt": "2026-05-25T11:04:47.891Z",
+  "generatedAt": "2026-05-27T08:35:15.610Z",
   "villasByFolder": {
     "Diamond": {
       "hero": [
@@ -49,6 +49,23 @@ export const MEDIA_MANIFEST = {
       ],
       "other": [],
       "categorizedSpaces": [
+        {
+          "id": "views-exteriors",
+          "title": "Views & Exteriors",
+          "category": "Views & Exteriors",
+          "amenities": [
+            "Exterior views",
+            "Property facade",
+            "Scenic views",
+            "Approach"
+          ],
+          "images": [
+            "/Villa_Retreats/Diamond/Hero/Hero 1.webp",
+            "/Villa_Retreats/Diamond/Hero/Hero 2.webp",
+            "/Villa_Retreats/Diamond/Hero/Hero 3.webp",
+            "/Villa_Retreats/Diamond/Hero/Hero 4.webp"
+          ]
+        },
         {
           "id": "outdoors-lawns",
           "title": "Outdoors & Lawns",
@@ -235,6 +252,20 @@ export const MEDIA_MANIFEST = {
             "Approach"
           ],
           "images": [
+            "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 1.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 2.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 3.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 4.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Blue/Hero/Hero 5.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 1.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 2.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 3.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 4.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 5.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/Hero 6.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Red/Hero/hero.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/Hero_evening_View.webp",
+            "/Villa_Retreats/Dome/Dome Villa_s - Yellow/Hero/hero.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Dome_Side_View.webp",
             "/Villa_Retreats/Dome/Dome Villa_s - Blue/Spaces/Hill_View.webp"
           ]
@@ -428,6 +459,7 @@ export const MEDIA_MANIFEST = {
             "Approach"
           ],
           "images": [
+            "/Villa_Retreats/Emerald/Hero/hero.webp",
             "/Villa_Retreats/Emerald/Spaces/Dinning_Area_View_2.webp",
             "/Villa_Retreats/Emerald/Spaces/Rustic_Glass_House_Villa.webp",
             "/Villa_Retreats/Emerald/Spaces/Villa.webp"
@@ -567,6 +599,20 @@ export const MEDIA_MANIFEST = {
       ],
       "other": [],
       "categorizedSpaces": [
+        {
+          "id": "views-exteriors",
+          "title": "Views & Exteriors",
+          "category": "Views & Exteriors",
+          "amenities": [
+            "Exterior views",
+            "Property facade",
+            "Scenic views",
+            "Approach"
+          ],
+          "images": [
+            "/Villa_Retreats/Haven/Hero/hero.webp"
+          ]
+        },
         {
           "id": "outdoors-lawns",
           "title": "Outdoors & Lawns",
@@ -728,6 +774,8 @@ export const MEDIA_MANIFEST = {
             "Approach"
           ],
           "images": [
+            "/Villa_Retreats/Jade 735/Hero/Hero 1.webp",
+            "/Villa_Retreats/Jade 735/Hero/hero.webp",
             "/Villa_Retreats/Jade 735/Spaces/First_Floor_view.webp"
           ]
         },
@@ -853,6 +901,20 @@ export const MEDIA_MANIFEST = {
       "perfectFor": [],
       "other": [],
       "categorizedSpaces": [
+        {
+          "id": "views-exteriors",
+          "title": "Views & Exteriors",
+          "category": "Views & Exteriors",
+          "amenities": [
+            "Exterior views",
+            "Property facade",
+            "Scenic views",
+            "Approach"
+          ],
+          "images": [
+            "/Villa_Retreats/Lounge Fly/1-Hero/Hero.webp"
+          ]
+        },
         {
           "id": "outdoors-lawns",
           "title": "Outdoors & Lawns",
@@ -1021,6 +1083,12 @@ export const MEDIA_MANIFEST = {
             "Approach"
           ],
           "images": [
+            "/Villa_Retreats/Magnolia/Hero/Hero 1.webp",
+            "/Villa_Retreats/Magnolia/Hero/Hero 2.webp",
+            "/Villa_Retreats/Magnolia/Hero/Hero 3.webp",
+            "/Villa_Retreats/Magnolia/Hero/Hero 4.webp",
+            "/Villa_Retreats/Magnolia/Hero/Hero 5.webp",
+            "/Villa_Retreats/Magnolia/Hero/hero.webp",
             "/Villa_Retreats/Magnolia/Spaces/Villa.webp"
           ]
         },
@@ -1184,6 +1252,14 @@ export const MEDIA_MANIFEST = {
             "Approach"
           ],
           "images": [
+            "/Villa_Retreats/Palatio/1-Hero/Hero 1.webp",
+            "/Villa_Retreats/Palatio/1-Hero/Hero 2.webp",
+            "/Villa_Retreats/Palatio/1-Hero/Hero 3.webp",
+            "/Villa_Retreats/Palatio/1-Hero/Hero 4.webp",
+            "/Villa_Retreats/Palatio/1-Hero/Hero 5.webp",
+            "/Villa_Retreats/Palatio/1-Hero/Hero 6.webp",
+            "/Villa_Retreats/Palatio/1-Hero/Hero 7.webp",
+            "/Villa_Retreats/Palatio/1-Hero/Hero 8.webp",
             "/Villa_Retreats/Palatio/2-Spaces/Villa.webp"
           ]
         },
@@ -1336,6 +1412,7 @@ export const MEDIA_MANIFEST = {
             "Approach"
           ],
           "images": [
+            "/Villa_Retreats/Retreat on the ridge/1-Hero/Hero.webp",
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Hill View.webp",
             "/Villa_Retreats/Retreat on the ridge/2-Spaces/Villa.webp"
           ]
@@ -1462,6 +1539,9 @@ export const MEDIA_MANIFEST = {
             "Approach"
           ],
           "images": [
+            "/Villa_Retreats/Royalty/1-Hero/Hero 1.webp",
+            "/Villa_Retreats/Royalty/1-Hero/Hero 3.webp",
+            "/Villa_Retreats/Royalty/1-Hero/hero 2.webp",
             "/Villa_Retreats/Royalty/2-Spaces/Hill View.webp"
           ]
         },
@@ -1623,6 +1703,21 @@ export const MEDIA_MANIFEST = {
       "other": [],
       "categorizedSpaces": [
         {
+          "id": "views-exteriors",
+          "title": "Views & Exteriors",
+          "category": "Views & Exteriors",
+          "amenities": [
+            "Exterior views",
+            "Property facade",
+            "Scenic views",
+            "Approach"
+          ],
+          "images": [
+            "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 1.webp",
+            "/Villa_Retreats/Tranquil Woods/1-Hero/Hero 2.webp"
+          ]
+        },
+        {
           "id": "outdoors-lawns",
           "title": "Outdoors & Lawns",
           "category": "Outdoors & Lawns",
@@ -1772,6 +1867,27 @@ export const MEDIA_MANIFEST = {
       ],
       "other": [],
       "categorizedSpaces": [
+        {
+          "id": "views-exteriors",
+          "title": "Views & Exteriors",
+          "category": "Views & Exteriors",
+          "amenities": [
+            "Exterior views",
+            "Property facade",
+            "Scenic views",
+            "Approach"
+          ],
+          "images": [
+            "/Villa_Retreats/Wonderland/Hero/Hero 3.webp",
+            "/Villa_Retreats/Wonderland/Hero/Hero 4.webp",
+            "/Villa_Retreats/Wonderland/Hero/Hero 5.webp",
+            "/Villa_Retreats/Wonderland/Hero/Hero 6.webp",
+            "/Villa_Retreats/Wonderland/Hero/Hero 7.webp",
+            "/Villa_Retreats/Wonderland/Hero/Hero_2.webp",
+            "/Villa_Retreats/Wonderland/Hero/Hero__.webp",
+            "/Villa_Retreats/Wonderland/Hero/hero.webp"
+          ]
+        },
         {
           "id": "outdoors-lawns",
           "title": "Outdoors & Lawns",

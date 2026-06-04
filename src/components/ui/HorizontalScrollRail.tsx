@@ -1,8 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { forwardRef, type AriaRole, type ReactNode } from "react";
-import LuxuryPattern from "@/components/LuxuryPattern";
+import { forwardRef, type AriaRole, type ReactNode, useMemo, useRef } from "react";
 import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
 import { JADE_HSCROLL_DATA_ATTR } from "@/lib/horizontalScrollClasses";
 
@@ -12,15 +11,18 @@ export type HorizontalScrollRailProps = {
   children: ReactNode;
   className?: string;
   trackClassName?: string;
-  /** Background color for right-edge fade (match section bg). */
+  /** @deprecated Use section bg #1A1C1E — fade uses global Figma gradient */
   fadeFrom?: string;
   showFade?: boolean;
-  /** ~60px extreme charcoal-glass blur fade + pattern on the right edge (category bars). */
+  /** Wider right-edge fade (category bars); no decorative pattern */
   patternFade?: boolean;
-  /** Mobile: viewport edge-to-edge (same as AmenityHighlightTile row). */
+  /** Mobile: viewport edge-to-edge */
   mobileViewportEdge?: boolean;
-  /** Mobile: 16px scroll padding + trailing spacer on the track. */
+  /** All breakpoints: 100vw bleed (spaces galleries, category nav) */
+  viewportEdgeAll?: boolean;
   mobileTrackGutter?: boolean;
+  /** Open-hand cursor on horizontal scroll track */
+  cursorGrab?: boolean;
   trackRole?: AriaRole;
   trackAriaLabel?: string;
 };
@@ -31,21 +33,86 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
       children,
       className,
       trackClassName,
-      fadeFrom = "#1A1C1E",
       showFade = true,
       patternFade = false,
       mobileViewportEdge = false,
+      viewportEdgeAll = false,
       mobileTrackGutter = false,
+      cursorGrab = false,
       trackRole,
       trackAriaLabel,
     },
     ref,
   ) {
+    const drag = useRef<{
+      active: boolean;
+      pointerId: number | null;
+      startX: number;
+      startScrollLeft: number;
+    }>({ active: false, pointerId: null, startX: 0, startScrollLeft: 0 });
+
+    const dragHandlers = useMemo(() => {
+      if (!cursorGrab) return {};
+
+      return {
+        onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => {
+          // Only enable click-drag scroll for mouse pointers (trackpad wheel already works).
+          if (e.pointerType !== "mouse") return;
+          if (e.button !== 0) return;
+          // Avoid native image/link drag interfering with scroll-drag.
+          e.preventDefault();
+          const el = e.currentTarget;
+          drag.current.active = true;
+          drag.current.pointerId = e.pointerId;
+          drag.current.startX = e.clientX;
+          drag.current.startScrollLeft = el.scrollLeft;
+          el.setPointerCapture(e.pointerId);
+          // Prevent text selection while dragging.
+          document.body.style.userSelect = "none";
+        },
+        onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => {
+          if (!drag.current.active) return;
+          const el = e.currentTarget;
+          const dx = e.clientX - drag.current.startX;
+          el.scrollLeft = drag.current.startScrollLeft - dx;
+        },
+        onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => {
+          if (!drag.current.active) return;
+          drag.current.active = false;
+          drag.current.pointerId = null;
+          try {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+          } catch {
+            // ignore
+          }
+          document.body.style.userSelect = "";
+        },
+        onPointerCancel: (e: React.PointerEvent<HTMLDivElement>) => {
+          if (!drag.current.active) return;
+          drag.current.active = false;
+          drag.current.pointerId = null;
+          try {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+          } catch {
+            // ignore
+          }
+          document.body.style.userSelect = "";
+        },
+        onPointerLeave: (e: React.PointerEvent<HTMLDivElement>) => {
+          if (!drag.current.active) return;
+          drag.current.active = false;
+          drag.current.pointerId = null;
+          document.body.style.userSelect = "";
+        },
+      };
+    }, [cursorGrab]);
+
     return (
       <div
         className={clsx(
           "relative min-w-0 w-full",
-          mobileViewportEdge && vd.hScrollViewportEdge,
+          viewportEdgeAll && "jade-hscroll-viewport--edge-all",
+          mobileViewportEdge && !viewportEdgeAll && vd.hScrollViewportEdge,
           className,
         )}
       >
@@ -57,8 +124,10 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
           className={clsx(
             "jade-hscroll-track flex overflow-x-auto min-w-0 overscroll-x-contain",
             mobileTrackGutter && vd.hScrollTrackMobileGutter,
+            cursorGrab && "cursor-grab active:cursor-grabbing",
             trackClassName,
           )}
+          {...dragHandlers}
         >
           {children}
         </div>
@@ -67,28 +136,9 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
             aria-hidden
             className={clsx(
               "jade-hscroll-fade",
-              patternFade
-                ? "jade-hscroll-fade--grey-white jade-hscroll-fade--pattern"
-                : "backdrop-blur-sm",
+              patternFade && "jade-hscroll-fade--wide",
             )}
-            style={
-              patternFade
-                ? undefined
-                : {
-                    background: `linear-gradient(to left, ${fadeFrom} 0%, ${fadeFrom}e6 40%, transparent 100%)`,
-                  }
-            }
-          >
-            {patternFade ? (
-              <div className="jade-hscroll-fade__pattern" aria-hidden>
-                <LuxuryPattern
-                  patternSize={120}
-                  opacity={1}
-                  className="absolute inset-0 h-full w-[200%] max-w-none"
-                />
-              </div>
-            ) : null}
-          </div>
+          />
         ) : null}
       </div>
     );

@@ -17,6 +17,7 @@ import TrustedBySection from "@/components/TrustedBySection";
 import ExperienceScrollSection from "@/components/ExperienceScrollSection";
 import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import { useAnimation } from "@/context/AnimationContext";
+import { EXPERIENCE_PAGE_PATHS } from "@/lib/enquiryReturnPath";
 
 export default function CorporateRetreatsPage() {
   const { setEnquireOverlayOpen } = useAnimation();
@@ -109,7 +110,9 @@ export default function CorporateRetreatsPage() {
         ]}
         footerText='"Structured spaces and curated experiences brought together under one standard of corporate hospitality."'
         ctaText="SPEAK WITH OUR TEAM"
-        onCtaClick={() => setEnquireOverlayOpen(true)}
+        onCtaClick={() =>
+          setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.corporateRetreats)
+        }
         alternateGold={true}
       />
       {/* SECTION 6: SELECTED VILLAS FOR CORPORET RETREATS */}

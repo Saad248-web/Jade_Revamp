@@ -7,6 +7,7 @@ ALTER TABLE leads
   ADD CONSTRAINT leads_source_check CHECK (
     source IN (
       'general_enquiry',
+      'weekend_getaways_enquiry',
       'wedding_enquiry',
       'rathaa_enquiry'
     )

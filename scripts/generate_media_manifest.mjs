@@ -223,7 +223,7 @@ function metaForCategory(cat) {
   }
 }
 
-function buildCategorizedSpaces(spaceUrls, villaId) {
+function buildCategorizedSpaces(spaceUrls, heroUrls, villaId) {
   const buckets = {};
   for (const url of spaceUrls) {
     const title = filenameTitle(url);
@@ -240,6 +240,16 @@ function buildCategorizedSpaces(spaceUrls, villaId) {
     }
     buckets[cat] = buckets[cat] || [];
     buckets[cat].push(url);
+  }
+
+  // Spaces page "Exterior"/"Views & Exteriors" should include villa Hero images as well.
+  // `media.hero` comes from `/Hero/` and `/1-Hero/` (and similar) folders scanned above.
+  const heroes = uniq(heroUrls || []);
+  if (heroes.length > 0) {
+    buckets["Views & Exteriors"] = uniq([
+      ...heroes,
+      ...(buckets["Views & Exteriors"] || []),
+    ]);
   }
   const order = [
     "Views & Exteriors",
@@ -299,7 +309,7 @@ function buildVillasManifest() {
 
     villas[villaFolder] = {
       ...media,
-      categorizedSpaces: buildCategorizedSpaces(media.spaces, villaId),
+      categorizedSpaces: buildCategorizedSpaces(media.spaces, media.hero, villaId),
     };
   }
   return villas;

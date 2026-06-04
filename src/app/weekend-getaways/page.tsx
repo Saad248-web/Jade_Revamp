@@ -7,6 +7,7 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useAnimation } from "@/context/AnimationContext";
+import { EXPERIENCE_PAGE_PATHS } from "@/lib/enquiryReturnPath";
 import Footer from "@/components/Footer";
 import ExperienceHero from "@/components/ExperienceHero";
 import ExperienceScrollSection from "@/components/ExperienceScrollSection";
@@ -124,7 +125,9 @@ export default function WeekendGetawaysPage() {
         title="Jade Weekends"
         slides={weekendSlides}
         ctaText="BOOK JADE WEEKEND"
-        onCtaClick={() => setEnquireOverlayOpen(true)}
+        onCtaClick={() =>
+          setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.weekendGetaways)
+        }
       />
 
       {/* SECTION 4: CURATED EXPERIENCES */}
@@ -132,8 +135,11 @@ export default function WeekendGetawaysPage() {
         label="CURATED EXPERIENCES"
         title="Enhance Your Stay"
         experiences={weekendExperiences}
+        showCta={false}
         ctaText="VIEW ALL EXPERIENCES"
-        onCtaClick={() => setEnquireOverlayOpen(true)}
+        onCtaClick={() =>
+          setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.weekendGetaways)
+        }
         innerClassName="max-w-6xl mx-auto px-4 sm:px-6 md:px-8"
         ctaContainerClassName="w-full max-w-xl mx-auto"
       />
@@ -181,7 +187,9 @@ function WhyChooseJadeSection() {
       ]}
       footerText="Private Villas and curated experiences designed to make every weekend feel like an escape."
       ctaText="PLAN YOUR WEEKEND ESCAPE"
-      onCtaClick={() => setEnquireOverlayOpen(true)}
+      onCtaClick={() =>
+        setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.weekendGetaways)
+      }
       alternateGold={true}
     />
   );

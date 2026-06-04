@@ -116,13 +116,20 @@ Booking UI uses `/book` and `ReservationOverlay` on the villas carousel — not 
 ```bash
 npm install
 npm run db:up          # Postgres; first start applies schema.sql via compose mount
+npm run db:migrate     # Phase 2: idempotent migrations on existing DB
 npm run dev            # http://localhost:3000
+```
+
+**Phase 2 (live leads + careers):** set `NEXT_PUBLIC_ENQUIRY_DEMO_MODE=false` and `NEXT_PUBLIC_CAREERS_DEMO_MODE=false` in `.env.local`, restart dev, then:
+
+```bash
+npm run api:smoke      # Expect 201 from /api/leads and /api/careers/apply
 ```
 
 Verify local setup:
 
 ```bash
-npm run setup:check    # Node, deps, .env.local, DB port
+npm run setup:check    # Node, deps, .env.local, DB port, demo flags
 npm run setup:guide    # Opens docs/local-dev-setup-guide.html
 ```
 
@@ -152,6 +159,8 @@ Full template: [`.env.example`](.env.example).
 | `NEXT_PUBLIC_SENTRY_DSN` | Optional | Sentry client + server |
 | `INDEXNOW_KEY` / `INDEXNOW_HOST` / `INDEXNOW_API_SECRET` | IndexNow | Production Bearer on `POST /api/indexnow` |
 | `NEXT_PUBLIC_API_BASE_URL` | Future | Reserved in `lib/api.ts` for external API switch |
+| `NEXT_PUBLIC_ENQUIRY_DEMO_MODE` | Phase 2 | `false` = Enquire + Footer POST `/api/leads` |
+| `NEXT_PUBLIC_CAREERS_DEMO_MODE` | Phase 2 | `false` = Careers Apply POST `/api/careers/apply` |
 
 ---
 
@@ -166,7 +175,9 @@ Full template: [`.env.example`](.env.example).
 | `test:e2e` | Playwright vs dev server |
 | `test:e2e:ci` | `build` + production server + Playwright (`CI=true`) |
 | `db:up` / `db:down` / `db:reset` | Docker Compose PostgreSQL |
+| `db:migrate` | Apply SQL migrations (weekend source, careers indexing, etc.) |
 | `db:reset:schema` | `scripts/reset-local-db.mjs` |
+| `api:smoke` | Phase 2 smoke: POST leads + careers apply (dev server running) |
 | `setup:check` / `setup:guide` | Local environment verification |
 | `optimize-images` / `optimize-images:dry-run` | `scripts/optimize_public_images.mjs` |
 | `generate-favicons` | `scripts/generate_favicons.mjs` |
@@ -180,7 +191,7 @@ Full template: [`.env.example`](.env.example).
 | `/` | Landing (splash + scroll sections) |
 | `/villas`, `/villas/[id]`, `/villas/[id]/spaces` | Directory, detail, gallery |
 | `/weddings`, `/corporate-retreats`, `/weekend-getaways`, `/party-villas` | Experience category + venue overlays |
-| `/experiences`, `/experiences/another-experience-1` | Experiences hub + scroll demo page |
+| `/experiences` | Experiences hub |
 | `/caravans` | Caravan experience + Rathaa CTA |
 | `/blogs`, `/blogs/[slug]` | Editorial |
 | `/book`, `/book/success` | Booking + payment |

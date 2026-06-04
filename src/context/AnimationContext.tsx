@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
+import { getExperienceEnquiryReturnPath } from "@/lib/enquiryReturnPath";
 
 interface AnimationContextType {
   isSplashComplete: boolean;
@@ -16,7 +17,9 @@ interface AnimationContextType {
   isRathaaOverlayOpen: boolean;
   setRathaaOverlayOpen: (value: boolean) => void;
   isEnquireOverlayOpen: boolean;
-  setEnquireOverlayOpen: (value: boolean) => void;
+  /** Pass experience page path when opening from a CTA (e.g. `/weekend-getaways`). */
+  setEnquireOverlayOpen: (open: boolean, returnPath?: string) => void;
+  enquireReturnPath: string | null;
 }
 
 const AnimationContext = createContext<AnimationContextType | undefined>(
@@ -34,7 +37,29 @@ export const AnimationProvider = ({
   const [isGlobalBookingOpen, setGlobalBookingOpen] = useState(false);
   const [villaBookingId, setVillaBookingId] = useState<string | null>(null);
   const [isRathaaOverlayOpen, setRathaaOverlayOpen] = useState(false);
-  const [isEnquireOverlayOpen, setEnquireOverlayOpen] = useState(false);
+  const [isEnquireOverlayOpen, setIsEnquireOverlayOpen] = useState(false);
+  const [enquireReturnPath, setEnquireReturnPath] = useState<string | null>(
+    null,
+  );
+
+  const setEnquireOverlayOpen = (open: boolean, returnPath?: string) => {
+    if (!open) {
+      setIsEnquireOverlayOpen(false);
+      setEnquireReturnPath(null);
+      return;
+    }
+
+    const captured =
+      returnPath ??
+      (typeof window !== "undefined"
+        ? getExperienceEnquiryReturnPath(
+            window.location.pathname,
+            window.location.search,
+          )
+        : null);
+    setEnquireReturnPath(captured);
+    setIsEnquireOverlayOpen(true);
+  };
 
   return (
     <AnimationContext.Provider
@@ -53,6 +78,7 @@ export const AnimationProvider = ({
         setRathaaOverlayOpen,
         isEnquireOverlayOpen,
         setEnquireOverlayOpen,
+        enquireReturnPath,
       }}
     >
       {children}

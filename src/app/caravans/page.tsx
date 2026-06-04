@@ -15,6 +15,7 @@ import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import TravelGuidelinesSection from "@/components/TravelGuidelinesSection";
 import { Info, Calendar } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
+import { EXPERIENCE_PAGE_PATHS } from "@/lib/enquiryReturnPath";
 import { useEffect, useMemo, useState } from "react";
 
 const DEFAULT_SLIDES = [
@@ -165,7 +166,9 @@ export default function CaravansPage() {
         label="CURATED EXPERIENCES"
         title="Enhance Your Stay"
         ctaText="ENQUIRE"
-        onCtaClick={() => setEnquireOverlayOpen(true)}
+        onCtaClick={() =>
+          setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.caravans)
+        }
         experiences={caravanSlides.slice(0, 6).map((s) => ({
           title: s.title,
           image: s.image,

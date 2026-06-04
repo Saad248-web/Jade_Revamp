@@ -18,6 +18,8 @@
     "db:down": "docker compose -f docker-compose.db.yml down",
     "db:reset": "docker compose -f docker-compose.db.yml down -v && docker compose -f docker-compose.db.yml up -d",
     "db:reset:schema": "node scripts/reset-local-db.mjs",
+    "db:migrate": "node scripts/run-db-migrations.mjs",
+    "api:smoke": "node scripts/smoke-api-live.mjs",
     "setup:check": "node scripts/verify-local-setup.mjs",
     "setup:guide": "node scripts/open-setup-guide.mjs"
   },

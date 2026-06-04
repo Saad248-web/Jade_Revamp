@@ -79,7 +79,12 @@ CREATE INDEX IF NOT EXISTS idx_partner_lead_photos_lead
 CREATE TABLE IF NOT EXISTS leads (
   id         UUID          DEFAULT gen_random_uuid() PRIMARY KEY,
   source     TEXT          NOT NULL
-               CHECK (source IN ('general_enquiry', 'wedding_enquiry', 'rathaa_enquiry')),
+               CHECK (source IN (
+                 'general_enquiry',
+                 'weekend_getaways_enquiry',
+                 'wedding_enquiry',
+                 'rathaa_enquiry'
+               )),
   payload    JSONB         NOT NULL,
   email      TEXT,
   created_at TIMESTAMPTZ   NOT NULL DEFAULT NOW()
@@ -94,13 +99,17 @@ CREATE INDEX IF NOT EXISTS idx_leads_source
 CREATE TABLE IF NOT EXISTS career_applications (
   id              UUID          DEFAULT gen_random_uuid() PRIMARY KEY,
   job_id          TEXT          NOT NULL,
+  job_title       TEXT          NOT NULL DEFAULT '',
+  source_page     TEXT          NOT NULL DEFAULT '/careers',
+  apply_context   TEXT          NOT NULL DEFAULT '',
+  client_path     TEXT          NOT NULL DEFAULT '',
   full_name       TEXT          NOT NULL,
   email           TEXT          NOT NULL,
   phone           TEXT          NOT NULL DEFAULT '',
   company         TEXT          NOT NULL DEFAULT '',
-  resume_filename TEXT,
-  resume_mime     TEXT,
-  resume_bytes    BYTEA,
+  resume_filename TEXT          NOT NULL,
+  resume_mime     TEXT          NOT NULL,
+  resume_bytes    BYTEA         NOT NULL,
   created_at      TIMESTAMPTZ   NOT NULL DEFAULT NOW()
 );
 
@@ -109,3 +118,12 @@ CREATE INDEX IF NOT EXISTS idx_career_applications_created_at
 
 CREATE INDEX IF NOT EXISTS idx_career_applications_job_id
   ON career_applications (job_id);
+
+CREATE INDEX IF NOT EXISTS idx_career_applications_apply_context
+  ON career_applications (apply_context);
+
+CREATE INDEX IF NOT EXISTS idx_career_applications_source_page
+  ON career_applications (source_page);
+
+CREATE INDEX IF NOT EXISTS idx_career_applications_job_role_created
+  ON career_applications (job_id, created_at DESC);

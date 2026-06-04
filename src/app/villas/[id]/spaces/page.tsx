@@ -2,11 +2,15 @@
 
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, Headset } from "lucide-react";
 import CallToEnquireLink from "@/components/ui/CallToEnquireLink";
 import ScrollHideTopChrome from "@/components/ui/ScrollHideTopChrome";
 import { useBatchedScrollHide } from "@/lib/useBatchedScrollHide";
-import { VILLA_SPACES_HEADER_HEIGHT_PX } from "@/lib/scrollChromeLayout";
+import {
+  VILLA_ACTION_CHROME_PAD_TOP_CLASS,
+  VILLA_DETAIL_ACTION_STICKY_TOP_VISIBLE_CLASS,
+} from "@/lib/scrollChromeLayout";
 import { useEffect, useMemo, useState } from "react";
 import { VILLAS } from "@/lib/mockData";
 import { Villa, VillaSpaceGroup } from "@/lib/types";
@@ -20,16 +24,18 @@ import {
   isDomeEstateId,
 } from "@/lib/domeVillaIds";
 import CategoryTabRail from "@/components/ui/CategoryTabRail";
-import HorizontalScrollRail from "@/components/ui/HorizontalScrollRail";
 import { stickyCategoryTabClass } from "@/lib/stickyTabGlass";
 import { VILLA_DETAIL_STICKY_TABS_CHROME_CLASS } from "@/lib/scrollChromeGlass";
-import MeanderStrip from "@/components/ui/MeanderStrip";
 import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
+import SpacesImageSection from "@/components/villa/SpacesImageSection";
 import clsx from "clsx";
 import { villaDetailPath } from "@/lib/appRoutes";
 import { useSafeBack } from "@/lib/safeBackNavigation";
 
 const vd = VILLA_DETAIL_SPACING;
+
+const HEADER_ACTION_CLASS =
+  "flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all shrink-0";
 
 export default function VillaSpacesPage() {
   const params = useParams();
@@ -48,7 +54,6 @@ export default function VillaSpacesPage() {
     VillaSpaceGroup[] | null
   >(null);
 
-  // Load full media-derived categorized spaces (uses all images in public folder)
   useEffect(() => {
     let cancelled = false;
     async function load() {
@@ -74,9 +79,7 @@ export default function VillaSpacesPage() {
     const cats = Array.from(
       new Set(base.map((s: VillaSpaceGroup) => s.category)),
     ).filter((c) => typeof c === "string" && c.length > 0) as string[];
-    // Dome Villas: no "All" — only the three dome color tabs plus Video.
     if (isDomeEstate) return [...cats, "Video"];
-    // Prefer predictable ordering: show "All", then category groups, then Video
     return ["All", ...cats, "Video"];
   }, [overrideSpaces, villa?.categorizedSpaces, isDomeEstate]);
 
@@ -84,7 +87,7 @@ export default function VillaSpacesPage() {
     const base = overrideSpaces || villa?.categorizedSpaces;
     if (!base) return [];
     if (activeCategory === "All") return base;
-    if (activeCategory === "Video") return []; // Special case
+    if (activeCategory === "Video") return [];
     return base.filter((s: VillaSpaceGroup) => s.category === activeCategory);
   }, [villa, activeCategory, overrideSpaces]);
 
@@ -99,80 +102,96 @@ export default function VillaSpacesPage() {
   }
 
   return (
-    <main className="bg-[#1A1C1E] min-h-screen">
+    <main
+      className={clsx(
+        "bg-[#1A1C1E] min-h-screen",
+        chromeHidden ? "pt-0" : VILLA_ACTION_CHROME_PAD_TOP_CLASS,
+      )}
+    >
       <ScrollHideTopChrome zIndex="z-50">
-        <header className="w-full px-6 py-4 flex items-center justify-between border-b border-white/5">
+        <header
+          className={clsx(
+            "w-full pt-4 pb-4 sm:pt-6 flex items-center justify-between border-b border-white/5",
+            vd.gutterX,
+          )}
+        >
           <div className="flex items-center gap-4 min-w-0">
             <button
               type="button"
               onClick={goBack}
-              className="p-2 text-white/60 hover:text-white transition-colors shrink-0"
+              className="w-11 h-11 md:w-12 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all shrink-0"
               aria-label="Go back"
             >
-              <ArrowLeft className="w-6 h-6" />
+              <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
             </button>
             <h1 className="text-white font-philosopher text-xl md:text-2xl capitalize truncate">
               {villa.name}
             </h1>
           </div>
-          <CallToEnquireLink
-            ariaLabel="Call support"
-            className="w-10 h-10 shrink-0 rounded-full border border-white/10 flex items-center justify-center text-white/60 hover:text-white transition-all bg-white/5"
-          />
+          <div className="flex items-center gap-2 md:gap-3 shrink-0">
+            <CallToEnquireLink
+              ariaLabel="Call to enquire"
+              className={clsx(
+                HEADER_ACTION_CLASS,
+                "lg:hidden w-11 h-11 md:w-12 md:h-12",
+              )}
+            />
+            <Link
+              href="/contact"
+              className={clsx(
+                HEADER_ACTION_CLASS,
+                "hidden lg:flex w-12 h-12",
+              )}
+              aria-label="Contact us"
+              title="Contact"
+            >
+              <Headset className="w-5 h-5" strokeWidth={1.5} />
+            </Link>
+          </div>
         </header>
       </ScrollHideTopChrome>
-      <div
-        className="shrink-0 overflow-hidden"
-        style={{ height: chromeHidden ? 0 : VILLA_SPACES_HEADER_HEIGHT_PX }}
-        aria-hidden
-      />
 
-      {/* Meander scrolls away; category bar sticks — top-0 when action header hidden (villa detail pattern) */}
-      <MeanderStrip layout="pageGutter" track="charcoal" />
       <nav
         className={clsx(
-          "jade-hscroll-chrome sticky z-40 min-w-0 w-full",
-          chromeHidden ? "top-0" : "top-[76px]",
-          vd.hScrollViewportEdge,
+          "jade-hscroll-chrome sticky z-40 min-w-0 w-full bg-[#1A1C1E]",
+          chromeHidden ? "top-0" : VILLA_DETAIL_ACTION_STICKY_TOP_VISIBLE_CLASS,
         )}
       >
-        <div className={vd.stickyChromeShell}>
-          <div className={VILLA_DETAIL_STICKY_TABS_CHROME_CLASS}>
-            <CategoryTabRail
-          fadeFrom="#1A1C1E"
-          patternFade
-          mobileTrackGutter
-          trackAriaLabel="Space categories"
-          trackClassName="gap-2 sm:gap-3 md:gap-4"
-        >
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              data-tab-key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={clsx(
-                stickyCategoryTabClass(activeCategory === cat),
-                "flex-shrink-0",
-              )}
-            >
-              {cat}
-            </button>
-          ))}
-            </CategoryTabRail>
-          </div>
+        <div className={clsx("w-full", VILLA_DETAIL_STICKY_TABS_CHROME_CLASS)}>
+          <CategoryTabRail
+            viewportEdgeAll
+            fadeFrom="#1A1C1E"
+            patternFade
+            cursorGrab
+            trackPreset="spaces"
+            trackAriaLabel="Space categories"
+          >
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                data-tab-key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={clsx(
+                  stickyCategoryTabClass(activeCategory === cat),
+                  "flex-shrink-0",
+                )}
+              >
+                {cat}
+              </button>
+            ))}
+          </CategoryTabRail>
         </div>
       </nav>
 
-      {/* SPACES CONTENT */}
-      <div
-        className={clsx(
-          "px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col gap-8",
-          vd.sectionY,
-        )}
-      >
+      <div className={clsx("flex flex-col gap-8", vd.sectionY)}>
         {activeCategory === "Video" ? (
-          <section className="flex flex-col gap-8">
+          <section
+            className={clsx(
+              "flex flex-col gap-8 max-w-7xl mx-auto w-full",
+              vd.gutterX,
+            )}
+          >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <h2 className="text-white font-philosopher text-3xl md:text-4xl">
                 Video Walkthrough
@@ -280,56 +299,15 @@ export default function VillaSpacesPage() {
           </section>
         ) : filteredSpaces.length > 0 ? (
           filteredSpaces.map((space: VillaSpaceGroup) => (
-            <section key={space.id} className="flex flex-col gap-6">
-              <div>
-                <h2 className="text-white font-philosopher text-3xl md:text-4xl mb-2">
-                  {space.title}
-                </h2>
-                <div className="text-white/40 text-[11px] md:text-[13px] font-manrope font-medium flex flex-wrap gap-x-2">
-                  {space.amenities.map((amenity: string, idx: number) => (
-                    <span key={idx} className="flex items-center gap-2">
-                      {amenity}
-                      {idx < space.amenities.length - 1 && <span>·</span>}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <HorizontalScrollRail
-                showFade={false}
-                mobileViewportEdge
-                mobileTrackGutter
-                trackClassName="gap-4 pb-4 scrollbar-none snap-x md:scroll-pr-8"
-              >
-                {(space.images.length > 0 ? space.images : ["", ""]).map(
-                  (img: string, idx: number) => (
-                    <div
-                      key={idx}
-                      className="relative min-w-[300px] md:min-w-[500px] flex-shrink-0 aspect-[4/3] md:aspect-[16/9] bg-white/5 snap-start overflow-hidden group jade-hscroll-view-item"
-                    >
-                      {img && img.length > 0 && (
-                        <Image
-                          src={img}
-                          alt={`${space.title} ${idx + 1}`}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-700"
-                          sizes="(max-width: 768px) 100vw, 500px"
-                          loading="lazy"
-                        />
-                      )}
-                      {!img && (
-                        <div className="w-full h-full flex items-center justify-center text-white/10 uppercase tracking-widest text-xs font-bold">
-                          {space.title} Image Coming Soon
-                        </div>
-                      )}
-                    </div>
-                  ),
-                )}
-              </HorizontalScrollRail>
-            </section>
+            <SpacesImageSection key={space.id} space={space} />
           ))
         ) : (
-          <div className="h-64 border border-white/10 flex items-center justify-center text-white/40 italic">
+          <div
+            className={clsx(
+              "h-64 border border-white/10 flex items-center justify-center text-white/40 italic max-w-7xl mx-auto",
+              vd.gutterX,
+            )}
+          >
             No spaces found for this category.
           </div>
         )}
@@ -337,3 +315,4 @@ export default function VillaSpacesPage() {
     </main>
   );
 }
+

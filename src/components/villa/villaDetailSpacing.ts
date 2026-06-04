@@ -9,6 +9,12 @@
 
 export const VILLA_DETAIL_SPACING = {
   gutterX: "px-4 sm:px-6 lg:px-8",
+  /**
+   * Edge-bleed horizontal scroll tracks — left inset matches gutterX (pl + scroll-pl).
+   * Use on Spaces category nav + image rails; do not combine with hScrollTrackMobileGutter.
+   */
+  hScrollTrackInset:
+    "pl-4 sm:pl-6 lg:pl-8 scroll-pl-4 sm:scroll-pl-6 lg:scroll-pl-8 scroll-pr-0",
   /** Symmetric block padding — see --villa-section-pad-block in globals.css */
   sectionY: "villa-section-pad-block",
   page: "max-w-7xl mx-auto w-full",

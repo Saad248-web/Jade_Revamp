@@ -43,6 +43,17 @@ import {
   Download,
 } from "lucide-react";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
+import {
+  validateEmail,
+  validateFullName,
+  validatePhone,
+} from "@/lib/leadFormValidation";
+import { getFieldShellClass } from "@/lib/jadeFormTokens";
+import {
+  JadeFloatingField,
+  JadeFloatingSelect,
+} from "@/components/ui/form";
+import JadeFormFieldError from "@/components/ui/form/JadeFormFieldError";
 
 // Icon mapping helper matching villa detail page
 const getIcon = (iconName?: string, title?: string) => {
@@ -192,6 +203,10 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
   const [partyDate, setPartyDate] = useState("");
   const [partyType, setPartyType] = useState("Birthday Party");
   const [partyFormError, setPartyFormError] = useState<string | null>(null);
+  const [partyAttempted, setPartyAttempted] = useState(false);
+  const [partyFieldErrors, setPartyFieldErrors] = useState<
+    Record<string, string | undefined>
+  >({});
 
   useEffect(() => {
     setMounted(true);
@@ -474,29 +489,19 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                           className="space-y-5"
                           onSubmit={(e) => {
                             e.preventDefault();
-                            if (!partyFullName.trim()) {
-                              setPartyFormError("Please enter your full name.");
-                              return;
-                            }
-                            if (!/^[\d\s+()-]{10,}/.test(partyPhone.trim())) {
-                              setPartyFormError(
-                                "Please enter a valid phone number (at least 10 digits).",
-                              );
-                              return;
-                            }
-                            if (
-                              partyEmail.trim() &&
-                              !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                                partyEmail.trim(),
-                              )
-                            ) {
-                              setPartyFormError("Please enter a valid email.");
-                              return;
-                            }
-                            if (!partyDate) {
-                              setPartyFormError("Please choose an event date.");
-                              return;
-                            }
+                            setPartyAttempted(true);
+                            const errs: Record<string, string | undefined> = {
+                              fullName: validateFullName(partyFullName),
+                              phone: validatePhone(partyPhone),
+                              email: partyEmail.trim()
+                                ? validateEmail(partyEmail)
+                                : undefined,
+                              eventDate: !partyDate
+                                ? "Please choose an event date."
+                                : undefined,
+                            };
+                            setPartyFieldErrors(errs);
+                            if (Object.values(errs).some(Boolean)) return;
                             setPartyFormError(null);
                             setView("success");
                           }}
@@ -510,87 +515,100 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                               {partyFormError}
                             </p>
                           ) : null}
-                          <div className="relative">
-                            <label
-                              className={`absolute -top-2.5 left-4 ${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS} px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10`}
-                            >
-                              Full Name *
-                            </label>
-                            <input
-                              type="text"
-                              value={partyFullName}
-                              onChange={(e) => setPartyFullName(e.target.value)}
-                              className="w-full bg-transparent border border-white/20 rounded-sm px-6 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors"
-                              placeholder="Enter your name"
-                            />
-                          </div>
-
+                          <JadeFloatingField
+                            id="party-fullName"
+                            label="Full Name"
+                            value={partyFullName}
+                            onChange={setPartyFullName}
+                            theme="experienceCharcoal"
+                            invalid={Boolean(partyFieldErrors.fullName)}
+                            showError={
+                              partyAttempted && Boolean(partyFieldErrors.fullName)
+                            }
+                            errorMessage={partyFieldErrors.fullName}
+                          />
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div className="relative">
-                              <label
-                                className={`absolute -top-2.5 left-4 ${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS} px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10`}
-                              >
-                                Phone *
-                              </label>
-                              <input
-                                type="tel"
-                                inputMode="numeric"
-                                value={partyPhone}
-                                onChange={(e) =>
-                                  setPartyPhone(
-                                    sanitizePhoneDigitsInput(e.target.value),
-                                  )
-                                }
-                                className="w-full bg-transparent border border-white/20 rounded-sm px-6 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors"
-                                placeholder="91XXXXXXXXXX"
-                                autoComplete="tel"
-                              />
-                            </div>
-                            <div className="relative">
-                              <label
-                                htmlFor="party-event-date"
-                                className={`absolute -top-2.5 left-4 ${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS} px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10`}
-                              >
-                                Event date *
-                              </label>
+                            <JadeFloatingField
+                              id="party-phone"
+                              label="Phone"
+                              type="tel"
+                              inputMode="numeric"
+                              autoComplete="tel"
+                              value={partyPhone}
+                              onChange={(v) =>
+                                setPartyPhone(sanitizePhoneDigitsInput(v))
+                              }
+                              theme="experienceCharcoal"
+                              invalid={Boolean(partyFieldErrors.phone)}
+                              showError={
+                                partyAttempted && Boolean(partyFieldErrors.phone)
+                              }
+                              errorMessage={partyFieldErrors.phone}
+                            />
+                            <div
+                              className={getFieldShellClass({
+                                invalid: Boolean(partyFieldErrors.eventDate),
+                                showError:
+                                  partyAttempted &&
+                                  Boolean(partyFieldErrors.eventDate),
+                                variant: "standard",
+                              })}
+                            >
                               <input
                                 id="party-event-date"
                                 type="date"
                                 value={partyDate}
                                 min={new Date().toISOString().slice(0, 10)}
                                 onChange={(e) => setPartyDate(e.target.value)}
-                                className="w-full bg-transparent border border-white/20 rounded-sm px-6 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors [color-scheme:dark]"
+                                className="w-full bg-transparent px-4 py-3.5 text-white text-gh-body focus:outline-none [color-scheme:dark] font-manrope rounded-sm"
                               />
+                              <label
+                                htmlFor="party-event-date"
+                                className="absolute -top-3 left-4 bg-jade-charcoal px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope pointer-events-none"
+                              >
+                                Event date
+                                {partyAttempted && partyFieldErrors.eventDate ? (
+                                  <span className="ml-1 text-[#D32C55]">*</span>
+                                ) : null}
+                              </label>
                             </div>
                           </div>
-
-                          <input
+                          {partyAttempted && partyFieldErrors.eventDate ? (
+                            <JadeFormFieldError
+                              id="party-date-err"
+                              message={partyFieldErrors.eventDate}
+                            />
+                          ) : null}
+                          <JadeFloatingField
+                            id="party-email"
+                            label="Email (optional)"
                             type="email"
-                            value={partyEmail}
-                            onChange={(e) => setPartyEmail(e.target.value)}
-                            placeholder="Email (optional)"
-                            className="w-full bg-white/5 border border-white/10 rounded-sm px-6 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors placeholder:text-white/35"
+                            required={false}
                             autoComplete="email"
+                            value={partyEmail}
+                            onChange={setPartyEmail}
+                            theme="experienceCharcoal"
+                            invalid={Boolean(partyFieldErrors.email)}
+                            showError={
+                              partyAttempted && Boolean(partyFieldErrors.email)
+                            }
+                            errorMessage={partyFieldErrors.email}
                           />
-
-                          <div className="relative">
-                            <label
-                              className={`absolute -top-2.5 left-4 ${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS} px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10`}
-                            >
-                              Celebration Type
-                            </label>
-                            <select
-                              value={partyType}
-                              onChange={(e) => setPartyType(e.target.value)}
-                              className={`w-full ${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS} border border-white/20 rounded-sm px-6 py-4 text-white text-gh-body focus:border-[#EFCD62] outline-none transition-colors appearance-none`}
-                            >
-                              <option>Birthday Party</option>
-                              <option>Anniversary</option>
-                              <option>Pool Party</option>
-                              <option>Get-together</option>
-                              <option>Other</option>
-                            </select>
-                          </div>
+                          <JadeFloatingSelect
+                            id="party-type"
+                            label="Celebration Type"
+                            value={partyType}
+                            onChange={setPartyType}
+                            options={[
+                              "Birthday Party",
+                              "Anniversary",
+                              "Pool Party",
+                              "Get-together",
+                              "Other",
+                            ]}
+                            theme="experienceCharcoal"
+                            required={false}
+                          />
 
                           <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
                             By proceeding, you agree to our{" "}

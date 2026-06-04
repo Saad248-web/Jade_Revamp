@@ -3,9 +3,8 @@
 import { useEffect } from "react";
 import { HORIZONTAL_SCROLL_RAIL_SELECTOR } from "@/lib/hscrollLenisRouting";
 
-/** Own scroll roots (SDA demo) — full Lenis prevent. */
-const FULL_LENIS_PREVENT_SELECTOR =
-  "#experience-sda-scroller, [data-page-scroll-root]";
+/** Own scroll roots — full Lenis prevent. */
+const FULL_LENIS_PREVENT_SELECTOR = "[data-page-scroll-root]";
 
 function clearLenisBlocksOnHorizontalRail(el: HTMLElement) {
   el.removeAttribute("data-lenis-prevent");

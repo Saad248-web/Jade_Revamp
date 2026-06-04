@@ -17,7 +17,12 @@ import { VILLAS } from "@/lib/mockData";
 import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
 import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
-import { MenuVillasExperiencesSwitcher } from "@/components/menu/MenuPanelTabs";
+import { MenuDesktopCarouselSection } from "@/components/menu/MenuDesktopCarouselSection";
+import { MenuMobileImageRail } from "@/components/menu/MenuMobileImageRail";
+import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
+import { GLOBAL_NAVBAR_OFFSET_TOP_CLASS } from "@/lib/scrollChromeLayout";
+
+const vd = VILLA_DETAIL_SPACING;
 
 /** VILLAS hidden from menu villa section only (still bookable via direct URL). */
 const MENU_VILLA_EXCLUDED_IDS = new Set(["vannani", "lemon-tree"]);
@@ -34,7 +39,7 @@ type MenuExperienceItem = {
   type: string;
   href: string;
   desc?: string;
-  images: [string, string];
+  images: string[];
 };
 
 /** Aligned with ExperiencesScrollSection / HorizontalScrollSection canonical routes. */
@@ -47,6 +52,12 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
     images: [
       "/Experiences/Weekend Getaways/1-Hero/casual stays.webp",
       "/Experiences/Weekend Getaways/2-What Weekends Look like/Poolside Mornings.webp",
+      "/Experiences/Weekend Getaways/2-What Weekends Look like/Outdoor dining.webp",
+      "/Experiences/Weekend Getaways/2-What Weekends Look like/Evenings Under the Stars.webp",
+      "/Experiences/Weekend Getaways/2-What Weekends Look like/Nature & Nearby Escapes.webp",
+      "/Experiences/Weekend Getaways/3-Addons/Bonfire Nights.webp",
+      "/Experiences/Weekend Getaways/3-Addons/Candlelight Dinner.webp",
+      "/Experiences/Weekend Getaways/3-Addons/Live Music _ DJ.webp",
     ],
   },
   {
@@ -56,7 +67,13 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
     desc: "Birthdays, pool parties and bachelor celebrations unfold across private farmhouse villas with pools, open lawns, and entertainment-ready spaces.",
     images: [
       "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
+      "/Experiences/Party Villas/2-Party Type/Pool Parties.webp",
+      "/Experiences/Party Villas/2-Party Type/Birthdays & Anniversaries.webp",
+      "/Experiences/Party Villas/2-Party Type/Bachelor_Bachelorette Parties.webp",
+      "/Experiences/Party Villas/3-Addons/DJ & Music Setup.webp",
+      "/Experiences/Party Villas/3-Addons/Bonfire Nights.webp",
       "/Experiences/Party Villas/3-Addons/Movie Under The Stars-2.webp",
+      "/Experiences/Party Villas/3-Addons/Themed Decor and Styling.webp",
     ],
   },
   {
@@ -66,7 +83,13 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
     desc: "Intimate ceremonies to grand, multi-day wedding celebrations, set amid private gardens, sprawling lawns, and luxury rooms.",
     images: [
       "/Experiences/Weddings/1-Hero/2 (1).webp",
+      "/Experiences/Weddings/1-Hero/3.webp",
       "/Experiences/Weddings/2-Venue Images/DIAMOND/10.webp",
+      "/Experiences/Weddings/2-Venue Images/DIAMOND/12.webp",
+      "/Experiences/Weddings/2-Venue Images/MAGNOLIA/10.webp",
+      "/Experiences/Weddings/2-Venue Images/MAGNOLIA/17.webp",
+      "/Experiences/Weddings/2-Venue Images/HAVEN/10.webp",
+      "/Experiences/Weddings/5-Pre Wedding/Haldi.webp",
     ],
   },
   {
@@ -77,6 +100,8 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
     images: [
       "/Experiences/Corporate Retreats/1-Hero/xhero.webp",
       "/Experiences/Corporate Retreats/2-Formats/offsite and work....webp",
+      "/Experiences/Corporate Retreats/2-Formats/corporate team outings.webp",
+      "/Experiences/Corporate Retreats/2-Formats/Conference and....webp",
     ],
   },
   {
@@ -87,6 +112,8 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
     images: [
       "/Home Page/2-Experiences/Wellness.webp",
       "/Experiences/Weekend Getaways/2-What Weekends Look like/Nature & Nearby Escapes.webp",
+      "/Experiences/Weekend Getaways/3-Addons/Private Chef Experience.webp",
+      "/Experiences/Weekend Getaways/3-Addons/Candlelight Dinner.webp",
     ],
   },
   {
@@ -96,7 +123,12 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
     desc: "Luxury motor caravans carry the idea of private retreat onto the road, offering comfort and privacy for glamping, pilgrimages or evolving journeys.",
     images: [
       "/Experiences/Caravan/1-Hero/6.webp",
+      "/Experiences/Caravan/1-Hero/14.webp",
+      "/Experiences/Caravan/1-Hero/28.webp",
       "/Experiences/Caravan/2-Spaces/11.webp",
+      "/Experiences/Caravan/2-Spaces/18.webp",
+      "/Experiences/Caravan/2-Spaces/24.webp",
+      "/Experiences/Caravan/2-Spaces/29.webp",
     ],
   },
   {
@@ -107,6 +139,8 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
     images: [
       "/Villa_Retreats/Magnolia/Hero/hero.webp",
       "/Villa_Retreats/Magnolia/Hero/Hero 1.webp",
+      "/Experiences/Weekend Getaways/1-Hero/casual stays.webp",
+      "/Experiences/Party Villas/1-Hero/Pool Parties.webp",
     ],
   },
 ];
@@ -148,19 +182,13 @@ function getMenuVillaCarouselImages(villa: any) {
   return combined.map(safeMenuImage);
 }
 
-/** < md: full-width phone panels use px-6 */
-// Note: mobile secondary views use `px-6`, and the list wrapper uses a small `pr-1`,
-// so we bleed slightly more on the right to truly hit the edge.
-const MENU_BLEED_X_MOBILE =
-  "-ml-6 -mr-[calc(1.5rem+0.25rem)] w-[calc(100%+3rem+0.25rem)]";
 /** md+ preview column: matches scroll area px-4 / md:px-6 / lg:px-8 */
 // On Windows, the vertical scroll container can reserve a small gutter for the scrollbar,
 // so we bleed a touch more on the right to visually touch the edge.
 const MENU_BLEED_X_DESKTOP =
   "-ml-4 md:-ml-6 lg:-ml-8 -mr-[calc(1rem+0.5rem)] md:-mr-[calc(1.5rem+0.5rem)] lg:-mr-[calc(2rem+0.5rem)] w-[calc(100%+2rem+0.5rem)] md:w-[calc(100%+3rem+0.5rem)] lg:w-[calc(100%+4rem+0.5rem)]";
 
-/** Right-bleed variant (used by the experience image row). */
-const MENU_BLEED_RIGHT_MOBILE = "pr-6";
+/** Right-bleed variant (desktop experience row only). */
 const MENU_BLEED_RIGHT_DESKTOP = "pr-4 md:pr-6 lg:pr-8";
 
 function MenuExperienceImages({
@@ -170,33 +198,44 @@ function MenuExperienceImages({
   exp: MenuExperienceItem;
   variant: "mobile" | "desktop";
 }) {
-  const bleed =
-    variant === "mobile" ? MENU_BLEED_RIGHT_MOBILE : MENU_BLEED_RIGHT_DESKTOP;
-  const height = variant === "mobile" ? "h-28" : "h-[280px]";
-  const gap = variant === "mobile" ? "gap-2" : "gap-3";
-  const imgHover =
-    variant === "desktop"
-      ? "group-hover/img:scale-105 transition-transform duration-700"
-      : "";
+  const imgHover = "group-hover/img:scale-105 transition-transform duration-700";
+
+  if (variant === "mobile") {
+    return (
+      <MenuMobileImageRail>
+        {exp.images.map((src, imgIdx) => (
+          <Link
+            key={`${exp.href}-mobile-${imgIdx}`}
+            href={exp.href}
+            className="relative h-40 w-[min(58vw,220px)] shrink-0 overflow-hidden"
+          >
+            <Image
+              src={safeMenuImage(src)}
+              alt={imgIdx === 0 ? exp.title : `${exp.title} ${imgIdx + 1}`}
+              fill
+              className="object-cover"
+              sizes="280px"
+            />
+          </Link>
+        ))}
+      </MenuMobileImageRail>
+    );
+  }
 
   return (
-    <div className={`flex ${gap} ${bleed}`}>
+    <div className={`flex gap-3 ${MENU_BLEED_RIGHT_DESKTOP}`}>
       {exp.images.map((src, imgIdx) => (
         <Link
           key={`${exp.href}-${imgIdx}`}
           href={exp.href}
-          className={`relative ${height} min-w-0 flex-1 overflow-hidden ${variant === "desktop" ? "cursor-pointer group/img" : ""}`}
+          className="group/img relative h-[280px] min-w-0 flex-1 cursor-pointer overflow-hidden"
         >
           <Image
             src={src}
             alt={imgIdx === 0 ? exp.title : `${exp.title} ${imgIdx + 1}`}
             fill
             className={`object-cover ${imgHover}`}
-            sizes={
-              variant === "mobile"
-                ? "(max-width: 1024px) 50vw, 33vw"
-                : "30vw"
-            }
+            sizes="30vw"
           />
         </Link>
       ))}
@@ -215,11 +254,11 @@ export default function MenuPage() {
   // Local state for Desktop split view hover
   const [desktopHoverView, setDesktopHoverView] = useState<
     "default" | "villas" | "experiences" | "more"
-  >("default");
+  >("villas");
 
   const [desktopSelectedView, setDesktopSelectedView] = useState<
     "default" | "villas" | "experiences" | "more"
-  >("default");
+  >("villas");
 
   const openVillasSection = () => {
     setMenuView("villas");
@@ -233,6 +272,34 @@ export default function MenuPage() {
     setDesktopHoverView("experiences");
   };
 
+  /** Primary menu links — 32px on phone/tablet; fluid h2 at lg+ (desktop split). */
+  const MENU_PRIMARY_OPTION_TYPE =
+    "max-lg:text-[32px] max-lg:leading-[1.1] lg:text-gh-h2 leading-none py-2 font-philosopher font-light";
+
+  const MENU_PRIMARY_STATIC_LINK_CLASS = `${MENU_PRIMARY_OPTION_TYPE} block text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right transition-all duration-500 ease-out hover:bg-left`;
+
+  /** Mobile secondary panels — Figma page title (Villas / Experiences). */
+  const MENU_MOBILE_SECTION_TITLE_CLASS =
+    "mb-6 font-philosopher text-[32px] font-light leading-[1.1] text-white capitalize";
+
+  const menuPanelNavLabelClass = (
+    section: "villas" | "experiences" | "more",
+  ) =>
+    `${MENU_PRIMARY_OPTION_TYPE} bg-[length:200%_100%] bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% text-transparent transition-all duration-500 ease-out ${
+      desktopSelectedView === section
+        ? "bg-left"
+        : "bg-right group-hover:bg-left"
+    }`;
+
+  const menuPanelNavChevronClass = (
+    section: "villas" | "experiences" | "more",
+  ) =>
+    `max-lg:h-5 max-lg:w-5 h-4 w-4 transition-colors ${
+      desktopSelectedView === section
+        ? "text-[#EFCD62]"
+        : "text-white/50 group-hover:text-[#EFCD62]"
+    }`;
+
   return (
     <main className="relative flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden bg-[#1E2023] text-white">
       {/* ── Navigation ── */}
@@ -240,9 +307,11 @@ export default function MenuPage() {
       <MobileBottomNav />
 
       {/* Main content — flex height clears navbar + mobile bottom nav */}
-      <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden pt-[48px] pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))] md:flex-row md:pt-[64px] md:pb-0">
+      <div
+        className={`relative flex min-h-0 w-full flex-1 flex-col overflow-hidden pt-[48px] pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))] md:flex-row md:pb-0 ${GLOBAL_NAVBAR_OFFSET_TOP_CLASS}`}
+      >
         {/* LEFT COLUMN: Main Menu */}
-        <div className="flex-1 min-h-0 md:flex-none md:w-1/3 relative overflow-hidden h-full z-10 border-r border-transparent md:border-white/10">
+        <div className="relative z-10 flex h-full min-h-0 flex-1 flex-col overflow-x-visible overflow-y-hidden border-r border-transparent max-lg:overflow-y-hidden md:w-[28%] md:max-w-[380px] md:flex-none md:overflow-hidden lg:w-1/4 lg:max-w-[400px] md:border-white/10">
           <AnimatePresence mode="wait">
             {/* Primary Menu: Always visible on desktop, or if menuView is primary on mobile */}
             {(menuView === "primary" || true) && (
@@ -251,17 +320,18 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className={`absolute inset-0 flex min-h-0 flex-col px-6 py-4 md:px-12 ${menuView !== "primary" ? "hidden md:flex" : "flex"}`}
+                className={`absolute inset-0 flex min-h-0 flex-col py-5 max-lg:pt-7 ${vd.gutterX} ${menuView !== "primary" ? "hidden md:flex" : "flex"}`}
               >
-                <span className="mb-5 flex-shrink-0 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-white/40">
+                <span className="mb-0 flex-shrink-0 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-white/40 max-lg:mt-1 md:mb-0">
                   MENU
                 </span>
 
                 <div
-                  className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] touch-pan-y"
+                  className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] touch-pan-y md:overflow-visible"
                   data-lenis-prevent
                 >
-                <ul className="flex flex-col space-y-2.5 pb-6 md:space-y-3">
+                <div className="flex min-h-0 flex-1 flex-col justify-start pb-6 md:justify-center md:pb-0">
+                <ul className="flex flex-col space-y-2 max-lg:space-y-3 md:space-y-2">
                   <li
                     className="flex items-center justify-between cursor-pointer group"
                     onClick={openVillasSection}
@@ -271,13 +341,11 @@ export default function MenuPage() {
                     }
                   >
                     <div className="flex items-center gap-3">
-                      <span
-                        className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${ desktopSelectedView === "villas" ? "bg-left text-[#EFCD62]" : "bg-right" }`}
-                      >
+                      <span className={menuPanelNavLabelClass("villas")}>
                         Villas
                       </span>
                       <ChevronRight
-                        className={`w-4 h-4 transition-colors ${ desktopSelectedView === "villas" ? "text-[#EFCD62]" : "text-white/50 group-hover:text-[#EFCD62]" }`}
+                        className={menuPanelNavChevronClass("villas")}
                       />
                     </div>
                   </li>
@@ -290,33 +358,31 @@ export default function MenuPage() {
                     }
                   >
                     <div className="flex items-center gap-3">
-                      <span
-                        className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${ desktopSelectedView === "experiences" ? "bg-left text-[#EFCD62]" : "bg-right" }`}
-                      >
+                      <span className={menuPanelNavLabelClass("experiences")}>
                         Experiences
                       </span>
                       <ChevronRight
-                        className={`w-4 h-4 transition-colors ${ desktopSelectedView === "experiences" ? "text-[#EFCD62]" : "text-white/50 group-hover:text-[#EFCD62]" }`}
+                        className={menuPanelNavChevronClass("experiences")}
                       />
                     </div>
                   </li>
                   <li>
                     <Link href="/about">
-                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className={MENU_PRIMARY_STATIC_LINK_CLASS}>
                         About us
                       </span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/careers">
-                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className={MENU_PRIMARY_STATIC_LINK_CLASS}>
                         Careers
                       </span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/blogs">
-                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className={MENU_PRIMARY_STATIC_LINK_CLASS}>
                         Blogs
                       </span>
                     </Link>
@@ -328,7 +394,7 @@ export default function MenuPage() {
                       }}
                       className="text-left"
                     >
-                      <span className="block text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right hover:bg-left transition-all duration-500 ease-out">
+                      <span className={MENU_PRIMARY_STATIC_LINK_CLASS}>
                         Partner with us
                       </span>
                     </button>
@@ -338,6 +404,7 @@ export default function MenuPage() {
                     onClick={() => {
                       setMenuView("more");
                       setDesktopSelectedView("more");
+                      setDesktopHoverView("more");
                     }}
                     onMouseEnter={() => setDesktopHoverView("more")}
                     onMouseLeave={() =>
@@ -345,19 +412,18 @@ export default function MenuPage() {
                     }
                   >
                     <div className="flex items-center gap-3">
-                      <span
-                        className={`text-gh-h2 lg:text-gh-h2 leading-none py-2 font-philosopher font-light text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] transition-all duration-500 ease-out group-hover:bg-left ${ desktopSelectedView === "more" ? "bg-left text-[#EFCD62]" : "bg-right" }`}
-                      >
+                      <span className={menuPanelNavLabelClass("more")}>
                         More
                       </span>
                       <ChevronRight
-                        className={`w-4 h-4 transition-colors ${ desktopSelectedView === "more" ? "text-[#EFCD62]" : "text-white/50 group-hover:text-[#EFCD62]" }`}
+                        className={menuPanelNavChevronClass("more")}
                       />
                     </div>
                   </li>
                 </ul>
+                </div>
 
-                <div className="mt-auto flex flex-shrink-0 gap-3 pt-6 pb-2">
+                <div className="mt-auto flex flex-shrink-0 gap-3 pt-6 pb-2 md:pt-8">
                   {[
                     {
                       Icon: Facebook,
@@ -400,30 +466,31 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="absolute inset-0 flex min-h-0 flex-col bg-[#1E2023] px-6 py-4 md:hidden"
+                className="absolute inset-0 flex min-h-0 flex-col bg-[#1E2023] pb-4 pt-6 md:hidden"
               >
+                <div className="flex-shrink-0 px-6">
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="mb-4 flex w-fit flex-shrink-0 items-center gap-2 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
+                  className="mb-5 mt-1 flex w-fit items-center gap-2 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
                 >
                   <ArrowLeft className="h-4 w-4" /> BACK
                 </button>
-                <MenuVillasExperiencesSwitcher
-                  active="villas"
-                  onVillas={openVillasSection}
-                  onExperiences={openExperiencesSection}
-                />
+                <h1 className={MENU_MOBILE_SECTION_TITLE_CLASS}>Villas</h1>
+                </div>
                 <div
-                  className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch] touch-pan-y"
+                  className="min-h-0 flex-1 overflow-x-visible overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch] touch-pan-y"
                   data-lenis-prevent
                 >
-                <div className="space-y-6 pr-1">
+                <div className="space-y-6">
                   {MENU_VILLAS.map((villa) => (
-                    <Link
+                    <div
                       key={villa.id}
-                      href={`/villas/${villa.id}`}
-                      className="flex flex-col cursor-pointer group"
+                      className="group flex flex-col"
                     >
+                      <Link
+                        href={`/villas/${villa.id}`}
+                        className="cursor-pointer px-6"
+                      >
                       <p className="text-white/40 text-[10px] font-manrope font-medium tracking-[0.2em] uppercase mb-1">
                         {villa.type}
                       </p>
@@ -436,30 +503,25 @@ export default function MenuPage() {
                         </h3>
                         <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
                       </div>
-                      <div
-                        data-lenis-prevent
-                        data-jade-hscroll
-                        className={`${MENU_BLEED_X_MOBILE} jade-hscroll-track min-w-0 overflow-x-auto hide-scrollbar`}
-                        onTouchStart={(e) => e.stopPropagation()}
-                      >
-                        <div className="flex gap-2 w-max px-6">
-                          {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
-                            <div
-                              key={`${villa.id}-${imgIdx}`}
-                              className="relative h-36 w-[280px] shrink-0 overflow-hidden"
-                            >
-                              <Image
-                                src={src}
-                                alt={`${villa.name} image ${imgIdx + 1}`}
-                                fill
-                                className="object-cover"
-                                sizes="280px"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </Link>
+                      </Link>
+                      <MenuMobileImageRail>
+                        {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
+                          <Link
+                            key={`${villa.id}-${imgIdx}`}
+                            href={`/villas/${villa.id}`}
+                            className="relative h-40 w-[min(58vw,220px)] shrink-0 overflow-hidden"
+                          >
+                            <Image
+                              src={src}
+                              alt={`${villa.name} image ${imgIdx + 1}`}
+                              fill
+                              className="object-cover"
+                              sizes="280px"
+                            />
+                          </Link>
+                        ))}
+                      </MenuMobileImageRail>
+                    </div>
                   ))}
                 </div>
                 </div>
@@ -472,28 +534,26 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="absolute inset-0 flex min-h-0 flex-col bg-[#1E2023] px-6 py-4 md:hidden"
+                className="absolute inset-0 flex min-h-0 flex-col bg-[#1E2023] pb-4 pt-6 md:hidden"
               >
+                <div className="flex-shrink-0 px-6">
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="mb-4 flex w-fit flex-shrink-0 items-center gap-2 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
+                  className="mb-5 mt-1 flex w-fit items-center gap-2 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
                 >
                   <ArrowLeft className="h-4 w-4" /> BACK
                 </button>
-                <MenuVillasExperiencesSwitcher
-                  active="experiences"
-                  onVillas={openVillasSection}
-                  onExperiences={openExperiencesSection}
-                />
+                <h1 className={MENU_MOBILE_SECTION_TITLE_CLASS}>Experiences</h1>
+                </div>
 
                 <div
-                  className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch] touch-pan-y"
+                  className="min-h-0 flex-1 overflow-x-visible overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch] touch-pan-y"
                   data-lenis-prevent
                 >
-                <div className="space-y-6 pr-1">
+                <div className="space-y-6">
                   {MENU_EXPERIENCES.map((exp) => (
                     <div key={exp.href + exp.title} className="flex flex-col group">
-                      <Link href={exp.href} className="cursor-pointer">
+                      <Link href={exp.href} className="cursor-pointer px-6">
                         <p className="text-white/40 text-[10px] font-manrope font-medium tracking-[0.2em] uppercase mb-1">
                           {exp.type}
                         </p>
@@ -508,7 +568,7 @@ export default function MenuPage() {
                         </div>
                       </Link>
                       {exp.desc ? (
-                        <Link href={exp.href} className="cursor-pointer">
+                        <Link href={exp.href} className="cursor-pointer px-6">
                           <p className="text-white/50 text-gh-label font-manrope mb-2.5 leading-relaxed group-hover:text-[#EFCD62]/70 transition-colors">
                             {exp.desc}
                           </p>
@@ -577,7 +637,7 @@ export default function MenuPage() {
         </div>
 
         {/* RIGHT COLUMN: Tablet/desktop previews (md+) */}
-        <div className="hidden md:flex flex-1 min-h-0 relative h-full overflow-hidden pointer-events-auto md:p-8 lg:p-12">
+        <div className="menu-desktop-preview pointer-events-auto relative hidden h-full min-h-0 flex-1 flex-col md:flex">
           <AnimatePresence mode="wait">
             {(desktopHoverView === "default"
               ? desktopSelectedView
@@ -613,65 +673,30 @@ export default function MenuPage() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}
                 data-lenis-prevent
-                className="absolute inset-0 flex flex-col min-h-0 overflow-hidden pointer-events-auto"
+                className="pointer-events-auto absolute inset-0 flex min-h-0 flex-col overflow-x-visible overflow-y-hidden"
               >
-                <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain px-4 pb-12 pt-5 [-webkit-overflow-scrolling:touch] touch-pan-y md:px-6 lg:px-8">
-                <div className="w-full space-y-12">
-                  {MENU_VILLAS.map((villa, idx) => (
-                    <motion.div
-                      key={villa.id}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: Math.min(idx * 0.05, 0.4), duration: 0.35 }}
-                      className="w-full flex flex-col group"
-                    >
-                      <div className="flex justify-between items-start mb-5 pr-2">
-                        <Link
-                          href={`/villas/${villa.id}`}
-                          className="flex flex-col cursor-pointer"
-                        >
-                          <p className="text-white/40 text-gh-label uppercase font-manrope font-medium tracking-[0.2em] mb-1.5">
-                            {villa.type}
-                          </p>
-                          <div className="flex items-center gap-2 group/title">
-                            <h3
-                              style={{ fontWeight: 200 }}
-                              className="text-gh-scroll lg:text-gh-h2 font-manrope text-white transition-colors capitalize tracking-wide"
-                            >
-                              {villa.name}
-                            </h3>
-                            <ChevronRight className="w-5 h-5 text-white/50 group-hover/title:text-[#EFCD62] transition-colors" />
-                          </div>
-                        </Link>
-                      </div>
-
-                      <div
-                        data-lenis-prevent
-                        data-jade-hscroll
-                        className={`${MENU_BLEED_X_DESKTOP} jade-hscroll-track min-w-0 overflow-x-auto hide-scrollbar`}
-                        onTouchStart={(e) => e.stopPropagation()}
+                <div className="min-h-0 flex-1 touch-pan-y overflow-x-visible overflow-y-auto overscroll-y-contain pb-12 pt-6 [-webkit-overflow-scrolling:touch]">
+                  <div className="flex w-full flex-col gap-10 lg:gap-12">
+                    {MENU_VILLAS.map((villa, idx) => (
+                      <motion.div
+                        key={villa.id}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          delay: Math.min(idx * 0.05, 0.4),
+                          duration: 0.35,
+                        }}
                       >
-                        <div className="flex gap-3 w-max px-4 md:px-6 lg:px-8">
-                          {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
-                            <Link
-                              key={`${villa.id}-desktop-${imgIdx}`}
-                              href={`/villas/${villa.id}`}
-                              className="relative h-[280px] w-[420px] shrink-0 overflow-hidden cursor-pointer group/img"
-                            >
-                              <Image
-                                src={src}
-                                alt={`${villa.name} image ${imgIdx + 1}`}
-                                fill
-                                className="object-cover group-hover/img:scale-105 transition-transform duration-700"
-                                sizes="420px"
-                              />
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+                        <MenuDesktopCarouselSection
+                          eyebrow={villa.type}
+                          title={villa.name}
+                          href={`/villas/${villa.id}`}
+                          images={getMenuVillaCarouselImages(villa)}
+                          imageAltPrefix={villa.name}
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -686,42 +711,30 @@ export default function MenuPage() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}
                 data-lenis-prevent
-                className="absolute inset-0 flex flex-col min-h-0 overflow-hidden pointer-events-auto"
+                className="pointer-events-auto absolute inset-0 flex min-h-0 flex-col overflow-x-visible overflow-y-hidden"
               >
-                <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain px-4 pb-12 pt-5 [-webkit-overflow-scrolling:touch] touch-pan-y md:px-6 lg:px-8">
-                <div className="w-full space-y-12">
-                  {MENU_EXPERIENCES.map((exp, idx) => (
-                    <motion.div
-                      key={exp.href + exp.title}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: Math.min(idx * 0.05, 0.4), duration: 0.35 }}
-                      className="w-full flex flex-col group"
-                    >
-                      <div className="flex justify-between items-start mb-5 pr-2">
-                        <Link
+                <div className="min-h-0 flex-1 touch-pan-y overflow-x-visible overflow-y-auto overscroll-y-contain pb-12 pt-6 [-webkit-overflow-scrolling:touch]">
+                  <div className="flex w-full flex-col gap-10 lg:gap-12">
+                    {MENU_EXPERIENCES.map((exp, idx) => (
+                      <motion.div
+                        key={exp.href + exp.title}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          delay: Math.min(idx * 0.05, 0.4),
+                          duration: 0.35,
+                        }}
+                      >
+                        <MenuDesktopCarouselSection
+                          eyebrow={exp.type}
+                          title={exp.title}
                           href={exp.href}
-                          className="flex flex-col cursor-pointer"
-                        >
-                          <p className="text-white/40 text-gh-label uppercase font-manrope font-bold tracking-[0.2em] mb-1.5 group-hover:text-[#EFCD62]/60 transition-colors">
-                            {exp.type}
-                          </p>
-                          <div className="flex items-center gap-2 group/title">
-                            <h3
-                              style={{ fontWeight: 200 }}
-                              className="text-gh-scroll lg:text-gh-h2 font-manrope text-white group-hover:text-[#EFCD62] transition-colors tracking-wide"
-                            >
-                              {exp.title}
-                            </h3>
-                            <ChevronRight className="w-5 h-5 text-white/50 group-hover:text-[#EFCD62] transition-colors" />
-                          </div>
-                        </Link>
-                      </div>
-
-                      <MenuExperienceImages exp={exp} variant="desktop" />
-                    </motion.div>
-                  ))}
-                </div>
+                          images={exp.images.map(safeMenuImage)}
+                          imageAltPrefix={exp.title}
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             )}

@@ -31,6 +31,7 @@ export default function Navbar() {
 
   // Check if it's a detail page for VILLAS or weddings (resorts)
   const isDetailPage = /^\/(?:villas|weddings)\/[^/]+$/.test(pathname);
+  const isMenuPage = pathname === "/menu";
 
   return (
     <>
@@ -49,9 +50,15 @@ export default function Navbar() {
         className="jade-nav-chrome fixed top-0 left-0 w-full z-50 mt-[4px]"
         {...chromeMotion}
       >
-        {/* Glass bar */}
-        <div className="w-full bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm">
-          <div className="max-w-[1920px] mx-auto px-4 sm:px-5 md:px-8 lg:px-10 xl:px-12 py-4 md:py-4 flex items-center justify-between relative">
+        {/* Glass bar — menu uses flat chrome (no gradient bleed onto #1E2023 body) */}
+        <div
+          className={
+            isMenuPage
+              ? "w-full border-b border-white/10 bg-[#1E2023]"
+              : "w-full bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm"
+          }
+        >
+          <div className="jade-nav-inner mx-auto flex max-w-[1920px] items-center justify-between relative py-2.5 md:py-3">
           {/* ── LEFT: Menu link + inline nav links (desktop only) ── */}
           <div className="hidden lg:flex items-center gap-6 flex-1">
             <Link
@@ -105,7 +112,6 @@ export default function Navbar() {
                   fill
                   className="object-contain"
                   sizes="36px"
-                  priority
                 />
               </div>
             </Link>
@@ -114,7 +120,7 @@ export default function Navbar() {
           {/* ── CENTER: Logo — absolute center on desktop ── */}
           <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center">
             <Link href="/">
-              <div className="relative w-14 h-14 hover:opacity-80 transition-opacity">
+              <div className="relative h-11 w-11 transition-opacity hover:opacity-80 lg:h-12 lg:w-12">
                 <Image
                   src={
                     navbarTheme === "white"
@@ -125,7 +131,6 @@ export default function Navbar() {
                   fill
                   className="object-contain"
                   sizes="56px"
-                  priority
                 />
               </div>
             </Link>

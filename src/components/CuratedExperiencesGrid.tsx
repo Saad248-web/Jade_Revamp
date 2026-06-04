@@ -22,6 +22,8 @@ interface CuratedExperiencesGridProps {
   innerClassName?: string;
   gridClassName?: string;
   ctaContainerClassName?: string;
+  /** When false, hides the bottom CTA row (WG-1 weekend page). */
+  showCta?: boolean;
 }
 
 export default function CuratedExperiencesGrid({
@@ -36,6 +38,7 @@ export default function CuratedExperiencesGrid({
   innerClassName = "max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24",
   gridClassName = "grid grid-cols-2 md:grid-cols-3",
   ctaContainerClassName = "max-w-4xl mx-auto",
+  showCta = true,
 }: CuratedExperiencesGridProps) {
   const lastIdx = experiences.length - 1;
   const mdLastAlone = experiences.length % 3 === 1;
@@ -105,16 +108,17 @@ export default function CuratedExperiencesGrid({
           ))}
         </div>
 
-        {/* Footer CTA */}
-        <div className={ctaContainerClassName}>
-          <PrimaryButton
-            className="w-full h-[54px] text-gh-label"
-            href={ctaLink}
-            onClick={onCtaClick}
-          >
-            {ctaText}
-          </PrimaryButton>
-        </div>
+        {showCta ? (
+          <div className={ctaContainerClassName}>
+            <PrimaryButton
+              className="w-full h-[54px] text-gh-label"
+              href={ctaLink}
+              onClick={onCtaClick}
+            >
+              {ctaText}
+            </PrimaryButton>
+          </div>
+        ) : null}
       </div>
     </section>
   );

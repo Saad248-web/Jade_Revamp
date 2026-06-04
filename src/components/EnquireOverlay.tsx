@@ -1,29 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Check, Facebook, Instagram, Youtube, Calendar } from "lucide-react";
+import { X, Facebook, Instagram, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
+import EnquiryDateRangePicker from "@/components/enquiry/EnquiryDateRangePicker";
 import { OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS } from "@/lib/overlayDismissButton";
 import { useAnimation } from "@/context/AnimationContext";
 import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
+import { formatPreferredDateRange } from "@/lib/enquiryDateRange";
+import { isEnquiryDemoMode, simulateEnquirySubmit } from "@/lib/enquiryDemoMode";
+import { getEnquiryOverlayVariant } from "@/lib/enquiryOverlayConfig";
+import { resolveEnquiryOkayReturnPath } from "@/lib/enquiryReturnPath";
 import { sanitizeGuestCountInput } from "@/lib/guestCountInput";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
+import {
+  enquiryFieldErrors,
+  isEnquiryFormValid,
+  type EnquiryFieldKey,
+} from "@/lib/leadFormValidation";
+import {
+  getFieldShellClass,
+  JADE_FORM_WARN,
+  JADE_OVERLAY_FORM_STACK_CLASS,
+} from "@/lib/jadeFormTokens";
+import JadeFormFieldError from "@/components/ui/form/JadeFormFieldError";
+import {
+  JadeFloatingField,
+  JadeFloatingSelect,
+  JadeFloatingTextarea,
+} from "@/components/ui/form";
 
 export default function EnquireOverlay() {
-  const { isEnquireOverlayOpen, setEnquireOverlayOpen } = useAnimation();
+  const router = useRouter();
+  const {
+    isEnquireOverlayOpen,
+    setEnquireOverlayOpen,
+    enquireReturnPath,
+  } = useAnimation();
+
+  const enquiryVariant = useMemo(
+    () => getEnquiryOverlayVariant(enquireReturnPath),
+    [enquireReturnPath],
+  );
   const [view, setView] = useState<"form" | "success">("form");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [checkIn, setCheckIn] = useState<Date | null>(null);
+  const [checkOut, setCheckOut] = useState<Date | null>(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
     phoneNumber: "",
     email: "",
     guests: "",
-    preferredDate: "",
     travelFormat: {
       weekendGetaway: false,
       corporateRetreat: false,
@@ -33,10 +66,7 @@ export default function EnquireOverlay() {
     specialRequests: "",
   });
 
-  const handleClose = () => {
-    setEnquireOverlayOpen(false);
-    setSubmitError(null);
-    setSubmitting(false);
+  const resetOverlayState = () => {
     setTimeout(() => {
       setView("form");
       setFormData({
@@ -44,7 +74,6 @@ export default function EnquireOverlay() {
         phoneNumber: "",
         email: "",
         guests: "",
-        preferredDate: "",
         travelFormat: {
           weekendGetaway: false,
           corporateRetreat: false,
@@ -53,49 +82,78 @@ export default function EnquireOverlay() {
         occasionType: "",
         specialRequests: "",
       });
+      setCheckIn(null);
+      setCheckOut(null);
     }, 500);
   };
 
-  const isFormValid = () => {
-    const {
-      fullName,
-      phoneNumber,
-      email,
-      guests,
-      preferredDate,
-      travelFormat,
-      occasionType,
-    } = formData;
-    const guestCount = Number.parseInt(guests, 10);
-    const hasFormat =
-      travelFormat.weekendGetaway ||
-      travelFormat.corporateRetreat ||
-      travelFormat.celebrationEvents;
-    return (
-      fullName.trim() !== "" &&
-      phoneNumber.trim() !== "" &&
-      email.trim() !== "" &&
-      Number.isFinite(guestCount) &&
-      guestCount >= 1 &&
-      preferredDate.trim() !== "" &&
-      occasionType.trim() !== "" &&
-      hasFormat
-    );
+  const handleClose = () => {
+    setEnquireOverlayOpen(false);
+    setSubmitError(null);
+    setSubmitting(false);
+    resetOverlayState();
+  };
+
+  const handleSuccessOkay = () => {
+    const returnPath = resolveEnquiryOkayReturnPath(enquireReturnPath);
+    handleClose();
+    router.push(returnPath);
+  };
+
+  useEffect(() => {
+    if (!isEnquireOverlayOpen) return;
+    setView("form");
+    setSubmitError(null);
+    setFormData((prev) => ({
+      ...prev,
+      occasionType: enquiryVariant.defaultOccasionType || "",
+    }));
+  }, [isEnquireOverlayOpen, enquiryVariant.defaultOccasionType]);
+
+  const fieldErrors = useMemo(
+    () => enquiryFieldErrors(formData, checkIn),
+    [formData, checkIn],
+  );
+
+  const formValid = isEnquiryFormValid(formData, checkIn);
+
+  const showFieldError = (key: EnquiryFieldKey) => {
+    if (!fieldErrors[key]) return false;
+    if (key === "preferredDate") return checkIn !== null;
+    if (key === "fullName") return formData.fullName.trim().length > 0;
+    if (key === "phoneNumber") return formData.phoneNumber.trim().length > 0;
+    if (key === "email") return formData.email.trim().length > 0;
+    if (key === "guests") return formData.guests.trim().length > 0;
+    if (key === "occasionType") return formData.occasionType.length > 0;
+    if (key === "specialRequests") {
+      return (formData.specialRequests ?? "").trim().length > 0;
+    }
+    return false;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isFormValid()) return;
+    if (!formValid || submitting) return;
 
     setSubmitting(true);
     setSubmitError(null);
     try {
+      if (isEnquiryDemoMode()) {
+        await simulateEnquirySubmit();
+        setView("success");
+        return;
+      }
+
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          source: "general_enquiry",
-          payload: formData,
+          source: enquiryVariant.leadSource,
+          payload: {
+            ...formData,
+            preferredDate: formatPreferredDateRange(checkIn, checkOut),
+            enquiryPage: enquireReturnPath ?? undefined,
+          },
         }),
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
@@ -112,17 +170,17 @@ export default function EnquireOverlay() {
     }
   };
 
-  const toggleFormat = (key: keyof typeof formData.travelFormat) => {
-    setFormData((prev) => ({
-      ...prev,
-      travelFormat: {
-        ...prev.travelFormat,
-        [key]: !prev.travelFormat[key],
-      },
-    }));
-  };
-
   if (!isEnquireOverlayOpen) return null;
+
+  const canDismiss = view === "form" && !submitting;
+  const isSuccessView = view === "success";
+  const backdropZ = isSuccessView ? "z-[220]" : "z-[100]";
+  const shellZ = isSuccessView ? "z-[221]" : "z-[101]";
+  const dateShellClass = getFieldShellClass({
+    invalid: Boolean(fieldErrors.preferredDate),
+    showError: showFieldError("preferredDate"),
+    variant: "standard",
+  });
 
   return (
     <AnimatePresence>
@@ -133,23 +191,25 @@ export default function EnquireOverlay() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={handleClose}
-            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm"
+            onClick={canDismiss ? handleClose : undefined}
+            className={`fixed inset-0 ${backdropZ} backdrop-blur-sm ${isSuccessView ? "bg-black/75" : "bg-black/60"}`}
           />
 
           {/* Centering wrapper */}
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            onClick={handleClose}
-            className={OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS}
-          >
-            <X className="w-6 h-6 stroke-[1.5]" />
-          </motion.button>
+          {canDismiss ? (
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              onClick={handleClose}
+              className={OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS}
+            >
+              <X className="w-6 h-6 stroke-[1.5]" />
+            </motion.button>
+          ) : null}
 
           <div
-            className="fixed inset-0 z-[101] flex items-center justify-center px-4 md:px-0 pointer-events-none"
+            className={`fixed inset-0 ${shellZ} flex items-center justify-center px-4 md:px-0 pointer-events-none`}
             onWheel={(e) => e.stopPropagation()}
           >
             <div className="relative w-full md:w-[600px] flex flex-col items-center pointer-events-auto">
@@ -159,194 +219,162 @@ export default function EnquireOverlay() {
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="relative w-full h-[80vh] md:h-[82vh] md:max-h-[760px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
+                className="relative w-full h-[80vh] md:h-[82vh] md:max-h-[760px] bg-jade-green flex flex-col min-h-0 font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
               >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
               {/* CONTENT AREA */}
               <div
-                className="flex-1 overflow-y-auto scrollbar-hide px-6 pt-5 pb-6"
+                className="flex-1 min-h-0 enquiry-overlay-scroll px-6 pt-6 pb-6"
                 data-lenis-prevent
               >
                 {view === "form" ? (
-                  <form onSubmit={handleSubmit} className="flex flex-col">
+                  <form
+                    onSubmit={handleSubmit}
+                    className="flex flex-col"
+                    noValidate
+                  >
                     {submitError ? (
                       <p
-                        className="text-red-400 text-sm font-manrope mb-3"
+                        className="text-sm font-manrope mb-3"
+                        style={{ color: JADE_FORM_WARN }}
                         role="alert"
                       >
                         {submitError}
                       </p>
                     ) : null}
                     <h2 className="text-white text-[32px] leading-tight md:text-gh-h2 font-philosopher mb-2.5">
-                      Enquire Now
+                      {enquiryVariant.title}
                     </h2>
                     <p className="text-white/80 text-gh-body mb-6">
-                      Tell us your preferred dates, group size, and occasion.
-                      Our team will help you design a curated luxury experience.
+                      {enquiryVariant.description}
                     </p>
+                    {isEnquiryDemoMode() ? (
+                      <p className="text-white/45 text-xs mb-4 -mt-4">
+                        Demo mode: submission is not saved. Connect Postgres and
+                        set{" "}
+                        <span className="text-white/60">
+                          NEXT_PUBLIC_ENQUIRY_DEMO_MODE=false
+                        </span>{" "}
+                        to enable live leads.
+                      </p>
+                    ) : null}
 
-                    <div className="flex flex-col gap-4 flex-1">
-                      {/* Floating Label Input - Full Name */}
-                      <div className="relative border border-white/20 focus-within:border-[#EFCD62] transition-colors rounded-sm group">
-                        <label className="absolute -top-3 left-4 bg-[#123A2D] px-1 text-white text-gh-label">
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.fullName}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              fullName: e.target.value,
-                            })
-                          }
-                          className="w-full bg-transparent px-4 py-3.5 text-white text-gh-body placeholder:text-white/40 focus:outline-none focus:border-transparent font-manrope"
-                        />
-                      </div>
+                    <div className={JADE_OVERLAY_FORM_STACK_CLASS}>
+                      <JadeFloatingField
+                        id="enquire-fullName"
+                        label="Full Name"
+                        value={formData.fullName}
+                        onChange={(v) =>
+                          setFormData({ ...formData, fullName: v })
+                        }
+                        theme="overlayGreen"
+                        invalid={Boolean(fieldErrors.fullName)}
+                        showError={showFieldError("fullName")}
+                        errorMessage={fieldErrors.fullName}
+                      />
 
-                      <input
+                      <JadeFloatingField
+                        id="enquire-phone"
+                        label="Phone Number"
                         type="tel"
                         inputMode="numeric"
                         autoComplete="tel"
-                        placeholder="Phone Number"
                         value={formData.phoneNumber}
-                        onChange={(e) =>
+                        onChange={(v) =>
                           setFormData({
                             ...formData,
-                            phoneNumber: sanitizePhoneDigitsInput(e.target.value),
+                            phoneNumber: sanitizePhoneDigitsInput(v),
                           })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] transition-colors"
+                        theme="overlayGreen"
+                        invalid={Boolean(fieldErrors.phoneNumber)}
+                        showError={showFieldError("phoneNumber")}
+                        errorMessage={fieldErrors.phoneNumber}
                       />
 
-                      <input
+                      <JadeFloatingField
+                        id="enquire-email"
+                        label="Email"
                         type="email"
-                        placeholder="Email"
+                        autoComplete="email"
                         value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
+                        onChange={(v) =>
+                          setFormData({ ...formData, email: v })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] transition-colors"
+                        theme="overlayGreen"
+                        invalid={Boolean(fieldErrors.email)}
+                        showError={showFieldError("email")}
+                        errorMessage={fieldErrors.email}
                       />
 
-                      <input
-                        type="text"
+                      <JadeFloatingField
+                        id="enquire-guests"
+                        label="Number of Guests"
                         inputMode="numeric"
                         autoComplete="off"
-                        placeholder="Number of Guests"
                         value={formData.guests}
-                        onChange={(e) =>
+                        onChange={(v) =>
                           setFormData({
                             ...formData,
-                            guests: sanitizeGuestCountInput(e.target.value),
+                            guests: sanitizeGuestCountInput(v),
                           })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] transition-colors"
+                        theme="overlayGreen"
+                        invalid={Boolean(fieldErrors.guests)}
+                        showError={showFieldError("guests")}
+                        errorMessage={fieldErrors.guests}
                       />
 
-                      <div className="relative">
-                        <input
-                          type="text"
-                          placeholder="Preferred Date"
-                          value={formData.preferredDate}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              preferredDate: e.target.value,
-                            })
-                          }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] transition-colors pr-12"
-                        />
-                        <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
-                      </div>
-
-                      {/* Travel Format Checkboxes */}
-                      <div className="mt-2 text-white">
-                        <h3 className="text-white text-gh-body mb-3">
-                          Interest:
-                        </h3>
-                        <div className="flex flex-col gap-2.5">
-                          {[
-                            {
-                              key: "weekendGetaway",
-                              label: "Weekend Getaway",
-                            },
-                            {
-                              key: "corporateRetreat",
-                              label: "Corporate Retreat",
-                            },
-                            {
-                              key: "celebrationEvents",
-                              label: "Celebrations & Events",
-                            },
-                          ].map((item) => (
-                            <label
-                              key={item.key}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                toggleFormat(
-                                  item.key as keyof typeof formData.travelFormat,
-                                );
-                              }}
-                              className="flex items-center gap-2.5 cursor-pointer group"
-                            >
-                              <div
-                                className={`w-5 h-5 rounded-sm border flex items-center justify-center transition-colors shrink-0 bg-[#0E2E23] ${formData.travelFormat[item.key as keyof typeof formData.travelFormat] ? "border-white bg-white" : "border-white/40 group-hover:border-white/80"}`}
-                              >
-                                {formData.travelFormat[
-                                  item.key as keyof typeof formData.travelFormat
-                                ] && (
-                                  <Check
-                                    className="w-3.5 h-3.5 text-[#123A2D]"
-                                    strokeWidth={3}
-                                  />
-                                )}
-                              </div>
-                              <span className="text-white/90 text-[15px] group-hover:text-white transition-colors">
-                                {item.label}
-                              </span>
-                            </label>
-                          ))}
+                      <div className="flex flex-col gap-1.5">
+                        <div className={dateShellClass}>
+                          <EnquiryDateRangePicker
+                            label="Preferred Date"
+                            theme="overlay"
+                            checkIn={checkIn}
+                            checkOut={checkOut}
+                            onDatesChange={(inDate, outDate) => {
+                              setCheckIn(inDate);
+                              setCheckOut(outDate);
+                            }}
+                            invalid={showFieldError("preferredDate")}
+                          />
                         </div>
+                        {showFieldError("preferredDate") &&
+                        fieldErrors.preferredDate ? (
+                          <JadeFormFieldError
+                            id="enquire-date-err"
+                            message={fieldErrors.preferredDate}
+                          />
+                        ) : null}
                       </div>
 
-                      <select
+                      <JadeFloatingSelect
+                        id="enquire-occasion"
+                        label="Occasion type"
                         value={formData.occasionType}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            occasionType: e.target.value,
-                          })
+                        onChange={(v) =>
+                          setFormData({ ...formData, occasionType: v })
                         }
-                        className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-3.5 text-white text-gh-body focus:outline-none focus:border-[#EFCD62] transition-colors"
-                      >
-                        <option value="" className="bg-[#123A2D] text-white/60">
-                          Occasion type
-                        </option>
-                        {OCCASION_OPTIONS.map((opt) => (
-                          <option
-                            key={opt}
-                            value={opt}
-                            className="bg-[#123A2D] text-white"
-                          >
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
+                        options={OCCASION_OPTIONS}
+                        theme="overlayGreen"
+                        invalid={Boolean(fieldErrors.occasionType)}
+                        showError={showFieldError("occasionType")}
+                        errorMessage={fieldErrors.occasionType}
+                      />
 
-                      <div className="mt-2 text-white">
-                        <textarea
-                          placeholder="Special requests (optional)"
-                          value={formData.specialRequests}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              specialRequests: e.target.value,
-                            })
-                          }
-                          className="w-full bg-transparent border border-white/20 rounded-sm px-4 py-4 text-white text-gh-body placeholder:text-white/80 focus:outline-none focus:border-[#EFCD62] h-20 resize-none font-manrope transition-colors"
-                        />
-                      </div>
+                      <JadeFloatingTextarea
+                        id="enquire-notes"
+                        label="Special requests (optional)"
+                        value={formData.specialRequests}
+                        onChange={(v) =>
+                          setFormData({ ...formData, specialRequests: v })
+                        }
+                        theme="overlayGreen"
+                        required={false}
+                        invalid={Boolean(fieldErrors.specialRequests)}
+                        showError={showFieldError("specialRequests")}
+                        errorMessage={fieldErrors.specialRequests}
+                      />
                     </div>
 
                     <div className="mt-6 border-t border-white/10 pt-5">
@@ -378,8 +406,13 @@ export default function EnquireOverlay() {
                       </p>
                       <button
                         type="submit"
-                        disabled={!isFormValid() || submitting}
-                        className={`w-full py-4 font-manrope font-bold text-gh-label tracking-[0.3em] uppercase transition-all border ${ isFormValid() && !submitting ? "bg-[#EFCD62] hover:bg-white text-black border-transparent" : "bg-transparent border-white/10 text-white/40 cursor-not-allowed" }`}
+                        disabled={!formValid || submitting}
+                        aria-disabled={!formValid || submitting}
+                        className={`w-full py-4 font-manrope font-bold text-gh-label tracking-[0.3em] uppercase transition-all border ${
+                          formValid && !submitting
+                            ? "bg-[#EFCD62] hover:bg-white text-black border-transparent"
+                            : "bg-transparent border-white/10 text-white/40 cursor-not-allowed"
+                        }`}
                       >
                         {submitting ? "SENDING…" : "SEND INQUIRY"}
                       </button>
@@ -451,7 +484,7 @@ export default function EnquireOverlay() {
                       <PrimaryButton
                         withArrow={false}
                         className="w-full"
-                        onClick={handleClose}
+                        onClick={handleSuccessOkay}
                       >
                         OKAY
                       </PrimaryButton>
