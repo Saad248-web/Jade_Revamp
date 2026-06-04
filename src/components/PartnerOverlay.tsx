@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useMemo, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -9,7 +9,6 @@ import {
   Instagram,
   Youtube,
   ArrowLeft,
-  Upload,
   ArrowRight,
 } from "lucide-react";
 import Image from "next/image";
@@ -19,14 +18,21 @@ import { useAnimation } from "@/context/AnimationContext";
 import Link from "next/link";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
 import {
-  validateEmail,
-  validateFullName,
-  validatePhone,
+  isPartnerFormValid,
+  partnerFieldErrors,
+  type PartnerFormValues,
 } from "@/lib/leadFormValidation";
 import {
   JadeFloatingField,
   JadeFloatingTextarea,
+  JadeFormFieldError,
 } from "@/components/ui/form";
+import PartnerImageUpload from "@/components/partner/PartnerImageUpload";
+import { JADE_FORM_WARN } from "@/lib/jadeFormTokens";
+import {
+  isPartnerDemoMode,
+  simulateEnquirySubmit,
+} from "@/lib/enquiryDemoMode";
 
 export default function PartnerOverlay() {
   const { isPartnerOverlayOpen, setPartnerOverlayOpen } = useAnimation();
@@ -39,7 +45,7 @@ export default function PartnerOverlay() {
     { file: File; preview: string }[]
   >([]);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<PartnerFormValues>({
     fullName: "",
     phoneNumber: "",
     email: "",
@@ -102,21 +108,35 @@ export default function PartnerOverlay() {
     }, 500);
   };
 
+  const fieldErrors = useMemo(
+    () => partnerFieldErrors(formData, selectedImages.length),
+    [formData, selectedImages.length],
+  );
+
+  const formValid = useMemo(
+    () => isPartnerFormValid(formData, selectedImages.length),
+    [formData, selectedImages.length],
+  );
+
+  const showFieldError = (key: keyof typeof fieldErrors) =>
+    attemptedSubmit && Boolean(fieldErrors[key]);
+
   const handleSubmit = async () => {
     setAttemptedSubmit(true);
     setSubmitError(null);
-    const hasPartnership = Object.values(formData.partnershipType).some(Boolean);
-    const nameErr = validateFullName(formData.fullName);
-    const phoneErr = validatePhone(formData.phoneNumber);
-    const emailErr = validateEmail(formData.email);
-    if (!hasPartnership) {
-      setSubmitError("Please select at least one partnership interest.");
-      return;
-    }
-    if (nameErr || phoneErr || emailErr) return;
+    if (!formValid || submitting) return;
 
     setSubmitting(true);
     try {
+      if (isPartnerDemoMode()) {
+        await simulateEnquirySubmit();
+        selectedImages.forEach((img) => URL.revokeObjectURL(img.preview));
+        setSelectedImages([]);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        setView("success");
+        return;
+      }
+
       const fd = new FormData();
       fd.append("meta", JSON.stringify(formData));
       for (const row of selectedImages) {
@@ -135,6 +155,7 @@ export default function PartnerOverlay() {
 
       selectedImages.forEach((img) => URL.revokeObjectURL(img.preview));
       setSelectedImages([]);
+      if (fileInputRef.current) fileInputRef.current.value = "";
       setView("success");
     } catch (e) {
       setSubmitError(
@@ -153,8 +174,9 @@ export default function PartnerOverlay() {
         preview: URL.createObjectURL(file),
       }));
 
-      setSelectedImages((prev) => [...prev, ...newImages].slice(0, 6)); // Limit to 6 for UI stability
+      setSelectedImages((prev) => [...prev, ...newImages].slice(0, 6));
     }
+    e.target.value = "";
   };
 
   const removeImage = (index: number) => {
@@ -234,7 +256,7 @@ export default function PartnerOverlay() {
 
               {/* CONTENT AREA */}
               <div
-                className="flex-1 overflow-y-auto scrollbar-hide"
+                className="flex-1 min-h-0 overflow-y-auto enquiry-overlay-scroll"
                 data-lenis-prevent
               >
                 {view === "form" ? (
@@ -252,12 +274,9 @@ export default function PartnerOverlay() {
                           setFormData({ ...formData, fullName: v })
                         }
                         theme="overlayGreen"
-                        invalid={Boolean(validateFullName(formData.fullName))}
-                        showError={
-                          attemptedSubmit &&
-                          Boolean(validateFullName(formData.fullName))
-                        }
-                        errorMessage={validateFullName(formData.fullName)}
+                        invalid={Boolean(fieldErrors.fullName)}
+                        showError={showFieldError("fullName")}
+                        errorMessage={fieldErrors.fullName}
                       />
                       <JadeFloatingField
                         id="partner-phone"
@@ -273,12 +292,9 @@ export default function PartnerOverlay() {
                           })
                         }
                         theme="overlayGreen"
-                        invalid={Boolean(validatePhone(formData.phoneNumber))}
-                        showError={
-                          attemptedSubmit &&
-                          Boolean(validatePhone(formData.phoneNumber))
-                        }
-                        errorMessage={validatePhone(formData.phoneNumber)}
+                        invalid={Boolean(fieldErrors.phoneNumber)}
+                        showError={showFieldError("phoneNumber")}
+                        errorMessage={fieldErrors.phoneNumber}
                       />
                       <JadeFloatingField
                         id="partner-email"
@@ -289,12 +305,9 @@ export default function PartnerOverlay() {
                           setFormData({ ...formData, email: v })
                         }
                         theme="overlayGreen"
-                        invalid={Boolean(validateEmail(formData.email))}
-                        showError={
-                          attemptedSubmit &&
-                          Boolean(validateEmail(formData.email))
-                        }
-                        errorMessage={validateEmail(formData.email)}
+                        invalid={Boolean(fieldErrors.email)}
+                        showError={showFieldError("email")}
+                        errorMessage={fieldErrors.email}
                       />
                       <JadeFloatingField
                         id="partner-company"
@@ -364,12 +377,30 @@ export default function PartnerOverlay() {
                           theme="overlayGreen"
                           className="mt-3"
                         />
+                        {showFieldError("partnershipType") &&
+                        fieldErrors.partnershipType ? (
+                          <JadeFormFieldError
+                            id="partner-partnership-err"
+                            message={fieldErrors.partnershipType}
+                          />
+                        ) : null}
                       </div>
 
                       {/* Property Type Checkboxes */}
-                      <div className="mt-2 text-white">
+                      <div
+                        className={`mt-2 text-white rounded-sm ${showFieldError("propertyType") ? "border-2 border-[#D32C55] p-3 -mx-1" : ""}`}
+                      >
                         <h3 className="text-white text-gh-body mb-2.5">
                           Property Type
+                          {showFieldError("propertyType") ? (
+                            <span
+                              className="ml-1"
+                              style={{ color: JADE_FORM_WARN }}
+                              aria-hidden
+                            >
+                              *
+                            </span>
+                          ) : null}
                         </h3>
                         <div className="grid grid-cols-2 gap-y-3 gap-x-2">
                           {[
@@ -420,6 +451,13 @@ export default function PartnerOverlay() {
                           theme="overlayGreen"
                           className="mt-3"
                         />
+                        {showFieldError("propertyType") &&
+                        fieldErrors.propertyType ? (
+                          <JadeFormFieldError
+                            id="partner-property-type-err"
+                            message={fieldErrors.propertyType}
+                          />
+                        ) : null}
                       </div>
 
                       {/* Property Details */}
@@ -430,7 +468,6 @@ export default function PartnerOverlay() {
                         <JadeFloatingField
                           id="partner-location"
                           label="Location"
-                          required={false}
                           value={formData.propertyDetails.location}
                           onChange={(v) =>
                             setFormData({
@@ -442,11 +479,13 @@ export default function PartnerOverlay() {
                             })
                           }
                           theme="overlayGreen"
+                          invalid={Boolean(fieldErrors.propertyLocation)}
+                          showError={showFieldError("propertyLocation")}
+                          errorMessage={fieldErrors.propertyLocation}
                         />
                         <JadeFloatingField
                           id="partner-bedrooms"
                           label="Number of Bedrooms"
-                          required={false}
                           value={formData.propertyDetails.bedrooms}
                           onChange={(v) =>
                             setFormData({
@@ -458,11 +497,13 @@ export default function PartnerOverlay() {
                             })
                           }
                           theme="overlayGreen"
+                          invalid={Boolean(fieldErrors.propertyBedrooms)}
+                          showError={showFieldError("propertyBedrooms")}
+                          errorMessage={fieldErrors.propertyBedrooms}
                         />
                         <JadeFloatingField
                           id="partner-capacity"
                           label="Outdoor Event Capacity"
-                          required={false}
                           value={formData.propertyDetails.eventCapacity}
                           onChange={(v) =>
                             setFormData({
@@ -474,53 +515,20 @@ export default function PartnerOverlay() {
                             })
                           }
                           theme="overlayGreen"
+                          invalid={Boolean(fieldErrors.propertyEventCapacity)}
+                          showError={showFieldError("propertyEventCapacity")}
+                          errorMessage={fieldErrors.propertyEventCapacity}
                         />
                       </div>
 
-                      {/* Image Upload Area */}
-                      <div className="mt-5 flex flex-col items-center">
-                        <input
-                          type="file"
-                          ref={fileInputRef}
-                          onChange={handleFileChange}
-                          multiple
-                          accept="image/*"
-                          className="hidden"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => fileInputRef.current?.click()}
-                          className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase mb-5 hover:text-white transition-colors"
-                        >
-                          UPLOAD IMAGES
-                          <Upload className="w-4 h-4" />
-                        </button>
-
-                        {selectedImages.length > 0 && (
-                          <div className="grid grid-cols-3 gap-2 w-full mb-2">
-                            {selectedImages.map((img, i) => (
-                              <div
-                                key={i}
-                                className="relative aspect-square w-full bg-white/5 border border-white/10 rounded-sm overflow-hidden group/thumb"
-                              >
-                                <Image
-                                  src={img.preview}
-                                  alt={`Upload ${i}`}
-                                  fill
-                                  className="object-cover"
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => removeImage(i)}
-                                  className="absolute top-1.5 right-1.5 w-6 h-6 bg-black/60 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-red-500 transition-colors z-20"
-                                >
-                                  <X className="w-3.5 h-3.5 text-white stroke-[3]" />
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                      <PartnerImageUpload
+                        images={selectedImages}
+                        error={fieldErrors.photos}
+                        showError={showFieldError("photos")}
+                        inputRef={fileInputRef}
+                        onPickFiles={handleFileChange}
+                        onRemove={removeImage}
+                      />
 
                       {submitError && (
                         <p
@@ -563,41 +571,43 @@ export default function PartnerOverlay() {
                         onClick={() => {
                           void handleSubmit();
                         }}
-                        disabled={submitting}
+                        disabled={!formValid || submitting}
+                        aria-disabled={!formValid || submitting}
                       >
                         {submitting ? "SENDING…" : "SUBMIT"}
                       </PrimaryButton>
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full px-8 text-center pt-6 md:pt-10 pb-10">
-                    {/* Glassy circular wrapper for the checkmark */}
-                    <div className="w-[180px] h-[180px] md:w-48 md:h-48 shrink-0 relative mb-6 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
-                      <div className="w-[72px] h-[72px] md:w-[84px] md:h-[84px] shrink-0 relative drop-shadow-2xl">
-                        <Image
-                          src="/assets/JAde%20Correction.png" // Using provided success check icon
-                          alt="Success Check"
-                          fill
-                          sizes="96px"
-                          quality={100}
-                          className="object-contain"
-                        />
+                  <div className="flex min-h-full flex-col items-center justify-between gap-8 px-6 md:px-8 py-8 md:py-10 pb-[max(1.75rem,env(safe-area-inset-bottom,0px))] text-center">
+                    <div className="flex flex-col items-center w-full shrink-0">
+                      <div className="w-[160px] h-[160px] md:w-[180px] md:h-[180px] shrink-0 relative mb-6 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
+                        <div className="w-[72px] h-[72px] md:w-[84px] md:h-[84px] shrink-0 relative drop-shadow-2xl">
+                          <Image
+                            src="/assets/JAde%20Correction.png"
+                            alt="Success Check"
+                            fill
+                            sizes="96px"
+                            quality={100}
+                            className="object-contain"
+                          />
+                        </div>
                       </div>
+
+                      <h2 className="text-white text-shadow-sm text-gh-h1 font-philosopher mb-3">
+                        We've got it from here
+                      </h2>
+
+                      <p className="text-white/90 text-gh-body leading-relaxed max-w-sm mx-auto">
+                        Thanks for sharing your details!
+                        <br />
+                        Our team will take a look and reach out shortly to
+                        understand things better.
+                      </p>
                     </div>
 
-                    <h2 className="text-white text-shadow-sm text-gh-h1 font-philosopher mb-3">
-                      We've got it from here
-                    </h2>
-
-                    <p className="text-white text-gh-body leading-relaxed mb-10 max-w-xs mx-auto">
-                      Thanks for sharing your details!
-                      <br />
-                      Our team will take a look and reach out shortly to
-                      understand things better.
-                    </p>
-
-                    <div className="flex flex-col w-full max-w-[280px] mx-auto mt-auto">
-                      <p className="text-white/60 text-gh-label font-bold tracking-[0.2em] uppercase mb-3">
+                    <div className="flex flex-col w-full max-w-[300px] mx-auto gap-5 shrink-0">
+                      <p className="text-white/60 text-gh-label font-bold tracking-[0.2em] uppercase">
                         MEANWHILE CHECK US OUT HERE
                       </p>
 
@@ -628,13 +638,13 @@ export default function PartnerOverlay() {
                         ))}
                       </div>
 
-                      <p className="text-white/60 text-gh-label mb-6">
+                      <p className="text-white/50 text-gh-label italic">
                         Thoughtfully operated. Always.
                       </p>
 
                       <PrimaryButton
                         withArrow={false}
-                        className="w-full"
+                        className="w-full mt-1"
                         onClick={handleClose}
                       >
                         OKAY

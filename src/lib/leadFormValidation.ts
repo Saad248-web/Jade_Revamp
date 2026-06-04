@@ -280,3 +280,118 @@ export function isCareersApplyFormValid(
     Object.keys(careersApplyFieldErrors(values)).length === 0 && !resumeError
   );
 }
+
+export function validateRequiredText(
+  raw: string,
+  label: string,
+): string | undefined {
+  if (!raw.trim()) return `Please enter ${label}.`;
+  return undefined;
+}
+
+export type PartnerFormValues = {
+  fullName: string;
+  phoneNumber: string;
+  email: string;
+  company: string;
+  partnershipType: {
+    propertyOwner: boolean;
+    weddingPlanner: boolean;
+    corporatePartner: boolean;
+    musicEntertainment: boolean;
+  };
+  partnershipOther: string;
+  propertyType: {
+    privateVilla: boolean;
+    farmhouse: boolean;
+    villaInGated: boolean;
+    retreatSpace: boolean;
+  };
+  propertyOther: string;
+  propertyDetails: {
+    location: string;
+    bedrooms: string;
+    eventCapacity: string;
+  };
+};
+
+export type PartnerFieldKey =
+  | "fullName"
+  | "phoneNumber"
+  | "email"
+  | "partnershipType"
+  | "propertyType"
+  | "propertyLocation"
+  | "propertyBedrooms"
+  | "propertyEventCapacity"
+  | "photos";
+
+export type PartnerFieldErrors = Partial<Record<PartnerFieldKey, string>>;
+
+function hasAnyCheckbox(
+  pairs: Record<string, boolean> | undefined,
+): boolean {
+  return !!pairs && Object.values(pairs).some(Boolean);
+}
+
+export function partnerFieldErrors(
+  values: PartnerFormValues,
+  photoCount: number,
+): PartnerFieldErrors {
+  const errors: PartnerFieldErrors = {};
+
+  const ne = validateFullName(values.fullName);
+  if (ne) errors.fullName = ne;
+
+  const pe = validatePhone(values.phoneNumber);
+  if (pe) errors.phoneNumber = pe;
+
+  const ee = validateEmail(values.email);
+  if (ee) errors.email = ee;
+
+  const hasPartnership =
+    hasAnyCheckbox(values.partnershipType) ||
+    values.partnershipOther.trim().length > 0;
+  if (!hasPartnership) {
+    errors.partnershipType =
+      "Please select at least one partnership interest.";
+  }
+
+  const hasProperty =
+    hasAnyCheckbox(values.propertyType) ||
+    values.propertyOther.trim().length > 0;
+  if (!hasProperty) {
+    errors.propertyType = "Please select at least one property type.";
+  }
+
+  const loc = validateRequiredText(
+    values.propertyDetails.location,
+    "location",
+  );
+  if (loc) errors.propertyLocation = loc;
+
+  const bed = validateRequiredText(
+    values.propertyDetails.bedrooms,
+    "number of bedrooms",
+  );
+  if (bed) errors.propertyBedrooms = bed;
+
+  const cap = validateRequiredText(
+    values.propertyDetails.eventCapacity,
+    "outdoor event capacity",
+  );
+  if (cap) errors.propertyEventCapacity = cap;
+
+  if (photoCount < 1) {
+    errors.photos = "Please upload at least one property image.";
+  }
+
+  return errors;
+}
+
+export function isPartnerFormValid(
+  values: PartnerFormValues,
+  photoCount: number,
+): boolean {
+  return Object.keys(partnerFieldErrors(values, photoCount)).length === 0;
+}

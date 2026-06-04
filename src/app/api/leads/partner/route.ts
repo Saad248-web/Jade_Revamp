@@ -84,13 +84,35 @@ export async function POST(req: NextRequest) {
       !!pairs &&
       Object.values(pairs).some(Boolean);
 
+    const partnershipOther = String(o.partnershipOther ?? "").trim();
     if (
       !hasPartnershipInterest(
         o.partnershipType as Record<string, boolean> | undefined,
-      )
+      ) &&
+      !partnershipOther
     ) {
       return NextResponse.json(
         { error: "Select at least one partnership interest" },
+        { status: 400, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
+    const propertyType = o.propertyType as Record<string, boolean> | undefined;
+    const propertyOther = String(o.propertyOther ?? "").trim();
+    if (!hasPartnershipInterest(propertyType) && !propertyOther) {
+      return NextResponse.json(
+        { error: "Select at least one property type" },
+        { status: 400, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
+    const details = o.propertyDetails as Record<string, unknown> | undefined;
+    const location = String(details?.location ?? "").trim();
+    const bedrooms = String(details?.bedrooms ?? "").trim();
+    const eventCapacity = String(details?.eventCapacity ?? "").trim();
+    if (!location || !bedrooms || !eventCapacity) {
+      return NextResponse.json(
+        { error: "Property location, bedrooms, and event capacity are required" },
         { status: 400, headers: { "Cache-Control": "no-store" } },
       );
     }
@@ -119,6 +141,13 @@ export async function POST(req: NextRequest) {
         );
       }
       files.push(entry);
+    }
+
+    if (files.length < 1) {
+      return NextResponse.json(
+        { error: "Upload at least one property image" },
+        { status: 400, headers: { "Cache-Control": "no-store" } },
+      );
     }
 
     const leadIns = await query<{ id: string }>(
@@ -177,9 +206,18 @@ export async function POST(req: NextRequest) {
     );
   } catch (err) {
     console.error("[POST /api/leads/partner]", err);
+    const code =
+      err && typeof err === "object" && "code" in err
+        ? String((err as { code?: unknown }).code)
+        : "";
+    const devDbHint =
+      process.env.NODE_ENV !== "production" && code === "ECONNREFUSED"
+        ? "Database is not running. Start Postgres (npm run db:up) or set NEXT_PUBLIC_ENQUIRY_DEMO_MODE=true for demo submit."
+        : null;
     return NextResponse.json(
       {
         error:
+          devDbHint ??
           "Unable to save your submission. Try again or email us directly.",
       },
       { status: 500, headers: { "Cache-Control": "no-store" } },

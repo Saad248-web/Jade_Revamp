@@ -3,8 +3,36 @@ import {
   enquiryFieldErrors,
   footerFieldErrors,
   isEnquiryFormValid,
+  isPartnerFormValid,
+  partnerFieldErrors,
   validateGuestCount,
 } from "@/lib/leadFormValidation";
+
+const emptyPartnerForm = {
+  fullName: "",
+  phoneNumber: "",
+  email: "",
+  company: "",
+  partnershipType: {
+    propertyOwner: false,
+    weddingPlanner: false,
+    corporatePartner: false,
+    musicEntertainment: false,
+  },
+  partnershipOther: "",
+  propertyType: {
+    privateVilla: false,
+    farmhouse: false,
+    villaInGated: false,
+    retreatSpace: false,
+  },
+  propertyOther: "",
+  propertyDetails: {
+    location: "",
+    bedrooms: "",
+    eventCapacity: "",
+  },
+} as const;
 
 describe("leadFormValidation", () => {
   it("enquiryFieldErrors flags empty email", () => {
@@ -52,5 +80,56 @@ describe("leadFormValidation", () => {
 
   it("validateGuestCount rejects zero", () => {
     expect(validateGuestCount("0")).toBeDefined();
+  });
+
+  it("partnerFieldErrors requires property details and photos", () => {
+    const errs = partnerFieldErrors(
+      {
+        ...emptyPartnerForm,
+        fullName: "Saad Ali",
+        phoneNumber: "9876543210",
+        email: "a@b.com",
+        partnershipType: {
+          ...emptyPartnerForm.partnershipType,
+          propertyOwner: true,
+        },
+        propertyType: {
+          ...emptyPartnerForm.propertyType,
+          privateVilla: true,
+        },
+      },
+      0,
+    );
+    expect(errs.propertyLocation).toBeDefined();
+    expect(errs.propertyBedrooms).toBeDefined();
+    expect(errs.propertyEventCapacity).toBeDefined();
+    expect(errs.photos).toBeDefined();
+  });
+
+  it("isPartnerFormValid when all required fields present", () => {
+    expect(
+      isPartnerFormValid(
+        {
+          ...emptyPartnerForm,
+          fullName: "Saad Ali",
+          phoneNumber: "9876543210",
+          email: "a@b.com",
+          partnershipType: {
+            ...emptyPartnerForm.partnershipType,
+            propertyOwner: true,
+          },
+          propertyType: {
+            ...emptyPartnerForm.propertyType,
+            privateVilla: true,
+          },
+          propertyDetails: {
+            location: "Goa",
+            bedrooms: "4",
+            eventCapacity: "100",
+          },
+        },
+        1,
+      ),
+    ).toBe(true);
   });
 });
