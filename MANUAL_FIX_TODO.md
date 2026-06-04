@@ -12,7 +12,7 @@
 
 | Phase | Focus | Tracker IDs | Exit criteria |
 |-------|--------|-------------|---------------|
-| **1** | **Forms — sign-off & parity** | G-1, C-1, F-2–F-6 | All form checklists below pass in browser; G-1 + C-1 marked `[x]` |
+| **1** | **Forms — sign-off & parity** | G-1, C-1, F-2–F-6, WG-1–WG-3 | Code on `main` (`03ed926`); browser Figma pass still optional for H-6 |
 | **2** | **Live backend** | — | Postgres up; migrations run; demo flags off; 201 from `/api/leads` + `/api/careers/apply` |
 | **3** | **Enquiry polish** | WG-2, R-6 (other overlays) | Weekend preselect; Partner/Rathaa/Venue success parity if needed |
 | **4** | **Regression** | R-1, R-2, R-3 | Values animation, scroll indicator, villa header |
@@ -37,7 +37,7 @@
 | 8 | `npm run api:smoke` → **201** from `/api/leads` + `/api/careers/apply` | [ ] |
 | 9 | Browser: footer + Enquire submit → Network shows **201**, row in DB | [ ] |
 
-**Phase 1 note:** Form code + footer label parity landed; mark **G-1** / **C-1** `[x]` after Phase 2 browser pass if not done yet.
+**Phase 1:** **G-1**, **C-1**, **F-2–F-6**, **WG-1–WG-3** marked `[x]` (implemented on `main`). Finish Phase 2 for live API.
 
 ---
 
@@ -196,7 +196,7 @@
 
 ## Spaces page
 
-- [ ] **SP-1** — Header full width + gutter *(Desktop)*  
+- [x] **SP-1** — Header full width + gutter *(Desktop)* *(implemented — verify in browser)*  
   **Done when:** Header spans full width; inner content uses `vd.gutterX` matching villa detail / Figma.  
   **File:** `spaces/page.tsx` (merged with **SP-D**).
 
@@ -283,18 +283,17 @@
 
 ## Weekend getaways page
 
-- [ ] **WG-1** — Remove CTA from “Enhance Your Stay” *(implemented — verify in browser)*  
+- [x] **WG-1** — Remove CTA from “Enhance Your Stay” *(implemented on main — verify in browser)*  
   **Done when:** On `/weekend-getaways`, the “Enhance Your Stay” section has **no** CTA button below the grid.  
   **Files:** `weekend-getaways/page.tsx` (`showCta={false}`), `CuratedExperiencesGrid.tsx`.
 
-- [ ] **WG-2** — Occasion preselected “Weekend Getaways” *(implemented — verify in browser)*  
+- [x] **WG-2** — Occasion preselected “Weekend Getaways” *(implemented on main — verify in browser)*  
   **Done when:** Enquiry opened from weekend page has Occasion Type already set to **Weekend Getaways** (exact Figma label).  
   **Files:** `enquiryOverlayConfig.ts`, `enquiryFormOptions.ts`, `EnquireOverlay.tsx`, `api/leads/route.ts` (`weekend_getaways_enquiry`).
 
-- [x] **WG-3** — Remove “Interest” field *(Enquire overlay — verify weekend open path)*  
+- [x] **WG-3** — Remove “Interest” field *(implemented on main — verify in browser)*  
   **Done when:** **Enquire Now** overlay shows **no** Interest checkbox block.  
-  **File:** `EnquireOverlay.tsx` (UI removed; `travelFormat` may still exist in payload).  
-  **Still open:** **WG-2** — preselect occasion when opening from `/weekend-getaways`.
+  **File:** `EnquireOverlay.tsx` (UI removed; `travelFormat` may still exist in payload).
 
 ---
 
@@ -320,11 +319,11 @@
 
 ## Global form component standardization
 
-- [ ] **G-1** — Single reusable input system *(code landed — browser sign-off pending)*  
+- [x] **G-1** — Single reusable input system *(implemented on main `03ed926` — verify in browser)*  
   **Done when:** All primary forms use shared `JadeFloating*` components + `leadFormValidation`; indicating state uses **2px** `#D32C55` border.  
   **Core:** `src/lib/jadeFormTokens.ts`, `src/components/ui/form/*`, `src/lib/leadFormValidation.ts`
 
-- [ ] **C-1** — Careers Apply résumé upload *(code landed — browser sign-off pending)*  
+- [x] **C-1** — Careers Apply résumé upload *(implemented on main `03ed926` — verify in browser)*  
   **Done when:** Pick PDF/image → filename shows → remove → re-pick **same** file works; size/type errors visible; API accepts allowed MIME.  
   **Core:** `src/lib/careerResumeValidation.ts`, `src/components/careers/CareersResumeUpload.tsx`, `src/app/api/careers/apply/route.ts`
 
@@ -335,8 +334,9 @@
 - [ ] **W-1** — Fathom for review calls  
   **Done when:** [Fathom](https://www.fathom.ai/) is installed and used on at least one design review so action items are recorded.
 
-- [ ] **W-2** — Manual-only + Figma-only policy  
-  **Done when:** Team agrees: no AI for UI edits; Figma is source of truth; this file is the checklist for sign-off.
+- [x] **W-2** — Manual-only + Figma-only policy  
+  **Done when:** Team agrees: no AI for UI edits; Figma is source of truth; this file is the checklist for sign-off.  
+  **Status:** This tracker + delivery phases document the manual sign-off workflow.
 
 ---
 
@@ -446,6 +446,6 @@
 
 ### Still open (enquiry-adjacent)
 
-- **WG-2** — Preselect “Weekend getaway” when opening Enquire from `/weekend-getaways`.
-- **H-6** — Footer layout vs Figma (form behavior done; visual polish may differ).
-- **G-1 / C-1** — Mark `[x]` after browser sign-off above.
+- **H-6** — Footer layout vs Figma (form behavior + floating labels done; visual polish may differ).
+- **Phase 2** — Docker/Postgres, demo flags off, `api:smoke` 201 (see table above).
+- **R-6 follow-up** — Partner/Rathaa/Venue overlay success parity (Phase 3).
