@@ -365,7 +365,7 @@
 
 | Date | Commit | IDs |
 |------|--------|-----|
-| 2026-06-05 | *(H-5 push)* | H-5 blog header subtext one line (desktop/laptop) |
+| 2026-06-05 | `949d66b` | H-5 blog header subtext one line (desktop/laptop) |
 | 2026-06-05 | `9f0e43c` / `4537780` | H-1–H-4, H-2 peek ratio, A-1 (Featured §6), scroll-linked primitives, weddings counter removed |
 | 2026-06-04 | *(uncommitted — dev session)* | R-6, F-1–F-6, WG-3 (partial), enquiry demo/calendar/scroll |
 
