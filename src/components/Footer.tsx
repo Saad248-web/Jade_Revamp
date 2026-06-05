@@ -171,6 +171,9 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
     { label: "REFUND POLICY", href: "/refund-policy" },
   ];
 
+  const footerNavLinkClass =
+    "font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors inline-flex items-center gap-2 lg:text-gh-desc lg:text-[#EFCD62] lg:tracking-[0.16em] lg:hover:text-[#EFCD62]/80 lg:gap-2 lg:whitespace-nowrap";
+
   return (
     <>
       <footer
@@ -206,8 +209,8 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
             <div className="lg:col-span-7 flex flex-col gap-10 lg:pr-12">
               {/* Heading */}
               <div>
-                <h2 className="font-philosopher text-gh-h1 text-white leading-tight">
-                  We'd love to hear from <br />
+                <h2 className="font-philosopher text-gh-h1 text-white leading-tight lg:whitespace-nowrap">
+                  We&apos;d love to hear from <br className="lg:hidden" />
                   you
                 </h2>
               </div>
@@ -375,41 +378,53 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
               </form>
             </div>
 
-            <div className="lg:col-start-8 lg:col-span-5 flex flex-col gap-10 border-t border-white/10 pt-8 lg:border-t-0 lg:pt-0 lg:border-l lg:border-white/10 lg:pl-12">
-              {/* LINKS block (matches screenshot style, but keeps all existing links) */}
-              <div>
-                <div className="grid grid-cols-2 gap-x-4 sm:gap-x-10 gap-y-12">
-                  <div className="flex flex-col gap-3 items-start">
+            <div className="lg:col-start-8 lg:col-span-5 flex flex-col gap-10 border-t border-white/10 pt-8 lg:gap-0 lg:border-t-0 lg:pt-0 lg:border-l lg:border-white/10 lg:px-12 xl:px-16">
+              {/* LINKS — mobile/tablet: original; lg+: left-aligned with contact block below */}
+              <div className="lg:flex-1 lg:flex lg:w-full lg:items-center lg:justify-start lg:pt-8 xl:pt-10">
+                <div className="grid grid-cols-2 gap-x-4 sm:gap-x-10 lg:gap-x-[4.5rem] xl:gap-x-20 w-full">
+                  <div className="flex flex-col gap-3 lg:gap-5 items-start">
                     {LINKS_COLUMN_1.map((link) => (
                       <Link
                         key={link.label}
                         href={link.href}
-                        className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors inline-flex items-center gap-2"
+                        className={footerNavLinkClass}
                       >
                         <span>{link.label}</span>
                         <span
                           aria-hidden
-                          className="shrink-0 text-[0.65em] leading-none translate-y-px select-none"
+                          className="shrink-0 text-[0.65em] leading-none translate-y-px select-none lg:hidden"
                         >
                           ▸
+                        </span>
+                        <span
+                          aria-hidden
+                          className="shrink-0 text-[0.45em] leading-none select-none hidden lg:inline"
+                        >
+                          •
                         </span>
                       </Link>
                     ))}
                   </div>
 
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 lg:gap-5 items-start">
                     {LINKS_COLUMN_2.map((link) => (
                       <Link
                         key={link.label}
                         href={link.href}
-                        className="font-manrope text-gh-label text-[#EFCD62]/85 tracking-widest uppercase hover:text-[#EFCD62] transition-colors inline-flex items-center gap-2"
+                        className={footerNavLinkClass}
                       >
                         <span>{link.label}</span>
                         <span
                           aria-hidden
-                          className="shrink-0 text-[0.65em] leading-none translate-y-px select-none"
+                          className="shrink-0 text-[0.65em] leading-none translate-y-px select-none lg:hidden"
                         >
                           ▸
+                        </span>
+                        <span
+                          aria-hidden
+                          className="shrink-0 text-[0.45em] leading-none select-none hidden lg:inline"
+                        >
+                          •
                         </span>
                       </Link>
                     ))}
@@ -418,7 +433,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
               </div>
 
               {/* Contact Info Anchor */}
-              <div className="mt-auto pt-10 border-t border-white/10">
+              <div className="mt-auto pt-10 lg:pt-16 border-t border-white/10">
                 <div className="flex flex-col gap-6">
                   <div className="w-12 h-12 relative opacity-50 contrast-125">
                     <Image

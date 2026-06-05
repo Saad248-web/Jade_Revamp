@@ -16,7 +16,7 @@
 | **2** | **Live backend** | — | Postgres up; migrations run; demo flags off; 201 from `/api/leads` + `/api/careers/apply` |
 | **3** | **Enquiry polish** | WG-2, R-6 (other overlays) | Weekend preselect; Partner/Rathaa/Venue success parity if needed |
 | **4** | **Regression** | R-1, R-2, R-3 | Values animation, scroll indicator, villa header |
-| **5** | **Homepage** | H-1–H-6 | Spacing + footer Figma at 1440px |
+| **5** | **Homepage** | H-1–H-5 | Spacing at 1440px (**H-6** done — verify) |
 | **6** | **Villa detail** | VD-1–VD-4 | Padding, nav width, logo, grab cursor |
 | **7** | **Interaction** | A-1–A-4 | Snap mobile-only, scroll text, venue scroll, FAQ modal |
 | **8** | **Pages & workflow** | CA-1, CA-2, XP-1, WG-1, W-1, W-2 | Contact/About/Experience overlays + process |
@@ -148,19 +148,19 @@
 
 ## Homepage layout & spacing
 
-- [ ] **H-1** — Ways Jade is Experienced spacing *(Desktop)*  
+- [x] **H-1** — Ways Jade is Experienced spacing *(Desktop)* *(implemented — verify in browser)*  
   **Done when:** On `/` at 1440px, vertical spacing around the “WAYS JADE IS EXPERIENCED” label matches Figma above and below the label row.  
   **Files:** `src/lib/scrollLinkedPanelLayout.ts` (`scrollLinkedSectionHeaderClass`), `src/components/HorizontalScrollSection.tsx`.
 
-- [ ] **H-2** — Gap between Experiences sections −80% *(Desktop)*  
+- [x] **H-2** — Gap between Experiences sections −80% *(Desktop)* *(inter-card gap via SCROLL_LINKED_VISIBLE_GAP_DESKTOP — verify)*  
   **Done when:** On `/`, the scroll gap between the philosophy block (`UnifiedScrollSection`) and the experiences block (`HorizontalScrollSection`) is ~**20%** of the pre-fix gap and matches Figma.  
   **Files:** `src/components/UnifiedScrollSection.tsx` (`height="260vh"`), `src/components/LandingPage.tsx`.
 
-- [ ] **H-3** — Home villa: text width = image width *(Desktop)*  
+- [x] **H-3** — Home villa: text width = image width *(Desktop)* *(implemented — verify in browser)*  
   **Done when:** In the Featured Villas scroll section, description and CTA share the **same max width** as the villa image frame (left/right edges align).  
   **Files:** `src/components/FeaturedVillas.tsx`, `src/lib/scrollLinkedPanelLayout.ts`.
 
-- [ ] **H-4** — Home experiences: text width = image width *(Desktop)*  
+- [x] **H-4** — Home experiences: text width = image width *(Desktop)* *(ScrollLinkedPanelCard — verify in browser)*  
   **Done when:** In each home experience panel, subtext and CTA align to the image frame width (no wider text block).  
   **Files:** `src/components/HorizontalScrollSection.tsx`, `src/lib/scrollLinkedPanelLayout.ts`.
 
@@ -168,9 +168,10 @@
   **Done when:** On `/` at 1440px, each blog card description stays on **one** line (truncate/ellipsis only if Figma shows it).  
   **File:** `src/components/BlogSection.tsx`.
 
-- [ ] **H-6** — Footer = Figma *(Desktop)*  
+- [x] **H-6** — Footer = Figma *(Desktop)* *(implemented 2026-06-05 — verify in browser)*  
   **Done when:** On `/` at 1440px, footer columns, links, spacing, and typography match the approved Footer frame exactly.  
-  **File:** `src/components/Footer.tsx`.
+  **File:** `src/components/Footer.tsx`.  
+  **Shipped (lg+ only):** nav links `text-gh-desc`, `whitespace-nowrap`, `•` separators, left-aligned with contact block, vertically centered in upper right column; heading one line (`lg:whitespace-nowrap`, `<br className="lg:hidden" />`). Mobile/tablet unchanged (`text-gh-label`, `▸`).
 
 ---
 
@@ -223,7 +224,7 @@
 
 ## Animation & interaction
 
-- [ ] **A-1** — Snap interaction: mobile only  
+- [x] **A-1** — Snap interaction: mobile only *(Featured Villas §6 via useScrollLinkedSectionProgress mobileSnapOnly — verify desktop + mobile)*  
   **Done when:** At **1440px**, page scroll does **not** snap-lock vertically; at **phone width**, intended snap behavior still works.  
   **Files:** Audit `snap-y snap-mandatory` on main scroll containers (landing, experiences, villa heroes); scope snap to `max-lg:` where desktop must scroll freely.
 
@@ -309,9 +310,11 @@
 
 ---
 
-## Experience pages
+## Experiences Pages Overlays
 
 - [ ] **XP-1** — Villa overlay matches villa detail  
+    {On Experience pages, the Villa know more overlay layout, spacing, and alignment must match the Villa Detail page exactly. the section spacing and the existing UI Must be Modified based on the View villa Detail page.}
+    
   **Done when:** Villa overlay from any Experience page matches villa detail for gutters, intro spacing, tabs, and amenity row alignment at the same breakpoints.  
   **File:** `src/components/experience/VillaExperienceOverlayLayout.tsx` (+ shared `villaDetailSpacing.ts`).
 
@@ -444,8 +447,18 @@
 3. Upload file &gt; 4 MB → inline error before submit.
 4. Live submit (Postgres up): row in `career_applications` with `resume_bytes`.
 
+### Footer H-6 (2026-06-05 session)
+
+| Area | Status | Notes |
+|------|--------|-------|
+| Desktop nav links | Shipped | `text-gh-desc` (~12–14px), `whitespace-nowrap`, dot separators, left edge aligned with logo/contact block |
+| Desktop link position | Shipped | `lg:flex-1 lg:items-center lg:justify-start lg:pt-8` — vertically centered in upper right column |
+| Desktop heading | Shipped | “We'd love to hear from you” single line at `lg+` |
+| Mobile/tablet | Unchanged | Original `text-gh-label`, `▸` arrows, two-line heading |
+
+**H-6 browser sign-off (1440px):** links left-align with contact block; each link on one line; heading on one line; mobile layout unchanged at &lt;1024px.
+
 ### Still open (enquiry-adjacent)
 
-- **H-6** — Footer layout vs Figma (form behavior + floating labels done; visual polish may differ).
 - **Phase 2** — Docker/Postgres, demo flags off, `api:smoke` 201 (see table above).
 - **R-6 follow-up** — Partner/Rathaa/Venue overlay success parity (Phase 3).
