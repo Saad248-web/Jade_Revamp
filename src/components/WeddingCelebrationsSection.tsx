@@ -1,30 +1,13 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import JadeImage from "@/components/ui/JadeImage";
-import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-
-import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import { motion, useTransform, type MotionValue } from "framer-motion";
 import PrimaryButton from "@/components/PrimaryButton";
-import {
-  scrollLinkedPanelAreaClass,
-  scrollLinkedPanelOuterClass,
-  scrollLinkedPanelImageFrameTallHeaderClass,
-  scrollLinkedPanelBodyClass,
-  scrollLinkedPanelCtaClass,
-  scrollLinkedPanelSlideClass,
-  scrollLinkedPanelSlideInteractiveClass,
-  scrollLinkedPanelStackWideClass,
-  scrollLinkedPanelStackWrapClass,
-  scrollLinkedSectionHeaderTallClass,
-  scrollLinkedStickyStageClass,
-  scrollLinkedStickyStageInnerClass,
-} from "@/lib/scrollLinkedPanelLayout";
-import { useScrollLinkedPanelOffset } from "@/lib/useScrollLinkedPanelOffset";
+import ScrollLinkedHorizontalSection from "@/components/scroll-linked/ScrollLinkedHorizontalSection";
+import ScrollLinkedPanelCard, {
+  type ScrollLinkedPanelData,
+} from "@/components/scroll-linked/ScrollLinkedPanelCard";
 
-const CELEBRATIONS = [
+const CELEBRATIONS: ScrollLinkedPanelData[] = [
   {
     id: "mehendi",
     title: "Mehendi & Haldi",
@@ -72,103 +55,10 @@ const CELEBRATIONS = [
   },
 ];
 
-export default function WeddingCelebrationsSection() {
-  const targetRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-  });
-
-  // Smooth scroll spring
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
-  const totalSteps = CELEBRATIONS.length + 1;
-
-  const celebrations = CELEBRATIONS;
-
-  return (
-    <section ref={targetRef} className="relative h-[600vh] bg-[#1A1C1E]">
-      <div
-        className={`${scrollLinkedStickyStageClass} ${scrollLinkedStickyStageInnerClass} bg-[#1A1C1E]`}
-      >
-        {/* Top Label & Counter - Global */}
-        <div className={scrollLinkedSectionHeaderTallClass}>
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/90 to-transparent -z-10" />
-          <span
-            className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-[#EFCD62] drop-shadow-lg block"
-            style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
-          >
-            PRE WEDDING CELEBRATIONS
-          </span>
-          <GlobalCounter
-            progress={smoothProgress}
-            total={CELEBRATIONS.length}
-            totalSteps={totalSteps}
-          />
-        </div>
-
-        {/* Panels Interactive Area */}
-        <div className={scrollLinkedPanelAreaClass}>
-          {celebrations.map((celebration, i) => (
-            <CelebrationPanelSlide
-              key={celebration.id}
-              data={celebration}
-              index={i}
-              globalProgress={smoothProgress}
-              totalSteps={totalSteps}
-            />
-          ))}
-          <EndButton globalProgress={smoothProgress} />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// Global Counter Component
-function GlobalCounter({
-  progress,
-  total,
-  totalSteps,
-}: {
-  progress: any;
-  total: number;
-  totalSteps: number;
-}) {
-  const [current, setCurrent] = useState(1);
-
-  useEffect(() => {
-    return progress.on("change", (v: number) => {
-      const step = 1 / (totalSteps - 1);
-      const lastPanelP = (total - 1) / (totalSteps - 1);
-      const effectiveP = Math.min(v, lastPanelP);
-
-      let idx = Math.round(effectiveP / step) + 1;
-      if (idx > total) idx = total;
-      if (idx < 1) idx = 1;
-
-      setCurrent(idx);
-    });
-  }, [progress, total, totalSteps]);
-
-  return (
-    <div className="relative flex items-center gap-10 md:gap-12 font-philosopher text-gh-scroll mt-2">
-      <span className="text-white drop-shadow-lg transition-all duration-300">
-        {current}
-      </span>
-      <div className="w-24 md:w-32 h-[1px] bg-white/70 drop-shadow-lg" />
-      <span className="text-white/70 drop-shadow-lg">{total}</span>
-    </div>
-  );
-}
-
-function EndButton({ globalProgress }: { globalProgress: any }) {
-  const opacity = useTransform(globalProgress, [0.85, 1.0], [0, 1]);
-  const scale = useTransform(globalProgress, [0.85, 1.0], [0.8, 1]);
-  const y = useTransform(globalProgress, [0.85, 1.0], [60, 0]);
+function EndButton({ panelProgress }: { panelProgress: MotionValue<number> }) {
+  const opacity = useTransform(panelProgress, [0.85, 1.0], [0, 1]);
+  const scale = useTransform(panelProgress, [0.85, 1.0], [0.8, 1]);
+  const y = useTransform(panelProgress, [0.85, 1.0], [60, 0]);
 
   return (
     <motion.div
@@ -189,93 +79,34 @@ function EndButton({ globalProgress }: { globalProgress: any }) {
   );
 }
 
-function CelebrationPanelSlide({
-  data,
-  index,
-  globalProgress,
-  totalSteps,
-}: {
-  data: any;
-  index: number;
-  globalProgress: any;
-  totalSteps: number;
-}) {
-  const panelRef = useRef<HTMLDivElement>(null);
-  const stackWrapRef = useRef<HTMLDivElement>(null);
-  const { offsetPx } = useScrollLinkedPanelOffset(stackWrapRef, {
-    visibleGap: 56,
-  });
-
-  const x = useTransform(globalProgress, (p: number) => {
-    return (index - p * totalSteps) * offsetPx;
-  });
+export default function WeddingCelebrationsSection() {
+  const totalSteps = CELEBRATIONS.length + 1;
+  const panelCount = CELEBRATIONS.length;
 
   return (
-    <motion.div
-      style={{ x, zIndex: index * 10 }}
-      className={`${scrollLinkedPanelSlideClass} bg-transparent`}
+    <ScrollLinkedHorizontalSection
+      sectionHeightVh={600}
+      bgClassName="bg-[#1A1C1E]"
+      headerLabel="PRE WEDDING CELEBRATIONS"
+      headerLabelClassName="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-[#EFCD62] drop-shadow-lg block"
+      scrollMode="free"
+      endButton={(panelProgress) => (
+        <EndButton panelProgress={panelProgress} />
+      )}
     >
-      <div className={scrollLinkedPanelSlideInteractiveClass}>
-        <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
-        <div className={`${scrollLinkedPanelOuterClass} px-6 md:px-24`}>
-          <div
-            ref={stackWrapRef}
-            className={`${scrollLinkedPanelStackWrapClass} max-w-xl`}
-          >
-            <div className={scrollLinkedPanelStackWideClass}>
-            <div className={scrollLinkedPanelImageFrameTallHeaderClass}>
-              <div className="w-full h-full relative">
-                {data.image ? (
-                  <JadeImage
-                    src={data.image}
-                    alt={data.title}
-                    fill
-                    className="object-cover object-center"
-                    sizes="(max-width: 1024px) 100vw, 600px"
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[#1A1C1E] to-black/80" />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              </div>
-            </div>
-
-            <div className="relative w-full flex flex-col items-start text-left shrink-0">
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="font-philosopher text-gh-h2 text-white leading-none"
-                style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
-              >
-                {data.title}
-              </motion.h2>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className={scrollLinkedPanelBodyClass}
-              >
-                {data.subtext}
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="w-full max-w-md"
-              >
-                <Link
-                  href={data.href || "#"}
-                  className={scrollLinkedPanelCtaClass}
-                >
-                  {data.cta} <ArrowRight className="w-5 h-5" />
-                </Link>
-              </motion.div>
-            </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
+      {(panelProgress) =>
+        CELEBRATIONS.map((celebration, i) => (
+          <ScrollLinkedPanelCard
+            key={celebration.id}
+            data={celebration}
+            index={i}
+            panelProgress={panelProgress}
+            totalSteps={totalSteps}
+            panelCount={panelCount}
+            gapVariant="wide"
+          />
+        ))
+      }
+    </ScrollLinkedHorizontalSection>
   );
 }

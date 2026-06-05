@@ -1,10 +1,18 @@
 "use client";
 
 import { useEffect, useState, type RefObject } from "react";
+import {
+  SCROLL_LINKED_DESKTOP_PEEK_RATIO,
+  resolveScrollLinkedLegacyGapAddon,
+  type ScrollLinkedPanelGapVariant,
+} from "@/lib/scrollLinkedPanelLayout";
+
+const DESKTOP_MQ = "(min-width: 1024px)";
 
 export type UseScrollLinkedPanelOffsetOptions = {
-  /** Gap between centered panel and next peek (Section 3: 20, Featured: 56). */
+  /** @deprecated Use variant — visibleGap overrides breakpoint constants when set. */
   visibleGap?: number;
+  variant?: ScrollLinkedPanelGapVariant;
 };
 
 /** Tailwind max-width fallbacks when measure ref is not mounted. */
@@ -25,12 +33,30 @@ function readViewportWidth(): number {
   return window.visualViewport?.width ?? window.innerWidth;
 }
 
-function computeOffsetPx(
+/**
+ * Legacy mobile offset — also used when visibleGap is explicitly overridden.
+ */
+function computeLegacyOffsetPx(
   viewportWidth: number,
   panelWidth: number,
-  visibleGap: number,
+  gapAddon: number,
 ): number {
-  return Math.ceil(viewportWidth / 2 + panelWidth / 2 + visibleGap);
+  return Math.ceil(viewportWidth / 2 + panelWidth / 2 + gapAddon);
+}
+
+/**
+ * Desktop/laptop: visible peek between card edges ≈ offsetPx − panelWidth.
+ * Scale legacy peek by SCROLL_LINKED_DESKTOP_PEEK_RATIO (keep 20% = −80%).
+ */
+function computeDesktopOffsetPx(
+  viewportWidth: number,
+  panelWidth: number,
+  variant: ScrollLinkedPanelGapVariant,
+): number {
+  const legacyAddon = resolveScrollLinkedLegacyGapAddon(variant);
+  const legacyPeek = viewportWidth / 2 - panelWidth / 2 + legacyAddon;
+  const desktopPeek = Math.max(0, legacyPeek * SCROLL_LINKED_DESKTOP_PEEK_RATIO);
+  return Math.ceil(panelWidth + desktopPeek);
 }
 
 /**
@@ -41,7 +67,8 @@ export function useScrollLinkedPanelOffset(
   measureRef: RefObject<HTMLElement | null>,
   options: UseScrollLinkedPanelOffsetOptions = {},
 ): { offsetPx: number; viewportWidth: number } {
-  const visibleGap = options.visibleGap ?? 20;
+  const variant = options.variant ?? "standard";
+  const visibleGapOverride = options.visibleGap;
   const [offsetPx, setOffsetPx] = useState(1000);
   const [viewportWidth, setViewportWidth] = useState(1920);
 
@@ -53,18 +80,33 @@ export function useScrollLinkedPanelOffset(
         measured && measured > 0
           ? measured
           : fallbackScrollLinkedPanelWidth(vw);
+      const isDesktop = window.matchMedia(DESKTOP_MQ).matches;
       setViewportWidth(vw);
-      setOffsetPx(computeOffsetPx(vw, panelWidth, visibleGap));
+      if (visibleGapOverride !== undefined) {
+        setOffsetPx(computeLegacyOffsetPx(vw, panelWidth, visibleGapOverride));
+      } else if (isDesktop) {
+        setOffsetPx(computeDesktopOffsetPx(vw, panelWidth, variant));
+      } else {
+        setOffsetPx(
+          computeLegacyOffsetPx(
+            vw,
+            panelWidth,
+            resolveScrollLinkedLegacyGapAddon(variant),
+          ),
+        );
+      }
     };
 
     recompute();
 
     const burst = [80, 200, 500].map((ms) => setTimeout(recompute, ms));
+    const mq = window.matchMedia(DESKTOP_MQ);
     const vv = window.visualViewport;
     vv?.addEventListener("resize", recompute);
     vv?.addEventListener("scroll", recompute);
     window.addEventListener("resize", recompute, { passive: true });
     window.addEventListener("orientationchange", recompute);
+    mq.addEventListener("change", recompute);
 
     return () => {
       burst.forEach(clearTimeout);
@@ -72,8 +114,9 @@ export function useScrollLinkedPanelOffset(
       vv?.removeEventListener("scroll", recompute);
       window.removeEventListener("resize", recompute);
       window.removeEventListener("orientationchange", recompute);
+      mq.removeEventListener("change", recompute);
     };
-  }, [measureRef, visibleGap]);
+  }, [measureRef, visibleGapOverride, variant]);
 
   return { offsetPx, viewportWidth };
 }

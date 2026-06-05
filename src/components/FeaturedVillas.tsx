@@ -3,9 +3,7 @@
 import { useRef, useState } from "react";
 import {
   motion,
-  useScroll,
   useTransform,
-  useSpring,
   AnimatePresence,
   useReducedMotion,
   type MotionValue,
@@ -21,10 +19,9 @@ import { useScrollLinkedPanelOffset } from "@/lib/useScrollLinkedPanelOffset";
 import { useMediaMinLg } from "@/lib/useMediaMinLg";
 import { JADE_GREEN } from "@/lib/jadeSectionColors";
 import PrimaryButton from "@/components/PrimaryButton";
-import {
-  usePreloadNeighborImages,
-  useSnappedScrollProgress,
-} from "@/lib/carouselMotion";
+import { usePreloadNeighborImages } from "@/lib/carouselMotion";
+import { useScrollLinkedSectionProgress } from "@/lib/useScrollLinkedSectionProgress";
+import ScrollLinkedHorizontalSection from "@/components/scroll-linked/ScrollLinkedHorizontalSection";
 import {
   liquidCarouselBgVariants,
   type HeroSplitCustom,
@@ -38,14 +35,12 @@ import {
   scrollLinkedFeaturedVillaImageFrameClass,
   scrollLinkedIntroSlideClass,
   scrollLinkedPanelBodyClass,
-  scrollLinkedPanelAreaClass,
   scrollLinkedPanelOuterFeaturedClass,
   scrollLinkedPanelSlideClass,
   scrollLinkedPanelSlideInteractiveClass,
-  scrollLinkedPanelStackWideClass,
-  scrollLinkedPanelStackWrapClass,
-  scrollLinkedStickyStageClass,
-  scrollLinkedStickyStageInnerClass,
+  scrollLinkedPanelStackFeaturedClass,
+  scrollLinkedPanelStackWrapFeaturedClass,
+  scrollLinkedPanelTextBlockClass,
 } from "@/lib/scrollLinkedPanelLayout";
 
 const VILLAS = [
@@ -136,32 +131,12 @@ export default function FeaturedVillas() {
   const deferPattern = shouldDeferParallaxPatternToStickyStage(
     FEATURED_PATTERN.parallaxFixed,
   );
-  const targetRef = useRef<HTMLDivElement>(null);
-  const reducedMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 70,
-    damping: 24,
-    mass: 0.6,
-    restDelta: 0.001,
-  });
-
   const totalVillas = VILLAS.length;
   const totalSteps = totalVillas + 2;
-  const dwellProgress = useSnappedScrollProgress(
-    smoothProgress,
-    totalSteps + 1,
-    reducedMotion,
-    0.32,
-  );
-  const snappedProgress = useSpring(dwellProgress, {
-    stiffness: 120,
-    damping: 26,
-    mass: 0.5,
-    restDelta: 0.0005,
+  const { targetRef, panelProgress } = useScrollLinkedSectionProgress({
+    scrollMode: "mobileSnapOnly",
+    stepCount: totalSteps + 1,
+    smoothSpring: true,
   });
 
   return (
@@ -172,32 +147,37 @@ export default function FeaturedVillas() {
       pattern={deferPattern ? false : FEATURED_PATTERN}
     >
       <NavbarThemeTrigger theme="white" sectionRef={targetRef} />
-      <div
-        className={`${scrollLinkedStickyStageClass} ${scrollLinkedStickyStageInnerClass} relative`}
+      <ScrollLinkedHorizontalSection
+        embedded
+        bgClassName="relative"
+        targetRef={targetRef}
+        panelProgress={panelProgress}
+        scrollMode="mobileSnapOnly"
+        stepCount={totalSteps + 1}
+        smoothSpring
+        panelAreaVariant="featured"
       >
-        {deferPattern && <LuxuryPattern {...FEATURED_PATTERN} />}
-        {/* Sections */}
-        <div className={scrollLinkedPanelAreaClass}>
-          {/* Panel 0: Intro */}
-          <IntroPanel globalProgress={snappedProgress} totalSteps={totalSteps} />
-
-          {VILLAS.map((villa, i) => (
-            <VillaSlide
-              key={villa.id}
-              data={villa}
-              index={i + 1}
-              globalProgress={snappedProgress}
+        {(progress) => (
+          <>
+            {deferPattern && <LuxuryPattern {...FEATURED_PATTERN} />}
+            <IntroPanel globalProgress={progress} totalSteps={totalSteps} />
+            {VILLAS.map((villa, i) => (
+              <VillaSlide
+                key={villa.id}
+                data={villa}
+                index={i + 1}
+                globalProgress={progress}
+                totalSteps={totalSteps}
+              />
+            ))}
+            <CtaSlide
+              globalProgress={progress}
               totalSteps={totalSteps}
+              index={totalVillas + 1}
             />
-          ))}
-
-          <CtaSlide
-            globalProgress={snappedProgress}
-            totalSteps={totalSteps}
-            index={totalVillas + 1}
-          />
-        </div>
-      </div>
+          </>
+        )}
+      </ScrollLinkedHorizontalSection>
     </SectionWrapper>
   );
 }
@@ -211,7 +191,7 @@ function useFeaturedCarouselX(
 ) {
   const { offsetPx, viewportWidth: vw } = useScrollLinkedPanelOffset(
     measureRef,
-    { visibleGap: 56 },
+    { variant: "wide" },
   );
 
   return useTransform(globalProgress, (p: number) => {
@@ -239,7 +219,7 @@ function IntroPanel({
   const isLg = useMediaMinLg();
   const introMeasureRef = useRef<HTMLDivElement>(null);
   const { offsetPx } = useScrollLinkedPanelOffset(introMeasureRef, {
-    visibleGap: 56,
+    variant: "wide",
   });
 
   const exitStart = step * 0.85;
@@ -352,9 +332,9 @@ function VillaSlide({
         <Link
           href={data.link}
           ref={innerRef}
-          className={`${scrollLinkedPanelStackWrapClass} pointer-events-auto max-w-3xl group rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EFCD62]`}
+          className={`${scrollLinkedPanelStackWrapFeaturedClass} pointer-events-auto w-full group rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EFCD62]`}
         >
-          <div className={scrollLinkedPanelStackWideClass}>
+          <div className={scrollLinkedPanelStackFeaturedClass}>
           <div
             className={scrollLinkedFeaturedVillaImageFrameClass}
             style={{ perspective: "1500px" }}
@@ -472,8 +452,7 @@ function VillaSlide({
             </div>
           </div>
 
-          {/* Text Section */}
-          <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 max-lg:pb-0 pb-8">
+          <div className={scrollLinkedPanelTextBlockClass}>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -559,14 +538,14 @@ function CtaSlide({
         <div className={scrollLinkedPanelOuterFeaturedClass}>
         <div
           ref={innerRef}
-          className={`${scrollLinkedPanelStackWrapClass} pointer-events-auto max-w-3xl rounded-sm`}
+          className={`${scrollLinkedPanelStackWrapFeaturedClass} pointer-events-auto w-full rounded-sm`}
         >
-          <div className={scrollLinkedPanelStackWideClass}>
+          <div className={scrollLinkedPanelStackFeaturedClass}>
           <div className={`${scrollLinkedFeaturedVillaImageFrameClass} bg-[#0f2a1f]`}>
             <VillaHeroGridImages />
           </div>
 
-          <div className="relative w-full flex flex-col items-start text-left mt-2 h-auto shrink-0 max-lg:pb-0 pb-8">
+          <div className={scrollLinkedPanelTextBlockClass}>
             <p className="font-manrope text-gh-label tracking-[0.2em] uppercase text-[#EFCD62] mb-2 font-bold">
               Explore All Villas
             </p>

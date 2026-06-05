@@ -1,35 +1,14 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
-import JadeImage from "@/components/ui/JadeImage";
-import { useMediaMinLg } from "@/lib/useMediaMinLg";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import { motion, useTransform, type MotionValue } from "framer-motion";
 import PrimaryButton from "@/components/PrimaryButton";
-import { experiencePanelTextOpacity } from "@/lib/experiencePanelMotion";
-import {
-  experiencePanelHref,
-  villaListingPath,
-} from "@/lib/appRoutes";
-import {
-  scrollLinkedPanelAreaClass,
-  scrollLinkedPanelBodyClass,
-  scrollLinkedPanelCtaClass,
-  scrollLinkedPanelOuterClass,
-  scrollLinkedPanelImageFrameClass,
-  scrollLinkedPanelSlideClass,
-  scrollLinkedPanelSlideInteractiveClass,
-  scrollLinkedPanelStackClass,
-  scrollLinkedPanelStackWrapClass,
-  scrollLinkedSectionHeaderClass,
-  scrollLinkedStickyStageClass,
-  scrollLinkedStickyStageInnerClass,
-} from "@/lib/scrollLinkedPanelLayout";
-import { useScrollLinkedPanelOffset } from "@/lib/useScrollLinkedPanelOffset";
+import ScrollLinkedHorizontalSection from "@/components/scroll-linked/ScrollLinkedHorizontalSection";
+import ScrollLinkedPanelCard, {
+  type ScrollLinkedPanelData,
+} from "@/components/scroll-linked/ScrollLinkedPanelCard";
+import { experiencePanelHref, villaListingPath } from "@/lib/appRoutes";
 
-const PANELS = [
+const PANELS: ScrollLinkedPanelData[] = [
   {
     id: "weekend",
     title: "Weekend Getaways",
@@ -99,55 +78,17 @@ const PANELS = [
   },
 ];
 
-export default function ExperiencesScrollSection() {
-  const targetRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-  });
-
-  const totalSteps = PANELS.length + 1;
-  const panelCount = PANELS.length;
-
-  return (
-    <section ref={targetRef} className="relative h-[800vh] bg-[#1A1C1E]">
-      <motion.div
-        className={`${scrollLinkedStickyStageClass} ${scrollLinkedStickyStageInnerClass} bg-[#1A1C1E]`}
-      >
-        <motion.div className={scrollLinkedSectionHeaderClass}>
-          <span className="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-jade-gold drop-shadow-lg block">
-            WAYS JADE IS EXPERIENCED
-          </span>
-        </motion.div>
-
-        <motion.div className={scrollLinkedPanelAreaClass}>
-          {PANELS.map((panel, i) => (
-            <PanelSlide
-              key={panel.id}
-              data={panel}
-              index={i}
-              globalProgress={scrollYProgress}
-              totalSteps={totalSteps}
-              panelCount={panelCount}
-            />
-          ))}
-        </motion.div>
-        <EndButton globalProgress={scrollYProgress} />
-      </motion.div>
-    </section>
-  );
-}
-
-function EndButton({ globalProgress }: { globalProgress: MotionValue<number> }) {
-  const opacity = useTransform(globalProgress, [0.85, 1.0], [0, 1]);
-  const scale = useTransform(globalProgress, [0.85, 1.0], [0.8, 1]);
-  const y = useTransform(globalProgress, [0.85, 1.0], [60, 0]);
+function EndButton({ panelProgress }: { panelProgress: MotionValue<number> }) {
+  const opacity = useTransform(panelProgress, [0.85, 1.0], [0, 1]);
+  const scale = useTransform(panelProgress, [0.85, 1.0], [0.8, 1]);
+  const y = useTransform(panelProgress, [0.85, 1.0], [60, 0]);
 
   return (
     <motion.div
       style={{ opacity, scale, y, zIndex: 100 }}
       className="absolute inset-0 flex items-center justify-center pointer-events-none"
     >
-      <motion.div className="pointer-events-auto">
+      <div className="pointer-events-auto">
         <PrimaryButton
           href={villaListingPath()}
           className="shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-transform duration-300 hover:scale-[1.03]"
@@ -156,104 +97,37 @@ function EndButton({ globalProgress }: { globalProgress: MotionValue<number> }) 
             See Best Experience Villas
           </span>
         </PrimaryButton>
-      </motion.div>
+      </div>
     </motion.div>
   );
 }
 
-function PanelSlide({
-  data,
-  index,
-  globalProgress,
-  totalSteps,
-  panelCount,
-}: {
-  data: (typeof PANELS)[number];
-  index: number;
-  globalProgress: MotionValue<number>;
-  totalSteps: number;
-  panelCount: number;
-}) {
-  const panelRef = useRef<HTMLDivElement>(null);
-  const isLg = useMediaMinLg();
-  const panelImageSrc = data.mobileImage
-    ? isLg
-      ? data.image
-      : data.mobileImage
-    : data.image;
-
-  const stackWrapRef = useRef<HTMLDivElement>(null);
-  const { offsetPx } = useScrollLinkedPanelOffset(stackWrapRef, {
-    visibleGap: 20,
-  });
-
-  const x = useTransform(globalProgress, (p: number) => {
-    return (index - p * totalSteps) * offsetPx;
-  });
-
-  const zIndex = useTransform(globalProgress, (p: number) => {
-    const centered = Math.min(Math.round(p * totalSteps), panelCount - 1);
-    return index === centered ? 100 : index * 10;
-  });
-
-  const textOpacity = useTransform(globalProgress, (p: number) =>
-    experiencePanelTextOpacity(p, index, totalSteps),
-  );
+export default function ExperiencesScrollSection() {
+  const totalSteps = PANELS.length + 1;
+  const panelCount = PANELS.length;
 
   return (
-    <motion.div
-      style={{ x, zIndex, willChange: "transform" }}
-      className={`${scrollLinkedPanelSlideClass} bg-transparent`}
+    <ScrollLinkedHorizontalSection
+      sectionHeightVh={800}
+      bgClassName="bg-[#1A1C1E]"
+      headerLabel="WAYS JADE IS EXPERIENCED"
+      scrollMode="free"
+      endButton={(panelProgress) => (
+        <EndButton panelProgress={panelProgress} />
+      )}
     >
-      <motion.div className={scrollLinkedPanelSlideInteractiveClass}>
-        <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
-        <motion.div className={scrollLinkedPanelOuterClass}>
-          <motion.div ref={stackWrapRef} className={scrollLinkedPanelStackWrapClass}>
-            <motion.div className={scrollLinkedPanelStackClass}>
-            <motion.div className={scrollLinkedPanelImageFrameClass}>
-              <motion.div className="w-full h-full relative">
-                <JadeImage
-                  src={panelImageSrc}
-                  alt={data.title}
-                  fill
-                  className="object-cover"
-                  sizes={
-                    data.mobileImage
-                      ? isLg
-                        ? "600px"
-                        : "(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
-                      : "(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
-                  }
-                />
-                <motion.div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              </motion.div>
-            </motion.div>
-
-            <motion.div
-              style={{ opacity: textOpacity }}
-              className="relative w-full flex flex-col items-start text-left shrink-0"
-            >
-              <motion.h2
-                className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-2.5"
-              >
-                {data.title}
-              </motion.h2>
-              <motion.p className={scrollLinkedPanelBodyClass}>
-                {data.subtext}
-              </motion.p>
-              <motion.div className="w-full max-w-md">
-                <Link
-                  href={data.href || "#"}
-                  className={scrollLinkedPanelCtaClass}
-                >
-                  {data.cta} <ArrowRight className="w-5 h-5" />
-                </Link>
-              </motion.div>
-            </motion.div>
-            </motion.div>
-          </motion.div>
-        </motion.div>
-      </motion.div>
-    </motion.div>
+      {(panelProgress) =>
+        PANELS.map((panel, i) => (
+          <ScrollLinkedPanelCard
+            key={panel.id}
+            data={panel}
+            index={i}
+            panelProgress={panelProgress}
+            totalSteps={totalSteps}
+            panelCount={panelCount}
+          />
+        ))
+      }
+    </ScrollLinkedHorizontalSection>
   );
 }

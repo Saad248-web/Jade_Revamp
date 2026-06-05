@@ -16,7 +16,7 @@
 | **2** | **Live backend** | — | Postgres up; migrations run; demo flags off; 201 from `/api/leads` + `/api/careers/apply` |
 | **3** | **Enquiry polish** | WG-2, R-6 (other overlays) | Weekend preselect; Partner/Rathaa/Venue success parity if needed |
 | **4** | **Regression** | R-1, R-2, R-3 | Values animation, scroll indicator, villa header |
-| **5** | **Homepage** | H-1–H-5 | Spacing at 1440px (**H-6** done — verify) |
+| **5** | **Homepage** | H-1–H-5 | Scroll-linked parity shipped 2026-06-05; **H-5** open; **H-1–H-4** verify in browser |
 | **6** | **Villa detail** | VD-1–VD-4 | Padding, nav width, logo, grab cursor |
 | **7** | **Interaction** | A-1–A-4 | Snap mobile-only, scroll text, venue scroll, FAQ modal |
 | **8** | **Pages & workflow** | CA-1, CA-2, XP-1, WG-1, W-1, W-2 | Contact/About/Experience overlays + process |
@@ -152,13 +152,15 @@
   **Done when:** On `/` at 1440px, vertical spacing around the “WAYS JADE IS EXPERIENCED” label matches Figma above and below the label row.  
   **Files:** `src/lib/scrollLinkedPanelLayout.ts` (`scrollLinkedSectionHeaderClass`), `src/components/HorizontalScrollSection.tsx`.
 
-- [x] **H-2** — Gap between Experiences sections −80% *(Desktop)* *(inter-card gap via SCROLL_LINKED_VISIBLE_GAP_DESKTOP — verify)*  
-  **Done when:** On `/`, the scroll gap between the philosophy block (`UnifiedScrollSection`) and the experiences block (`HorizontalScrollSection`) is ~**20%** of the pre-fix gap and matches Figma.  
-  **Files:** `src/components/UnifiedScrollSection.tsx` (`height="260vh"`), `src/components/LandingPage.tsx`.
+- [x] **H-2** — Inter-card horizontal gap −80% *(Desktop/laptop)* *(implemented 2026-06-05 — verify)*  
+  **Done when:** On `/`, `/experiences`, `/weddings` last block, and §6 @ **1440px**, charcoal peek between centered card and next card is ~**20%** of pre-fix width.  
+  **Files:** `scrollLinkedPanelLayout.ts` (`SCROLL_LINKED_DESKTOP_PEEK_RATIO`), `useScrollLinkedPanelOffset.ts`, `ScrollLinkedPanelCard.tsx`.  
+  **Also applies:** `/experiences` §2, `/weddings` celebrations (wide variant).
 
-- [x] **H-3** — Home villa: text width = image width *(Desktop)* *(implemented — verify in browser)*  
+- [x] **H-3** — Home villa: text width = image width *(Desktop)* *(implemented 2026-06-05 — verify)*  
   **Done when:** In the Featured Villas scroll section, description and CTA share the **same max width** as the villa image frame (left/right edges align).  
-  **Files:** `src/components/FeaturedVillas.tsx`, `src/lib/scrollLinkedPanelLayout.ts`.
+  **Files:** `FeaturedVillas.tsx`, `scrollLinkedPanelLayout.ts` (`w-full` body + featured stack wrap).  
+  **Mobile/tablet §6:** equal top/bottom spacing (`py-10`, `panelAreaVariant="featured"`, `--jade-scroll-card-max-h-featured`) — verify phone/tablet.
 
 - [x] **H-4** — Home experiences: text width = image width *(Desktop)* *(ScrollLinkedPanelCard — verify in browser)*  
   **Done when:** In each home experience panel, subtext and CTA align to the image frame width (no wider text block).  
@@ -363,11 +365,34 @@
 
 | Date | Commit | IDs |
 |------|--------|-----|
+| 2026-06-05 | *(this push)* | H-1–H-4, H-2 peek ratio, A-1 (Featured §6), scroll-linked primitives, weddings counter removed |
 | 2026-06-04 | *(uncommitted — dev session)* | R-6, F-1–F-6, WG-3 (partial), enquiry demo/calendar/scroll |
 
 ---
 
 ## Notes / blockers
+
+### Scroll-linked horizontal sections (2026-06-05 session)
+
+| Area | Status | Key files |
+|------|--------|-----------|
+| Shared shell + panel card | Shipped | `scroll-linked/ScrollLinkedHorizontalSection.tsx`, `ScrollLinkedPanelCard.tsx` |
+| Scroll driver | Shipped | `useScrollLinkedSectionProgress.ts` (`free` / `mobileSnapOnly`) |
+| Desktop inter-card gap −80% | Shipped | `SCROLL_LINKED_DESKTOP_PEEK_RATIO` (0.2), `useScrollLinkedPanelOffset.ts` |
+| Home §3 | Refactored | `HorizontalScrollSection.tsx` |
+| Experiences §2 | Refactored | `ExperiencesScrollSection.tsx` |
+| Weddings last section | Refactored | `WeddingCelebrationsSection.tsx` — **GlobalCounter removed** |
+| Featured §6 | Refactored | `FeaturedVillas.tsx` — snap mobile-only; featured mobile spacing tokens |
+| Edit-one-place contract | Shipped | `scrollLinkedPanelLayout.ts` |
+
+**Browser sign-off (scroll-linked):**
+
+1. `/experiences` @ 1440px — Caravan Journeys: tight inter-card peek; text width = image.
+2. `/` §3 — same gap + text alignment as Experiences.
+3. `/` §6 @ 1440px — free scroll (not snap); @ phone — snap + **balanced** top/bottom green padding.
+4. `/weddings` — no `1 / 5` counter; spacing matches Experiences.
+
+**Deferred:** §5 Values, §7 Amenities carousels; **H-5** blog one-line; philosophy→§3 vertical gap (`UnifiedScrollSection` vh) if still long.
 
 ### Enquiry overlay + footer (2026-06-04 session)
 

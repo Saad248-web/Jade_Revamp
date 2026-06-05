@@ -8,8 +8,8 @@ import { MOBILE_BOTTOM_NAV_CONTENT_GAP } from "@/lib/layoutSpacing";
 
 const MOBILE_MQ = "(max-width: 1023px)";
 
-/** Section label row inside sticky stage (WAYS JADE / counter). */
-const SECTION_HEADER_PX = 36;
+/** Section label row inside sticky stage (40px top + 40px bottom on mobile). */
+const SECTION_HEADER_PX = 80;
 
 const CUSTOM_PROPS = [
   "--jade-vv-offset-top",
@@ -19,6 +19,7 @@ const CUSTOM_PROPS = [
   "--jade-scroll-panel-row-height",
   "--jade-scroll-text-reserve",
   "--jade-scroll-card-max-h",
+  "--jade-scroll-card-max-h-featured",
   "--jade-scroll-card-max-h-tall-header",
   "--jade-scroll-panel-gap",
   "--jade-scroll-panel-gap-lg",
@@ -149,6 +150,19 @@ function setCardMaxHeights(
   root.style.setProperty(
     "--jade-scroll-card-max-h-tall-header",
     `${cardMaxTall}px`,
+  );
+
+  const featuredTextReserve = Math.min(
+    200,
+    Math.max(152, Math.round(panelRowPx * 0.36) + stackGaps),
+  );
+  const featuredCardMax = Math.min(
+    600,
+    Math.max(140, panelRowPx - featuredTextReserve),
+  );
+  root.style.setProperty(
+    "--jade-scroll-card-max-h-featured",
+    `${featuredCardMax}px`,
   );
 }
 
