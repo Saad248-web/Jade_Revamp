@@ -85,7 +85,7 @@ export default function BlogSection() {
       <div className="max-w-[1920px] mx-auto w-full px-6 md:px-12 lg:px-24">
         {/* Header Area */}
         <div className="mb-6 lg:mb-10">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl lg:max-w-none">
             <p
               className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]"
               style={{ marginBottom: "clamp(4px, 0.64vw, 8px)" }}
@@ -109,7 +109,7 @@ export default function BlogSection() {
                 />
               </Link>
             </h2>
-            <p className="font-manrope text-white/60 text-[0.9rem] sm:text-gh-body leading-relaxed max-w-md">
+            <p className="font-manrope text-white/60 text-[0.9rem] sm:text-gh-body leading-relaxed max-w-md lg:max-w-none lg:whitespace-nowrap">
               Thoughts on hosting, travel, and creating meaningful experiences
               through space.
             </p>

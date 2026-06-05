@@ -16,7 +16,7 @@
 | **2** | **Live backend** | — | Postgres up; migrations run; demo flags off; 201 from `/api/leads` + `/api/careers/apply` |
 | **3** | **Enquiry polish** | WG-2, R-6 (other overlays) | Weekend preselect; Partner/Rathaa/Venue success parity if needed |
 | **4** | **Regression** | R-1, R-2, R-3 | Values animation, scroll indicator, villa header |
-| **5** | **Homepage** | H-1–H-5 | Scroll-linked parity shipped 2026-06-05; **H-5** open; **H-1–H-4** verify in browser |
+| **5** | **Homepage** | H-1–H-6 | **H-1–H-6** coded on `main` (2026-06-05); browser Figma verify for H-1–H-5 |
 | **6** | **Villa detail** | VD-1–VD-4 | Padding, nav width, logo, grab cursor |
 | **7** | **Interaction** | A-1–A-4 | Snap mobile-only, scroll text, venue scroll, FAQ modal |
 | **8** | **Pages & workflow** | CA-1, CA-2, XP-1, WG-1, W-1, W-2 | Contact/About/Experience overlays + process |
@@ -166,9 +166,9 @@
   **Done when:** In each home experience panel, subtext and CTA align to the image frame width (no wider text block).  
   **Files:** `src/components/HorizontalScrollSection.tsx`, `src/lib/scrollLinkedPanelLayout.ts`.
 
-- [ ] **H-5** — Blog subtext one line *(Desktop)*  
-  **Done when:** On `/` at 1440px, each blog card description stays on **one** line (truncate/ellipsis only if Figma shows it).  
-  **File:** `src/components/BlogSection.tsx`.
+- [x] **H-5** — Blog section subtext one line *(Desktop/laptop)* *(implemented 2026-06-05 — verify)*  
+  **Done when:** On `/` at **1440px**, the header subtext below “From the Journal” (“Thoughts on hosting…”) stays on **one** line; mobile/tablet may wrap.  
+  **File:** `src/components/BlogSection.tsx` (header `<p>`, not card excerpts).
 
 - [x] **H-6** — Footer = Figma *(Desktop)* *(implemented 2026-06-05 — verify in browser)*  
   **Done when:** On `/` at 1440px, footer columns, links, spacing, and typography match the approved Footer frame exactly.  
@@ -365,7 +365,8 @@
 
 | Date | Commit | IDs |
 |------|--------|-----|
-| 2026-06-05 | `9f0e43c` | H-1–H-4, H-2 peek ratio, A-1 (Featured §6), scroll-linked primitives, weddings counter removed |
+| 2026-06-05 | *(H-5 push)* | H-5 blog header subtext one line (desktop/laptop) |
+| 2026-06-05 | `9f0e43c` / `4537780` | H-1–H-4, H-2 peek ratio, A-1 (Featured §6), scroll-linked primitives, weddings counter removed |
 | 2026-06-04 | *(uncommitted — dev session)* | R-6, F-1–F-6, WG-3 (partial), enquiry demo/calendar/scroll |
 
 ---
