@@ -2,27 +2,41 @@
  * Villa detail page — 8pt spatial system (mobile-first).
  *
  * Scale: 8 · 16 · 24 · 32 · 40 · 48 · 64
- * - Gutter: 16px → 24px (sm) → 32px (lg)
+ * - Gutter: 16px (base) → 20px (sm) → 24px (lg) — shared by content, tabs, pricing bar
  * - Section padding: 40px top & bottom → 64px (lg) via .villa-section-pad-block
  * - In-section stacks: 32px between major blocks · 16px for tight groups
  */
 
 export const VILLA_DETAIL_SPACING = {
-  gutterX: "px-4 sm:px-6 lg:px-8",
+  gutterX: "px-4 sm:px-5 lg:px-6",
   /**
    * Edge-bleed horizontal scroll tracks — left inset matches gutterX (pl + scroll-pl).
    * Use on Spaces category nav + image rails; do not combine with hScrollTrackMobileGutter.
    */
   hScrollTrackInset:
-    "pl-4 sm:pl-6 lg:pl-8 scroll-pl-4 sm:scroll-pl-6 lg:scroll-pl-8 scroll-pr-0",
+    "pl-4 sm:pl-5 lg:pl-6 scroll-pl-4 sm:scroll-pl-5 lg:scroll-pl-6 scroll-pr-0",
   /** Symmetric block padding — see --villa-section-pad-block in globals.css */
   sectionY: "villa-section-pad-block",
   page: "max-w-7xl mx-auto w-full",
-  content: "max-w-4xl mx-auto w-full",
+  /** Section body inside sectionShell — full column width (aligns with tabs + pricing bar). */
+  content: "w-full min-w-0",
+  /** Horizontal inset matching sectionShell — pricing bar, sticky tabs (lg+), chrome rows. */
+  contentInsetShell: "max-w-7xl mx-auto w-full px-4 sm:px-5 lg:px-6",
   /** Equal vertical + horizontal section padding */
   sectionShell:
-    "px-4 sm:px-6 lg:px-8 villa-section-pad-block max-w-7xl mx-auto w-full",
+    "px-4 sm:px-5 lg:px-6 villa-section-pad-block max-w-7xl mx-auto w-full",
   stack: "flex flex-col gap-6",
+  /** Spaces / Experiences / Perfect for — tighter vertical rhythm on desktop */
+  mediaSectionStack: "flex flex-col gap-6 lg:gap-4 min-h-0",
+  /** Carousel + video frames — taller stage on desktop (dynamic vh cap) */
+  mediaStageFrame:
+    "aspect-[3/4] md:aspect-[16/9] lg:aspect-auto lg:h-[min(68dvh,760px)]",
+  /** Perfect for cards — shorter than portrait mobile; capped on desktop */
+  perfectForCard:
+    "relative w-full overflow-hidden aspect-[3/4] lg:aspect-auto lg:h-[min(38dvh,380px)]",
+  /** Amenities — 2 cols mobile; 3 cols desktop (no see-more needed at lg+) */
+  amenitiesGrid:
+    "grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-6",
   stackSm: "flex flex-col gap-4",
   stackTight: "flex flex-col gap-2",
   /**
@@ -43,9 +57,10 @@ export const VILLA_DETAIL_SPACING = {
   introBody: "mt-8 flex flex-col gap-6",
   introDescription:
     "font-manrope text-white/70 text-gh-body leading-relaxed whitespace-pre-line text-justify",
-  introContent: "max-w-4xl mx-auto w-full",
+  /** Intro block — full section width (no max-w-4xl narrowing; aligns with tabs + pricing). */
+  introContent: "w-full min-w-0",
   row: "flex flex-wrap gap-4",
-  hScrollBleed: "-mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8",
+  hScrollBleed: "-mx-4 px-4 sm:-mx-5 sm:px-5 lg:-mx-6 lg:px-6",
   hScrollTrack: "flex gap-4 overflow-x-auto pb-2 snap-x scrollbar-none",
   /** Stats chips row — stays inside page gutters (no viewport bleed). */
   statsTagsRail: "w-full min-w-0 overflow-x-auto scrollbar-none",
@@ -53,18 +68,24 @@ export const VILLA_DETAIL_SPACING = {
   hScrollViewportEdge: "max-sm:jade-hscroll-viewport--edge",
   hScrollTrackMobileGutter: "max-sm:jade-hscroll-track--mobile-gutter",
   /**
-   * Sticky category chrome — mobile full-bleed unchanged; sm+ max-w-7xl + page gutters.
-   * Use with MeanderStrip layout="pageGutter" and stickyChromeShell on the tab bar.
+   * Sticky category chrome — full-width background; inner inset at lg+ only.
+   * Pair with MeanderStrip layout="fullBleed" + stickyChromeInner + CategoryTabRail.
    */
-  stickyChromeShell:
-    "w-full min-w-0 sm:max-w-7xl sm:mx-auto sm:px-4 md:px-6 lg:px-8",
+  stickyChromeOuter: "w-full min-w-0",
+  /** Desktop/laptop: tab row aligns with sectionShell; below lg unchanged (track inset). */
+  stickyChromeInner: "w-full lg:max-w-7xl lg:mx-auto lg:px-6",
+  /** Tab track gutters — mobile/tablet only (lg+ defers to stickyChromeInner). */
+  stickyTabTrackInset:
+    "pl-4 sm:pl-5 scroll-pl-4 sm:scroll-pl-5 lg:pl-0 lg:scroll-pl-0 scroll-pr-0",
+  /** @deprecated Use stickyChromeOuter + stickyChromeInner */
+  stickyChromeShell: "w-full min-w-0 lg:max-w-7xl lg:mx-auto lg:px-6",
   /**
    * Horizontal scroll rail — edge-to-edge on mobile; inset gutters at md+.
    * See `.amenity-highlight-*` in globals.css.
    */
   amenityHighlightViewportShell:
     "amenity-highlight-rail amenity-highlight-viewport w-full min-w-0",
-  /** Mobile: viewport edge-to-edge; sm+: align with max-w-4xl column. */
+  /** Mobile: viewport edge-to-edge; sm+: full sectionShell column width. */
   amenityHighlightViewportEdge:
     "max-sm:amenity-highlight-viewport--edge max-sm:jade-hscroll-viewport--edge",
   amenityHighlightViewportInset:
@@ -98,11 +119,11 @@ export const VILLA_DETAIL_SPACING = {
   /** Pricing section legal note — fluid ~8px (see --fs-pricing-footnote) */
   pricingFootnote:
     "text-white/70 font-manrope text-gh-pricing-footnote leading-snug",
-  heroInsetX: "px-4 sm:px-6 lg:px-8",
+  heroInsetX: "px-4 sm:px-5 lg:px-6",
   heroBottom: "bottom-8 lg:bottom-12",
   /** Carousel arrows — align to page gutter (not flush to viewport) */
-  heroArrowLeft: "left-4 sm:left-6 lg:left-8",
-  heroArrowRight: "right-4 sm:right-6 lg:right-8",
+  heroArrowLeft: "left-4 sm:left-5 lg:left-6",
+  heroArrowRight: "right-4 sm:right-5 lg:right-6",
 } as const;
 
 export const VILLA_DETAIL_CHARCOAL = "w-full bg-jade-charcoal text-white";

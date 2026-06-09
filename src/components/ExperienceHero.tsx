@@ -38,7 +38,6 @@ interface ExperienceHeroProps {
   /** Optional extra content between description and buttons */
   children?: React.ReactNode;
   showScrollIndicator?: boolean;
-  scrollIndicatorLabel?: string;
   /** Element id of the next section (philosophy panel) */
   scrollTargetId?: string;
 }
@@ -54,7 +53,6 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
       stats,
       children,
       showScrollIndicator = false,
-      scrollIndicatorLabel = "SCROLL TO EXPLORE",
       scrollTargetId,
     },
     ref,
@@ -160,7 +158,6 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
         {showScrollIndicator && (
           <ScrollLineIndicator
             floating
-            label={scrollIndicatorLabel}
             className="pointer-events-none [&_button]:pointer-events-auto"
             onClick={scrollToNext}
           />

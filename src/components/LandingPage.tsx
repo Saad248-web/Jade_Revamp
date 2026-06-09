@@ -213,8 +213,6 @@ export default function LandingPage() {
         >
           <ScrollLineIndicator
             floating
-            label="SCROLL TO EXPERIENCE"
-            labelClassName="text-gh-label tracking-[0.2em] text-white/50"
             trackClassName="h-16 md:h-20"
             barClassName="bg-white"
             className="gap-5 pointer-events-auto"

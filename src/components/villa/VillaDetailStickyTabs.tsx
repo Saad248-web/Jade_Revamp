@@ -44,48 +44,53 @@ export default function VillaDetailStickyTabs({
   const trackRef = useScrollTabIntoView(activeTab);
   const actionChromeHidden = useBatchedScrollHide();
 
-  const visibleTabs = TAB_LABELS.filter((tab) => {    const sectionId = tabToSectionId(tab);
+  const visibleTabs = TAB_LABELS.filter((tab) => {
+    const sectionId = tabToSectionId(tab);
     return sectionIds ? sectionIds.includes(sectionId) : true;
   });
 
   return (
     <>
-      {/* Greek-key band — static in document flow (scrolls away); tabs alone stay sticky */}
-      <MeanderStrip layout="pageGutter" track="charcoal" className="relative z-40" />
+      <MeanderStrip layout="fullBleed" track="charcoal" className="relative z-40" />
       <div
         className={clsx(
-          "jade-hscroll-chrome sticky z-40 w-full",
+          "jade-hscroll-chrome sticky z-40",
+          vd.stickyChromeOuter,
           actionChromeHidden ? "top-0" : VILLA_DETAIL_ACTION_STICKY_TOP_VISIBLE_CLASS,
           vd.hScrollViewportEdge,
         )}
-      >        <div className={vd.stickyChromeShell}>
-          <div className={VILLA_DETAIL_STICKY_TABS_CHROME_CLASS}>
+      >
+        <div className={clsx(vd.stickyChromeOuter, VILLA_DETAIL_STICKY_TABS_CHROME_CLASS)}>
+          <div className={vd.stickyChromeInner}>
             <CategoryTabRail
-            ref={trackRef}
-            fadeFrom="#1A1C1E"
-            patternFade
-            mobileTrackGutter
-            trackAriaLabel="Villa sections"
-          >
-          {visibleTabs.map((tab) => {
-            const sectionId = tabToSectionId(tab);
-            const isActive = activeTab === sectionId;
-            return (
-              <button
-                key={tab}
-                type="button"
-                data-tab-key={sectionId}
-                onClick={() => onTabClick(sectionId)}
-                className={clsx(
-                  stickyCategoryTabClass(isActive),
-                  "flex-shrink-0",
-                )}
-                aria-current={isActive ? "true" : undefined}
-              >
-                {tab === "Details" ? "Property Details" : tab}
-              </button>
-            );
-          })}
+              ref={trackRef}
+              fadeFrom="#1A1C1E"
+              patternFade
+              mobileViewportEdge
+              mobileTrackGutter
+              cursorGrab
+              trackClassName={vd.stickyTabTrackInset}
+              trackAriaLabel="Villa sections"
+            >
+              {visibleTabs.map((tab) => {
+                const sectionId = tabToSectionId(tab);
+                const isActive = activeTab === sectionId;
+                return (
+                  <button
+                    key={tab}
+                    type="button"
+                    data-tab-key={sectionId}
+                    onClick={() => onTabClick(sectionId)}
+                    className={clsx(
+                      stickyCategoryTabClass(isActive),
+                      "flex-shrink-0",
+                    )}
+                    aria-current={isActive ? "true" : undefined}
+                  >
+                    {tab === "Details" ? "Property Details" : tab}
+                  </button>
+                );
+              })}
             </CategoryTabRail>
           </div>
         </div>

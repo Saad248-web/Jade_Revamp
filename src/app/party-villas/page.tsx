@@ -40,6 +40,7 @@ import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
 import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
 import { useAnimation } from "@/context/AnimationContext";
 import { EXPERIENCE_PAGE_PATHS } from "@/lib/enquiryReturnPath";
+import { scrollToExperienceVillaSection } from "@/lib/experiencePageVillaScroll";
 
 const partySlides = [
   {
@@ -92,13 +93,7 @@ export default function PartyVillasPage() {
           {
             icon: <Calendar className="w-5 h-5" />,
             label: "VENUES",
-            onClick: () => {
-              const venuesSection = document.getElementById(
-                "spaces-for-celebrations",
-              );
-              if (venuesSection)
-                venuesSection.scrollIntoView({ behavior: "smooth" });
-            },
+            onClick: () => scrollToExperienceVillaSection("party"),
           },
           {
             icon: <Download className="w-5 h-5" />,

@@ -18,6 +18,7 @@ import ExperienceScrollSection from "@/components/ExperienceScrollSection";
 import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import { useAnimation } from "@/context/AnimationContext";
 import { EXPERIENCE_PAGE_PATHS } from "@/lib/enquiryReturnPath";
+import { scrollToExperienceVillaSection } from "@/lib/experiencePageVillaScroll";
 
 export default function CorporateRetreatsPage() {
   const { setEnquireOverlayOpen } = useAnimation();
@@ -49,11 +50,7 @@ export default function CorporateRetreatsPage() {
           {
             icon: <Calendar className="w-5 h-5" />,
             label: "VENUES",
-            onClick: () => {
-              const venuesSection = document.getElementById("featured-venues");
-              if (venuesSection)
-                venuesSection.scrollIntoView({ behavior: "smooth" });
-            },
+            onClick: () => scrollToExperienceVillaSection("corporate"),
           },
           {
             icon: <Download className="w-5 h-5" />,

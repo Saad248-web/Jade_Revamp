@@ -1,7 +1,9 @@
 "use client";
 
+import clsx from "clsx";
 import type { LucideIcon } from "lucide-react";
 import { splitAmenityLabel } from "@/lib/villaDetailIcons";
+import HorizontalScrollRail from "@/components/ui/HorizontalScrollRail";
 import AmenityHighlightTile from "./AmenityHighlightTile";
 import { VILLA_DETAIL_SPACING } from "./villaDetailSpacing";
 
@@ -21,30 +23,28 @@ export default function OverlayIntroAmenityHighlights({
   if (!amenities?.length) return null;
 
   return (
-    <div
-      className={
-        `${vd.amenityHighlightViewportShell} ` +
-        `${vd.amenityHighlightViewportEdge} ` +
-        `${vd.amenityHighlightViewportInset}`
-      }
+    <HorizontalScrollRail
+      className={clsx(
+        vd.amenityHighlightViewportShell,
+        vd.amenityHighlightViewportEdge,
+        vd.amenityHighlightViewportInset,
+      )}
+      trackClassName={vd.amenityHighlightTrackFullBleed}
+      showFade={false}
+      cursorGrab
     >
-      <div
-        className={vd.amenityHighlightTrackFullBleed}
-        data-jade-hscroll
-      >
-        {amenities.map((amenity, idx) => {
-          const IconComponent = getIcon(amenity.icon, amenity.label);
-          const { line1, line2 } = splitAmenityLabel(amenity.label ?? "");
-          return (
-            <AmenityHighlightTile
-              key={idx}
-              icon={IconComponent}
-              label={line1}
-              sublabel={line2 || null}
-            />
-          );
-        })}
-      </div>
-    </div>
+      {amenities.map((amenity, idx) => {
+        const IconComponent = getIcon(amenity.icon, amenity.label);
+        const { line1, line2 } = splitAmenityLabel(amenity.label ?? "");
+        return (
+          <AmenityHighlightTile
+            key={idx}
+            icon={IconComponent}
+            label={line1}
+            sublabel={line2 || null}
+          />
+        );
+      })}
+    </HorizontalScrollRail>
   );
 }

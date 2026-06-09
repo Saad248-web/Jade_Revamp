@@ -365,6 +365,7 @@ export function VillaExperienceStickyTabs({
             ref={trackRef}
             fadeFrom="#1A1C1E"
             patternFade
+            cursorGrab
             trackPreset="amenityParity"
             trackAriaLabel="Experience sections"
           >

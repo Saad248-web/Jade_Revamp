@@ -23,7 +23,6 @@ export default function UnifiedScrollSection() {
       scrollEffects="performance"
       background={<LiveBackground variant="static" />}
       showScrollIndicator
-      scrollIndicatorText="SCROLL TO EXPERIENCES"
     />
   );
 }

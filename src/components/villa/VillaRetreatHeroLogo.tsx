@@ -7,7 +7,7 @@ type VillaRetreatHeroLogoProps = {
 
 export default function VillaRetreatHeroLogo({ src, alt }: VillaRetreatHeroLogoProps) {
   return (
-    <div className="relative z-10 w-full max-w-[min(100%,28rem)] mx-auto rounded-sm bg-black/50 backdrop-blur-sm border border-white/10 px-4 py-3 sm:px-6 sm:py-4">
+    <div className="relative z-10 w-full max-w-[min(100%,28rem)] mx-auto">
       <div className="relative w-full h-[clamp(3.5rem,11vw,7rem)]">
         <JadeImage
           src={src}

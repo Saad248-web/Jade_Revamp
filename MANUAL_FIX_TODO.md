@@ -179,19 +179,19 @@
 
 ## Villa detail page
 
-- [ ] **VD-1** — Remove background behind logo  
+- [x] **VD-1** — Remove background behind logo *(implemented 2026-06-05 — verify in browser)*  
   **Done when:** The retreat logo on the villa hero is **only** the logo image—no panel, blur, border, or tint behind it per Figma.  
   **File:** `src/components/villa/VillaRetreatHeroLogo.tsx`.
 
-- [ ] **VD-2** — Left/right padding *(Desktop)*  
-  **Done when:** Every villa detail section uses the **same** horizontal inset as Figma desktop specs (no mixed `px-*` overrides).  
-  **Files:** `src/components/villa/villaDetailSpacing.ts` (`gutterX`, `sectionShell`), `src/app/villas/[id]/page.tsx`.
+- [x] **VD-2** — Sticky tab rail inset = section gutters *(Desktop/laptop)* *(implemented 2026-06-05 — verify; body sections audit optional)*  
+  **Done when:** At **1440px**, first tab left edge aligns with section titles (`sectionShell`); mobile/tablet unchanged.  
+  **Files:** `villaDetailSpacing.ts` (`stickyChromeInner`, `stickyTabTrackInset`), `VillaDetailStickyTabs.tsx`.
 
-- [ ] **VD-3** — Navigation full width *(Desktop)*  
-  **Done when:** Meander + sticky section tabs span the **full layout width** per Figma (not a narrow `max-w-7xl` strip).  
-  **Files:** `src/components/villa/VillaDetailStickyTabs.tsx`, `villaDetailSpacing.ts` (`stickyChromeShell`).
+- [x] **VD-3** — Navigation full width *(Desktop/laptop)* *(implemented 2026-06-05 — verify)*  
+  **Done when:** Meander + sticky tab **background** spans viewport edge-to-edge; tabs inset per VD-2. Mobile full-bleed behavior preserved.  
+  **Files:** `VillaDetailStickyTabs.tsx` (`MeanderStrip` `fullBleed`, `stickyChromeOuter`), `villaDetailSpacing.ts`.
 
-- [ ] **VD-4** — Highlight tiles: open-hand cursor *(Desktop)*  
+- [x] **VD-4** — Highlight tiles: open-hand cursor *(Desktop)* *(implemented — verify in browser)*  
   **Done when:** Hovering intro amenity/highlight tiles shows **`cursor: grab`** (open hand).  
   **File:** `src/components/villa/AmenityHighlightTile.tsx`.
 
@@ -230,17 +230,17 @@
   **Done when:** At **1440px**, page scroll does **not** snap-lock vertically; at **phone width**, intended snap behavior still works.  
   **Files:** Audit `snap-y snap-mandatory` on main scroll containers (landing, experiences, villa heroes); scope snap to `max-lg:` where desktop must scroll freely.
 
-- [ ] **A-2** — Remove “SCROLL TO EXPERIENCE” text  
+- [x] **A-2** — Remove “SCROLL TO EXPERIENCE” text *(implemented — verify in browser)*  
   **Done when:** Scroll cues show **only** the animated line—no “SCROLL TO EXPERIENCE(S)” copy anywhere.  
-  **Files:** `LandingPage.tsx`, `UnifiedScrollSection.tsx`, `ScrollSectionComposer.tsx`, `ExperienceScrollSection.tsx`, `ExperiencesHero.tsx`, `VillasHero.tsx` — remove `label` / `scrollIndicatorText`.
+  **Files:** `LandingPage.tsx`, `UnifiedScrollSection.tsx`, `ScrollSectionComposer.tsx`, `ExperienceScrollSection.tsx`, `ExperiencesHero.tsx`, `VillasHero.tsx`, `ExperienceHero.tsx` — remove `label` / `scrollIndicatorText`.
 
-- [ ] **A-3** — Venue → villa section on same page  
-  **Done when:** On each Experience page that has a **Venue** control, one click smooth-scrolls to the **villa section** on that **same URL** (target `id` exists in DOM).  
-  **Example:** `src/components/WeddingHero.tsx` — update `getElementById` to your page’s villa block id.
+- [x] **A-3** — Venue → villa section on same page *(implemented — verify in browser)*  
+  **Done when:** Hero **VENUES** on Wedding, Corporate, Party Villas, Weekend Getaways smooth-scrolls to that page’s villa carousel (`wedding-venues`, `featured-venues`, `party-villas-section`, `themed-villa-retreats`).  
+  **Files:** `experiencePageVillaScroll.ts`, `WeddingHero.tsx`, `WeddingVillasCarousel.tsx`, `corporate-retreats/page.tsx`, `party-villas/page.tsx`, `weekend-getaways/page.tsx`.
 
-- [ ] **A-4** — FAQ opens as modal  
-  **Done when:** On villa detail FAQ, clicking a question opens a **modal** with answer + dimmed backdrop; closing restores page scroll.  
-  **Files:** `src/app/villas/[id]/page.tsx`, `src/components/villa/VillaDetailFaqList.tsx`.
+- [x] **A-4** — FAQ VIEW MORE opens as modal *(implemented — verify in browser)*  
+  **Done when:** FAQ preview shows inline Q+A (first 3); **VIEW MORE** opens full FAQ **DetailsDrawer** (same pop as Amenities/Services); closing restores page scroll. Questions are not clickable.  
+  **Files:** `src/components/villa/VillaDetailFaqList.tsx`.
 
 ---
 

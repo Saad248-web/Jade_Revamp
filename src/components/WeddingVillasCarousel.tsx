@@ -23,7 +23,10 @@ export default function WeddingVillasCarousel() {
   };
 
   return (
-    <section className="relative bg-[#25282C] pt-fluid-lg pb-8 md:pt-fluid-xl md:pb-8">
+    <section
+      id="wedding-venues"
+      className="relative bg-[#25282C] pt-fluid-lg pb-8 md:pt-fluid-xl md:pb-8"
+    >
       <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full overflow-hidden">
         <div className="flex flex-col gap-11">
           {WEDDING_VILLAS.map((villa) => (

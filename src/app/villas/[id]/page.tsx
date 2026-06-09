@@ -842,7 +842,7 @@ export default function VillaDetailsPage() {
       {(domeColor || isDomeEstate || currentSpace) && (
         <section id="spaces" className={VILLA_DETAIL_CHARCOAL}>
           <div className={vd.sectionShell}>
-            <div className={clsx(vd.content, vd.stack)}>
+            <div className={clsx(vd.content, vd.mediaSectionStack)}>
               <div className="flex flex-wrap items-center gap-3 md:gap-5">
                 <h3 className={vd.heading}>Spaces</h3>
                 {isDomeEstate && (
@@ -878,7 +878,7 @@ export default function VillaDetailsPage() {
                   />
                 </VillaDetailImageFrame>
               ) : (
-                <div className="relative aspect-[4/3] md:aspect-[16/9] w-full rounded-none overflow-hidden bg-emerald-900/20 flex items-center justify-center text-white/40 italic">Loading spaces…</div>
+                <div className={clsx(vd.mediaStageFrame, "relative w-full rounded-none overflow-hidden bg-emerald-900/20 flex items-center justify-center text-white/40 italic")}>Loading spaces…</div>
               )}
               <Link href={`/villas/${id}/spaces`} className="w-full border border-white/20 bg-white/5 py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2">
                 VIEW ALL SPACES
@@ -970,13 +970,13 @@ export default function VillaDetailsPage() {
                 if (!ytId) return null;
                 if (isPlayingVideo) {
                   return (
-                    <div className="relative aspect-video w-full bg-gray-900 overflow-hidden border border-white/10">
+                    <div className={clsx(vd.mediaStageFrame, "relative w-full bg-gray-900 overflow-hidden border border-white/10")}>
                       <iframe src={`https://www.youtube.com/embed/${ytId}?autoplay=1`} title={`${villa.name} Walkthrough`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="absolute inset-0 w-full h-full" />
                     </div>
                   );
                 }
                 return (
-                  <div className="relative aspect-video w-full bg-gray-900 overflow-hidden group border border-white/10 cursor-pointer" onClick={() => setIsPlayingVideo(true)}>
+                  <div className={clsx(vd.mediaStageFrame, "relative w-full bg-gray-900 overflow-hidden group border border-white/10 cursor-pointer")} onClick={() => setIsPlayingVideo(true)}>
                     {walkthroughPoster ? (
                       <Image src={walkthroughPoster} alt={`${villa.name} Video Walkthrough`} fill className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 800px" priority={false} />
                     ) : null}
@@ -1028,12 +1028,18 @@ export default function VillaDetailsPage() {
         <div className={vd.sectionShell}>
           <div className={clsx(vd.content, vd.stack)}>
             <h3 className={vd.heading}>Amenities</h3>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-8">
-              {villa.amenities?.slice(0, 8).map((amenity, idx) => {
+            <div className={vd.amenitiesGrid}>
+              {villa.amenities?.map((amenity, idx) => {
                 const Icon = getIcon(amenity.icon);
                 const { line1, line2 } = splitAmenityLabel(amenity.label);
                 return (
-                  <div key={idx} className="flex items-start gap-3">
+                  <div
+                    key={idx}
+                    className={clsx(
+                      "flex items-start gap-3",
+                      idx >= 8 && "hidden lg:flex",
+                    )}
+                  >
                     <div className="w-10 h-10 shrink-0 border border-[#EFCD62]/70 flex items-center justify-center">
                       <Icon className="w-5 h-5 text-[#EFCD62]" strokeWidth={1} />
                     </div>
@@ -1045,13 +1051,15 @@ export default function VillaDetailsPage() {
                 );
               })}
             </div>
-            <button
-              type="button"
-              onClick={() => openDrawer("Amenities", villa.amenities || [])}
-              className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
-            >
-              SEE MORE <ArrowRight className="w-3 h-3" />
-            </button>
+            {(villa.amenities?.length ?? 0) > 8 ? (
+              <button
+                type="button"
+                onClick={() => openDrawer("Amenities", villa.amenities || [])}
+                className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors lg:hidden"
+              >
+                SEE MORE <ArrowRight className="w-3 h-3" />
+              </button>
+            ) : null}
           </div>
         </div>
         <VillaDetailMeanderStrip accentLine="green" />
@@ -1098,11 +1106,11 @@ export default function VillaDetailsPage() {
       {villa.perfectForCards.length > 0 && (
         <section id="perfect-for" className={VILLA_DETAIL_CHARCOAL}>
           <div className={vd.sectionShell}>
-            <div className={clsx(vd.content, vd.stack)}>
+            <div className={clsx(vd.content, vd.mediaSectionStack)}>
               <h3 className={vd.heading}>Perfect for</h3>
-              <div className="grid grid-cols-2 gap-3 md:gap-4">
+              <div className="grid grid-cols-2 gap-3 md:gap-4 lg:gap-5">
                 {villa.perfectForCards.map((item, idx) => (
-                    <div key={`${item.title}-${idx}`} className="relative aspect-[3/4] overflow-hidden">
+                    <div key={`${item.title}-${idx}`} className={vd.perfectForCard}>
                       {item.image && (
                         <JadeImage
                           src={item.image}
@@ -1153,7 +1161,7 @@ export default function VillaDetailsPage() {
           "pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:pb-4",
         )}
       >
-        <div className={clsx(vd.page, vd.gutterX, "flex justify-between items-center gap-4")}>
+        <div className={clsx(vd.contentInsetShell, "flex justify-between items-center gap-4")}>
           <div className="flex flex-col font-manrope leading-tight">
             <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">Starting from</span>
             <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold whitespace-nowrap">{villaFooterPriceDisplay ?? "Contact for pricing"}</span>

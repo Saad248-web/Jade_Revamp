@@ -3,8 +3,12 @@
 import { ArrowRight } from "lucide-react";
 import type { VillaAmenity } from "@/lib/types";
 import { getVillaDetailIcon, splitAmenityLabel } from "@/lib/villaDetailIcons";
+import clsx from "clsx";
 import VillaDetailSection from "./VillaDetailSection";
 import { VillaDetailSectionHeading } from "./VillaDetailSection";
+import { VILLA_DETAIL_SPACING } from "./villaDetailSpacing";
+
+const vd = VILLA_DETAIL_SPACING;
 
 type Props = {
   amenities: VillaAmenity[];
@@ -52,7 +56,7 @@ export default function VillaDetailAmenityGrid({
         <button
           type="button"
           onClick={onSeeMore}
-          className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors"
+          className="flex items-center gap-2 text-[#EFCD62] text-gh-label font-bold tracking-widest uppercase hover:text-white transition-colors lg:hidden"
         >
           SEE MORE <ArrowRight className="h-3 w-3" />
         </button>

@@ -5,6 +5,9 @@ import clsx from "clsx";
 import JadeImage from "@/components/ui/JadeImage";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import { CAROUSEL_CROSSFADE_FAST } from "@/lib/carouselMotion";
+import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
+
+const vd = VILLA_DETAIL_SPACING;
 
 type VillaDetailImageFrameProps = {
   imageKey: string;
@@ -28,7 +31,7 @@ export default function VillaDetailImageFrame({
   onPrev,
   onNext,
   slideCount,
-  aspectClassName = "aspect-[3/4] md:aspect-[16/9]",
+  aspectClassName = vd.mediaStageFrame,
   imageClassName = "object-cover object-center",
   sizes = "(max-width: 768px) 100vw, 800px",
   onPauseAuto,

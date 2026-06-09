@@ -64,8 +64,6 @@ export default function ExperiencesHero() {
       >
         <ScrollLineIndicator
           floating
-          label="SCROLL TO EXPERIENCES"
-          labelClassName="text-gh-label text-white/40"
           barClassName="bg-white"
           className="pointer-events-auto"
           onClick={() => {

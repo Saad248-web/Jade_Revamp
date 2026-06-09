@@ -37,7 +37,7 @@ export default function VillaDetailExperienceCarousel({
   const src = isValidImage(activity.image) ? activity.image : fallbackImage;
 
   return (
-    <>
+    <div className={vd.mediaSectionStack}>
       <h3 className={vd.sectionHeading}>Experiences</h3>
       {src ? (
         <VillaDetailImageFrame
@@ -79,6 +79,6 @@ export default function VillaDetailExperienceCarousel({
         ENQUIRE
         <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
       </button>
-    </>
+    </div>
   );
 }

@@ -4,6 +4,7 @@ import { Home, Download } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ExperienceHero, { HeroButton } from "./ExperienceHero";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
+import { scrollToExperienceVillaSection } from "@/lib/experiencePageVillaScroll";
 
 export default function WeddingHero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -37,12 +38,7 @@ export default function WeddingHero() {
     {
       icon: <Home className="w-5 h-5" />,
       label: "Venues",
-      onClick: () => {
-        const venuesSection = document.getElementById("wedding-venues");
-        if (venuesSection) {
-          venuesSection.scrollIntoView({ behavior: "smooth" });
-        }
-      },
+      onClick: () => scrollToExperienceVillaSection("wedding"),
     },
     {
       icon: <Download className="w-5 h-5" />,

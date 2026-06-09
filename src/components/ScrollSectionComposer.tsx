@@ -34,7 +34,6 @@ interface ScrollSectionComposerProps {
   /** Safe back target when showNavigation is enabled */
   backFallbackPath?: string;
   showScrollIndicator?: boolean;
-  scrollIndicatorText?: string;
   /** Horizontal gutters for slide copy (e.g. `px-4 md:px-8` to match premium card rails) */
   slideGutterClassName?: string;
   /** Outer width constraint for slide copy (e.g. `w-full max-w-7xl mx-auto`) */
@@ -213,7 +212,6 @@ export default function ScrollSectionComposer({
   showNavigation = false,
   backFallbackPath = "/experiences",
   showScrollIndicator = true,
-  scrollIndicatorText,
   slideGutterClassName = "px-6 md:px-12",
   contentContainerClassName = "max-w-[90vw] md:max-w-4xl mx-auto",
 }: ScrollSectionComposerProps) {
@@ -280,11 +278,9 @@ export default function ScrollSectionComposer({
         {showScrollIndicator && (
           <ScrollLineIndicator
             floating
-            label={scrollIndicatorText ?? "SCROLL TO EXPERIENCES"}
             className="z-30 gap-5 pointer-events-none [&_button]:pointer-events-auto"
             trackClassName="h-16 md:h-20"
             barClassName="bg-white"
-            labelClassName="text-white/50"
           />
         )}
       </div>

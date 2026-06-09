@@ -8,6 +8,7 @@ import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useAnimation } from "@/context/AnimationContext";
 import { EXPERIENCE_PAGE_PATHS } from "@/lib/enquiryReturnPath";
+import { scrollToExperienceVillaSection } from "@/lib/experiencePageVillaScroll";
 import Footer from "@/components/Footer";
 import ExperienceHero from "@/components/ExperienceHero";
 import ExperienceScrollSection from "@/components/ExperienceScrollSection";
@@ -102,11 +103,7 @@ export default function WeekendGetawaysPage() {
           {
             icon: <Calendar className="w-5 h-5" />,
             label: "VENUES",
-            onClick: () => {
-              const venuesSection = document.getElementById("themed-villas");
-              if (venuesSection)
-                venuesSection.scrollIntoView({ behavior: "smooth" });
-            },
+            onClick: () => scrollToExperienceVillaSection("weekend"),
           },
           {
             icon: <Download className="w-5 h-5" />,

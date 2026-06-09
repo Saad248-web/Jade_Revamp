@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import type { VillaAmenityHighlight } from "@/lib/types";
 import { getVillaDetailIcon } from "@/lib/villaDetailIcons";
+import HorizontalScrollRail from "@/components/ui/HorizontalScrollRail";
 import AmenityHighlightTile from "./AmenityHighlightTile";
 import { VILLA_DETAIL_SPACING } from "./villaDetailSpacing";
 
@@ -20,29 +21,26 @@ export default function VillaDetailAmenityHighlights({
   if (!highlights?.length) return null;
 
   return (
-    <div
+    <HorizontalScrollRail
       className={clsx(
         vd.amenityHighlightViewportShell,
         vd.amenityHighlightViewportEdge,
-        vd.amenityHighlightViewportInset,
       )}
+      trackClassName={clsx(vd.amenityHighlightTrackFullBleed, className)}
+      showFade={false}
+      cursorGrab
     >
-      <div
-        className={clsx(vd.amenityHighlightTrackFullBleed, className)}
-        data-jade-hscroll
-      >
-        {highlights.map((amenity, idx) => {
-          const Icon = getVillaDetailIcon(amenity.icon);
-          return (
-            <AmenityHighlightTile
-              key={`${amenity.label}-${idx}`}
-              icon={Icon}
-              label={amenity.label}
-              sublabel={amenity.sublabel}
-            />
-          );
-        })}
-      </div>
-    </div>
+      {highlights.map((amenity, idx) => {
+        const Icon = getVillaDetailIcon(amenity.icon);
+        return (
+          <AmenityHighlightTile
+            key={`${amenity.label}-${idx}`}
+            icon={Icon}
+            label={amenity.label}
+            sublabel={amenity.sublabel}
+          />
+        );
+      })}
+    </HorizontalScrollRail>
   );
 }

@@ -39,7 +39,6 @@ export default function ExperienceScrollSection({
           isWedding ? <LiveBackground variant="static" /> : <LiveBackground />
         }
         showScrollIndicator
-        scrollIndicatorText="SCROLL TO EXPERIENCES"
       />
     </div>
   );

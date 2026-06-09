@@ -16,6 +16,7 @@ import TravelGuidelinesSection from "@/components/TravelGuidelinesSection";
 import { Info, Calendar } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
 import { EXPERIENCE_PAGE_PATHS } from "@/lib/enquiryReturnPath";
+import { scrollToExperienceHeroSection } from "@/lib/experiencePageVillaScroll";
 import { useEffect, useMemo, useState } from "react";
 
 const DEFAULT_SLIDES = [
@@ -132,11 +133,7 @@ export default function CaravansPage() {
           {
             icon: <Info className="w-5 h-5" />,
             label: "KNOW MORE",
-            onClick: () => {
-              const carouselSection = document.getElementById("the-caravan");
-              if (carouselSection)
-                carouselSection.scrollIntoView({ behavior: "smooth" });
-            },
+            onClick: () => scrollToExperienceHeroSection("caravans"),
           },
           {
             icon: <Calendar className="w-5 h-5" />,
@@ -149,15 +146,15 @@ export default function CaravansPage() {
       {/* SECTION 2: ANIMATED TEXT SECTION */}
       <ExperienceScrollSection variant="caravans" id="caravans-philosophy" />
 
-      {/* SECTION 3: THE CARAVAN CAROUSEL */}
-      <div id="the-caravan">
+      {/* SECTION 3: THE CARAVAN — hero KNOW MORE scroll target */}
+      <section id="the-caravan">
         <ExperienceCarouselSection
           label="INSIDE THE RATHAA EXPERIENCE"
           title="The Caravan"
           slides={caravanSlides}
           ctaText="BOOK CARAVAN"
         />
-      </div>
+      </section>
 
       <CaravanUsageSection />
       <CaravanJourneySection />
