@@ -18,9 +18,7 @@ export function useVenueOverlayScrollSpy(
   useSectionScrollSpy({
     sectionIds: VENUE_OVERLAY_SECTION_IDS,
     rootRef: scrollRootRef,
-    enabled:
-      enabled &&
-      (scrollRootRef.current != null || rootVersion > 0),
+    enabled,
     rootVersion,
     offsetPx: VENUE_OVERLAY_TAB_OFFSET_PX,
     onActiveSection: (sectionId) => {

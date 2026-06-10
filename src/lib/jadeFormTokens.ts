@@ -35,6 +35,12 @@ export function getFieldShellClass(options: {
 export const JADE_FORM_INPUT_CLASS =
   "peer w-full bg-transparent px-4 py-3.5 text-white text-gh-body placeholder-transparent focus:outline-none font-manrope";
 
+/**
+ * Native `<input type="date">` — hides the browser calendar affordance.
+ * Pair with a trailing Calendar button that calls `input.showPicker()`.
+ */
+export const JADE_FORM_DATE_INPUT_CLASS = `${JADE_FORM_INPUT_CLASS} pr-12 [color-scheme:dark] appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-inner-spin-button]:hidden [&::-webkit-clear-button]:hidden`;
+
 export const JADE_FORM_INPUT_FOOTER_CLASS =
   "peer w-full bg-white/[0.02] px-4 py-4 text-white text-gh-body placeholder-transparent focus:outline-none transition-all duration-300 rounded-none h-14 font-manrope";
 
@@ -55,7 +61,7 @@ const LABEL_FOOTER =
   "absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]";
 
 const LABEL_EXPERIENCE =
-  `absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/60 transition-all duration-300 pointer-events-none px-1 peer-focus:-top-3 peer-focus:translate-y-0 peer-focus:text-white peer-focus:${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS} peer-[:not(:placeholder-shown)]:-top-3 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:${EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS}`;
+  "absolute left-4 top-1/2 z-10 -translate-y-1/2 text-gh-label text-white/60 transition-all duration-300 pointer-events-none px-2 font-manrope peer-focus:-top-3 peer-focus:translate-y-0 peer-focus:text-white peer-focus:bg-jade-charcoal peer-[:not(:placeholder-shown)]:-top-3 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-jade-charcoal";
 
 export function getFloatingLabelClass(theme: JadeFormTheme): string {
   switch (theme) {

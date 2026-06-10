@@ -112,7 +112,7 @@ export function VillaExperienceOverlayBody({
   };
 
   const scrollContent = (
-    <>
+    <div data-overlay-scroll-content>
       <div className="relative z-[1]">{pinnedTop}</div>
       <div
         className={EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS}
@@ -123,7 +123,7 @@ export function VillaExperienceOverlayBody({
       {mobileFooter ? (
         <div className={EXPERIENCE_OVERLAY_BOOKING_BAR_SPACER_CLASS} aria-hidden />
       ) : null}
-    </>
+    </div>
   );
 
   return (
@@ -349,26 +349,29 @@ export function VillaExperienceStickyTabs({
       {/* Full-width chrome (like booking bottom bar); tabs align to page gutters inside. */}
       <div
         className={clsx(
-          "jade-hscroll-chrome sticky top-0 z-40 mb-0 w-full min-w-0",
-          VILLA_DETAIL_STICKY_TABS_CHROME_CLASS,
-          "border-b-0",
+          "jade-hscroll-chrome sticky top-0 z-40 mb-0",
+          vd.stickyChromeOuter,
+          vd.hScrollViewportEdge,
         )}
       >
         <div
-          data-experience-overlay-tabs
           className={clsx(
-            vd.overlayCategoryRailViewport,
-            "md:mx-auto md:max-w-7xl md:px-4 lg:px-8",
+            vd.stickyChromeOuter,
+            VILLA_DETAIL_STICKY_TABS_CHROME_CLASS,
+            "border-b-0",
           )}
         >
-          <CategoryTabRail
-            ref={trackRef}
-            fadeFrom="#1A1C1E"
-            patternFade
-            cursorGrab
-            trackPreset="amenityParity"
-            trackAriaLabel="Experience sections"
-          >
+          <div className={vd.stickyChromeInner}>
+            <CategoryTabRail
+              ref={trackRef}
+              fadeFrom="#1A1C1E"
+              patternFade
+              mobileViewportEdge
+              mobileTrackGutter
+              cursorGrab
+              trackClassName={vd.stickyTabTrackInset}
+              trackAriaLabel="Experience sections"
+            >
             {tabs.map((tab) => (
               <button
                 key={tab}
@@ -384,7 +387,8 @@ export function VillaExperienceStickyTabs({
                 {tab}
               </button>
             ))}
-          </CategoryTabRail>
+            </CategoryTabRail>
+          </div>
         </div>
       </div>
     </>
@@ -416,8 +420,7 @@ export function VillaExperienceBookingBottomBar({
     >
       <div
         className={clsx(
-          vd.page,
-          vd.gutterX,
+          vd.contentInsetShell,
           "relative z-[3] flex w-full justify-between items-center gap-4 md:gap-6",
         )}
       >

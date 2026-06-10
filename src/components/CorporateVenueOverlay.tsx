@@ -28,10 +28,11 @@ import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 import VillaPricingBlocks, {
   buildCorporateOverlayPricingBlocks,
 } from "@/components/experience/VillaPricingBlocks";
-import { ExperiencePolicyCompactList } from "@/components/experience/ExperienceFaqAccordion";
 import VillaDetailAmenityGrid from "@/components/villa/VillaDetailAmenityGrid";
-import VillaDetailFaqList from "@/components/villa/VillaDetailFaqList";
 import VillaDetailLocationBlock from "@/components/villa/VillaDetailLocationBlock";
+import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip";
+import VillaOverlayFaqPolicies from "@/components/villa/VillaOverlayFaqPolicies";
+import VillaOverlayIntroAmenities from "@/components/villa/VillaOverlayIntroAmenities";
 import {
   EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS,
   EXPERIENCE_OVERLAY_ROOT_CLASS,
@@ -44,7 +45,11 @@ import {
   validateFullName,
   validatePhone,
 } from "@/lib/leadFormValidation";
-import { getFieldShellClass } from "@/lib/jadeFormTokens";
+import {
+  JADE_FORM_WARN,
+  JADE_OVERLAY_FORM_STACK_CLASS,
+} from "@/lib/jadeFormTokens";
+import EnquirySingleDatePicker from "@/components/enquiry/EnquirySingleDatePicker";
 import {
   JadeFloatingField,
   JadeFloatingTextarea,
@@ -59,15 +64,12 @@ import {
   isExperienceOverlayMdUp,
 } from "@/components/experience/VillaExperienceOverlayLayout";
 import VillaDetailIntroSection from "@/components/villa/VillaDetailIntroSection";
-import OverlayIntroAmenityHighlights from "@/components/villa/OverlayIntroAmenityHighlights";
 import clsx from "clsx";
 import {
   VILLA_DETAIL_CHARCOAL,
   VILLA_DETAIL_GREEN,
   VILLA_DETAIL_SPACING,
 } from "@/components/villa/villaDetailSpacing";
-import { getVillaDetailIcon } from "@/lib/villaDetailIcons";
-
 const vd = VILLA_DETAIL_SPACING;
 
 interface CorporateVenueOverlayProps {
@@ -105,14 +107,13 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
   const formRef = useRef<HTMLDivElement>(null);
   const overlayScrollRef = useRef<HTMLDivElement>(null);
   const [overlayScrollRootGen, setOverlayScrollRootGen] = useState(0);
-  const corpDateRef = useRef<HTMLInputElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
   const [corpFullName, setCorpFullName] = useState("");
   const [corpCompany, setCorpCompany] = useState("");
   const [corpPhone, setCorpPhone] = useState("");
   const [corpEmail, setCorpEmail] = useState("");
   const [corpTeamSize, setCorpTeamSize] = useState("");
-  const [corpDate, setCorpDate] = useState("");
+  const [corpDate, setCorpDate] = useState<Date | null>(null);
   const [corpFormats, setCorpFormats] = useState<Set<string>>(new Set());
   const [corpServices, setCorpServices] = useState<Set<string>>(new Set());
   const [corpPref, setCorpPref] = useState<Set<string>>(new Set());
@@ -260,14 +261,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                       </div>
                     </div>
                   }
-                  amenityHighlights={
-                    v.amenities?.length ? (
-                      <OverlayIntroAmenityHighlights
-                        amenities={v.amenities}
-                        getIcon={(icon) => getVillaDetailIcon(icon)}
-                      />
-                    ) : undefined
-                  }
+                  amenityHighlights={<VillaOverlayIntroAmenities villa={v} />}
                 >
                   <p className={VILLA_DETAIL_SPACING.introDescription}>
                     {v.description ||
@@ -343,6 +337,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
             ) : null}
 
             <section id="location" className={VILLA_DETAIL_CHARCOAL}>
+              <VillaDetailMeanderStrip />
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
                   <h3 className={vd.heading}>Location</h3>
@@ -385,44 +380,30 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
               </div>
             </section>
 
-            <section id="faq" className={VILLA_DETAIL_CHARCOAL}>
+            <VillaOverlayFaqPolicies
+              faqItems={(villa.faq || []).map((item: any) => ({
+                question: item.question,
+                answer: item.answer,
+              }))}
+              policies={[
+                {
+                  title: "AV Equipment",
+                  desc: "Projectors, screens, and basic sound systems are included. Specialized equipment on request.",
+                },
+                {
+                  title: "Catering",
+                  desc: "In-house culinary team provides all meals. Customized corporate menus available.",
+                },
+                {
+                  title: "Booking Policy",
+                  desc: "50% advance required to block dates. Full payment due week before the event.",
+                },
+              ]}
+            />
+
+            <section id="enquiry" className={VILLA_DETAIL_CHARCOAL} ref={formRef}>
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
-                  <h3 className={vd.heading}>FAQ</h3>
-                  {(villa.faq || []).length > 0 ? (
-                    <VillaDetailFaqList
-                      items={(villa.faq || []).map((item: any) => ({
-                        question: item.question,
-                        answer: item.answer,
-                      }))}
-                    />
-                  ) : null}
-                  <div className={vd.stackSm}>
-                    <h3 className={vd.heading}>Key Policies</h3>
-                    <ExperiencePolicyCompactList
-                      policies={[
-                        {
-                          title: "AV Equipment",
-                          desc: "Projectors, screens, and basic sound systems are included. Specialized equipment on request.",
-                        },
-                        {
-                          title: "Catering",
-                          desc: "In-house culinary team provides all meals. Customized corporate menus available.",
-                        },
-                        {
-                          title: "Booking Policy",
-                          desc: "50% advance required to block dates. Full payment due week before the event.",
-                        },
-                      ]}
-                    />
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <div className={VILLA_DETAIL_CHARCOAL}>
-              <div className={vd.sectionShell}>
-                <div className={clsx(vd.content, vd.stack)} id="enquiry" ref={formRef}>
                 {view === "form" ? (
                   <>
                     <h2 className={vd.heading}>Plan Your Corporate Retreat</h2>
@@ -432,7 +413,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                     </p>
 
                     <form
-                      className="space-y-5"
+                      className={JADE_OVERLAY_FORM_STACK_CLASS}
                       noValidate
                       onSubmit={(e) => {
                         e.preventDefault();
@@ -458,7 +439,11 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                       }}
                     >
                       {corpError ? (
-                        <p className="text-red-400 text-gh-label" role="alert">
+                        <p
+                          className="text-gh-label font-manrope"
+                          style={{ color: JADE_FORM_WARN }}
+                          role="alert"
+                        >
                           {corpError}
                         </p>
                       ) : null}
@@ -524,50 +509,24 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                           errorMessage={corpFieldErrors.teamSize}
                         />
                       </div>
-                      <div
-                        className={`relative ${getFieldShellClass({
-                          invalid: Boolean(corpFieldErrors.eventDate),
-                          showError:
-                            corpAttempted && Boolean(corpFieldErrors.eventDate),
-                          variant: "standard",
-                        })}`}
-                      >
-                        <input
-                          ref={corpDateRef}
-                          id="corp-event-date"
-                          type="date"
+                      <div className="flex flex-col gap-1.5">
+                        <EnquirySingleDatePicker
+                          label="Event date"
+                          theme="experienceCharcoal"
                           value={corpDate}
-                          min={new Date().toISOString().slice(0, 10)}
-                          onChange={(e) => setCorpDate(e.target.value)}
-                          className="w-full bg-transparent px-4 py-3.5 pr-12 text-white text-gh-body focus:outline-none [color-scheme:dark] font-manrope rounded-sm"
+                          onChange={setCorpDate}
+                          invalid={
+                            corpAttempted &&
+                            Boolean(corpFieldErrors.eventDate)
+                          }
                         />
-                        <button
-                          type="button"
-                          aria-label="Open date picker"
-                          onClick={() => {
-                            corpDateRef.current?.showPicker?.();
-                            corpDateRef.current?.focus();
-                          }}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/50 hover:text-[#EFCD62] rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
-                        >
-                          <Calendar className="w-5 h-5" />
-                        </button>
-                        <label
-                          htmlFor="corp-event-date"
-                          className="absolute -top-3 left-4 bg-jade-charcoal px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope pointer-events-none"
-                        >
-                          Event date
-                          {corpAttempted && corpFieldErrors.eventDate ? (
-                            <span className="ml-1 text-[#D32C55]">*</span>
-                          ) : null}
-                        </label>
+                        {corpAttempted && corpFieldErrors.eventDate ? (
+                          <JadeFormFieldError
+                            id="corp-date-err"
+                            message={corpFieldErrors.eventDate}
+                          />
+                        ) : null}
                       </div>
-                      {corpAttempted && corpFieldErrors.eventDate ? (
-                        <JadeFormFieldError
-                          id="corp-date-err"
-                          message={corpFieldErrors.eventDate}
-                        />
-                      ) : null}
 
                       <div className="py-5">
                         <h4 className="text-white font-bold text-gh-body mb-3">
@@ -823,7 +782,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                 )}
                 </div>
               </div>
-            </div>
+            </section>
       </VillaExperienceOverlayBody>
 
       <VillaExperienceBookingBottomBar

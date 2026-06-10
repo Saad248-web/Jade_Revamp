@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import { Calendar, Check } from "lucide-react";
-import { getFieldShellClass } from "@/lib/jadeFormTokens";
+import { Check } from "lucide-react";
+import EnquirySingleDatePicker from "@/components/enquiry/EnquirySingleDatePicker";
+import {
+  JADE_FORM_WARN,
+  JADE_OVERLAY_FORM_STACK_CLASS,
+} from "@/lib/jadeFormTokens";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
 import {
   validateEmail,
@@ -92,7 +96,7 @@ export default function WeddingVenueEnquiryForm({
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [eventDate, setEventDate] = useState("");
+  const [eventDate, setEventDate] = useState<Date | null>(null);
   const [services, setServices] = useState<Set<string>>(new Set());
   const [events, setEvents] = useState<Set<string>>(new Set());
   const [setting, setSetting] = useState<Set<string>>(new Set());
@@ -100,8 +104,6 @@ export default function WeddingVenueEnquiryForm({
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const dateRef = useRef<HTMLInputElement>(null);
-
   const toggle = (prev: Set<string>, v: string) => {
     const next = new Set(prev);
     if (next.has(v)) next.delete(v);
@@ -123,14 +125,16 @@ export default function WeddingVenueEnquiryForm({
 
   const isValid = !Object.values(fieldErrors).some(Boolean);
 
-  const openCalendar = () => {
-    dateRef.current?.showPicker?.();
-    dateRef.current?.focus();
+  const formatEventDate = (d: Date) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
   };
 
   return (
     <form
-      className="space-y-5"
+      className={JADE_OVERLAY_FORM_STACK_CLASS}
       onSubmit={async (e) => {
         e.preventDefault();
         setAttemptedSubmit(true);
@@ -147,7 +151,7 @@ export default function WeddingVenueEnquiryForm({
                 fullName: fullName.trim(),
                 phone: phone.trim(),
                 email: email.trim(),
-                eventDate,
+                eventDate: eventDate ? formatEventDate(eventDate) : "",
                 services: Array.from(services),
                 events: Array.from(events),
                 setting: Array.from(setting),
@@ -173,7 +177,11 @@ export default function WeddingVenueEnquiryForm({
       noValidate
     >
       {submitError ? (
-        <p className="text-red-400 text-gh-label font-manrope" role="alert">
+        <p
+          className="text-gh-label font-manrope"
+          style={{ color: JADE_FORM_WARN }}
+          role="alert"
+        >
           {submitError}
         </p>
       ) : null}
@@ -217,47 +225,21 @@ export default function WeddingVenueEnquiryForm({
         />
       </div>
 
-      <div
-        className={`relative ${getFieldShellClass({
-          invalid: Boolean(fieldErrors.eventDate),
-          showError: showErr("eventDate"),
-          variant: "standard",
-        })}`}
-      >
-        <input
-          ref={dateRef}
-          id="wedding-event-date"
-          type="date"
+      <div className="flex flex-col gap-1.5">
+        <EnquirySingleDatePicker
+          label="Event date"
+          theme="experienceCharcoal"
           value={eventDate}
-          min={new Date().toISOString().slice(0, 10)}
-          onChange={(e) => setEventDate(e.target.value)}
-          aria-invalid={showErr("eventDate")}
-          className="w-full bg-transparent px-4 py-3.5 pr-12 text-white text-gh-body focus:outline-none [color-scheme:dark] font-manrope rounded-sm"
+          onChange={setEventDate}
+          invalid={showErr("eventDate") && Boolean(fieldErrors.eventDate)}
         />
-        <button
-          type="button"
-          aria-label="Open date picker"
-          onClick={openCalendar}
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/50 hover:text-[#EFCD62] rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
-        >
-          <Calendar className="w-5 h-5" />
-        </button>
-        <label
-          htmlFor="wedding-event-date"
-          className="absolute -top-3 left-4 bg-jade-charcoal px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope pointer-events-none"
-        >
-          Event date
-          {showErr("eventDate") ? (
-            <span className="ml-1 text-[#D32C55]">*</span>
-          ) : null}
-        </label>
+        {showErr("eventDate") && fieldErrors.eventDate ? (
+          <JadeFormFieldError
+            id="wedding-date-err"
+            message={fieldErrors.eventDate}
+          />
+        ) : null}
       </div>
-      {showErr("eventDate") && fieldErrors.eventDate ? (
-        <JadeFormFieldError
-          id="wedding-date-err"
-          message={fieldErrors.eventDate}
-        />
-      ) : null}
 
       <div className="space-y-2.5">
         <p className="text-white/60 text-gh-label font-bold uppercase tracking-widest">

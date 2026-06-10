@@ -27,7 +27,6 @@ export default function OverlayIntroAmenityHighlights({
       className={clsx(
         vd.amenityHighlightViewportShell,
         vd.amenityHighlightViewportEdge,
-        vd.amenityHighlightViewportInset,
       )}
       trackClassName={vd.amenityHighlightTrackFullBleed}
       showFade={false}

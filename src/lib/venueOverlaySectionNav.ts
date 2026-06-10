@@ -6,6 +6,8 @@ export const VENUE_OVERLAY_SECTION_IDS = [
   "location",
   "walkthrough",
   "faq",
+  "key-policies",
+  "enquiry",
 ] as const;
 
 export const VENUE_OVERLAY_TABS = [
@@ -24,6 +26,8 @@ const SECTION_TO_TAB: Record<string, VenueOverlayTab> = {
   location: "Location",
   walkthrough: "Walkthrough",
   faq: "FAQ",
+  "key-policies": "FAQ",
+  enquiry: "FAQ",
 };
 
 const TAB_TO_SECTION: Record<string, string> = {

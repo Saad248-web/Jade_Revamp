@@ -1,3 +1,5 @@
+import { getScrollSectionElement } from "@/lib/scrollSectionElement";
+
 /**
  * Picks the section id that best matches the current scroll position.
  * Uses the sticky-tab anchor line: last section (in page order) whose top has passed it.
@@ -15,7 +17,7 @@ export function resolveActiveScrollSection(
   let activeId: string | null = null;
 
   for (const id of sectionIds) {
-    const el = document.getElementById(id);
+    const el = getScrollSectionElement(root, id);
     if (!el) continue;
     const top = el.getBoundingClientRect().top;
     if (top <= anchorY) activeId = id;
@@ -24,7 +26,7 @@ export function resolveActiveScrollSection(
   if (activeId) return activeId;
 
   for (const id of sectionIds) {
-    const el = document.getElementById(id);
+    const el = getScrollSectionElement(root, id);
     if (!el) continue;
     const rect = el.getBoundingClientRect();
     const bottom =

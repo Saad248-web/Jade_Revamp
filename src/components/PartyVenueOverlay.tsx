@@ -48,7 +48,11 @@ import {
   validateFullName,
   validatePhone,
 } from "@/lib/leadFormValidation";
-import { getFieldShellClass } from "@/lib/jadeFormTokens";
+import {
+  JADE_FORM_WARN,
+  JADE_OVERLAY_FORM_STACK_CLASS,
+} from "@/lib/jadeFormTokens";
+import EnquirySingleDatePicker from "@/components/enquiry/EnquirySingleDatePicker";
 import {
   JadeFloatingField,
   JadeFloatingSelect,
@@ -145,7 +149,9 @@ import {
   isExperienceOverlayMdUp,
 } from "@/components/experience/VillaExperienceOverlayLayout";
 import VillaDetailIntroSection from "@/components/villa/VillaDetailIntroSection";
-import OverlayIntroAmenityHighlights from "@/components/villa/OverlayIntroAmenityHighlights";
+import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip";
+import VillaOverlayFaqPolicies from "@/components/villa/VillaOverlayFaqPolicies";
+import VillaOverlayIntroAmenities from "@/components/villa/VillaOverlayIntroAmenities";
 import clsx from "clsx";
 import {
   VILLA_DETAIL_CHARCOAL,
@@ -155,9 +161,7 @@ import {
 import VillaPricingBlocks, {
   buildPartyOverlayPricingBlocks,
 } from "@/components/experience/VillaPricingBlocks";
-import { ExperiencePolicyCompactList } from "@/components/experience/ExperienceFaqAccordion";
 import VillaDetailAmenityGrid from "@/components/villa/VillaDetailAmenityGrid";
-import VillaDetailFaqList from "@/components/villa/VillaDetailFaqList";
 import VillaDetailLocationBlock from "@/components/villa/VillaDetailLocationBlock";
 
 const vd = VILLA_DETAIL_SPACING;
@@ -200,7 +204,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
   const [partyFullName, setPartyFullName] = useState("");
   const [partyPhone, setPartyPhone] = useState("");
   const [partyEmail, setPartyEmail] = useState("");
-  const [partyDate, setPartyDate] = useState("");
+  const [partyDate, setPartyDate] = useState<Date | null>(null);
   const [partyType, setPartyType] = useState("Birthday Party");
   const [partyFormError, setPartyFormError] = useState<string | null>(null);
   const [partyAttempted, setPartyAttempted] = useState(false);
@@ -332,14 +336,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                       </div>
                     </div>
                   }
-                  amenityHighlights={
-                    villa.amenities?.length ? (
-                      <OverlayIntroAmenityHighlights
-                        amenities={villa.amenities}
-                        getIcon={getIcon}
-                      />
-                    ) : undefined
-                  }
+                  amenityHighlights={<VillaOverlayIntroAmenities villa={villa} />}
                 >
                   <p className={VILLA_DETAIL_SPACING.introDescription}>{villa.description}</p>
                   <div className={VILLA_DETAIL_SPACING.stackSm}>
@@ -399,6 +396,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
             ) : null}
 
             <section id="location" className={VILLA_DETAIL_CHARCOAL}>
+              <VillaDetailMeanderStrip />
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
                   <h3 className={vd.heading}>Location</h3>
@@ -439,44 +437,30 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
               </div>
             </section>
 
-            <section id="faq" className={VILLA_DETAIL_CHARCOAL}>
+            <VillaOverlayFaqPolicies
+              faqItems={(villa.faq || []).map((item: any) => ({
+                question: item.question,
+                answer: item.answer,
+              }))}
+              policies={[
+                {
+                  title: "Check-in / Check-out",
+                  desc: "Standard check-in at 2:00 PM and check-out at 11:00 AM. Early check-in subject to availability.",
+                },
+                {
+                  title: "Music & Noise",
+                  desc: "Outdoor music allowed till 10:00 PM as per local regulations. Indoor music can continue at moderate levels.",
+                },
+                {
+                  title: "Refund Policy",
+                  desc: "Full refund for cancellations made 15 days prior to check-in. No refunds within 7 days of booking.",
+                },
+              ]}
+            />
+
+            <section id="enquiry" className={VILLA_DETAIL_CHARCOAL} ref={formRef}>
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
-                  <h3 className={vd.heading}>FAQ</h3>
-                  {(villa.faq || []).length > 0 ? (
-                    <VillaDetailFaqList
-                      items={(villa.faq || []).map((item: any) => ({
-                        question: item.question,
-                        answer: item.answer,
-                      }))}
-                    />
-                  ) : null}
-                  <div className={vd.stackSm}>
-                    <h3 className={vd.heading}>Key Policies</h3>
-                    <ExperiencePolicyCompactList
-                      policies={[
-                        {
-                          title: "Check-in / Check-out",
-                          desc: "Standard check-in at 2:00 PM and check-out at 11:00 AM. Early check-in subject to availability.",
-                        },
-                        {
-                          title: "Music & Noise",
-                          desc: "Outdoor music allowed till 10:00 PM as per local regulations. Indoor music can continue at moderate levels.",
-                        },
-                        {
-                          title: "Refund Policy",
-                          desc: "Full refund for cancellations made 15 days prior to check-in. No refunds within 7 days of booking.",
-                        },
-                      ]}
-                    />
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <div className={VILLA_DETAIL_CHARCOAL}>
-              <div className={vd.sectionShell}>
-                <div className={clsx(vd.content, vd.stack)} id="enquiry" ref={formRef}>
                     {view === "form" ? (
                       <>
                         <h2 className={vd.heading}>Plan Your Celebration</h2>
@@ -486,7 +470,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                         </p>
 
                         <form
-                          className="space-y-5"
+                          className={JADE_OVERLAY_FORM_STACK_CLASS}
                           onSubmit={(e) => {
                             e.preventDefault();
                             setPartyAttempted(true);
@@ -509,7 +493,8 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                         >
                           {partyFormError ? (
                             <p
-                              className="text-red-400 text-gh-label font-manrope"
+                              className="text-gh-label font-manrope"
+                              style={{ color: JADE_FORM_WARN }}
                               role="alert"
                             >
                               {partyFormError}
@@ -545,40 +530,26 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                               }
                               errorMessage={partyFieldErrors.phone}
                             />
-                            <div
-                              className={getFieldShellClass({
-                                invalid: Boolean(partyFieldErrors.eventDate),
-                                showError:
-                                  partyAttempted &&
-                                  Boolean(partyFieldErrors.eventDate),
-                                variant: "standard",
-                              })}
-                            >
-                              <input
-                                id="party-event-date"
-                                type="date"
+                            <div className="flex min-w-0 flex-col gap-1.5">
+                              <EnquirySingleDatePicker
+                                label="Event date"
+                                theme="experienceCharcoal"
                                 value={partyDate}
-                                min={new Date().toISOString().slice(0, 10)}
-                                onChange={(e) => setPartyDate(e.target.value)}
-                                className="w-full bg-transparent px-4 py-3.5 text-white text-gh-body focus:outline-none [color-scheme:dark] font-manrope rounded-sm"
+                                onChange={setPartyDate}
+                                invalid={
+                                  partyAttempted &&
+                                  Boolean(partyFieldErrors.eventDate)
+                                }
+                                className="min-w-0"
                               />
-                              <label
-                                htmlFor="party-event-date"
-                                className="absolute -top-3 left-4 bg-jade-charcoal px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope pointer-events-none"
-                              >
-                                Event date
-                                {partyAttempted && partyFieldErrors.eventDate ? (
-                                  <span className="ml-1 text-[#D32C55]">*</span>
-                                ) : null}
-                              </label>
+                              {partyAttempted && partyFieldErrors.eventDate ? (
+                                <JadeFormFieldError
+                                  id="party-date-err"
+                                  message={partyFieldErrors.eventDate}
+                                />
+                              ) : null}
                             </div>
                           </div>
-                          {partyAttempted && partyFieldErrors.eventDate ? (
-                            <JadeFormFieldError
-                              id="party-date-err"
-                              message={partyFieldErrors.eventDate}
-                            />
-                          ) : null}
                           <JadeFloatingField
                             id="party-email"
                             label="Email (optional)"
@@ -719,7 +690,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                     )}
                 </div>
               </div>
-            </div>
+            </section>
       </VillaExperienceOverlayBody>
 
       <VillaExperienceBookingBottomBar

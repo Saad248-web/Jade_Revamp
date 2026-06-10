@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, type RefObject } from "react";
 import { scheduleScrollUpdate } from "@/lib/batchScrollUpdate";
+import { subscribeNestedPanelScroll } from "@/lib/nestedLenisPanel";
 import { resolveActiveScrollSection } from "@/lib/resolveActiveScrollSection";
+import { getScrollSectionElement } from "@/lib/scrollSectionElement";
 import { isScrollSpyLocked } from "@/lib/scrollSpyLock";
 import { subscribeLenisScroll } from "@/lib/lenisScrollBridge";
 
@@ -24,9 +26,10 @@ export type SectionScrollSpyOptions = {
 function observeSections(
   sectionIds: readonly string[],
   observer: IntersectionObserver,
+  scopeRoot: HTMLElement | null,
 ) {
   sectionIds.forEach((id) => {
-    const el = document.getElementById(id);
+    const el = getScrollSectionElement(scopeRoot, id);
     if (el) observer.observe(el);
   });
 }
@@ -51,6 +54,7 @@ export function useSectionScrollSpy({
     if (!enabled || typeof window === "undefined") return;
 
     const scrollRoot = rootRef?.current ?? root ?? null;
+    if (!scrollRoot) return;
 
     const publishActive = () => {
       if (isScrollSpyLocked()) return;
@@ -69,7 +73,7 @@ export function useSectionScrollSpy({
       { root: scrollRoot, rootMargin: "0px", threshold: 0 },
     );
 
-    observeSections(sectionIds, observer);
+    observeSections(sectionIds, observer, scrollRoot);
 
     const scrollTarget: HTMLElement | Window = scrollRoot ?? window;
     scrollTarget.addEventListener("scroll", schedulePublish, { passive: true });
@@ -77,19 +81,43 @@ export function useSectionScrollSpy({
     const unsubLenis =
       scrollRoot == null ? subscribeLenisScroll(() => schedulePublish()) : undefined;
 
+    const unsubPanel =
+      scrollRoot?.hasAttribute("data-lenis-prevent") === true
+        ? subscribeNestedPanelScroll(scrollRoot, schedulePublish)
+        : undefined;
+
     const retryObserve = window.setTimeout(() => {
-      observeSections(sectionIds, observer);
+      observeSections(sectionIds, observer, scrollRoot);
       publishActive();
     }, 120);
 
+    const retryObserveLate = window.setTimeout(() => {
+      observeSections(sectionIds, observer, scrollRoot);
+      publishActive();
+    }, 400);
+
     const rafId = requestAnimationFrame(() => publishActive());
 
+    /** Lenis panels may not emit native scroll — poll position while open. */
+    let rafLoopActive = true;
+    let rafLoopId = 0;
+    const rafLoop = () => {
+      if (!rafLoopActive) return;
+      schedulePublish();
+      rafLoopId = requestAnimationFrame(rafLoop);
+    };
+    rafLoopId = requestAnimationFrame(rafLoop);
+
     return () => {
+      rafLoopActive = false;
+      cancelAnimationFrame(rafLoopId);
       cancelAnimationFrame(rafId);
       window.clearTimeout(retryObserve);
+      window.clearTimeout(retryObserveLate);
       observer.disconnect();
       scrollTarget.removeEventListener("scroll", schedulePublish);
       unsubLenis?.();
+      unsubPanel?.();
     };
   }, [sectionIds, root, rootRef, enabled, rootVersion, offsetPx]);
 }

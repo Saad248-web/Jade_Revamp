@@ -90,7 +90,12 @@
 | WG-3 | Remove Interest field |
 | CA-1 | Contact title one line |
 | CA-2 | About form = Figma |
-| XP-1 | Experience villa overlay = villa detail |
+| XP-1 | Experience villa overlay chrome = villa detail |
+| XP-2 | Overlay FAQ + Key Policies separate sections |
+| XP-3 | Venue overlay enquiry form = footer standard |
+| XP-4 | Overlay category rail scroll-spy |
+| XP-5 | Overlay intro amenity highlights = villa detail |
+| XP-6 | Overlay section meanders (pricing → location) |
 | G-1 | Standardized input component system |
 | W-1 | Fathom installed for reviews |
 | W-2 | Manual-only workflow acknowledged |
@@ -314,11 +319,29 @@
 
 ## Experiences Pages Overlays
 
-- [ ] **XP-1** — Villa overlay matches villa detail  
-    {On Experience pages, the Villa know more overlay layout, spacing, and alignment must match the Villa Detail page exactly. the section spacing and the existing UI Must be Modified based on the View villa Detail page.}
-    
-  **Done when:** Villa overlay from any Experience page matches villa detail for gutters, intro spacing, tabs, and amenity row alignment at the same breakpoints.  
-  **File:** `src/components/experience/VillaExperienceOverlayLayout.tsx` (+ shared `villaDetailSpacing.ts`).
+- [x] **XP-1** — Villa overlay chrome = villa detail *(implemented — verify in browser)*  
+  **Done when:** Overlay chrome (sticky tabs, pricing bar, intro amenity row gutters) matches villa detail tokens; section content and overlay shell UI unchanged.  
+  **Files:** `VillaExperienceOverlayLayout.tsx`, `OverlayIntroAmenityHighlights.tsx`, `villaDetailSpacing.ts`.
+
+- [x] **XP-2** — FAQ + Key Policies separate sections *(implemented — verify in browser)*  
+  **Done when:** FAQ and Key Policies are independent `<section>` blocks, each with `sectionShell` / `villa-section-pad-block` spacing (not one combined stack).  
+  **Files:** `VillaOverlayFaqPolicies.tsx`, `VenueOverlay.tsx`, `CorporateVenueOverlay.tsx`, `PartyVenueOverlay.tsx`.
+
+- [x] **XP-3** — Venue overlay enquiry form = footer standard *(implemented — verify in browser)*  
+  **Done when:** Event date uses `EnquirySingleDatePicker` (floating label + shared calendar popover); `JADE_OVERLAY_FORM_STACK_CLASS` + `#D32C55` validation; `experienceCharcoal` matches Phone/Email fields.  
+  **Files:** `EnquirySingleDatePicker.tsx`, `WeddingVenueEnquiryForm.tsx`, corporate/party overlays, `jadeFormTokens.ts`.
+
+- [x] **XP-4** — Overlay category rail scroll-spy *(implemented — verify in browser)*  
+  **Done when:** Sticky tab highlight follows scroll: Amenities → Pricing → Location → Walkthrough → FAQ (incl. Key Policies + enquiry form).  
+  **Files:** `useSectionScrollSpy.ts`, `useVenueOverlayScrollSpy.ts`, `nestedLenisPanel.ts`, `venueOverlaySectionNav.ts`, `scrollSectionElement.ts`, `VillaExperienceOverlayLayout.tsx`.
+
+- [x] **XP-5** — Intro amenity highlights = villa detail *(implemented — verify in browser)*  
+  **Done when:** Know-more overlay intro row uses `VillaDetailAmenityHighlights` via `VillaOverlayIntroAmenities` (same tile spacing as villa detail).  
+  **Files:** `VillaOverlayIntroAmenities.tsx`, three venue overlays.
+
+- [x] **XP-6** — Section meanders (pricing → location) *(implemented — verify in browser)*  
+  **Done when:** `VillaDetailMeanderStrip` at Location top after green pricing; amenity grid green meander bottom; no meander between FAQ and enquiry (sectionShell gap only).  
+  **Files:** `VenueOverlay.tsx`, `CorporateVenueOverlay.tsx`, `PartyVenueOverlay.tsx`.
 
 ---
 
@@ -365,6 +388,8 @@
 
 | Date | Commit | IDs |
 |------|--------|-----|
+| 2026-06-05 | *(this commit)* | XP-1–XP-6: overlay sections, enquiry form, scroll-spy, amenities |
+| 2026-06-05 | `7367043` | VD spacing, A-2/A-3/A-4, unified gutters |
 | 2026-06-05 | `949d66b` | H-5 blog header subtext one line (desktop/laptop) |
 | 2026-06-05 | `9f0e43c` / `4537780` | H-1–H-4, H-2 peek ratio, A-1 (Featured §6), scroll-linked primitives, weddings counter removed |
 | 2026-06-04 | *(uncommitted — dev session)* | R-6, F-1–F-6, WG-3 (partial), enquiry demo/calendar/scroll |

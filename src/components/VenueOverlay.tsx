@@ -124,10 +124,11 @@ import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 import VillaPricingBlocks, {
   buildWeddingWeekendOverlayPricingBlocks,
 } from "@/components/experience/VillaPricingBlocks";
-import { ExperiencePolicyCompactList } from "@/components/experience/ExperienceFaqAccordion";
 import VillaDetailAmenityGrid from "@/components/villa/VillaDetailAmenityGrid";
-import VillaDetailFaqList from "@/components/villa/VillaDetailFaqList";
 import VillaDetailLocationBlock from "@/components/villa/VillaDetailLocationBlock";
+import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip";
+import VillaOverlayFaqPolicies from "@/components/villa/VillaOverlayFaqPolicies";
+import VillaOverlayIntroAmenities from "@/components/villa/VillaOverlayIntroAmenities";
 import WeddingVenueEnquiryForm from "@/components/experience/WeddingVenueEnquiryForm";
 import { EXPERIENCE_OVERLAY_ROOT_CLASS } from "@/lib/experienceOverlayTheme";
 import { useOverlayScrollChromeHide } from "@/lib/useOverlayScrollChromeHide";
@@ -141,7 +142,6 @@ import {
   isExperienceOverlayMdUp,
 } from "@/components/experience/VillaExperienceOverlayLayout";
 import VillaDetailIntroSection from "@/components/villa/VillaDetailIntroSection";
-import OverlayIntroAmenityHighlights from "@/components/villa/OverlayIntroAmenityHighlights";
 import clsx from "clsx";
 import {
   VILLA_DETAIL_CHARCOAL,
@@ -327,14 +327,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                       </div>
                     </div>
                   }
-                  amenityHighlights={
-                    v.amenities?.length ? (
-                      <OverlayIntroAmenityHighlights
-                        amenities={v.amenities}
-                        getIcon={getIcon}
-                      />
-                    ) : undefined
-                  }
+                  amenityHighlights={<VillaOverlayIntroAmenities villa={v} />}
                 >
                   <p className={VILLA_DETAIL_SPACING.introDescription}>{v.description}</p>
                   {v.perfectForTags && v.perfectForTags.length > 0 ? (
@@ -393,6 +386,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             </section>
 
             <section id="location" className={VILLA_DETAIL_CHARCOAL}>
+              <VillaDetailMeanderStrip />
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
                   <h3 className={vd.heading}>Location</h3>
@@ -436,44 +430,30 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
               </div>
             </section>
 
-            <section id="faq" className={VILLA_DETAIL_CHARCOAL}>
+            <VillaOverlayFaqPolicies
+              faqItems={(v.faq || []).map((item: any) => ({
+                question: item.question,
+                answer: item.answer,
+              }))}
+              policies={[
+                {
+                  title: "Cancellation Policy",
+                  desc: "Full refund if cancelled 90+ days before. 50% refund for 30-90 days. No refund within 30 days.",
+                },
+                {
+                  title: "Booking Requirements",
+                  desc: "30% advance payment required. Balance due 15 days before event. Refundable security deposit applicable.",
+                },
+                {
+                  title: "Outside Vendors",
+                  desc: "You can bring your own caterers, decorators, and photographers. Coordination required.",
+                },
+              ]}
+            />
+
+            <section id="enquiry" className={VILLA_DETAIL_CHARCOAL} ref={formRef}>
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
-                  <h3 className={vd.heading}>FAQ</h3>
-                  {(v.faq || []).length > 0 ? (
-                    <VillaDetailFaqList
-                      items={(v.faq || []).map((item: any) => ({
-                        question: item.question,
-                        answer: item.answer,
-                      }))}
-                    />
-                  ) : null}
-                  <div className={vd.stackSm}>
-                    <h3 className={vd.heading}>Key Policies</h3>
-                    <ExperiencePolicyCompactList
-                      policies={[
-                        {
-                          title: "Cancellation Policy",
-                          desc: "Full refund if cancelled 90+ days before. 50% refund for 30-90 days. No refund within 30 days.",
-                        },
-                        {
-                          title: "Booking Requirements",
-                          desc: "30% advance payment required. Balance due 15 days before event. Refundable security deposit applicable.",
-                        },
-                        {
-                          title: "Outside Vendors",
-                          desc: "You can bring your own caterers, decorators, and photographers. Coordination required.",
-                        },
-                      ]}
-                    />
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <div className={VILLA_DETAIL_CHARCOAL}>
-              <div className={vd.sectionShell}>
-                <div className={clsx(vd.content, vd.stack)} id="enquiry" ref={formRef}>
                     {view === "form" ? (
                       <>
                         <h2 className={vd.heading}>Plan Your Wedding at Jade</h2>
@@ -496,7 +476,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                     )}
                 </div>
               </div>
-            </div>
+            </section>
       </VillaExperienceOverlayBody>
 
       <VillaExperienceBookingBottomBar

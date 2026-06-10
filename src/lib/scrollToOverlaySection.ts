@@ -1,4 +1,5 @@
 import { VENUE_OVERLAY_TAB_OFFSET_PX, venueSectionIdFromTab } from "@/lib/venueOverlaySectionNav";
+import { getScrollSectionElement } from "@/lib/scrollSectionElement";
 import { smoothScrollTo } from "@/lib/smoothScrollTo";
 
 /** Scroll an overlay's inner panel to a section by tab label (e.g. "Amenities"). */
@@ -7,7 +8,7 @@ export function scrollToOverlaySection(
   scrollRoot: HTMLDivElement | null,
 ): boolean {
   const sectionId = venueSectionIdFromTab(tabOrSectionId);
-  const element = document.getElementById(sectionId);
+  const element = getScrollSectionElement(scrollRoot, sectionId);
   if (!element) return false;
 
   const container =
