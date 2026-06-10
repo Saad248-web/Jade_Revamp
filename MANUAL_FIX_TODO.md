@@ -388,7 +388,7 @@
 
 | Date | Commit | IDs |
 |------|--------|-----|
-| 2026-06-05 | *(this commit)* | XP-1–XP-6: overlay sections, enquiry form, scroll-spy, amenities |
+| 2026-06-05 | `a20d2f7` | XP-1–XP-6: overlay sections, enquiry form, scroll-spy, amenities |
 | 2026-06-05 | `7367043` | VD spacing, A-2/A-3/A-4, unified gutters |
 | 2026-06-05 | `949d66b` | H-5 blog header subtext one line (desktop/laptop) |
 | 2026-06-05 | `9f0e43c` / `4537780` | H-1–H-4, H-2 peek ratio, A-1 (Featured §6), scroll-linked primitives, weddings counter removed |
