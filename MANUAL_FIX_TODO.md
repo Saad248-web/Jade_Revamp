@@ -112,9 +112,9 @@
   **Done when:** The vertical scroll-line indicator matches approved Figma for size, motion, color, and position on every page where it appears.  
   **Files:** `src/components/ScrollLineIndicator.tsx`, `src/app/globals.css` (`.jade-scroll-line-*`).
 
-- [ ] **R-3** — Villa detail header = Figma *(Desktop)*  
-  **Done when:** On `/villas/[id]` at 1440px, the sticky top bar (back, enquire, contact/icons) matches Figma for layout, height, padding, and control styles with **no** extra elements.  
-  **File:** `src/app/villas/[id]/page.tsx` (~569–605 `ScrollHideTopChrome`).
+- [ ] **R-3** — Villa detail header = Figma *(Desktop)* *(partial — transparent + compact; verify controls)*  
+  **Done when:** On `/villas/[id]` at 1440px, the sticky top bar matches Figma: **no** gradient/blur header fill (`shellVariant="transparent"`), **minimal** balanced `py-2` + 36–40px controls (`villaDetailSpacing` action header tokens); sticky tabs `top` synced (`52px` / `56px`).  
+  **Files:** `src/app/villas/[id]/page.tsx`, `ScrollHideTopChrome.tsx`, `villaDetailSpacing.ts`, `VillaDetailStickyTabs.tsx`.
 
 - [x] **R-4** — Spaces: remove separator + unintended patterns *(implemented — verify in browser)*  
   **Done when:** No meander bar above category tabs; no luxury pattern on tab fade—right-edge fade blends with the charcoal background (no visible band/pattern).  

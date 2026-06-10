@@ -120,6 +120,18 @@ export const VILLA_DETAIL_SPACING = {
   pricingFootnote:
     "text-white/70 font-manrope text-gh-pricing-footnote leading-snug",
   heroInsetX: "px-4 sm:px-5 lg:px-6",
+  /**
+   * View villa detail — fixed action header (transparent shell).
+   * Height: py-2 + 36–40px controls ≈ 52–56px total.
+   */
+  actionHeaderRow:
+    "flex justify-between items-center w-full py-2",
+  actionHeaderControl: "h-9 w-9 md:h-10 md:w-10 shrink-0",
+  actionHeaderIcon: "w-4 h-4 md:w-[18px] md:h-[18px]",
+  actionHeaderEnquire:
+    "px-3 md:px-3.5 h-9 md:h-10 flex items-center justify-center shrink-0",
+  /** Sticky category rail `top` when action header visible — keep in sync with row above. */
+  actionHeaderStickyTop: "top-[52px] md:top-[56px]",
   heroBottom: "bottom-8 lg:bottom-12",
   /** Carousel arrows — align to page gutter (not flush to viewport) */
   heroArrowLeft: "left-4 sm:left-5 lg:left-6",

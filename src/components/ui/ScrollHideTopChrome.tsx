@@ -11,6 +11,8 @@ type ScrollHideTopChromeProps = {
   /** Layout / padding on the inner row (gutters, pt-* for hero inset). */
   className?: string;
   zIndex?: string;
+  /** `glass` = gradient + blur (default). `transparent` = no header bar fill. */
+  shellVariant?: "glass" | "transparent";
 };
 
 /**
@@ -20,6 +22,7 @@ export default function ScrollHideTopChrome({
   children,
   className,
   zIndex = "z-[70]",
+  shellVariant = "glass",
 }: ScrollHideTopChromeProps) {
   const isHidden = useBatchedScrollHide();
   const reduceMotion = useReducedMotion();
@@ -33,7 +36,13 @@ export default function ScrollHideTopChrome({
       )}
       {...motionProps}
     >
-      <div className={SCROLL_CHROME_NAV_GLASS_SHELL_CLASS}>
+      <div
+        className={
+          shellVariant === "transparent"
+            ? "w-full"
+            : SCROLL_CHROME_NAV_GLASS_SHELL_CLASS
+        }
+      >
         <div
           className={clsx(
             className,

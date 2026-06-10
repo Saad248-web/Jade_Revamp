@@ -567,37 +567,47 @@ export default function VillaDetailsPage() {
   return (
     <main className="bg-jade-charcoal min-h-screen relative">
       <ScrollHideTopChrome
-        className={clsx(
-          "flex justify-between items-center w-full pt-4 pb-4 sm:pt-6 lg:pt-8",
-          vd.gutterX,
-        )}
+        shellVariant="transparent"
+        className={clsx(vd.actionHeaderRow, vd.gutterX)}
       >
         <button
           type="button"
           onClick={goBack}
-          className="w-11 h-11 md:w-12 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all shrink-0"
+          className={clsx(
+            vd.actionHeaderControl,
+            "flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all",
+          )}
           aria-label="Go back"
         >
-          <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
+          <ArrowLeft className={vd.actionHeaderIcon} strokeWidth={1.5} />
         </button>
-        <div className="flex items-center gap-2 md:gap-3">
+        <div className="flex items-center gap-2 md:gap-2.5">
           {/* Mobile: Dialer */}
           <CallToEnquireLink
             ariaLabel="Call support"
-            className="md:hidden w-11 h-11 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all shrink-0"
+            className={clsx(
+              "md:hidden flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all",
+              vd.actionHeaderControl,
+            )}
           />
           {/* Desktop: Contact Page */}
           <Link
             href="/contact"
-            className="hidden md:flex w-12 h-12 items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all shrink-0"
+            className={clsx(
+              "hidden md:flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white/10 transition-all",
+              vd.actionHeaderControl,
+            )}
             aria-label="Contact support"
           >
-            <Headset className="w-5 h-5" strokeWidth={1.5} />
+            <Headset className={vd.actionHeaderIcon} strokeWidth={1.5} />
           </Link>
           <button
             type="button"
             onClick={() => setEnquireOverlayOpen(true)}
-            className="px-4 md:px-5 h-11 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/20 text-white text-[9px] md:text-[10px] font-bold tracking-[0.35em] uppercase hover:bg-white hover:text-black transition-all shrink-0"
+            className={clsx(
+              vd.actionHeaderEnquire,
+              "bg-black/40 backdrop-blur-md border border-white/20 text-white text-[9px] md:text-[10px] font-bold tracking-[0.35em] uppercase hover:bg-white hover:text-black transition-all",
+            )}
           >
             ENQUIRE NOW
           </button>
