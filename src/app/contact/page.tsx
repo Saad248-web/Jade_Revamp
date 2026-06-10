@@ -163,10 +163,9 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-gh-h1 font-philosopher leading-tight mb-6 max-w-3xl"
+            className="text-gh-h1 font-philosopher leading-tight mb-6 max-w-3xl lg:max-w-none lg:whitespace-nowrap"
           >
-            Planning a stay, <span className="block">celebration or</span>
-            <span className="block">partnership?</span>
+            Planning a stay, celebration or partnership?
           </motion.h1>
 
           <motion.p

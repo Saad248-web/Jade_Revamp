@@ -307,9 +307,9 @@
 
 ## Contact & about pages
 
-- [ ] **CA-1** — Contact Us title on one line  
+- [ ] **CA-1** — Contact Us title on one line *(Desktop/Laptop — coded; verify @ 1440px)*  
   **Done when:** On `/contact` at 1440px, the Contact title/eyebrow line specified in Figma does **not** wrap to a second line.  
-  **File:** `src/app/contact/page.tsx` (~154–169).
+  **File:** `src/app/contact/page.tsx` (~162–169) — single-line copy + `lg:whitespace-nowrap lg:max-w-none`.
 
 - [ ] **CA-2** — About Us form = Figma  
   **Done when:** On `/about`, the form matches About Figma for fields, layout, spacing, and styles.  
