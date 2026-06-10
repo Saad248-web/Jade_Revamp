@@ -58,7 +58,7 @@ const TEAM_PLACEHOLDERS = [
 ] as const;
 
 export default function AboutPage() {
-  const { setEnquireOverlayOpen } = useAnimation();
+  const { setPartnerOverlayOpen } = useAnimation();
   const [currentOffering, setCurrentOffering] = React.useState(0);
   const [offeringDirection, setOfferingDirection] = React.useState(0);
   const reducedMotion = useReducedMotion();
@@ -222,7 +222,7 @@ export default function AboutPage() {
         ]}
         footerText="Bringing unique VILLAS and curated experiences together under one standard of hospitality."
         ctaText="PARTNER WITH JADE"
-        onCtaClick={() => setEnquireOverlayOpen(true)}
+        onCtaClick={() => setPartnerOverlayOpen(true)}
         alternateGold={true}
       />
 

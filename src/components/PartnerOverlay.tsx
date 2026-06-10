@@ -1,19 +1,17 @@
 "use client";
 
 import { useMemo, useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import {
-  X,
   Check,
   Facebook,
   Instagram,
   Youtube,
-  ArrowLeft,
   ArrowRight,
 } from "lucide-react";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
-import { OVERLAY_DISMISS_BUTTON_BASE } from "@/lib/overlayDismissButton";
+import FormOverlayLayout from "@/components/overlays/FormOverlayLayout";
 import { useAnimation } from "@/context/AnimationContext";
 import Link from "next/link";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
@@ -213,54 +211,17 @@ export default function PartnerOverlay() {
   return (
     <AnimatePresence>
       {isPartnerOverlayOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={handleClose}
-            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm"
-          />
-
-          <div
-            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center px-4 md:px-0 pointer-events-none pb-[max(0.5rem,env(safe-area-inset-bottom,0px))]"
-            onWheel={(e) => e.stopPropagation()}
-          >
-            <motion.button
-              type="button"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              onClick={handleClose}
-              className={`pointer-events-auto z-[102] mb-2.5 ${OVERLAY_DISMISS_BUTTON_BASE}`}
-            >
-              <X className="w-6 h-6 stroke-[1.5]" />
-            </motion.button>
-
-            <motion.div
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className={`relative pointer-events-auto w-full md:w-[600px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden ${view === "success" ? "h-[80vh] md:h-[650px]" : "max-h-[min(85dvh,calc(100dvh-4.5rem))]"}`}
-            >
-              {/* Header */}
-              {view === "form" && (
-                <div className="flex items-center px-6 pt-5 pb-2">
-                  <h2 className="text-white text-gh-h2 font-philosopher">
-                    Partner with us
-                  </h2>
-                </div>
-              )}
-
-              {/* CONTENT AREA */}
-              <div
-                className="flex-1 min-h-0 overflow-y-auto enquiry-overlay-scroll"
-                data-lenis-prevent
-              >
-                {view === "form" ? (
-                  <div className="flex flex-col px-6 pb-6">
+        <FormOverlayLayout
+          onClose={handleClose}
+          desktopModalClassName={
+            view === "success" ? "md:h-[650px]" : undefined
+          }
+        >
+              {view === "form" ? (
+                  <div className="flex flex-col px-6 pb-6 md:pt-5">
+                    <h2 className="text-white text-gh-h2 font-philosopher md:mb-0 mb-1">
+                      Partner with us
+                    </h2>
                     <p className="text-white/80 text-gh-body mb-5 mt-2">
                       Share a few details. Our team will get back to you shortly
                     </p>
@@ -579,7 +540,7 @@ export default function PartnerOverlay() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex min-h-full flex-col items-center justify-between gap-8 px-6 md:px-8 py-8 md:py-10 pb-[max(1.75rem,env(safe-area-inset-bottom,0px))] text-center">
+                  <div className="flex min-h-full flex-col items-center justify-between gap-8 px-6 md:px-8 py-8 md:py-10 pb-[max(1.75rem,env(safe-area-inset-bottom,0px))] text-center font-manrope">
                     <div className="flex flex-col items-center w-full shrink-0">
                       <div className="w-[160px] h-[160px] md:w-[180px] md:h-[180px] shrink-0 relative mb-6 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
                         <div className="w-[72px] h-[72px] md:w-[84px] md:h-[84px] shrink-0 relative drop-shadow-2xl">
@@ -652,10 +613,7 @@ export default function PartnerOverlay() {
                     </div>
                   </div>
                 )}
-              </div>
-            </motion.div>
-          </div>
-        </>
+        </FormOverlayLayout>
       )}
     </AnimatePresence>
   );

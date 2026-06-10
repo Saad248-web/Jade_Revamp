@@ -307,13 +307,13 @@
 
 ## Contact & about pages
 
-- [ ] **CA-1** — Contact Us title on one line *(Desktop/Laptop — coded; verify @ 1440px)*  
+- [x] **CA-1** — Contact Us title on one line *(Desktop/Laptop — `bab271a`)*  
   **Done when:** On `/contact` at 1440px, the Contact title/eyebrow line specified in Figma does **not** wrap to a second line.  
   **File:** `src/app/contact/page.tsx` (~162–169) — single-line copy + `lg:whitespace-nowrap lg:max-w-none`.
 
-- [ ] **CA-2** — About Us form = Figma  
-  **Done when:** On `/about`, the form matches About Figma for fields, layout, spacing, and styles.  
-  **File:** `src/app/about/page.tsx`.
+- [x] **CA-2** — About Us Partner form = Figma *(Desktop/Laptop + mobile shell)*  
+  **Done when:** On `/about`, **PARTNER WITH JADE** opens `PartnerOverlay` (not Enquire); mobile uses Know More sheet shell (8vh/92vh + scroll lock).  
+  **Files:** `src/app/about/page.tsx`, `PartnerOverlay.tsx`, `FormOverlayLayout.tsx`, `EnquireOverlay.tsx`, `careers/page.tsx`.
 
 ---
 

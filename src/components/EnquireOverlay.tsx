@@ -2,13 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, Facebook, Instagram, Youtube } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
+import { Facebook, Instagram, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
+import FormOverlayLayout from "@/components/overlays/FormOverlayLayout";
 import EnquiryDateRangePicker from "@/components/enquiry/EnquiryDateRangePicker";
-import { OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS } from "@/lib/overlayDismissButton";
 import { useAnimation } from "@/context/AnimationContext";
 import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
 import { formatPreferredDateRange } from "@/lib/enquiryDateRange";
@@ -173,9 +173,6 @@ export default function EnquireOverlay() {
   if (!isEnquireOverlayOpen) return null;
 
   const canDismiss = view === "form" && !submitting;
-  const isSuccessView = view === "success";
-  const backdropZ = isSuccessView ? "z-[220]" : "z-[100]";
-  const shellZ = isSuccessView ? "z-[221]" : "z-[101]";
   const dateShellClass = getFieldShellClass({
     invalid: Boolean(fieldErrors.preferredDate),
     showError: showFieldError("preferredDate"),
@@ -185,48 +182,13 @@ export default function EnquireOverlay() {
   return (
     <AnimatePresence>
       {isEnquireOverlayOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={canDismiss ? handleClose : undefined}
-            className={`fixed inset-0 ${backdropZ} backdrop-blur-sm ${isSuccessView ? "bg-black/75" : "bg-black/60"}`}
-          />
-
-          {/* Centering wrapper */}
-          {canDismiss ? (
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              onClick={handleClose}
-              className={OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS}
-            >
-              <X className="w-6 h-6 stroke-[1.5]" />
-            </motion.button>
-          ) : null}
-
-          <div
-            className={`fixed inset-0 ${shellZ} flex items-center justify-center px-4 md:px-0 pointer-events-none`}
-            onWheel={(e) => e.stopPropagation()}
-          >
-            <div className="relative w-full md:w-[600px] flex flex-col items-center pointer-events-auto">
-              {/* Modal */}
-              <motion.div
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                exit={{ y: "100%" }}
-                transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="relative w-full h-[80vh] md:h-[82vh] md:max-h-[760px] bg-jade-green flex flex-col min-h-0 font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
-              >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
-              {/* CONTENT AREA */}
-              <div
-                className="flex-1 min-h-0 enquiry-overlay-scroll px-6 pt-6 pb-6"
-                data-lenis-prevent
-              >
+        <FormOverlayLayout
+          onClose={handleClose}
+          canDismiss={canDismiss}
+          scrollClassName="px-6 pt-6 pb-6 font-manrope relative"
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
+          <div className="relative z-[1]">
                 {view === "form" ? (
                   <form
                     onSubmit={handleSubmit}
@@ -491,11 +453,8 @@ export default function EnquireOverlay() {
                     </div>
                   </div>
                 )}
-              </div>
-            </motion.div>
           </div>
-        </div>
-        </>
+        </FormOverlayLayout>
       )}
     </AnimatePresence>
   );

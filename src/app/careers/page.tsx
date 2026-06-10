@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PrimaryButton from "@/components/PrimaryButton";
+import FormOverlayLayout from "@/components/overlays/FormOverlayLayout";
 import LiveBackground from "@/components/LiveBackground";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -427,51 +428,17 @@ export default function CareersPage() {
               />
             </div>
 
-            {/* ── Mobile: backdrop (dismisses on tap, below Navbar z-50) ── */}
+            {/* ── Mobile: Know More form shell (8vh band + 92vh sheet) ── */}
             <div className="md:hidden">
-              <motion.div
-                key="mobile-backdrop"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={handleApplyModalDismiss}
-                className={`fixed inset-0 z-[46] bg-black/70 backdrop-blur-[2px] ${isSuccess ? "pointer-events-none" : ""}`}
-              />
-            </div>
-
-            {/* ── Mobile: bottom-sheet card (below Navbar z-50 → Navbar stays accessible) ── */}
-            <div className="md:hidden w-full">
-              <motion.div
-                key="mobile-overlay"
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                exit={{ y: "100%" }}
-                transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="fixed inset-x-0 bottom-0 top-24 z-[48] bg-[#0B2C23] rounded-t-[28px] flex flex-col"
+              <FormOverlayLayout
+                onClose={handleApplyModalDismiss}
+                canDismiss={canClose && !isSuccess}
+                sheetFrameClassName="bg-[#0B2C23]"
+                scrollClassName="font-manrope"
               >
-                {/* The Close button centered at top, outside the modal */}
-                <div className="absolute -top-[72px] left-1/2 -translate-x-1/2 flex items-center z-10">
-                  <button
-                    type="button"
-                    onClick={handleApplyModalDismiss}
-                    disabled={isSuccess}
-                    aria-disabled={isSuccess}
-                    className={`w-12 h-12 rounded-full flex items-center justify-center text-white transition-colors shadow-2xl ${
-                      isSuccess
-                        ? "bg-[#124131]/40 cursor-not-allowed opacity-50"
-                        : "bg-[#124131] hover:bg-[#1f5c48]"
-                    }`}
-                  >
-                    <X className="w-6 h-6 stroke-[1.5]" />
-                  </button>
-                </div>
-
-                {/* ── Scrollable Content (no custom header — real Navbar is above) ── */}
-                <div className="flex-1 w-full overflow-y-auto overflow-x-hidden rounded-t-[28px]" data-lenis-prevent>
                   {!isSuccess ? (
                     /* FORM VIEW */
-                    <div className="px-5 pt-6 pb-8 w-full box-border">
-                      {/* Title row */}
+                    <div className="px-5 pt-4 pb-8 w-full box-border">
                       <div className="flex items-start justify-between mb-3">
                         <h3 className="text-gh-h3 font-philosopher text-white mt-2">
                           Apply Now
@@ -526,7 +493,6 @@ export default function CareersPage() {
                         transition={{ duration: 0.5, ease: "easeOut" }}
                         className="relative w-48 h-48 flex items-center justify-center mx-auto mb-8"
                       >
-                        {/* Outer soft glow */}
                         <div
                           className="absolute inset-0 rounded-full"
                           style={{
@@ -534,8 +500,6 @@ export default function CareersPage() {
                               "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
                           }}
                         />
-
-                        {/* Glassmorphic disc */}
                         <div
                           className="absolute inset-0 rounded-full"
                           style={{
@@ -547,8 +511,6 @@ export default function CareersPage() {
                               "inset 0 1px 1px rgba(255,255,255,0.25), 0 4px 24px rgba(0,0,0,0.15)",
                           }}
                         />
-
-                        {/* Inner glass highlight ring */}
                         <div
                           className="absolute rounded-full pointer-events-none"
                           style={{
@@ -557,8 +519,6 @@ export default function CareersPage() {
                             borderRadius: "50%",
                           }}
                         />
-
-                        {/* Coin image — centered, smaller than glass disc */}
                         <Image
                           src="/assets/JAde Correction.png"
                           alt="Jade Coin"
@@ -638,10 +598,8 @@ export default function CareersPage() {
                       </PrimaryButton>
                     </div>
                   )}
-                </div>
-              </motion.div>
+              </FormOverlayLayout>
             </div>
-            {/* end md:hidden wrapper */}
 
             {/* ── Desktop: centered modal (md+) ── */}
             <div className="hidden md:flex fixed inset-0 z-[101] items-center justify-center pointer-events-none">
