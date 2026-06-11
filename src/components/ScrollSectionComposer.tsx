@@ -276,12 +276,7 @@ export default function ScrollSectionComposer({
 
         {/* Scroll Indicator at the bottom */}
         {showScrollIndicator && (
-          <ScrollLineIndicator
-            floating
-            className="z-30 gap-5 pointer-events-none [&_button]:pointer-events-auto"
-            trackClassName="h-16 md:h-20"
-            barClassName="bg-white"
-          />
+          <ScrollLineIndicator floating />
         )}
       </div>
     </div>

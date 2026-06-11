@@ -6,19 +6,34 @@ import {
   SCROLL_LINE_INDICATOR_BOTTOM_CLASS,
   SCROLL_LINE_INDICATOR_MB_CLASS,
 } from "@/lib/layoutSpacing";
+import {
+  SCROLL_LINE_DOT_SIZE_PX,
+  SCROLL_LINE_DURATION_MS,
+  SCROLL_LINE_INDICATOR_ROOT_GAP_CLASS,
+  SCROLL_LINE_MOUSE_CLASS,
+  SCROLL_LINE_WHEEL_CLASS,
+} from "@/lib/scrollLineIndicatorTokens";
 
 export { SCROLL_LINE_INDICATOR_BOTTOM_CLASS, SCROLL_LINE_INDICATOR_MB_CLASS };
+export {
+  SCROLL_LINE_DURATION_MS,
+  SCROLL_LINE_INDICATOR_CLICKABLE_CLASS,
+  SCROLL_LINE_INDICATOR_HERO_WRAPPER_CLASS,
+  SCROLL_LINE_INDICATOR_ROOT_GAP_CLASS,
+} from "@/lib/scrollLineIndicatorTokens";
 
 export type ScrollLineIndicatorProps = {
   /** Optional label (e.g. "SCROLL TO EXPERIENCES") */
   label?: string;
-  /** Place label above or below the animated line */
+  /** Place label above or below the indicator */
   labelPosition?: "above" | "below";
   className?: string;
+  /** Extra classes on the mouse outline */
   trackClassName?: string;
+  /** Extra classes on the animated wheel pill */
   barClassName?: string;
   labelClassName?: string;
-  /** Loop duration in ms — default 2.8s */
+  /** Wheel loop duration in ms — default 2.8s */
   durationMs?: number;
   onClick?: () => void;
   children?: ReactNode;
@@ -29,8 +44,44 @@ export type ScrollLineIndicatorProps = {
 const defaultLabelClass =
   "font-manrope text-[12px] tracking-[0.2em] uppercase text-white/50 whitespace-nowrap";
 
+const SCROLL_WHEEL_KEYFRAMES = `
+  @keyframes jade-scroll-wheel-stretch {
+    0% {
+      transform: translateX(-50%) translateY(0) scaleX(1) scaleY(1);
+    }
+    40% {
+      transform: translateX(-50%) translateY(10px) scaleX(1) scaleY(2.5);
+    }
+    85% {
+      transform: translateX(-50%) translateY(24px) scaleX(1) scaleY(1);
+    }
+    100% {
+      transform: translateX(-50%) translateY(24px) scaleX(1) scaleY(1);
+    }
+  }
+
+  .jade-scroll-wheel {
+    width: var(--jade-scroll-dot-size, 8px);
+    min-width: var(--jade-scroll-dot-size, 8px);
+    max-width: var(--jade-scroll-dot-size, 8px);
+    height: var(--jade-scroll-dot-size, 8px);
+    transform-origin: top center;
+    animation: jade-scroll-wheel-stretch var(--jade-scroll-line-duration, 2.8s)
+      ease-in-out infinite;
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .jade-scroll-wheel {
+      animation: none;
+      transform: translateX(-50%) translateY(0) scaleX(1) scaleY(1);
+    }
+  }
+`;
+
 /**
- * Filler-line loader: grow → glide at full size → smooth shrink at end → loop.
+ * Mouse outline + wheel dot — stretch, glide, compress (pure CSS keyframes).
  */
 export function ScrollLineIndicator({
   label,
@@ -39,13 +90,14 @@ export function ScrollLineIndicator({
   trackClassName,
   barClassName,
   labelClassName,
-  durationMs = 2800,
+  durationMs = SCROLL_LINE_DURATION_MS,
   onClick,
   children,
   floating = false,
 }: ScrollLineIndicatorProps) {
-  const barStyle = {
+  const mouseStyle = {
     "--jade-scroll-line-duration": `${durationMs}ms`,
+    "--jade-scroll-dot-size": `${SCROLL_LINE_DOT_SIZE_PX}px`,
   } as CSSProperties;
 
   const labelEl =
@@ -55,35 +107,30 @@ export function ScrollLineIndicator({
       children
     );
 
-  const line = (
-    <div
-      className={clsx(
-        "jade-scroll-line-track relative w-[1px] shrink-0 h-16 md:h-20",
-        trackClassName,
-      )}
-      aria-hidden
-    >
-      <div className="jade-scroll-line-rail absolute inset-0 w-full rounded-full bg-white/25" />
+  const indicator = (
+    <>
+      <style>{SCROLL_WHEEL_KEYFRAMES}</style>
       <div
-        className={clsx(
-          "jade-scroll-line-bar absolute inset-0 w-full rounded-full",
-          barClassName ?? "bg-white",
-        )}
-        style={barStyle}
-      />
-    </div>
+        className={clsx(SCROLL_LINE_MOUSE_CLASS, trackClassName)}
+        style={mouseStyle}
+        aria-hidden
+      >
+        <div className={clsx(SCROLL_LINE_WHEEL_CLASS, barClassName)} />
+      </div>
+    </>
   );
 
   const content = (
     <>
       {labelPosition === "above" && labelEl}
-      {line}
+      {indicator}
       {labelPosition === "below" && labelEl}
     </>
   );
 
   const rootClass = clsx(
-    "flex flex-col items-center gap-3",
+    "flex flex-col items-center",
+    SCROLL_LINE_INDICATOR_ROOT_GAP_CLASS,
     onClick && "cursor-pointer hover:opacity-80 transition-opacity",
     floating &&
       `absolute left-1/2 z-20 -translate-x-1/2 ${SCROLL_LINE_INDICATOR_BOTTOM_CLASS}`,

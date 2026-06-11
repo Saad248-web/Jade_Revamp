@@ -9,7 +9,10 @@ import {
   EXPERIENCE_HERO_CHROME_WIDTH_CLASS,
   EXPERIENCE_HERO_SAFE_BOTTOM_CLASS,
 } from "@/lib/experienceHeroLayout";
-import { ScrollLineIndicator } from "./ScrollLineIndicator";
+import {
+  ScrollLineIndicator,
+  SCROLL_LINE_INDICATOR_CLICKABLE_CLASS,
+} from "./ScrollLineIndicator";
 
 export interface HeroButton {
   icon: React.ReactNode;
@@ -158,7 +161,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
         {showScrollIndicator && (
           <ScrollLineIndicator
             floating
-            className="pointer-events-none [&_button]:pointer-events-auto"
+            className={SCROLL_LINE_INDICATOR_CLICKABLE_CLASS}
             onClick={scrollToNext}
           />
         )}

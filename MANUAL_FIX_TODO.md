@@ -15,7 +15,7 @@
 | **1** | **Forms — sign-off & parity** | G-1, C-1, F-2–F-6, WG-1–WG-3 | Code on `main` (`03ed926`); browser Figma pass still optional for H-6 |
 | **2** | **Live backend** | — | Postgres up; migrations run; demo flags off; 201 from `/api/leads` + `/api/careers/apply` |
 | **3** | **Enquiry polish** | WG-2, R-6 (other overlays) | Weekend preselect; Partner/Rathaa/Venue success parity if needed |
-| **4** | **Regression** | R-1, R-2, R-3 | Values animation, scroll indicator, villa header — **R-3** done (`3eed382`); **R-1**, **R-2** open |
+| **4** | **Regression** | R-1, R-2, R-3 | **Complete** — R-1 (`6c46742`), R-2 (scroll mouse + stretch dot), R-3 (`3eed382`); browser verify @ 1440px optional |
 | **5** | **Homepage** | H-1–H-6 | **H-1–H-6** coded on `main` (2026-06-05); browser Figma verify for H-1–H-5 |
 | **6** | **Villa detail** | VD-1–VD-4 | Padding, nav width, logo, grab cursor |
 | **7** | **Interaction** | A-1–A-4 | Snap mobile-only, scroll text, venue scroll, FAQ modal |
@@ -104,13 +104,13 @@
 
 ## Regression & critical issues
 
-- [ ] **R-1** — Values of Jade animation restored *(Desktop)* *(mini frame direction fix — verify @ 1440px)*  
+- [x] **R-1** — Values of Jade animation restored *(Desktop — `6c46742`)*  
   **Done when:** On `/` at 1440px, the “Values of Jade” / value carousel section uses the **approved** animation (not the rejected version)—no wrong fades, timing, or scroll jumps—and matches the signed-off Figma recording or reference commit. Mini frame: **Next/Prev always slide in gesture direction** (no strip rewind on wrap).  
   **Files:** `CarouselHeroMiniFrame.tsx`, `ValuePropositionSection.tsx`, `JadeAmenitiesSection.tsx`, `CaravanUsageSection.tsx`, `WeddingServicesSection.tsx`.
 
-- [ ] **R-2** — Scroll indicator updated  
-  **Done when:** The vertical scroll-line indicator matches approved Figma for size, motion, color, and position on every page where it appears.  
-  **Files:** `src/components/ScrollLineIndicator.tsx`, `src/app/globals.css` (`.jade-scroll-line-*`).
+- [x] **R-2** — Scroll indicator updated *(Desktop — `5eb97f0`)*  
+  **Done when:** Mouse pill (44×68, 4px stroke) + 8px dot stretches/glides/compresses (no fade, 2.8s ease-in-out); keyframes in `ScrollLineIndicator.tsx`; same on every hero / philosophy panel.  
+  **Files:** `scrollLineIndicatorTokens.ts`, `ScrollLineIndicator.tsx`, hero + `ScrollSectionComposer` call sites.
 
 - [x] **R-3** — Villa detail header = Figma *(Desktop — `3eed382`)*  
   **Done when:** On `/villas/[id]` at 1440px, the sticky top bar matches Figma: **no** gradient/blur header fill (`shellVariant="transparent"`), **minimal** balanced `py-2` + 36–40px controls (`villaDetailSpacing` action header tokens); sticky tabs `top` synced (`52px` / `56px`).  
@@ -393,6 +393,7 @@
 | 2026-06-05 | `949d66b` | H-5 blog header subtext one line (desktop/laptop) |
 | 2026-06-05 | `9f0e43c` / `4537780` | H-1–H-4, H-2 peek ratio, A-1 (Featured §6), scroll-linked primitives, weddings counter removed |
 | 2026-06-04 | *(uncommitted — dev session)* | R-6, F-1–F-6, WG-3 (partial), enquiry demo/calendar/scroll |
+| 2026-06-11 | `5eb97f0` | R-1/R-2 tracker: mouse scroll indicator, stretch/glide/compress, 8px dot |
 
 ---
 

@@ -4,7 +4,11 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 import LiveBackground from "./LiveBackground";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
-import { ScrollLineIndicator } from "./ScrollLineIndicator";
+import {
+  ScrollLineIndicator,
+  SCROLL_LINE_INDICATOR_CLICKABLE_CLASS,
+  SCROLL_LINE_INDICATOR_HERO_WRAPPER_CLASS,
+} from "./ScrollLineIndicator";
 
 export default function ExperiencesHero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -60,12 +64,11 @@ export default function ExperiencesHero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1, ease: "easeOut" }}
-        className="absolute inset-x-0 bottom-0 z-30 flex justify-center pointer-events-none"
+        className={SCROLL_LINE_INDICATOR_HERO_WRAPPER_CLASS}
       >
         <ScrollLineIndicator
           floating
-          barClassName="bg-white"
-          className="pointer-events-auto"
+          className={SCROLL_LINE_INDICATOR_CLICKABLE_CLASS}
           onClick={() => {
             document.getElementById("experiences-list")?.scrollIntoView({
               behavior: "smooth",

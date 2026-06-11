@@ -17,7 +17,11 @@ import { getLenis, scrollToY } from "@/lib/lenis";
 import LazyWhenNear from "@/components/ui/LazyWhenNear";
 import { InstagramCarouselShell } from "@/components/InstagramCarouselShell";
 import { prefetchInstagramOembed } from "@/lib/instagramOembedCache";
-import { ScrollLineIndicator } from "./ScrollLineIndicator";
+import {
+  ScrollLineIndicator,
+  SCROLL_LINE_INDICATOR_CLICKABLE_CLASS,
+  SCROLL_LINE_INDICATOR_HERO_WRAPPER_CLASS,
+} from "./ScrollLineIndicator";
 
 const InstagramCarousel = dynamic(() => import("./InstagramCarousel"), {
   ssr: false,
@@ -209,13 +213,11 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
-          className="absolute inset-x-0 z-20 flex justify-center pointer-events-none"
+          className={SCROLL_LINE_INDICATOR_HERO_WRAPPER_CLASS}
         >
           <ScrollLineIndicator
             floating
-            trackClassName="h-16 md:h-20"
-            barClassName="bg-white"
-            className="gap-5 pointer-events-auto"
+            className={SCROLL_LINE_INDICATOR_CLICKABLE_CLASS}
             onClick={() => scrollToY(window.innerHeight, { duration: 1.1 })}
           />
         </motion.div>
