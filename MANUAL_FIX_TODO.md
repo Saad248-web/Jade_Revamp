@@ -108,7 +108,7 @@
   **Done when:** On `/` at 1440px, the “Values of Jade” / value carousel section uses the **approved** animation (not the rejected version)—no wrong fades, timing, or scroll jumps—and matches the signed-off Figma recording or reference commit. Mini frame: **Next/Prev always slide in gesture direction** (no strip rewind on wrap).  
   **Files:** `CarouselHeroMiniFrame.tsx`, `ValuePropositionSection.tsx`, `JadeAmenitiesSection.tsx`, `CaravanUsageSection.tsx`, `WeddingServicesSection.tsx`.
 
-- [x] **R-2** — Scroll indicator updated *(Desktop — `5eb97f0`)*  
+- [x] **R-2** — Scroll indicator updated *(Desktop — `695e5ab`)*  
   **Done when:** Mouse pill (44×68, 4px stroke) + 8px dot stretches/glides/compresses (no fade, 2.8s ease-in-out); keyframes in `ScrollLineIndicator.tsx`; same on every hero / philosophy panel.  
   **Files:** `scrollLineIndicatorTokens.ts`, `ScrollLineIndicator.tsx`, hero + `ScrollSectionComposer` call sites.
 
@@ -393,7 +393,7 @@
 | 2026-06-05 | `949d66b` | H-5 blog header subtext one line (desktop/laptop) |
 | 2026-06-05 | `9f0e43c` / `4537780` | H-1–H-4, H-2 peek ratio, A-1 (Featured §6), scroll-linked primitives, weddings counter removed |
 | 2026-06-04 | *(uncommitted — dev session)* | R-6, F-1–F-6, WG-3 (partial), enquiry demo/calendar/scroll |
-| 2026-06-11 | `5eb97f0` | R-1/R-2 tracker: mouse scroll indicator, stretch/glide/compress, 8px dot |
+| 2026-06-11 | `695e5ab` | R-1/R-2 tracker: mouse scroll indicator, stretch/glide/compress, 8px dot |
 
 ---
 
