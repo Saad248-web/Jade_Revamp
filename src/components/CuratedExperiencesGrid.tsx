@@ -18,7 +18,7 @@ interface CuratedExperiencesGridProps {
   label: string;
   title: string;
   experiences: Experience[];
-  ctaText: string;
+  ctaText?: string;
   ctaLink?: string;
   onCtaClick?: () => void;
   background?: string;

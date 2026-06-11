@@ -119,9 +119,9 @@ export default function CorporateRetreatsPage() {
           <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3 font-manrope">
             FEATURED VENUES
           </p>
-          <h2 className="text-gh-h1 font-philosopher text-white mb-6">
+          <h2 className="text-gh-h1 font-philosopher text-white mb-6 lg:whitespace-nowrap">
             Explore Our Private
-            <br />
+            <br className="lg:hidden" />
             Corporate Retreats
           </h2>
         </div>

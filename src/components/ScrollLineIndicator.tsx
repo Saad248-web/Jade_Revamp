@@ -7,10 +7,15 @@ import {
   SCROLL_LINE_INDICATOR_MB_CLASS,
 } from "@/lib/layoutSpacing";
 import {
-  SCROLL_LINE_DOT_SIZE_PX,
+  SCROLL_LINE_CAPTION_CLASS,
+  SCROLL_LINE_CAPTION_JEWEL_CLASS,
+  SCROLL_LINE_CAPTION_ROW_CLASS,
+  SCROLL_LINE_CROWN_CLASS,
   SCROLL_LINE_DURATION_MS,
   SCROLL_LINE_INDICATOR_ROOT_GAP_CLASS,
   SCROLL_LINE_MOUSE_CLASS,
+  SCROLL_LINE_TRACK_FILL_CLASS,
+  SCROLL_LINE_TRACK_LINE_CLASS,
   SCROLL_LINE_WHEEL_CLASS,
 } from "@/lib/scrollLineIndicatorTokens";
 
@@ -23,69 +28,39 @@ export {
 } from "@/lib/scrollLineIndicatorTokens";
 
 export type ScrollLineIndicatorProps = {
-  /** Optional label (e.g. "SCROLL TO EXPERIENCES") */
   label?: string;
-  /** Place label above or below the indicator */
   labelPosition?: "above" | "below";
+  showCaption?: boolean;
   className?: string;
-  /** Extra classes on the mouse outline */
   trackClassName?: string;
-  /** Extra classes on the animated wheel pill */
   barClassName?: string;
   labelClassName?: string;
-  /** Wheel loop duration in ms — default 2.8s */
   durationMs?: number;
   onClick?: () => void;
   children?: ReactNode;
-  /** Absolute bottom offset above mobile nav (ScrollSectionComposer, heroes) */
   floating?: boolean;
 };
 
-const defaultLabelClass =
-  "font-manrope text-[12px] tracking-[0.2em] uppercase text-white/50 whitespace-nowrap";
+const customLabelClass =
+  "font-manrope text-[11px] tracking-[0.28em] uppercase text-white/45 whitespace-nowrap text-center";
 
-const SCROLL_WHEEL_KEYFRAMES = `
-  @keyframes jade-scroll-wheel-stretch {
-    0% {
-      transform: translateX(-50%) translateY(0) scaleX(1) scaleY(1);
-    }
-    40% {
-      transform: translateX(-50%) translateY(10px) scaleX(1) scaleY(2.5);
-    }
-    85% {
-      transform: translateX(-50%) translateY(24px) scaleX(1) scaleY(1);
-    }
-    100% {
-      transform: translateX(-50%) translateY(24px) scaleX(1) scaleY(1);
-    }
-  }
-
-  .jade-scroll-wheel {
-    width: var(--jade-scroll-dot-size, 8px);
-    min-width: var(--jade-scroll-dot-size, 8px);
-    max-width: var(--jade-scroll-dot-size, 8px);
-    height: var(--jade-scroll-dot-size, 8px);
-    transform-origin: top center;
-    animation: jade-scroll-wheel-stretch var(--jade-scroll-line-duration, 2.8s)
-      ease-in-out infinite;
-    backface-visibility: hidden;
-    will-change: transform;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .jade-scroll-wheel {
-      animation: none;
-      transform: translateX(-50%) translateY(0) scaleX(1) scaleY(1);
-    }
-  }
-`;
+function ScrollCaption() {
+  return (
+    <div className={SCROLL_LINE_CAPTION_ROW_CLASS} aria-hidden>
+      <span className={SCROLL_LINE_CAPTION_JEWEL_CLASS} />
+      <span className={SCROLL_LINE_CAPTION_CLASS}>Scroll</span>
+      <span className={SCROLL_LINE_CAPTION_JEWEL_CLASS} />
+    </div>
+  );
+}
 
 /**
- * Mouse outline + wheel dot — stretch, glide, compress (pure CSS keyframes).
+ * Premium mouse scroll cue — wheel + track line restart loop together.
  */
 export function ScrollLineIndicator({
   label,
   labelPosition = "below",
+  showCaption = true,
   className,
   trackClassName,
   barClassName,
@@ -95,47 +70,44 @@ export function ScrollLineIndicator({
   children,
   floating = false,
 }: ScrollLineIndicatorProps) {
-  const mouseStyle = {
+  const cueStyle = {
     "--jade-scroll-line-duration": `${durationMs}ms`,
-    "--jade-scroll-dot-size": `${SCROLL_LINE_DOT_SIZE_PX}px`,
   } as CSSProperties;
 
-  const labelEl =
-    label != null ? (
-      <span className={clsx(defaultLabelClass, labelClassName)}>{label}</span>
-    ) : (
-      children
-    );
+  const hasCustomLabel = label != null || children != null;
 
-  const indicator = (
-    <>
-      <style>{SCROLL_WHEEL_KEYFRAMES}</style>
-      <div
-        className={clsx(SCROLL_LINE_MOUSE_CLASS, trackClassName)}
-        style={mouseStyle}
-        aria-hidden
-      >
-        <div className={clsx(SCROLL_LINE_WHEEL_CLASS, barClassName)} />
-      </div>
-    </>
-  );
+  const customLabelEl = hasCustomLabel ? (
+    <span className={clsx(customLabelClass, labelClassName)}>
+      {label ?? children}
+    </span>
+  ) : null;
 
   const content = (
-    <>
-      {labelPosition === "above" && labelEl}
-      {indicator}
-      {labelPosition === "below" && labelEl}
-    </>
+    <div className={SCROLL_LINE_INDICATOR_ROOT_GAP_CLASS} style={cueStyle}>
+      {labelPosition === "above" && customLabelEl}
+      <div
+        className={clsx(SCROLL_LINE_MOUSE_CLASS, trackClassName)}
+        aria-hidden
+      >
+        <span className={SCROLL_LINE_CROWN_CLASS} />
+        <span className={SCROLL_LINE_TRACK_LINE_CLASS} />
+        <span className={SCROLL_LINE_TRACK_FILL_CLASS} />
+        <div className={clsx(SCROLL_LINE_WHEEL_CLASS, barClassName)} />
+      </div>
+      {showCaption && !hasCustomLabel ? <ScrollCaption /> : null}
+      {labelPosition === "below" && customLabelEl}
+    </div>
   );
 
   const rootClass = clsx(
-    "flex flex-col items-center",
-    SCROLL_LINE_INDICATOR_ROOT_GAP_CLASS,
-    onClick && "cursor-pointer hover:opacity-80 transition-opacity",
+    "jade-scroll-cue inline-flex flex-col items-center justify-center opacity-[0.92] transition-[opacity,transform] duration-500 ease-out hover:opacity-100",
+    onClick && "cursor-pointer",
     floating &&
       `absolute left-1/2 z-20 -translate-x-1/2 ${SCROLL_LINE_INDICATOR_BOTTOM_CLASS}`,
     className,
   );
+
+  const ariaLabel = label ?? "Scroll down";
 
   if (onClick) {
     return (
@@ -143,7 +115,7 @@ export function ScrollLineIndicator({
         type="button"
         onClick={onClick}
         className={rootClass}
-        aria-label={label ?? "Scroll down"}
+        aria-label={ariaLabel}
       >
         {content}
       </button>

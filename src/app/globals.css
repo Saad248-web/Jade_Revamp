@@ -1082,3 +1082,257 @@ body {
     scroll-behavior: auto;
   }
 }
+
+/* ============================================================
+   Scroll line indicator — mouse + restarting line + wheel loop
+   ============================================================ */
+.jade-scroll-cue {
+  --jade-scroll-mouse-w: clamp(34px, 2.1vw + 23px, 44px);
+  --jade-scroll-mouse-h: calc(var(--jade-scroll-mouse-w) * 1.545);
+  --jade-scroll-mouse-radius: calc(var(--jade-scroll-mouse-w) / 2);
+  --jade-scroll-dot-size: clamp(4px, 0.3vw + 3.5px, 7px);
+  --jade-scroll-wheel-top: calc(var(--jade-scroll-mouse-h) * 0.118);
+  --jade-scroll-rail-bottom: calc(var(--jade-scroll-mouse-h) * 0.2);
+  --jade-scroll-rail-length: calc(
+    var(--jade-scroll-mouse-h) - var(--jade-scroll-wheel-top) -
+      var(--jade-scroll-rail-bottom)
+  );
+  --jade-scroll-travel: calc(
+    var(--jade-scroll-rail-length) - var(--jade-scroll-dot-size)
+  );
+  --jade-scroll-travel-mid: calc(var(--jade-scroll-travel) * 0.42);
+  --jade-scroll-crown-size: clamp(3px, 0.18vw + 2px, 4px);
+  --jade-scroll-crown-top: calc(var(--jade-scroll-mouse-h) * 0.14);
+  --jade-scroll-jewel-size: clamp(2.5px, 0.14vw + 1.5px, 3.5px);
+  --jade-scroll-caption-size: clamp(9px, 0.48vw + 5.5px, 11px);
+  --jade-scroll-caption-gap: clamp(0.45rem, 0.6vw + 0.12rem, 0.7rem);
+  --jade-scroll-line-duration: 3s;
+}
+
+.jade-scroll-cue-inner {
+  gap: clamp(0.6rem, 0.8vw + 0.18rem, 0.9rem);
+}
+
+/* Wheel: down → fade → restart at top (invisible reset) */
+@keyframes jade-scroll-wheel-stretch {
+  0% {
+    transform: translateX(-50%) translateY(0) scaleX(1) scaleY(1);
+    opacity: 0;
+  }
+
+  6% {
+    opacity: 1;
+  }
+
+  40% {
+    transform: translateX(-50%) translateY(var(--jade-scroll-travel-mid)) scaleX(1)
+      scaleY(2.4);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translateX(-50%) translateY(var(--jade-scroll-travel)) scaleX(1)
+      scaleY(1);
+    opacity: 1;
+  }
+
+  92% {
+    opacity: 0.35;
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(var(--jade-scroll-travel)) scaleX(1)
+      scaleY(1);
+    opacity: 0;
+  }
+}
+
+/* Track fill: grows top→bottom, fades, restarts */
+@keyframes jade-scroll-track-restart {
+  0% {
+    transform: translateX(-50%) scaleY(0);
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 0.55;
+  }
+
+  80% {
+    transform: translateX(-50%) scaleY(1);
+    opacity: 0.55;
+  }
+
+  100% {
+    transform: translateX(-50%) scaleY(1);
+    opacity: 0;
+  }
+}
+
+.jade-scroll-mouse {
+  width: var(--jade-scroll-mouse-w);
+  height: var(--jade-scroll-mouse-h);
+  border-radius: var(--jade-scroll-mouse-radius);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(0, 0, 0, 0.22) 100%
+  );
+  box-shadow:
+    0 14px 44px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 0 0.5px rgba(239, 205, 98, 0.15);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+.jade-scroll-crown {
+  top: var(--jade-scroll-crown-top);
+  width: var(--jade-scroll-crown-size);
+  height: var(--jade-scroll-crown-size);
+  border: 1px solid rgba(239, 205, 98, 0.7);
+  background: linear-gradient(135deg, #fff9e8 0%, #efcd62 100%);
+  box-shadow: 0 0 6px rgba(239, 205, 98, 0.45);
+  z-index: 2;
+}
+
+.jade-scroll-track-line {
+  top: var(--jade-scroll-wheel-top);
+  bottom: var(--jade-scroll-rail-bottom);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.2) 55%,
+    rgba(239, 205, 98, 0.25) 100%
+  );
+}
+
+.jade-scroll-track-fill {
+  top: var(--jade-scroll-wheel-top);
+  height: var(--jade-scroll-rail-length);
+  transform-origin: top center;
+  background: linear-gradient(
+    180deg,
+    rgba(239, 205, 98, 0.15) 0%,
+    rgba(239, 205, 98, 0.65) 100%
+  );
+  animation: jade-scroll-track-restart var(--jade-scroll-line-duration) ease-in-out
+    infinite;
+  will-change: transform, opacity;
+}
+
+.jade-scroll-wheel {
+  top: var(--jade-scroll-wheel-top);
+  width: var(--jade-scroll-dot-size);
+  min-width: var(--jade-scroll-dot-size);
+  max-width: var(--jade-scroll-dot-size);
+  height: var(--jade-scroll-dot-size);
+  border-radius: 999px;
+  transform-origin: top center;
+  background: radial-gradient(
+    circle at 35% 30%,
+    #fffce8 0%,
+    #efcd62 45%,
+    #a67c1a 100%
+  );
+  box-shadow: 0 0 10px rgba(239, 205, 98, 0.55);
+  animation: jade-scroll-wheel-stretch var(--jade-scroll-line-duration) ease-in-out
+    infinite;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.jade-scroll-caption-row {
+  gap: var(--jade-scroll-caption-gap);
+}
+
+.jade-scroll-caption-jewel {
+  width: var(--jade-scroll-jewel-size);
+  height: var(--jade-scroll-jewel-size);
+  rotate: 45deg;
+  background: linear-gradient(135deg, #fff9e8 0%, #efcd62 100%);
+  opacity: 0.72;
+}
+
+.jade-scroll-caption-text {
+  position: relative;
+  font-size: var(--jade-scroll-caption-size);
+  letter-spacing: 0.34em;
+  padding-left: 0.34em;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(239, 205, 98, 0.95) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0.92;
+  transition: opacity 0.5s ease;
+}
+
+.jade-scroll-caption-text::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: calc(100% + 4px);
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(239, 205, 98, 0.5) 50%,
+    transparent 100%
+  );
+  opacity: 0.65;
+}
+
+.jade-scroll-cue:hover .jade-scroll-caption-text,
+.jade-scroll-cue:focus-visible .jade-scroll-caption-text {
+  opacity: 1;
+}
+
+.jade-scroll-cue:hover .jade-scroll-caption-text::after,
+.jade-scroll-cue:focus-visible .jade-scroll-caption-text::after {
+  opacity: 0.9;
+}
+
+.jade-scroll-cue:hover .jade-scroll-caption-jewel,
+.jade-scroll-cue:focus-visible .jade-scroll-caption-jewel {
+  opacity: 0.95;
+}
+
+.jade-scroll-cue:hover .jade-scroll-mouse,
+.jade-scroll-cue:focus-visible .jade-scroll-mouse {
+  border-color: rgba(255, 255, 255, 0.52);
+  box-shadow:
+    0 18px 52px rgba(0, 0, 0, 0.48),
+    0 0 20px rgba(239, 205, 98, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 0 0 0.5px rgba(239, 205, 98, 0.22);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jade-scroll-wheel,
+  .jade-scroll-track-fill {
+    animation: none !important;
+  }
+
+  .jade-scroll-wheel {
+    opacity: 0.9;
+    transform: translateX(-50%) translateY(calc(var(--jade-scroll-travel) * 0.35))
+      scaleX(1) scaleY(1);
+  }
+
+  .jade-scroll-track-fill {
+    opacity: 0.35;
+    transform: translateX(-50%) scaleY(0.45);
+  }
+
+  .jade-scroll-caption-text {
+    opacity: 0.85;
+  }
+}

@@ -15,7 +15,6 @@ import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import TravelGuidelinesSection from "@/components/TravelGuidelinesSection";
 import { Info, Calendar } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
-import { EXPERIENCE_PAGE_PATHS } from "@/lib/enquiryReturnPath";
 import { scrollToExperienceHeroSection } from "@/lib/experiencePageVillaScroll";
 import { useEffect, useMemo, useState } from "react";
 
@@ -47,7 +46,7 @@ const DEFAULT_SLIDES = [
 ];
 
 export default function CaravansPage() {
-  const { setRathaaOverlayOpen, setEnquireOverlayOpen } = useAnimation();
+  const { setRathaaOverlayOpen } = useAnimation();
   const [allImages, setAllImages] = useState<string[]>([]);
   const [heroImages, setHeroImages] = useState<string[]>([]);
   const [spaceImages, setSpaceImages] = useState<string[]>([]);
@@ -153,6 +152,7 @@ export default function CaravansPage() {
           title="The Caravan"
           slides={caravanSlides}
           ctaText="BOOK CARAVAN"
+          onCtaClick={() => setRathaaOverlayOpen(true)}
         />
       </section>
 
@@ -162,10 +162,7 @@ export default function CaravansPage() {
       <CuratedExperiencesGrid
         label="CURATED EXPERIENCES"
         title="Enhance Your Stay"
-        ctaText="ENQUIRE"
-        onCtaClick={() =>
-          setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.caravans)
-        }
+        showCta={false}
         experiences={caravanSlides.slice(0, 6).map((s) => ({
           title: s.title,
           image: s.image,

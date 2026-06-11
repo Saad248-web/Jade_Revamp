@@ -112,16 +112,16 @@ export default function PartyVillasPage() {
         title="Party Types"
         slides={partySlides}
         ctaText="BOOK A PARTY VILLA"
+        onCtaClick={() =>
+          setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.partyVillas)
+        }
       />
 
       {/* SECTION 4: CURATED EXPERIENCES */}
       <CuratedExperiencesGrid
         label="PERSONALIZE YOUR CELEBRATION"
         title="Curated Experiences"
-        ctaText="PLAN YOUR CELEBRATION"
-        onCtaClick={() =>
-          setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.partyVillas)
-        }
+        showCta={false}
         innerClassName="max-w-6xl mx-auto px-4 sm:px-6 md:px-8"
         experiences={[
           {
