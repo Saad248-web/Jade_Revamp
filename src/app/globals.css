@@ -1087,10 +1087,12 @@ body {
    Scroll line indicator — mouse + restarting line + wheel loop
    ============================================================ */
 .jade-scroll-cue {
-  --jade-scroll-mouse-w: clamp(34px, 2.1vw + 23px, 44px);
-  --jade-scroll-mouse-h: calc(var(--jade-scroll-mouse-w) * 1.545);
+  /* Slim tall capsule — editorial scroll pendant */
+  --jade-scroll-mouse-w: clamp(26px, 1.45vw + 17px, 34px);
+  --jade-scroll-mouse-h: clamp(54px, 3.6vw + 34px, 68px);
   --jade-scroll-mouse-radius: calc(var(--jade-scroll-mouse-w) / 2);
-  --jade-scroll-dot-size: clamp(4px, 0.3vw + 3.5px, 7px);
+  --jade-scroll-dot-w: clamp(3px, 0.18vw + 2.2px, 4px);
+  --jade-scroll-dot-h: clamp(5px, 0.32vw + 3.8px, 7px);
   --jade-scroll-wheel-top: calc(var(--jade-scroll-mouse-h) * 0.118);
   --jade-scroll-rail-bottom: calc(var(--jade-scroll-mouse-h) * 0.2);
   --jade-scroll-rail-length: calc(
@@ -1098,7 +1100,7 @@ body {
       var(--jade-scroll-rail-bottom)
   );
   --jade-scroll-travel: calc(
-    var(--jade-scroll-rail-length) - var(--jade-scroll-dot-size)
+    var(--jade-scroll-rail-length) - var(--jade-scroll-dot-h)
   );
   --jade-scroll-travel-mid: calc(var(--jade-scroll-travel) * 0.42);
   --jade-scroll-crown-size: clamp(3px, 0.18vw + 2px, 4px);
@@ -1110,7 +1112,7 @@ body {
 }
 
 .jade-scroll-cue-inner {
-  gap: clamp(0.6rem, 0.8vw + 0.18rem, 0.9rem);
+  gap: clamp(0.45rem, 0.55vw + 0.12rem, 0.65rem);
 }
 
 /* Wheel: down → fade → restart at top (invisible reset) */
@@ -1125,8 +1127,8 @@ body {
   }
 
   40% {
-    transform: translateX(-50%) translateY(var(--jade-scroll-travel-mid)) scaleX(1)
-      scaleY(2.4);
+    transform: translateX(-50%) translateY(var(--jade-scroll-travel-mid)) scaleX(0.95)
+      scaleY(2.15);
     opacity: 1;
   }
 
@@ -1169,23 +1171,45 @@ body {
   }
 }
 
+.jade-scroll-mouse-ring {
+  inset: -4px;
+  border: 1px solid rgba(239, 205, 98, 0.14);
+  box-shadow: 0 0 20px rgba(239, 205, 98, 0.05);
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
 .jade-scroll-mouse {
   width: var(--jade-scroll-mouse-w);
   height: var(--jade-scroll-mouse-h);
   border-radius: var(--jade-scroll-mouse-radius);
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.45);
   background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.07) 0%,
-    rgba(0, 0, 0, 0.22) 100%
+    165deg,
+    rgba(255, 255, 255, 0.09) 0%,
+    rgba(255, 255, 255, 0.02) 42%,
+    rgba(0, 0, 0, 0.26) 100%
   );
   box-shadow:
-    0 14px 44px rgba(0, 0, 0, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 0 0 0.5px rgba(239, 205, 98, 0.15);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+    0 16px 48px rgba(0, 0, 0, 0.44),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    inset 0 0 0 0.5px rgba(239, 205, 98, 0.18);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
   transition: border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+.jade-scroll-stem {
+  display: block;
+  width: 1px;
+  height: clamp(8px, 0.9vw + 5px, 14px);
+  margin-top: -0.15rem;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(239, 205, 98, 0.5) 100%
+  );
+  opacity: 0.7;
 }
 
 .jade-scroll-crown {
@@ -1213,10 +1237,12 @@ body {
   top: var(--jade-scroll-wheel-top);
   height: var(--jade-scroll-rail-length);
   transform-origin: top center;
+  border-radius: 0 0 1px 1px;
   background: linear-gradient(
     180deg,
-    rgba(239, 205, 98, 0.15) 0%,
-    rgba(239, 205, 98, 0.65) 100%
+    rgba(239, 205, 98, 0.12) 0%,
+    rgba(239, 205, 98, 0.55) 88%,
+    rgba(255, 249, 232, 0.7) 100%
   );
   animation: jade-scroll-track-restart var(--jade-scroll-line-duration) ease-in-out
     infinite;
@@ -1225,19 +1251,21 @@ body {
 
 .jade-scroll-wheel {
   top: var(--jade-scroll-wheel-top);
-  width: var(--jade-scroll-dot-size);
-  min-width: var(--jade-scroll-dot-size);
-  max-width: var(--jade-scroll-dot-size);
-  height: var(--jade-scroll-dot-size);
+  width: var(--jade-scroll-dot-w);
+  min-width: var(--jade-scroll-dot-w);
+  max-width: var(--jade-scroll-dot-w);
+  height: var(--jade-scroll-dot-h);
   border-radius: 999px;
   transform-origin: top center;
-  background: radial-gradient(
-    circle at 35% 30%,
+  background: linear-gradient(
+    180deg,
     #fffce8 0%,
-    #efcd62 45%,
+    #efcd62 48%,
     #a67c1a 100%
   );
-  box-shadow: 0 0 10px rgba(239, 205, 98, 0.55);
+  box-shadow:
+    0 0 10px rgba(239, 205, 98, 0.55),
+    0 2px 6px rgba(0, 0, 0, 0.2);
   animation: jade-scroll-wheel-stretch var(--jade-scroll-line-duration) ease-in-out
     infinite;
   backface-visibility: hidden;
@@ -1307,12 +1335,23 @@ body {
 
 .jade-scroll-cue:hover .jade-scroll-mouse,
 .jade-scroll-cue:focus-visible .jade-scroll-mouse {
-  border-color: rgba(255, 255, 255, 0.52);
+  border-color: rgba(255, 255, 255, 0.55);
   box-shadow:
-    0 18px 52px rgba(0, 0, 0, 0.48),
-    0 0 20px rgba(239, 205, 98, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    inset 0 0 0 0.5px rgba(239, 205, 98, 0.22);
+    0 20px 56px rgba(0, 0, 0, 0.5),
+    0 0 24px rgba(239, 205, 98, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 0 0 0.5px rgba(239, 205, 98, 0.26);
+}
+
+.jade-scroll-cue:hover .jade-scroll-mouse-ring,
+.jade-scroll-cue:focus-visible .jade-scroll-mouse-ring {
+  border-color: rgba(239, 205, 98, 0.28);
+  box-shadow: 0 0 24px rgba(239, 205, 98, 0.1);
+}
+
+.jade-scroll-cue:hover .jade-scroll-stem,
+.jade-scroll-cue:focus-visible .jade-scroll-stem {
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {

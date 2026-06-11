@@ -11,7 +11,13 @@ export const SCROLL_LINE_TRACK_HEIGHT_PX = 68;
 /** @deprecated */
 export const SCROLL_LINE_TRACK_WIDTH_PX = 44;
 
+export const SCROLL_LINE_MOUSE_RING_CLASS =
+  "jade-scroll-mouse-ring pointer-events-none absolute rounded-full";
+
 export const SCROLL_LINE_MOUSE_CLASS = "jade-scroll-mouse relative shrink-0";
+
+export const SCROLL_LINE_STEM_CLASS =
+  "jade-scroll-stem pointer-events-none shrink-0";
 
 export const SCROLL_LINE_TRACK_LINE_CLASS =
   "jade-scroll-track-line pointer-events-none absolute left-1/2 w-px -translate-x-1/2";
@@ -58,8 +64,6 @@ export const SCROLL_LINE_CAPTION_FLANK_CLASS = "hidden";
 export const SCROLL_LINE_CAPTION_FLANK_RIGHT_CLASS = "hidden";
 /** @deprecated */
 export const SCROLL_LINE_CAPTION_LINE_CLASS = "hidden";
-/** @deprecated */
-export const SCROLL_LINE_STEM_CLASS = "hidden";
 /** @deprecated */
 export const SCROLL_LINE_WHEEL_SLOT_CLASS = "hidden";
 /** @deprecated */

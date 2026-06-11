@@ -14,6 +14,8 @@ import {
   SCROLL_LINE_DURATION_MS,
   SCROLL_LINE_INDICATOR_ROOT_GAP_CLASS,
   SCROLL_LINE_MOUSE_CLASS,
+  SCROLL_LINE_MOUSE_RING_CLASS,
+  SCROLL_LINE_STEM_CLASS,
   SCROLL_LINE_TRACK_FILL_CLASS,
   SCROLL_LINE_TRACK_LINE_CLASS,
   SCROLL_LINE_WHEEL_CLASS,
@@ -89,12 +91,18 @@ export function ScrollLineIndicator({
         className={clsx(SCROLL_LINE_MOUSE_CLASS, trackClassName)}
         aria-hidden
       >
+        <span className={SCROLL_LINE_MOUSE_RING_CLASS} />
         <span className={SCROLL_LINE_CROWN_CLASS} />
         <span className={SCROLL_LINE_TRACK_LINE_CLASS} />
         <span className={SCROLL_LINE_TRACK_FILL_CLASS} />
         <div className={clsx(SCROLL_LINE_WHEEL_CLASS, barClassName)} />
       </div>
-      {showCaption && !hasCustomLabel ? <ScrollCaption /> : null}
+      {showCaption && !hasCustomLabel ? (
+        <>
+          <span className={SCROLL_LINE_STEM_CLASS} aria-hidden />
+          <ScrollCaption />
+        </>
+      ) : null}
       {labelPosition === "below" && customLabelEl}
     </div>
   );
