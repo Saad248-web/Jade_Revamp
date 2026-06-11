@@ -15,7 +15,7 @@
 | **1** | **Forms — sign-off & parity** | G-1, C-1, F-2–F-6, WG-1–WG-3 | Code on `main` (`03ed926`); browser Figma pass still optional for H-6 |
 | **2** | **Live backend** | — | Postgres up; migrations run; demo flags off; 201 from `/api/leads` + `/api/careers/apply` |
 | **3** | **Enquiry polish** | WG-2, R-6 (other overlays) | Weekend preselect; Partner/Rathaa/Venue success parity if needed |
-| **4** | **Regression** | R-1, R-2, R-3 | Values animation, scroll indicator, villa header |
+| **4** | **Regression** | R-1, R-2, R-3 | Values animation, scroll indicator, villa header — **R-3** done (`3eed382`); **R-1**, **R-2** open |
 | **5** | **Homepage** | H-1–H-6 | **H-1–H-6** coded on `main` (2026-06-05); browser Figma verify for H-1–H-5 |
 | **6** | **Villa detail** | VD-1–VD-4 | Padding, nav width, logo, grab cursor |
 | **7** | **Interaction** | A-1–A-4 | Snap mobile-only, scroll text, venue scroll, FAQ modal |
@@ -104,15 +104,15 @@
 
 ## Regression & critical issues
 
-- [ ] **R-1** — Values of Jade animation restored *(Desktop)*  
-  **Done when:** On `/` at 1440px, the “Values of Jade” / value carousel section uses the **approved** animation (not the rejected version)—no wrong fades, timing, or scroll jumps—and matches the signed-off Figma recording or reference commit.  
-  **Files:** `src/components/ValuePropositionSection.tsx` (primary); if wrong section, also `UnifiedScrollSection.tsx`, `ScrollSectionComposer.tsx`. Restore from good commit: `git show <hash>:src/components/ValuePropositionSection.tsx`.
+- [ ] **R-1** — Values of Jade animation restored *(Desktop)* *(mini frame direction fix — verify @ 1440px)*  
+  **Done when:** On `/` at 1440px, the “Values of Jade” / value carousel section uses the **approved** animation (not the rejected version)—no wrong fades, timing, or scroll jumps—and matches the signed-off Figma recording or reference commit. Mini frame: **Next/Prev always slide in gesture direction** (no strip rewind on wrap).  
+  **Files:** `CarouselHeroMiniFrame.tsx`, `ValuePropositionSection.tsx`, `JadeAmenitiesSection.tsx`, `CaravanUsageSection.tsx`, `WeddingServicesSection.tsx`.
 
 - [ ] **R-2** — Scroll indicator updated  
   **Done when:** The vertical scroll-line indicator matches approved Figma for size, motion, color, and position on every page where it appears.  
   **Files:** `src/components/ScrollLineIndicator.tsx`, `src/app/globals.css` (`.jade-scroll-line-*`).
 
-- [ ] **R-3** — Villa detail header = Figma *(Desktop)* *(partial — transparent + compact; verify controls)*  
+- [x] **R-3** — Villa detail header = Figma *(Desktop — `3eed382`)*  
   **Done when:** On `/villas/[id]` at 1440px, the sticky top bar matches Figma: **no** gradient/blur header fill (`shellVariant="transparent"`), **minimal** balanced `py-2` + 36–40px controls (`villaDetailSpacing` action header tokens); sticky tabs `top` synced (`52px` / `56px`).  
   **Files:** `src/app/villas/[id]/page.tsx`, `ScrollHideTopChrome.tsx`, `villaDetailSpacing.ts`, `VillaDetailStickyTabs.tsx`.
 

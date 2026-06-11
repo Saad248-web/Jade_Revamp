@@ -14,7 +14,6 @@ import {
   carouselHeroHeadlineClass,
   carouselHeroLabelClass,
   carouselHeroSubtextClass,
-  carouselHeroMiniCardShadow,
 } from "@/lib/carouselHeroCopy";
 import {
   CAROUSEL_CROSSFADE,
@@ -22,9 +21,9 @@ import {
   usePreloadNeighborSlideImages,
 } from "@/lib/carouselMotion";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
+import CarouselHeroMiniFrame from "@/components/ui/CarouselHeroMiniFrame";
 import {
   heroSplitBgVariants,
-  heroSplitCardVariants,
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 
@@ -190,33 +189,21 @@ export default function ValuePropositionSection() {
         <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white group-hover:translate-x-1 transition-transform" />
       </button>
 
-      {/* ── FEATURE CARD — perfectly centred on the seam ── */}
-      <motion.div
-        className={`absolute top-[75vh] md:top-[80vh] -translate-y-1/2 left-1/2 -translate-x-1/2 z-30 w-[45vw] max-w-[280px] sm:w-[35vw] sm:max-w-[320px] lg:w-[24vw] lg:max-w-[380px] xl:w-[20vw] aspect-[4/3] ${carouselHeroMiniCardShadow} overflow-hidden border border-white/20`}
+      <CarouselHeroMiniFrame
+        slideKey={`card-${currentIndex}`}
+        carouselCustom={carouselCustom}
+        miniCardSwipeProps={miniCardSwipeProps}
       >
-        <motion.div
-          className="flex w-full h-full cursor-grab active:cursor-grabbing"
-          animate={{ x: `-${currentIndex * 100}%` }}
-          transition={{ type: "spring", stiffness: 100, damping: 20 }}
-          style={{ willChange: "transform" }}
-          dragElastic={miniCardSwipeProps.drag ? 0.2 : 0}
-          {...miniCardSwipeProps}
-        >
-          {SLIDES.map((slide, idx) => (
-            <div key={`card-${idx}`} className="w-full h-full relative flex-shrink-0">
-              <Image
-                src={slide.cardImage}
-                alt="Feature"
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
-                priority={true}
-                loading="eager"
-              />
-            </div>
-          ))}
-        </motion.div>
-      </motion.div>
+        <Image
+          src={currentSlide.cardImage}
+          alt="Feature"
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 55vw, (max-width: 1024px) 45vw, 32vw"
+          priority={currentIndex === 0}
+          loading="eager"
+        />
+      </CarouselHeroMiniFrame>
     </SectionWrapper>
   );
 }
