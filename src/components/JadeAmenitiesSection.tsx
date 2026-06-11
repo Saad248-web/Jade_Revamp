@@ -103,15 +103,9 @@ export default function JadeAmenitiesSection() {
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
-      <CarouselSwipeLayer
-        onPrev={handlePrev}
-        onNext={handleNext}
-        slideCount={AMENITIES.length}
-      />
-
       {/* ── TOP AREA (75vh mobile / 80vh desktop) — background image ── */}
       <div
-        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0 bg-jade-green"
+        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0 bg-jade-green pointer-events-none"
         style={{ perspective: "1500px" }}
       >
         {/* Background Overlay Pattern for the Green part */}
@@ -141,6 +135,13 @@ export default function JadeAmenitiesSection() {
         </AnimatePresence>
 
         <CarouselHeroScrim variant="upper" />
+
+        <CarouselSwipeLayer
+          onPrev={handlePrev}
+          onNext={handleNext}
+          slideCount={AMENITIES.length}
+          className="pointer-events-auto"
+        />
 
         {/* ── TEXT ── */}
         <div className={carouselHeroCopyRoot}>

@@ -138,7 +138,6 @@ export default function WeekendGetawaysPage() {
           setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.weekendGetaways)
         }
         innerClassName="max-w-6xl mx-auto px-4 sm:px-6 md:px-8"
-        ctaContainerClassName="w-full max-w-xl mx-auto"
       />
 
       {/* SECTION 5: WHY CHOOSE JADE */}
@@ -188,6 +187,7 @@ function WhyChooseJadeSection() {
         setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.weekendGetaways)
       }
       alternateGold={true}
+      experienceCta
     />
   );
 }

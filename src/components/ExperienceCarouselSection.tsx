@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import PrimaryButton from "./PrimaryButton";
 import { experienceCarouselDefaults } from "@/lib/experienceCarouselLayout";
+import { EXPERIENCE_SECTION_CTA_BUTTON_CLASS } from "@/lib/experienceSectionCta";
 import {
   liquidCarouselBgVariants,
   type HeroSplitCustom,
@@ -40,7 +41,7 @@ export default function ExperienceCarouselSection({
   ctaLink,
   onCtaClick,
   aspectClass = experienceCarouselDefaults.aspectClass,
-  buttonClassName = "w-full text-gh-label",
+  buttonClassName = EXPERIENCE_SECTION_CTA_BUTTON_CLASS,
   buttonContainerClassName = experienceCarouselDefaults.buttonContainerClassName,
   containerClassName = experienceCarouselDefaults.containerClassName,
   innerClassName = experienceCarouselDefaults.innerClassName,
@@ -180,7 +181,7 @@ export default function ExperienceCarouselSection({
           className={`relative z-10 w-full shrink-0 ${buttonContainerClassName}`}
         >
           <PrimaryButton
-            className={`${buttonClassName} h-[54px] md:h-[64px]`}
+            className={buttonClassName}
             href={ctaLink}
             onClick={onCtaClick}
           >

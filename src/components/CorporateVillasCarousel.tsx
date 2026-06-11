@@ -11,7 +11,7 @@ import { AnimatePresence } from "framer-motion";
 const CORPORATE_VILLAS = CORPORATE_VILLA_IDS.map((id) => {
   const base = VILLAS.find((v) => v.id === id);
   return getOverlayVillaData("corporate", id) ?? base ?? null;
-}).filter(Boolean);
+}).filter((villa): villa is NonNullable<typeof villa> => villa != null);
 
 export default function CorporateVillasCarousel() {
   const [selectedVilla, setSelectedVilla] = useState<any>(null);

@@ -31,6 +31,7 @@ import SpacesImageSection from "@/components/villa/SpacesImageSection";
 import clsx from "clsx";
 import { villaDetailPath } from "@/lib/appRoutes";
 import { useSafeBack } from "@/lib/safeBackNavigation";
+import { spaceMatchesCategory } from "@/lib/villaCategoryMatch";
 
 const vd = VILLA_DETAIL_SPACING;
 
@@ -88,7 +89,9 @@ export default function VillaSpacesPage() {
     if (!base) return [];
     if (activeCategory === "All") return base;
     if (activeCategory === "Video") return [];
-    return base.filter((s: VillaSpaceGroup) => s.category === activeCategory);
+    return base.filter((s: VillaSpaceGroup) =>
+      spaceMatchesCategory(s.category, activeCategory),
+    );
   }, [villa, activeCategory, overrideSpaces]);
 
   const chromeHidden = useBatchedScrollHide();

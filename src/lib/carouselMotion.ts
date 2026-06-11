@@ -17,6 +17,9 @@ const CAROUSEL_SWIPE_MEDIA_QUERY = `(max-width: ${CAROUSEL_SWIPE_MAX_WIDTH_PX}px
 
 export const CAROUSEL_SWIPE_CONFIDENCE_THRESHOLD = 10000;
 
+/** Minimum horizontal drag (px) before advancing — desktop mouse drags */
+export const CAROUSEL_DRAG_OFFSET_THRESHOLD_PX = 48;
+
 export function carouselSwipePower(offset: number, velocity: number) {
   return Math.abs(offset) * velocity;
 }
@@ -49,19 +52,35 @@ export function resolveCarouselSwipeFromDrag(
   onPrev: () => void,
   onNext: () => void,
 ) {
+  if (offsetX <= -CAROUSEL_DRAG_OFFSET_THRESHOLD_PX) {
+    onNext();
+    return;
+  }
+  if (offsetX >= CAROUSEL_DRAG_OFFSET_THRESHOLD_PX) {
+    onPrev();
+    return;
+  }
+
   const swipe = carouselSwipePower(offsetX, velocityX);
   if (swipe < -CAROUSEL_SWIPE_CONFIDENCE_THRESHOLD) onNext();
   else if (swipe > CAROUSEL_SWIPE_CONFIDENCE_THRESHOLD) onPrev();
 }
 
-/** Framer drag props for horizontal swipe; inert when swipe is disabled. */
+type CarouselSwipeDragOptions = {
+  /** When true, only enable below `lg` (legacy touch-only rails). Default: false. */
+  mobileOnly?: boolean;
+};
+
+/** Framer drag props for horizontal swipe / grab-drag navigation. */
 export function useCarouselSwipeDragProps(
   onPrev: () => void,
   onNext: () => void,
   enabled: boolean = true,
+  options?: CarouselSwipeDragOptions,
 ) {
   const swipeEnabled = useCarouselSwipeEnabled();
-  const active = enabled && swipeEnabled;
+  const mobileOnly = options?.mobileOnly ?? false;
+  const active = enabled && (mobileOnly ? swipeEnabled : true);
 
   const onDragEnd = useCallback(
     (_e: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
@@ -77,7 +96,7 @@ export function useCarouselSwipeDragProps(
     return {
       drag: "x" as const,
       dragConstraints: { left: 0, right: 0 },
-      dragElastic: 0,
+      dragElastic: 0.12,
       onDragEnd,
     };
   }, [active, onDragEnd]);

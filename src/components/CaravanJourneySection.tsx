@@ -2,6 +2,10 @@
 
 import React from "react";
 import PrimaryButton from "./PrimaryButton";
+import {
+  EXPERIENCE_SECTION_CTA_BUTTON_CLASS,
+  EXPERIENCE_SECTION_CTA_CONTAINER_CLASS,
+} from "@/lib/experienceSectionCta";
 import { useAnimation } from "@/context/AnimationContext";
 
 interface JourneyCardProps {
@@ -160,9 +164,9 @@ const CaravanJourneySection = () => {
             week, and specific requirements. Fuel charges may apply depending on
             the travel route.
           </p>
-          <div className="w-full max-w-xl mx-auto">
+          <div className={EXPERIENCE_SECTION_CTA_CONTAINER_CLASS}>
             <PrimaryButton
-              className="w-full h-[54px]"
+              className={EXPERIENCE_SECTION_CTA_BUTTON_CLASS}
               onClick={() => setRathaaOverlayOpen(true)}
             >
               ENQUIRE

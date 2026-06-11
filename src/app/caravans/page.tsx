@@ -171,7 +171,6 @@ export default function CaravansPage() {
           image: s.image,
         }))}
         innerClassName="max-w-6xl mx-auto px-4 sm:px-6 md:px-8"
-        ctaContainerClassName="w-full max-w-xl mx-auto"
       />
 
       <PremiumFeaturesSection
@@ -204,6 +203,7 @@ export default function CaravansPage() {
         ctaText="PLAN YOUR JOURNEY"
         onCtaClick={() => setRathaaOverlayOpen(true)}
         alternateGold={true}
+        experienceCta
       />
 
       <TravelGuidelinesSection />

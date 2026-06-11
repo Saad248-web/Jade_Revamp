@@ -1,5 +1,10 @@
 import React, { ReactNode } from "react";
+import clsx from "clsx";
 import PrimaryButton from "@/components/PrimaryButton";
+import {
+  EXPERIENCE_SECTION_CTA_BUTTON_CLASS,
+  EXPERIENCE_SECTION_CTA_CONTAINER_CLASS,
+} from "@/lib/experienceSectionCta";
 
 interface FeatureCard {
   tag: string;
@@ -27,6 +32,8 @@ interface PremiumFeaturesSectionProps {
   cardRailSpacingClassName?: string;
   /** Tight layout for subheading + heading (e.g. flex flex-col items-center gap-1.5). */
   headerGroupClassName?: string;
+  /** Experience landing pages — standardized md+ CTA sizing (About page stays default). */
+  experienceCta?: boolean;
 }
 
 /** Canonical scroll-rail layout (About page reference). */
@@ -49,6 +56,7 @@ export default function PremiumFeaturesSection({
   cardsBlockClassName = "mb-fluid-md",
   cardRailSpacingClassName,
   headerGroupClassName,
+  experienceCta = false,
 }: PremiumFeaturesSectionProps) {
   const resolvedHeaderGroupClassName =
     headerGroupClassName ??
@@ -154,12 +162,23 @@ export default function PremiumFeaturesSection({
           </p>
 
           <div
-            className={`w-full ${resolvedCardRailSpacingClassName ? "" : "max-w-3xl mx-auto"}`}
+            className={clsx(
+              "w-full",
+              experienceCta
+                ? EXPERIENCE_SECTION_CTA_CONTAINER_CLASS
+                : resolvedCardRailSpacingClassName
+                  ? ""
+                  : "max-w-3xl mx-auto",
+            )}
           >
             <PrimaryButton
               href={ctaLink}
               onClick={onCtaClick}
-              className="w-full h-[54px]"
+              className={
+                experienceCta
+                  ? EXPERIENCE_SECTION_CTA_BUTTON_CLASS
+                  : "w-full h-[54px]"
+              }
             >
               {ctaText}
             </PrimaryButton>

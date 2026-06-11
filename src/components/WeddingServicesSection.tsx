@@ -148,15 +148,9 @@ export default function WeddingServicesSection() {
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
-      <CarouselSwipeLayer
-        onPrev={handlePrev}
-        onNext={handleNext}
-        slideCount={slides.length}
-      />
-
       {/* ── TOP AREA (75vh mobile / 80vh desktop) — background image ── */}
       <div
-        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0"
+        className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden shrink-0 pointer-events-none"
         style={{ perspective: "1500px" }}
       >
         <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
@@ -189,6 +183,13 @@ export default function WeddingServicesSection() {
         </AnimatePresence>
 
         <CarouselHeroScrim variant="upper" />
+
+        <CarouselSwipeLayer
+          onPrev={handlePrev}
+          onNext={handleNext}
+          slideCount={slides.length}
+          className="pointer-events-auto"
+        />
 
         {/* ── TEXT ── */}
         <div className={carouselHeroCopyRoot}>

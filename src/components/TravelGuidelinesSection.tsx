@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import clsx from "clsx";
 import TravelGuidelinesModal from "./TravelGuidelinesModal";
+import {
+  EXPERIENCE_SECTION_CTA_CONTAINER_CLASS,
+  EXPERIENCE_SECTION_CTA_DIMENSIONS_MD,
+} from "@/lib/experienceSectionCta";
 
 const GUIDELINES = [
   {
@@ -65,13 +70,22 @@ export default function TravelGuidelinesSection() {
               ))}
             </div>
 
-            <button
-              className="flex items-center gap-2.5 text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope group bg-white/5 hover:bg-white/10 border border-[#EFCD62]/30 px-6 py-4 transition-all duration-300"
-              onClick={() => setIsModalOpen(true)}
-            >
-              SEE ALL GUIDELINES
-              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
+            <div className={EXPERIENCE_SECTION_CTA_CONTAINER_CLASS}>
+              <button
+                type="button"
+                className={clsx(
+                  "flex w-full h-[54px] items-center justify-center gap-2.5",
+                  "text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase font-manrope",
+                  "group bg-white/5 hover:bg-white/10 border border-[#EFCD62]/30",
+                  "px-6 py-4 transition-all duration-300 md:w-auto",
+                  EXPERIENCE_SECTION_CTA_DIMENSIONS_MD,
+                )}
+                onClick={() => setIsModalOpen(true)}
+              >
+                SEE ALL GUIDELINES
+                <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

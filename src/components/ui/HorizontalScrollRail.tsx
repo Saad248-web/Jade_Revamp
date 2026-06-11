@@ -44,12 +44,33 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
     },
     ref,
   ) {
+    const DRAG_THRESHOLD_PX = 5;
+
     const drag = useRef<{
-      active: boolean;
+      pending: boolean;
+      dragging: boolean;
       pointerId: number | null;
       startX: number;
       startScrollLeft: number;
-    }>({ active: false, pointerId: null, startX: 0, startScrollLeft: 0 });
+    }>({
+      pending: false,
+      dragging: false,
+      pointerId: null,
+      startX: 0,
+      startScrollLeft: 0,
+    });
+
+    const endDrag = (el: HTMLDivElement, pointerId: number) => {
+      drag.current.pending = false;
+      drag.current.dragging = false;
+      drag.current.pointerId = null;
+      try {
+        el.releasePointerCapture(pointerId);
+      } catch {
+        // ignore
+      }
+      document.body.style.userSelect = "";
+    };
 
     const dragHandlers = useMemo(() => {
       if (!cursorGrab) return {};
@@ -59,50 +80,44 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
           // Only enable click-drag scroll for mouse pointers (trackpad wheel already works).
           if (e.pointerType !== "mouse") return;
           if (e.button !== 0) return;
-          // Avoid native image/link drag interfering with scroll-drag.
-          e.preventDefault();
           const el = e.currentTarget;
-          drag.current.active = true;
+          drag.current.pending = true;
+          drag.current.dragging = false;
           drag.current.pointerId = e.pointerId;
           drag.current.startX = e.clientX;
           drag.current.startScrollLeft = el.scrollLeft;
-          el.setPointerCapture(e.pointerId);
-          // Prevent text selection while dragging.
-          document.body.style.userSelect = "none";
         },
         onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => {
-          if (!drag.current.active) return;
+          if (!drag.current.pending && !drag.current.dragging) return;
           const el = e.currentTarget;
           const dx = e.clientX - drag.current.startX;
+
+          if (!drag.current.dragging) {
+            if (Math.abs(dx) < DRAG_THRESHOLD_PX) return;
+            drag.current.dragging = true;
+            e.preventDefault();
+            el.setPointerCapture(e.pointerId);
+            document.body.style.userSelect = "none";
+          }
+
           el.scrollLeft = drag.current.startScrollLeft - dx;
         },
         onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => {
-          if (!drag.current.active) return;
-          drag.current.active = false;
-          drag.current.pointerId = null;
-          try {
-            e.currentTarget.releasePointerCapture(e.pointerId);
-          } catch {
-            // ignore
+          if (!drag.current.pending && !drag.current.dragging) return;
+          if (drag.current.dragging) {
+            endDrag(e.currentTarget, e.pointerId);
+            return;
           }
-          document.body.style.userSelect = "";
+          drag.current.pending = false;
+          drag.current.pointerId = null;
         },
         onPointerCancel: (e: React.PointerEvent<HTMLDivElement>) => {
-          if (!drag.current.active) return;
-          drag.current.active = false;
-          drag.current.pointerId = null;
-          try {
-            e.currentTarget.releasePointerCapture(e.pointerId);
-          } catch {
-            // ignore
-          }
-          document.body.style.userSelect = "";
+          if (!drag.current.pending && !drag.current.dragging) return;
+          endDrag(e.currentTarget, e.pointerId);
         },
         onPointerLeave: (e: React.PointerEvent<HTMLDivElement>) => {
-          if (!drag.current.active) return;
-          drag.current.active = false;
-          drag.current.pointerId = null;
-          document.body.style.userSelect = "";
+          if (!drag.current.dragging) return;
+          endDrag(e.currentTarget, e.pointerId);
         },
       };
     }, [cursorGrab]);

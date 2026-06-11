@@ -115,11 +115,12 @@ export default function CaravanUsageSection() {
         onPrev={handlePrev}
         onNext={handleNext}
         slideCount={SLIDES.length}
+        className="absolute inset-x-0 top-0 h-[75vh] md:h-[80vh] z-[12] pointer-events-auto"
       />
 
       {/* ── TOP 75vh/80vh — full-bleed background image ── */}
       <div
-        className="absolute inset-x-0 top-0 h-[75vh] md:h-[80vh] z-0 overflow-hidden"
+        className="absolute inset-x-0 top-0 h-[75vh] md:h-[80vh] z-0 overflow-hidden pointer-events-none"
         style={{ perspective: "1500px" }}
       >
         <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>

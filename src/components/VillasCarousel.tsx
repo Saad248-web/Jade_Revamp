@@ -2,8 +2,9 @@
 
 import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { VILLAS, CATEGORIES } from "@/lib/mockData";
+import { villaMatchesCategory } from "@/lib/villaCategoryMatch";
 import ReservationOverlay from "./ReservationOverlay";
 import VillaCard from "./VillaCard";
 import BookingBanner from "./BookingBanner";
@@ -42,6 +43,7 @@ export default function VillasCarousel() {
   const [activeCategory, setActiveCategory] = useState("All");
   const navbarVisible = !useBatchedScrollHide();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   // Read category from URL on mount
   useEffect(() => {
@@ -110,16 +112,20 @@ export default function VillasCarousel() {
     VILLAS.filter(
       (villa) =>
         !(villa as { hideFromVillasDirectory?: boolean })
-          .hideFromVillasDirectory &&
-        (activeCategory === "All" ||
-          villa.categories?.some(
-            (c: string) => c.toLowerCase() === activeCategory.toLowerCase(),
-          )),
+          .hideFromVillasDirectory && villaMatchesCategory(villa, activeCategory),
     ),
   );
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
+    const params = new URLSearchParams(searchParams?.toString() ?? "");
+    if (category === "All") {
+      params.delete("category");
+    } else {
+      params.set("category", category);
+    }
+    const query = params.toString();
+    router.replace(query ? `/villas?${query}` : "/villas", { scroll: false });
   };
 
   // Auto-scroll to the carousel section when there is a date conflict

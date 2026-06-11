@@ -4,6 +4,10 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
+import {
+  EXPERIENCE_SECTION_CTA_BUTTON_CLASS,
+  EXPERIENCE_SECTION_CTA_CONTAINER_CLASS,
+} from "@/lib/experienceSectionCta";
 import HorizontalScrollRail from "@/components/ui/HorizontalScrollRail";
 import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
 import { WEEKEND_THEMED_VILLAS } from "@/data/weekend/weekendThemedVillas";
@@ -81,9 +85,14 @@ export default function WeekendThemedVillasSection() {
       </div>
 
       <div className="shrink-0 max-w-7xl mx-auto px-4 w-full pb-5 md:pb-6 pt-3 md:pt-4">
-        <PrimaryButton className="w-full h-[54px]" href="/villas">
-          VIEW ALL VILLA RETREATS
-        </PrimaryButton>
+        <div className={EXPERIENCE_SECTION_CTA_CONTAINER_CLASS}>
+          <PrimaryButton
+            className={EXPERIENCE_SECTION_CTA_BUTTON_CLASS}
+            href="/villas"
+          >
+            VIEW ALL VILLA RETREATS
+          </PrimaryButton>
+        </div>
       </div>
     </section>
   );

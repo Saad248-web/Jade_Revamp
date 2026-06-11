@@ -4,6 +4,10 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import PrimaryButton from "./PrimaryButton";
+import {
+  EXPERIENCE_SECTION_CTA_BUTTON_CLASS,
+  EXPERIENCE_SECTION_CTA_CONTAINER_CLASS,
+} from "@/lib/experienceSectionCta";
 
 interface Experience {
   title: string;
@@ -37,7 +41,7 @@ export default function CuratedExperiencesGrid({
   containerClassName = "py-fluid-lg md:py-fluid-xl",
   innerClassName = "max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24",
   gridClassName = "grid grid-cols-2 md:grid-cols-3",
-  ctaContainerClassName = "max-w-4xl mx-auto",
+  ctaContainerClassName = EXPERIENCE_SECTION_CTA_CONTAINER_CLASS,
   showCta = true,
 }: CuratedExperiencesGridProps) {
   const lastIdx = experiences.length - 1;
@@ -111,7 +115,7 @@ export default function CuratedExperiencesGrid({
         {showCta ? (
           <div className={ctaContainerClassName}>
             <PrimaryButton
-              className="w-full h-[54px] text-gh-label"
+              className={EXPERIENCE_SECTION_CTA_BUTTON_CLASS}
               href={ctaLink}
               onClick={onCtaClick}
             >

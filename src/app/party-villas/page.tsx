@@ -123,7 +123,6 @@ export default function PartyVillasPage() {
           setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.partyVillas)
         }
         innerClassName="max-w-6xl mx-auto px-4 sm:px-6 md:px-8"
-        ctaContainerClassName="w-full max-w-xl mx-auto"
         experiences={[
           {
             title: "DJ & Music Setup",
@@ -203,6 +202,7 @@ function SpacesForCelebrationsSection() {
         setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.partyVillas)
       }
       alternateGold={true}
+      experienceCta
     />
   );
 }

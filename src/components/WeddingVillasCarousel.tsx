@@ -11,7 +11,7 @@ import { AnimatePresence } from "framer-motion";
 const WEDDING_VILLAS = WEDDING_VILLA_IDS.map((id) => {
   const base = VILLAS.find((v) => v.id === id);
   return getOverlayVillaData("wedding", id) ?? base ?? null;
-}).filter(Boolean);
+}).filter((villa): villa is NonNullable<typeof villa> => villa != null);
 
 export default function WeddingVillasCarousel() {
   const [selectedVilla, setSelectedVilla] = useState<any>(null);

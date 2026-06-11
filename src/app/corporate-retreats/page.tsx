@@ -111,6 +111,7 @@ export default function CorporateRetreatsPage() {
           setEnquireOverlayOpen(true, EXPERIENCE_PAGE_PATHS.corporateRetreats)
         }
         alternateGold={true}
+        experienceCta
       />
       {/* SECTION 6: SELECTED VILLAS FOR CORPORET RETREATS */}
       <section className="jade-section bg-[#1A1C1E] border-t border-white/5">

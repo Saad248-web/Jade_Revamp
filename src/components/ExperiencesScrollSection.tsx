@@ -2,6 +2,7 @@
 
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import PrimaryButton from "@/components/PrimaryButton";
+import { EXPERIENCE_SECTION_CTA_BUTTON_CLASS } from "@/lib/experienceSectionCta";
 import ScrollLinkedHorizontalSection from "@/components/scroll-linked/ScrollLinkedHorizontalSection";
 import ScrollLinkedPanelCard, {
   type ScrollLinkedPanelData,
@@ -91,7 +92,7 @@ function EndButton({ panelProgress }: { panelProgress: MotionValue<number> }) {
       <div className="pointer-events-auto">
         <PrimaryButton
           href={villaListingPath()}
-          className="shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-transform duration-300 hover:scale-[1.03]"
+          className={`${EXPERIENCE_SECTION_CTA_BUTTON_CLASS} shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-transform duration-300 hover:scale-[1.03]`}
         >
           <span className="font-bold whitespace-nowrap text-center">
             See Best Experience Villas

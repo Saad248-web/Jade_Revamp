@@ -80,6 +80,10 @@ import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip"
 import VillaDetailLocationBlock from "@/components/villa/VillaDetailLocationBlock";
 import VillaDetailStickyTabs from "@/components/villa/VillaDetailStickyTabs";
 import VillaDetailAmenityHighlights from "@/components/villa/VillaDetailAmenityHighlights";
+import { amenityHighlightsFrom } from "@/lib/villaDetailData";
+import { scrollToElement } from "@/lib/lenis";
+import { VILLA_DETAIL_SCROLL_TO_DURATION } from "@/lib/lenisConfig";
+import { isScrollSpyLocked, lockScrollSpy } from "@/lib/scrollSpyLock";
 import VillaDetailIntroSection from "@/components/villa/VillaDetailIntroSection";
 import VillaDetailFaqList from "@/components/villa/VillaDetailFaqList";
 import { VILLA_DETAIL_PRICING_BOTTOM_BAR_CHROME_CLASS } from "@/lib/scrollChromeGlass";
@@ -441,17 +445,13 @@ export default function VillaDetailsPage() {
   const scrollToSection = (id: string) => {
     setActiveTab(id);
     const element = document.getElementById(id);
-    if (element) {
-      const offset = 80; // Reverted to 80 as header now scrolls away
-      const elementPosition =
-        element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - offset;
+    if (!element) return;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-    }
+    lockScrollSpy(VILLA_DETAIL_SCROLL_TO_DURATION * 1000 + 80);
+    scrollToElement(element, {
+      offset: -96,
+      duration: VILLA_DETAIL_SCROLL_TO_DURATION,
+    });
   };
 
   // Scroll-Spy Effect for Navigation Tabs
@@ -478,6 +478,8 @@ export default function VillaDetailsPage() {
     };
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      if (isScrollSpyLocked()) return;
+
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           visibleSections.current.add(entry.target.id);
@@ -750,7 +752,11 @@ export default function VillaDetailsPage() {
           }
           amenityHighlights={
             <VillaDetailAmenityHighlights
-              highlights={villa.amenityHighlights ?? []}
+              highlights={
+                villa.amenityHighlights?.length
+                  ? villa.amenityHighlights
+                  : amenityHighlightsFrom(villa.amenities ?? [])
+              }
             />
           }
         >

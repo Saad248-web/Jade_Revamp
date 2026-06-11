@@ -96,16 +96,10 @@ export default function ValuePropositionSection() {
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
-      <CarouselSwipeLayer
-        onPrev={handlePrev}
-        onNext={handleNext}
-        slideCount={SLIDES.length}
-      />
-
       {/* Split-hero stack — mobile uses SectionSeamFeather across image + lower band */}
       <div className="relative w-full shrink-0">
         <div
-          className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden bg-jade-green"
+          className="relative w-full h-[75vh] md:h-[80vh] z-0 overflow-hidden bg-jade-green pointer-events-none"
           style={{ perspective: "1500px" }}
         >
           <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
@@ -134,6 +128,13 @@ export default function ValuePropositionSection() {
           </AnimatePresence>
 
           <CarouselHeroScrim variant="value" />
+
+          <CarouselSwipeLayer
+            onPrev={handlePrev}
+            onNext={handleNext}
+            slideCount={SLIDES.length}
+            className="pointer-events-auto"
+          />
 
           {/* ── TEXT — sits inside the image zone ── */}
           <div className={carouselHeroCopyRoot}>

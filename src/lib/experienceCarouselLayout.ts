@@ -1,3 +1,5 @@
+import { EXPERIENCE_SECTION_CTA_CONTAINER_CLASS } from "@/lib/experienceSectionCta";
+
 /**
  * Shared layout for “Section 3” experience carousels:
  * Party Villas · Weekend Getaways · Caravans
@@ -24,6 +26,5 @@ export const experienceCarouselDefaults = {
     "relative w-full max-w-6xl mx-auto bg-[#121417] overflow-hidden rounded-sm shadow-2xl h-[456px] sm:h-[480px] md:h-[528px] lg:h-[576px] min-h-[360px]",
 
   /** Frame → CTA: 16px floor on mobile, then scales with viewport (capped for large screens). */
-  buttonContainerClassName:
-    "mt-[clamp(12.8px,3.2vw,25.6px)] w-full max-w-xl mx-auto",
+  buttonContainerClassName: `mt-[clamp(12.8px,3.2vw,25.6px)] ${EXPERIENCE_SECTION_CTA_CONTAINER_CLASS}`,
 } as const;
