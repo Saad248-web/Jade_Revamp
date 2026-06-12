@@ -89,6 +89,7 @@ export default function WeekendGetawaysPage() {
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
         scrollTargetId="weekend-philosophy"
+        videoSlug="getaways"
         backgroundImage="/Experiences/Weekend Getaways/1-Hero/casual stays.webp"
         backgroundAlt="Weekend Getaways"
         heading={

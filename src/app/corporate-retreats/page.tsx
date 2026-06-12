@@ -31,6 +31,7 @@ export default function CorporateRetreatsPage() {
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
         scrollTargetId="corporate-philosophy"
+        videoSlug="corporate"
         backgroundImage="/Experiences/Corporate Retreats/1-Hero/xhero.webp"
         backgroundAlt="Corporate Retreats"
         heading={

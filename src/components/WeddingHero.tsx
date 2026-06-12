@@ -53,6 +53,7 @@ export default function WeddingHero() {
     <ExperienceHero
       ref={sectionRef}
       scrollTargetId="wedding-philosophy"
+      videoSlug="weddings"
       backgroundImage={heroBg}
       backgroundAlt="Boutique Weddings"
       heading={

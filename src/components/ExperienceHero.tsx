@@ -13,6 +13,7 @@ import {
   ScrollLineIndicator,
   SCROLL_LINE_INDICATOR_CLICKABLE_CLASS,
 } from "./ScrollLineIndicator";
+import ResponsiveVideo, { type VideoSlug } from "./ResponsiveVideo";
 
 export interface HeroButton {
   icon: React.ReactNode;
@@ -26,8 +27,10 @@ export interface HeroStat {
 }
 
 interface ExperienceHeroProps {
-  /** Background image path */
+  /** Background image path (also used as video poster when videoSlug is set) */
   backgroundImage?: string;
+  /** Responsive hero video slug — landscape on desktop, portrait on mobile */
+  videoSlug?: VideoSlug;
   /** Alt text for the background image */
   backgroundAlt: string;
   /** Main heading - supports line breaks via \n or ReactNode */
@@ -49,6 +52,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
   (
     {
       backgroundImage,
+      videoSlug,
       backgroundAlt,
       heading,
       description,
@@ -77,9 +81,29 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
         ref={ref}
         className="major-section relative flex min-h-[100dvh] min-h-screen w-full flex-col items-center justify-end overflow-hidden"
       >
-        {/* Background Image */}
+        {/* Background media */}
         <div className="absolute inset-0 z-0">
-          {backgroundImage ? (
+          {videoSlug ? (
+            <>
+              {backgroundImage ? (
+                <Image
+                  src={backgroundImage}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="100vw"
+                  aria-hidden
+                />
+              ) : null}
+              <ResponsiveVideo
+                slug={videoSlug}
+                poster={backgroundImage}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black/40" />
+            </>
+          ) : backgroundImage ? (
             <>
               <Image
                 src={backgroundImage}

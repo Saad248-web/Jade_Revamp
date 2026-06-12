@@ -79,6 +79,7 @@ export default function PartyVillasPage() {
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
         scrollTargetId="party-philosophy"
+        videoSlug="parties"
         backgroundImage="/Experiences/Party Villas/1-Hero/Pool Parties.webp"
         backgroundAlt="Party Villas"
         heading={

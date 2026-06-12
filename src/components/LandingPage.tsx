@@ -1,14 +1,14 @@
 "use client";
 
-import { useRef, useEffect, useMemo, useState } from "react";
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { useAnimation } from "@/context/AnimationContext";
 import {
   motion,
   useScroll,
   useTransform,
-  AnimatePresence,
 } from "framer-motion";
+import ResponsiveVideo from "./ResponsiveVideo";
 import Navbar from "./Navbar";
 import MobileBottomNav from "./MobileBottomNav";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
@@ -54,32 +54,6 @@ export default function LandingPage() {
 
   const heroFallbackImage = "/Home Page/4-Venue Images/1.webp";
 
-  type VideoSource = { mp4: string; webm?: string };
-
-  const videoPlaylist = useMemo(
-    () =>
-      [
-        // Online, high-quality “party / pool / celebration” vibe clips.
-        // If any CDN blocks hotlinking, the local fallback below will still work.
-        {
-          mp4: "https://cdn.coverr.co/videos/coverr-people-at-a-party-9719/1080p.mp4",
-        },
-        {
-          mp4: "https://cdn.coverr.co/videos/coverr-cheers-with-champagne-9497/1080p.mp4",
-        },
-        {
-          mp4: "https://cdn.coverr.co/videos/coverr-pool-party-people-having-fun-2331/1080p.mp4",
-        },
-        {
-          mp4: "https://cdn.coverr.co/videos/coverr-dj-turntable-9158/1080p.mp4",
-        },
-        {
-          mp4: "https://cdn.coverr.co/videos/coverr-fireworks-over-the-city-9159/1080p.mp4",
-        },
-      ] as VideoSource[],
-    [],
-  );
-
   useEffect(() => {
     const timer = setTimeout(() => getLenis()?.resize(), 800);
     prefetchInstagramOembed();
@@ -89,16 +63,6 @@ export default function LandingPage() {
   const { scrollY } = useScroll();
   const yBackground = useTransform(scrollY, [0, 1000], ["0%", "40%"]);
   const heroContentY = useTransform(scrollY, [0, 500], ["0%", "15%"]);
-
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(() =>
-    Math.floor(Math.random() * videoPlaylist.length),
-  );
-
-  const handleVideoEnd = () => {
-    if (videoPlaylist.length > 1) {
-      setCurrentVideoIndex((prev: number) => (prev + 1) % videoPlaylist.length);
-    }
-  };
 
   return (
     <motion.div
@@ -124,32 +88,11 @@ export default function LandingPage() {
           style={{ y: yBackground }}
           className="absolute inset-0 w-full h-[120%] z-0"
         >
-          <AnimatePresence mode="wait">
-            <motion.video
-              key={currentVideoIndex}
-              autoPlay
-              muted
-              playsInline
-              preload="metadata"
-              poster={heroFallbackImage}
-              loop={videoPlaylist.length === 1}
-              onEnded={handleVideoEnd}
-              onError={handleVideoEnd}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1 }}
-              className="absolute inset-0 w-full h-full object-cover"
-            >
-              {videoPlaylist[currentVideoIndex]?.webm ? (
-                <source
-                  src={videoPlaylist[currentVideoIndex].webm}
-                  type="video/webm"
-                />
-              ) : null}
-              <source src={videoPlaylist[currentVideoIndex].mp4} type="video/mp4" />
-            </motion.video>
-          </AnimatePresence>
+          <ResponsiveVideo
+            slug="homepage"
+            poster={heroFallbackImage}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
           <div className="absolute inset-0 z-[-1]">
             <Image
               src={heroFallbackImage}
