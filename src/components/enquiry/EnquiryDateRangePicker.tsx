@@ -149,17 +149,37 @@ export default function EnquiryDateRangePicker({
       </div>
 
       <AnimatePresence>
+        {showCalendar && !isOverlay ? (
+          <motion.button
+            key="calendar-backdrop"
+            type="button"
+            aria-label="Close calendar"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="fixed inset-0 z-40 bg-black/55 sm:hidden"
+            onClick={() => setShowCalendar(false)}
+          />
+        ) : null}
         {showCalendar && (
           <motion.div
+            key="calendar-panel"
             initial={{ opacity: 0, y: 8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.97 }}
             transition={{ duration: 0.18 }}
             className={clsx(
-              "absolute left-0 top-[calc(100%+8px)] z-50 bg-[#1C1F22] border border-white/10 shadow-2xl p-5",
+              "z-50 border border-white/10 bg-[#1C1F22] shadow-2xl",
               isOverlay
-                ? "w-full max-w-[min(100vw-3rem,22rem)]"
-                : "w-full max-w-[min(100vw-3rem,22rem)] sm:w-[calc(200%+1.25rem)]",
+                ? "absolute left-0 top-[calc(100%+8px)] w-full max-w-[min(100vw-2rem,24rem)] p-4 sm:p-5"
+                : clsx(
+                    // Mobile: full-width sheet above bottom nav
+                    "fixed inset-x-4 bottom-[max(5.25rem,calc(env(safe-area-inset-bottom,0px)+4.5rem))] max-h-[min(72dvh,30rem)] overflow-y-auto rounded-sm p-4",
+                    // sm+: span date + guests row (2-col grid)
+                    "sm:absolute sm:inset-x-auto sm:bottom-auto sm:left-0 sm:top-[calc(100%+8px)] sm:max-h-none sm:overflow-visible sm:rounded-none sm:p-5",
+                    "sm:w-[calc(200%+1.25rem)] sm:max-w-[min(100vw-2rem,24rem)]",
+                  ),
             )}
           >
             <div className="flex items-center justify-between mb-3">
@@ -250,7 +270,7 @@ export default function EnquiryDateRangePicker({
                     onMouseEnter={() => setHoverDate(day)}
                     onMouseLeave={() => setHoverDate(null)}
                     className={clsx(
-                      "relative h-9 w-full font-manrope text-gh-label transition-all duration-150",
+                      "relative h-10 w-full font-manrope text-sm sm:text-gh-label transition-all duration-150",
                       isPast
                         ? "text-white/15 cursor-not-allowed"
                         : isStart || isEnd
@@ -268,15 +288,15 @@ export default function EnquiryDateRangePicker({
               })}
             </div>
 
-            <div className="mt-3 pt-4 border-t border-white/10 flex items-center justify-between gap-3">
-              <p className="font-manrope text-gh-label text-white/30">
+            <div className="mt-3 border-t border-white/10 pt-3 sm:pt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+              <p className="font-manrope text-[11px] leading-snug text-white/40 sm:text-gh-label sm:text-white/30 text-center sm:text-left">
                 {!checkIn
                   ? "Select check-in date"
                   : !checkOut
-                    ? "Select check-out date (or tap Done for one night)"
+                    ? "Select check-out, or tap Done for one night"
                     : `${formatEnquiryDate(checkIn)} → ${formatEnquiryDate(checkOut)}`}
               </p>
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="flex items-center justify-center gap-4 shrink-0 sm:justify-end sm:gap-3">
                 {checkIn && !checkOut ? (
                   <button
                     type="button"

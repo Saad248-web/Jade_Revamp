@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAnimation } from "@/context/AnimationContext";
+import { GLASS_INNER_SURFACE } from "@/lib/glassChrome";
 
 interface NavItem {
   label: string;
@@ -52,7 +53,7 @@ export default function MobileBottomNav() {
             delay: 0.2, // Slight delay after splash ends for better flow
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="jade-scroll-chrome lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-[#1A1C1E] pt-2 shadow-[0_-8px_32px_rgba(0,0,0,0.35)] pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))]"
+          className={`jade-scroll-chrome lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-white/15 pt-2 shadow-[0_-8px_32px_rgba(0,0,0,0.35)] pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))] ${GLASS_INNER_SURFACE}`}
         >
           <div className="flex items-center justify-around px-1">
             {navItems.map((item) => {

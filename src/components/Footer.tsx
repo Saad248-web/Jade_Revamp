@@ -177,7 +177,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
   return (
     <>
       <footer
-        className="relative z-20 overflow-hidden"
+        className="relative z-20 overflow-x-hidden"
         style={{ backgroundColor: "#2E3034" }}
       >
         {/* Decorative top border */}
