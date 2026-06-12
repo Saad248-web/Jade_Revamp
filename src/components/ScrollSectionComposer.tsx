@@ -276,7 +276,7 @@ export default function ScrollSectionComposer({
 
         {/* Scroll Indicator at the bottom */}
         {showScrollIndicator && (
-          <ScrollLineIndicator floating showCaption={false} />
+          <ScrollLineIndicator floating />
         )}
       </div>
     </div>

@@ -7,16 +7,10 @@ import {
   SCROLL_LINE_INDICATOR_MB_CLASS,
 } from "@/lib/layoutSpacing";
 import {
-  SCROLL_LINE_CAPTION_CLASS,
-  SCROLL_LINE_CAPTION_JEWEL_CLASS,
-  SCROLL_LINE_CAPTION_ROW_CLASS,
-  SCROLL_LINE_CROWN_CLASS,
   SCROLL_LINE_DURATION_MS,
   SCROLL_LINE_INDICATOR_ROOT_GAP_CLASS,
   SCROLL_LINE_MOUSE_CLASS,
   SCROLL_LINE_MOUSE_RING_CLASS,
-  SCROLL_LINE_STEM_CLASS,
-  SCROLL_LINE_TRACK_FILL_CLASS,
   SCROLL_LINE_TRACK_LINE_CLASS,
   SCROLL_LINE_WHEEL_CLASS,
 } from "@/lib/scrollLineIndicatorTokens";
@@ -32,6 +26,7 @@ export {
 export type ScrollLineIndicatorProps = {
   label?: string;
   labelPosition?: "above" | "below";
+  /** @deprecated Caption removed — kept for API compat */
   showCaption?: boolean;
   className?: string;
   trackClassName?: string;
@@ -46,23 +41,12 @@ export type ScrollLineIndicatorProps = {
 const customLabelClass =
   "font-manrope text-[11px] tracking-[0.28em] uppercase text-white/45 whitespace-nowrap text-center";
 
-function ScrollCaption() {
-  return (
-    <div className={SCROLL_LINE_CAPTION_ROW_CLASS} aria-hidden>
-      <span className={SCROLL_LINE_CAPTION_JEWEL_CLASS} />
-      <span className={SCROLL_LINE_CAPTION_CLASS}>Scroll</span>
-      <span className={SCROLL_LINE_CAPTION_JEWEL_CLASS} />
-    </div>
-  );
-}
-
 /**
- * Premium mouse scroll cue — wheel + track line restart loop together.
+ * Mouse scroll cue — capsule + gold dot, full-travel linear loop.
  */
 export function ScrollLineIndicator({
   label,
   labelPosition = "below",
-  showCaption = true,
   className,
   trackClassName,
   barClassName,
@@ -92,17 +76,9 @@ export function ScrollLineIndicator({
         aria-hidden
       >
         <span className={SCROLL_LINE_MOUSE_RING_CLASS} />
-        <span className={SCROLL_LINE_CROWN_CLASS} />
         <span className={SCROLL_LINE_TRACK_LINE_CLASS} />
-        <span className={SCROLL_LINE_TRACK_FILL_CLASS} />
         <div className={clsx(SCROLL_LINE_WHEEL_CLASS, barClassName)} />
       </div>
-      {showCaption && !hasCustomLabel ? (
-        <>
-          <span className={SCROLL_LINE_STEM_CLASS} aria-hidden />
-          <ScrollCaption />
-        </>
-      ) : null}
       {labelPosition === "below" && customLabelEl}
     </div>
   );
