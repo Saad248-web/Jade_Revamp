@@ -21,7 +21,7 @@ export default function UnifiedScrollSection() {
       height="260vh"
       fadeTiming="early"
       scrollEffects="performance"
-      background={<LiveBackground variant="static" />}
+      background={<LiveBackground />}
       showScrollIndicator
     />
   );

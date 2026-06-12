@@ -1,7 +1,6 @@
 "use client";
 
 import ScrollSectionComposer from "./ScrollSectionComposer";
-import LiveBackground from "./LiveBackground";
 import {
   EXPERIENCE_SCROLL_SECTIONS,
   type ExperienceScrollVariant,
@@ -35,9 +34,6 @@ export default function ExperienceScrollSection({
           slideGutterClassName: "px-4 md:px-8",
           contentContainerClassName: "w-full max-w-7xl mx-auto",
         })}
-        background={
-          isWedding ? <LiveBackground variant="static" /> : <LiveBackground />
-        }
         showScrollIndicator
       />
     </div>
