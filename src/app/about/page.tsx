@@ -18,7 +18,7 @@ import {
   usePreloadNeighborImages,
 } from "@/lib/carouselMotion";
 import {
-  liquidCarouselBgVariants,
+  heroSplitCardVariants,
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
@@ -264,15 +264,12 @@ export default function AboutPage() {
               <motion.div
                 key={currentOffering}
                 custom={offeringCarouselCustom}
-                variants={liquidCarouselBgVariants}
+                variants={heroSplitCardVariants}
                 initial="enter"
                 animate="center"
                 exit="exit"
                 className="absolute inset-0 w-full h-full border border-white/10"
-                style={{
-                  transformStyle: "preserve-3d",
-                  backfaceVisibility: "hidden",
-                }}
+                style={{ willChange: "transform" }}
               >
                 {/* Background Image with Overlay */}
                 <div className="absolute inset-0">
@@ -319,7 +316,7 @@ export default function AboutPage() {
               onPrev={prevOffering}
               onNext={nextOffering}
               slideCount={OFFERINGS.length}
-              className="absolute inset-0 z-[15] touch-pan-y"
+              className="absolute inset-0 z-[8] touch-pan-y cursor-grab active:cursor-grabbing"
             />
           </div>
         </div>

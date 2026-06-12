@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -13,6 +13,8 @@ import {
 } from "@/lib/carouselHeroCopy";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import {
+  useCarouselAutoAdvance,
+  useCarouselDirectionalNav,
   useCarouselSwipeDragProps,
   usePreloadNeighborSlideImages,
 } from "@/lib/carouselMotion";
@@ -78,42 +80,42 @@ const SLIDES = [
 ];
 
 export default function CaravanUsageSection() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
+  const { currentIndex, carouselCustom, goNext, goPrev } =
+    useCarouselDirectionalNav(SLIDES.length);
 
   const currentSlide = SLIDES[currentIndex];
 
   usePreloadNeighborSlideImages(SLIDES, currentIndex);
 
-  const carouselCustom: HeroSplitCustom = {
-    dir: direction,
+  const bgCarouselCustom: HeroSplitCustom = {
+    dir: carouselCustom.dir,
     lowFx: !!reducedMotion,
   };
 
-  const handlePrev = () => {
-    setDirection(-1);
-    setCurrentIndex((prev) => (prev === 0 ? SLIDES.length - 1 : prev - 1));
-  };
+  const miniCardSwipeProps = useCarouselSwipeDragProps(goPrev, goNext);
 
-  const handleNext = () => {
-    setDirection(1);
-    setCurrentIndex((prev) => (prev === SLIDES.length - 1 ? 0 : prev + 1));
-  };
-
-  const miniCardSwipeProps = useCarouselSwipeDragProps(handlePrev, handleNext);
+  const { pause: pauseAuto, resume: resumeAuto } = useCarouselAutoAdvance({
+    onNext: goNext,
+    enabled: SLIDES.length > 1,
+    intervalMs: 6000,
+  });
 
   return (
     <section
       ref={sectionRef}
       className="relative h-[87vh] md:h-screen md:max-h-screen w-full overflow-hidden bg-[#0B2C23]"
+      onMouseEnter={pauseAuto}
+      onMouseLeave={resumeAuto}
+      onFocusCapture={pauseAuto}
+      onBlurCapture={resumeAuto}
     >
       <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
 
       <CarouselSwipeLayer
-        onPrev={handlePrev}
-        onNext={handleNext}
+        onPrev={goPrev}
+        onNext={goNext}
         slideCount={SLIDES.length}
         className="absolute inset-x-0 top-0 h-[75vh] md:h-[80vh] z-[12] pointer-events-auto"
       />
@@ -123,10 +125,10 @@ export default function CaravanUsageSection() {
         className="absolute inset-x-0 top-0 h-[75vh] md:h-[80vh] z-0 overflow-hidden pointer-events-none"
         style={{ perspective: "1500px" }}
       >
-        <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
+        <AnimatePresence mode="sync" initial={false} custom={bgCarouselCustom}>
           <motion.div
             key={`bg-${currentIndex}`}
-            custom={carouselCustom}
+            custom={bgCarouselCustom}
             variants={heroSplitBgVariants}
             initial="enter"
             animate="center"
@@ -154,40 +156,27 @@ export default function CaravanUsageSection() {
       {/* ── BOTTOM 12vh/20vh — solid charcoal anchor ── */}
       <div className="absolute inset-x-0 bottom-0 h-[12vh] md:h-[20vh] z-10 bg-[#0B2C23]" />
 
-      {/* ── TEXT ── */}
-      <div className={carouselHeroCopyRootCompact}>
-        <motion.p
-          key={`label-${currentIndex}`}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={`${carouselHeroLabelClass} mb-2.5`}
-        >
+      {/* ── TEXT — entrance once; copy updates without re-animating on slide change ── */}
+      <motion.div
+        className={carouselHeroCopyRootCompact}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+      >
+        <p className={`${carouselHeroLabelClass} mb-2.5`}>
           {currentSlide.label}
-        </motion.p>
+        </p>
         <div className="mb-2.5">
-          <motion.h2
-            key={`heading-${currentIndex}`}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={carouselHeroHeadlineClass}
-          >
+          <h2 className={carouselHeroHeadlineClass}>
             {currentSlide.heading.join(" ")}
-          </motion.h2>
+          </h2>
         </div>
-        <motion.p
-          key={`sub-${currentIndex}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.06, duration: 0.38 }}
-          className={carouselHeroSubtextClass}
-        >
-          {currentSlide.subtext}
-        </motion.p>
-      </div>
+        <p className={carouselHeroSubtextClass}>{currentSlide.subtext}</p>
+      </motion.div>
 
       {/* ── ARROWS ── */}
       <button
-        onClick={handlePrev}
+        onClick={goPrev}
         aria-label="Previous"
         className="absolute left-4 sm:left-8 lg:left-16 xl:left-28 top-[75vh] md:top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
       >
@@ -195,7 +184,7 @@ export default function CaravanUsageSection() {
       </button>
 
       <button
-        onClick={handleNext}
+        onClick={goNext}
         aria-label="Next"
         className="absolute right-4 sm:right-8 lg:right-16 xl:right-28 top-[75vh] md:top-[80vh] -translate-y-1/2 p-3 sm:p-4 lg:p-5 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all shadow-md z-30 border border-white/10 group"
       >

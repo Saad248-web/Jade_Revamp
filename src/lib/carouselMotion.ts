@@ -5,10 +5,12 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
   useSyncExternalStore,
 } from "react";
 import { useReducedMotion, useTransform, type MotionValue } from "framer-motion";
 import type { PanInfo } from "framer-motion";
+import type { HeroSplitCustom } from "@/lib/heroSplitCarouselVariants";
 
 /** Tailwind `lg` — swipe enabled below this width (mobile + tablet). */
 export const CAROUSEL_SWIPE_MAX_WIDTH_PX = 1023;
@@ -100,6 +102,52 @@ export function useCarouselSwipeDragProps(
       onDragEnd,
     };
   }, [active, onDragEnd]);
+}
+
+/**
+ * Direction-aware index nav — matches CarouselHeroMiniFrame semantics.
+ * Ref holds gesture direction so enter/exit never run with stale dir:0.
+ */
+export function useCarouselDirectionalNav(length: number, initialIndex = 0) {
+  const directionRef = useRef<1 | -1>(1);
+  const [directionEpoch, setDirectionEpoch] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const reducedMotion = useReducedMotion();
+  const busyRef = useRef(false);
+
+  const carouselCustom: HeroSplitCustom = useMemo(
+    () => ({
+      dir: directionRef.current,
+      lowFx: !!reducedMotion,
+    }),
+    [directionEpoch, reducedMotion],
+  );
+
+  const releaseBusy = useCallback(() => {
+    window.setTimeout(() => {
+      busyRef.current = false;
+    }, CAROUSEL_CROSSFADE.duration * 1000 + 40);
+  }, []);
+
+  const goNext = useCallback(() => {
+    if (length <= 1 || busyRef.current) return;
+    busyRef.current = true;
+    directionRef.current = 1;
+    setDirectionEpoch((n) => n + 1);
+    setCurrentIndex((prev) => (prev + 1) % length);
+    releaseBusy();
+  }, [length, releaseBusy]);
+
+  const goPrev = useCallback(() => {
+    if (length <= 1 || busyRef.current) return;
+    busyRef.current = true;
+    directionRef.current = -1;
+    setDirectionEpoch((n) => n + 1);
+    setCurrentIndex((prev) => (prev - 1 + length) % length);
+    releaseBusy();
+  }, [length, releaseBusy]);
+
+  return { currentIndex, carouselCustom, goNext, goPrev };
 }
 
 /**

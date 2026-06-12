@@ -1,10 +1,14 @@
 "use client";
 
+import { useCallback, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import clsx from "clsx";
 import JadeImage from "@/components/ui/JadeImage";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
-import { CAROUSEL_CROSSFADE_FAST } from "@/lib/carouselMotion";
+import {
+  heroSplitCardVariants,
+  type HeroSplitCustom,
+} from "@/lib/heroSplitCarouselVariants";
 import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
 
 const vd = VILLA_DETAIL_SPACING;
@@ -39,10 +43,22 @@ export default function VillaDetailImageFrame({
   children,
 }: VillaDetailImageFrameProps) {
   const reducedMotion = useReducedMotion();
-  const { duration, ease } = CAROUSEL_CROSSFADE_FAST;
-  const transition = reducedMotion
-    ? { duration: 0.01 }
-    : { duration, ease };
+  const [direction, setDirection] = useState(0);
+
+  const carouselCustom: HeroSplitCustom = {
+    dir: direction,
+    lowFx: !!reducedMotion,
+  };
+
+  const wrappedPrev = useCallback(() => {
+    setDirection(-1);
+    onPrev();
+  }, [onPrev]);
+
+  const wrappedNext = useCallback(() => {
+    setDirection(1);
+    onNext();
+  }, [onNext]);
 
   return (
     <div
@@ -55,14 +71,16 @@ export default function VillaDetailImageFrame({
       onFocusCapture={onPauseAuto}
       onBlurCapture={onResumeAuto}
     >
-      <AnimatePresence mode="sync" initial={false}>
+      <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
         <motion.div
           key={imageKey}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={transition}
+          custom={carouselCustom}
+          variants={heroSplitCardVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
           className="absolute inset-0"
+          style={{ willChange: "transform" }}
         >
           <JadeImage
             src={src}
@@ -75,10 +93,10 @@ export default function VillaDetailImageFrame({
         </motion.div>
       </AnimatePresence>
       <CarouselSwipeLayer
-        onPrev={onPrev}
-        onNext={onNext}
+        onPrev={wrappedPrev}
+        onNext={wrappedNext}
         slideCount={slideCount}
-        className="absolute inset-0 z-[10] touch-pan-y"
+        className="absolute inset-0 z-[8] touch-pan-y"
       />
       {children}
     </div>

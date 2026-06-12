@@ -8,7 +8,7 @@ import PrimaryButton from "./PrimaryButton";
 import { experienceCarouselDefaults } from "@/lib/experienceCarouselLayout";
 import { EXPERIENCE_SECTION_CTA_BUTTON_CLASS } from "@/lib/experienceSectionCta";
 import {
-  liquidCarouselBgVariants,
+  heroSplitCardVariants,
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
@@ -119,7 +119,7 @@ export default function ExperienceCarouselSection({
           </div>
         </div>
 
-        {/* Carousel Content — liquid crossfade (hero split parity) */}
+        {/* Carousel Content — direction-aware mini-frame slide */}
         <div
           className={`relative shrink-0 ${aspectClass}`}
           style={{
@@ -131,14 +131,11 @@ export default function ExperienceCarouselSection({
             <motion.div
               key={activeSlide}
               custom={carouselCustom}
-              variants={liquidCarouselBgVariants}
+              variants={heroSplitCardVariants}
               initial="enter"
               animate="center"
               exit="exit"
-              style={{
-                transformStyle: "preserve-3d",
-                backfaceVisibility: "hidden",
-              }}
+              style={{ willChange: "transform" }}
               className="absolute inset-0 overflow-hidden rounded-sm bg-[#121417]"
             >
               {imageSrc ? (
@@ -172,7 +169,7 @@ export default function ExperienceCarouselSection({
             onPrev={prevSlide}
             onNext={nextSlide}
             slideCount={slides.length}
-            className="absolute inset-0 z-[5] touch-pan-y"
+            className="absolute inset-0 z-[8] touch-pan-y cursor-grab active:cursor-grabbing"
           />
         </div>
 

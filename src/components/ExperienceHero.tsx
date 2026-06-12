@@ -1,10 +1,18 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
-import React from "react";
+import React, { useMemo } from "react";
 import GlassButton from "./GlassButton";
 import GlassStatsBanner from "./GlassStatsBanner";
+import {
+  useCarouselAutoAdvance,
+  useCarouselDirectionalNav,
+} from "@/lib/carouselMotion";
+import {
+  heroSplitBgVariants,
+  type HeroSplitCustom,
+} from "@/lib/heroSplitCarouselVariants";
 import {
   EXPERIENCE_HERO_CHROME_WIDTH_CLASS,
   EXPERIENCE_HERO_SAFE_BOTTOM_CLASS,
@@ -29,6 +37,10 @@ export interface HeroStat {
 interface ExperienceHeroProps {
   /** Background image path (also used as video poster when videoSlug is set) */
   backgroundImage?: string;
+  /** Multiple backgrounds — liquid big-frame crossfade (text stays static) */
+  backgroundImages?: string[];
+  /** Auto-advance interval when `backgroundImages` has 2+ items */
+  backgroundAutoAdvanceMs?: number;
   /** Responsive hero video slug — landscape on desktop, portrait on mobile */
   videoSlug?: VideoSlug;
   /** Alt text for the background image */
@@ -52,6 +64,8 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
   (
     {
       backgroundImage,
+      backgroundImages,
+      backgroundAutoAdvanceMs = 4500,
       videoSlug,
       backgroundAlt,
       heading,
@@ -64,6 +78,28 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
     },
     ref,
   ) => {
+    const reducedMotion = useReducedMotion();
+
+    const backgroundSlides = useMemo(() => {
+      const fromList = backgroundImages?.filter((src) => src?.trim()) ?? [];
+      if (fromList.length > 0) return fromList;
+      if (backgroundImage?.trim()) return [backgroundImage];
+      return [];
+    }, [backgroundImages, backgroundImage]);
+
+    const { currentIndex, carouselCustom, goNext } = useCarouselDirectionalNav(
+      backgroundSlides.length,
+    );
+
+    const activeBackground =
+      backgroundSlides[currentIndex] ?? backgroundSlides[0] ?? "";
+
+    const { pause: pauseBgLoop, resume: resumeBgLoop } = useCarouselAutoAdvance({
+      onNext: goNext,
+      enabled: !videoSlug && backgroundSlides.length > 1,
+      intervalMs: backgroundAutoAdvanceMs,
+    });
+
     const scrollToNext = () => {
       if (scrollTargetId) {
         document.getElementById(scrollTargetId)?.scrollIntoView({
@@ -76,13 +112,24 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
       }
     };
 
+    const bgCarouselCustom: HeroSplitCustom = {
+      dir: carouselCustom.dir,
+      lowFx: !!reducedMotion,
+    };
+
+    const hasBgCarousel = !videoSlug && backgroundSlides.length > 1;
+
     return (
       <section
         ref={ref}
         className="major-section relative flex min-h-[100dvh] min-h-screen w-full flex-col items-center justify-end overflow-hidden"
+        onMouseEnter={hasBgCarousel ? pauseBgLoop : undefined}
+        onMouseLeave={hasBgCarousel ? resumeBgLoop : undefined}
+        onFocusCapture={hasBgCarousel ? pauseBgLoop : undefined}
+        onBlurCapture={hasBgCarousel ? resumeBgLoop : undefined}
       >
         {/* Background media */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 overflow-hidden">
           {videoSlug ? (
             <>
               {backgroundImage ? (
@@ -103,10 +150,45 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
               />
               <div className="absolute inset-0 bg-black/40" />
             </>
-          ) : backgroundImage ? (
+          ) : hasBgCarousel ? (
+            <div
+              className="absolute inset-0"
+              style={{ perspective: "1500px" }}
+            >
+              <AnimatePresence
+                mode="sync"
+                initial={false}
+                custom={bgCarouselCustom}
+              >
+                <motion.div
+                  key={`${currentIndex}-${activeBackground}`}
+                  custom={bgCarouselCustom}
+                  variants={heroSplitBgVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  className="absolute inset-0 h-full w-full"
+                  style={{
+                    transformStyle: "preserve-3d",
+                    backfaceVisibility: "hidden",
+                  }}
+                >
+                  <Image
+                    src={activeBackground}
+                    alt={backgroundAlt}
+                    fill
+                    className="object-cover"
+                    priority={currentIndex === 0}
+                    sizes="100vw"
+                  />
+                </motion.div>
+              </AnimatePresence>
+              <div className="absolute inset-0 bg-black/40" />
+            </div>
+          ) : activeBackground ? (
             <>
               <Image
-                src={backgroundImage}
+                src={activeBackground}
                 alt={backgroundAlt}
                 fill
                 className="object-cover"

@@ -111,6 +111,10 @@ export const scrollLinkedPanelSlideClass =
 export const scrollLinkedPanelSlideInteractiveClass =
   "pointer-events-auto flex h-full w-full lg:items-center lg:justify-center";
 
+/** Full-viewport slide shell — never captures clicks (pass through to cards below). */
+export const scrollLinkedPanelSlideShellClass =
+  "flex h-full w-full lg:items-center lg:justify-center pointer-events-none";
+
 export const scrollLinkedIntroSlideClass =
   "pointer-events-none absolute inset-0 flex h-full w-full flex-col items-center justify-center px-6 md:px-24";
 

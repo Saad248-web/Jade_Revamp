@@ -22,7 +22,7 @@ import { useAnimation } from "@/context/AnimationContext";
 import { isVillaRecordBookable } from "@/lib/villaBooking";
 import { useVillaListingImages } from "@/lib/useVillaListingImages";
 import {
-  liquidCarouselBgVariants,
+  heroSplitCardVariants,
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
@@ -118,15 +118,12 @@ export default function VillaCard({ villa }: VillaCardProps) {
           <motion.div
             key={`${villa.id}-${currentImageIndex}`}
             custom={carouselCustom}
-            variants={liquidCarouselBgVariants}
+            variants={heroSplitCardVariants}
             initial="enter"
             animate="center"
             exit="exit"
             className="absolute inset-0 w-full h-full"
-            style={{
-              transformStyle: "preserve-3d",
-              backfaceVisibility: "hidden",
-            }}
+            style={{ willChange: "transform" }}
           >
             {validImage(currentSpace?.image) ? (
               <JadeImage
@@ -152,7 +149,7 @@ export default function VillaCard({ villa }: VillaCardProps) {
           onPrev={prevImage}
           onNext={nextImage}
           slideCount={images.length}
-          className="absolute inset-0 z-[8] touch-pan-y"
+          className="absolute inset-0 z-[8] touch-pan-y cursor-grab active:cursor-grabbing"
         />
 
         {/* WISHLIST HEART */}

@@ -1,16 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
-import {
-  motion,
-  useTransform,
-  AnimatePresence,
-  useReducedMotion,
-  type MotionValue,
-} from "framer-motion";
+import { memo, useRef } from "react";
+import { motion, useTransform, type MotionValue } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import CarouselNavImageFrame from "@/components/ui/CarouselNavImageFrame";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import SectionWrapper from "./SectionWrapper";
 import LuxuryPattern from "./LuxuryPattern";
@@ -19,14 +14,12 @@ import { useScrollLinkedPanelOffset } from "@/lib/useScrollLinkedPanelOffset";
 import { useMediaMinLg } from "@/lib/useMediaMinLg";
 import { JADE_GREEN } from "@/lib/jadeSectionColors";
 import PrimaryButton from "@/components/PrimaryButton";
-import { usePreloadNeighborImages } from "@/lib/carouselMotion";
+import {
+  useCarouselDirectionalNav,
+  usePreloadNeighborImages,
+} from "@/lib/carouselMotion";
 import { useScrollLinkedSectionProgress } from "@/lib/useScrollLinkedSectionProgress";
 import ScrollLinkedHorizontalSection from "@/components/scroll-linked/ScrollLinkedHorizontalSection";
-import {
-  liquidCarouselBgVariants,
-  type HeroSplitCustom,
-} from "@/lib/heroSplitCarouselVariants";
-import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import { domeVillas } from "@/data/retreats/dome";
 import { magnolia } from "@/data/retreats/magnolia";
 import { retreatOnTheRidge } from "@/data/retreats/retreat-on-the-ridge";
@@ -37,7 +30,7 @@ import {
   scrollLinkedPanelBodyClass,
   scrollLinkedPanelOuterFeaturedClass,
   scrollLinkedPanelSlideClass,
-  scrollLinkedPanelSlideInteractiveClass,
+  scrollLinkedPanelSlideShellClass,
   scrollLinkedPanelStackFeaturedClass,
   scrollLinkedPanelStackWrapFeaturedClass,
   scrollLinkedPanelTextBlockClass,
@@ -265,194 +258,88 @@ function IntroPanel({
   );
 }
 
+type FeaturedVillaData = (typeof VILLAS)[number];
+
+/** Isolated from scroll progress re-renders — prevents slide animation interruption. */
+const FeaturedVillaImageCarousel = memo(function FeaturedVillaImageCarousel({
+  data,
+}: {
+  data: FeaturedVillaData;
+}) {
+  const isLg = useMediaMinLg();
+  const { currentIndex, carouselCustom, goNext, goPrev } =
+    useCarouselDirectionalNav(data.images.length);
+
+  const imageSrc = isLg
+    ? data.images[currentIndex]
+    : (data.mobileImages?.[currentIndex] ?? data.images[currentIndex]);
+
+  usePreloadNeighborImages(data.images, currentIndex);
+  usePreloadNeighborImages(data.mobileImages ?? data.images, currentIndex);
+
+  return (
+    <CarouselNavImageFrame
+      slideKey={`${data.id}-${currentIndex}`}
+      imageSrc={imageSrc}
+      alt={data.title}
+      slideCount={data.images.length}
+      carouselCustom={carouselCustom}
+      onPrev={goPrev}
+      onNext={goNext}
+      navLayout="corners"
+      sizes={
+        isLg
+          ? "(max-width: 640px) 100vw, (max-width: 1280px) 95vw, 1400px"
+          : "(max-width: 640px) 100vw, (max-width: 1024px) 75vw, 1400px"
+      }
+      priority={currentIndex === 0}
+    >
+      {!isLg ? (
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+      ) : null}
+    </CarouselNavImageFrame>
+  );
+});
+
 function VillaSlide({
   data,
   index,
   globalProgress,
   totalSteps,
 }: {
-  data: any;
+  data: FeaturedVillaData;
   index: number;
   globalProgress: MotionValue<number>;
   totalSteps: number;
 }) {
-  const innerRef = useRef<HTMLAnchorElement>(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
-  const reducedMotion = useReducedMotion();
-
-  const carouselCustom: HeroSplitCustom = {
-    dir: direction,
-    lowFx: !!reducedMotion,
-  };
-
-  const handleNextImage = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDirection(1);
-    setCurrentImageIndex((prev) =>
-      prev === data.images.length - 1 ? 0 : prev + 1,
-    );
-  };
-
-  const handlePrevImage = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDirection(-1);
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? data.images.length - 1 : prev - 1,
-    );
-  };
-
-  usePreloadNeighborImages(data.images, currentImageIndex);
-
-  const swipePrevImage = () => {
-    setDirection(-1);
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? data.images.length - 1 : prev - 1,
-    );
-  };
-
-  const swipeNextImage = () => {
-    setDirection(1);
-    setCurrentImageIndex((prev) =>
-      prev === data.images.length - 1 ? 0 : prev + 1,
-    );
-  };
-
+  const innerRef = useRef<HTMLDivElement>(null);
   const x = useFeaturedCarouselX(globalProgress, totalSteps, index, innerRef);
 
   return (
     <motion.div
-      style={{ x, zIndex: index * 10 }}
+      style={{ x, zIndex: totalSteps + 2 - index }}
       className={`${scrollLinkedPanelSlideClass} bg-transparent`}
     >
-      <div className={`${scrollLinkedPanelSlideInteractiveClass} pointer-events-none`}>
+      <div className={scrollLinkedPanelSlideShellClass}>
         <div className={scrollLinkedPanelOuterFeaturedClass}>
-        <Link
-          href={data.link}
+        <div
           ref={innerRef}
-          className={`${scrollLinkedPanelStackWrapFeaturedClass} pointer-events-auto w-full group rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EFCD62]`}
+          className={`${scrollLinkedPanelStackWrapFeaturedClass} relative z-10 w-full`}
         >
           <div className={scrollLinkedPanelStackFeaturedClass}>
           <div
-            className={scrollLinkedFeaturedVillaImageFrameClass}
+            className={`${scrollLinkedFeaturedVillaImageFrameClass} relative z-20 pointer-events-auto`}
             style={{ perspective: "1500px" }}
           >
-            <div className="w-full h-full relative">
-              {data.mobileImages ? (
-                <>
-                  {/* Mobile & Tab View */}
-                  <div className="block lg:hidden w-full h-full relative">
-                    <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
-                      <motion.div
-                        key={currentImageIndex}
-                        custom={carouselCustom}
-                        variants={liquidCarouselBgVariants}
-                        initial="enter"
-                        animate="center"
-                        exit="exit"
-                        className="absolute inset-0 w-full h-full"
-                        style={{
-                          transformStyle: "preserve-3d",
-                          backfaceVisibility: "hidden",
-                        }}
-                      >
-                        <Image
-                          src={data.mobileImages[currentImageIndex]}
-                          alt={data.title}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 75vw, 1400px"
-                          priority={currentImageIndex === 0}
-                        />
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
-                  {/* Desktop View */}
-                  <div className="hidden lg:block w-full h-full relative">
-                    <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
-                      <motion.div
-                        key={currentImageIndex}
-                        custom={carouselCustom}
-                        variants={liquidCarouselBgVariants}
-                        initial="enter"
-                        animate="center"
-                        exit="exit"
-                        className="absolute inset-0 w-full h-full"
-                        style={{
-                          transformStyle: "preserve-3d",
-                          backfaceVisibility: "hidden",
-                        }}
-                      >
-                        <Image
-                          src={data.images[currentImageIndex]}
-                          alt={data.title}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 95vw, 1400px"
-                          priority={currentImageIndex === 0}
-                        />
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
-                </>
-              ) : (
-                <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
-                  <motion.div
-                    key={currentImageIndex}
-                    custom={carouselCustom}
-                    variants={liquidCarouselBgVariants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    className="absolute inset-0 w-full h-full"
-                    style={{
-                      transformStyle: "preserve-3d",
-                      backfaceVisibility: "hidden",
-                    }}
-                  >
-                    <Image
-                      src={data.images[currentImageIndex]}
-                      alt={data.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1280px) 95vw, 1400px"
-                      priority={currentImageIndex === 0}
-                    />
-                  </motion.div>
-                </AnimatePresence>
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent lg:hidden" />
-              <CarouselSwipeLayer
-                onPrev={swipePrevImage}
-                onNext={swipeNextImage}
-                slideCount={data.images.length}
-                className="absolute inset-0 z-[50] touch-pan-y"
-              />
-              {/* Navigation Arrows */}
-              <div className="absolute bottom-0 left-0 z-[100]">
-                <button
-                  type="button"
-                  onClick={handlePrevImage}
-                  className="p-4 bg-black/40 backdrop-blur-md text-white hover:bg-[#EFCD62] hover:text-black transition-colors rounded-none border-t border-r border-white/10 pointer-events-auto cursor-pointer"
-                >
-                  <ChevronRight className="w-6 h-6 rotate-180" />
-                </button>
-              </div>
-              <div className="absolute bottom-0 right-0 z-[100]">
-                <button
-                  type="button"
-                  onClick={handleNextImage}
-                  className="p-4 bg-black/40 backdrop-blur-md text-white hover:bg-[#EFCD62] hover:text-black transition-colors rounded-none border-t border-l border-white/10 pointer-events-auto cursor-pointer"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
-              </div>
+            <div className="relative h-full w-full">
+              <FeaturedVillaImageCarousel data={data} />
             </div>
           </div>
 
-          <div className={scrollLinkedPanelTextBlockClass}>
+          <Link
+            href={data.link}
+            className={`${scrollLinkedPanelTextBlockClass} pointer-events-auto group rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EFCD62]`}
+          >
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -486,9 +373,9 @@ function VillaSlide({
                 Learn more about {data.title} <ArrowRight className="w-5 h-5" />
               </span>
             </motion.div>
+          </Link>
           </div>
-          </div>
-        </Link>
+        </div>
         </div>
       </div>
     </motion.div>
@@ -534,11 +421,11 @@ function CtaSlide({
       style={{ x, zIndex: index * 10 }}
       className={`${scrollLinkedPanelSlideClass} bg-transparent`}
     >
-      <div className={`${scrollLinkedPanelSlideInteractiveClass} pointer-events-none`}>
+      <div className={scrollLinkedPanelSlideShellClass}>
         <div className={scrollLinkedPanelOuterFeaturedClass}>
         <div
           ref={innerRef}
-          className={`${scrollLinkedPanelStackWrapFeaturedClass} pointer-events-auto w-full rounded-sm`}
+          className={`${scrollLinkedPanelStackWrapFeaturedClass} relative z-10 pointer-events-auto w-full rounded-sm`}
         >
           <div className={scrollLinkedPanelStackFeaturedClass}>
           <div className={`${scrollLinkedFeaturedVillaImageFrameClass} bg-[#0f2a1f]`}>

@@ -25,7 +25,7 @@ import {
   VILLA_DETAIL_STICKY_TABS_CHROME_CLASS,
 } from "@/lib/scrollChromeGlass";
 import {
-  liquidCarouselBgVariants,
+  heroSplitCardVariants,
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
@@ -255,15 +255,12 @@ export function VillaExperienceHeroCarousel({
         <MotionDiv
           key={currentImageIndex}
           custom={carouselCustom}
-          variants={liquidCarouselBgVariants}
+          variants={heroSplitCardVariants}
           initial="enter"
           animate="center"
           exit="exit"
           className="absolute inset-0"
-          style={{
-            transformStyle: "preserve-3d",
-            backfaceVisibility: "hidden",
-          }}
+          style={{ willChange: "transform" }}
         >
           <Image
             src={slide.image}
@@ -280,7 +277,7 @@ export function VillaExperienceHeroCarousel({
         onPrev={onPrev}
         onNext={onNext}
         slideCount={images.length}
-        className="absolute inset-0 z-[15] touch-pan-y"
+        className="absolute inset-0 z-[8] touch-pan-y cursor-grab active:cursor-grabbing"
       />
 
       {/* Bottom bar — same pattern as experience villa cards (arrows + label + index) */}

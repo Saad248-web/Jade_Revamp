@@ -50,8 +50,6 @@ export default function CaravansPage() {
   const [allImages, setAllImages] = useState<string[]>([]);
   const [heroImages, setHeroImages] = useState<string[]>([]);
   const [spaceImages, setSpaceImages] = useState<string[]>([]);
-  const [heroIndex, setHeroIndex] = useState(0);
-
   useEffect(() => {
     let cancelled = false;
     async function load() {
@@ -90,24 +88,11 @@ export default function CaravansPage() {
     }));
   }, [spaceImages, allImages]);
 
-  const heroBg = useMemo(
-    () => heroImages[0] || allImages[0] || "",
-    [heroImages, allImages],
-  );
-
-  useEffect(() => {
-    if (heroImages.length <= 1) return;
-    const id = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % heroImages.length);
-    }, 4500);
-    return () => clearInterval(id);
-  }, [heroImages]);
-
-  const heroSlide = useMemo(() => {
-    if (heroImages.length)
-      return heroImages[heroIndex % heroImages.length] || "";
-    return heroBg;
-  }, [heroImages, heroIndex, heroBg]);
+  const heroBackgrounds = useMemo(() => {
+    if (heroImages.length > 0) return heroImages;
+    if (allImages.length > 0) return allImages;
+    return [];
+  }, [heroImages, allImages]);
 
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
@@ -117,8 +102,9 @@ export default function CaravansPage() {
       {/* SECTION 1: HERO SECTION */}
       <ExperienceHero
         scrollTargetId="caravans-philosophy"
-        key={heroSlide}
-        backgroundImage={heroSlide}
+        backgroundImages={heroBackgrounds}
+        backgroundImage={heroBackgrounds[0]}
+        backgroundAutoAdvanceMs={4500}
         backgroundAlt="Caravans"
         heading={
           <>

@@ -9,7 +9,7 @@ import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
 import { getOverlayVillaData } from "@/lib/overlayVillaData";
 import { useVillaListingImages } from "@/lib/useVillaListingImages";
 import {
-  liquidCarouselBgVariants,
+  heroSplitCardVariants,
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
@@ -93,15 +93,12 @@ export default function WeddingVillaCard({
           <motion.div
             key={`${villa.id}-${currentImageIndex}`}
             custom={carouselCustom}
-            variants={liquidCarouselBgVariants}
+            variants={heroSplitCardVariants}
             initial="enter"
             animate="center"
             exit="exit"
             className="absolute inset-0"
-            style={{
-              transformStyle: "preserve-3d",
-              backfaceVisibility: "hidden",
-            }}
+            style={{ willChange: "transform" }}
           >
             <Image
               src={currentSpace.image}
@@ -118,14 +115,15 @@ export default function WeddingVillaCard({
           onPrev={prevImage}
           onNext={nextImage}
           slideCount={images.length}
-          className="absolute inset-0 z-[15] touch-pan-y"
+          className="absolute inset-0 z-[8] touch-pan-y cursor-grab active:cursor-grabbing"
         />
 
         {/* IMAGE CONTROLS */}
-        <div className="absolute bottom-6 left-4 right-4 z-20 flex items-center justify-between">
+        <div className="pointer-events-none absolute bottom-6 left-4 right-4 z-20 flex items-center justify-between">
           <button
+            type="button"
             onClick={prevImage}
-            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-[#EFCD62] hover:text-black transition-all"
+            className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-[#EFCD62] hover:text-black transition-all"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -146,8 +144,9 @@ export default function WeddingVillaCard({
           </div>
 
           <button
+            type="button"
             onClick={nextImage}
-            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-[#EFCD62] hover:text-black transition-all"
+            className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-[#EFCD62] hover:text-black transition-all"
           >
             <ArrowRight className="w-5 h-5" />
           </button>
