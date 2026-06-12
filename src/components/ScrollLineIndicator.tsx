@@ -41,7 +41,7 @@ const customLabelClass =
   "font-manrope text-[11px] tracking-[0.28em] uppercase text-white/45 whitespace-nowrap text-center";
 
 /**
- * Minimal scroll cue — vertical line + gold dot loop.
+ * Minimal scroll cue — vertical line + white dot loop (subtle, non-competing).
  */
 export function ScrollLineIndicator({
   label,
@@ -82,7 +82,7 @@ export function ScrollLineIndicator({
   );
 
   const rootClass = clsx(
-    "jade-scroll-cue inline-flex flex-col items-center justify-center opacity-[0.92] transition-[opacity,transform] duration-500 ease-out hover:opacity-100",
+    "jade-scroll-cue inline-flex flex-col items-center justify-center opacity-50 transition-[opacity,transform] duration-500 ease-out hover:opacity-[0.65] focus-visible:opacity-[0.65]",
     onClick && "cursor-pointer",
     floating &&
       `absolute left-1/2 z-20 -translate-x-1/2 ${SCROLL_LINE_INDICATOR_BOTTOM_CLASS}`,

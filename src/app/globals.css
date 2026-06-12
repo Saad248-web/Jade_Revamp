@@ -1084,7 +1084,7 @@ body {
 }
 
 /* ============================================================
-   Scroll line indicator — vertical line + gold dot loop
+   Scroll line indicator — vertical line + white dot loop (subtle)
    ============================================================ */
 .jade-scroll-cue {
   --jade-scroll-track-h: clamp(48px, 3.2vw + 28px, 64px);
@@ -1133,9 +1133,9 @@ body {
 .jade-scroll-track-line {
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.12) 0%,
-    rgba(255, 255, 255, 0.28) 50%,
-    rgba(239, 205, 98, 0.35) 100%
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.16) 50%,
+    rgba(255, 255, 255, 0.22) 100%
   );
 }
 
@@ -1148,13 +1148,11 @@ body {
   transform-origin: top center;
   background: linear-gradient(
     180deg,
-    #fffce8 0%,
-    #efcd62 48%,
-    #a67c1a 100%
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.72) 50%,
+    rgba(255, 255, 255, 0.5) 100%
   );
-  box-shadow:
-    0 0 10px rgba(239, 205, 98, 0.55),
-    0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.12);
   animation: jade-scroll-wheel-stretch var(--jade-scroll-line-duration) linear
     infinite;
   backface-visibility: hidden;
@@ -1165,23 +1163,21 @@ body {
 .jade-scroll-cue:focus-visible .jade-scroll-track-line {
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(255, 255, 255, 0.38) 50%,
-    rgba(239, 205, 98, 0.5) 100%
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(255, 255, 255, 0.3) 100%
   );
 }
 
 .jade-scroll-cue:hover .jade-scroll-wheel,
 .jade-scroll-cue:focus-visible .jade-scroll-wheel {
-  box-shadow:
-    0 0 12px rgba(239, 205, 98, 0.65),
-    0 2px 8px rgba(239, 205, 98, 0.35);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .jade-scroll-wheel {
     animation: none !important;
-    opacity: 0.9;
+    opacity: 0.5;
     transform: translateX(-50%) translateY(calc(var(--jade-scroll-travel) * 0.4))
       scaleY(1);
   }

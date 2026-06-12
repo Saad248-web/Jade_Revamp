@@ -1,5 +1,5 @@
 /**
- * Scroll cue — vertical line + gold dot loop.
+ * Scroll cue — vertical line + white dot loop (subtle).
  */
 
 export const SCROLL_LINE_DURATION_MS = 3000;
