@@ -185,7 +185,7 @@ export default function EnquireOverlay() {
         <FormOverlayLayout
           onClose={handleClose}
           canDismiss={canDismiss}
-          scrollClassName="px-6 pt-6 pb-6 font-manrope relative"
+          scrollClassName="px-6 pt-6 md:pb-6 font-manrope relative"
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
           <div className="relative z-[1]">

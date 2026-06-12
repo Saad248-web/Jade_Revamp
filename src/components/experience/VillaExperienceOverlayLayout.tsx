@@ -205,7 +205,7 @@ export function VillaExperienceOverlayCloseFramer({
   );
 
   if (variant === "above-sheet") {
-    const bandCenterTop = `calc(${EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH / 2}vh - 1.5rem)`;
+    const bandCenterTop = `calc(${EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH / 2}svh - 1.5rem)`;
     return (
       <div
         className="md:hidden fixed left-0 right-0 mx-auto z-[210] w-12 h-12 pointer-events-none"

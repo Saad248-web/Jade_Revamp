@@ -254,7 +254,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                 />
 
                 <div className="grid grid-cols-2 gap-3 sm:gap-5">
-                  <div className="min-w-0 flex flex-col gap-1.5">
+                  <div className="relative z-20 min-w-0 flex flex-col gap-1.5">
                     <EnquiryDateRangePicker
                       label="Check-In & Out Date"
                       theme="footer"

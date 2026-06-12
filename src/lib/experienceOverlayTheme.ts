@@ -36,20 +36,20 @@ export const EXPERIENCE_OVERLAY_MOBILE_SCRIM_CLASS =
 export const EXPERIENCE_OVERLAY_ROOT_CLASS =
   "fixed inset-0 z-[9999] max-md:bg-transparent max-md:backdrop-blur-none md:bg-jade-charcoal backdrop-blur-sm md:backdrop-blur-none overflow-hidden text-white";
 
-/** Mobile bottom-sheet proportions (tap band + sheet = 100vh). */
+/** Mobile bottom-sheet proportions (tap band + sheet = 100svh). */
 export const EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH = 8;
 export const EXPERIENCE_OVERLAY_MOBILE_SHEET_VH = 92;
 
-/** Top 8vh tap-to-dismiss band — solid 60% black (not transparent). */
+/** Top 8svh tap-to-dismiss band — solid 60% black (not transparent). */
 export const EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_CLASS =
-  `h-[8vh] min-h-[8vh] shrink-0 ${EXPERIENCE_OVERLAY_MOBILE_CHROME_BG_CLASS}`;
+  `h-[8svh] min-h-[8svh] shrink-0 ${EXPERIENCE_OVERLAY_MOBILE_CHROME_BG_CLASS}`;
 
 /** Gap between mobile close button and sheet top edge (below the 8vh band). */
 export const EXPERIENCE_OVERLAY_MOBILE_CLOSE_FRAME_GAP_REM = 1;
 
-/** 92vh zone — fills rounded-corner wedges with same chrome as top band. */
+/** 92svh zone — fills rounded-corner wedges with same chrome as top band. */
 export const EXPERIENCE_OVERLAY_MOBILE_SHEET_ZONE_CLASS =
-  `h-[92vh] min-h-0 shrink-0 relative ${EXPERIENCE_OVERLAY_MOBILE_CHROME_BG_CLASS}`;
+  `h-[92svh] min-h-0 shrink-0 relative ${EXPERIENCE_OVERLAY_MOBILE_CHROME_BG_CLASS}`;
 
 /** Scrim fill for sheet zone (corner wedges). */
 export const EXPERIENCE_OVERLAY_MOBILE_SHEET_SCRIM_CLASS = `absolute inset-0 pointer-events-none ${EXPERIENCE_OVERLAY_MOBILE_SCRIM_CLASS}`;

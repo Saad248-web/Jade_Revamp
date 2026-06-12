@@ -13,7 +13,10 @@ import {
   EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS,
 } from "@/lib/experienceOverlayTheme";
-import { FORM_OVERLAY_ROOT_CLASS } from "@/lib/formOverlayTheme";
+import {
+  FORM_OVERLAY_MOBILE_SCROLL_PAD_CLASS,
+  FORM_OVERLAY_ROOT_CLASS,
+} from "@/lib/formOverlayTheme";
 import { OVERLAY_DISMISS_BUTTON_BASE } from "@/lib/overlayDismissButton";
 import {
   EXPERIENCE_OVERLAY_MD_UP_QUERY,
@@ -112,7 +115,7 @@ export default function FormOverlayLayout({
       <div
         className={clsx(
           "relative z-[1] flex min-h-0 w-full flex-col pointer-events-auto",
-          "h-[92vh] md:h-auto md:max-h-[min(85dvh,760px)] md:max-w-[600px] md:mx-4",
+          "md:h-auto md:max-h-[min(85dvh,760px)] md:max-w-[600px] md:mx-4",
           EXPERIENCE_OVERLAY_MOBILE_SHEET_ZONE_CLASS,
           "md:bg-transparent md:h-auto md:min-h-0",
         )}
@@ -150,6 +153,7 @@ export default function FormOverlayLayout({
               EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS,
               "enquiry-overlay-scroll max-md:pt-6",
               scrollClassName,
+              FORM_OVERLAY_MOBILE_SCROLL_PAD_CLASS,
             )}
             data-lenis-prevent
           >

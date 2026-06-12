@@ -13,7 +13,10 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
-import { OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS } from "@/lib/overlayDismissButton";
+import {
+  OVERLAY_DISMISS_ABOVE_SHEET_MOBILE_CLASS,
+  OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS,
+} from "@/lib/overlayDismissButton";
 import { useAnimation } from "@/context/AnimationContext";
 import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
 import { sanitizeGuestCountInput } from "@/lib/guestCountInput";
@@ -118,13 +121,14 @@ export default function RathaaOverlay() {
             className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm"
           />
 
-          {/* Centering wrapper */}
+          {/* Desktop: viewport-top dismiss */}
           <motion.button
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={handleClose}
-            className={OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS}
+            className={`hidden md:flex ${OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS}`}
+            aria-label="Close"
           >
             <X className="w-6 h-6 stroke-[1.5]" />
           </motion.button>
@@ -133,18 +137,30 @@ export default function RathaaOverlay() {
             className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center px-4 md:px-0 pointer-events-none"
             onWheel={(e) => e.stopPropagation()}
           >
+            {/* Mobile: dismiss sits just above the sheet lip */}
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              onClick={handleClose}
+              className={OVERLAY_DISMISS_ABOVE_SHEET_MOBILE_CLASS}
+              aria-label="Close"
+            >
+              <X className="w-6 h-6 stroke-[1.5]" />
+            </motion.button>
+
             {/* Modal */}
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative pointer-events-auto w-full md:w-[600px] h-[80vh] md:h-[82vh] md:max-h-[760px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
+              className="relative pointer-events-auto w-full md:w-[600px] max-md:h-[80svh] md:h-[82vh] md:max-h-[760px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 overflow-hidden"
             >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
               {/* CONTENT AREA */}
               <div
-                className="flex-1 overflow-y-auto scrollbar-hide px-6 pt-5 pb-8"
+                className="flex-1 overflow-y-auto scrollbar-hide px-6 pt-5 pb-[max(2rem,calc(env(safe-area-inset-bottom,0px)+1.25rem))]"
                 data-lenis-prevent
               >
                 {view === "form" ? (
