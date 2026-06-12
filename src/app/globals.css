@@ -1084,24 +1084,13 @@ body {
 }
 
 /* ============================================================
-   Scroll line indicator — mouse + restarting line + wheel loop
+   Scroll line indicator — vertical line + gold dot loop
    ============================================================ */
 .jade-scroll-cue {
-  /* Slim tall capsule — editorial scroll pendant */
-  --jade-scroll-mouse-w: clamp(26px, 1.45vw + 17px, 34px);
-  --jade-scroll-mouse-h: clamp(54px, 3.6vw + 34px, 68px);
-  --jade-scroll-mouse-radius: calc(var(--jade-scroll-mouse-w) / 2);
+  --jade-scroll-track-h: clamp(48px, 3.2vw + 28px, 64px);
   --jade-scroll-dot-w: clamp(3px, 0.18vw + 2.2px, 4px);
   --jade-scroll-dot-h: clamp(5px, 0.32vw + 3.8px, 7px);
-  --jade-scroll-wheel-top: calc(var(--jade-scroll-mouse-h) * 0.118);
-  --jade-scroll-rail-bottom: calc(var(--jade-scroll-mouse-h) * 0.16);
-  --jade-scroll-rail-length: calc(
-    var(--jade-scroll-mouse-h) - var(--jade-scroll-wheel-top) -
-      var(--jade-scroll-rail-bottom)
-  );
-  --jade-scroll-travel: calc(
-    var(--jade-scroll-rail-length) - var(--jade-scroll-dot-h)
-  );
+  --jade-scroll-travel: calc(var(--jade-scroll-track-h) - var(--jade-scroll-dot-h));
   --jade-scroll-line-duration: 3s;
 }
 
@@ -1136,47 +1125,21 @@ body {
   }
 }
 
-.jade-scroll-mouse-ring {
-  inset: -4px;
-  border: 1px solid rgba(239, 205, 98, 0.14);
-  box-shadow: 0 0 20px rgba(239, 205, 98, 0.05);
-  transition: border-color 0.5s ease, box-shadow 0.5s ease;
-}
-
-.jade-scroll-mouse {
-  width: var(--jade-scroll-mouse-w);
-  height: var(--jade-scroll-mouse-h);
-  border-radius: var(--jade-scroll-mouse-radius);
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  background: linear-gradient(
-    165deg,
-    rgba(255, 255, 255, 0.09) 0%,
-    rgba(255, 255, 255, 0.02) 42%,
-    rgba(0, 0, 0, 0.26) 100%
-  );
-  box-shadow:
-    0 16px 48px rgba(0, 0, 0, 0.44),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
-    inset 0 0 0 0.5px rgba(239, 205, 98, 0.18);
-  backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
-  transition: border-color 0.5s ease, box-shadow 0.5s ease;
+.jade-scroll-track {
+  width: var(--jade-scroll-dot-w);
+  height: var(--jade-scroll-track-h);
 }
 
 .jade-scroll-track-line {
-  top: var(--jade-scroll-wheel-top);
-  bottom: var(--jade-scroll-rail-bottom);
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.06) 0%,
-    rgba(255, 255, 255, 0.2) 55%,
-    rgba(239, 205, 98, 0.25) 100%
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(239, 205, 98, 0.35) 100%
   );
 }
 
 .jade-scroll-wheel {
-  top: var(--jade-scroll-wheel-top);
   width: var(--jade-scroll-dot-w);
   min-width: var(--jade-scroll-dot-w);
   max-width: var(--jade-scroll-dot-w);
@@ -1198,20 +1161,21 @@ body {
   will-change: transform, opacity;
 }
 
-.jade-scroll-cue:hover .jade-scroll-mouse,
-.jade-scroll-cue:focus-visible .jade-scroll-mouse {
-  border-color: rgba(255, 255, 255, 0.55);
-  box-shadow:
-    0 20px 56px rgba(0, 0, 0, 0.5),
-    0 0 24px rgba(239, 205, 98, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 0 0 0.5px rgba(239, 205, 98, 0.26);
+.jade-scroll-cue:hover .jade-scroll-track-line,
+.jade-scroll-cue:focus-visible .jade-scroll-track-line {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.38) 50%,
+    rgba(239, 205, 98, 0.5) 100%
+  );
 }
 
-.jade-scroll-cue:hover .jade-scroll-mouse-ring,
-.jade-scroll-cue:focus-visible .jade-scroll-mouse-ring {
-  border-color: rgba(239, 205, 98, 0.28);
-  box-shadow: 0 0 24px rgba(239, 205, 98, 0.1);
+.jade-scroll-cue:hover .jade-scroll-wheel,
+.jade-scroll-cue:focus-visible .jade-scroll-wheel {
+  box-shadow:
+    0 0 12px rgba(239, 205, 98, 0.65),
+    0 2px 8px rgba(239, 205, 98, 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {

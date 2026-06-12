@@ -9,8 +9,7 @@ import {
 import {
   SCROLL_LINE_DURATION_MS,
   SCROLL_LINE_INDICATOR_ROOT_GAP_CLASS,
-  SCROLL_LINE_MOUSE_CLASS,
-  SCROLL_LINE_MOUSE_RING_CLASS,
+  SCROLL_LINE_TRACK_CLASS,
   SCROLL_LINE_TRACK_LINE_CLASS,
   SCROLL_LINE_WHEEL_CLASS,
 } from "@/lib/scrollLineIndicatorTokens";
@@ -26,7 +25,7 @@ export {
 export type ScrollLineIndicatorProps = {
   label?: string;
   labelPosition?: "above" | "below";
-  /** @deprecated Caption removed — kept for API compat */
+  /** @deprecated Caption removed */
   showCaption?: boolean;
   className?: string;
   trackClassName?: string;
@@ -42,7 +41,7 @@ const customLabelClass =
   "font-manrope text-[11px] tracking-[0.28em] uppercase text-white/45 whitespace-nowrap text-center";
 
 /**
- * Mouse scroll cue — capsule + gold dot, full-travel linear loop.
+ * Minimal scroll cue — vertical line + gold dot loop.
  */
 export function ScrollLineIndicator({
   label,
@@ -72,10 +71,9 @@ export function ScrollLineIndicator({
     <div className={SCROLL_LINE_INDICATOR_ROOT_GAP_CLASS} style={cueStyle}>
       {labelPosition === "above" && customLabelEl}
       <div
-        className={clsx(SCROLL_LINE_MOUSE_CLASS, trackClassName)}
+        className={clsx(SCROLL_LINE_TRACK_CLASS, trackClassName)}
         aria-hidden
       >
-        <span className={SCROLL_LINE_MOUSE_RING_CLASS} />
         <span className={SCROLL_LINE_TRACK_LINE_CLASS} />
         <div className={clsx(SCROLL_LINE_WHEEL_CLASS, barClassName)} />
       </div>
