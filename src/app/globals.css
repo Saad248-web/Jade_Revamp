@@ -1010,11 +1010,15 @@ body {
     overflow: hidden;
   }
 
-  .menu-mobile-hscroll-shell .jade-hscroll-track {
+  .menu-mobile-hscroll-shell .jade-hscroll-track,
+  .menu-mobile-hscroll-shell .menu-mobile-hscroll-track {
     touch-action: pan-x pan-y;
+    overflow-x: auto;
     overscroll-behavior-x: contain;
     overscroll-behavior-y: auto;
     -webkit-overflow-scrolling: touch;
+    scroll-snap-type: none;
+    scroll-behavior: auto;
   }
 
   .menu-mobile-vscroll {

@@ -231,7 +231,7 @@ function MenuExperienceImages({
         {exp.images.map((src, imgIdx) => (
           <div
             key={`${exp.href}-mobile-${imgIdx}`}
-            className="jade-hscroll-view-item relative h-40 w-[min(58vw,220px)] shrink-0 snap-start overflow-hidden"
+            className="jade-hscroll-view-item relative h-40 w-[min(58vw,220px)] shrink-0 overflow-hidden"
           >
             <Image
               src={safeMenuImage(src)}
@@ -527,7 +527,7 @@ export default function MenuPage() {
                         {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
                           <div
                             key={`${villa.id}-${imgIdx}`}
-                            className="jade-hscroll-view-item relative h-40 w-[min(58vw,220px)] shrink-0 snap-start overflow-hidden"
+                            className="jade-hscroll-view-item relative h-40 w-[min(58vw,220px)] shrink-0 overflow-hidden"
                           >
                             <Image
                               src={src}
