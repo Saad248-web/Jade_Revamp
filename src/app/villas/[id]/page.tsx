@@ -673,7 +673,10 @@ export default function VillaDetailsPage() {
                 </div>
                 <Link
                   href={`/villas/${id}/spaces`}
-                  className="inline-flex w-auto max-w-full shrink-0 items-center justify-center gap-1.5 border border-white/30 bg-black/40 backdrop-blur-md px-3 py-2.5 md:px-4 md:py-3 text-white text-[9px] md:text-[11px] font-bold tracking-[0.18em] md:tracking-[0.25em] uppercase whitespace-nowrap hover:bg-white hover:text-black transition-all"
+                  className={clsx(
+                    vd.heroGalleryCta,
+                    "border border-white/30 bg-black/40 backdrop-blur-md text-white text-[9px] md:text-[11px] font-bold tracking-[0.18em] md:tracking-[0.25em] uppercase hover:bg-white hover:text-black transition-all",
+                  )}
                 >
                   <LayoutGrid className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" strokeWidth={1.5} />
                   VIEW ALL PICTURES
@@ -1184,7 +1187,14 @@ export default function VillaDetailsPage() {
           </div>
           <div className="flex items-center gap-4 md:gap-6">
             <button onClick={() => setEnquireOverlayOpen(true)} className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap">ENQUIRE</button>
-            <PrimaryButton href={`/book?villa=${villa.id}`} withArrow={false} className="whitespace-nowrap">BOOK VILLA</PrimaryButton>
+            <PrimaryButton
+              href={`/book?villa=${villa.id}`}
+              withArrow={false}
+              size="chrome"
+              className="whitespace-nowrap"
+            >
+              BOOK VILLA
+            </PrimaryButton>
           </div>
         </div>
       </div>

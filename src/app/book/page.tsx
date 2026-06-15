@@ -849,15 +849,17 @@ function SuccessScreen({
                 {payError}
               </p>
             )}
-            <button
+            <PrimaryButton
               type="button"
+              width="form"
+              withArrow={false}
               disabled={payBusy}
               onClick={handleRazorpay}
-              className={`w-full mb-2.5 py-3.5 font-manrope font-bold text-gh-label tracking-widest uppercase transition-colors flex items-center justify-center gap-2 ${payBusy ? "bg-[#EFCD62]/50 text-[#0B2C23]/70 cursor-not-allowed" : "bg-[#EFCD62] text-[#0B2C23] hover:bg-white"}`}
+              className="mb-2.5"
             >
               {payBusy && <Loader2 className="w-4 h-4 animate-spin" />}
               {payBusy ? "OPENING…" : `PAY ${formatRupees(totalPriceRupees)}`}
-            </button>
+            </PrimaryButton>
           </>
         )}
 
@@ -1124,20 +1126,22 @@ function BookPageContent() {
             )}
           </div>
           {villaBookingDisabled ? (
-            <a
+            <PrimaryButton
               href="tel:08970663366"
-              className="shrink-0 px-6 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope bg-[#EFCD62] text-[#0B2C23] hover:bg-white"
+              width="compact"
+              withArrow={false}
             >
               ENQUIRE
-            </a>
+            </PrimaryButton>
           ) : (
-            <button
+            <PrimaryButton
+              width="compact"
+              withArrow={false}
               disabled={!canNext}
               onClick={() => setStep("guests")}
-              className={`shrink-0 px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${canNext ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
             >
               NEXT
-            </button>
+            </PrimaryButton>
           )}
         </div>
       );
@@ -1162,13 +1166,14 @@ function BookPageContent() {
             >
               BACK
             </button>
-            <button
+            <PrimaryButton
+              width="compact"
+              withArrow={false}
               disabled={guests.adults === 0}
               onClick={goNextFromGuests}
-              className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${guests.adults > 0 ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}
             >
               {nextLabel}
-            </button>
+            </PrimaryButton>
           </div>
         </div>
       );
@@ -1193,7 +1198,10 @@ function BookPageContent() {
               >
                 BACK
               </button>
-              <button
+              <PrimaryButton
+                width="compact"
+                withArrow={false}
+                variant={canProceed ? "primary" : "secondary"}
                 onClick={() => {
                   if (!canProceed) {
                     setDetailsForceErrors(true);
@@ -1202,10 +1210,14 @@ function BookPageContent() {
                   setDetailsForceErrors(false);
                   setStep("review");
                 }}
-                className={`px-8 py-2.5 text-gh-label font-bold tracking-widest uppercase transition-all font-manrope ${canProceed ? "bg-[#EFCD62] text-[#0B2C23] hover:bg-white" : "bg-white/10 text-white/30 cursor-pointer"}`}
+                className={
+                  canProceed
+                    ? undefined
+                    : "!opacity-100 !pointer-events-auto cursor-pointer"
+                }
               >
                 CONTINUE
-              </button>
+              </PrimaryButton>
             </div>
           </div>
         </div>
@@ -1242,14 +1254,16 @@ function BookPageContent() {
               >
                 BACK
               </button>
-              <button
+              <PrimaryButton
+                width="compact"
+                withArrow={false}
                 disabled={isSubmitting}
                 onClick={handlePayNow}
-                className={`px-6 sm:px-8 py-3 sm:py-3.5 text-gh-label font-bold tracking-widest uppercase font-manrope transition-all duration-300 outline outline-1 outline-[#EFCD62] outline-offset-[3px] rounded-none ${ isSubmitting ? "bg-[#EFCD62]/60 text-[#0B2C23]/60 cursor-not-allowed" : "bg-[#EFCD62] text-[#0B2C23] hover:bg-white hover:text-black hover:outline-white" }`}
+                className="outline outline-1 outline-[#EFCD62] outline-offset-[3px] hover:outline-white"
               >
                 {isSubmitting && <Loader2 className="w-4 h-4 animate-spin mr-2 inline" />}
                 {isSubmitting ? "CONFIRMING…" : "PAY NOW"}
-              </button>
+              </PrimaryButton>
             </div>
           </div>
         </div>

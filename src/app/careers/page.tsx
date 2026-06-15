@@ -2,21 +2,17 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
   ChevronDown,
   ChevronUp,
   X,
-  CheckCircle2,
-  Facebook,
-  Instagram,
-  Youtube,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PrimaryButton from "@/components/PrimaryButton";
 import FormOverlayLayout from "@/components/overlays/FormOverlayLayout";
+import OverlayEnquirySuccessContent from "@/components/overlays/OverlayEnquirySuccessContent";
 import LiveBackground from "@/components/LiveBackground";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -95,9 +91,8 @@ export default function CareersPage() {
     setIsSuccess(false);
   };
 
-  /** Success: only OKAY / intentional close — not backdrop or stray X (matches Enquire). */
+  /** Form backdrop / X — closes overlay and stays on Careers (success or form). */
   const handleApplyModalDismiss = () => {
-    if (isSuccess) return;
     if (!canClose) return;
     closeApplyModal();
   };
@@ -262,19 +257,8 @@ export default function CareersPage() {
       {/* 2. JOBS SECTION */}
       <section
         id="jobs"
-        className="py-20 bg-[#0B2C23] relative overflow-hidden"
+        className="py-20 bg-[#0B2C23] relative"
       >
-        {/* Diamond Pattern Overlay */}
-        <div
-          className="absolute inset-0 opacity-10 pointer-events-none"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
-            backgroundSize: "40px 40px",
-            transform: "rotate(45deg)",
-          }}
-        />
-
         <div className="max-w-4xl mx-auto px-6 relative z-10">
           <div className="text-center mb-12">
             <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3">
@@ -349,7 +333,9 @@ export default function CareersPage() {
                         </div>
 
                         <PrimaryButton
-                          className="w-full mt-3"
+                          width="form"
+                          withArrow={false}
+                          className="mt-3"
                           onClick={(e) => {
                             e.stopPropagation();
                             e.preventDefault();
@@ -396,7 +382,9 @@ export default function CareersPage() {
 
           <div className="w-full mx-auto flex justify-center">
             <PrimaryButton
-              className="h-[54px]"
+              width="auto"
+              withArrow={false}
+              className="px-8"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -432,9 +420,12 @@ export default function CareersPage() {
             <div className="md:hidden">
               <FormOverlayLayout
                 onClose={handleApplyModalDismiss}
-                canDismiss={canClose && !isSuccess}
+                canDismiss={canClose}
+                showSheetTopEdgeShade={!isSuccess}
                 sheetFrameClassName="bg-[#0B2C23]"
-                scrollClassName="font-manrope"
+                scrollClassName={
+                  isSuccess ? "px-0 font-manrope" : "font-manrope"
+                }
               >
                   {!isSuccess ? (
                     /* FORM VIEW */
@@ -484,119 +475,10 @@ export default function CareersPage() {
                       />
                     </div>
                   ) : (
-                    /* SUCCESS VIEW */
-                    <div className="flex flex-col items-center text-center px-6 pt-10 pb-8 w-full box-border">
-                      {/* Jade Coin — Glassmorphic Circle */}
-                      <motion.div
-                        initial={{ scale: 0.7, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="relative w-48 h-48 flex items-center justify-center mx-auto mb-8"
-                      >
-                        <div
-                          className="absolute inset-0 rounded-full"
-                          style={{
-                            background:
-                              "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
-                          }}
-                        />
-                        <div
-                          className="absolute inset-0 rounded-full"
-                          style={{
-                            background: "rgba(255, 255, 255, 0.10)",
-                            backdropFilter: "blur(12px)",
-                            WebkitBackdropFilter: "blur(12px)",
-                            border: "1px solid rgba(255, 255, 255, 0.18)",
-                            boxShadow:
-                              "inset 0 1px 1px rgba(255,255,255,0.25), 0 4px 24px rgba(0,0,0,0.15)",
-                          }}
-                        />
-                        <div
-                          className="absolute rounded-full pointer-events-none"
-                          style={{
-                            inset: 6,
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            borderRadius: "50%",
-                          }}
-                        />
-                        <Image
-                          src="/assets/JAde Correction.png"
-                          alt="Jade Coin"
-                          width={128}
-                          height={128}
-                          className="relative z-10 w-32 h-32 object-contain drop-shadow-2xl"
-                        />
-                      </motion.div>
-
-                      <motion.h3
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2, duration: 0.4 }}
-                        className="text-[2rem] font-philosopher text-white mb-3 leading-tight"
-                      >
-                        We&apos;ve got it from here
-                      </motion.h3>
-
-                      <motion.p
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3, duration: 0.4 }}
-                        className="text-white/70 text-gh-desc leading-relaxed mb-8 max-w-xs mx-auto"
-                      >
-                        Thanks for sharing your details!
-                        <br />
-                        Our team will take a look and reach out shortly to
-                        understand things better.
-                      </motion.p>
-
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4, duration: 0.4 }}
-                        className="space-y-4 mb-8 w-full"
-                      >
-                        <p className="text-gh-label tracking-[0.3em] text-white/40 uppercase">
-                          MEANWHILE CHECK US OUT HERE
-                        </p>
-                        <div className="flex justify-center gap-3">
-                          {[
-                            {
-                              Icon: Facebook,
-                              href: "https://www.facebook.com/jadehospitainment/",
-                            },
-                            {
-                              Icon: Instagram,
-                              href: "https://www.instagram.com/jadehospitainment/?hl=en",
-                            },
-                            {
-                              Icon: Youtube,
-                              href: "https://www.youtube.com/@jade_hospitainment",
-                            },
-                          ].map(({ Icon, href }, i) => (
-                            <a
-                              key={i}
-                              href={href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-12 h-12 bg-white/5 border border-white/20 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                            >
-                              <Icon className="w-5 h-5" />
-                            </a>
-                          ))}
-                        </div>
-                        <p className="text-gh-label text-white/30 italic">
-                          Thoughtfully operated. Always.
-                        </p>
-                      </motion.div>
-
-                      <PrimaryButton
-                        withArrow={false}
-                        className="w-full"
-                        onClick={handleApplySuccessOkay}
-                      >
-                        OKAY
-                      </PrimaryButton>
-                    </div>
+                    <OverlayEnquirySuccessContent
+                      embedded
+                      onOkay={handleApplySuccessOkay}
+                    />
                   )}
               </FormOverlayLayout>
             </div>
@@ -616,10 +498,10 @@ export default function CareersPage() {
                   <button
                     type="button"
                     onClick={handleApplyModalDismiss}
-                    disabled={isSuccess}
-                    aria-disabled={isSuccess}
+                    disabled={!canClose}
+                    aria-disabled={!canClose}
                     className={`w-12 h-12 rounded-full flex items-center justify-center text-white transition-colors shadow-2xl ${
-                      isSuccess
+                      !canClose
                         ? "bg-[#124131]/40 cursor-not-allowed opacity-50"
                         : "bg-[#124131] hover:bg-[#1f5c48]"
                     }`}
@@ -628,7 +510,10 @@ export default function CareersPage() {
                   </button>
                 </div>
 
-                <div className="p-12 overflow-y-auto overflow-x-hidden rounded-3xl" data-lenis-prevent>
+                <div
+                  className={`overflow-y-auto overflow-x-hidden rounded-3xl ${isSuccess ? "p-0" : "p-12"}`}
+                  data-lenis-prevent
+                >
                   {!isSuccess ? (
                     <>
                       <h3 className="text-gh-h1 font-philosopher text-white mb-3 pr-16">
@@ -674,104 +559,10 @@ export default function CareersPage() {
                       />
                     </>
                   ) : (
-                    <div className="text-center pb-10">
-                      {/* Jade Coin — Glassmorphic Circle */}
-                      <motion.div
-                        initial={{ scale: 0.7, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="relative w-48 h-48 flex items-center justify-center mx-auto mb-8"
-                      >
-                        {/* Outer soft glow */}
-                        <div
-                          className="absolute inset-0 rounded-full"
-                          style={{
-                            background:
-                              "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
-                          }}
-                        />
-                        {/* Glassmorphic disc */}
-                        <div
-                          className="absolute inset-0 rounded-full"
-                          style={{
-                            background: "rgba(255, 255, 255, 0.10)",
-                            backdropFilter: "blur(12px)",
-                            WebkitBackdropFilter: "blur(12px)",
-                            border: "1px solid rgba(255, 255, 255, 0.18)",
-                            boxShadow:
-                              "inset 0 1px 1px rgba(255,255,255,0.25), 0 4px 24px rgba(0,0,0,0.15)",
-                          }}
-                        />
-                        {/* Inner highlight ring */}
-                        <div
-                          className="absolute rounded-full pointer-events-none"
-                          style={{
-                            inset: 6,
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            borderRadius: "50%",
-                          }}
-                        />
-                        {/* Coin image */}
-                        <Image
-                          src="/assets/JAde Correction.png"
-                          alt="Jade Coin"
-                          width={128}
-                          height={128}
-                          className="relative z-10 w-32 h-32 object-contain drop-shadow-2xl"
-                        />
-                      </motion.div>
-
-                      <h3 className="text-gh-h3 font-philosopher text-white mb-5">
-                        We&apos;ve got it from here
-                      </h3>
-                      <p className="text-white/70 text-gh-desc leading-relaxed mb-8 max-w-xs mx-auto text-center">
-                        Thanks for sharing your details! Our team will take a
-                        look and reach out shortly to understand things better.
-                      </p>
-
-                      <div className="space-y-6">
-                        <p className="text-gh-label tracking-[0.3em] text-white/40 uppercase">
-                          MEANWHILE CHECK US OUT HERE
-                        </p>
-                        <div className="flex justify-center gap-5">
-                          {[
-                            {
-                              Icon: Facebook,
-                              href: "https://www.facebook.com/jadehospitainment/",
-                            },
-                            {
-                              Icon: Instagram,
-                              href: "https://www.instagram.com/jadehospitainment/?hl=en",
-                            },
-                            {
-                              Icon: Youtube,
-                              href: "https://www.youtube.com/@jade_hospitainment",
-                            },
-                          ].map(({ Icon, href }, i) => (
-                            <a
-                              key={i}
-                              href={href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                            >
-                              <Icon className="w-5 h-5" />
-                            </a>
-                          ))}
-                        </div>
-                        <p className="text-gh-label text-white/30 italic">
-                          Thoughtfully operated. Always.
-                        </p>
-                      </div>
-
-                      <PrimaryButton
-                        withArrow={false}
-                        className="w-full"
-                        onClick={handleApplySuccessOkay}
-                      >
-                        OKAY
-                      </PrimaryButton>
-                    </div>
+                    <OverlayEnquirySuccessContent
+                      embedded
+                      onOkay={handleApplySuccessOkay}
+                    />
                   )}
                 </div>
               </motion.div>

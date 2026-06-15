@@ -301,6 +301,7 @@ export default function InstagramCarousel() {
             href="https://www.instagram.com/jadehospitainment"
             target="_blank"
             rel="noopener noreferrer"
+            width="section"
           >
             Visit Jade on Instagram
           </PrimaryButton>

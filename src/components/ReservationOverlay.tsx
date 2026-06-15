@@ -400,6 +400,7 @@ export default function ReservationOverlay({
                     )}
                     <PrimaryButton
                       withArrow={false}
+                      width="compact"
                       onClick={() => setView("guests")}
                     >
                       NEXT
@@ -424,7 +425,7 @@ export default function ReservationOverlay({
                       >
                         BACK
                       </button>
-                      <PrimaryButton withArrow={false} onClick={handleApply}>
+                      <PrimaryButton withArrow={false} width="compact" onClick={handleApply}>
                         APPLY
                       </PrimaryButton>
                     </div>

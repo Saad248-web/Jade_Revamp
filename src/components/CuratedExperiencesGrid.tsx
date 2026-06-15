@@ -5,7 +5,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import PrimaryButton from "./PrimaryButton";
 import {
-  EXPERIENCE_SECTION_CTA_BUTTON_CLASS,
   EXPERIENCE_SECTION_CTA_CONTAINER_CLASS,
 } from "@/lib/experienceSectionCta";
 
@@ -115,7 +114,7 @@ export default function CuratedExperiencesGrid({
         {showCta ? (
           <div className={ctaContainerClassName}>
             <PrimaryButton
-              className={EXPERIENCE_SECTION_CTA_BUTTON_CLASS}
+              width="section"
               href={ctaLink}
               onClick={onCtaClick}
             >

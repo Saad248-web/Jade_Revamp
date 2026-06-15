@@ -149,12 +149,10 @@ export default function CareersApplyFormFields({
 
       <PrimaryButton
         type="submit"
+        width="form"
+        withArrow={false}
         disabled={!formValid || submitting}
-        className={`w-full mt-1 ${
-          formValid && !submitting
-            ? ""
-            : "!bg-white/[0.06] !text-white/25 !ring-white/15 hover:!bg-white/[0.06] cursor-not-allowed"
-        }`}
+        className="mt-1"
       >
         {submitting ? "SUBMITTING…" : "SUBMIT APPLICATION"}
       </PrimaryButton>

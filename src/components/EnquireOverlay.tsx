@@ -372,18 +372,15 @@ export default function EnquireOverlay() {
                           Refund Policy
                         </Link>
                       </p>
-                      <button
+                      <PrimaryButton
                         type="submit"
+                        width="form"
+                        withArrow={false}
                         disabled={!formValid || submitting}
                         aria-disabled={!formValid || submitting}
-                        className={`w-full py-4 font-manrope font-bold text-gh-label tracking-[0.3em] uppercase transition-all border ${
-                          formValid && !submitting
-                            ? "bg-[#EFCD62] hover:bg-white text-black border-transparent"
-                            : "bg-transparent border-white/10 text-white/40 cursor-not-allowed"
-                        }`}
                       >
                         {submitting ? "SENDING…" : "SEND INQUIRY"}
-                      </button>
+                      </PrimaryButton>
                     </div>
                   </form>
                 ) : (

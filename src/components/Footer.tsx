@@ -363,18 +363,20 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
                   />
                 ) : null}
 
-                <button
+                <PrimaryButton
                   type="submit"
+                  width="form"
+                  withArrow={false}
                   disabled={!formValid || submitting}
                   aria-disabled={!formValid || submitting}
-                  className={`w-full py-4 mt-1 font-manrope tracking-[0.25em] text-gh-label transition-all duration-300 uppercase border ${
+                  className={`mt-1 ${
                     formValid && !submitting
-                      ? "bg-transparent border-[#EFCD62]/40 text-[#EFCD62] hover:bg-[#EFCD62] hover:text-black hover:border-[#EFCD62]"
-                      : "bg-white/[0.03] border-white/10 text-white/15 cursor-not-allowed"
+                      ? "!bg-transparent !ring-0 border border-[#EFCD62]/40 !text-[#EFCD62] hover:!bg-[#EFCD62] hover:!text-black hover:!border-[#EFCD62]"
+                      : ""
                   }`}
                 >
                   {submitting ? "SENDING…" : "CONTACT US"}
-                </button>
+                </PrimaryButton>
               </form>
             </div>
 
@@ -658,7 +660,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
 
                       <PrimaryButton
                         withArrow={false}
-                        className="w-full"
+                        width="form"
                         onClick={handleFooterSuccessOkay}
                       >
                         OKAY

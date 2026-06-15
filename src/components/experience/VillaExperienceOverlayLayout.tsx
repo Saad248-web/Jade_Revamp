@@ -445,6 +445,7 @@ export function VillaExperienceBookingBottomBar({
           <PrimaryButton
             href={`/book?villa=${villaId}`}
             withArrow={false}
+            width="compact"
             className="whitespace-nowrap"
           >
             BOOK VILLA

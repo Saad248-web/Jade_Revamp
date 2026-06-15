@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Facebook, Instagram, Youtube } from "lucide-react";
+import PrimaryButton from "@/components/PrimaryButton";
 import { OVERLAY_MOBILE_ACTION_BAR_PB_CLASS } from "@/lib/overlayMobileChrome";
 
 const SOCIAL_LINKS = [
@@ -122,13 +123,13 @@ export default function OverlayEnquirySuccessContent({
           </p>
         </div>
 
-        <button
-          type="button"
+        <PrimaryButton
+          withArrow={false}
+          width="form"
           onClick={onOkay}
-          className="w-full min-h-[56px] shrink-0 border border-transparent bg-[#EFCD62] py-4 font-manrope text-gh-label font-bold tracking-[0.2em] text-black uppercase ring-1 ring-inset ring-[#AC8831] transition-all hover:bg-white"
         >
           OKAY
-        </button>
+        </PrimaryButton>
       </div>
     </div>
   );

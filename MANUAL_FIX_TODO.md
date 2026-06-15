@@ -14,8 +14,8 @@
 
 | | ID | Status |
 |---|-----|--------|
-| **Current** | O-04 | Pending |
-| **Next** | O-04 → O-05 → F-01 → V-01 → MP-01 → AB-01 → CR-01 → UI-01 → UI-02 → QA-01 | |
+| **Current** | V-01 | Pending |
+| **Next** | V-01 → MP-01 → AB-01 → UI-01 → UI-02 → QA-01 | |
 
 | ID | Task | Status |
 |----|------|--------|
@@ -24,15 +24,16 @@
 | O-01 | FAQ behaviour consistency | [x] |
 | O-02 | Overlay bottom action bar | [x] |
 | O-03 | Success overlay consistency | [x] |
-| O-04 | Career form success close (X) | [ ] |
+| O-04 | Career form success close (X) | [x] |
 | O-05 | Overlay typography consistency | [ ] |
-| F-01 | Mobile input zoom | [ ] |
+| F-01 | Mobile input zoom | [x] |
 | V-01 | Villa category navigation glitch | [ ] |
 | MP-01 | Menu page design refinements | [ ] |
 | AB-01 | About Section 3 background | [ ] |
-| CR-01 | Careers remove dot patterns | [ ] |
+| CR-01 | Careers remove dot patterns | [x] |
 | UI-01 | Header layout shift | [ ] |
 | UI-02 | Section spacing & vertical rhythm | [ ] |
+| BTN-01 | Global button height & width standardization | [ ] |
 | QA-01 | Mobile browser consistency | [ ] |
 
 ---
@@ -163,7 +164,7 @@
 
 ### O-04 — Career Form Success Screen Close Action
 
-- [ ] Career application success screen is missing a close (X) button.
+- [x] Career application success screen is missing a close (X) button.
 
 **Expected Result:**
 
@@ -171,9 +172,13 @@
 - Clicking close should dismiss the success state.
 - User should remain on the Careers page after closing.
 
-**Files:** *(fill when started)*
+**Done when:** Mobile + desktop career apply success show active X; tap X closes modal and user stays on `/careers`.
 
-**Verify:** *(fill when started)*
+**Files:** `src/app/careers/page.tsx`
+
+**Verify:** Careers → Apply Now → submit (demo OK) → success shows X → tap X → modal closed, still on `/careers`. OKAY still navigates via `resolveEnquiryOkayReturnPath()`.
+
+**Fix:** `handleApplyModalDismiss` closes on success; mobile `FormOverlayLayout` `canDismiss={canClose}`; desktop X no longer disabled on success.
 
 ---
 
@@ -196,7 +201,7 @@
 
 ### F-01 — Mobile Input Zoom Issue
 
-- [ ] Input fields trigger browser zoom on iOS and some Android devices.
+- [x] Input fields trigger browser zoom on iOS and some Android devices.
 
 **Current Issue:**
 
@@ -217,9 +222,13 @@
 - Overlay Forms
 - Any remaining site-wide input fields
 
-**Files:** *(fill when started)*
+**Done when:** Tapping any input on mobile does not zoom the page; no stuck zoom after keyboard dismiss.
 
-**Verify:** *(fill when started)*
+**Files:** `src/app/layout.tsx` (viewport export)
+
+**Verify:** iPhone Safari + Chrome Android — Enquire, Partner, Footer, Careers, `/book`, venue overlays; tap fields → no page zoom. Note: pinch-zoom disabled site-wide (accepted tradeoff).
+
+**Fix:** Viewport lock — `maximumScale: 1`, `userScalable: false` on root viewport meta. No font/UI changes.
 
 ---
 
@@ -294,7 +303,7 @@
 
 ### CR-01 — Remove Dot Patterns
 
-- [ ] Remove decorative dot patterns from the Careers page.
+- [x] Remove decorative dot patterns from the Careers page.
 
 **Scope:**
 
@@ -306,9 +315,13 @@
 
 - Careers page should not contain decorative dot patterns unless explicitly specified in Figma.
 
-**Files:** *(fill when started)*
+**Done when:** Jobs section green fill is solid `#0B2C23` with no dot grid overlay.
 
-**Verify:** *(fill when started)*
+**Files:** `src/app/careers/page.tsx`
+
+**Verify:** `/careers` → scroll to Current Opportunities — no dotted pattern on green background.
+
+**Fix:** Removed jobs section “Diamond Pattern Overlay” radial-gradient dot grid.
 
 ---
 
@@ -361,6 +374,36 @@
 **Files:** *(fill when started)*
 
 **Verify:** *(fill when started)*
+
+---
+
+### BTN-01 — Global Button Height & Width Standardization
+
+- [ ] Verify all primary CTAs use the shared 48px height token (`JADE_BTN_HEIGHT` via `PrimaryButton`).
+
+**Standard:**
+
+- Form/modal submits, section CTAs, success OKAY, booking footer actions: **48px** height (`width="form"` | `"section"` | `"compact"` as appropriate).
+- Navbar BOOK: **44px** chrome exception (`JADE_BTN_CHROME_HEIGHT` via `size="chrome"`).
+- Villa card VIEW / BOOK / ENQUIRE row: **48px** height, compact horizontal padding.
+
+**Manual QA matrix (430px mobile, 768px tablet, 1440px desktop):**
+
+| Surface | Check |
+|---------|--------|
+| Careers apply form | Submit Application matches Apply Now (48px) |
+| Enquire / Partner / venue enquiry | Full-width form submit (48px) |
+| Success overlays | OKAY button full-width (48px) |
+| Section CTAs (weekend/party pages) | Section width profile on desktop |
+| Villa card footer row | VIEW / BOOK / ENQUIRE aligned at 48px |
+| Navbar BOOK | Still 44px, aligned to icon row |
+| Book flow | PAY / NEXT / CONTINUE / PAY NOW at 48px |
+
+**Browsers:** Chrome, Safari iOS, Firefox, Edge.
+
+**Files:** `src/lib/jadeButtonTokens.ts`, `src/components/PrimaryButton.tsx`, migrated CTA consumers across `src/components/*`, `src/app/*`.
+
+**Verify:** Spot-check bounding box height === 48px on form submits; navbar BOOK === 44px.
 
 ---
 

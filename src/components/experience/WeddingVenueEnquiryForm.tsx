@@ -19,6 +19,7 @@ import {
   JadeFloatingTextarea,
 } from "@/components/ui/form";
 import JadeFormFieldError from "@/components/ui/form/JadeFormFieldError";
+import PrimaryButton from "@/components/PrimaryButton";
 
 type Props = {
   onSuccess: () => void;
@@ -310,13 +311,14 @@ export default function WeddingVenueEnquiryForm({
         </Link>
       </p>
 
-      <button
+      <PrimaryButton
         type="submit"
+        width="form"
+        withArrow={false}
         disabled={submitting}
-        className="w-full py-4 bg-[#EFCD62] text-black font-manrope font-bold text-gh-label tracking-widest uppercase hover:bg-white hover:text-black transition-all disabled:opacity-50 disabled:pointer-events-none"
       >
         {submitting ? "SENDING…" : "CONTACT US"}
-      </button>
+      </PrimaryButton>
     </form>
   );
 }

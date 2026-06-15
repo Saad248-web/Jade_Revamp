@@ -701,12 +701,9 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         </Link>
                       </p>
 
-                      <button
-                        type="submit"
-                        className="w-full py-4 bg-[#EFCD62] text-black font-manrope font-bold text-gh-label tracking-widest uppercase hover:bg-white hover:text-black transition-all"
-                      >
+                      <PrimaryButton type="submit" width="form" withArrow={false}>
                         SUBMIT ENQUIRE
-                      </button>
+                      </PrimaryButton>
                     </form>
                 </div>
               </div>

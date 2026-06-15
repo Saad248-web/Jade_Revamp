@@ -276,6 +276,7 @@ export default function VillasCarousel() {
           </div>
           <p className="text-white/30 text-gh-label font-manrope">or</p>
           <PrimaryButton
+            width="compact"
             withArrow={false}
             onClick={() => {
               setDateRange({ checkIn: null, checkOut: null });

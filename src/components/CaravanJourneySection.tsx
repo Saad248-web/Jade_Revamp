@@ -3,7 +3,6 @@
 import React from "react";
 import PrimaryButton from "./PrimaryButton";
 import {
-  EXPERIENCE_SECTION_CTA_BUTTON_CLASS,
   EXPERIENCE_SECTION_CTA_CONTAINER_CLASS,
 } from "@/lib/experienceSectionCta";
 import { useAnimation } from "@/context/AnimationContext";
@@ -165,10 +164,7 @@ const CaravanJourneySection = () => {
             the travel route.
           </p>
           <div className={EXPERIENCE_SECTION_CTA_CONTAINER_CLASS}>
-            <PrimaryButton
-              className={EXPERIENCE_SECTION_CTA_BUTTON_CLASS}
-              onClick={() => setRathaaOverlayOpen(true)}
-            >
+            <PrimaryButton width="section" onClick={() => setRathaaOverlayOpen(true)}>
               ENQUIRE
             </PrimaryButton>
           </div>

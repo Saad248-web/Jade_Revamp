@@ -2,6 +2,7 @@
 
 import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default function RootErrorBoundary({
   error,
@@ -24,13 +25,9 @@ export default function RootErrorBoundary({
         {error.message ||
           "A client error occurred. You can retry, or head back home from the menu."}
       </p>
-      <button
-        type="button"
-        onClick={reset}
-        className="rounded-sm bg-[#EFCD62] px-8 py-4 font-manrope text-sm font-bold uppercase tracking-widest text-[#0B2C23] transition-colors hover:bg-white"
-      >
+      <PrimaryButton width="compact" withArrow={false} onClick={reset}>
         Try again
-      </button>
+      </PrimaryButton>
     </div>
   );
 }

@@ -14,6 +14,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import PrimaryButton from "@/components/PrimaryButton";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
@@ -255,19 +256,28 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
                     <div key={idx} className="flex flex-wrap gap-5 my-10">
                       {section.ctas?.map((cta, i) => {
                         const isEnquire = cta.link === "/contact";
-                        const Component = isEnquire ? "button" : Link;
-                        const props = isEnquire
-                          ? { onClick: () => setEnquireOverlayOpen(true) }
-                          : { href: cta.link };
+                        const isPrimary = cta.variant === "primary";
 
                         return (
-                          <Component
+                          <PrimaryButton
                             key={i}
-                            {...(props as any)}
-                            className={`inline-flex items-center justify-center px-8 py-4 font-manrope font-bold tracking-[0.2em] uppercase text-[10px] transition-all duration-300 ${ cta.variant === "primary" ? "bg-[#EFCD62] text-black hover:bg-[#EFCD62]/90 shadow-[inset_0_0_0_1px_rgba(172,136,49,1)]" : "bg-transparent text-[#EFCD62] border border-[#EFCD62] hover:bg-[#EFCD62]/10" }`}
+                            href={isEnquire ? undefined : cta.link}
+                            onClick={
+                              isEnquire
+                                ? () => setEnquireOverlayOpen(true)
+                                : undefined
+                            }
+                            withArrow={false}
+                            width="compact"
+                            variant={isPrimary ? "primary" : "secondary"}
+                            className={
+                              isPrimary
+                                ? undefined
+                                : "!border-[#EFCD62] !text-[#EFCD62] hover:!bg-[#EFCD62]/10 !bg-transparent"
+                            }
                           >
                             {cta.label}
-                          </Component>
+                          </PrimaryButton>
                         );
                       })}
                     </div>
@@ -327,9 +337,13 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
                     placeholder="EMAIL ADDRESS"
                     className="w-full bg-black/10 border border-black/10 px-6 py-4 text-black placeholder:text-black/40 focus:outline-none focus:bg-black/20 transition-all font-manrope text-xs tracking-widest font-bold"
                   />
-                  <button className="w-full bg-black text-[#EFCD62] py-4 font-manrope font-bold tracking-[0.2em] uppercase hover:bg-black/90 transition-all text-xs">
+                  <PrimaryButton
+                    width="form"
+                    withArrow={false}
+                    className="!bg-black !text-[#EFCD62] !ring-0 hover:!bg-black/90"
+                  >
                     JOIN THE LIST
-                  </button>
+                  </PrimaryButton>
                 </div>
               </div>
             </div>

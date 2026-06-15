@@ -13,6 +13,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 import {
   NAVBAR_ACTIONS_CLUSTER_CLASS,
   NAVBAR_BOOK_BUTTON_CLASS,
+  NAVBAR_CHROME_TEXT_BUTTON_CLASS,
   NAVBAR_GLASS_ICON_CLASS,
   NAVBAR_WISHLIST_ICON_CLASS,
 } from "@/lib/navbarChrome";
@@ -168,10 +169,7 @@ export default function Navbar() {
           {/* ── RIGHT: Contact CTA ── */}
           <div className="flex items-center justify-end flex-1 gap-3">
             {isDetailPage ? (
-              <Link
-                href="/book"
-                className="flex h-11 min-h-[44px] max-h-[44px] shrink-0 items-center justify-center rounded-none border border-white/20 bg-white/[0.05] px-4 text-gh-label font-manrope font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm transition-all duration-300 hover:bg-jade-gold hover:text-black md:px-5"
-              >
+              <Link href="/book" className={NAVBAR_CHROME_TEXT_BUTTON_CLASS}>
                 BOOK NOW
               </Link>
             ) : isMenuPage ? (
@@ -198,6 +196,7 @@ export default function Navbar() {
                   <PrimaryButton
                     href="/book"
                     withArrow={false}
+                    size="chrome"
                     className={NAVBAR_BOOK_BUTTON_CLASS}
                   >
                     BOOK
@@ -228,6 +227,7 @@ export default function Navbar() {
                   <PrimaryButton
                     href="/book"
                     withArrow={false}
+                    size="chrome"
                     className={NAVBAR_BOOK_BUTTON_CLASS}
                   >
                     BOOK
@@ -261,16 +261,14 @@ export default function Navbar() {
                   )}
                 </Link>
                 {pathname?.startsWith("/experiences") ? (
-                  <Link
-                    href="/book"
-                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-11 min-h-[44px] max-h-[44px] shrink-0 whitespace-nowrap"
-                  >
+                  <Link href="/book" className={NAVBAR_CHROME_TEXT_BUTTON_CLASS}>
                     BOOK NOW
                   </Link>
                 ) : (
                   <PrimaryButton
                     href="/book"
                     withArrow={false}
+                    size="chrome"
                     className={NAVBAR_BOOK_BUTTON_CLASS}
                   >
                     BOOK

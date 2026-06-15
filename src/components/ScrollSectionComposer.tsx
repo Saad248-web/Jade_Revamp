@@ -42,7 +42,9 @@ interface ScrollSectionComposerProps {
 
 const ScrollButton = ({ href, label }: { href: string; label: string }) => (
   <div className="pointer-events-auto">
-    <PrimaryButton href={href}>{label}</PrimaryButton>
+    <PrimaryButton href={href} width="section">
+      {label}
+    </PrimaryButton>
   </div>
 );
 

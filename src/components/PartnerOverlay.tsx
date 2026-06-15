@@ -527,7 +527,9 @@ export default function PartnerOverlay() {
                       </p>
 
                       <PrimaryButton
-                        className="w-full mt-2"
+                        width="form"
+                        withArrow={false}
+                        className="mt-2"
                         onClick={() => {
                           void handleSubmit();
                         }}

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
+import PrimaryButton from "@/components/PrimaryButton";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
@@ -130,9 +131,13 @@ export default function BlogsPage() {
                 placeholder="YOUR EMAIL ADDRESS"
                 className="flex-1 bg-white/20 border border-black/10 px-6 py-4 text-black placeholder:text-black/40 focus:outline-none focus:bg-white/30 transition-all font-manrope text-gh-label"
               />
-              <button className="bg-black text-[#EFCD62] px-10 py-4 font-manrope font-bold tracking-[0.2em] uppercase hover:bg-black/90 transition-all text-gh-label">
+              <PrimaryButton
+                width="compact"
+                withArrow={false}
+                className="!bg-black !text-[#EFCD62] !ring-0 hover:!bg-black/90 shrink-0"
+              >
                 JOIN
-              </button>
+              </PrimaryButton>
             </div>
           </div>
         </div>

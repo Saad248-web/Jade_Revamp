@@ -364,7 +364,7 @@ export default function ContactPage() {
 
                       <PrimaryButton
                         withArrow={false}
-                        className="w-full"
+                        width="form"
                         onClick={closeModal}
                       >
                         OKAY

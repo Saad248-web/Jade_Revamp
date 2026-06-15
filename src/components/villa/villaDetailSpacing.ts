@@ -7,6 +7,8 @@
  * - In-section stacks: 32px between major blocks · 16px for tight groups
  */
 
+import { JADE_BTN_CHROME_HEIGHT } from "@/lib/jadeButtonTokens";
+
 export const VILLA_DETAIL_SPACING = {
   gutterX: "px-4 sm:px-5 lg:px-6",
   /**
@@ -122,16 +124,16 @@ export const VILLA_DETAIL_SPACING = {
   heroInsetX: "px-4 sm:px-5 lg:px-6",
   /**
    * View villa detail — fixed action header (transparent shell).
-   * Height: py-2 + 36–40px controls ≈ 52–56px total.
+   * Row: py-2 (16px) + 44px controls = 60px total.
    */
   actionHeaderRow:
     "flex justify-between items-center w-full py-2",
-  actionHeaderControl: "h-9 w-9 md:h-10 md:w-10 shrink-0",
+  actionHeaderControl: `${JADE_BTN_CHROME_HEIGHT} w-11 min-w-[44px] max-w-[44px] shrink-0 flex items-center justify-center`,
   actionHeaderIcon: "w-4 h-4 md:w-[18px] md:h-[18px]",
-  actionHeaderEnquire:
-    "px-3 md:px-3.5 h-9 md:h-10 flex items-center justify-center shrink-0",
+  actionHeaderEnquire: `${JADE_BTN_CHROME_HEIGHT} shrink-0 px-3 md:px-4 flex items-center justify-center whitespace-nowrap`,
+  heroGalleryCta: `${JADE_BTN_CHROME_HEIGHT} shrink-0 inline-flex max-w-full items-center justify-center gap-1.5 px-3 md:px-4 py-0 whitespace-nowrap`,
   /** Sticky category rail `top` when action header visible — keep in sync with row above. */
-  actionHeaderStickyTop: "top-[52px] md:top-[56px]",
+  actionHeaderStickyTop: "top-[60px]",
   heroBottom: "bottom-8 lg:bottom-12",
   /** Carousel arrows — align to page gutter (not flush to viewport) */
   heroArrowLeft: "left-4 sm:left-5 lg:left-6",

@@ -155,7 +155,7 @@ export default function LandingPage() {
               transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
               style={{ marginTop: "clamp(16px, 2.5vw, 24px)" }}
             >
-              <PrimaryButton href="/book" withArrow={false}>
+              <PrimaryButton href="/book" withArrow={false} width="section">
                 Book Villa Retreat
               </PrimaryButton>
             </motion.div>

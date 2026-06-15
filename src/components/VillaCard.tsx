@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { VILLAS } from "@/lib/mockData";
 import PrimaryButton from "@/components/PrimaryButton";
+import { JADE_BTN_HEIGHT } from "@/lib/jadeButtonTokens";
 import { useBooking } from "@/context/BookingContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useAnimation } from "@/context/AnimationContext";
@@ -285,8 +286,10 @@ export default function VillaCard({ villa }: VillaCardProps) {
             </span>
           </div>
 
-          {/* Buttons */}
-          <div className="flex shrink-0 items-stretch justify-end gap-2 md:gap-2.5 h-[clamp(44px,5vw,52px)]">
+          {/* Buttons — standard CTA height; compact width profile */}
+          <div
+            className={`flex shrink-0 items-stretch justify-end gap-2 md:gap-2.5 ${JADE_BTN_HEIGHT}`}
+          >
             <Link
               href={`${villaDetailPath(villa.id)}?autoScroll=true`}
               onClick={() => rememberListingReturn()}
@@ -296,20 +299,22 @@ export default function VillaCard({ villa }: VillaCardProps) {
             </Link>
             {bookable ? (
               <PrimaryButton
+                width="compact"
                 withArrow={false}
                 onClick={() => router.push(bookHref)}
-                className="h-full py-0 whitespace-nowrap text-gh-villa-footer-row"
+                className="h-full text-gh-villa-footer-row"
               >
                 BOOK VILLA
               </PrimaryButton>
             ) : (
-              <button
-                type="button"
+              <PrimaryButton
+                width="compact"
+                withArrow={false}
                 onClick={() => setEnquireOverlayOpen(true)}
-                className="h-full inline-flex items-center justify-center bg-[#EFCD62] text-[#0B2C23] hover:bg-white hover:text-black transition-colors px-3 md:px-5 font-manrope font-bold text-gh-villa-footer-row tracking-widest uppercase text-center rounded-sm whitespace-nowrap"
+                className="h-full text-gh-villa-footer-row"
               >
                 ENQUIRE
-              </button>
+              </PrimaryButton>
             )}
           </div>
         </div>

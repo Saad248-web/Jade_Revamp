@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import PrimaryButton from "@/components/PrimaryButton";
 import clsx from "clsx";
 import type { VillaActivity } from "@/lib/types";
 import VillaDetailImageFrame from "./VillaDetailImageFrame";
@@ -71,14 +71,9 @@ export default function VillaDetailExperienceCarousel({
           ) : null}
         </VillaDetailImageFrame>
       ) : null}
-      <button
-        type="button"
-        onClick={onEnquire}
-        className="w-full py-4 bg-[#EFCD62] text-black font-manrope font-bold text-[11px] md:text-gh-label tracking-[0.2em] uppercase flex items-center justify-center gap-2 rounded-none hover:bg-[#dfbd52] transition-colors"
-      >
+      <PrimaryButton width="form" onClick={onEnquire}>
         ENQUIRE
-        <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
-      </button>
+      </PrimaryButton>
     </div>
   );
 }

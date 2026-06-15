@@ -2,6 +2,16 @@ import React from "react";
 import clsx from "clsx";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import {
+  JADE_BTN_CHROME_HEIGHT,
+  JADE_BTN_HEIGHT,
+  JADE_BTN_LAYOUT,
+  JADE_BTN_TYPO,
+  jadeButtonVariantClass,
+  jadeButtonWidthClass,
+  type JadeButtonVariant,
+  type JadeButtonWidth,
+} from "@/lib/jadeButtonTokens";
 
 interface PrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
@@ -10,19 +20,18 @@ interface PrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   withArrow?: boolean;
   className?: string;
   children: React.ReactNode;
+  /** Visual style — secondary used for disabled form submits. */
+  variant?: JadeButtonVariant;
+  /** Horizontal layout profile. */
+  width?: JadeButtonWidth;
+  /** Standard 48px CTA vs 44px navbar chrome (matches icon row). */
+  size?: "standard" | "chrome";
 }
 
 /**
- * PrimaryButton — Advanced self-balancing CTA button.
- *
- * Behavior:
- * - Fills its parent container naturally (max-w-full) without ever
- *   overflowing or breaking through the frame.
- * - Uses viewport-scaled fluid padding (clamp) so it auto-balances
- *   its internal spacing on every screen size.
- * - Typography scales fluidly with clamp() for perfect readability.
- * - Pass `className` to override width (e.g. `w-full`) when the
- *   button should stretch to fill a specific layout slot.
+ * PrimaryButton — canonical Jade CTA (48px standard height).
+ * Use width="form" | "section" | "compact" for layout profiles.
+ * Navbar BOOK uses className override with JADE_BTN_CHROME_HEIGHT (44px).
  */
 export default function PrimaryButton({
   href,
@@ -33,32 +42,34 @@ export default function PrimaryButton({
   children,
   type = "button",
   disabled,
+  variant = "primary",
+  width = "auto",
+  size = "standard",
   ...buttonProps
 }: PrimaryButtonProps) {
+  const effectiveVariant =
+    disabled && variant === "primary" ? "secondary" : variant;
+
   const content = (
     <>
       {children}
       {withArrow && (
-        <ArrowRight className="w-[clamp(16px,1.5vw,20px)] h-[clamp(16px,1.5vw,20px)] transition-transform duration-300 group-hover:translate-x-1 flex-shrink-0" />
+        <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1 md:h-5 md:w-5" />
       )}
     </>
   );
 
   const sharedClassName = clsx(
-    // Core identity — gold solid CTA with 1px INSIDE stroke
-    "group bg-[#EFCD62] text-black font-manrope font-bold",
-    "ring-1 ring-inset ring-[#AC8831]",
-    "rounded-none",
-    "inline-flex items-center justify-center gap-[clamp(6px,0.8vw,12px)]",
-    "max-w-full box-border shrink-1",
-    "px-[clamp(12px,1.4vw,18px)] py-[clamp(12px,1.35vw,16px)]",
-    "text-gh-label tracking-[0.15em] uppercase",
-    "hover:bg-[#dfbd52] transition-all duration-300",
-    "disabled:opacity-50 disabled:pointer-events-none",
+    "group",
+    JADE_BTN_LAYOUT,
+    size === "chrome" ? JADE_BTN_CHROME_HEIGHT : JADE_BTN_HEIGHT,
+    JADE_BTN_TYPO,
+    jadeButtonWidthClass(width),
+    jadeButtonVariantClass(effectiveVariant, disabled),
+    width === "auto" && size !== "chrome" && "px-[clamp(12px,1.4vw,18px)] shrink",
     className,
   );
 
-  /** `<a>` cannot wrap `<button>` — render styled `Link` instead of nesting a button. */
   if (href) {
     return (
       <Link
@@ -91,6 +102,7 @@ export default function PrimaryButton({
     <button
       type={type}
       disabled={disabled}
+      aria-disabled={disabled || undefined}
       className={sharedClassName}
       {...buttonProps}
     >

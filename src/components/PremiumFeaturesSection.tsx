@@ -2,7 +2,6 @@ import React, { ReactNode } from "react";
 import clsx from "clsx";
 import PrimaryButton from "@/components/PrimaryButton";
 import {
-  EXPERIENCE_SECTION_CTA_BUTTON_CLASS,
   EXPERIENCE_SECTION_CTA_CONTAINER_CLASS,
 } from "@/lib/experienceSectionCta";
 
@@ -174,11 +173,7 @@ export default function PremiumFeaturesSection({
             <PrimaryButton
               href={ctaLink}
               onClick={onCtaClick}
-              className={
-                experienceCta
-                  ? EXPERIENCE_SECTION_CTA_BUTTON_CLASS
-                  : "w-full h-[54px]"
-              }
+              width={experienceCta ? "section" : "form"}
             >
               {ctaText}
             </PrimaryButton>
