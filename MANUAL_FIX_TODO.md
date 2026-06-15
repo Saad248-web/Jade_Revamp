@@ -393,13 +393,6 @@
 
 ---
 
-## Workflow & review process
-
-- [ ] **W-1** — Fathom for review calls  
-  **Done when:** [Fathom](https://www.fathom.ai/) is installed and used on at least one design review so action items are recorded.
-
----
-
 ## Figma reference table (fill in)
 
 | Screen | Figma frame | Route |
@@ -419,7 +412,7 @@
 
 | Date | Commit | IDs |
 |------|--------|-----|
-| | | M-01 |
+| 2026-06-04 | `5eb731d` | M-01 |
 
 ---
 
