@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { Facebook, Instagram, Youtube } from "lucide-react";
-import PrimaryButton from "@/components/PrimaryButton";
 import { OVERLAY_MOBILE_ACTION_BAR_PB_CLASS } from "@/lib/overlayMobileChrome";
 
 const SOCIAL_LINKS = [
@@ -11,11 +10,61 @@ const SOCIAL_LINKS = [
   { Icon: Youtube, href: "https://www.youtube.com/@jade_hospitainment" },
 ] as const;
 
+/** Equal top/bottom inset — open breathable shell (ref. Know More success). */
+const SUCCESS_SHEET_INSET_CLASS =
+  "py-[max(3rem,env(safe-area-inset-bottom,0px))] md:py-12";
+
 export type OverlayEnquirySuccessContentProps = {
   onOkay: () => void;
   /** Embedded in FormOverlayLayout — no extra chrome padding */
   embedded?: boolean;
 };
+
+function SuccessMedal() {
+  return (
+    <div className="relative mx-auto flex h-[160px] w-[160px] shrink-0 items-center justify-center rounded-full">
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
+        }}
+        aria-hidden
+      />
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background: "rgba(255, 255, 255, 0.10)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          border: "1px solid rgba(255, 255, 255, 0.18)",
+          boxShadow:
+            "inset 0 1px 1px rgba(255,255,255,0.25), 0 4px 24px rgba(0,0,0,0.15)",
+        }}
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute rounded-full"
+        style={{
+          inset: 6,
+          border: "1px solid rgba(255,255,255,0.08)",
+        }}
+        aria-hidden
+      />
+      <div className="relative h-[84px] w-[84px] shrink-0 drop-shadow-2xl">
+        <Image
+          src="/assets/JAde%20Correction.png"
+          alt="Success"
+          fill
+          sizes="96px"
+          quality={100}
+          className="object-contain"
+          priority
+        />
+      </div>
+    </div>
+  );
+}
 
 /** Shared success body — Partner / Know More / venue enquiry parity */
 export default function OverlayEnquirySuccessContent({
@@ -24,65 +73,62 @@ export default function OverlayEnquirySuccessContent({
 }: OverlayEnquirySuccessContentProps) {
   return (
     <div
-      className={`flex min-h-full flex-col items-center justify-between gap-8 text-center font-manrope ${
+      className={`flex min-h-full w-full flex-col items-center justify-center px-6 text-center font-manrope md:px-8 ${
         embedded
-          ? "min-h-[min(84dvh,680px)] px-6 md:px-8 py-8 md:py-10 pb-[max(1.75rem,env(safe-area-inset-bottom,0px))]"
-          : `px-6 md:px-8 py-8 md:py-10 ${OVERLAY_MOBILE_ACTION_BAR_PB_CLASS} md:pb-10`
+          ? SUCCESS_SHEET_INSET_CLASS
+          : `${SUCCESS_SHEET_INSET_CLASS} ${OVERLAY_MOBILE_ACTION_BAR_PB_CLASS}`
       }`}
     >
-      <div className="flex w-full shrink-0 flex-col items-center">
-        <div className="mb-6 flex h-[160px] w-[160px] shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/[0.03] shadow-2xl backdrop-blur-md md:h-[180px] md:w-[180px]">
-          <div className="relative h-[72px] w-[72px] shrink-0 drop-shadow-2xl md:h-[84px] md:w-[84px]">
-            <Image
-              src="/assets/JAde%20Correction.png"
-              alt="Success"
-              fill
-              sizes="96px"
-              quality={100}
-              className="object-contain"
-            />
+      <div className="flex w-full flex-col items-center gap-10 md:gap-9">
+        <SuccessMedal />
+
+        <div className="flex max-w-sm flex-col gap-4">
+          <h2
+            id="overlay-success-title"
+            className="font-philosopher text-gh-h1 text-white text-shadow-sm"
+          >
+            We&apos;ve got it from here
+          </h2>
+
+          <p className="text-gh-body leading-relaxed text-white/90">
+            Thanks for sharing your details!
+            <br />
+            Our team will take a look and reach out shortly to understand things
+            better.
+          </p>
+        </div>
+
+        <div className="flex w-full max-w-[280px] flex-col items-center gap-6">
+          <p className="text-gh-label font-bold tracking-[0.2em] uppercase text-white/60">
+            MEANWHILE CHECK US OUT HERE
+          </p>
+
+          <div className="flex justify-center gap-3">
+            {SOCIAL_LINKS.map(({ Icon, href }, i) => (
+              <a
+                key={i}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex h-12 w-12 items-center justify-center border border-white/20 bg-white/5 transition-all hover:border-[#EFCD62] hover:bg-[#EFCD62]"
+              >
+                <Icon className="h-5 w-5 text-white/50 transition-colors group-hover:text-black" />
+              </a>
+            ))}
           </div>
+
+          <p className="text-gh-label italic text-white/50">
+            Thoughtfully operated. Always.
+          </p>
         </div>
 
-        <h2
-          id="overlay-success-title"
-          className="font-philosopher text-gh-h1 text-white text-shadow-sm mb-3"
+        <button
+          type="button"
+          onClick={onOkay}
+          className="w-full min-h-[56px] shrink-0 border border-transparent bg-[#EFCD62] py-4 font-manrope text-gh-label font-bold tracking-[0.2em] text-black uppercase ring-1 ring-inset ring-[#AC8831] transition-all hover:bg-white"
         >
-          We&apos;ve got it from here
-        </h2>
-
-        <p className="max-w-sm mx-auto text-gh-body leading-relaxed text-white/90">
-          Thanks for sharing your details!
-          <br />
-          Our team will take a look and reach out shortly to understand things
-          better.
-        </p>
-      </div>
-
-      <div className="mx-auto flex w-full max-w-[300px] shrink-0 flex-col gap-5">
-        <p className="text-gh-label font-bold tracking-[0.2em] uppercase text-white/60">
-          MEANWHILE CHECK US OUT HERE
-        </p>
-
-        <div className="flex justify-center gap-3">
-          {SOCIAL_LINKS.map(({ Icon, href }, i) => (
-            <a
-              key={i}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-12 w-12 items-center justify-center border border-white/20 bg-white/5 transition-all hover:bg-[#EFCD62] hover:text-black"
-            >
-              <Icon className="h-5 w-5" />
-            </a>
-          ))}
-        </div>
-
-        <p className="text-gh-label italic text-white/50">Thoughtfully operated. Always.</p>
-
-        <PrimaryButton withArrow={false} className="mt-1 w-full" onClick={onOkay}>
           OKAY
-        </PrimaryButton>
+        </button>
       </div>
     </div>
   );

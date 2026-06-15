@@ -184,9 +184,16 @@ export default function EnquireOverlay() {
         <FormOverlayLayout
           onClose={handleClose}
           canDismiss={canDismiss}
-          scrollClassName="px-6 pt-6 md:pb-6 font-manrope relative"
+          showSheetTopEdgeShade={view === "form"}
+          scrollClassName={
+            view === "form"
+              ? "px-6 pt-6 md:pb-6 font-manrope relative"
+              : "px-0 font-manrope relative"
+          }
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
+          {view === "form" ? (
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
+          ) : null}
           <div className="relative z-[1]">
                 {view === "form" ? (
                   <form

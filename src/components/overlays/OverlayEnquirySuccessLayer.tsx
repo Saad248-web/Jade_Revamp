@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import OverlayEnquirySuccessContent from "@/components/overlays/OverlayEnquirySuccessContent";
 import {
   EXPERIENCE_OVERLAY_MOBILE_SHEET_SCRIM_CLASS,
-  EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_SHEET_ZONE_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH,
 } from "@/lib/experienceOverlayTheme";
@@ -52,11 +51,6 @@ export default function OverlayEnquirySuccessLayer({
               <div
                 className={`relative flex min-h-0 flex-1 flex-col overflow-hidden ${FORM_OVERLAY_MOBILE_SHEET_FRAME_CLASS}`}
               >
-                <div
-                  className={EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS}
-                  aria-hidden
-                />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
                 <div className="relative z-[1] flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain">
                   <OverlayEnquirySuccessContent onOkay={onOkay} embedded />
                 </div>
@@ -87,7 +81,6 @@ export default function OverlayEnquirySuccessLayer({
               transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
               className="relative z-10 flex max-h-[min(85dvh,650px)] w-full max-w-lg min-h-0 flex-col overflow-hidden rounded-lg border border-white/10 bg-jade-green shadow-2xl"
             >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
               <div className="relative z-[1] flex min-h-0 flex-1 flex-col overflow-y-auto">
                 <OverlayEnquirySuccessContent onOkay={onOkay} embedded />
               </div>

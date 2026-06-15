@@ -34,6 +34,8 @@ type FormOverlayLayoutProps = {
   desktopModalClassName?: string;
   /** Override mobile sheet surface (e.g. careers `#0B2C23`). */
   sheetFrameClassName?: string;
+  /** Lip shadow at rounded sheet top — off for success screens (ref. Know More shell). */
+  showSheetTopEdgeShade?: boolean;
 };
 
 /**
@@ -48,6 +50,7 @@ export default function FormOverlayLayout({
   scrollClassName,
   desktopModalClassName,
   sheetFrameClassName,
+  showSheetTopEdgeShade = true,
 }: FormOverlayLayoutProps) {
   useFormOverlayScrollLock(true);
   useOverlayMobileChrome(true);
@@ -142,18 +145,21 @@ export default function FormOverlayLayout({
             desktopModalClassName,
           )}
         >
-          <div
-            className={clsx(
-              EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS,
-              "md:hidden",
-            )}
-            aria-hidden
-          />
+          {showSheetTopEdgeShade ? (
+            <div
+              className={clsx(
+                EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS,
+                "md:hidden",
+              )}
+              aria-hidden
+            />
+          ) : null}
           <div
             ref={scrollRef}
             className={clsx(
               EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS,
-              "enquiry-overlay-scroll max-md:pt-6",
+              "enquiry-overlay-scroll",
+              !showSheetTopEdgeShade ? "max-md:pt-0" : "max-md:pt-6",
               scrollClassName,
               FORM_OVERLAY_MOBILE_SCROLL_PAD_CLASS,
             )}

@@ -211,6 +211,7 @@ export default function PartnerOverlay() {
       {isPartnerOverlayOpen && (
         <FormOverlayLayout
           onClose={handleClose}
+          showSheetTopEdgeShade={view === "form"}
           desktopModalClassName={
             view === "success" ? "md:h-[650px]" : undefined
           }
