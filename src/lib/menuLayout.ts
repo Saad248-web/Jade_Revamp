@@ -60,4 +60,4 @@ export const MENU_MOBILE_PRIMARY_SOCIAL_CLASS =
 
 /** Mobile secondary panels (Villas / Experiences) — vertical scroll; no lenis-prevent */
 export const MENU_MOBILE_VSCROLL_PANEL_CLASS =
-  "menu-mobile-vscroll min-h-0 flex-1 overflow-x-clip overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch]";
+  "menu-mobile-vscroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch]";

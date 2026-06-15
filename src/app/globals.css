@@ -1006,15 +1006,10 @@ body {
 
   /* Parent vertical panels must not use touch-pan-y — it blocks nested rail swipes */
   .menu-mobile-hscroll-shell .jade-hscroll-track {
-    touch-action: pan-x;
-    overscroll-behavior-y: none;
+    touch-action: pan-x pan-y;
+    overscroll-behavior-x: contain;
+    overscroll-behavior-y: auto;
     -webkit-overflow-scrolling: touch;
-  }
-
-  .menu-mobile-hscroll-shell .jade-hscroll-view-item {
-    touch-action: pan-x;
-    -webkit-user-drag: none;
-    user-select: none;
   }
 
   .menu-mobile-vscroll {

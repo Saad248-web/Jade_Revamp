@@ -23,6 +23,8 @@ export type HorizontalScrollRailProps = {
   mobileTrackGutter?: boolean;
   /** Open-hand cursor on horizontal scroll track */
   cursorGrab?: boolean;
+  /** When true, lock gesture axis so vertical swipes reach parent scroll (menu mobile rails). */
+  nestedVerticalScroll?: boolean;
   trackRole?: AriaRole;
   trackAriaLabel?: string;
 };
@@ -39,6 +41,7 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
       viewportEdgeAll = false,
       mobileTrackGutter = false,
       cursorGrab = false,
+      nestedVerticalScroll = false,
       trackRole,
       trackAriaLabel,
     },
@@ -51,12 +54,14 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
       dragging: boolean;
       pointerId: number | null;
       startX: number;
+      startY: number;
       startScrollLeft: number;
     }>({
       pending: false,
       dragging: false,
       pointerId: null,
       startX: 0,
+      startY: 0,
       startScrollLeft: 0,
     });
 
@@ -81,19 +86,39 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
         onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => {
           if (!cursorGrab) return;
           if (e.pointerType === "mouse" && e.button !== 0) return;
+          if (nestedVerticalScroll && e.pointerType !== "mouse") return;
           const el = e.currentTarget;
           drag.current.pending = true;
           drag.current.dragging = false;
           drag.current.pointerId = e.pointerId;
           drag.current.startX = e.clientX;
+          drag.current.startY = e.clientY;
           drag.current.startScrollLeft = el.scrollLeft;
         },
         onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => {
           if (!drag.current.pending && !drag.current.dragging) return;
+          if (
+            drag.current.pointerId !== null &&
+            drag.current.pointerId !== e.pointerId
+          ) {
+            return;
+          }
           const el = e.currentTarget;
           const dx = e.clientX - drag.current.startX;
+          const dy = e.clientY - drag.current.startY;
 
           if (!drag.current.dragging) {
+            if (
+              Math.abs(dx) < DRAG_THRESHOLD_PX &&
+              Math.abs(dy) < DRAG_THRESHOLD_PX
+            ) {
+              return;
+            }
+            if (nestedVerticalScroll && Math.abs(dy) >= Math.abs(dx)) {
+              drag.current.pending = false;
+              drag.current.pointerId = null;
+              return;
+            }
             if (Math.abs(dx) < DRAG_THRESHOLD_PX) return;
             drag.current.dragging = true;
             e.preventDefault();
@@ -126,10 +151,12 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
         },
         onPointerLeave: (e: React.PointerEvent<HTMLDivElement>) => {
           if (!drag.current.dragging) return;
-          endDrag(e.currentTarget, e.pointerId);
+          if (e.pointerType === "mouse") {
+            endDrag(e.currentTarget, e.pointerId);
+          }
         },
       };
-    }, [cursorGrab]);
+    }, [cursorGrab, nestedVerticalScroll]);
 
     return (
       <div
