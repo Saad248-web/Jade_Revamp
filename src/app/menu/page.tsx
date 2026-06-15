@@ -31,6 +31,7 @@ import {
   MENU_MOBILE_PRIMARY_ITEM_CLASS,
   MENU_DESKTOP_CHEVRON_ROW_CLASS,
   MENU_MOBILE_PRIMARY_SOCIAL_CLASS,
+  MENU_MOBILE_VSCROLL_PANEL_CLASS,
   MENU_MOBILE_LABEL_CLASS,
 } from "@/lib/menuLayout";
 import { JADE_WHATSAPP_URL } from "@/lib/siteContact";
@@ -497,10 +498,7 @@ export default function MenuPage() {
                 </button>
                 <h1 className={MENU_MOBILE_SECTION_TITLE_CLASS}>Villas</h1>
                 </div>
-                <div
-                  className="min-h-0 flex-1 overflow-x-visible overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch]"
-                  data-lenis-prevent
-                >
+                <div className={MENU_MOBILE_VSCROLL_PANEL_CLASS}>
                 <div className="space-y-6">
                   {MENU_VILLAS.map((villa) => (
                     <div
@@ -510,6 +508,7 @@ export default function MenuPage() {
                       <Link
                         href={`/villas/${villa.id}`}
                         className="cursor-pointer px-6"
+                        draggable={false}
                       >
                       <p className="text-white/40 text-[10px] font-manrope font-medium tracking-[0.2em] uppercase mb-1">
                         {villa.type}
@@ -566,14 +565,11 @@ export default function MenuPage() {
                 <h1 className={MENU_MOBILE_SECTION_TITLE_CLASS}>Experiences</h1>
                 </div>
 
-                <div
-                  className="min-h-0 flex-1 overflow-x-visible overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch]"
-                  data-lenis-prevent
-                >
+                <div className={MENU_MOBILE_VSCROLL_PANEL_CLASS}>
                 <div className="space-y-6">
                   {MENU_EXPERIENCES.map((exp) => (
                     <div key={exp.href + exp.title} className="flex flex-col group">
-                      <Link href={exp.href} className="cursor-pointer px-6">
+                      <Link href={exp.href} className="cursor-pointer px-6" draggable={false}>
                         <p className="text-white/40 text-[10px] font-manrope font-medium tracking-[0.2em] uppercase mb-1">
                           {exp.type}
                         </p>

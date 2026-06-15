@@ -57,3 +57,7 @@ export const MENU_DESKTOP_CHEVRON_ROW_CLASS =
 /** Social row — pinned below nav on mobile; extra bottom pad clears bottom nav */
 export const MENU_MOBILE_PRIMARY_SOCIAL_CLASS =
   "menu-mobile-primary__social flex shrink-0 gap-3 md:mt-auto md:pt-8";
+
+/** Mobile secondary panels (Villas / Experiences) — vertical scroll; no lenis-prevent */
+export const MENU_MOBILE_VSCROLL_PANEL_CLASS =
+  "menu-mobile-vscroll min-h-0 flex-1 overflow-x-clip overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch]";

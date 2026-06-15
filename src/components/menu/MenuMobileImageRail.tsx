@@ -10,6 +10,7 @@ export function MenuMobileImageRail({ children }: { children: ReactNode }) {
       <HorizontalScrollRail
         showFade
         patternFade
+        cursorGrab
         className="menu-hscroll-fade w-full overflow-visible"
         trackClassName="flex w-max gap-2 overflow-x-auto scroll-pl-6 pl-6 scroll-pr-0 pr-0 pb-1 scrollbar-none hide-scrollbar"
       >

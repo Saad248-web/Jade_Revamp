@@ -79,9 +79,8 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
 
       return {
         onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => {
-          // Only enable click-drag scroll for mouse pointers (trackpad wheel already works).
-          if (e.pointerType !== "mouse") return;
-          if (e.button !== 0) return;
+          if (!cursorGrab) return;
+          if (e.pointerType === "mouse" && e.button !== 0) return;
           const el = e.currentTarget;
           drag.current.pending = true;
           drag.current.dragging = false;
@@ -98,6 +97,7 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
             if (Math.abs(dx) < DRAG_THRESHOLD_PX) return;
             drag.current.dragging = true;
             e.preventDefault();
+            e.stopPropagation();
             el.setPointerCapture(e.pointerId);
             document.body.style.userSelect = "none";
           }
