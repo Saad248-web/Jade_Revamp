@@ -22,6 +22,8 @@ import {
   SCROLL_LINE_INDICATOR_CLICKABLE_CLASS,
   SCROLL_LINE_INDICATOR_HERO_WRAPPER_CLASS,
 } from "./ScrollLineIndicator";
+import PrimaryButton from "./PrimaryButton";
+import { carouselHeroLabelClass } from "@/lib/carouselHeroCopy";
 
 const InstagramCarousel = dynamic(() => import("./InstagramCarousel"), {
   ssr: false,
@@ -118,7 +120,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="text-gh-label tracking-[0.25em] text-jade-gold uppercase font-manrope font-bold"
+              className={`${carouselHeroLabelClass} [text-shadow:0_1px_8px_rgba(0,0,0,0.8),0_2px_18px_rgba(0,0,0,0.5)]`}
               style={{ marginBottom: "clamp(4px, 0.96vw, 8px)" }}
             >
               VILLA RETREATS
@@ -146,6 +148,17 @@ export default function LandingPage() {
               Private themed farmhouse villa retreats in serene locations of Bangalore,
               curated for gatherings and getaways.
             </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
+              style={{ marginTop: "clamp(16px, 2.5vw, 24px)" }}
+            >
+              <PrimaryButton href="/book" withArrow={false}>
+                Book Villa Retreat
+              </PrimaryButton>
+            </motion.div>
             </motion.div>
           </motion.div>
 

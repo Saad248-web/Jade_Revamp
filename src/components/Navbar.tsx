@@ -9,6 +9,7 @@ import { Heart } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
 import { useWishlist } from "@/context/WishlistContext";
 import CallToEnquireLink from "@/components/ui/CallToEnquireLink";
+import PrimaryButton from "@/components/PrimaryButton";
 import { scrollChromeHideMotionProps } from "@/lib/scrollChromeMotion";
 
 export default function Navbar() {
@@ -197,12 +198,13 @@ export default function Navbar() {
                     BOOK NOW
                   </Link>
                 ) : (
-                  <Link
+                  <PrimaryButton
                     href="/book"
-                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-11 whitespace-nowrap shrink-0"
+                    withArrow={false}
+                    className="h-11 shrink-0 px-4 md:px-5"
                   >
                     BOOK
-                  </Link>
+                  </PrimaryButton>
                 )}
               </div>
             )}
