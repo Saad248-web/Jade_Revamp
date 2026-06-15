@@ -142,7 +142,7 @@ export default function FeaturedVillas() {
     smoothSpring: true,
     mobileSnapAggressive: true,
     mobileSnapScrollGain: 1,
-    mobileSnapDwellRatio: 0.12,
+    mobileSnapDwellRatio: 0.18,
     mobileSnapZoneRatio: FEATURED_MOBILE_SNAP_PORTION,
     mobileSnapMaxProgress: mobileCarouselMaxProgress,
   });

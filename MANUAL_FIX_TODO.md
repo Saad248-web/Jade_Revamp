@@ -85,7 +85,7 @@
 
 **Verify:** Home — mobile: small scroll flick advances villa card with snap animation. Desktop 1440px: continuous scroll through section; drag on image frame does not grab.
 
-**Fix:** Mobile snap zone 200vh + **12vh exit** after CTA; CTA at end of horizontal track. Brief vertical flick releases to next section.
+**Fix:** Mobile snap zone 200vh + **12vh exit** after CTA; dwell **0.18** (slight stick per card). CTA at end of horizontal track.
 
 ---
 
