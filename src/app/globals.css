@@ -1004,6 +1004,12 @@ body {
     overflow: visible;
   }
 
+  /* Parent vertical panels must not use touch-pan-y — it blocks nested rail swipes */
+  .menu-mobile-hscroll-shell .jade-hscroll-track {
+    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .menu-mobile-hscroll-shell .menu-hscroll-fade .jade-hscroll-fade {
     right: 0;
     z-index: 20;

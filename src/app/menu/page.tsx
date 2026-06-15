@@ -478,7 +478,7 @@ export default function MenuPage() {
                 <h1 className={MENU_MOBILE_SECTION_TITLE_CLASS}>Villas</h1>
                 </div>
                 <div
-                  className="min-h-0 flex-1 overflow-x-visible overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch] touch-pan-y"
+                  className="min-h-0 flex-1 overflow-x-visible overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch]"
                   data-lenis-prevent
                 >
                 <div className="space-y-6">
@@ -547,7 +547,7 @@ export default function MenuPage() {
                 </div>
 
                 <div
-                  className="min-h-0 flex-1 overflow-x-visible overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch] touch-pan-y"
+                  className="min-h-0 flex-1 overflow-x-visible overflow-y-auto overscroll-y-contain pb-6 [-webkit-overflow-scrolling:touch]"
                   data-lenis-prevent
                 >
                 <div className="space-y-6">
