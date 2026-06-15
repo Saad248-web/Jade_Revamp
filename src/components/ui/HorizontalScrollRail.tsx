@@ -60,6 +60,8 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
       startScrollLeft: 0,
     });
 
+    const suppressClickRef = useRef(false);
+
     const endDrag = (el: HTMLDivElement, pointerId: number) => {
       drag.current.pending = false;
       drag.current.dragging = false;
@@ -105,11 +107,18 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
         onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => {
           if (!drag.current.pending && !drag.current.dragging) return;
           if (drag.current.dragging) {
+            suppressClickRef.current = true;
             endDrag(e.currentTarget, e.pointerId);
             return;
           }
           drag.current.pending = false;
           drag.current.pointerId = null;
+        },
+        onClickCapture: (e: React.MouseEvent<HTMLDivElement>) => {
+          if (!suppressClickRef.current) return;
+          e.preventDefault();
+          e.stopPropagation();
+          suppressClickRef.current = false;
         },
         onPointerCancel: (e: React.PointerEvent<HTMLDivElement>) => {
           if (!drag.current.pending && !drag.current.dragging) return;

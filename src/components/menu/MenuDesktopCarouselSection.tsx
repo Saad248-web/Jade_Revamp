@@ -3,12 +3,12 @@
 import { useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import clsx from "clsx";
 import { ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";
 import HorizontalScrollRail from "@/components/ui/HorizontalScrollRail";
-import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
-
-const vd = VILLA_DETAIL_SPACING;
+import {
+  MENU_CAROUSEL_NAV_BUTTON_CLASS,
+  MENU_PREVIEW_GUTTER_CLASS,
+} from "@/lib/menuLayout";
 
 export type MenuDesktopCarouselSectionProps = {
   eyebrow: string;
@@ -38,12 +38,9 @@ export function MenuDesktopCarouselSection({
   const slides = images.length > 0 ? images : [""];
 
   return (
-    <section className="flex flex-col gap-5">
+    <section className="flex flex-col gap-4">
       <div
-        className={clsx(
-          "flex w-full items-end justify-between gap-4",
-          vd.gutterX,
-        )}
+        className={`${MENU_PREVIEW_GUTTER_CLASS} flex w-full items-end justify-between gap-4`}
       >
         <Link href={href} className="group flex min-w-0 flex-col">
           <p className="mb-1.5 font-manrope text-gh-label font-medium uppercase tracking-[0.2em] text-white/40">
@@ -60,12 +57,12 @@ export function MenuDesktopCarouselSection({
           </div>
         </Link>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2 self-end">
           <button
             type="button"
             onClick={() => scrollRail(-1)}
             aria-label={`Scroll ${title} images left`}
-            className="flex h-10 w-10 items-center justify-center rounded-sm border border-white/20 bg-black/40 text-white backdrop-blur-md transition-colors hover:bg-white hover:text-black md:h-12 md:w-12"
+            className={MENU_CAROUSEL_NAV_BUTTON_CLASS}
           >
             <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" strokeWidth={1.5} />
           </button>
@@ -73,7 +70,7 @@ export function MenuDesktopCarouselSection({
             type="button"
             onClick={() => scrollRail(1)}
             aria-label={`Scroll ${title} images right`}
-            className="flex h-10 w-10 items-center justify-center rounded-sm border border-white/20 bg-black/40 text-white backdrop-blur-md transition-colors hover:bg-white hover:text-black md:h-12 md:w-12"
+            className={MENU_CAROUSEL_NAV_BUTTON_CLASS}
           >
             <ArrowRight className="h-4 w-4 md:h-5 md:w-5" strokeWidth={1.5} />
           </button>
@@ -91,9 +88,8 @@ export function MenuDesktopCarouselSection({
           trackClassName="flex snap-x snap-mandatory gap-3 pb-2 scrollbar-none scroll-pl-0 pl-0 md:gap-4"
         >
         {slides.map((src, idx) => (
-          <Link
+          <div
             key={`${href}-${idx}`}
-            href={href}
             className="jade-hscroll-view-item group/img relative aspect-[16/10] min-w-[min(88vw,380px)] shrink-0 snap-start overflow-hidden bg-white/5 sm:min-w-[420px] lg:min-w-[480px]"
           >
             {src ? (
@@ -111,7 +107,7 @@ export function MenuDesktopCarouselSection({
                 Image coming soon
               </div>
             )}
-          </Link>
+          </div>
         ))}
         </HorizontalScrollRail>
       </div>

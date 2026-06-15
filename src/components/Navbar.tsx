@@ -10,7 +10,35 @@ import { useAnimation } from "@/context/AnimationContext";
 import { useWishlist } from "@/context/WishlistContext";
 import CallToEnquireLink from "@/components/ui/CallToEnquireLink";
 import PrimaryButton from "@/components/PrimaryButton";
+import {
+  NAVBAR_ACTIONS_CLUSTER_CLASS,
+  NAVBAR_BOOK_BUTTON_CLASS,
+  NAVBAR_GLASS_ICON_CLASS,
+  NAVBAR_WISHLIST_ICON_CLASS,
+} from "@/lib/navbarChrome";
 import { scrollChromeHideMotionProps } from "@/lib/scrollChromeMotion";
+
+const NAV_HEADSET_ICON = (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.25"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="transition-colors drop-shadow-sm"
+    aria-hidden
+  >
+    <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3V11z" />
+    <path d="M21 11h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3v-7z" />
+    <path d="M3 11V9a9 9 0 0 1 18 0v2" />
+    <path d="M21 16v2a4 4 0 0 1-4 4h-5" />
+    <path d="M9 10h6v4H9z" />
+    <path d="M10 12h.01M12 12h.01M14 12h.01" />
+  </svg>
+);
 
 export default function Navbar() {
   const pathname = usePathname() ?? "";
@@ -142,45 +170,87 @@ export default function Navbar() {
             {isDetailPage ? (
               <Link
                 href="/book"
-                className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-11 shrink-0"
+                className="flex h-11 min-h-[44px] max-h-[44px] shrink-0 items-center justify-center rounded-none border border-white/20 bg-white/[0.05] px-4 text-gh-label font-manrope font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm transition-all duration-300 hover:bg-jade-gold hover:text-black md:px-5"
               >
                 BOOK NOW
               </Link>
-            ) : (
-              <div className="flex items-center gap-2">
-                {/* Phone: mobile & tablet → call; desktop → contact */}
-                <CallToEnquireLink className="lg:hidden bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] h-11 rounded-none border border-white/20 transition-all duration-300 shrink-0" />
-                <Link
-                  href="/contact"
-                  className="hidden lg:flex bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black items-center justify-center min-w-[44px] min-h-[44px] rounded-none border border-white/20 transition-all duration-300 group shrink-0"
-                  aria-label="Contact us"
-                  title="Contact"
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.25"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="transition-colors drop-shadow-sm"
-                    aria-hidden
+            ) : isMenuPage ? (
+              <>
+                {/* Mobile & tablet — phone call, wishlist, gold BOOK */}
+                <div className={`${NAVBAR_ACTIONS_CLUSTER_CLASS} lg:hidden`}>
+                  <CallToEnquireLink
+                    className={NAVBAR_GLASS_ICON_CLASS}
+                    ariaLabel="Call to enquire"
+                    title="Call us"
+                  />
+                  <Link
+                    href="/wishlist"
+                    className={NAVBAR_WISHLIST_ICON_CLASS}
+                    aria-label="Wishlist"
                   >
-                    <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3V11z" />
-                    <path d="M21 11h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3v-7z" />
-                    <path d="M3 11V9a9 9 0 0 1 18 0v2" />
-                    <path d="M21 16v2a4 4 0 0 1-4 4h-5" />
-                    <path d="M9 10h6v4H9z" />
-                    <path d="M10 12h.01M12 12h.01M14 12h.01" />
-                  </svg>
-                </Link>
+                    <Heart className="h-[18px] w-[18px]" strokeWidth={1.25} />
+                    {wishlistCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-0.5 text-[9px] font-bold leading-none text-white">
+                        {wishlistCount > 9 ? "9+" : wishlistCount}
+                      </span>
+                    )}
+                  </Link>
+                  <PrimaryButton
+                    href="/book"
+                    withArrow={false}
+                    className={NAVBAR_BOOK_BUTTON_CLASS}
+                  >
+                    BOOK
+                  </PrimaryButton>
+                </div>
+                {/* Desktop — headset contact, wishlist, gold BOOK */}
+                <div className={`${NAVBAR_ACTIONS_CLUSTER_CLASS} hidden lg:flex`}>
+                  <Link
+                    href="/contact"
+                    className={NAVBAR_GLASS_ICON_CLASS}
+                    aria-label="Contact us"
+                    title="Contact"
+                  >
+                    {NAV_HEADSET_ICON}
+                  </Link>
+                  <Link
+                    href="/wishlist"
+                    className={NAVBAR_WISHLIST_ICON_CLASS}
+                    aria-label="Wishlist"
+                  >
+                    <Heart className="h-[18px] w-[18px]" strokeWidth={1.25} />
+                    {wishlistCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-0.5 text-[9px] font-bold leading-none text-white">
+                        {wishlistCount > 9 ? "9+" : wishlistCount}
+                      </span>
+                    )}
+                  </Link>
+                  <PrimaryButton
+                    href="/book"
+                    withArrow={false}
+                    className={NAVBAR_BOOK_BUTTON_CLASS}
+                  >
+                    BOOK
+                  </PrimaryButton>
+                </div>
+              </>
+            ) : (
+              <div className={NAVBAR_ACTIONS_CLUSTER_CLASS}>
+                {/* Phone: mobile & tablet → call; desktop → contact */}
+                <CallToEnquireLink className={`${NAVBAR_GLASS_ICON_CLASS} lg:hidden`} />
+                  <Link
+                    href="/contact"
+                    className={`${NAVBAR_GLASS_ICON_CLASS} hidden lg:flex`}
+                    aria-label="Contact us"
+                    title="Contact"
+                  >
+                    {NAV_HEADSET_ICON}
+                  </Link>
 
                 {/* Wishlist icon with badge */}
                 <Link
                   href="/wishlist"
-                  className="relative bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold text-white hover:text-black flex items-center justify-center min-w-[44px] h-11 rounded-none border border-white/20 transition-all duration-300 shrink-0"
+                  className={NAVBAR_WISHLIST_ICON_CLASS}
                   aria-label="Wishlist"
                 >
                   <Heart className="w-[18px] h-[18px]" strokeWidth={1.25} />
@@ -193,7 +263,7 @@ export default function Navbar() {
                 {pathname?.startsWith("/experiences") ? (
                   <Link
                     href="/book"
-                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-11 whitespace-nowrap shrink-0"
+                    className="bg-white/[0.05] backdrop-blur-sm hover:bg-jade-gold hover:text-black text-white text-gh-label font-manrope font-semibold tracking-[0.2em] uppercase px-4 md:px-5 rounded-none border border-white/20 transition-all duration-300 flex items-center justify-center h-11 min-h-[44px] max-h-[44px] shrink-0 whitespace-nowrap"
                   >
                     BOOK NOW
                   </Link>
@@ -201,7 +271,7 @@ export default function Navbar() {
                   <PrimaryButton
                     href="/book"
                     withArrow={false}
-                    className="h-11 shrink-0 px-4 md:px-5"
+                    className={NAVBAR_BOOK_BUTTON_CLASS}
                   >
                     BOOK
                   </PrimaryButton>

@@ -11,7 +11,6 @@ import {
   Facebook,
   Instagram,
   Youtube,
-  Phone,
 } from "lucide-react";
 import { VILLAS } from "@/lib/mockData";
 import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
@@ -19,10 +18,22 @@ import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { MenuDesktopCarouselSection } from "@/components/menu/MenuDesktopCarouselSection";
 import { MenuMobileImageRail } from "@/components/menu/MenuMobileImageRail";
-import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
-import { GLOBAL_NAVBAR_OFFSET_TOP_CLASS } from "@/lib/scrollChromeLayout";
-
-const vd = VILLA_DETAIL_SPACING;
+import {
+  MENU_PREVIEW_GUTTER_CLASS,
+  MENU_MOBILE_NAV_LABEL_CLASS,
+  MENU_MOBILE_NAV_CHEVRON_CLASS,
+  MENU_MOBILE_STATIC_LINK_CLASS,
+  MENU_MOBILE_SOCIAL_ICON_CLASS,
+  MENU_MOBILE_PRIMARY_OPTION_TYPE,
+  MENU_MOBILE_PRIMARY_PANEL_CLASS,
+  MENU_MOBILE_PRIMARY_NAV_CLASS,
+  MENU_MOBILE_PRIMARY_SPACER_CLASS,
+  MENU_MOBILE_PRIMARY_ITEM_CLASS,
+  MENU_DESKTOP_CHEVRON_ROW_CLASS,
+  MENU_MOBILE_PRIMARY_SOCIAL_CLASS,
+  MENU_MOBILE_LABEL_CLASS,
+} from "@/lib/menuLayout";
+import { JADE_WHATSAPP_URL } from "@/lib/siteContact";
 
 /** VILLAS hidden from menu villa section only (still bookable via direct URL). */
 const MENU_VILLA_EXCLUDED_IDS = new Set(["vannani", "lemon-tree"]);
@@ -146,6 +157,19 @@ const MENU_EXPERIENCES: MenuExperienceItem[] = [
 ];
 
 const FALLBACK_MENU_IMAGE = "/Villa_Retreats/Magnolia/Hero/Hero 1.webp";
+
+function MenuWhatsAppIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden
+    >
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.884 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  );
+}
 function safeMenuImage(src?: string) {
   return src && src.trim().length > 0 ? src : FALLBACK_MENU_IMAGE;
 }
@@ -204,10 +228,9 @@ function MenuExperienceImages({
     return (
       <MenuMobileImageRail>
         {exp.images.map((src, imgIdx) => (
-          <Link
+          <div
             key={`${exp.href}-mobile-${imgIdx}`}
-            href={exp.href}
-            className="relative h-40 w-[min(58vw,220px)] shrink-0 overflow-hidden"
+            className="jade-hscroll-view-item relative h-40 w-[min(58vw,220px)] shrink-0 overflow-hidden"
           >
             <Image
               src={safeMenuImage(src)}
@@ -215,8 +238,9 @@ function MenuExperienceImages({
               fill
               className="object-cover"
               sizes="280px"
+              draggable={false}
             />
-          </Link>
+          </div>
         ))}
       </MenuMobileImageRail>
     );
@@ -225,10 +249,9 @@ function MenuExperienceImages({
   return (
     <div className={`flex gap-3 ${MENU_BLEED_RIGHT_DESKTOP}`}>
       {exp.images.map((src, imgIdx) => (
-        <Link
+        <div
           key={`${exp.href}-${imgIdx}`}
-          href={exp.href}
-          className="group/img relative h-[280px] min-w-0 flex-1 cursor-pointer overflow-hidden"
+          className="group/img relative h-[280px] min-w-0 flex-1 overflow-hidden"
         >
           <Image
             src={src}
@@ -236,8 +259,9 @@ function MenuExperienceImages({
             fill
             className={`object-cover ${imgHover}`}
             sizes="30vw"
+            draggable={false}
           />
-        </Link>
+        </div>
       ))}
     </div>
   );
@@ -272,32 +296,31 @@ export default function MenuPage() {
     setDesktopHoverView("experiences");
   };
 
-  /** Primary menu links — 32px on phone/tablet; fluid h2 at lg+ (desktop split). */
-  const MENU_PRIMARY_OPTION_TYPE =
-    "max-lg:text-[32px] max-lg:leading-[1.1] lg:text-gh-h2 leading-none py-2 font-philosopher font-light";
+  /** Primary menu links — fluid on short phones; fluid h2 at lg+ (desktop split). */
+  const MENU_PRIMARY_OPTION_TYPE = MENU_MOBILE_PRIMARY_OPTION_TYPE;
 
-  const MENU_PRIMARY_STATIC_LINK_CLASS = `${MENU_PRIMARY_OPTION_TYPE} block text-transparent bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% bg-[length:200%_100%] bg-right transition-all duration-500 ease-out hover:bg-left`;
+  const MENU_PRIMARY_STATIC_LINK_CLASS = `${MENU_PRIMARY_OPTION_TYPE} ${MENU_MOBILE_STATIC_LINK_CLASS} lg:block lg:bg-clip-text lg:bg-gradient-to-r lg:from-[#EFCD62] lg:from-50% lg:to-white lg:to-50% lg:bg-[length:200%_100%] lg:bg-right lg:text-transparent lg:transition-all lg:duration-500 lg:ease-out lg:hover:bg-left`;
 
   /** Mobile secondary panels — Figma page title (Villas / Experiences). */
   const MENU_MOBILE_SECTION_TITLE_CLASS =
-    "mb-6 font-philosopher text-[32px] font-light leading-[1.1] text-white capitalize";
+    "mb-6 font-philosopher text-[32px] font-normal leading-[1.1] text-white capitalize";
 
   const menuPanelNavLabelClass = (
     section: "villas" | "experiences" | "more",
   ) =>
-    `${MENU_PRIMARY_OPTION_TYPE} bg-[length:200%_100%] bg-clip-text bg-gradient-to-r from-[#EFCD62] from-50% to-white to-50% text-transparent transition-all duration-500 ease-out ${
+    `${MENU_PRIMARY_OPTION_TYPE} ${MENU_MOBILE_NAV_LABEL_CLASS} lg:bg-[length:200%_100%] lg:bg-clip-text lg:bg-gradient-to-r lg:from-[#EFCD62] lg:from-50% lg:to-white lg:to-50% lg:text-transparent lg:transition-all lg:duration-500 lg:ease-out ${
       desktopSelectedView === section
-        ? "bg-left"
-        : "bg-right group-hover:bg-left"
+        ? "lg:bg-left"
+        : "lg:bg-right lg:group-hover:bg-left"
     }`;
 
   const menuPanelNavChevronClass = (
     section: "villas" | "experiences" | "more",
   ) =>
-    `max-lg:h-5 max-lg:w-5 h-4 w-4 transition-colors ${
+    `${MENU_MOBILE_NAV_CHEVRON_CLASS} lg:transition-colors ${
       desktopSelectedView === section
-        ? "text-[#EFCD62]"
-        : "text-white/50 group-hover:text-[#EFCD62]"
+        ? "lg:text-[#EFCD62]"
+        : "lg:text-white/50 lg:group-hover:text-[#EFCD62]"
     }`;
 
   return (
@@ -308,7 +331,7 @@ export default function MenuPage() {
 
       {/* Main content — flex height clears navbar + mobile bottom nav */}
       <div
-        className={`relative flex min-h-0 w-full flex-1 flex-col overflow-hidden pt-[48px] pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))] md:flex-row md:pb-0 ${GLOBAL_NAVBAR_OFFSET_TOP_CLASS}`}
+        className={`relative flex min-h-0 w-full flex-1 flex-col overflow-hidden pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))] max-lg:pt-[4.75rem] md:flex-row md:pb-0 md:pt-[5.5rem] lg:pt-[3.75rem]`}
       >
         {/* LEFT COLUMN: Main Menu */}
         <div className="relative z-10 flex h-full min-h-0 flex-1 flex-col overflow-x-visible overflow-y-hidden border-r border-transparent max-lg:overflow-y-hidden md:w-[28%] md:max-w-[380px] md:flex-none md:overflow-hidden lg:w-1/4 lg:max-w-[400px] md:border-white/10">
@@ -320,79 +343,73 @@ export default function MenuPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className={`absolute inset-0 flex min-h-0 flex-col py-5 max-lg:pt-7 ${vd.gutterX} ${menuView !== "primary" ? "hidden md:flex" : "flex"}`}
+                className={`absolute inset-0 flex min-h-0 flex-col lg:py-5 ${MENU_MOBILE_PRIMARY_PANEL_CLASS} ${MENU_PREVIEW_GUTTER_CLASS} ${menuView !== "primary" ? "hidden md:flex" : "flex"}`}
               >
-                <span className="mb-0 flex-shrink-0 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-white/40 max-lg:mt-1 md:mb-0">
+                <span className={`menu-mobile-primary__label flex-shrink-0 ${MENU_MOBILE_LABEL_CLASS}`}>
                   MENU
                 </span>
 
-                <div
-                  className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] touch-pan-y md:overflow-visible"
+                <ul
+                  className={MENU_MOBILE_PRIMARY_NAV_CLASS}
                   data-lenis-prevent
                 >
-                <div className="flex min-h-0 flex-1 flex-col justify-start pb-6 md:justify-center md:pb-0">
-                <ul className="flex flex-col space-y-2 max-lg:space-y-3 md:space-y-2">
                   <li
-                    className="flex items-center justify-between cursor-pointer group"
+                    className={`${MENU_MOBILE_PRIMARY_ITEM_CLASS} ${MENU_DESKTOP_CHEVRON_ROW_CLASS} cursor-pointer group`}
                     onClick={openVillasSection}
                     onMouseEnter={() => setDesktopHoverView("villas")}
                     onMouseLeave={() =>
                       setDesktopHoverView(desktopSelectedView)
                     }
                   >
-                    <div className="flex items-center gap-3">
-                      <span className={menuPanelNavLabelClass("villas")}>
-                        Villas
-                      </span>
-                      <ChevronRight
-                        className={menuPanelNavChevronClass("villas")}
-                      />
-                    </div>
+                    <span className={menuPanelNavLabelClass("villas")}>
+                      Villas
+                    </span>
+                    <ChevronRight
+                      className={menuPanelNavChevronClass("villas")}
+                    />
                   </li>
                   <li
-                    className="flex items-center justify-between cursor-pointer group"
+                    className={`${MENU_MOBILE_PRIMARY_ITEM_CLASS} ${MENU_DESKTOP_CHEVRON_ROW_CLASS} cursor-pointer group`}
                     onClick={openExperiencesSection}
                     onMouseEnter={() => setDesktopHoverView("experiences")}
                     onMouseLeave={() =>
                       setDesktopHoverView(desktopSelectedView)
                     }
                   >
-                    <div className="flex items-center gap-3">
-                      <span className={menuPanelNavLabelClass("experiences")}>
-                        Experiences
-                      </span>
-                      <ChevronRight
-                        className={menuPanelNavChevronClass("experiences")}
-                      />
-                    </div>
+                    <span className={menuPanelNavLabelClass("experiences")}>
+                      Experiences
+                    </span>
+                    <ChevronRight
+                      className={menuPanelNavChevronClass("experiences")}
+                    />
                   </li>
-                  <li>
-                    <Link href="/about">
+                  <li className={MENU_MOBILE_PRIMARY_ITEM_CLASS}>
+                    <Link href="/about" className="w-full">
                       <span className={MENU_PRIMARY_STATIC_LINK_CLASS}>
                         About us
                       </span>
                     </Link>
                   </li>
-                  <li>
-                    <Link href="/careers">
+                  <li className={MENU_MOBILE_PRIMARY_ITEM_CLASS}>
+                    <Link href="/careers" className="w-full">
                       <span className={MENU_PRIMARY_STATIC_LINK_CLASS}>
                         Careers
                       </span>
                     </Link>
                   </li>
-                  <li>
-                    <Link href="/blogs">
+                  <li className={MENU_MOBILE_PRIMARY_ITEM_CLASS}>
+                    <Link href="/blogs" className="w-full">
                       <span className={MENU_PRIMARY_STATIC_LINK_CLASS}>
                         Blogs
                       </span>
                     </Link>
                   </li>
-                  <li>
+                  <li className={MENU_MOBILE_PRIMARY_ITEM_CLASS}>
                     <button
                       onClick={() => {
                         setPartnerOverlayOpen(true);
                       }}
-                      className="text-left"
+                      className="w-full text-left"
                     >
                       <span className={MENU_PRIMARY_STATIC_LINK_CLASS}>
                         Partner with us
@@ -400,7 +417,7 @@ export default function MenuPage() {
                     </button>
                   </li>
                   <li
-                    className="flex items-center justify-between cursor-pointer group"
+                    className={`${MENU_MOBILE_PRIMARY_ITEM_CLASS} ${MENU_DESKTOP_CHEVRON_ROW_CLASS} cursor-pointer group`}
                     onClick={() => {
                       setMenuView("more");
                       setDesktopSelectedView("more");
@@ -411,50 +428,53 @@ export default function MenuPage() {
                       setDesktopHoverView(desktopSelectedView)
                     }
                   >
-                    <div className="flex items-center gap-3">
-                      <span className={menuPanelNavLabelClass("more")}>
-                        More
-                      </span>
-                      <ChevronRight
-                        className={menuPanelNavChevronClass("more")}
-                      />
-                    </div>
+                    <span className={menuPanelNavLabelClass("more")}>More</span>
+                    <ChevronRight
+                      className={menuPanelNavChevronClass("more")}
+                    />
                   </li>
                 </ul>
-                </div>
 
-                <div className="mt-auto flex flex-shrink-0 gap-3 pt-6 pb-2 md:pt-8">
+                <div className={MENU_MOBILE_PRIMARY_SPACER_CLASS} aria-hidden />
+
+                <div className={MENU_MOBILE_PRIMARY_SOCIAL_CLASS}>
                   {[
                     {
                       Icon: Facebook,
                       href: "https://www.facebook.com/jadehospitainment/",
+                      label: "Facebook",
                     },
                     {
                       Icon: Instagram,
                       href: "https://www.instagram.com/jadehospitainment/?hl=en",
+                      label: "Instagram",
                     },
                     {
                       Icon: Youtube,
                       href: "https://www.youtube.com/@jade_hospitainment",
+                      label: "YouTube",
                     },
-                  ].map(({ Icon, href }, idx) => (
+                  ].map(({ Icon, href, label }) => (
                     <a
-                      key={idx}
+                      key={label}
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 border border-white/10 flex items-center justify-center text-white hover:bg-white/5 transition-colors"
+                      aria-label={label}
+                      className={`${MENU_MOBILE_SOCIAL_ICON_CLASS} lg:border-white/10`}
                     >
-                      <Icon className="w-4 h-4" />
+                      <Icon className="h-4 w-4" />
                     </a>
                   ))}
                   <a
-                    href="tel:08970663366"
-                    className="w-10 h-10 border border-white/10 flex items-center justify-center text-white hover:bg-white/5 transition-colors"
+                    href={JADE_WHATSAPP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="WhatsApp"
+                    className={MENU_MOBILE_SOCIAL_ICON_CLASS}
                   >
-                    <Phone className="w-4 h-4" />
+                    <MenuWhatsAppIcon className="h-4 w-4" />
                   </a>
-                </div>
                 </div>
               </motion.div>
             )}
@@ -471,7 +491,7 @@ export default function MenuPage() {
                 <div className="flex-shrink-0 px-6">
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="mb-5 mt-1 flex w-fit items-center gap-2 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
+                  className="mb-5 mt-1 flex w-fit items-center gap-2 font-manrope text-gh-label font-semibold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
                 >
                   <ArrowLeft className="h-4 w-4" /> BACK
                 </button>
@@ -506,10 +526,9 @@ export default function MenuPage() {
                       </Link>
                       <MenuMobileImageRail>
                         {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
-                          <Link
+                          <div
                             key={`${villa.id}-${imgIdx}`}
-                            href={`/villas/${villa.id}`}
-                            className="relative h-40 w-[min(58vw,220px)] shrink-0 overflow-hidden"
+                            className="jade-hscroll-view-item relative h-40 w-[min(58vw,220px)] shrink-0 overflow-hidden"
                           >
                             <Image
                               src={src}
@@ -517,8 +536,9 @@ export default function MenuPage() {
                               fill
                               className="object-cover"
                               sizes="280px"
+                              draggable={false}
                             />
-                          </Link>
+                          </div>
                         ))}
                       </MenuMobileImageRail>
                     </div>
@@ -539,7 +559,7 @@ export default function MenuPage() {
                 <div className="flex-shrink-0 px-6">
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="mb-5 mt-1 flex w-fit items-center gap-2 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
+                  className="mb-5 mt-1 flex w-fit items-center gap-2 font-manrope text-gh-label font-semibold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
                 >
                   <ArrowLeft className="h-4 w-4" /> BACK
                 </button>
@@ -594,7 +614,7 @@ export default function MenuPage() {
               >
                 <button
                   onClick={() => setMenuView("primary")}
-                  className="mb-10 flex w-fit items-center gap-2 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
+                  className="mb-10 flex w-fit items-center gap-2 font-manrope text-gh-label font-semibold uppercase tracking-[0.2em] text-[#EFCD62] transition-colors hover:text-white"
                 >
                   <ArrowLeft className="h-4 w-4 cursor-pointer" /> BACK
                 </button>

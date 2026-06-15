@@ -21,7 +21,7 @@ export default function CallToEnquireLink({
       aria-label={ariaLabel}
       title={title}
     >
-      <Phone className="w-5 h-5" strokeWidth={1.5} aria-hidden />
+      <Phone className="h-[18px] w-[18px]" strokeWidth={1.25} aria-hidden />
     </a>
   );
 }
