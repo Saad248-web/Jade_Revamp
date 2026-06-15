@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Waves, Warehouse, Menu, LucideIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,7 +18,35 @@ interface NavItem {
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
-  const { isSplashComplete } = useAnimation();
+  const {
+    isSplashComplete,
+    isPartnerOverlayOpen,
+    isEnquireOverlayOpen,
+    isRathaaOverlayOpen,
+    isGlobalBookingOpen,
+  } = useAnimation();
+  const [venueOverlayOpen, setVenueOverlayOpen] = useState(false);
+
+  useEffect(() => {
+    const sync = () =>
+      setVenueOverlayOpen(
+        document.body.hasAttribute("data-jade-overlay-open"),
+      );
+    sync();
+    const obs = new MutationObserver(sync);
+    obs.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["data-jade-overlay-open"],
+    });
+    return () => obs.disconnect();
+  }, []);
+
+  const hideForOverlay =
+    isPartnerOverlayOpen ||
+    isEnquireOverlayOpen ||
+    isRathaaOverlayOpen ||
+    isGlobalBookingOpen ||
+    venueOverlayOpen;
 
   const navItems: NavItem[] = [
     {
@@ -44,16 +73,17 @@ export default function MobileBottomNav() {
 
   return (
     <AnimatePresence>
-      {(isSplashComplete || pathname !== "/") && (
+      {(isSplashComplete || pathname !== "/") && !hideForOverlay && (
         <motion.div
           initial={{ y: "100%", opacity: 0 }}
           animate={{ y: "0%", opacity: 1 }}
+          exit={{ y: "100%", opacity: 0 }}
           transition={{
             duration: 0.8,
-            delay: 0.2, // Slight delay after splash ends for better flow
+            delay: 0.2,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className={`jade-scroll-chrome lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-white/15 pt-2 shadow-[0_-8px_32px_rgba(0,0,0,0.35)] pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))] ${GLASS_INNER_SURFACE}`}
+          className={`jade-mobile-bottom-nav jade-scroll-chrome lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-white/15 pt-2 shadow-[0_-8px_32px_rgba(0,0,0,0.35)] pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))] ${GLASS_INNER_SURFACE}`}
         >
           <div className="flex items-center justify-around px-1">
             {navItems.map((item) => {

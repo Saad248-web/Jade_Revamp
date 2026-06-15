@@ -10,6 +10,10 @@ import {
   OVERLAY_SHEET_TOP_RADIUS_EDGE_SHADE_CLASS,
   OVERLAY_STICKY_TABS_CHROME_CLASS,
 } from "@/lib/scrollChromeGlass";
+import {
+  OVERLAY_MOBILE_ACTION_BAR_PB_CLASS,
+  OVERLAY_MOBILE_ACTION_BAR_SPACER_CLASS,
+} from "@/lib/overlayMobileChrome";
 
 /** Mobile sheet lip — 30% black on top 8px + rounded corner edges (matches `rounded-t-[32px]`). */
 export const EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS =
@@ -64,10 +68,10 @@ export const EXPERIENCE_OVERLAY_STICKY_TABS_CLASS = `sticky top-0 z-[60] mb-0 w-
  * Scroll-end spacer — matches mobile booking bar (pt-4 + row + pb), not extra section pad.
  */
 export const EXPERIENCE_OVERLAY_BOOKING_BAR_SPACER_CLASS =
-  "h-[calc(4rem+env(safe-area-inset-bottom,0px))] shrink-0 md:hidden";
+  OVERLAY_MOBILE_ACTION_BAR_SPACER_CLASS;
 
 /** Glass chrome — same tokens as {@link OVERLAY_STICKY_TABS_CHROME_CLASS}. */
-const EXPERIENCE_OVERLAY_BOTTOM_BAR_CHROME = `jade-scroll-chrome relative w-full ${OVERLAY_PRICING_BOTTOM_BAR_CHROME_CLASS} pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] md:pb-4 transition-all flex justify-center`;
+const EXPERIENCE_OVERLAY_BOTTOM_BAR_CHROME = `jade-scroll-chrome relative w-full ${OVERLAY_PRICING_BOTTOM_BAR_CHROME_CLASS} pt-4 ${OVERLAY_MOBILE_ACTION_BAR_PB_CLASS} md:pb-4 transition-all flex justify-center`;
 
 /** Overlaid on mobile sheet scroll (absolute bottom of sheet frame). */
 export const EXPERIENCE_OVERLAY_BOTTOM_BAR_SHEET_CLASS = EXPERIENCE_OVERLAY_BOTTOM_BAR_CHROME;

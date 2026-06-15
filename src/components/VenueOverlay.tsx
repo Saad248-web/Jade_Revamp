@@ -132,6 +132,7 @@ import VillaOverlayIntroAmenities from "@/components/villa/VillaOverlayIntroAmen
 import WeddingVenueEnquiryForm from "@/components/experience/WeddingVenueEnquiryForm";
 import { EXPERIENCE_OVERLAY_ROOT_CLASS } from "@/lib/experienceOverlayTheme";
 import { useOverlayScrollChromeHide } from "@/lib/useOverlayScrollChromeHide";
+import OverlayEnquirySuccessLayer from "@/components/overlays/OverlayEnquirySuccessLayer";
 import { useVenueOverlaySectionNav } from "@/lib/useVenueOverlaySectionNav";
 import {
   VillaExperienceBookingBottomBar,
@@ -283,14 +284,16 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
         scrollRef={overlayScrollRef}
         onScroll={handleScroll}
         onScrollRootUpdated={() => setOverlayScrollRootGen((g) => g + 1)}
-        onBackdropClick={onClose}
+        onBackdropClick={view === "form" ? onClose : undefined}
         mobileFooter={
-          <VillaExperienceBookingBottomBar
-            placement="sheet"
-            villaId={v.id}
-            onwardPrice={price}
-            onEnquireClick={() => scrollToSection("enquiry")}
-          />
+          view === "form" ? (
+            <VillaExperienceBookingBottomBar
+              placement="sheet"
+              villaId={v.id}
+              onwardPrice={price}
+              onEnquireClick={() => scrollToSection("enquiry")}
+            />
+          ) : undefined
         }
         pinnedTop={
           <VillaExperienceHeroCarousel
@@ -454,35 +457,30 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             <section id="enquiry" className={VILLA_DETAIL_CHARCOAL} ref={formRef}>
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
-                    {view === "form" ? (
-                      <>
                         <h2 className={vd.heading}>Plan Your Wedding at Jade</h2>
                         <p className="text-white/60 text-gh-body">
                           Share a few details. Our wedding team will guide you through venues &amp; pricing.
                         </p>
                         <WeddingVenueEnquiryForm onSuccess={() => setView("success")} onClosePrivacyNav={onClose} />
-                      </>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <div className="w-[180px] h-[180px] shrink-0 relative mb-6 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
-                          <div className="w-[84px] h-[84px] shrink-0 relative drop-shadow-2xl">
-                            <Image src="/assets/JAde%20Correction.png" alt="Success Check" fill sizes="96px" quality={100} className="object-contain" />
-                          </div>
-                        </div>
-                        <h2 className="text-white text-[36px] font-philosopher mb-3">We've got it from here</h2>
-                        <p className="text-white/90 text-[16px] leading-relaxed mb-10 max-w-sm mx-auto">Thanks for sharing your details!<br />Our team will take a look and reach out shortly.</p>
-                        <PrimaryButton withArrow={false} className="max-w-[300px] w-full" onClick={() => setView("form")}>SUBMIT ANOTHER</PrimaryButton>
-                      </div>
-                    )}
                 </div>
               </div>
             </section>
       </VillaExperienceOverlayBody>
 
-      <VillaExperienceBookingBottomBar
-        villaId={v.id}
-        onwardPrice={price}
-        onEnquireClick={() => scrollToSection("enquiry")}
+      {view === "form" ? (
+        <VillaExperienceBookingBottomBar
+          villaId={v.id}
+          onwardPrice={price}
+          onEnquireClick={() => scrollToSection("enquiry")}
+        />
+      ) : null}
+
+      <OverlayEnquirySuccessLayer
+        open={view === "success"}
+        onOkay={() => {
+          onClose();
+          setView("form");
+        }}
       />
     </MotionDiv>,
     document.body,

@@ -9,6 +9,8 @@ import {
   OVERLAY_DISMISS_BUTTON_VIEWPORT_TOP_CLASS,
 } from "@/lib/overlayDismissButton";
 import { useEffect, useState } from "react";
+import { OVERLAY_MOBILE_FORM_SCROLL_PAD_CLASS } from "@/lib/overlayMobileChrome";
+import { useOverlayMobileChrome } from "@/lib/useOverlayMobileChrome";
 
 interface ReservationOverlayProps {
   isOpen: boolean;
@@ -34,6 +36,7 @@ export default function ReservationOverlay({
   onApply,
 }: ReservationOverlayProps) {
   const [view, setView] = useState<"dates" | "guests">(initialView);
+  useOverlayMobileChrome(isOpen);
 
   // Sync view when opened from different buttons
   useEffect(() => {
@@ -176,7 +179,7 @@ export default function ReservationOverlay({
               </div>
 
               {/* CONTENT AREA */}
-              <div className="flex-1 bg-[#0B2C23] overflow-y-auto px-5 md:px-6 py-5 max-md:pb-[max(2rem,calc(env(safe-area-inset-bottom,0px)+1.25rem))] overflow-x-hidden scrollbar-hide" data-lenis-prevent>
+              <div className={`flex-1 bg-[#0B2C23] overflow-y-auto px-5 md:px-6 py-5 ${OVERLAY_MOBILE_FORM_SCROLL_PAD_CLASS} overflow-x-hidden scrollbar-hide`} data-lenis-prevent>
                 {view === "dates" && (
                   <div className="flex flex-col gap-4">
                     <h2 className="text-white text-gh-h2 font-philosopher leading-none mb-1">

@@ -1,50 +1,32 @@
-import React, { useEffect } from "react";
+"use client";
+
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
+import clsx from "clsx";
+import { useNestedLenisPanel } from "@/lib/nestedLenisPanel";
+import { useOverlayMobileChrome } from "@/lib/useOverlayMobileChrome";
+import {
+  EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_SHEET_SCRIM_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_SHEET_ZONE_CLASS,
+  EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_CLASS,
+} from "@/lib/experienceOverlayTheme";
+import { FORM_OVERLAY_ROOT_CLASS } from "@/lib/formOverlayTheme";
 import { OVERLAY_DISMISS_BUTTON_BASE } from "@/lib/overlayDismissButton";
 import {
-  X,
-  Wifi,
-  Car,
-  Wind,
-  Waves,
-  Dribbble,
-  Presentation,
-  Trees,
-  Mountain,
-  PartyPopper,
-  Bath,
-  Home,
-  Sun,
-  ChefHat,
-  SprayCan,
-  User,
-  Phone,
-  Check,
-  Zap,
-  Info,
-  Projector,
-  Diamond,
-  Bed,
-  Maximize,
-  MapPin,
-  Layers,
-  Tent,
-  Smile,
-  Sofa,
-  Flame,
-  Utensils,
-  Wine,
-  Activity,
-  Dog,
-  Tv,
-  GlassWater,
-} from "lucide-react";
+  EXPERIENCE_OVERLAY_MD_UP_QUERY,
+  VillaExperienceOverlayCloseFramer,
+} from "@/components/experience/VillaExperienceOverlayLayout";
+
+const MotionButton = motion.button;
 
 interface DetailItem {
   label: string;
   icon: string;
   description?: string;
-  footer?: string; // For services
+  footer?: string;
 }
 
 interface DetailsDrawerProps {
@@ -54,45 +36,41 @@ interface DetailsDrawerProps {
   items: DetailItem[];
 }
 
-const getIcon = (iconName: string) => {
-  const icons: any = {
-    Wifi,
-    Car,
-    Wind,
-    Waves,
-    Dribbble,
-    Presentation,
-    Trees,
-    Mountain,
-    PartyPopper,
-    Bath,
-    Home,
-    Sun,
-    ChefHat,
-    SprayCan,
-    User,
-    Phone,
-    Check,
-    Zap,
-    Projector,
-    Diamond,
-    Bed,
-    Maximize,
-    MapPin,
-    Layers,
-    Tent,
-    Smile,
-    Sofa,
-    Flame,
-    Utensils,
-    Wine,
-    Activity,
-    Dog,
-    Tv,
-    GlassWater,
-  };
-  return icons[iconName] || Info;
-};
+function DetailDiamondRow({
+  title,
+  description,
+  footer,
+}: {
+  title: string;
+  description?: string;
+  footer?: string;
+}) {
+  return (
+    <div className="m-0">
+      <div className="flex items-start gap-2.5">
+        <span
+          className="mt-2 h-2 w-2 shrink-0 rotate-45 bg-[#EFCD62] opacity-90"
+          aria-hidden
+        />
+        <div className="min-w-0 flex-1">
+          <h3 className="font-manrope text-gh-body font-semibold leading-snug text-white">
+            {title}
+          </h3>
+          {description ? (
+            <p className="mt-2 font-manrope text-gh-desc leading-relaxed text-white/50">
+              {description}
+            </p>
+          ) : null}
+          {footer ? (
+            <p className="mt-2 font-manrope text-gh-label font-bold uppercase tracking-[0.2em] text-[#EFCD62]">
+              {footer}
+            </p>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
   isOpen,
@@ -100,6 +78,11 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
   title,
   items,
 }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [mdUp, setMdUp] = useState(false);
+
+  useOverlayMobileChrome(isOpen);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -111,93 +94,130 @@ const DetailsDrawer: React.FC<DetailsDrawerProps> = ({
     };
   }, [isOpen]);
 
+  useLayoutEffect(() => {
+    const mq = window.matchMedia(EXPERIENCE_OVERLAY_MD_UP_QUERY);
+    const sync = () => setMdUp(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useNestedLenisPanel(scrollRef, isOpen);
+
   return (
     <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+      {isOpen ? (
+        <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="details-drawer-title"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className={clsx(
+            FORM_OVERLAY_ROOT_CLASS,
+            "flex flex-col md:items-center md:justify-center",
+          )}
+          data-lenis-prevent
+        >
+          <div
+            className="absolute inset-0 hidden bg-black/60 backdrop-blur-sm md:block"
             onClick={onClose}
-            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm"
+            aria-hidden={!mdUp}
+          />
+
+          <VillaExperienceOverlayCloseFramer
+            MotionButton={MotionButton}
+            onClose={onClose}
+            variant="above-sheet"
+          />
+          <MotionButton
+            type="button"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={onClose}
+            className={`pointer-events-auto fixed left-0 right-0 top-[max(0.75rem,env(safe-area-inset-top,0px))] z-[200] mx-auto hidden md:flex ${OVERLAY_DISMISS_BUTTON_BASE}`}
+            aria-label="Close"
+          >
+            <X className="h-6 w-6 stroke-[1.5]" aria-hidden />
+          </MotionButton>
+
+          <button
+            type="button"
+            className={`w-full shrink-0 border-0 p-0 md:hidden ${EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_CLASS} cursor-pointer`}
+            aria-label="Close overlay"
+            onClick={onClose}
           />
 
           <div
-            className="fixed inset-0 z-[101] flex flex-col items-center justify-end md:justify-center px-4 md:px-0 pointer-events-none pb-[max(0.5rem,env(safe-area-inset-bottom,0px))]"
-            onWheel={(e) => e.stopPropagation()}
+            className={clsx(
+              "pointer-events-auto relative z-[1] flex min-h-0 w-full flex-col",
+              "md:mx-4 md:h-auto md:max-h-[min(85dvh,760px)] md:max-w-[600px] md:min-h-0 md:bg-transparent",
+              EXPERIENCE_OVERLAY_MOBILE_SHEET_ZONE_CLASS,
+            )}
           >
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              onClick={onClose}
-              className={`pointer-events-auto z-[102] mb-2.5 ${OVERLAY_DISMISS_BUTTON_BASE}`}
-            >
-              <X className="w-6 h-6 stroke-[1.5]" />
-            </motion.button>
-
+            <div
+              className={clsx(
+                EXPERIENCE_OVERLAY_MOBILE_SHEET_SCRIM_CLASS,
+                "md:hidden",
+              )}
+              aria-hidden
+            />
             <motion.div
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
+              initial={mdUp ? { opacity: 0, y: 24 } : { y: "100%" }}
+              animate={mdUp ? { opacity: 1, y: 0 } : { y: 0 }}
+              exit={mdUp ? { opacity: 0, y: 24 } : { y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative pointer-events-auto w-full md:w-[600px] bg-jade-green flex flex-col font-manrope rounded-t-2xl md:rounded-lg shadow-2xl border border-white/10 max-h-[80vh] md:max-h-[85vh] overflow-hidden"
+              className="relative z-10 flex h-full min-h-0 flex-col overflow-hidden rounded-t-[32px] border border-white/10 bg-jade-green md:h-auto md:max-h-[min(85dvh,760px)] md:rounded-lg md:shadow-2xl"
             >
-              {/* Header */}
-              <div className="flex items-center px-6 pt-5 pb-2 border-b border-white/5">
-                <h2 className="text-white text-gh-h2 font-philosopher">
+              <div
+                className={clsx(
+                  EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS,
+                  "md:hidden",
+                )}
+                aria-hidden
+              />
+              <div
+                ref={scrollRef}
+                className={clsx(
+                  EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS,
+                  "px-6 py-6 md:px-8 md:py-8",
+                )}
+                data-lenis-prevent
+                onWheel={(e) => e.stopPropagation()}
+              >
+                <h2
+                  id="details-drawer-title"
+                  className="mb-6 font-philosopher text-gh-h2 leading-tight text-white"
+                >
                   {title}
                 </h2>
-              </div>
-
-              {/* CONTENT AREA */}
-              <div
-                className="flex-1 overflow-y-auto scrollbar-hide p-6 md:p-8"
-                data-lenis-prevent
-              >
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-6">
                   {items.map((item, idx) => {
-                    const Icon = item.icon ? getIcon(item.icon) : null;
                     const itemTitle =
                       item.label ||
-                      (item as any).title ||
-                      (item as any).question;
+                      (item as { title?: string }).title ||
+                      (item as { question?: string }).question ||
+                      "";
                     const description =
-                      item.description || (item as any).answer;
+                      item.description || (item as { answer?: string }).answer;
 
                     return (
-                      <div key={idx} className="flex gap-3 items-start group">
-                        {Icon && (
-                          <div className="shrink-0 w-10 h-10 flex items-center justify-center border border-white/10 rounded-sm bg-white/5 transition-colors">
-                            <Icon className="w-4 h-4 text-[#EFCD62]" />
-                          </div>
-                        )}
-                        <div>
-                          <h3 className="text-white font-manrope font-bold tracking-widest text-[12px] mb-2 uppercase">
-                            {itemTitle}
-                          </h3>
-                          {description && (
-                            <p className="text-white/60 text-gh-body leading-relaxed">
-                              {description}
-                            </p>
-                          )}
-                          {item.footer && (
-                            <p className="text-jade-gold text-gh-label mt-2 font-bold tracking-widest uppercase">
-                              {item.footer}
-                            </p>
-                          )}
-                        </div>
-                      </div>
+                      <DetailDiamondRow
+                        key={idx}
+                        title={itemTitle}
+                        description={description}
+                        footer={item.footer}
+                      />
                     );
                   })}
                 </div>
               </div>
             </motion.div>
           </div>
-        </>
-      )}
+        </motion.div>
+      ) : null}
     </AnimatePresence>
   );
 };

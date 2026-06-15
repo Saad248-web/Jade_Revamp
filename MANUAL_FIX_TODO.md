@@ -14,16 +14,16 @@
 
 | | ID | Status |
 |---|-----|--------|
-| **Current** | O-01 | Pending |
-| **Next** | O-01 → O-02 → O-03 → O-04 → O-05 → F-01 → V-01 → MP-01 → AB-01 → CR-01 → UI-01 → UI-02 → QA-01 | |
+| **Current** | O-04 | Pending |
+| **Next** | O-04 → O-05 → F-01 → V-01 → MP-01 → AB-01 → CR-01 → UI-01 → UI-02 → QA-01 | |
 
 | ID | Task | Status |
 |----|------|--------|
 | M-01 | Menu page horizontal scroll (mobile) | [x] |
 | M-02 | Featured Villas carousel swipe sensitivity | [x] |
-| O-01 | FAQ behaviour consistency | [ ] |
-| O-02 | Overlay bottom action bar | [ ] |
-| O-03 | Success overlay consistency | [ ] |
+| O-01 | FAQ behaviour consistency | [x] |
+| O-02 | Overlay bottom action bar | [x] |
+| O-03 | Success overlay consistency | [x] |
 | O-04 | Career form success close (X) | [ ] |
 | O-05 | Overlay typography consistency | [ ] |
 | F-01 | Mobile input zoom | [ ] |
@@ -93,26 +93,30 @@
 
 #### Experience / Venue Overlay
 
-- [ ] Clicking **View More** within the FAQ section should expand the remaining FAQ content within the same overlay.
+- [x] Clicking **View More** within the FAQ section should expand the remaining FAQ content within the same overlay.
 
 #### Villa Detail Page
 
-- [ ] FAQ behaviour should follow the approved Villa Detail page design.
+- [x] FAQ behaviour should follow the approved Villa Detail page design.
 
 **Expected Result:**
 
 - Overlay FAQ and Villa Detail FAQ should follow their respective approved designs.
 - Both experiences should remain consistent and predictable.
 
-**Files:** *(fill when started)*
+**Done when:** Overlay FAQ VIEW MORE expands inline in Wedding/Party/Corporate overlays; villa detail `/villas/[id]` still opens FAQ drawer.
 
-**Verify:** *(fill when started)*
+**Files:** `src/components/villa/VillaDetailFaqList.tsx`, `src/components/villa/VillaOverlayFaqPolicies.tsx`
+
+**Verify:** Open venue overlay → FAQ → VIEW MORE shows remaining Q&A in same sheet (no second modal). Villa detail FAQ → VIEW MORE opens DetailsDrawer.
+
+**Fix:** Overlay FAQ `expandInPlace`; villa detail drawers match Property Details sheet (chrome bar + green panel + diamond list).
 
 ---
 
 ### O-02 — Overlay Bottom Action Bar
 
-- [ ] Overlay bottom action bar positioning is inconsistent on iOS and Android devices.
+- [x] Overlay bottom action bar positioning is inconsistent on iOS and Android devices.
 
 **Current Issue:**
 
@@ -125,15 +129,19 @@
 - No overlap with device browser navigation controls.
 - Behaviour should remain stable during scroll, keyboard open/close, and browser UI transitions.
 
-**Files:** *(fill when started)*
+**Done when:** Venue overlay booking bar and form overlay CTAs sit above browser chrome + home indicator; site mobile nav hidden while any overlay is open.
 
-**Verify:** *(fill when started)*
+**Files:** `src/lib/overlayMobileChrome.ts`, `src/lib/useOverlayMobileChrome.ts`, `src/lib/experienceOverlayTheme.ts`, `src/components/experience/VillaExperienceOverlayLayout.tsx`, `src/components/overlays/FormOverlayLayout.tsx`, `src/components/MobileBottomNav.tsx`
+
+**Verify:** iPhone Safari + Chrome Android — open Wedding/Party venue overlay → pricing bar clears browser nav; no double bottom bars. Enquire/Partner overlay submit button not clipped.
+
+**Fix:** visualViewport `--jade-overlay-browser-bottom-inset` sync; shared action-bar padding + scroll spacers; hide `MobileBottomNav` while overlays open.
 
 ---
 
 ### O-03 — Success Overlay Consistency
 
-- [ ] All successful form submissions should display a dedicated success overlay.
+- [x] All successful form submissions should display a dedicated success overlay on Know More / venue overlays (Wedding, Corporate, Party).
 
 **Expected Result:**
 
@@ -143,9 +151,13 @@
 - Consistent across all overlay forms.
 - Behaviour remains identical across mobile and desktop devices.
 
-**Files:** *(fill when started)*
+**Done when:** Venue Know More enquiry submit shows dimmed full-screen success (Partner pattern); OKAY dismisses overlay.
 
-**Verify:** *(fill when started)*
+**Files:** `src/components/overlays/OverlayEnquirySuccessLayer.tsx`, `OverlayEnquirySuccessContent.tsx`, venue overlays, `PartnerOverlay.tsx`, `EnquireOverlay.tsx`
+
+**Verify:** Party overlay → Plan Your Celebration → ENQUIRE NOW → success above dimmed content with social + OKAY.
+
+**Fix:** Shared `OverlayEnquirySuccessLayer` uses Know More shell — mobile 92svh `bg-jade-green` sheet below 8svh band; desktop dimmed green modal. Matches Partner reference.
 
 ---
 

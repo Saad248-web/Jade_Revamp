@@ -13,6 +13,7 @@ import {
   EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_SCROLL_SHEET_CLASS,
 } from "@/lib/experienceOverlayTheme";
+import { useOverlayMobileChrome } from "@/lib/useOverlayMobileChrome";
 import {
   FORM_OVERLAY_MOBILE_SCROLL_PAD_CLASS,
   FORM_OVERLAY_ROOT_CLASS,
@@ -49,6 +50,7 @@ export default function FormOverlayLayout({
   sheetFrameClassName,
 }: FormOverlayLayoutProps) {
   useFormOverlayScrollLock(true);
+  useOverlayMobileChrome(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [mdUp, setMdUp] = useState(false);
 

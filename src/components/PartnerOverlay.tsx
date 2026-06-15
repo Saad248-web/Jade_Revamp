@@ -4,14 +4,12 @@ import { useMemo, useState, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import {
   Check,
-  Facebook,
-  Instagram,
-  Youtube,
   ArrowRight,
 } from "lucide-react";
 import Image from "next/image";
 import PrimaryButton from "@/components/PrimaryButton";
 import FormOverlayLayout from "@/components/overlays/FormOverlayLayout";
+import OverlayEnquirySuccessContent from "@/components/overlays/OverlayEnquirySuccessContent";
 import { useAnimation } from "@/context/AnimationContext";
 import Link from "next/link";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
@@ -540,78 +538,7 @@ export default function PartnerOverlay() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex min-h-full flex-col items-center justify-between gap-8 px-6 md:px-8 py-8 md:py-10 pb-[max(1.75rem,env(safe-area-inset-bottom,0px))] text-center font-manrope">
-                    <div className="flex flex-col items-center w-full shrink-0">
-                      <div className="w-[160px] h-[160px] md:w-[180px] md:h-[180px] shrink-0 relative mb-6 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
-                        <div className="w-[72px] h-[72px] md:w-[84px] md:h-[84px] shrink-0 relative drop-shadow-2xl">
-                          <Image
-                            src="/assets/JAde%20Correction.png"
-                            alt="Success Check"
-                            fill
-                            sizes="96px"
-                            quality={100}
-                            className="object-contain"
-                          />
-                        </div>
-                      </div>
-
-                      <h2 className="text-white text-shadow-sm text-gh-h1 font-philosopher mb-3">
-                        We've got it from here
-                      </h2>
-
-                      <p className="text-white/90 text-gh-body leading-relaxed max-w-sm mx-auto">
-                        Thanks for sharing your details!
-                        <br />
-                        Our team will take a look and reach out shortly to
-                        understand things better.
-                      </p>
-                    </div>
-
-                    <div className="flex flex-col w-full max-w-[300px] mx-auto gap-5 shrink-0">
-                      <p className="text-white/60 text-gh-label font-bold tracking-[0.2em] uppercase">
-                        MEANWHILE CHECK US OUT HERE
-                      </p>
-
-                      <div className="flex justify-center gap-3">
-                        {[
-                          {
-                            Icon: Facebook,
-                            href: "https://www.facebook.com/jadehospitainment/",
-                          },
-                          {
-                            Icon: Instagram,
-                            href: "https://www.instagram.com/jadehospitainment/?hl=en",
-                          },
-                          {
-                            Icon: Youtube,
-                            href: "https://www.youtube.com/@jade_hospitainment",
-                          },
-                        ].map(({ Icon, href }, i) => (
-                          <a
-                            key={i}
-                            href={href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-12 h-12 bg-white/5 border border-white/20 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                          >
-                            <Icon className="w-5 h-5" />
-                          </a>
-                        ))}
-                      </div>
-
-                      <p className="text-white/50 text-gh-label italic">
-                        Thoughtfully operated. Always.
-                      </p>
-
-                      <PrimaryButton
-                        withArrow={false}
-                        className="w-full mt-1"
-                        onClick={handleClose}
-                      >
-                        OKAY
-                      </PrimaryButton>
-                    </div>
-                  </div>
+                  <OverlayEnquirySuccessContent embedded onOkay={handleClose} />
                 )}
         </FormOverlayLayout>
       )}

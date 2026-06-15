@@ -31,10 +31,13 @@ import {
   JadeFloatingSelect,
   JadeFloatingTextarea,
 } from "@/components/ui/form";
+import { OVERLAY_MOBILE_FORM_SCROLL_PAD_CLASS } from "@/lib/overlayMobileChrome";
+import { useOverlayMobileChrome } from "@/lib/useOverlayMobileChrome";
 import JadeFormFieldError from "@/components/ui/form/JadeFormFieldError";
 
 export default function RathaaOverlay() {
   const { isRathaaOverlayOpen, setRathaaOverlayOpen } = useAnimation();
+  useOverlayMobileChrome(isRathaaOverlayOpen);
   const [view, setView] = useState<"form" | "success">("form");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -160,7 +163,7 @@ export default function RathaaOverlay() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,205,98,0.05)_0%,transparent_50%)] pointer-events-none" />
               {/* CONTENT AREA */}
               <div
-                className="flex-1 overflow-y-auto scrollbar-hide px-6 pt-5 pb-[max(2rem,calc(env(safe-area-inset-bottom,0px)+1.25rem))]"
+                className={`flex-1 overflow-y-auto scrollbar-hide px-6 pt-5 ${OVERLAY_MOBILE_FORM_SCROLL_PAD_CLASS}`}
                 data-lenis-prevent
               >
                 {view === "form" ? (

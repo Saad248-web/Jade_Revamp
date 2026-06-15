@@ -457,6 +457,10 @@
 
 /* Experience overlay — last section (enquiry) + scroll clearance (mobile booking bar) */
 @media (max-width: 767px) {
+  :root {
+    --jade-overlay-browser-bottom-inset: 0px;
+  }
+
   [data-experience-overlay-content] .villa-section-pad-block:has(#enquiry) {
     padding-bottom: 1rem;
   }

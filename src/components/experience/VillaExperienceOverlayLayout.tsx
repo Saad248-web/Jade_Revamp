@@ -39,6 +39,8 @@ import {
   scrollChromeAnimate,
 } from "@/lib/scrollChromeMotion";
 import { useScrollTabIntoView } from "@/lib/useScrollTabIntoView";
+import { useOverlayMobileChrome } from "@/lib/useOverlayMobileChrome";
+import { OVERLAY_MOBILE_ACTION_BAR_PB_CLASS } from "@/lib/overlayMobileChrome";
 import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
 
 const vd = VILLA_DETAIL_SPACING;
@@ -75,6 +77,7 @@ export function VillaExperienceOverlayBody({
   /** Tap top shade to dismiss (mobile). */
   onBackdropClick?: () => void;
 }) {
+  useOverlayMobileChrome(true);
   const mobileScrollEl = useRef<HTMLDivElement>(null);
   const desktopScrollEl = useRef<HTMLDivElement>(null);
   const onScrollRootUpdatedRef = useRef(onScrollRootUpdated);
@@ -412,7 +415,9 @@ export function VillaExperienceBookingBottomBar({
           ? "relative"
           : "fixed bottom-0 left-0 z-[150] hidden md:flex",
         VILLA_DETAIL_PRICING_BOTTOM_BAR_CHROME_CLASS,
-        "pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:pb-4",
+        "pt-4",
+        OVERLAY_MOBILE_ACTION_BAR_PB_CLASS,
+        "md:pb-4",
       )}
     >
       <div

@@ -26,7 +26,9 @@ export default function VillaOverlayFaqPolicies({ faqItems, policies }: Props) {
         <div className={vd.sectionShell}>
           <div className={clsx(vd.content, vd.stack)}>
             <h3 className={vd.heading}>FAQ</h3>
-            {faqItems.length > 0 ? <VillaDetailFaqList items={faqItems} /> : null}
+            {faqItems.length > 0 ? (
+              <VillaDetailFaqList items={faqItems} expandInPlace />
+            ) : null}
           </div>
         </div>
       </section>

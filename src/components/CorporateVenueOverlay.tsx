@@ -38,6 +38,7 @@ import {
   EXPERIENCE_OVERLAY_ROOT_CLASS,
 } from "@/lib/experienceOverlayTheme";
 import { useOverlayScrollChromeHide } from "@/lib/useOverlayScrollChromeHide";
+import OverlayEnquirySuccessLayer from "@/components/overlays/OverlayEnquirySuccessLayer";
 import { useVenueOverlaySectionNav } from "@/lib/useVenueOverlaySectionNav";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
 import {
@@ -216,14 +217,16 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
         scrollRef={overlayScrollRef}
         onScroll={handleScroll}
         onScrollRootUpdated={() => setOverlayScrollRootGen((g) => g + 1)}
-        onBackdropClick={onClose}
+        onBackdropClick={view === "form" ? onClose : undefined}
         mobileFooter={
-          <VillaExperienceBookingBottomBar
-            placement="sheet"
-            villaId={v.id}
-            onwardPrice={(v as { overlay?: { onwardsPrice?: string } })?.overlay?.onwardsPrice ?? null}
-            onEnquireClick={() => scrollToSection("enquiry")}
-          />
+          view === "form" ? (
+            <VillaExperienceBookingBottomBar
+              placement="sheet"
+              villaId={v.id}
+              onwardPrice={(v as { overlay?: { onwardsPrice?: string } })?.overlay?.onwardsPrice ?? null}
+              onEnquireClick={() => scrollToSection("enquiry")}
+            />
+          ) : undefined
         }
         pinnedTop={
           <VillaExperienceHeroCarousel
@@ -404,8 +407,6 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
             <section id="enquiry" className={VILLA_DETAIL_CHARCOAL} ref={formRef}>
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
-                {view === "form" ? (
-                  <>
                     <h2 className={vd.heading}>Plan Your Corporate Retreat</h2>
                     <p className="text-white/60 text-gh-body">
                       Share a few details. Our corporate team will guide you
@@ -707,88 +708,25 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         SUBMIT ENQUIRE
                       </button>
                     </form>
-                  </>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <div className="w-[180px] h-[180px] shrink-0 relative mb-6 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/20 backdrop-blur-md shadow-2xl">
-                      <div className="w-[84px] h-[84px] shrink-0 relative drop-shadow-2xl">
-                        <Image
-                          src="/assets/JAde%20Correction.png"
-                          alt="Success Check"
-                          fill
-                          sizes="96px"
-                          quality={100}
-                          className="object-contain"
-                        />
-                      </div>
-                    </div>
-
-                    <h2 className="text-white text-shadow-sm text-[36px] font-philosopher mb-3">
-                      We've got it from here
-                    </h2>
-
-                    <p className="text-white/90 text-[16px] leading-relaxed mb-10 max-w-sm mx-auto">
-                      Thanks for sharing your details!
-                      <br />
-                      Our team will take a look and reach out shortly to
-                      understand things better.
-                    </p>
-
-                    <div className="flex flex-col w-full max-w-[300px] mx-auto">
-                      <p className="text-white/60 text-[11px] font-bold tracking-[0.2em] uppercase mb-4">
-                        MEANWHILE CHECK US OUT HERE
-                      </p>
-
-                      <div className="flex justify-center gap-3">
-                        {[
-                          {
-                            Icon: Facebook,
-                            href: "https://www.facebook.com/jadehospitainment/",
-                          },
-                          {
-                            Icon: Instagram,
-                            href: "https://www.instagram.com/jadehospitainment/?hl=en",
-                          },
-                          {
-                            Icon: Youtube,
-                            href: "https://www.youtube.com/@jade_hospitainment",
-                          },
-                        ].map(({ Icon, href }, i) => (
-                          <a
-                            key={i}
-                            href={href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-12 h-12 bg-white/5 border border-white/20 flex items-center justify-center hover:bg-[#EFCD62] hover:text-black transition-all"
-                          >
-                            <Icon className="w-5 h-5" />
-                          </a>
-                        ))}
-                      </div>
-
-                      <p className="text-white/60 text-[13px] mb-8 mt-5">
-                        Thoughtfully operated. Always.
-                      </p>
-
-                      <PrimaryButton
-                        withArrow={false}
-                        className="w-full"
-                        onClick={() => setView("form")}
-                      >
-                        SUBMIT ANOTHER
-                      </PrimaryButton>
-                    </div>
-                  </div>
-                )}
                 </div>
               </div>
             </section>
       </VillaExperienceOverlayBody>
 
-      <VillaExperienceBookingBottomBar
-        villaId={v.id}
-        onwardPrice={(overlayVilla as any)?.overlay?.onwardsPrice ?? null}
-        onEnquireClick={() => scrollToSection("enquiry")}
+      {view === "form" ? (
+        <VillaExperienceBookingBottomBar
+          villaId={v.id}
+          onwardPrice={(overlayVilla as any)?.overlay?.onwardsPrice ?? null}
+          onEnquireClick={() => scrollToSection("enquiry")}
+        />
+      ) : null}
+
+      <OverlayEnquirySuccessLayer
+        open={view === "success"}
+        onOkay={() => {
+          onClose();
+          setView("form");
+        }}
       />
     </MotionDiv>,
     document.body,
