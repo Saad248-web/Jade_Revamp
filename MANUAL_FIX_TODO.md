@@ -14,13 +14,13 @@
 
 | | ID | Status |
 |---|-----|--------|
-| **Current** | M-02 | Pending |
-| **Next** | M-02 → O-01 → O-02 → O-03 → O-04 → O-05 → F-01 → V-01 → MP-01 → AB-01 → CR-01 → UI-01 → UI-02 → QA-01 | |
+| **Current** | O-01 | Pending |
+| **Next** | O-01 → O-02 → O-03 → O-04 → O-05 → F-01 → V-01 → MP-01 → AB-01 → CR-01 → UI-01 → UI-02 → QA-01 | |
 
 | ID | Task | Status |
 |----|------|--------|
 | M-01 | Menu page horizontal scroll (mobile) | [x] |
-| M-02 | Featured Villas carousel swipe sensitivity | [ ] |
+| M-02 | Featured Villas carousel swipe sensitivity | [x] |
 | O-01 | FAQ behaviour consistency | [ ] |
 | O-02 | Overlay bottom action bar | [ ] |
 | O-03 | Success overlay consistency | [ ] |
@@ -66,7 +66,7 @@
 
 ### M-02 — Featured Villas Carousel Swipe Sensitivity
 
-- [ ] The Featured Villas carousel currently requires excessive swipe movement before transitioning to the next card.
+- [x] The Featured Villas carousel currently requires excessive swipe movement before transitioning to the next card.
 
 **Current Issue:**
 
@@ -79,13 +79,15 @@
 - Swipe interaction should feel smooth, natural, and responsive.
 - Avoid accidental triggers while reducing the current swipe threshold.
 
-**Files:** *(fill when started)*
+**Done when:** On mobile/tablet, a light vertical scroll in Featured Villas snaps to the next villa card quickly. On desktop (lg+), section scroll is smooth/free with no snap; image carousel uses corner arrows only (no drag lock).
 
-**Verify:** *(fill when started)*
+**Files:** `src/lib/useScrollLinkedSectionProgress.ts`, `src/components/FeaturedVillas.tsx`, `src/components/ui/CarouselNavImageFrame.tsx`
+
+**Verify:** Home — mobile: small scroll flick advances villa card with snap animation. Desktop 1440px: continuous scroll through section; drag on image frame does not grab.
+
+**Fix:** Mobile snap zone 200vh + **12vh exit** after CTA; CTA at end of horizontal track. Brief vertical flick releases to next section.
 
 ---
-
-## Overlay & Modal Behaviour
 
 ### O-01 — FAQ Behaviour Consistency
 

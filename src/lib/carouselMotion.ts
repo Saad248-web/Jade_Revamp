@@ -19,8 +19,19 @@ const CAROUSEL_SWIPE_MEDIA_QUERY = `(max-width: ${CAROUSEL_SWIPE_MAX_WIDTH_PX}px
 
 export const CAROUSEL_SWIPE_CONFIDENCE_THRESHOLD = 10000;
 
+/** Mobile/tablet — lower bar for flick gestures (Featured Villas, etc.). */
+export const CAROUSEL_SWIPE_CONFIDENCE_THRESHOLD_MOBILE = 4500;
+
 /** Minimum horizontal drag (px) before advancing — desktop mouse drags */
 export const CAROUSEL_DRAG_OFFSET_THRESHOLD_PX = 48;
+
+/** Mobile/tablet — shorter drag distance before slide change */
+export const CAROUSEL_DRAG_OFFSET_THRESHOLD_MOBILE_PX = 28;
+
+export type CarouselSwipeResolveOptions = {
+  /** Viewport < lg — use mobile thresholds */
+  mobile?: boolean;
+};
 
 export function carouselSwipePower(offset: number, velocity: number) {
   return Math.abs(offset) * velocity;
@@ -53,19 +64,27 @@ export function resolveCarouselSwipeFromDrag(
   velocityX: number,
   onPrev: () => void,
   onNext: () => void,
+  options?: CarouselSwipeResolveOptions,
 ) {
-  if (offsetX <= -CAROUSEL_DRAG_OFFSET_THRESHOLD_PX) {
+  const offsetThreshold = options?.mobile
+    ? CAROUSEL_DRAG_OFFSET_THRESHOLD_MOBILE_PX
+    : CAROUSEL_DRAG_OFFSET_THRESHOLD_PX;
+  const confidenceThreshold = options?.mobile
+    ? CAROUSEL_SWIPE_CONFIDENCE_THRESHOLD_MOBILE
+    : CAROUSEL_SWIPE_CONFIDENCE_THRESHOLD;
+
+  if (offsetX <= -offsetThreshold) {
     onNext();
     return;
   }
-  if (offsetX >= CAROUSEL_DRAG_OFFSET_THRESHOLD_PX) {
+  if (offsetX >= offsetThreshold) {
     onPrev();
     return;
   }
 
   const swipe = carouselSwipePower(offsetX, velocityX);
-  if (swipe < -CAROUSEL_SWIPE_CONFIDENCE_THRESHOLD) onNext();
-  else if (swipe > CAROUSEL_SWIPE_CONFIDENCE_THRESHOLD) onPrev();
+  if (swipe < -confidenceThreshold) onNext();
+  else if (swipe > confidenceThreshold) onPrev();
 }
 
 type CarouselSwipeDragOptions = {
@@ -86,9 +105,15 @@ export function useCarouselSwipeDragProps(
 
   const onDragEnd = useCallback(
     (_e: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      resolveCarouselSwipeFromDrag(info.offset.x, info.velocity.x, onPrev, onNext);
+      resolveCarouselSwipeFromDrag(
+        info.offset.x,
+        info.velocity.x,
+        onPrev,
+        onNext,
+        { mobile: swipeEnabled },
+      );
     },
-    [onPrev, onNext],
+    [onPrev, onNext, swipeEnabled],
   );
 
   return useMemo(() => {
@@ -98,10 +123,10 @@ export function useCarouselSwipeDragProps(
     return {
       drag: "x" as const,
       dragConstraints: { left: 0, right: 0 },
-      dragElastic: 0.12,
+      dragElastic: swipeEnabled ? 0.22 : 0.12,
       onDragEnd,
     };
-  }, [active, onDragEnd]);
+  }, [active, onDragEnd, swipeEnabled]);
 }
 
 /**

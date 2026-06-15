@@ -120,23 +120,38 @@ const FEATURED_PATTERN = {
   parallaxFixed: true,
 } as const;
 
+/** Mobile: card snaps use snapVh; only exitVh of vertical scroll after CTA before next section */
+const FEATURED_MOBILE_SNAP_VH = 200;
+const FEATURED_MOBILE_EXIT_VH = 12;
+const FEATURED_MOBILE_HEIGHT_VH =
+  FEATURED_MOBILE_SNAP_VH + FEATURED_MOBILE_EXIT_VH;
+const FEATURED_MOBILE_SNAP_PORTION =
+  FEATURED_MOBILE_SNAP_VH / FEATURED_MOBILE_HEIGHT_VH;
+
 export default function FeaturedVillas() {
   const deferPattern = shouldDeferParallaxPatternToStickyStage(
     FEATURED_PATTERN.parallaxFixed,
   );
   const totalVillas = VILLAS.length;
   const totalSteps = totalVillas + 2;
+  /** CTA (last card) centers at this progress — no further horizontal drift on mobile */
+  const mobileCarouselMaxProgress = (totalVillas + 1) / totalSteps;
   const { targetRef, panelProgress } = useScrollLinkedSectionProgress({
     scrollMode: "mobileSnapOnly",
     stepCount: totalSteps + 1,
     smoothSpring: true,
+    mobileSnapAggressive: true,
+    mobileSnapScrollGain: 1,
+    mobileSnapDwellRatio: 0.12,
+    mobileSnapZoneRatio: FEATURED_MOBILE_SNAP_PORTION,
+    mobileSnapMaxProgress: mobileCarouselMaxProgress,
   });
 
   return (
     <SectionWrapper
       ref={targetRef}
       bg={JADE_GREEN}
-      className="h-[720vh]"
+      className="max-lg:h-[212vh] lg:h-[720vh]"
       pattern={deferPattern ? false : FEATURED_PATTERN}
     >
       <NavbarThemeTrigger theme="white" sectionRef={targetRef} />
@@ -287,6 +302,7 @@ const FeaturedVillaImageCarousel = memo(function FeaturedVillaImageCarousel({
       onPrev={goPrev}
       onNext={goNext}
       navLayout="corners"
+      swipeMobileOnly
       sizes={
         isLg
           ? "(max-width: 640px) 100vw, (max-width: 1280px) 95vw, 1400px"

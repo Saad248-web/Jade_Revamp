@@ -24,6 +24,8 @@ export type CarouselNavImageFrameProps = {
   imageClassName?: string;
   /** Featured-villa corner arrows; `none` = swipe/drag only */
   navLayout?: "corners" | "none";
+  /** When true, horizontal swipe/drag only below `lg`; desktop uses arrows / free scroll */
+  swipeMobileOnly?: boolean;
   children?: React.ReactNode;
 };
 
@@ -44,6 +46,7 @@ export default function CarouselNavImageFrame({
   priority = false,
   imageClassName = "object-cover",
   navLayout = "none",
+  swipeMobileOnly = false,
   children,
 }: CarouselNavImageFrameProps) {
   const showCornerNav = navLayout === "corners" && slideCount > 1;
@@ -51,6 +54,7 @@ export default function CarouselNavImageFrame({
     onPrev,
     onNext,
     slideCount > 1,
+    { mobileOnly: swipeMobileOnly },
   );
   const swipeDrag = miniCardSwipeProps.drag === "x";
 

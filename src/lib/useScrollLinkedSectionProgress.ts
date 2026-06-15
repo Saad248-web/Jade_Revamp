@@ -5,6 +5,7 @@ import {
   useReducedMotion,
   useScroll,
   useSpring,
+  useTransform,
   type MotionValue,
 } from "framer-motion";
 import { useSnappedScrollProgress } from "@/lib/carouselMotion";
@@ -16,6 +17,16 @@ export type UseScrollLinkedSectionProgressOptions = {
   scrollMode?: ScrollLinkedScrollMode;
   stepCount?: number;
   smoothSpring?: boolean;
+  /** Mobile snap only — lower = less vertical scroll before the next card snaps in */
+  mobileSnapDwellRatio?: number;
+  /** Mobile snap — amplified scroll + optional light dwell */
+  mobileSnapAggressive?: boolean;
+  /** Passed to aggressive snap (default scrollGain 2.1) */
+  mobileSnapScrollGain?: number;
+  /** Share of section scroll used for card snaps; remainder is exit runway to next section */
+  mobileSnapZoneRatio?: number;
+  /** Cap snapped progress so horizontal carousel stops at last card (Featured CTA) */
+  mobileSnapMaxProgress?: number;
 };
 
 export function useScrollLinkedSectionProgress(
@@ -25,7 +36,17 @@ export function useScrollLinkedSectionProgress(
     scrollMode = "free",
     stepCount = 2,
     smoothSpring = false,
+    mobileSnapDwellRatio = 0.32,
+    mobileSnapAggressive = false,
+    mobileSnapScrollGain = 2.1,
+    mobileSnapZoneRatio = 0.68,
+    mobileSnapMaxProgress,
   } = options;
+
+  const mobileSnapDwell =
+    mobileSnapAggressive && mobileSnapDwellRatio === 0.32
+      ? 0.12
+      : mobileSnapDwellRatio;
 
   const targetRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
@@ -39,24 +60,42 @@ export function useScrollLinkedSectionProgress(
     restDelta: 0.001,
   });
 
-  const inputProgress = smoothSpring ? smoothProgress : scrollYProgress;
+  const mobileSnapActive = scrollMode === "mobileSnapOnly" && !isLg;
+  const useSmoothInput = smoothSpring && !mobileSnapActive;
+  const inputProgress = useSmoothInput ? smoothProgress : scrollYProgress;
+
+  const amplifiedInput = useTransform(inputProgress, (p) => {
+    if (!mobileSnapAggressive) return p;
+    if (p >= mobileSnapZoneRatio) return 1;
+    const t = p / mobileSnapZoneRatio;
+    return Math.min(1, t * mobileSnapScrollGain);
+  });
+
+  const snapInput =
+    mobileSnapActive && mobileSnapAggressive ? amplifiedInput : inputProgress;
 
   const dwellProgress = useSnappedScrollProgress(
-    inputProgress,
+    snapInput,
     stepCount,
     reducedMotion,
-    0.32,
+    mobileSnapActive ? mobileSnapDwell : 0.32,
   );
 
   const snappedProgress = useSpring(dwellProgress, {
-    stiffness: 120,
-    damping: 26,
-    mass: 0.5,
-    restDelta: 0.0005,
+    stiffness: mobileSnapActive ? (mobileSnapAggressive ? 260 : 200) : 120,
+    damping: mobileSnapActive ? (mobileSnapAggressive ? 30 : 24) : 26,
+    mass: mobileSnapActive ? (mobileSnapAggressive ? 0.22 : 0.35) : 0.5,
+    restDelta: mobileSnapAggressive ? 0.0015 : 0.0005,
   });
 
-  const panelProgress: MotionValue<number> =
-    scrollMode === "mobileSnapOnly" && !isLg ? snappedProgress : scrollYProgress;
+  const cappedSnapProgress = useTransform(snappedProgress, (p) => {
+    if (!mobileSnapActive || mobileSnapMaxProgress == null) return p;
+    return Math.min(p, mobileSnapMaxProgress);
+  });
+
+  const panelProgress: MotionValue<number> = mobileSnapActive
+    ? cappedSnapProgress
+    : scrollYProgress;
 
   return { targetRef, panelProgress, scrollYProgress };
 }
