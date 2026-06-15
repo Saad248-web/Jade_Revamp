@@ -1001,10 +1001,15 @@ body {
   .menu-mobile-hscroll-shell {
     position: relative;
     width: 100%;
-    overflow: visible;
+    min-width: 0;
+    overflow: hidden;
   }
 
-  /* Parent vertical panels must not use touch-pan-y — it blocks nested rail swipes */
+  /* Clip track to shell width so overflow-x scroll engages (not expand layout) */
+  .menu-mobile-hscroll-shell .menu-hscroll-fade {
+    overflow: hidden;
+  }
+
   .menu-mobile-hscroll-shell .jade-hscroll-track {
     touch-action: pan-x pan-y;
     overscroll-behavior-x: contain;
