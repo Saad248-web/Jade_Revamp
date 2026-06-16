@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import Link from "next/link";
 import { Check } from "lucide-react";
 import EnquirySingleDatePicker from "@/components/enquiry/EnquirySingleDatePicker";
 import {
@@ -20,6 +19,10 @@ import {
 } from "@/components/ui/form";
 import JadeFormFieldError from "@/components/ui/form/JadeFormFieldError";
 import PrimaryButton from "@/components/PrimaryButton";
+import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
+import VenueEnquiryLegalFootnote from "@/components/experience/VenueEnquiryLegalFootnote";
+
+const vd = VILLA_DETAIL_SPACING;
 
 type Props = {
   onSuccess: () => void;
@@ -80,7 +83,7 @@ function ToggleSet({
                 <Check className="w-3 h-3 text-black" strokeWidth={3.5} />
               )}
             </div>
-            <span className="text-white/80 text-gh-desc leading-snug group-hover:text-white transition-colors">
+            <span className={vd.formOptionLabel}>
               {s}
             </span>
           </label>
@@ -243,7 +246,7 @@ export default function WeddingVenueEnquiryForm({
       </div>
 
       <div className="space-y-2.5">
-        <p className="text-white/60 text-gh-label font-bold uppercase tracking-widest">
+        <p className={vd.formGroupLabel}>
           Services Required
         </p>
         <ToggleSet
@@ -254,7 +257,7 @@ export default function WeddingVenueEnquiryForm({
       </div>
 
       <div className="space-y-2.5">
-        <p className="text-white/60 text-gh-label font-bold uppercase tracking-widest">
+        <p className={vd.formGroupLabel}>
           Events You&apos;re Planning
         </p>
         <ToggleSet
@@ -265,7 +268,7 @@ export default function WeddingVenueEnquiryForm({
       </div>
 
       <div className="space-y-2.5">
-        <p className="text-white/60 text-gh-label font-bold uppercase tracking-widest">
+        <p className={vd.formGroupLabel}>
           Preferred Setting
         </p>
         <ToggleSet
@@ -284,32 +287,7 @@ export default function WeddingVenueEnquiryForm({
         theme="experienceCharcoal"
       />
 
-      <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
-        By proceeding, you agree to our{" "}
-        <Link
-          href="/privacy-policy"
-          className="text-[#EFCD62] hover:underline"
-          onClick={onClosePrivacyNav}
-        >
-          Privacy Policy
-        </Link>
-        ,{" "}
-        <Link
-          href="/terms-conditions"
-          className="text-[#EFCD62] hover:underline"
-          onClick={onClosePrivacyNav}
-        >
-          Terms & Conditions
-        </Link>{" "}
-        and{" "}
-        <Link
-          href="/refund-policy"
-          className="text-[#EFCD62] hover:underline"
-          onClick={onClosePrivacyNav}
-        >
-          Refund Policy
-        </Link>
-      </p>
+      <VenueEnquiryLegalFootnote onClosePrivacyNav={onClosePrivacyNav} />
 
       <PrimaryButton
         type="submit"

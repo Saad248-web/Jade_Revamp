@@ -95,6 +95,7 @@ import {
   VILLA_DETAIL_SPACING,
 } from "@/components/villa/villaDetailSpacing";
 import clsx from "clsx";
+import { EXPERIENCE_SECTION_CTA_CONTAINER_CLASS } from "@/lib/experienceSectionCta";
 import { usePreloadNeighborImages } from "@/lib/carouselMotion";
 import { villaListingPath } from "@/lib/appRoutes";
 import { useSafeBack } from "@/lib/safeBackNavigation";
@@ -899,10 +900,17 @@ export default function VillaDetailsPage() {
               ) : (
                 <div className={clsx(vd.mediaStageFrame, "relative w-full rounded-none overflow-hidden bg-emerald-900/20 flex items-center justify-center text-white/40 italic")}>Loading spaces…</div>
               )}
-              <Link href={`/villas/${id}/spaces`} className="w-full border border-white/20 bg-white/5 py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2">
-                VIEW ALL SPACES
-                <LayoutGrid className="w-3.5 h-3.5" strokeWidth={1.5} />
-              </Link>
+              <div className={EXPERIENCE_SECTION_CTA_CONTAINER_CLASS}>
+                <PrimaryButton
+                  href={`/villas/${id}/spaces`}
+                  width="section"
+                  withArrow={false}
+                  className="!bg-white/5 !ring-0 border border-white/20 !text-white hover:!bg-white hover:!text-black"
+                >
+                  <LayoutGrid className="w-3.5 h-3.5 shrink-0" strokeWidth={1.5} />
+                  VIEW ALL SPACES
+                </PrimaryButton>
+              </div>
             </div>
           </div>
         </section>
@@ -1182,16 +1190,16 @@ export default function VillaDetailsPage() {
       >
         <div className={clsx(vd.contentInsetShell, "flex justify-between items-center gap-4")}>
           <div className="flex flex-col font-manrope leading-tight">
-            <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">Starting from</span>
-            <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold whitespace-nowrap">{villaFooterPriceDisplay ?? "Contact for pricing"}</span>
+            <span className={vd.pricingBarLabel}>Starting from</span>
+            <span className={vd.pricingBarPrice}>{villaFooterPriceDisplay ?? "Contact for pricing"}</span>
           </div>
           <div className="flex items-center gap-4 md:gap-6">
             <button onClick={() => setEnquireOverlayOpen(true)} className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap">ENQUIRE</button>
             <PrimaryButton
               href={`/book?villa=${villa.id}`}
               withArrow={false}
-              size="chrome"
-              className="whitespace-nowrap"
+              width="compact"
+              className="!px-6 md:!px-10 whitespace-nowrap"
             >
               BOOK VILLA
             </PrimaryButton>

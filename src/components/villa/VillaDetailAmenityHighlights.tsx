@@ -12,13 +12,21 @@ const vd = VILLA_DETAIL_SPACING;
 type Props = {
   highlights: VillaAmenityHighlight[];
   className?: string;
+  /** Overlay intro rails use right-edge bleed + extra track padding. */
+  trackVariant?: "detail" | "overlay";
 };
 
 export default function VillaDetailAmenityHighlights({
   highlights,
   className,
+  trackVariant = "detail",
 }: Props) {
   if (!highlights?.length) return null;
+
+  const trackClass =
+    trackVariant === "overlay"
+      ? vd.amenityHighlightTrackOverlay
+      : vd.amenityHighlightTrackFullBleed;
 
   return (
     <HorizontalScrollRail
@@ -26,7 +34,7 @@ export default function VillaDetailAmenityHighlights({
         vd.amenityHighlightViewportShell,
         vd.amenityHighlightViewportEdge,
       )}
-      trackClassName={clsx(vd.amenityHighlightTrackFullBleed, className)}
+      trackClassName={clsx(trackClass, className)}
       showFade={false}
       cursorGrab
     >

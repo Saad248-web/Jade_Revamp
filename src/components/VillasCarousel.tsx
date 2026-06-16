@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { VILLAS, CATEGORIES } from "@/lib/mockData";
 import { villaMatchesCategory } from "@/lib/villaCategoryMatch";
 import ReservationOverlay from "./ReservationOverlay";
@@ -43,28 +43,49 @@ export default function VillasCarousel() {
   const [activeCategory, setActiveCategory] = useState("All");
   const navbarVisible = !useBatchedScrollHide();
   const searchParams = useSearchParams();
-  const router = useRouter();
 
-  // Read category from URL on mount
+  // Cold load / external deep link only — sync ?category= once; never on tab clicks.
   useEffect(() => {
     const categoryParam = searchParams?.get("category");
-    if (categoryParam) {
-      // Check if it's a valid category
+    if (!categoryParam) return;
+
+    const validCategory = CATEGORIES.find(
+      (c) => c.toLowerCase() === categoryParam.toLowerCase(),
+    );
+    if (!validCategory) return;
+
+    setActiveCategory(validCategory);
+
+    const timer = window.setTimeout(() => {
+      const el = document.getElementById("VILLAS-carousel");
+      if (el) {
+        scrollToElement(el, { offset: -(NAVBAR_HEIGHT + 20) });
+      }
+    }, 500);
+
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount / full navigation only
+  }, []);
+
+  // Browser back/forward — keep tab state in sync without scrolling.
+  useEffect(() => {
+    const syncCategoryFromUrl = () => {
+      const categoryParam = new URLSearchParams(window.location.search).get(
+        "category",
+      );
+      if (!categoryParam) {
+        setActiveCategory("All");
+        return;
+      }
       const validCategory = CATEGORIES.find(
         (c) => c.toLowerCase() === categoryParam.toLowerCase(),
       );
-      if (validCategory) {
-        setActiveCategory(validCategory);
-        // Scroll to the carousel when a category is specified
-        setTimeout(() => {
-          const el = document.getElementById("VILLAS-carousel");
-          if (el) {
-            scrollToElement(el, { offset: -(NAVBAR_HEIGHT + 20) });
-          }
-        }, 500);
-      }
-    }
-  }, [searchParams]);
+      if (validCategory) setActiveCategory(validCategory);
+    };
+
+    window.addEventListener("popstate", syncCategoryFromUrl);
+    return () => window.removeEventListener("popstate", syncCategoryFromUrl);
+  }, []);
 
   // Overlay states
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
@@ -118,14 +139,15 @@ export default function VillasCarousel() {
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
-    const params = new URLSearchParams(searchParams?.toString() ?? "");
+    const params = new URLSearchParams(window.location.search);
     if (category === "All") {
       params.delete("category");
     } else {
       params.set("category", category);
     }
     const query = params.toString();
-    router.replace(query ? `/villas?${query}` : "/villas", { scroll: false });
+    const nextUrl = query ? `/villas?${query}` : "/villas";
+    window.history.replaceState(window.history.state, "", nextUrl);
   };
 
   // Auto-scroll to the carousel section when there is a date conflict
@@ -280,7 +302,7 @@ export default function VillasCarousel() {
             withArrow={false}
             onClick={() => {
               setDateRange({ checkIn: null, checkOut: null });
-              setActiveCategory("All");
+              handleCategoryChange("All");
             }}
           >
             CLEAR ALL FILTERS
@@ -318,7 +340,8 @@ export default function VillasCarousel() {
                 No VILLAS found for &quot;{activeCategory}&quot;.
               </span>
               <button
-                onClick={() => setActiveCategory("All")}
+                type="button"
+                onClick={() => handleCategoryChange("All")}
                 className="mt-3 text-[#EFCD62] font-manrope underline underline-offset-4"
               >
                 View All Villas

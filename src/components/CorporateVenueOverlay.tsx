@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Share2,
@@ -17,7 +16,6 @@ import {
   Youtube,
   Check,
 } from "lucide-react";
-import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useVillaListingImages } from "@/lib/useVillaListingImages";
 import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
@@ -33,6 +31,9 @@ import VillaDetailLocationBlock from "@/components/villa/VillaDetailLocationBloc
 import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip";
 import VillaOverlayFaqPolicies from "@/components/villa/VillaOverlayFaqPolicies";
 import VillaOverlayIntroAmenities from "@/components/villa/VillaOverlayIntroAmenities";
+import VillaDetailPerfectForTags from "@/components/villa/VillaDetailPerfectForTags";
+import VillaDetailWalkthroughPoster from "@/components/villa/VillaDetailWalkthroughPoster";
+import VenueEnquiryLegalFootnote from "@/components/experience/VenueEnquiryLegalFootnote";
 import {
   EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS,
   EXPERIENCE_OVERLAY_ROOT_CLASS,
@@ -270,12 +271,9 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                     {v.description ||
                       `${v.name} by Jade is an expansive corporate retreat featuring private spaces, lush lawns, and dedicated outdoor areas. Designed for corporate offsites, team celebrations, and immersive workations, the venue balances structured productivity with open-air engagement.`}
                   </p>
-                  <div className={VILLA_DETAIL_SPACING.stackSm}>
-                    <h4 className="text-white font-manrope font-medium text-gh-body">
-                      Perfect for:
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {(v.perfectForTags?.length
+                  <VillaDetailPerfectForTags
+                    tags={
+                      v.perfectForTags?.length
                         ? v.perfectForTags
                         : [
                             "Corporate Offsites",
@@ -284,16 +282,8 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                             "Workations",
                             "Recognition Events",
                           ]
-                      ).map((tag: string) => (
-                        <span
-                          key={tag}
-                          className="px-4 py-2 bg-white/5 border border-white/15 text-white/90 text-[11px] md:text-gh-label font-manrope"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                    }
+                  />
                 </VillaDetailIntroSection>
               </div>
             </div>
@@ -317,7 +307,6 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
               }
               title="Corporate Amenities"
               showSeeMore={false}
-              meanderBottom={corporatePricingBlocks.length > 0}
             />
 
             {corporatePricingBlocks.length > 0 ? (
@@ -365,22 +354,12 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
                   <h3 className={vd.heading}>Video Walkthrough</h3>
-                  <div className="group relative aspect-video w-full cursor-pointer overflow-hidden border border-white/10 bg-gray-900">
-                    <Image
-                      src={walkthroughCover || "/Villa_Retreats/Magnolia/Hero/hero.webp"}
-                      alt="Video Cover"
-                      fill
-                      className="object-cover opacity-80 transition-opacity group-hover:opacity-60"
-                      sizes="(max-width: 768px) 100vw, 800px"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition-all hover:bg-white/30 sm:h-20 sm:w-20">
-                        <div className="ml-1 h-0 w-0 border-b-[10px] border-l-[18px] border-t-[10px] border-b-transparent border-l-white border-t-transparent" />
-                      </div>
-                    </div>
-                  </div>
+                  <VillaDetailWalkthroughPoster
+                    src={walkthroughCover || "/Villa_Retreats/Magnolia/Hero/hero.webp"}
+                  />
                 </div>
               </div>
+              <VillaDetailMeanderStrip />
             </section>
 
             <VillaOverlayFaqPolicies
@@ -407,8 +386,8 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
             <section id="enquiry" className={VILLA_DETAIL_CHARCOAL} ref={formRef}>
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
-                    <h2 className={vd.heading}>Plan Your Corporate Retreat</h2>
-                    <p className="text-white/60 text-gh-body">
+                    <h3 className={vd.heading}>Plan Your Corporate Retreat</h3>
+                    <p className={vd.enquirySectionLead}>
                       Share a few details. Our corporate team will guide you
                       through venues &amp; pricing.
                     </p>
@@ -529,11 +508,9 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         ) : null}
                       </div>
 
-                      <div className="py-5">
-                        <h4 className="text-white font-bold text-gh-body mb-3">
-                          Retreat Format
-                        </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
+                      <div className="space-y-2.5">
+                        <p className={vd.formGroupLabel}>Retreat Format</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                           {[
                             "Leadership Retreat",
                             "Day Outing / Team Outing",
@@ -565,7 +542,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                                     <Check className="w-3 h-3 text-black" strokeWidth={3.5} />
                                   )}
                                 </div>
-                                <span className="text-gh-label text-white/70 leading-snug group-hover:text-white transition-colors">
+                                <span className={vd.formOptionLabel}>
                                   {label}
                                 </span>
                               </label>
@@ -574,11 +551,9 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         </div>
                       </div>
 
-                      <div className="py-5 border-t border-white/5">
-                        <h4 className="text-white font-bold text-gh-body mb-3">
-                          Services Required
-                        </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
+                      <div className="space-y-2.5">
+                        <p className={vd.formGroupLabel}>Services Required</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                           {[
                             "Décor & Event Setup",
                             "AV & Presentation Setup",
@@ -612,7 +587,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                                     <Check className="w-3 h-3 text-black" strokeWidth={3.5} />
                                   )}
                                 </div>
-                                <span className="text-gh-label text-white/70 leading-snug group-hover:text-white transition-colors">
+                                <span className={vd.formOptionLabel}>
                                   {label}
                                 </span>
                               </label>
@@ -621,11 +596,9 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         </div>
                       </div>
 
-                      <div className="py-5 border-t border-white/5">
-                        <h4 className="text-white font-bold text-gh-body mb-3">
-                          Preferred Setting
-                        </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
+                      <div className="space-y-2.5">
+                        <p className={vd.formGroupLabel}>Preferred Setting</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                           {[
                             "Outdoor Lawn Setup",
                             "Poolside / Informal Setup",
@@ -655,7 +628,7 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                                     <Check className="w-3 h-3 text-black" strokeWidth={3.5} />
                                   )}
                                 </div>
-                                <span className="text-gh-label text-white/70 leading-snug group-hover:text-white transition-colors">
+                                <span className={vd.formOptionLabel}>
                                   {label}
                                 </span>
                               </label>
@@ -671,35 +644,9 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                         value={corpNotes}
                         onChange={setCorpNotes}
                         theme="experienceCharcoal"
-                        className="py-5"
                       />
 
-                      <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
-                        By proceeding, you agree to our{" "}
-                        <Link
-                          href="/privacy-policy"
-                          className="text-[#EFCD62] hover:underline"
-                          onClick={onClose}
-                        >
-                          Privacy Policy
-                        </Link>
-                        ,{" "}
-                        <Link
-                          href="/terms-conditions"
-                          className="text-[#EFCD62] hover:underline"
-                          onClick={onClose}
-                        >
-                          Terms & Conditions
-                        </Link>{" "}
-                        and{" "}
-                        <Link
-                          href="/refund-policy"
-                          className="text-[#EFCD62] hover:underline"
-                          onClick={onClose}
-                        >
-                          Refund Policy
-                        </Link>
-                      </p>
+                      <VenueEnquiryLegalFootnote onClosePrivacyNav={onClose} />
 
                       <PrimaryButton type="submit" width="form" withArrow={false}>
                         SUBMIT ENQUIRE

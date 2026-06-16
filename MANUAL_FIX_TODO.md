@@ -14,8 +14,8 @@
 
 | | ID | Status |
 |---|-----|--------|
-| **Current** | V-01 | Pending |
-| **Next** | V-01 → MP-01 → AB-01 → UI-01 → UI-02 → QA-01 | |
+| **Current** | MP-01 | Pending |
+| **Next** | MP-01 → AB-01 → UI-01 → UI-02 → QA-01 | |
 
 | ID | Task | Status |
 |----|------|--------|
@@ -27,7 +27,7 @@
 | O-04 | Career form success close (X) | [x] |
 | O-05 | Overlay typography consistency | [ ] |
 | F-01 | Mobile input zoom | [x] |
-| V-01 | Villa category navigation glitch | [ ] |
+| V-01 | Villa category navigation glitch | [x] |
 | MP-01 | Menu page design refinements | [ ] |
 | AB-01 | About Section 3 background | [ ] |
 | CR-01 | Careers remove dot patterns | [x] |
@@ -184,16 +184,18 @@
 
 ### O-05 — Overlay Typography Consistency
 
-- [ ] Typography inside overlays does not fully match the Villa Detail page.
+- [x] Typography inside overlays does not fully match the Villa Detail page.
 
 **Expected Result:**
 
 - Font sizes, line heights, spacing, and hierarchy should match the Villa Detail design system.
 - Typography should remain consistent across all overlays.
 
-**Files:** *(fill when started)*
+**Scope:** Know More venue overlays only — Wedding (`VenueOverlay`), Party (`PartyVenueOverlay`), Corporate (`CorporateVenueOverlay`).
 
-**Verify:** *(fill when started)*
+**Files:** `src/components/villa/villaDetailSpacing.ts`, `VillaDetailAmenityGrid.tsx`, `VillaDetailAmenityHighlights.tsx`, `VillaOverlayIntroAmenities.tsx`, `VillaDetailWalkthroughPoster.tsx`, `VillaDetailPerfectForTags.tsx` (reused), `experience/VenueEnquiryLegalFootnote.tsx`, `experience/WeddingVenueEnquiryForm.tsx`, `experience/VillaExperienceOverlayLayout.tsx`, `experience/ExperienceFaqAccordion.tsx`, `VenueOverlay.tsx`, `PartyVenueOverlay.tsx`, `CorporateVenueOverlay.tsx`, `src/app/villas/[id]/page.tsx` (pricing bar tokens)
+
+**Verify:** Wedding / Party / Corporate — open Know More on a villa card (mobile + 1440px). Compare intro, amenities grid, walkthrough frame (`vd.mediaStageFrame`, opacity-60), FAQ/policies, enquiry headings (`h3` + `vd.enquirySectionLead`), form group labels, legal footnote, sticky tabs chrome, booking bar typography vs `/villas/[id]`.
 
 ---
 
@@ -236,7 +238,7 @@
 
 ### V-01 — Category Navigation Glitch
 
-- [ ] Villa category navigation is behaving incorrectly.
+- [x] Villa category navigation is behaving incorrectly.
 
 **Current Issue:**
 
@@ -250,9 +252,11 @@
 - No jump-to-top behaviour.
 - Category switching should feel seamless.
 
-**Files:** *(fill when started)*
+**Files:** `src/components/VillasCarousel.tsx`
 
-**Verify:** *(fill when started)*
+**Verify:** On `/villas`, scroll down into villa cards; click category tabs — list filters in place with no scroll jump. Deep link `/villas?category=Weddings` from another page still scrolls to filter bar once.
+
+**Fix:** Category tabs update URL via `history.replaceState` (no Next.js navigation/remount). URL→state sync + scroll run **once on mount** only (deep links); `popstate` syncs back/forward without scrolling.
 
 ---
 

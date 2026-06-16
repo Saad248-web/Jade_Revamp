@@ -63,7 +63,7 @@ export function ExperiencePolicyCompactList({
             aria-hidden
           />
           <div>
-            <h4 className="text-white font-manrope font-bold text-gh-body mb-0.5">
+            <h4 className="font-manrope text-gh-body font-semibold mb-0.5 text-white">
               {policy.title}
             </h4>
             <p className="text-white/50 text-gh-desc leading-relaxed">

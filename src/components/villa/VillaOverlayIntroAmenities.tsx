@@ -23,5 +23,5 @@ export default function VillaOverlayIntroAmenities({ villa }: Props) {
 
   if (!highlights.length) return null;
 
-  return <VillaDetailAmenityHighlights highlights={highlights} />;
+  return <VillaDetailAmenityHighlights highlights={highlights} trackVariant="overlay" />;
 }

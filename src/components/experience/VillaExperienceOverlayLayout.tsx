@@ -353,12 +353,12 @@ export function VillaExperienceStickyTabs({
           vd.stickyChromeOuter,
           vd.hScrollViewportEdge,
         )}
+        data-experience-overlay-tabs
       >
         <div
           className={clsx(
             vd.stickyChromeOuter,
             VILLA_DETAIL_STICKY_TABS_CHROME_CLASS,
-            "border-b-0",
           )}
         >
           <div className={vd.stickyChromeInner}>
@@ -427,10 +427,10 @@ export function VillaExperienceBookingBottomBar({
         )}
       >
         <div className="flex flex-col font-manrope leading-tight">
-          <span className="text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold whitespace-nowrap">
+          <span className={vd.pricingBarLabel}>
             Starting from
           </span>
-          <span className="text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold whitespace-nowrap">
+          <span className={vd.pricingBarPrice}>
             {priceMain}
           </span>
         </div>

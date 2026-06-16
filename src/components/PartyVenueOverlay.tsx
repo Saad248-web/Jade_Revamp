@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Share2,
@@ -125,7 +124,6 @@ const getIcon = (iconName?: string, title?: string) => {
 
   return icons[iconName || ""] || Info;
 };
-import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import { buildVillaGalleryItems } from "@/lib/villaGallery";
 import { getBhk, getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
@@ -150,6 +148,9 @@ import VillaDetailIntroSection from "@/components/villa/VillaDetailIntroSection"
 import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip";
 import VillaOverlayFaqPolicies from "@/components/villa/VillaOverlayFaqPolicies";
 import VillaOverlayIntroAmenities from "@/components/villa/VillaOverlayIntroAmenities";
+import VillaDetailPerfectForTags from "@/components/villa/VillaDetailPerfectForTags";
+import VillaDetailWalkthroughPoster from "@/components/villa/VillaDetailWalkthroughPoster";
+import VenueEnquiryLegalFootnote from "@/components/experience/VenueEnquiryLegalFootnote";
 import clsx from "clsx";
 import {
   VILLA_DETAIL_CHARCOAL,
@@ -339,21 +340,13 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                   amenityHighlights={<VillaOverlayIntroAmenities villa={villa} />}
                 >
                   <p className={VILLA_DETAIL_SPACING.introDescription}>{villa.description}</p>
-                  <div className={VILLA_DETAIL_SPACING.stackSm}>
-                    <h4 className="text-white font-manrope font-medium text-gh-body">
-                      Perfect for:
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {["Birthdays", "Anniversaries", "Pool Parties", "Reunions"].map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-4 py-2 bg-white/5 border border-white/15 text-white/90 text-[11px] md:text-gh-label font-manrope"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                  <VillaDetailPerfectForTags
+                    tags={
+                      villa.perfectForTags?.length
+                        ? villa.perfectForTags
+                        : ["Birthdays", "Anniversaries", "Pool Parties", "Reunions"]
+                    }
+                  />
                 </VillaDetailIntroSection>
               </div>
             </div>
@@ -373,7 +366,6 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
               }
               title="Villa Amenities"
               showSeeMore={false}
-              meanderBottom={partyPricingBlocks.length > 0}
             />
 
             {partyPricingBlocks.length > 0 ? (
@@ -419,22 +411,10 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
                   <h3 className={vd.heading}>Video Walkthrough</h3>
-                  <div className="group relative aspect-video w-full cursor-pointer overflow-hidden border border-white/10 bg-gray-900">
-                    <Image
-                      src="/Villa_Retreats/Magnolia/Hero/hero.webp"
-                      alt="Video Cover"
-                      fill
-                      className="object-cover opacity-80 transition-opacity group-hover:opacity-60"
-                      sizes="(max-width: 768px) 100vw, 800px"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition-all hover:bg-white/30 sm:h-20 sm:w-20">
-                        <div className="ml-1 h-0 w-0 border-b-[10px] border-l-[18px] border-t-[10px] border-b-transparent border-l-white border-t-transparent" />
-                      </div>
-                    </div>
-                  </div>
+                  <VillaDetailWalkthroughPoster src="/Villa_Retreats/Magnolia/Hero/hero.webp" />
                 </div>
               </div>
+              <VillaDetailMeanderStrip />
             </section>
 
             <VillaOverlayFaqPolicies
@@ -461,8 +441,8 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
             <section id="enquiry" className={VILLA_DETAIL_CHARCOAL} ref={formRef}>
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
-                        <h2 className={vd.heading}>Plan Your Celebration</h2>
-                        <p className="text-white/50 text-gh-body">
+                        <h3 className={vd.heading}>Plan Your Celebration</h3>
+                        <p className={vd.enquirySectionLead}>
                           Share a few details. Our concierge team will help you pick
                           the perfect villa for your party.
                         </p>
@@ -579,32 +559,7 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                             required={false}
                           />
 
-                          <p className="text-[11px] text-white/30 pt-2 text-center font-manrope">
-                            By proceeding, you agree to our{" "}
-                            <Link
-                              href="/privacy-policy"
-                              className="text-[#EFCD62] hover:underline"
-                              onClick={() => onClose()}
-                            >
-                              Privacy Policy
-                            </Link>
-                            ,{" "}
-                            <Link
-                              href="/terms-conditions"
-                              className="text-[#EFCD62] hover:underline"
-                              onClick={() => onClose()}
-                            >
-                              Terms & Conditions
-                            </Link>{" "}
-                            and{" "}
-                            <Link
-                              href="/refund-policy"
-                              className="text-[#EFCD62] hover:underline"
-                              onClick={() => onClose()}
-                            >
-                              Refund Policy
-                            </Link>
-                          </p>
+                          <VenueEnquiryLegalFootnote onClosePrivacyNav={onClose} />
 
                           <PrimaryButton type="submit" width="form" withArrow={false}>
                             ENQUIRE NOW

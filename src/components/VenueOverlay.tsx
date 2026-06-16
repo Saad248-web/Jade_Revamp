@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Share2,
@@ -129,6 +128,8 @@ import VillaDetailLocationBlock from "@/components/villa/VillaDetailLocationBloc
 import VillaDetailMeanderStrip from "@/components/villa/VillaDetailMeanderStrip";
 import VillaOverlayFaqPolicies from "@/components/villa/VillaOverlayFaqPolicies";
 import VillaOverlayIntroAmenities from "@/components/villa/VillaOverlayIntroAmenities";
+import VillaDetailPerfectForTags from "@/components/villa/VillaDetailPerfectForTags";
+import VillaDetailWalkthroughPoster from "@/components/villa/VillaDetailWalkthroughPoster";
 import WeddingVenueEnquiryForm from "@/components/experience/WeddingVenueEnquiryForm";
 import { EXPERIENCE_OVERLAY_ROOT_CLASS } from "@/lib/experienceOverlayTheme";
 import { useOverlayScrollChromeHide } from "@/lib/useOverlayScrollChromeHide";
@@ -333,23 +334,7 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                   amenityHighlights={<VillaOverlayIntroAmenities villa={v} />}
                 >
                   <p className={VILLA_DETAIL_SPACING.introDescription}>{v.description}</p>
-                  {v.perfectForTags && v.perfectForTags.length > 0 ? (
-                    <div className={VILLA_DETAIL_SPACING.stackSm}>
-                      <h4 className="text-white font-manrope font-medium text-gh-body">
-                        Perfect for:
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {v.perfectForTags.map((tag: string) => (
-                          <span
-                            key={tag}
-                            className="px-4 py-2 bg-white/5 border border-white/15 text-white/90 text-[11px] md:text-gh-label font-manrope"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ) : null}
+                  <VillaDetailPerfectForTags tags={v.perfectForTags ?? []} />
                 </VillaDetailIntroSection>
               </div>
             </div>
@@ -415,22 +400,12 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
                   <h3 className={vd.heading}>Video Walkthrough</h3>
-                  <div className="group relative aspect-video w-full cursor-pointer overflow-hidden border border-white/10 bg-gray-900">
-                    <Image
-                      src={walkthroughCover || "/Villa_Retreats/Magnolia/Hero/hero.webp"}
-                      alt="Video Cover"
-                      fill
-                      className="object-cover opacity-80 transition-opacity group-hover:opacity-60"
-                      sizes="(max-width: 768px) 100vw, 800px"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-2xl backdrop-blur-md transition-all hover:bg-white/30 md:h-20 md:w-20">
-                        <div className="ml-1 h-0 w-0 border-b-[10px] border-l-[18px] border-t-[10px] border-b-transparent border-l-white border-t-transparent" />
-                      </div>
-                    </div>
-                  </div>
+                  <VillaDetailWalkthroughPoster
+                    src={walkthroughCover || "/Villa_Retreats/Magnolia/Hero/hero.webp"}
+                  />
                 </div>
               </div>
+              <VillaDetailMeanderStrip />
             </section>
 
             <VillaOverlayFaqPolicies
@@ -457,8 +432,8 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
             <section id="enquiry" className={VILLA_DETAIL_CHARCOAL} ref={formRef}>
               <div className={vd.sectionShell}>
                 <div className={clsx(vd.content, vd.stack)}>
-                        <h2 className={vd.heading}>Plan Your Wedding at Jade</h2>
-                        <p className="text-white/60 text-gh-body">
+                        <h3 className={vd.heading}>Plan Your Wedding at Jade</h3>
+                        <p className={vd.enquirySectionLead}>
                           Share a few details. Our wedding team will guide you through venues &amp; pricing.
                         </p>
                         <WeddingVenueEnquiryForm onSuccess={() => setView("success")} onClosePrivacyNav={onClose} />

@@ -224,6 +224,7 @@ export default function AboutPage() {
         ctaText="PARTNER WITH JADE"
         onCtaClick={() => setPartnerOverlayOpen(true)}
         alternateGold={true}
+        experienceCta
       />
 
       {/* 5. WHAT WE DO SECTION (Offering Carousel) */}

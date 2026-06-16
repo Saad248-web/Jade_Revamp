@@ -6,6 +6,7 @@ import type { VillaActivity } from "@/lib/types";
 import VillaDetailImageFrame from "./VillaDetailImageFrame";
 import VillaDetailCarouselControls from "./VillaDetailCarouselControls";
 import { VILLA_DETAIL_SPACING } from "./villaDetailSpacing";
+import { EXPERIENCE_SECTION_CTA_CONTAINER_CLASS } from "@/lib/experienceSectionCta";
 
 const vd = VILLA_DETAIL_SPACING;
 
@@ -71,9 +72,15 @@ export default function VillaDetailExperienceCarousel({
           ) : null}
         </VillaDetailImageFrame>
       ) : null}
-      <PrimaryButton width="form" onClick={onEnquire}>
-        ENQUIRE
-      </PrimaryButton>
+      <div className={EXPERIENCE_SECTION_CTA_CONTAINER_CLASS}>
+        <PrimaryButton
+          width="section"
+          withArrow={false}
+          onClick={onEnquire}
+        >
+          ENQUIRE
+        </PrimaryButton>
+      </div>
     </div>
   );
 }

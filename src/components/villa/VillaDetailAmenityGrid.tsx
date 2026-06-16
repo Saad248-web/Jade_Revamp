@@ -35,12 +35,12 @@ export default function VillaDetailAmenityGrid({
   const content = (
     <>
       <VillaDetailSectionHeading>{title}</VillaDetailSectionHeading>
-      <div className="grid grid-cols-2 gap-x-6 gap-y-8">
+      <div className={vd.amenitiesGrid}>
         {amenities.slice(0, previewCount).map((amenity, idx) => {
           const Icon = getVillaDetailIcon(amenity.icon);
           const { line1, line2 } = splitAmenityLabel(amenity.label);
           return (
-            <div key={idx} className="flex items-start gap-2.5">
+            <div key={idx} className="flex items-start gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center border border-[#EFCD62]/70">
                 <Icon className="h-5 w-5 text-[#EFCD62]" strokeWidth={1} />
               </div>

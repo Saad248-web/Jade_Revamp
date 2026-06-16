@@ -121,6 +121,23 @@ export const VILLA_DETAIL_SPACING = {
   /** Pricing section legal note — fluid ~8px (see --fs-pricing-footnote) */
   pricingFootnote:
     "text-white/70 font-manrope text-gh-pricing-footnote leading-snug",
+  /** Venue overlay enquiry section lead copy */
+  enquirySectionLead: "text-white/60 text-gh-body font-manrope",
+  /** Venue overlay form group labels (toggle / checkbox sections) */
+  formGroupLabel:
+    "text-white/60 text-gh-label font-bold uppercase tracking-widest",
+  /** Venue overlay form option labels (toggle / checkbox items) */
+  formOptionLabel:
+    "text-white/80 text-gh-desc leading-snug group-hover:text-white transition-colors",
+  /** Venue overlay enquiry legal footnote */
+  formLegalFootnote:
+    "text-[11px] text-white/30 pt-2 text-center font-manrope leading-snug",
+  /** Fixed pricing bar — "Starting from" label */
+  pricingBarLabel:
+    "text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold font-manrope whitespace-nowrap",
+  /** Fixed pricing bar — price value */
+  pricingBarPrice:
+    "text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold font-manrope whitespace-nowrap",
   heroInsetX: "px-4 sm:px-5 lg:px-6",
   /**
    * View villa detail — fixed action header (transparent shell).
