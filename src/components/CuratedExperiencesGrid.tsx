@@ -37,7 +37,7 @@ export default function CuratedExperiencesGrid({
   ctaLink,
   onCtaClick,
   background = "#141517",
-  containerClassName = "py-fluid-lg md:py-fluid-xl",
+  containerClassName = "jade-section",
   innerClassName = "max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24",
   gridClassName = "grid grid-cols-2 md:grid-cols-3",
   ctaContainerClassName = EXPERIENCE_SECTION_CTA_CONTAINER_CLASS,

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { ArrowLeft, Headset } from "lucide-react";
 import CallToEnquireLink from "@/components/ui/CallToEnquireLink";
 import ScrollHideTopChrome from "@/components/ui/ScrollHideTopChrome";
-import { useBatchedScrollHide } from "@/lib/useBatchedScrollHide";
 import {
   VILLA_ACTION_CHROME_PAD_TOP_CLASS,
   VILLA_DETAIL_ACTION_STICKY_TOP_VISIBLE_CLASS,
@@ -94,8 +93,6 @@ export default function VillaSpacesPage() {
     );
   }, [villa, activeCategory, overrideSpaces]);
 
-  const chromeHidden = useBatchedScrollHide();
-
   if (!villa) {
     return (
       <div className="min-h-screen bg-[#1A1C1E] flex items-center justify-center text-white font-philosopher text-2xl">
@@ -108,7 +105,7 @@ export default function VillaSpacesPage() {
     <main
       className={clsx(
         "bg-[#1A1C1E] min-h-screen",
-        chromeHidden ? "pt-0" : VILLA_ACTION_CHROME_PAD_TOP_CLASS,
+        VILLA_ACTION_CHROME_PAD_TOP_CLASS,
       )}
     >
       <ScrollHideTopChrome zIndex="z-50">
@@ -157,7 +154,7 @@ export default function VillaSpacesPage() {
       <nav
         className={clsx(
           "jade-hscroll-chrome sticky z-40 min-w-0 w-full bg-[#1A1C1E]",
-          chromeHidden ? "top-0" : VILLA_DETAIL_ACTION_STICKY_TOP_VISIBLE_CLASS,
+          VILLA_DETAIL_ACTION_STICKY_TOP_VISIBLE_CLASS,
         )}
       >
         <div className={clsx("w-full", VILLA_DETAIL_STICKY_TABS_CHROME_CLASS)}>

@@ -80,7 +80,7 @@ export default function PremiumFeaturesSection({
     "w-[max(200px,min(72dvw,275px))] sm:w-[max(218px,min(74dvw,275px))] md:w-[min(269px,40vw)] lg:w-[269px]";
 
   return (
-    <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
+    <section className="jade-section flex flex-col items-center justify-center bg-[#1A1C1E]">
       <div className="max-w-7xl mx-auto px-4 w-full flex flex-col items-center">
         <div
           className={`text-center ${

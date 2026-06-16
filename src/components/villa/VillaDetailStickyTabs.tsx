@@ -3,7 +3,6 @@
 import clsx from "clsx";
 import { stickyCategoryTabClass } from "@/lib/stickyTabGlass";
 import { VILLA_DETAIL_STICKY_TABS_CHROME_CLASS } from "@/lib/scrollChromeGlass";
-import { useBatchedScrollHide } from "@/lib/useBatchedScrollHide";
 import { useScrollTabIntoView } from "@/lib/useScrollTabIntoView";
 import CategoryTabRail from "@/components/ui/CategoryTabRail";
 import MeanderStrip from "@/components/ui/MeanderStrip";
@@ -41,7 +40,6 @@ export default function VillaDetailStickyTabs({
   sectionIds,
 }: VillaDetailStickyTabsProps) {
   const trackRef = useScrollTabIntoView(activeTab);
-  const actionChromeHidden = useBatchedScrollHide();
 
   const visibleTabs = TAB_LABELS.filter((tab) => {
     const sectionId = tabToSectionId(tab);
@@ -55,7 +53,7 @@ export default function VillaDetailStickyTabs({
         className={clsx(
           "jade-hscroll-chrome sticky z-40",
           vd.stickyChromeOuter,
-          actionChromeHidden ? "top-0" : vd.actionHeaderStickyTop,
+          vd.actionHeaderStickyTop,
           vd.hScrollViewportEdge,
         )}
       >

@@ -11,7 +11,6 @@ import BookingBanner from "./BookingBanner";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useBooking } from "@/context/BookingContext";
 import { scrollToElement } from "@/lib/lenis";
-import { useBatchedScrollHide } from "@/lib/useBatchedScrollHide";
 import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
 import HorizontalScrollRail from "@/components/ui/HorizontalScrollRail";
 
@@ -41,7 +40,6 @@ const NEXT_AVAILABLE = [
 
 export default function VillasCarousel() {
   const [activeCategory, setActiveCategory] = useState("All");
-  const navbarVisible = !useBatchedScrollHide();
   const searchParams = useSearchParams();
 
   // Cold load / external deep link only — sync ?category= once; never on tab clicks.
@@ -170,8 +168,8 @@ export default function VillasCarousel() {
     <section id="VILLAS-carousel" className="relative bg-[#1A1C1E]">
       {/* STICKY FILTERS BAR */}
       <div
-        className="sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/10 transition-all duration-300 ease-in-out"
-        style={{ top: navbarVisible ? `${NAVBAR_HEIGHT}px` : "0px" }}
+        className="sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/10"
+        style={{ top: `${NAVBAR_HEIGHT}px` }}
       >
         <div className="max-w-[1920px] mx-auto px-2 md:px-8 lg:px-16 pt-3 md:pt-5 pb-3">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-start gap-2.5 md:gap-5">

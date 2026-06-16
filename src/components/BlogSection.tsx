@@ -78,7 +78,7 @@ export default function BlogSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex flex-col justify-center pt-12 pb-12 md:pt-fluid-lg md:pb-10 lg:pt-fluid-xl"
+      className="jade-section relative flex flex-col justify-center"
       style={{ backgroundColor: "#25282C" }}
     >
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />

@@ -9,13 +9,11 @@ import { EXPERIENCE_SECTION_CTA_CONTAINER_CLASS } from "@/lib/experienceSectionC
 
 export const experienceCarouselDefaults = {
   /** Section shell — no min-height stretch so CTA stays 16px under the frame */
-  containerClassName: "bg-[#141517] overflow-x-hidden",
+  containerClassName: "jade-section bg-[#141517] overflow-x-hidden",
 
-  /**
-   * Inner column — horizontal + vertical padding scale with viewport (fluid tokens + steps).
-   */
+  /** Inner column — horizontal inset only; vertical rhythm from `.jade-section`. */
   innerClassName:
-    "w-full max-w-6xl mx-auto flex flex-col px-4 sm:px-6 md:px-8 pt-fluid-xl sm:pt-fluid-xl md:pt-fluid-lg lg:pt-fluid-xl pb-fluid-md sm:pb-fluid-lg md:pb-8 lg:pb-10",
+    "w-full max-w-6xl mx-auto flex flex-col px-4 sm:px-6 md:px-8",
 
   /**
    * Image frame — explicit stepped heights only (avoid `min(dvh,*)` arbitrary classes;

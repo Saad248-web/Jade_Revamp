@@ -85,7 +85,7 @@ const CaravanJourneySection = () => {
 
   const [activeCard, setActiveCard] = React.useState<number | null>(null);
   return (
-    <section className="bg-[#0B2C23] py-fluid-lg md:py-fluid-xl px-6 md:px-12 lg:px-24">
+    <section className="jade-section bg-[#0B2C23] px-6 md:px-12 lg:px-24">
       <div className="max-w-6xl mx-auto">
         {/* Title Group */}
         <div className="mb-10">

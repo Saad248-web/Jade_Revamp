@@ -257,7 +257,7 @@ export default function CareersPage() {
       {/* 2. JOBS SECTION */}
       <section
         id="jobs"
-        className="py-20 bg-[#0B2C23] relative"
+        className="jade-section bg-[#0B2C23] relative"
       >
         <div className="max-w-4xl mx-auto px-6 relative z-10">
           <div className="text-center mb-12">

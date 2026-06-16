@@ -7,7 +7,7 @@ import { JADE_CHARCOAL } from "@/lib/jadeSectionColors";
 export function InstagramCarouselShell() {
   return (
     <div
-      className="py-12 md:py-20 min-h-[80dvh] flex flex-col justify-center items-center px-6"
+      className="jade-section min-h-[80dvh] flex flex-col justify-center items-center px-6"
       style={{ background: JADE_CHARCOAL }}
       aria-hidden
     >

@@ -14,8 +14,8 @@
 
 | | ID | Status |
 |---|-----|--------|
-| **Current** | MP-01 | Pending |
-| **Next** | MP-01 → AB-01 → UI-01 → UI-02 → QA-01 | |
+| **Current** | AB-01 | Done — verify |
+| **Next** | QA-01 | |
 
 | ID | Task | Status |
 |----|------|--------|
@@ -28,11 +28,11 @@
 | O-05 | Overlay typography consistency | [ ] |
 | F-01 | Mobile input zoom | [x] |
 | V-01 | Villa category navigation glitch | [x] |
-| MP-01 | Menu page design refinements | [ ] |
-| AB-01 | About Section 3 background | [ ] |
+| MP-01 | Menu page design refinements | [x] |
+| AB-01 | About Section 3 background | [x] |
 | CR-01 | Careers remove dot patterns | [x] |
-| UI-01 | Header layout shift | [ ] |
-| UI-02 | Section spacing & vertical rhythm | [ ] |
+| UI-01 | Header layout shift | [x] |
+| UI-02 | Section spacing & vertical rhythm | [x] |
 | BTN-01 | Global button height & width standardization | [ ] |
 | QA-01 | Mobile browser consistency | [ ] |
 
@@ -284,7 +284,7 @@
 
 ### AB-01 — Section 3 Background Update
 
-- [ ] Remove the decorative dot pattern from Section 3.
+- [x] Remove the decorative dot pattern from Section 3.
 
 **Replace With:**
 
@@ -297,9 +297,9 @@
 
 - Section styling remains visually consistent with the Featured Villas design language.
 
-**Files:** *(fill when started)*
+**Files:** `src/app/about/page.tsx` (`SectionWrapper`, `JADE_GREEN`, `LuxuryPattern` via `OUR_STORY_SECTION_PATTERN`)
 
-**Verify:** *(fill when started)*
+**Verify:** `/about` — Our Story section: jade green base, gold geometric motif at 0.09 opacity, 18vh top/bottom edge fade; no white dot grid.
 
 ---
 
@@ -333,7 +333,7 @@
 
 ### UI-01 — Prevent Layout Shift When Header Appears
 
-- [ ] Page layout shifts when the header becomes visible.
+- [x] Page layout shifts when the header becomes visible.
 
 **Current Issue:**
 
@@ -351,9 +351,11 @@
 
 - StayVista navigation behaviour.
 
-**Files:** *(fill when started)*
+**Done:** Fixed navbar is overlay-only (`transform` hide/show). Removed layout recalculation on nav hide (`scrollLinkedMobileViewport`), constant sticky `top` on villas filter bar / villa detail tabs / spaces page, constant action-header padding on spaces.
 
-**Verify:** *(fill when started)*
+**Files:** `src/lib/scrollLinkedMobileViewport.ts`, `src/components/ScrollLinkedViewportSync.tsx`, `src/components/VillasCarousel.tsx`, `src/components/villa/VillaDetailStickyTabs.tsx`, `src/app/villas/[id]/spaces/page.tsx`
+
+**Verify:** Mobile + desktop — scroll down (header hides) then scroll up (header shows). Featured/experience scroll-linked sections, `/villas` category bar, villa detail tabs, and spaces page should not jump or resize when the navbar appears.
 
 ---
 
@@ -361,7 +363,7 @@
 
 ### UI-02 — Section Spacing & Vertical Rhythm
 
-- [ ] Review spacing between all major sections across mobile devices.
+- [x] Review spacing between all major sections across mobile devices.
 
 **Current Issue:**
 
@@ -375,9 +377,9 @@
 - Mobile spacing should follow a standardized spacing system.
 - Sections should not feel visually compressed on smaller screens.
 
-**Files:** *(fill when started)*
+**Files:** `src/app/globals.css` (`--jade-section-pad-y` + `.jade-section`), `src/lib/experienceCarouselLayout.ts`, experience section components (`PremiumFeaturesSection`, `CuratedExperiencesGrid`, `CaravanJourneySection`, `WhyJadeWeddings`, `TrustedBySection`, villa carousels).
 
-**Verify:** *(fill when started)*
+**Verify:** Mobile/tablet (≤1023px): Caravans, Corporate, Wedding, Party, Weekend, Home, About, Careers — inter-section gaps ~48px min, scales with viewport. Desktop (≥1024px): pre-UI-02 rhythm (`clamp(4rem, 3.5vw, 6rem)`). Full-viewport sections unchanged.
 
 ---
 

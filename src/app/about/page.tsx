@@ -22,6 +22,15 @@ import {
   type HeroSplitCustom,
 } from "@/lib/heroSplitCarouselVariants";
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
+import SectionWrapper from "@/components/SectionWrapper";
+import { JADE_GREEN } from "@/lib/jadeSectionColors";
+
+/** Matches Featured Villas — green base + gold motif with top/bottom edge fade. */
+const OUR_STORY_SECTION_PATTERN = {
+  opacity: 0.09,
+  strokeColor: "#EFCD62",
+  edgeFade: "18vh",
+} as const;
 
 const OFFERINGS = [
   {
@@ -147,10 +156,11 @@ export default function AboutPage() {
       <TrustedBySection />
 
       {/* 3. OUR STORY SECTION */}
-      <section className="jade-section bg-jade-charcoal relative overflow-hidden">
-        {/* Background Pattern Overlay (Optional subtle texture) */}
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]" />
-
+      <SectionWrapper
+        bg={JADE_GREEN}
+        className="jade-section overflow-hidden"
+        pattern={OUR_STORY_SECTION_PATTERN}
+      >
         <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
           <h3 className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-6">
             OUR STORY
@@ -191,7 +201,7 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-      </section>
+      </SectionWrapper>
 
       {/* 4. WHY JADE SECTION */}
       <PremiumFeaturesSection
@@ -228,7 +238,7 @@ export default function AboutPage() {
       />
 
       {/* 5. WHAT WE DO SECTION (Offering Carousel) */}
-      <section className="relative bg-[#1A1C1E] py-10 md:py-12 overflow-hidden">
+      <section className="jade-section relative bg-[#1A1C1E] overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 w-full flex flex-col">
           {/* Header & Nav */}
           <div className="flex justify-between items-end mb-6 md:mb-10">
@@ -324,7 +334,7 @@ export default function AboutPage() {
       </section>
 
       {/* 6. MEET THE TEAM SECTION (Hidden for now)
-      <section className="py-fluid-lg md:py-fluid-xl bg-[#1A1C1E] relative overflow-hidden">
+      <section className="jade-section bg-[#1A1C1E] relative overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-100">
           <LiveBackground />
         </div>

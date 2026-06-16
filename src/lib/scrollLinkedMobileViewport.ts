@@ -66,26 +66,25 @@ function clampGap(
 }
 
 /**
- * @param navHidden — from useBatchedScrollHide (navbar translated off-screen).
+ * iOS Safari / mobile: sync scroll-linked panel stage to visualViewport.
+ * Site navbar is `position: fixed` (overlay) — hide/show must not resize stages (UI-01).
  */
-export function syncScrollLinkedMobileViewport(navHidden: boolean): void {
+export function syncScrollLinkedMobileViewport(): void {
   if (!isScrollLinkedMobileViewport()) return;
 
   const root = document.documentElement;
   const vv = window.visualViewport;
   const layoutH = window.innerHeight;
 
-  const measuredTop = readRootPx("--jade-mobile-chrome-top-px", 0);
   const measuredBottom = readRootPx("--jade-mobile-chrome-bottom-px", 0);
-  const chromeTop =
-    measuredTop > 0 ? measuredTop : readRootPx("--jade-mobile-chrome-top", 56);
   const chromeBottom =
     measuredBottom > 0
       ? measuredBottom
       : readRootPx("--jade-mobile-chrome-bottom", 80);
 
   const browserTop = Math.max(0, vv?.offsetTop ?? 0);
-  const siteTop = navHidden ? 0 : chromeTop;
+  /** Fixed navbar overlays content — never add site chrome to layout math on hide/show. */
+  const siteTop = 0;
   const top = browserTop + siteTop;
 
   const vvHeight = vv?.height ?? layoutH;

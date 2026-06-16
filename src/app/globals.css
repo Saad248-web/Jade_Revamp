@@ -78,10 +78,9 @@
     --villa-section-pad-block: 2.5rem; /* 40px top + bottom */
     --villa-section-pad-block-lg: 4rem; /* 64px top + bottom at lg */
 
-    /* Global section rhythm — non-Villa pages (mobile target: 40–56px) */
-    --jade-section-pad-y: clamp(2.5rem, 5vw, 3.5rem); /* 40–56px */
-    --jade-section-pad-y-md: clamp(3rem, 4vw, 4rem); /* 48–64px */
-    --jade-section-pad-y-lg: clamp(4rem, 3.5vw, 6rem); /* 64–96px */
+    /* Global section rhythm — breathable on mobile/tablet; desktop uses lg token below */
+    --jade-section-pad-y: clamp(3rem, 8vw, 7rem); /* 48–112px — mobile + tablet */
+    --jade-section-pad-y-lg: clamp(4rem, 3.5vw, 6rem); /* 64–96px — desktop (pre-UI-02) */
 
     /* Gallery / default rails — Figma fade band width */
     --jade-hscroll-fade-width: 3.75rem;
@@ -130,13 +129,6 @@
     .villa-section-pad-block {
       padding-top: var(--villa-section-pad-block-lg);
       padding-bottom: var(--villa-section-pad-block-lg);
-    }
-  }
-
-  @media (min-width: 768px) and (max-width: 1023px) {
-    .jade-section {
-      padding-top: var(--jade-section-pad-y-md);
-      padding-bottom: var(--jade-section-pad-y-md);
     }
   }
 

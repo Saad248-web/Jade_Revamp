@@ -38,7 +38,7 @@ const LOGOS = [
 
 export default function TrustedBySection() {
   return (
-    <section className="flex flex-col items-center justify-center py-fluid-lg md:py-fluid-xl bg-[#1A1C1E]">
+    <section className="jade-section flex flex-col items-center justify-center bg-[#1A1C1E]">
       <div className="max-w-4xl mx-auto px-8 text-center w-full">
         <p className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase mb-3">
           TRUSTED BY
