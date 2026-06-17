@@ -1,43 +1,156 @@
 /**
- * iOS Safari / mobile: one-time scroll-linked stage bootstrap.
- * Navbar + browser chrome are overlays — no live visualViewport tracking during scroll
- * (prevents body jerk when the header appears).
+ * Mobile scroll-linked stage sizing.
+ *
+ * Computes a STABLE per-device frame (stage height, card heights, gaps) so panels
+ * fit between the fixed navbar overlay and the bottom nav without clipping CTAs.
+ *
+ * Stability contract: values derive from window.innerWidth-keyed layout only and are
+ * recomputed on orientation / width change — never on scroll or navbar show/hide.
+ * This keeps the frame "unshakable" while the header slides in (overlay-only).
  */
+
+import { MOBILE_BOTTOM_NAV_CONTENT_GAP } from "@/lib/layoutSpacing";
 
 const MOBILE_MQ = "(max-width: 1023px)";
 
-/** Vars set once at bootstrap — cleared on desktop. */
+/** Section label row inside sticky stage (40px top + 40px bottom on mobile). */
+const SECTION_HEADER_PX = 80;
+
 const CUSTOM_PROPS = [
   "--jade-vv-offset-top",
+  "--jade-vv-height",
   "--jade-vv-nav-inset",
+  "--jade-scroll-stage-mobile-height",
+  "--jade-scroll-panel-row-height",
+  "--jade-scroll-text-reserve",
+  "--jade-scroll-card-max-h",
+  "--jade-scroll-card-max-h-featured",
+  "--jade-scroll-card-max-h-tall-header",
+  "--jade-scroll-panel-gap",
+  "--jade-scroll-panel-gap-lg",
+  "--jade-scroll-panel-bottom-gap",
+  "--jade-mobile-chrome-top-px",
   "--jade-mobile-chrome-bottom-px",
 ] as const;
+
+function parsePx(value: string): number {
+  const n = parseFloat(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function readRootPx(varName: string, fallback: number): number {
+  if (typeof document === "undefined") return fallback;
+  const raw = getComputedStyle(document.documentElement)
+    .getPropertyValue(varName)
+    .trim();
+  return parsePx(raw) || fallback;
+}
 
 export function isScrollLinkedMobileViewport(): boolean {
   if (typeof window === "undefined") return false;
   return window.matchMedia(MOBILE_MQ).matches;
 }
 
+function clampGap(
+  panelRowPx: number,
+  minPx: number,
+  vhFactor: number,
+  maxPx: number,
+): number {
+  const fromVh = panelRowPx * vhFactor;
+  return Math.round(Math.min(maxPx, Math.max(minPx, fromVh)));
+}
+
 /**
- * Pin scroll-linked sticky stage to static CSS tokens (globals.css).
- * Does not call Lenis.resize() or follow visualViewport while scrolling.
+ * Pin the scroll-linked sticky stage to a stable height.
+ * Uses innerHeight (stable per width) — not visualViewport — so browser chrome and
+ * the overlay navbar showing/hiding does not resize the frame mid-scroll.
  */
-export function bootstrapScrollLinkedMobileViewport(): void {
+export function syncScrollLinkedMobileViewport(): void {
   if (!isScrollLinkedMobileViewport()) return;
 
   const root = document.documentElement;
-  measureScrollLinkedChromeHeights();
+  const layoutH = window.innerHeight;
+
+  const measuredBottom = readRootPx("--jade-mobile-chrome-bottom-px", 0);
+  const chromeBottom =
+    measuredBottom > 0
+      ? measuredBottom
+      : readRootPx("--jade-mobile-chrome-bottom", 80);
+
+  /** Fixed navbar overlays content; only the bottom nav reduces usable stage height. */
+  const stageHeight = Math.max(200, layoutH - chromeBottom);
 
   root.style.setProperty("--jade-vv-offset-top", "0px");
+  root.style.setProperty("--jade-vv-height", `${layoutH}px`);
   root.style.setProperty("--jade-vv-nav-inset", "0px");
+  root.style.setProperty(
+    "--jade-scroll-stage-mobile-height",
+    `${stageHeight}px`,
+  );
+
+  const panelRow = Math.max(160, stageHeight - SECTION_HEADER_PX);
+  root.style.setProperty("--jade-scroll-panel-row-height", `${panelRow}px`);
+
+  const panelGap = clampGap(panelRow, 6, 0.024, 12);
+  const panelGapLg = clampGap(panelRow, 8, 0.032, 20);
+  root.style.setProperty("--jade-scroll-panel-gap", `${panelGap}px`);
+  root.style.setProperty("--jade-scroll-panel-gap-lg", `${panelGapLg}px`);
+  root.style.setProperty(
+    "--jade-scroll-panel-bottom-gap",
+    MOBILE_BOTTOM_NAV_CONTENT_GAP,
+  );
+
+  setCardMaxHeights(root, panelRow, panelGap, panelGapLg);
 }
 
-/** @deprecated No-op during scroll — use bootstrap on mount / orientation only. */
-export function syncScrollLinkedMobileViewport(): void {
-  bootstrapScrollLinkedMobileViewport();
+function setCardMaxHeights(
+  root: HTMLElement,
+  panelRowPx: number,
+  panelGap: number,
+  panelGapLg: number,
+): void {
+  const stackGaps = panelGap * 3 + panelGapLg;
+  const textReserve = Math.min(
+    240,
+    Math.max(200, Math.round(panelRowPx * 0.46) + stackGaps),
+  );
+  const tallHeaderReserve = textReserve + 28;
+
+  root.style.setProperty("--jade-scroll-text-reserve", `${textReserve}px`);
+
+  const cardMax = Math.min(600, Math.max(132, panelRowPx - textReserve));
+  const cardMaxTall = Math.min(
+    560,
+    Math.max(120, panelRowPx - tallHeaderReserve),
+  );
+
+  root.style.setProperty("--jade-scroll-card-max-h", `${cardMax}px`);
+  root.style.setProperty(
+    "--jade-scroll-card-max-h-tall-header",
+    `${cardMaxTall}px`,
+  );
+
+  /**
+   * Featured §6 has no header row but its outer grid reserves navbar clearance (top)
+   * + bottom padding, so the safe stack budget ≈ panelRow. Size the villa image to
+   * that budget minus the text/CTA block — fills the frame without clipping the CTA.
+   */
+  const featuredTextReserve = Math.min(
+    208,
+    Math.max(168, Math.round(panelRowPx * 0.36) + stackGaps),
+  );
+  const featuredCardMax = Math.min(
+    600,
+    Math.max(150, panelRowPx - featuredTextReserve),
+  );
+  root.style.setProperty(
+    "--jade-scroll-card-max-h-featured",
+    `${featuredCardMax}px`,
+  );
 }
 
-/** Measure bottom chrome once — fixed navbar is transform-only overlay. */
+/** Measure fixed bottom-nav chrome height once (orientation / width change). */
 export function measureScrollLinkedChromeHeights(): void {
   if (typeof document === "undefined") return;
 

@@ -10,9 +10,6 @@ import {
 } from "framer-motion";
 import { useSnappedScrollProgress } from "@/lib/carouselMotion";
 import {
-  SCROLL_LINKED_FREE_SCROLL_GAIN,
-} from "@/lib/scrollLinkedFreeScroll";
-import {
   useScrollLinkedManualNavigation,
   type ScrollLinkedStageNavigation,
 } from "@/lib/useScrollLinkedManualNavigation";
@@ -34,11 +31,9 @@ export type UseScrollLinkedSectionProgressOptions = {
   mobileSnapZoneRatio?: number;
   /** Cap snapped progress so horizontal carousel stops at last card (Featured CTA) */
   mobileSnapMaxProgress?: number;
-  /** Free / desktop scroll-linked — vertical scroll → horizontal gain */
-  freeScrollGain?: number;
-  /** Manual swipe/drag + horizontal wheel (default: free mode, or desktop when mobileSnapOnly) */
+  /** Manual swipe/drag + horizontal wheel navigation (default: on for all sections) */
   enableManualNavigation?: boolean;
-  /** Show swipe/drag hint on first visit to section */
+  /** Show swipe/drag hint while the section is first explored */
   showHorizontalHint?: boolean;
 };
 
@@ -61,7 +56,6 @@ export function useScrollLinkedSectionProgress(
     mobileSnapScrollGain = 2.1,
     mobileSnapZoneRatio = 0.68,
     mobileSnapMaxProgress,
-    freeScrollGain = SCROLL_LINKED_FREE_SCROLL_GAIN,
     enableManualNavigation,
     showHorizontalHint = true,
   } = options;
@@ -84,11 +78,6 @@ export function useScrollLinkedSectionProgress(
   });
 
   const mobileSnapActive = scrollMode === "mobileSnapOnly" && !isLg;
-  const freeNavActive =
-    scrollMode === "free" || (scrollMode === "mobileSnapOnly" && isLg);
-  const manualNavEnabled =
-    enableManualNavigation ?? freeNavActive;
-
   const useSmoothInput = smoothSpring && !mobileSnapActive;
   const inputProgress = useSmoothInput ? smoothProgress : scrollYProgress;
 
@@ -121,23 +110,17 @@ export function useScrollLinkedSectionProgress(
     return Math.min(p, mobileSnapMaxProgress);
   });
 
-  const legacyFreeProgress = useTransform(scrollYProgress, (p) =>
-    Math.min(1, Math.max(0, p * freeScrollGain)),
-  );
-
-  const stageNavigation = useScrollLinkedManualNavigation({
-    targetRef,
-    scrollYProgress,
-    enabled: manualNavEnabled,
-    scrollGain: freeScrollGain,
-    showHint: showHorizontalHint,
-  });
-
+  /** Free sections track scroll directly; snap sections use the snapped pipeline. */
   const panelProgress: MotionValue<number> = mobileSnapActive
     ? cappedSnapProgress
-    : manualNavEnabled
-      ? stageNavigation.panelProgress
-      : legacyFreeProgress;
+    : scrollYProgress;
+
+  const manualNavEnabled = enableManualNavigation ?? true;
+
+  const stageNavigation = useScrollLinkedManualNavigation({
+    enabled: manualNavEnabled,
+    showHint: showHorizontalHint,
+  });
 
   return {
     targetRef,

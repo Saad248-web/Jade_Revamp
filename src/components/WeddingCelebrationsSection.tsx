@@ -86,7 +86,7 @@ export default function WeddingCelebrationsSection() {
 
   return (
     <ScrollLinkedHorizontalSection
-      sectionHeightVh={600}
+      sectionHeightVh={480}
       bgClassName="bg-[#1A1C1E]"
       headerLabel="PRE WEDDING CELEBRATIONS"
       headerLabelClassName="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-[#EFCD62] drop-shadow-lg block"

@@ -63,7 +63,7 @@ export const scrollLinkedPanelOuterClass =
   "relative mx-auto grid h-full min-h-0 w-full max-w-[1920px] max-lg:max-h-[var(--jade-scroll-panel-row-height,100%)] max-lg:grid-rows-[minmax(0,1fr)_auto_minmax(0,1fr)] max-lg:items-center max-lg:justify-items-center max-lg:box-border max-lg:px-4 max-lg:pb-[var(--jade-scroll-panel-bottom-gap,1.25rem)] max-lg:py-0 sm:px-8 md:px-16 xl:px-24 lg:flex lg:flex-col lg:items-center lg:justify-center lg:pb-8";
 
 export const scrollLinkedPanelOuterFeaturedClass =
-  "relative mx-auto grid h-full min-h-0 w-full max-w-[1920px] max-lg:max-h-[var(--jade-scroll-stage-mobile-height,100%)] max-lg:grid-rows-[minmax(0,1fr)_auto_minmax(0,1fr)] max-lg:items-center max-lg:justify-items-center max-lg:box-border max-lg:px-6 max-lg:py-10 md:px-20 lg:px-32 xl:px-48 lg:flex lg:flex-col lg:items-center lg:justify-center lg:py-0";
+  "relative mx-auto grid h-full min-h-0 w-full max-w-[1920px] max-lg:max-h-[var(--jade-scroll-stage-mobile-height,100%)] max-lg:grid-rows-[minmax(0,1fr)_auto_minmax(0,1fr)] max-lg:items-center max-lg:justify-items-center max-lg:box-border max-lg:px-6 max-lg:pt-[var(--jade-mobile-chrome-top,3.5rem)] max-lg:pb-8 md:px-20 lg:px-32 xl:px-48 lg:flex lg:flex-col lg:items-center lg:justify-center lg:py-0";
 
 export const scrollLinkedPanelStackWrapClass =
   "relative col-start-1 row-start-2 w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto self-center max-lg:max-h-full max-lg:pb-[max(0px,env(safe-area-inset-bottom,0px))]";

@@ -606,8 +606,13 @@ html.jade-splash-locked main {
 /* Navbar shell — slide hide/show driven by Framer Motion in Navbar.tsx */
 .jade-nav-chrome {
   will-change: transform;
-  contain: layout style paint;
   isolation: isolate;
+}
+
+/* Grab-drag carousels must not start native image drag or text selection */
+.jade-scroll-linked-stage img {
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 /* Global header — balanced horizontal inset (matches page gutter, not oversized xl padding) */
@@ -863,12 +868,14 @@ body {
     --jade-scroll-panel-gap: 0.5rem;
     --jade-scroll-panel-gap-lg: 0.625rem;
     --jade-scroll-text-reserve: 12rem;
-    /* svh = smallest viewport — stable frame; navbar overlays top */
+    /* svh = smallest viewport — stable frame. Navbar overlays the top (header row /
+       Featured top padding provide its clearance); only the bottom nav is subtracted
+       so cards fill to the bottom nav without leaving a navbar-height empty gap. */
     --jade-scroll-stage-mobile-height: calc(
-      100svh - var(--jade-mobile-chrome-top) - var(--jade-mobile-chrome-bottom)
+      100svh - var(--jade-mobile-chrome-bottom)
     );
     --jade-scroll-panel-row-height: calc(
-      var(--jade-scroll-stage-mobile-height) - 2.25rem
+      var(--jade-scroll-stage-mobile-height) - 5rem
     );
     --jade-scroll-card-max-h: min(
       55svh,
@@ -889,7 +896,6 @@ body {
     max-height: var(--jade-scroll-stage-mobile-height);
     transform: translateZ(0);
     backface-visibility: hidden;
-    contain: layout style;
     /* Instant clamp — navbar hide/show must not resize this frame */
     transition: none;
   }

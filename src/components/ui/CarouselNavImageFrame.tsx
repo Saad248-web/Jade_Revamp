@@ -26,6 +26,8 @@ export type CarouselNavImageFrameProps = {
   navLayout?: "corners" | "none";
   /** When true, horizontal swipe/drag only below `lg`; desktop uses arrows / free scroll */
   swipeMobileOnly?: boolean;
+  /** Disable image swipe/drag entirely (arrows only) — lets a parent surface own the drag */
+  enableSwipe?: boolean;
   children?: React.ReactNode;
 };
 
@@ -47,13 +49,14 @@ export default function CarouselNavImageFrame({
   imageClassName = "object-cover",
   navLayout = "none",
   swipeMobileOnly = false,
+  enableSwipe = true,
   children,
 }: CarouselNavImageFrameProps) {
   const showCornerNav = navLayout === "corners" && slideCount > 1;
   const miniCardSwipeProps = useCarouselSwipeDragProps(
     onPrev,
     onNext,
-    slideCount > 1,
+    enableSwipe && slideCount > 1,
     { mobileOnly: swipeMobileOnly },
   );
   const swipeDrag = miniCardSwipeProps.drag === "x";

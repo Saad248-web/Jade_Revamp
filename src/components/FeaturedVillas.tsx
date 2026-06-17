@@ -149,6 +149,7 @@ export default function FeaturedVillas() {
     mobileSnapDwellRatio: FEATURED_MOBILE_SNAP_DWELL,
     mobileSnapZoneRatio: FEATURED_MOBILE_SNAP_PORTION,
     mobileSnapMaxProgress: mobileCarouselMaxProgress,
+    showHorizontalHint: false,
   });
 
   return (
@@ -307,7 +308,7 @@ const FeaturedVillaImageCarousel = memo(function FeaturedVillaImageCarousel({
       onPrev={goPrev}
       onNext={goNext}
       navLayout="corners"
-      swipeMobileOnly
+      enableSwipe
       sizes={
         isLg
           ? "(max-width: 640px) 100vw, (max-width: 1280px) 95vw, 1400px"
@@ -351,6 +352,7 @@ function VillaSlide({
           <div
             className={`${scrollLinkedFeaturedVillaImageFrameClass} relative z-20 pointer-events-auto`}
             style={{ perspective: "1500px" }}
+            data-jade-stage-no-pan
           >
             <div className="relative h-full w-full">
               <FeaturedVillaImageCarousel data={data} />

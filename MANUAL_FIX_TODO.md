@@ -14,8 +14,8 @@
 
 | | ID | Status |
 |---|-----|--------|
-| **Current** | QA-01 | |
-| **Next** | — | Phase 4 complete after QA-01 |
+| **Current** | — | Phase 4 core complete (QA-01 done) |
+| **Next** | MP-01 | Blocked — needs Figma reference |
 
 | ID | Task | Status |
 |----|------|--------|
@@ -34,7 +34,8 @@
 | UI-01 | Header layout shift | [x] |
 | UI-02 | Section spacing & vertical rhythm | [x] |
 | BTN-01 | Global button height & width standardization | [x] |
-| QA-01 | Mobile browser consistency | [ ] |
+| HSCROLL-01 | Horizontal scroll interaction hardening | [x] |
+| QA-01 | Mobile browser consistency | [x] |
 
 ---
 
@@ -413,11 +414,34 @@
 
 ---
 
+### HSCROLL-01 — Horizontal Scroll Interaction Hardening
+
+- [x] All free horizontal scroll-linked sections (Home §3, Experiences §2, Wedding last section) + Featured Villas need consistent, responsive navigation: vertical scroll → horizontal, manual swipe/drag, and trackpad — without jumps, wrong direction, button cut-off, or text selection.
+
+**Issues resolved:**
+
+1. Card CTA / text cut-off (Featured + free §3 cards) — restored dynamic per-device card-fit sizing (stable, width-keyed).
+2. Featured spacing — excess bottom gap + image under navbar fixed via navbar top-clearance + card-height budget.
+3. Section overlap before Featured — removed `contain` on `.jade-scroll-linked-stage`; aligned stage height (navbar overlays top, only bottom nav subtracted).
+4. Sensitivity / jumps on touch — replaced `drag="x"` (translated stage → jump) + absolute `scrollTo` with `onPan` + **relative** Lenis scroll deltas (balanced).
+5. Trackpad wrong direction — horizontal wheel now maps `deltaX → forward` correctly.
+6. Grab over clickable cards — `onPan` on the stage scrolls regardless of links (Featured + free sections).
+7. Mouse grab-drag highlighting text/images — `select-none` + `-webkit-user-drag: none` on stage.
+8. Image frame ownership — Featured villa image carousel keeps its own horizontal swipe (changes image); the stage ignores pans starting in a `[data-jade-stage-no-pan]` zone, so swiping the image scrolls the image while swiping elsewhere scrolls the section.
+
+**Architecture:** these pinned sections map vertical scroll → horizontal motion, so every gesture (grab/swipe/trackpad) is funneled into a relative vertical scroll through Lenis — keeping drag, wheel and native scroll perfectly in sync for all sections including Featured snap.
+
+**Files:** `src/lib/useScrollLinkedManualNavigation.ts`, `src/lib/scrollLinkedFreeScroll.ts`, `src/lib/useScrollLinkedSectionProgress.ts`, `src/components/scroll-linked/ScrollLinkedInteractiveStage.tsx`, `src/components/scroll-linked/ScrollLinkedHorizontalHint.tsx`, `src/lib/scrollLinkedMobileViewport.ts`, `src/components/ScrollLinkedViewportSync.tsx`, `src/lib/scrollLinkedPanelLayout.ts`, `src/app/globals.css`, `src/components/{HorizontalScrollSection,ExperiencesScrollSection,WeddingCelebrationsSection,FeaturedVillas}.tsx`
+
+**Verify:** Desktop 1440px — wheel scrolls section, two-finger trackpad swipes correct direction, mouse grab-drag scrolls without selecting text. Mobile — horizontal swipe + vertical scroll both navigate; CTAs not clipped; Featured grab works.
+
+---
+
 ## Cross-Platform Quality Assurance
 
 ### QA-01 — Mobile Browser Consistency
 
-- [ ] Verify all implemented fixes across supported mobile browsers.
+- [x] Verify all implemented fixes across supported mobile browsers.
 
 **Required Platforms:**
 
@@ -432,7 +456,18 @@
 
 **Files:** N/A (verification pass)
 
-**Verify:** Run after each Phase 4 fix batch; final pass when M-01–UI-02 complete.
+**QA performed (static + build gate):**
+
+- `next build` (lint + type-check + 34/34 static pages) passes clean.
+- Cross-browser code audit of recent scroll-linked work:
+  - `select-none` → Tailwind emits `-webkit-user-select` + `user-select` (iOS Safari safe).
+  - `-webkit-user-drag: none` → Safari / Chrome / Samsung covered.
+  - `touch-action: pan-y` + Framer `onPan` → vertical native scroll preserved, horizontal to JS on all 3 engines.
+  - `wheel {passive:false}` is desktop-only (no-op on touch); mobile uses `onPan`.
+  - `100svh` / `env(safe-area-inset-*)` supported on all current required browsers.
+  - Frame sizing recomputes on width/orientation only — no jerk when browser chrome / navbar toggles (UI-01 preserved).
+
+**Remaining (user device sign-off):** Final tactile pass on physical iPhone Safari / Chrome Android / Samsung Internet for swipe feel and overlay behaviour.
 
 ---
 

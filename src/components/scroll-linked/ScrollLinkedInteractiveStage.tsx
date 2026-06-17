@@ -1,5 +1,6 @@
 "use client";
 
+import type { PanInfo } from "framer-motion";
 import type { ReactNode, Ref } from "react";
 import clsx from "clsx";
 import { motion } from "framer-motion";
@@ -13,7 +14,9 @@ type ScrollLinkedInteractiveStageProps = {
 };
 
 /**
- * Wraps scroll-linked sticky stage — pan-x drag + horizontal wheel when navigation is enabled.
+ * Wraps the scroll-linked sticky stage. Horizontal grab / swipe / trackpad gestures
+ * are translated into vertical scroll (see useScrollLinkedManualNavigation) — the stage
+ * itself never transforms, so clickable cards still work and there is no jump/snap.
  */
 export function ScrollLinkedInteractiveStage({
   children,
@@ -24,22 +27,21 @@ export function ScrollLinkedInteractiveStage({
     return <div className={className}>{children}</div>;
   }
 
-  const { stageRef, onPan, onPanEnd, showHint, isDragging } = stageNavigation;
+  const { stageRef, onPanStart, onPan, onPanEnd, showHint, isDragging } =
+    stageNavigation;
 
   return (
     <motion.div
       ref={stageRef as Ref<HTMLDivElement>}
       className={clsx(
         className,
-        "relative touch-pan-y",
+        // select-none: grab-dragging must never highlight card text/images
+        "relative touch-pan-y select-none",
         isDragging ? "cursor-grabbing" : "cursor-grab",
       )}
-      drag="x"
-      dragElastic={0}
-      dragMomentum={false}
-      dragConstraints={{ left: 0, right: 0 }}
-      onDrag={(_event, info) => onPan(_event as unknown as PointerEvent, info)}
-      onDragEnd={onPanEnd}
+      onPanStart={(event) => onPanStart(event as PointerEvent)}
+      onPan={(event, info: PanInfo) => onPan(event as PointerEvent, info)}
+      onPanEnd={onPanEnd}
     >
       {children}
       {showHint ? <ScrollLinkedHorizontalHint /> : null}

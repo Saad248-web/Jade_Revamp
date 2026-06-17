@@ -1,43 +1,57 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
-  bootstrapScrollLinkedMobileViewport,
   clearScrollLinkedMobileViewport,
   isScrollLinkedMobileViewport,
+  measureScrollLinkedChromeHeights,
+  syncScrollLinkedMobileViewport,
 } from "@/lib/scrollLinkedMobileViewport";
 
 /**
- * One-time mobile scroll-linked bootstrap (orientation / width change only).
- * Does not observe navbar or visualViewport during scroll — header is overlay-only.
+ * Computes the stable mobile scroll-linked frame on mount, orientation change, and
+ * width change only. Height-only resizes (mobile browser chrome show/hide and the
+ * overlay navbar appearing) are ignored so the body never jerks while scrolling.
  */
 export default function ScrollLinkedViewportSync() {
+  const lastWidthRef = useRef(0);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const mq = window.matchMedia("(max-width: 1023px)");
 
-    const apply = () => {
+    const recompute = () => {
       if (!mq.matches) {
         clearScrollLinkedMobileViewport();
         return;
       }
-      bootstrapScrollLinkedMobileViewport();
+      measureScrollLinkedChromeHeights();
+      syncScrollLinkedMobileViewport();
     };
 
-    apply();
+    const onResize = () => {
+      // Ignore height-only changes (browser chrome / navbar overlay) — width is the
+      // only trigger that should reflow the scroll-linked frame.
+      if (window.innerWidth === lastWidthRef.current) return;
+      lastWidthRef.current = window.innerWidth;
+      recompute();
+    };
 
-    window.addEventListener("orientationchange", apply);
-    window.addEventListener("resize", apply, { passive: true });
-    mq.addEventListener("change", apply);
+    lastWidthRef.current = window.innerWidth;
+    recompute();
 
-    const burst = [120, 400].map((ms) => setTimeout(apply, ms));
+    window.addEventListener("orientationchange", recompute);
+    window.addEventListener("resize", onResize, { passive: true });
+    mq.addEventListener("change", recompute);
+
+    const burst = [120, 400, 900].map((ms) => setTimeout(recompute, ms));
 
     return () => {
       burst.forEach(clearTimeout);
-      window.removeEventListener("orientationchange", apply);
-      window.removeEventListener("resize", apply);
-      mq.removeEventListener("change", apply);
+      window.removeEventListener("orientationchange", recompute);
+      window.removeEventListener("resize", onResize);
+      mq.removeEventListener("change", recompute);
       if (isScrollLinkedMobileViewport()) clearScrollLinkedMobileViewport();
     };
   }, []);
