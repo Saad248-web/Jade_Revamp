@@ -80,6 +80,13 @@ export default function FormOverlayLayout({
       )}
       data-lenis-prevent
     >
+      {/* Mobile: full-viewport scrim so fixed page chrome (pricing bar) is covered */}
+      <div
+        className="absolute inset-0 z-0 bg-black/60 backdrop-blur-sm md:hidden"
+        onClick={handleDismiss}
+        aria-hidden
+      />
+
       <div
         className="absolute inset-0 hidden md:block bg-black/60 backdrop-blur-sm"
         onClick={handleDismiss}

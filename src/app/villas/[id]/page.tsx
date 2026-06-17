@@ -202,7 +202,7 @@ export default function VillaDetailsPage() {
   const id = params?.id as string;
   const villa = VILLAS.find((v) => v.id === id) as Villa | undefined;
   const retreatLogoSrc = getVillaRetreatLogoSrc(id);
-  const { setEnquireOverlayOpen } = useAnimation();
+  const { setEnquireOverlayOpen, isEnquireOverlayOpen } = useAnimation();
   const goBack = useSafeBack(villaListingPath());
 
   const [media, setMedia] = useState<{
@@ -1181,6 +1181,7 @@ export default function VillaDetailsPage() {
 
       {/* FOOTER */}
       <Footer stickyBottomBar />
+      {!isEnquireOverlayOpen ? (
       <div
         className={clsx(
           "jade-scroll-chrome fixed bottom-0 left-0 w-full z-50 transition-all flex justify-center",
@@ -1206,6 +1207,7 @@ export default function VillaDetailsPage() {
           </div>
         </div>
       </div>
+      ) : null}
       <DetailsDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} title={drawerData.title} items={drawerData.items} />
     </main>
   );

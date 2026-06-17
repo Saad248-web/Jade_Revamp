@@ -6,6 +6,7 @@ import ScrollLinkedHorizontalSection from "@/components/scroll-linked/ScrollLink
 import ScrollLinkedPanelCard, {
   type ScrollLinkedPanelData,
 } from "@/components/scroll-linked/ScrollLinkedPanelCard";
+import { useScrollLinkedSectionHeight } from "@/lib/useScrollLinkedSectionHeight";
 
 const CELEBRATIONS: ScrollLinkedPanelData[] = [
   {
@@ -83,10 +84,11 @@ function EndButton({ panelProgress }: { panelProgress: MotionValue<number> }) {
 export default function WeddingCelebrationsSection() {
   const totalSteps = CELEBRATIONS.length + 1;
   const panelCount = CELEBRATIONS.length;
+  const sectionHeightVh = useScrollLinkedSectionHeight("wedding");
 
   return (
     <ScrollLinkedHorizontalSection
-      sectionHeightVh={440}
+      sectionHeightVh={sectionHeightVh}
       bgClassName="bg-[#1A1C1E]"
       headerLabel="PRE WEDDING CELEBRATIONS"
       headerLabelClassName="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-[#EFCD62] drop-shadow-lg block"

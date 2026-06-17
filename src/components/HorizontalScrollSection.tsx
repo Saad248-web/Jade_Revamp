@@ -7,6 +7,7 @@ import ScrollLinkedPanelCard, {
   type ScrollLinkedPanelData,
 } from "@/components/scroll-linked/ScrollLinkedPanelCard";
 import { experiencesListingPath, experiencePanelHref } from "@/lib/appRoutes";
+import { useScrollLinkedSectionHeight } from "@/lib/useScrollLinkedSectionHeight";
 
 const PANELS: ScrollLinkedPanelData[] = [
   {
@@ -102,10 +103,11 @@ function EndButton({ panelProgress }: { panelProgress: MotionValue<number> }) {
 export default function HorizontalScrollSection() {
   const totalSteps = PANELS.length + 1;
   const panelCount = PANELS.length;
+  const sectionHeightVh = useScrollLinkedSectionHeight("home");
 
   return (
     <ScrollLinkedHorizontalSection
-      sectionHeightVh={560}
+      sectionHeightVh={sectionHeightVh}
       bgClassName="bg-[#25282C]"
       headerLabel="WAYS JADE IS EXPERIENCED"
       scrollMode="free"
