@@ -1,79 +1,43 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import {
+  bootstrapScrollLinkedMobileViewport,
   clearScrollLinkedMobileViewport,
   isScrollLinkedMobileViewport,
-  measureScrollLinkedChromeHeights,
-  syncScrollLinkedMobileViewport,
 } from "@/lib/scrollLinkedMobileViewport";
 
-const SYNC_DEBOUNCE_MS = 40;
-
 /**
- * Keeps scroll-linked panel CSS vars in sync with iOS visualViewport + navbar hide.
- * Mount once inside SmoothScroll (see providers.tsx).
+ * One-time mobile scroll-linked bootstrap (orientation / width change only).
+ * Does not observe navbar or visualViewport during scroll — header is overlay-only.
  */
 export default function ScrollLinkedViewportSync() {
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const rafRef = useRef(0);
-
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const mq = window.matchMedia("(max-width: 1023px)");
 
-    const runSyncNow = () => {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        if (!mq.matches) {
-          clearScrollLinkedMobileViewport();
-          return;
-        }
-        measureScrollLinkedChromeHeights();
-        syncScrollLinkedMobileViewport();
-      });
+    const apply = () => {
+      if (!mq.matches) {
+        clearScrollLinkedMobileViewport();
+        return;
+      }
+      bootstrapScrollLinkedMobileViewport();
     };
 
-    const scheduleSync = () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(runSyncNow, SYNC_DEBOUNCE_MS);
-    };
+    apply();
 
-    const onMqChange = () => {
-      if (!mq.matches) clearScrollLinkedMobileViewport();
-      scheduleSync();
-    };
+    window.addEventListener("orientationchange", apply);
+    window.addEventListener("resize", apply, { passive: true });
+    mq.addEventListener("change", apply);
 
-    measureScrollLinkedChromeHeights();
-    runSyncNow();
-
-    const vv = window.visualViewport;
-    vv?.addEventListener("resize", scheduleSync);
-    window.addEventListener("resize", scheduleSync, { passive: true });
-    window.addEventListener("orientationchange", scheduleSync);
-    mq.addEventListener("change", onMqChange);
-
-    const burst = [80, 200, 500].map((ms) => setTimeout(runSyncNow, ms));
-
-    let resizeObserver: ResizeObserver | undefined;
-    if (typeof ResizeObserver !== "undefined") {
-      resizeObserver = new ResizeObserver(scheduleSync);
-      const navEl = document.querySelector(".jade-nav-chrome");
-      const bottomEl = document.querySelector(".jade-scroll-chrome");
-      if (navEl) resizeObserver.observe(navEl);
-      if (bottomEl) resizeObserver.observe(bottomEl);
-    }
+    const burst = [120, 400].map((ms) => setTimeout(apply, ms));
 
     return () => {
-      cancelAnimationFrame(rafRef.current);
-      if (debounceRef.current) clearTimeout(debounceRef.current);
       burst.forEach(clearTimeout);
-      vv?.removeEventListener("resize", scheduleSync);
-      window.removeEventListener("resize", scheduleSync);
-      window.removeEventListener("orientationchange", scheduleSync);
-      mq.removeEventListener("change", onMqChange);
-      resizeObserver?.disconnect();
+      window.removeEventListener("orientationchange", apply);
+      window.removeEventListener("resize", apply);
+      mq.removeEventListener("change", apply);
       if (isScrollLinkedMobileViewport()) clearScrollLinkedMobileViewport();
     };
   }, []);

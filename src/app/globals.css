@@ -566,6 +566,7 @@ html.lenis.lenis-smooth body {
 
 html.lenis.lenis-smooth body {
   overscroll-behavior-y: none;
+  overflow-anchor: none;
 }
 
 html.lenis.lenis-scrolling main {
@@ -605,6 +606,8 @@ html.jade-splash-locked main {
 /* Navbar shell — slide hide/show driven by Framer Motion in Navbar.tsx */
 .jade-nav-chrome {
   will-change: transform;
+  contain: layout style paint;
+  isolation: isolate;
 }
 
 /* Global header — balanced horizontal inset (matches page gutter, not oversized xl padding) */
@@ -838,8 +841,7 @@ body {
 
 /* ============================================================
    Scroll-linked panels — iOS / mobile safe stage
-   Static fallback: 100svh (all browser UI visible). Runtime overrides via
-   ScrollLinkedViewportSync + visualViewport (see scrollLinkedMobileViewport.ts).
+   Static CSS tokens only at runtime (bootstrap pins vv offsets to 0).
    ============================================================ */
 @media (max-width: 1023px) {
   :root {
@@ -861,7 +863,7 @@ body {
     --jade-scroll-panel-gap: 0.5rem;
     --jade-scroll-panel-gap-lg: 0.625rem;
     --jade-scroll-text-reserve: 12rem;
-    /* svh = smallest viewport — safe before JS; vv sync refines on scroll */
+    /* svh = smallest viewport — stable frame; navbar overlays top */
     --jade-scroll-stage-mobile-height: calc(
       100svh - var(--jade-mobile-chrome-top) - var(--jade-mobile-chrome-bottom)
     );
@@ -881,13 +883,14 @@ body {
   }
 
   .jade-scroll-linked-stage {
-    top: calc(
-      var(--jade-vv-offset-top, 0px) + var(--jade-vv-nav-inset, 0px)
-    );
+    top: 0;
     min-height: var(--jade-scroll-stage-mobile-height);
     height: var(--jade-scroll-stage-mobile-height);
     max-height: var(--jade-scroll-stage-mobile-height);
-    /* Instant clamp — avoids double-jank with navbar / browser chrome */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    contain: layout style;
+    /* Instant clamp — navbar hide/show must not resize this frame */
     transition: none;
   }
 
