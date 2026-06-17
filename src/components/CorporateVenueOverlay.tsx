@@ -18,7 +18,10 @@ import {
 } from "lucide-react";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useVillaListingImages } from "@/lib/useVillaListingImages";
-import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
+import {
+  formatIntroEventStat,
+  formatIntroStayStat,
+} from "@/lib/villaDisplay";
 import type { OverlayPageKey } from "@/lib/overlayVillaData";
 import { getOverlayVillaData } from "@/lib/overlayVillaData";
 import type { HeroSplitCustom } from "@/lib/heroSplitCarouselVariants";
@@ -251,12 +254,12 @@ const CorporateVenueOverlay: React.FC<CorporateVenueOverlayProps> = ({
                     <div className={VILLA_DETAIL_SPACING.introStatsRow}>
                       <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
                         <Users className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                        <span>{getEventCapacity(v)?.toString() || v.stats?.events || "500 Guests"}</span>
+                        <span>{formatIntroEventStat(v, "500 Guests")}</span>
                       </div>
                       <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
                       <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
                         <Home className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                        <span>{getStayCapacity(v)?.toString() || v.stats?.stay || "20 Stay"}</span>
+                        <span>{formatIntroStayStat(v, "20 Stay")}</span>
                       </div>
                       <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
                       <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">

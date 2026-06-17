@@ -115,7 +115,10 @@ const getIcon = (iconName?: string, title?: string) => {
 import { usePathname } from "next/navigation";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useVillaListingImages } from "@/lib/useVillaListingImages";
-import { getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
+import {
+  formatIntroEventStat,
+  formatIntroStayStat,
+} from "@/lib/villaDisplay";
 import type { OverlayPageKey } from "@/lib/overlayVillaData";
 import { getOverlayVillaData } from "@/lib/overlayVillaData";
 import type { HeroSplitCustom } from "@/lib/heroSplitCarouselVariants";
@@ -317,12 +320,22 @@ const VenueOverlay: React.FC<VenueOverlayProps> = ({
                     <div className={VILLA_DETAIL_SPACING.introStatsRow}>
                       <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
                         <Users className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                        <span>{getEventCapacity(v)?.toString() || v.stats?.events || (resolvedContext === "weekend" ? "15+ Guests" : "600 Guests")}</span>
+                        <span>
+                          {formatIntroEventStat(
+                            v,
+                            resolvedContext === "weekend" ? "15+ Guests" : "600 Guests",
+                          )}
+                        </span>
                       </div>
                       <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
                       <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
                         <Home className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                        <span>{getStayCapacity(v)?.toString() || v.stats?.stay || (resolvedContext === "weekend" ? "6-12 Stay" : "20 Stay")}</span>
+                        <span>
+                          {formatIntroStayStat(
+                            v,
+                            resolvedContext === "weekend" ? "6-12 Stay" : "20 Stay",
+                          )}
+                        </span>
                       </div>
                       <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
                       <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">

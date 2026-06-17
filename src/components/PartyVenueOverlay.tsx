@@ -126,7 +126,11 @@ const getIcon = (iconName?: string, title?: string) => {
 };
 import PrimaryButton from "@/components/PrimaryButton";
 import { buildVillaGalleryItems } from "@/lib/villaGallery";
-import { getBhk, getEventCapacity, getStayCapacity } from "@/lib/villaDisplay";
+import {
+  formatIntroBhkStat,
+  formatIntroEventStat,
+  formatIntroStayStat,
+} from "@/lib/villaDisplay";
 import { getOverlayVillaData } from "@/lib/overlayVillaData";
 import type { HeroSplitCustom } from "@/lib/heroSplitCarouselVariants";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
@@ -323,17 +327,17 @@ const PartyVenueOverlay: React.FC<PartyVenueOverlayProps> = ({
                     <div className={VILLA_DETAIL_SPACING.introStatsRow}>
                       <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
                         <Users className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                        <span>{getEventCapacity(villa)?.toString() || villa.stats?.events || "30 Guests"}</span>
+                        <span>{formatIntroEventStat(villa, "30 Guests")}</span>
                       </div>
                       <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
                       <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
                         <Home className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                        <span>{getBhk(villa)?.toString() || villa.stats?.bhk || "4 BHK"}</span>
+                        <span>{formatIntroBhkStat(villa, "4 BHK")}</span>
                       </div>
                       <div className="w-[4px] h-[4px] rounded-full bg-white/30 flex-shrink-0" />
                       <div className="flex items-center gap-2.5 whitespace-nowrap flex-shrink-0">
                         <Home className="w-4 h-4 md:w-5 md:h-5 text-[#EFCD62]" strokeWidth={1.5} />
-                        <span>{getStayCapacity(villa)?.toString() || villa.stats?.stay || "15 Stay"}</span>
+                        <span>{formatIntroStayStat(villa, "15 Stay")}</span>
                       </div>
                     </div>
                   }

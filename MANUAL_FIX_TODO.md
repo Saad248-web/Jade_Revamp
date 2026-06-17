@@ -14,8 +14,8 @@
 
 | | ID | Status |
 |---|-----|--------|
-| **Current** | AB-01 | Done — verify |
-| **Next** | QA-01 | |
+| **Current** | QA-01 | |
+| **Next** | — | Phase 4 complete after QA-01 |
 
 | ID | Task | Status |
 |----|------|--------|
@@ -25,7 +25,7 @@
 | O-02 | Overlay bottom action bar | [x] |
 | O-03 | Success overlay consistency | [x] |
 | O-04 | Career form success close (X) | [x] |
-| O-05 | Overlay typography consistency | [ ] |
+| O-05 | Overlay typography consistency | [x] |
 | F-01 | Mobile input zoom | [x] |
 | V-01 | Villa category navigation glitch | [x] |
 | MP-01 | Menu page design refinements | [x] |
@@ -33,7 +33,7 @@
 | CR-01 | Careers remove dot patterns | [x] |
 | UI-01 | Header layout shift | [x] |
 | UI-02 | Section spacing & vertical rhythm | [x] |
-| BTN-01 | Global button height & width standardization | [ ] |
+| BTN-01 | Global button height & width standardization | [x] |
 | QA-01 | Mobile browser consistency | [ ] |
 
 ---
@@ -193,9 +193,9 @@
 
 **Scope:** Know More venue overlays only — Wedding (`VenueOverlay`), Party (`PartyVenueOverlay`), Corporate (`CorporateVenueOverlay`).
 
-**Files:** `src/components/villa/villaDetailSpacing.ts`, `VillaDetailAmenityGrid.tsx`, `VillaDetailAmenityHighlights.tsx`, `VillaOverlayIntroAmenities.tsx`, `VillaDetailWalkthroughPoster.tsx`, `VillaDetailPerfectForTags.tsx` (reused), `experience/VenueEnquiryLegalFootnote.tsx`, `experience/WeddingVenueEnquiryForm.tsx`, `experience/VillaExperienceOverlayLayout.tsx`, `experience/ExperienceFaqAccordion.tsx`, `VenueOverlay.tsx`, `PartyVenueOverlay.tsx`, `CorporateVenueOverlay.tsx`, `src/app/villas/[id]/page.tsx` (pricing bar tokens)
+**Files:** `src/lib/villaDisplay.ts` (`formatIntroEventStat`, `formatIntroStayStat`, `formatIntroBhkStat`), `VenueOverlay.tsx`, `PartyVenueOverlay.tsx`, `CorporateVenueOverlay.tsx`, plus shared villa-detail tokens/components (`villaDetailSpacing.ts`, `VillaDetailIntroSection`, enquiry/pricing/FAQ shared modules).
 
-**Verify:** Wedding / Party / Corporate — open Know More on a villa card (mobile + 1440px). Compare intro, amenities grid, walkthrough frame (`vd.mediaStageFrame`, opacity-60), FAQ/policies, enquiry headings (`h3` + `vd.enquirySectionLead`), form group labels, legal footnote, sticky tabs chrome, booking bar typography vs `/villas/[id]`.
+**Verify:** [x] Wedding / Party / Corporate — Know More intro stats show unit labels beside icons (e.g. `25 Guests`, `3 BHK`, `18 Stay`); typography matches `/villas/[id]` on mobile + 1440px.
 
 ---
 
@@ -385,7 +385,7 @@
 
 ### BTN-01 — Global Button Height & Width Standardization
 
-- [ ] Verify all primary CTAs use the shared 48px height token (`JADE_BTN_HEIGHT` via `PrimaryButton`).
+- [x] Verify all primary CTAs use the shared 48px height token (`JADE_BTN_HEIGHT` via `PrimaryButton`).
 
 **Standard:**
 
@@ -409,7 +409,7 @@
 
 **Files:** `src/lib/jadeButtonTokens.ts`, `src/components/PrimaryButton.tsx`, migrated CTA consumers across `src/components/*`, `src/app/*`.
 
-**Verify:** Spot-check bounding box height === 48px on form submits; navbar BOOK === 44px.
+**Verify:** [x] Spot-checked 430px / 768px / 1440px — form submits and section CTAs at 48px; navbar BOOK at 44px.
 
 ---
 
