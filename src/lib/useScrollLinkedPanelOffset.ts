@@ -30,7 +30,7 @@ export function fallbackScrollLinkedPanelWidth(viewportWidth: number): number {
 
 function readViewportWidth(): number {
   if (typeof window === "undefined") return 375;
-  return window.visualViewport?.width ?? window.innerWidth;
+  return window.innerWidth;
 }
 
 /**
@@ -59,9 +59,29 @@ function computeDesktopOffsetPx(
   return Math.ceil(panelWidth + desktopPeek);
 }
 
+function computeOffsetPx(
+  viewportWidth: number,
+  panelWidth: number,
+  variant: ScrollLinkedPanelGapVariant,
+  visibleGapOverride: number | undefined,
+): number {
+  const isDesktop = window.matchMedia(DESKTOP_MQ).matches;
+  if (visibleGapOverride !== undefined) {
+    return computeLegacyOffsetPx(viewportWidth, panelWidth, visibleGapOverride);
+  }
+  if (isDesktop) {
+    return computeDesktopOffsetPx(viewportWidth, panelWidth, variant);
+  }
+  return computeLegacyOffsetPx(
+    viewportWidth,
+    panelWidth,
+    resolveScrollLinkedLegacyGapAddon(variant),
+  );
+}
+
 /**
- * Horizontal scroll-linked panel offset — visualViewport-aware, remeasures on
- * resize / orientation / visualViewport (matches ScrollLinkedViewportSync burst).
+ * Horizontal scroll-linked panel offset — measured once per breakpoint resize.
+ * Avoids visualViewport scroll listeners so card spacing stays fixed while scrolling.
  */
 export function useScrollLinkedPanelOffset(
   measureRef: RefObject<HTMLElement | null>,
@@ -80,38 +100,20 @@ export function useScrollLinkedPanelOffset(
         measured && measured > 0
           ? measured
           : fallbackScrollLinkedPanelWidth(vw);
-      const isDesktop = window.matchMedia(DESKTOP_MQ).matches;
       setViewportWidth(vw);
-      if (visibleGapOverride !== undefined) {
-        setOffsetPx(computeLegacyOffsetPx(vw, panelWidth, visibleGapOverride));
-      } else if (isDesktop) {
-        setOffsetPx(computeDesktopOffsetPx(vw, panelWidth, variant));
-      } else {
-        setOffsetPx(
-          computeLegacyOffsetPx(
-            vw,
-            panelWidth,
-            resolveScrollLinkedLegacyGapAddon(variant),
-          ),
-        );
-      }
+      setOffsetPx(
+        computeOffsetPx(vw, panelWidth, variant, visibleGapOverride),
+      );
     };
 
     recompute();
 
-    const burst = [80, 200, 500].map((ms) => setTimeout(recompute, ms));
     const mq = window.matchMedia(DESKTOP_MQ);
-    const vv = window.visualViewport;
-    vv?.addEventListener("resize", recompute);
-    vv?.addEventListener("scroll", recompute);
     window.addEventListener("resize", recompute, { passive: true });
     window.addEventListener("orientationchange", recompute);
     mq.addEventListener("change", recompute);
 
     return () => {
-      burst.forEach(clearTimeout);
-      vv?.removeEventListener("resize", recompute);
-      vv?.removeEventListener("scroll", recompute);
       window.removeEventListener("resize", recompute);
       window.removeEventListener("orientationchange", recompute);
       mq.removeEventListener("change", recompute);

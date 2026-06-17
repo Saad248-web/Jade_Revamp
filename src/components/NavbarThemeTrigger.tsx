@@ -6,7 +6,7 @@ import { useAnimation } from "@/context/AnimationContext";
 
 interface NavbarThemeTriggerProps {
   theme: "white" | "golden";
-  sectionRef: React.RefObject<HTMLElement | HTMLDivElement>;
+  sectionRef: React.RefObject<HTMLElement | HTMLDivElement | null>;
 }
 
 /**

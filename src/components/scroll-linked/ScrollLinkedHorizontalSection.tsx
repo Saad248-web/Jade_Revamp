@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode, RefObject } from "react";
+import type { ReactNode, Ref, RefObject } from "react";
 import type { MotionValue } from "framer-motion";
 import {
   scrollLinkedPanelAreaClass,
@@ -28,7 +28,7 @@ export type ScrollLinkedHorizontalSectionProps = {
   children: ReactNode | ((panelProgress: MotionValue<number>) => ReactNode);
   /** When set, skip outer section + hook (parent owns ref/progress). */
   embedded?: boolean;
-  targetRef?: RefObject<HTMLDivElement | null>;
+  targetRef?: RefObject<HTMLElement | null>;
   panelProgress?: MotionValue<number>;
   stageNavigation?: ScrollLinkedStageNavigation | null;
   /** Featured §6 — full mobile stage height (no header row). */
@@ -128,7 +128,7 @@ export default function ScrollLinkedHorizontalSection({
 
   return (
     <section
-      ref={targetRef}
+      ref={targetRef as Ref<HTMLElement>}
       className={`relative ${bgClassName}`}
       style={sectionHeightVh ? { height: `${sectionHeightVh}vh` } : undefined}
     >

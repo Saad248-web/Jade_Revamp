@@ -50,7 +50,6 @@ export default function ScrollLinkedViewportSync() {
 
     const vv = window.visualViewport;
     vv?.addEventListener("resize", scheduleSync);
-    vv?.addEventListener("scroll", scheduleSync);
     window.addEventListener("resize", scheduleSync, { passive: true });
     window.addEventListener("orientationchange", scheduleSync);
     mq.addEventListener("change", onMqChange);
@@ -71,7 +70,6 @@ export default function ScrollLinkedViewportSync() {
       if (debounceRef.current) clearTimeout(debounceRef.current);
       burst.forEach(clearTimeout);
       vv?.removeEventListener("resize", scheduleSync);
-      vv?.removeEventListener("scroll", scheduleSync);
       window.removeEventListener("resize", scheduleSync);
       window.removeEventListener("orientationchange", scheduleSync);
       mq.removeEventListener("change", onMqChange);

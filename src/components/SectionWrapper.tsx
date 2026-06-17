@@ -18,7 +18,7 @@ export interface SectionWrapperProps
   pattern?: boolean | Omit<LuxuryPatternProps, "className">;
 }
 
-const SectionWrapper = forwardRef<HTMLElement, SectionWrapperProps>(
+const SectionWrapper = forwardRef<HTMLElement | null, SectionWrapperProps>(
   (
     { bg, children, pattern = false, className = "", style, ...rest },
     ref,

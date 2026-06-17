@@ -3,8 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   useMotionValue,
-  useReducedMotion,
-  useSpring,
   type MotionValue,
   type PanInfo,
 } from "framer-motion";
@@ -42,16 +40,11 @@ export function useScrollLinkedManualNavigation({
   scrollGain = SCROLL_LINKED_FREE_SCROLL_GAIN,
   showHint: showHintOption = true,
 }: UseScrollLinkedManualNavigationOptions): ScrollLinkedStageNavigation {
-  const reducedMotion = useReducedMotion();
   const stageRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef(false);
   const progressMotion = useMotionValue(0);
-  const panelProgress = useSpring(progressMotion, {
-    stiffness: reducedMotion ? 280 : 140,
-    damping: reducedMotion ? 32 : 28,
-    mass: 0.42,
-    restDelta: 0.0008,
-  });
+  /** Direct progress — no spring so card frames stay locked to scroll/drag input. */
+  const panelProgress = progressMotion;
   const [showHint, setShowHint] = useState(enabled && showHintOption);
   const [isDragging, setIsDragging] = useState(false);
 

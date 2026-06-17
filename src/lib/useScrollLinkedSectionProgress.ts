@@ -43,7 +43,7 @@ export type UseScrollLinkedSectionProgressOptions = {
 };
 
 export type UseScrollLinkedSectionProgressResult = {
-  targetRef: React.RefObject<HTMLDivElement | null>;
+  targetRef: React.RefObject<HTMLElement | null>;
   panelProgress: MotionValue<number>;
   scrollYProgress: MotionValue<number>;
   stageNavigation: ScrollLinkedStageNavigation | null;
@@ -71,7 +71,7 @@ export function useScrollLinkedSectionProgress(
       ? 0.12
       : mobileSnapDwellRatio;
 
-  const targetRef = useRef<HTMLDivElement>(null);
+  const targetRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
   const isLg = useMediaMinLg();
   const { scrollYProgress } = useScroll({ target: targetRef });

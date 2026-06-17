@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import type { ScrollLinkedStageNavigation } from "@/lib/useScrollLinkedManualNavigation";
@@ -28,7 +28,7 @@ export function ScrollLinkedInteractiveStage({
 
   return (
     <motion.div
-      ref={stageRef}
+      ref={stageRef as Ref<HTMLDivElement>}
       className={clsx(
         className,
         "relative touch-pan-y",

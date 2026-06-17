@@ -4,26 +4,15 @@
  */
 
 import { getLenis } from "@/lib/lenis";
-import { MOBILE_BOTTOM_NAV_CONTENT_GAP } from "@/lib/layoutSpacing";
 
 const MOBILE_MQ = "(max-width: 1023px)";
 
-/** Section label row inside sticky stage (40px top + 40px bottom on mobile). */
-const SECTION_HEADER_PX = 80;
-
+/** Runtime-synced vars only — card frame, gaps, and offsets use static CSS tokens. */
 const CUSTOM_PROPS = [
   "--jade-vv-offset-top",
   "--jade-vv-height",
   "--jade-vv-nav-inset",
   "--jade-scroll-stage-mobile-height",
-  "--jade-scroll-panel-row-height",
-  "--jade-scroll-text-reserve",
-  "--jade-scroll-card-max-h",
-  "--jade-scroll-card-max-h-featured",
-  "--jade-scroll-card-max-h-tall-header",
-  "--jade-scroll-panel-gap",
-  "--jade-scroll-panel-gap-lg",
-  "--jade-scroll-panel-bottom-gap",
   "--jade-mobile-chrome-top-px",
   "--jade-mobile-chrome-bottom-px",
 ] as const;
@@ -55,19 +44,9 @@ function readBrowserToolbarBottomInset(
   return Math.max(0, Math.round(belowVv));
 }
 
-function clampGap(
-  panelRowPx: number,
-  minPx: number,
-  vhFactor: number,
-  maxPx: number,
-): number {
-  const fromVh = panelRowPx * vhFactor;
-  return Math.round(Math.min(maxPx, Math.max(minPx, fromVh)));
-}
-
 /**
- * iOS Safari / mobile: sync scroll-linked panel stage to visualViewport.
- * Site navbar is `position: fixed` (overlay) — hide/show must not resize stages (UI-01).
+ * iOS Safari / mobile: sync sticky stage height to visualViewport.
+ * Spacing and card frames stay on static CSS vars (globals.css).
  */
 export function syncScrollLinkedMobileViewport(): void {
   if (!isScrollLinkedMobileViewport()) return;
@@ -107,62 +86,7 @@ export function syncScrollLinkedMobileViewport(): void {
     `${stageHeight}px`,
   );
 
-  const panelRow = Math.max(160, stageHeight - SECTION_HEADER_PX);
-  root.style.setProperty("--jade-scroll-panel-row-height", `${panelRow}px`);
-
-  const panelGap = clampGap(panelRow, 6, 0.024, 12);
-  const panelGapLg = clampGap(panelRow, 8, 0.032, 20);
-  root.style.setProperty("--jade-scroll-panel-gap", `${panelGap}px`);
-  root.style.setProperty("--jade-scroll-panel-gap-lg", `${panelGapLg}px`);
-  root.style.setProperty(
-    "--jade-scroll-panel-bottom-gap",
-    MOBILE_BOTTOM_NAV_CONTENT_GAP,
-  );
-
-  setCardMaxHeights(root, panelRow, panelGap, panelGapLg);
-
   getLenis()?.resize();
-}
-
-function setCardMaxHeights(
-  root: HTMLElement,
-  panelRowPx: number,
-  panelGap: number,
-  panelGapLg: number,
-): void {
-  const stackGaps = panelGap * 3 + panelGapLg;
-  const textReserve = Math.min(
-    240,
-    Math.max(200, Math.round(panelRowPx * 0.46) + stackGaps),
-  );
-  const tallHeaderReserve = textReserve + 28;
-
-  root.style.setProperty("--jade-scroll-text-reserve", `${textReserve}px`);
-
-  const cardMax = Math.min(600, Math.max(132, panelRowPx - textReserve));
-  const cardMaxTall = Math.min(
-    560,
-    Math.max(120, panelRowPx - tallHeaderReserve),
-  );
-
-  root.style.setProperty("--jade-scroll-card-max-h", `${cardMax}px`);
-  root.style.setProperty(
-    "--jade-scroll-card-max-h-tall-header",
-    `${cardMaxTall}px`,
-  );
-
-  const featuredTextReserve = Math.min(
-    200,
-    Math.max(152, Math.round(panelRowPx * 0.36) + stackGaps),
-  );
-  const featuredCardMax = Math.min(
-    600,
-    Math.max(140, panelRowPx - featuredTextReserve),
-  );
-  root.style.setProperty(
-    "--jade-scroll-card-max-h-featured",
-    `${featuredCardMax}px`,
-  );
 }
 
 /** Measure fixed nav chrome heights into CSS vars (ResizeObserver). */
