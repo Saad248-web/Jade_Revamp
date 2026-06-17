@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { forwardRef, type AriaRole, type ReactNode, useMemo, useRef } from "react";
 import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
 import { JADE_HSCROLL_DATA_ATTR } from "@/lib/horizontalScrollClasses";
+import { HORIZONTAL_RAIL_DRAG_GAIN } from "@/lib/hscrollSensitivity";
 
 const vd = VILLA_DETAIL_SPACING;
 
@@ -127,7 +128,7 @@ const HorizontalScrollRail = forwardRef<HTMLDivElement, HorizontalScrollRailProp
             document.body.style.userSelect = "none";
           }
 
-          el.scrollLeft = drag.current.startScrollLeft - dx;
+          el.scrollLeft = drag.current.startScrollLeft - dx * HORIZONTAL_RAIL_DRAG_GAIN;
         },
         onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => {
           if (!drag.current.pending && !drag.current.dragging) return;

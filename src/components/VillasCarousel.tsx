@@ -13,6 +13,7 @@ import { useBooking } from "@/context/BookingContext";
 import { scrollToElement } from "@/lib/lenis";
 import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
 import HorizontalScrollRail from "@/components/ui/HorizontalScrollRail";
+import { STICKY_BELOW_GLOBAL_NAV_CLASS } from "@/lib/scrollChromeLayout";
 
 // Navbar height to offset the sticky filter bar
 const NAVBAR_HEIGHT = 72;
@@ -168,8 +169,7 @@ export default function VillasCarousel() {
     <section id="VILLAS-carousel" className="relative bg-[#1A1C1E]">
       {/* STICKY FILTERS BAR */}
       <div
-        className="sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/10"
-        style={{ top: `${NAVBAR_HEIGHT}px` }}
+        className={`sticky z-30 bg-[#1A1C1E]/95 backdrop-blur-md border-b border-white/10 ${STICKY_BELOW_GLOBAL_NAV_CLASS}`}
       >
         <div className="max-w-[1920px] mx-auto px-2 md:px-8 lg:px-16 pt-3 md:pt-5 pb-3">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-start gap-2.5 md:gap-5">
@@ -184,6 +184,7 @@ export default function VillasCarousel() {
               patternFade
               mobileViewportEdge
               mobileTrackGutter
+              cursorGrab
               className="order-2 lg:order-2 flex-1 min-w-0 md:-mr-8 lg:-mr-16"
               trackClassName="items-center gap-2 md:gap-2.5 pb-1 md:scroll-pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
             >

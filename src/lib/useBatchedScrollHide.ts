@@ -11,9 +11,15 @@ const listeners = new Set<HideListener>();
 let subscriberCount = 0;
 let disposeEngine: (() => void) | undefined;
 
+function syncChromeHiddenClass(next: boolean): void {
+  if (typeof document === "undefined") return;
+  document.documentElement.classList.toggle("jade-scroll-chrome-hidden", next);
+}
+
 function emit(next: boolean) {
   if (next === hidden) return;
   hidden = next;
+  syncChromeHiddenClass(next);
   listeners.forEach((fn) => fn(hidden));
 }
 
@@ -78,6 +84,7 @@ function releaseEngine() {
     disposeEngine?.();
     disposeEngine = undefined;
     hidden = false;
+    syncChromeHiddenClass(false);
     listeners.forEach((fn) => fn(false));
   }
 }

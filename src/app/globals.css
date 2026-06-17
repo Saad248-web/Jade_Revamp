@@ -609,6 +609,67 @@ html.jade-splash-locked main {
   isolation: isolate;
 }
 
+/*
+ * Sticky category / filter rails — stack under fixed scroll chrome when visible,
+ * animate to top: 0 when chrome hides (html.jade-scroll-chrome-hidden from useBatchedScrollHide).
+ * Transition matches scrollChromeHideMotion (0.4s ease-out).
+ */
+:root {
+  --jade-sticky-offset-global-nav: 4.5rem; /* 72px — Villas listing filter bar */
+  --jade-sticky-offset-villa-action-compact: 60px; /* Villa detail tabs — action row */
+  --jade-sticky-offset-villa-action-full: 76px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --jade-sticky-offset-villa-action-full: 84px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --jade-sticky-offset-villa-action-full: 88px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --jade-sticky-offset-villa-action-full: 96px;
+  }
+}
+
+html.jade-scroll-chrome-hidden {
+  --jade-sticky-offset-global-nav: 0px;
+  --jade-sticky-offset-villa-action-compact: 0px;
+  --jade-sticky-offset-villa-action-full: 0px;
+}
+
+.jade-sticky-below-global-nav,
+.jade-sticky-below-villa-action-compact,
+.jade-sticky-below-villa-action-full {
+  transition: top 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jade-sticky-below-global-nav,
+  .jade-sticky-below-villa-action-compact,
+  .jade-sticky-below-villa-action-full {
+    transition: none;
+  }
+}
+
+.jade-sticky-below-global-nav {
+  top: var(--jade-sticky-offset-global-nav);
+}
+
+.jade-sticky-below-villa-action-compact {
+  top: var(--jade-sticky-offset-villa-action-compact);
+}
+
+.jade-sticky-below-villa-action-full {
+  top: var(--jade-sticky-offset-villa-action-full);
+}
+
 /* Grab-drag carousels must not start native image drag or text selection */
 .jade-scroll-linked-stage img {
   -webkit-user-drag: none;

@@ -7,8 +7,8 @@ import { ArrowLeft, Headset } from "lucide-react";
 import CallToEnquireLink from "@/components/ui/CallToEnquireLink";
 import ScrollHideTopChrome from "@/components/ui/ScrollHideTopChrome";
 import {
+  STICKY_BELOW_VILLA_ACTION_FULL_CLASS,
   VILLA_ACTION_CHROME_PAD_TOP_CLASS,
-  VILLA_DETAIL_ACTION_STICKY_TOP_VISIBLE_CLASS,
 } from "@/lib/scrollChromeLayout";
 import { useEffect, useMemo, useState } from "react";
 import { VILLAS } from "@/lib/mockData";
@@ -154,7 +154,7 @@ export default function VillaSpacesPage() {
       <nav
         className={clsx(
           "jade-hscroll-chrome sticky z-40 min-w-0 w-full bg-[#1A1C1E]",
-          VILLA_DETAIL_ACTION_STICKY_TOP_VISIBLE_CLASS,
+          STICKY_BELOW_VILLA_ACTION_FULL_CLASS,
         )}
       >
         <div className={clsx("w-full", VILLA_DETAIL_STICKY_TABS_CHROME_CLASS)}>

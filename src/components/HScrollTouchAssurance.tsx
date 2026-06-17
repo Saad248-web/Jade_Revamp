@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { HORIZONTAL_SCROLL_RAIL_SELECTOR } from "@/lib/hscrollLenisRouting";
+import {
+  closestHorizontalScrollRail,
+  HORIZONTAL_SCROLL_RAIL_SELECTOR,
+} from "@/lib/hscrollLenisRouting";
+import { HORIZONTAL_RAIL_WHEEL_GAIN } from "@/lib/hscrollSensitivity";
 
 /** Own scroll roots — full Lenis prevent. */
 const FULL_LENIS_PREVENT_SELECTOR = "[data-page-scroll-root]";
@@ -25,6 +29,18 @@ function applyFullLenisPrevent(el: HTMLElement) {
  */
 export default function HScrollTouchAssurance() {
   useEffect(() => {
+    const onWheel = (event: WheelEvent) => {
+      const rail = closestHorizontalScrollRail(event.target);
+      if (!rail) return;
+      const absX = Math.abs(event.deltaX);
+      const absY = Math.abs(event.deltaY);
+      if (absX <= absY || absX === 0) return;
+      event.preventDefault();
+      rail.scrollLeft += event.deltaX * HORIZONTAL_RAIL_WHEEL_GAIN;
+    };
+
+    document.addEventListener("wheel", onWheel, { passive: false, capture: true });
+
     const apply = () => {
       document
         .querySelectorAll<HTMLElement>(HORIZONTAL_SCROLL_RAIL_SELECTOR)
@@ -52,7 +68,10 @@ export default function HScrollTouchAssurance() {
       ],
     });
 
-    return () => observer.disconnect();
+    return () => {
+      document.removeEventListener("wheel", onWheel, { capture: true });
+      observer.disconnect();
+    };
   }, []);
 
   return null;

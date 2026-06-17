@@ -149,7 +149,7 @@ export const VILLA_DETAIL_SPACING = {
   actionHeaderIcon: "w-4 h-4 md:w-[18px] md:h-[18px]",
   actionHeaderEnquire: `${JADE_BTN_CHROME_HEIGHT} shrink-0 px-3 md:px-4 flex items-center justify-center whitespace-nowrap`,
   heroGalleryCta: `${JADE_BTN_CHROME_HEIGHT} shrink-0 inline-flex max-w-full items-center justify-center gap-1.5 px-3 md:px-4 py-0 whitespace-nowrap`,
-  /** Sticky category rail `top` when action header visible — keep in sync with row above. */
+  /** @deprecated Use STICKY_BELOW_VILLA_ACTION_COMPACT_CLASS from scrollChromeLayout */
   actionHeaderStickyTop: "top-[60px]",
   heroBottom: "bottom-8 lg:bottom-12",
   /** Carousel arrows — align to page gutter (not flush to viewport) */
