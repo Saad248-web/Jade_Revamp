@@ -123,6 +123,10 @@ const FEATURED_PATTERN = {
 /** Mobile: card snaps use snapVh; only exitVh of vertical scroll after CTA before next section */
 const FEATURED_MOBILE_SNAP_VH = 200;
 const FEATURED_MOBILE_EXIT_VH = 12;
+/** 40% less scroll→progress than gain=1 — one light flick ≈ one card */
+const FEATURED_MOBILE_SNAP_SCROLL_GAIN = 0.6;
+/** Longer dwell per card so the track sticks before advancing */
+const FEATURED_MOBILE_SNAP_DWELL = 0.3;
 const FEATURED_MOBILE_HEIGHT_VH =
   FEATURED_MOBILE_SNAP_VH + FEATURED_MOBILE_EXIT_VH;
 const FEATURED_MOBILE_SNAP_PORTION =
@@ -136,13 +140,13 @@ export default function FeaturedVillas() {
   const totalSteps = totalVillas + 2;
   /** CTA (last card) centers at this progress — no further horizontal drift on mobile */
   const mobileCarouselMaxProgress = (totalVillas + 1) / totalSteps;
-  const { targetRef, panelProgress } = useScrollLinkedSectionProgress({
+  const { targetRef, panelProgress, stageNavigation } = useScrollLinkedSectionProgress({
     scrollMode: "mobileSnapOnly",
     stepCount: totalSteps + 1,
     smoothSpring: true,
     mobileSnapAggressive: true,
-    mobileSnapScrollGain: 1,
-    mobileSnapDwellRatio: 0.18,
+    mobileSnapScrollGain: FEATURED_MOBILE_SNAP_SCROLL_GAIN,
+    mobileSnapDwellRatio: FEATURED_MOBILE_SNAP_DWELL,
     mobileSnapZoneRatio: FEATURED_MOBILE_SNAP_PORTION,
     mobileSnapMaxProgress: mobileCarouselMaxProgress,
   });
@@ -160,6 +164,7 @@ export default function FeaturedVillas() {
         bgClassName="relative"
         targetRef={targetRef}
         panelProgress={panelProgress}
+        stageNavigation={stageNavigation}
         scrollMode="mobileSnapOnly"
         stepCount={totalSteps + 1}
         smoothSpring

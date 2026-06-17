@@ -9,6 +9,13 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { useSnappedScrollProgress } from "@/lib/carouselMotion";
+import {
+  SCROLL_LINKED_FREE_SCROLL_GAIN,
+} from "@/lib/scrollLinkedFreeScroll";
+import {
+  useScrollLinkedManualNavigation,
+  type ScrollLinkedStageNavigation,
+} from "@/lib/useScrollLinkedManualNavigation";
 import { useMediaMinLg } from "@/lib/useMediaMinLg";
 
 export type ScrollLinkedScrollMode = "free" | "mobileSnapOnly";
@@ -27,11 +34,24 @@ export type UseScrollLinkedSectionProgressOptions = {
   mobileSnapZoneRatio?: number;
   /** Cap snapped progress so horizontal carousel stops at last card (Featured CTA) */
   mobileSnapMaxProgress?: number;
+  /** Free / desktop scroll-linked — vertical scroll → horizontal gain */
+  freeScrollGain?: number;
+  /** Manual swipe/drag + horizontal wheel (default: free mode, or desktop when mobileSnapOnly) */
+  enableManualNavigation?: boolean;
+  /** Show swipe/drag hint on first visit to section */
+  showHorizontalHint?: boolean;
+};
+
+export type UseScrollLinkedSectionProgressResult = {
+  targetRef: React.RefObject<HTMLDivElement | null>;
+  panelProgress: MotionValue<number>;
+  scrollYProgress: MotionValue<number>;
+  stageNavigation: ScrollLinkedStageNavigation | null;
 };
 
 export function useScrollLinkedSectionProgress(
   options: UseScrollLinkedSectionProgressOptions = {},
-) {
+): UseScrollLinkedSectionProgressResult {
   const {
     scrollMode = "free",
     stepCount = 2,
@@ -41,6 +61,9 @@ export function useScrollLinkedSectionProgress(
     mobileSnapScrollGain = 2.1,
     mobileSnapZoneRatio = 0.68,
     mobileSnapMaxProgress,
+    freeScrollGain = SCROLL_LINKED_FREE_SCROLL_GAIN,
+    enableManualNavigation,
+    showHorizontalHint = true,
   } = options;
 
   const mobileSnapDwell =
@@ -61,6 +84,11 @@ export function useScrollLinkedSectionProgress(
   });
 
   const mobileSnapActive = scrollMode === "mobileSnapOnly" && !isLg;
+  const freeNavActive =
+    scrollMode === "free" || (scrollMode === "mobileSnapOnly" && isLg);
+  const manualNavEnabled =
+    enableManualNavigation ?? freeNavActive;
+
   const useSmoothInput = smoothSpring && !mobileSnapActive;
   const inputProgress = useSmoothInput ? smoothProgress : scrollYProgress;
 
@@ -82,10 +110,10 @@ export function useScrollLinkedSectionProgress(
   );
 
   const snappedProgress = useSpring(dwellProgress, {
-    stiffness: mobileSnapActive ? (mobileSnapAggressive ? 260 : 200) : 120,
-    damping: mobileSnapActive ? (mobileSnapAggressive ? 30 : 24) : 26,
-    mass: mobileSnapActive ? (mobileSnapAggressive ? 0.22 : 0.35) : 0.5,
-    restDelta: mobileSnapAggressive ? 0.0015 : 0.0005,
+    stiffness: mobileSnapActive ? (mobileSnapAggressive ? 175 : 200) : 120,
+    damping: mobileSnapActive ? (mobileSnapAggressive ? 36 : 24) : 26,
+    mass: mobileSnapActive ? (mobileSnapAggressive ? 0.4 : 0.35) : 0.5,
+    restDelta: mobileSnapAggressive ? 0.0008 : 0.0005,
   });
 
   const cappedSnapProgress = useTransform(snappedProgress, (p) => {
@@ -93,9 +121,28 @@ export function useScrollLinkedSectionProgress(
     return Math.min(p, mobileSnapMaxProgress);
   });
 
+  const legacyFreeProgress = useTransform(scrollYProgress, (p) =>
+    Math.min(1, Math.max(0, p * freeScrollGain)),
+  );
+
+  const stageNavigation = useScrollLinkedManualNavigation({
+    targetRef,
+    scrollYProgress,
+    enabled: manualNavEnabled,
+    scrollGain: freeScrollGain,
+    showHint: showHorizontalHint,
+  });
+
   const panelProgress: MotionValue<number> = mobileSnapActive
     ? cappedSnapProgress
-    : scrollYProgress;
+    : manualNavEnabled
+      ? stageNavigation.panelProgress
+      : legacyFreeProgress;
 
-  return { targetRef, panelProgress, scrollYProgress };
+  return {
+    targetRef,
+    panelProgress,
+    scrollYProgress,
+    stageNavigation: manualNavEnabled ? stageNavigation : null,
+  };
 }

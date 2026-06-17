@@ -13,6 +13,8 @@ import {
   useScrollLinkedSectionProgress,
   type ScrollLinkedScrollMode,
 } from "@/lib/useScrollLinkedSectionProgress";
+import type { ScrollLinkedStageNavigation } from "@/lib/useScrollLinkedManualNavigation";
+import { ScrollLinkedInteractiveStage } from "@/components/scroll-linked/ScrollLinkedInteractiveStage";
 
 export type ScrollLinkedHorizontalSectionProps = {
   sectionHeightVh?: number;
@@ -26,8 +28,9 @@ export type ScrollLinkedHorizontalSectionProps = {
   children: ReactNode | ((panelProgress: MotionValue<number>) => ReactNode);
   /** When set, skip outer section + hook (parent owns ref/progress). */
   embedded?: boolean;
-  targetRef?: RefObject<HTMLDivElement>;
+  targetRef?: RefObject<HTMLDivElement | null>;
   panelProgress?: MotionValue<number>;
+  stageNavigation?: ScrollLinkedStageNavigation | null;
   /** Featured §6 — full mobile stage height (no header row). */
   panelAreaVariant?: "default" | "featured";
 };
@@ -40,6 +43,7 @@ export function ScrollLinkedStickyStage({
   children,
   panelProgress,
   panelAreaClassName = scrollLinkedPanelAreaClass,
+  stageNavigation = null,
 }: {
   bgClassName: string;
   headerLabel?: string;
@@ -48,6 +52,7 @@ export function ScrollLinkedStickyStage({
   children: ReactNode | ((panelProgress: MotionValue<number>) => ReactNode);
   panelProgress: MotionValue<number>;
   panelAreaClassName?: string;
+  stageNavigation?: ScrollLinkedStageNavigation | null;
 }) {
   const resolvedEndButton =
     typeof endButton === "function" ? endButton(panelProgress) : endButton;
@@ -55,7 +60,8 @@ export function ScrollLinkedStickyStage({
     typeof children === "function" ? children(panelProgress) : children;
 
   return (
-    <div
+    <ScrollLinkedInteractiveStage
+      stageNavigation={stageNavigation}
       className={`${scrollLinkedStickyStageClass} ${scrollLinkedStickyStageInnerClass} ${bgClassName}`}
     >
       {headerLabel ? (
@@ -65,7 +71,7 @@ export function ScrollLinkedStickyStage({
       ) : null}
       <div className={panelAreaClassName}>{resolvedChildren}</div>
       {resolvedEndButton}
-    </div>
+    </ScrollLinkedInteractiveStage>
   );
 }
 
@@ -82,6 +88,7 @@ export default function ScrollLinkedHorizontalSection({
   embedded = false,
   targetRef: externalRef,
   panelProgress: externalProgress,
+  stageNavigation: externalStageNavigation,
   panelAreaVariant = "default",
 }: ScrollLinkedHorizontalSectionProps) {
   const panelAreaClassName =
@@ -96,6 +103,10 @@ export default function ScrollLinkedHorizontalSection({
 
   const targetRef = externalRef ?? internal.targetRef;
   const panelProgress = externalProgress ?? internal.panelProgress;
+  const stageNavigation =
+    externalStageNavigation !== undefined
+      ? externalStageNavigation
+      : internal.stageNavigation;
 
   const stage = (
     <ScrollLinkedStickyStage
@@ -105,6 +116,7 @@ export default function ScrollLinkedHorizontalSection({
       endButton={endButton}
       panelProgress={panelProgress}
       panelAreaClassName={panelAreaClassName}
+      stageNavigation={stageNavigation}
     >
       {children}
     </ScrollLinkedStickyStage>
