@@ -108,6 +108,7 @@ export default function HorizontalScrollSection() {
   return (
     <ScrollLinkedHorizontalSection
       sectionHeightVh={sectionHeightVh}
+      stepCount={totalSteps}
       bgClassName="bg-[#25282C]"
       headerLabel="WAYS JADE IS EXPERIENCED"
       scrollMode="free"

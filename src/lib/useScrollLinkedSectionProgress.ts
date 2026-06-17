@@ -14,11 +14,13 @@ import {
   type ScrollLinkedStageNavigation,
 } from "@/lib/useScrollLinkedManualNavigation";
 import { useMediaMinLg } from "@/lib/useMediaMinLg";
+import { SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN } from "@/lib/scrollLinkedFreeScroll";
 
 export type ScrollLinkedScrollMode = "free" | "mobileSnapOnly";
 
 export type UseScrollLinkedSectionProgressOptions = {
   scrollMode?: ScrollLinkedScrollMode;
+  /** Panel steps (cards + end CTA) — used for swipe distance scaling */
   stepCount?: number;
   smoothSpring?: boolean;
   /** Mobile snap only — lower = less vertical scroll before the next card snaps in */
@@ -110,16 +112,23 @@ export function useScrollLinkedSectionProgress(
     return Math.min(p, mobileSnapMaxProgress);
   });
 
+  const freeProgress = useTransform(scrollYProgress, (p) => {
+    if (isLg || mobileSnapActive) return p;
+    return Math.min(1, p * SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN);
+  });
+
   /** Free sections track scroll directly; snap sections use the snapped pipeline. */
   const panelProgress: MotionValue<number> = mobileSnapActive
     ? cappedSnapProgress
-    : scrollYProgress;
+    : freeProgress;
 
   const manualNavEnabled = enableManualNavigation ?? true;
 
   const stageNavigation = useScrollLinkedManualNavigation({
     enabled: manualNavEnabled,
     showHint: showHorizontalHint,
+    sectionRef: targetRef,
+    stepCount,
   });
 
   return {
