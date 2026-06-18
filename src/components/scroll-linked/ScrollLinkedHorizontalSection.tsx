@@ -1,7 +1,10 @@
 "use client";
 
-import type { ReactNode, Ref, RefObject } from "react";
+import { useRef, type ReactNode, type Ref, RefObject } from "react";
 import type { MotionValue } from "framer-motion";
+import NavbarThemeTrigger from "@/components/NavbarThemeTrigger";
+import ScrollLinkedFreeMobileRail from "@/components/scroll-linked/ScrollLinkedFreeMobileRail";
+import type { ScrollLinkedPanelData } from "@/components/scroll-linked/ScrollLinkedPanelCard";
 import {
   scrollLinkedPanelAreaClass,
   scrollLinkedPanelAreaFeaturedClass,
@@ -14,6 +17,7 @@ import {
   type ScrollLinkedScrollMode,
 } from "@/lib/useScrollLinkedSectionProgress";
 import type { ScrollLinkedStageNavigation } from "@/lib/useScrollLinkedManualNavigation";
+import { useMediaMinLg } from "@/lib/useMediaMinLg";
 import { ScrollLinkedInteractiveStage } from "@/components/scroll-linked/ScrollLinkedInteractiveStage";
 
 export type ScrollLinkedHorizontalSectionProps = {
@@ -33,6 +37,11 @@ export type ScrollLinkedHorizontalSectionProps = {
   stageNavigation?: ScrollLinkedStageNavigation | null;
   /** Featured §6 — full mobile stage height (no header row). */
   panelAreaVariant?: "default" | "featured";
+  /** Mobile free mode — native horizontal rail (amenities/blog feel). */
+  panels?: ScrollLinkedPanelData[];
+  mobileEndSlot?: ReactNode;
+  gapVariant?: "standard" | "wide";
+  mobileRailAriaLabel?: string;
 };
 
 export function ScrollLinkedStickyStage({
@@ -75,7 +84,48 @@ export function ScrollLinkedStickyStage({
   );
 }
 
-export default function ScrollLinkedHorizontalSection({
+function ScrollLinkedHorizontalSectionMobileFree({
+  bgClassName,
+  headerLabel,
+  headerLabelClassName = "font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-jade-gold drop-shadow-lg block",
+  panels,
+  mobileEndSlot,
+  gapVariant = "standard",
+  mobileRailAriaLabel,
+}: Pick<
+  ScrollLinkedHorizontalSectionProps,
+  | "bgClassName"
+  | "headerLabel"
+  | "headerLabelClassName"
+  | "panels"
+  | "mobileEndSlot"
+  | "gapVariant"
+  | "mobileRailAriaLabel"
+>) {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  return (
+    <section
+      ref={sectionRef}
+      className={`jade-section relative ${bgClassName}`}
+    >
+      <NavbarThemeTrigger theme="white" sectionRef={sectionRef} />
+      {headerLabel ? (
+        <div className={scrollLinkedSectionHeaderClass}>
+          <span className={headerLabelClassName}>{headerLabel}</span>
+        </div>
+      ) : null}
+      <ScrollLinkedFreeMobileRail
+        panels={panels!}
+        endSlot={mobileEndSlot}
+        gapVariant={gapVariant}
+        ariaLabel={mobileRailAriaLabel}
+      />
+    </section>
+  );
+}
+
+function ScrollLinkedHorizontalSectionPinned({
   sectionHeightVh,
   bgClassName,
   headerLabel,
@@ -135,4 +185,21 @@ export default function ScrollLinkedHorizontalSection({
       {stage}
     </section>
   );
+}
+
+export default function ScrollLinkedHorizontalSection(
+  props: ScrollLinkedHorizontalSectionProps,
+) {
+  const isLg = useMediaMinLg();
+  const useMobileFreeRail =
+    props.scrollMode === "free" &&
+    !isLg &&
+    !props.embedded &&
+    Boolean(props.panels?.length);
+
+  if (useMobileFreeRail) {
+    return <ScrollLinkedHorizontalSectionMobileFree {...props} />;
+  }
+
+  return <ScrollLinkedHorizontalSectionPinned {...props} />;
 }

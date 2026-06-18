@@ -93,7 +93,8 @@ export function useScrollLinkedManualNavigation({
       const absY = Math.abs(event.deltaY);
       if (absX <= absY) return;
       event.preventDefault();
-      applyHorizontalDelta(event.deltaX, SCROLL_LINKED_WHEEL_FACTOR);
+      // Trackpad deltaX sign is opposite pan/touch — invert so swipe-right advances forward.
+      applyHorizontalDelta(-event.deltaX, SCROLL_LINKED_WHEEL_FACTOR);
       dismissHint();
     };
 

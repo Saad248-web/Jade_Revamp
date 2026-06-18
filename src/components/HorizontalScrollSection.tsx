@@ -112,6 +112,17 @@ export default function HorizontalScrollSection() {
       bgClassName="bg-[#25282C]"
       headerLabel="WAYS JADE IS EXPERIENCED"
       scrollMode="free"
+      panels={PANELS}
+      mobileEndSlot={
+        <PrimaryButton
+          href={experiencesListingPath()}
+          width="section"
+          className="shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-transform duration-300 hover:scale-[1.03]"
+        >
+          <span className="font-bold whitespace-nowrap">View All Experiences</span>
+        </PrimaryButton>
+      }
+      mobileRailAriaLabel="Ways Jade is experienced"
       endButton={(panelProgress) => (
         <EndButton panelProgress={panelProgress} />
       )}
