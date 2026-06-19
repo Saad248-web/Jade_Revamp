@@ -43,12 +43,18 @@ function pointerGain(pointerType?: string): number {
 
 function scrollByDelta(dy: number): void {
   if (!dy) return;
+  const isCoarse =
+    typeof window !== "undefined" &&
+    window.matchMedia("(pointer: coarse)").matches;
   const lenis = getLenis();
-  if (lenis) {
-    lenis.scrollTo(lenis.scroll + dy, { immediate: true });
-  } else {
+
+  // Mobile uses native touch scroll (Lenis syncTouch off) — scrollBy keeps momentum in sync.
+  if (isCoarse || !lenis) {
     window.scrollBy(0, dy);
+    return;
   }
+
+  lenis.scrollTo(lenis.scroll + dy, { immediate: true });
 }
 
 function resolveSectionEl(

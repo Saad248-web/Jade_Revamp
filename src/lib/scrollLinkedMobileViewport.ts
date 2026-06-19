@@ -13,15 +13,24 @@ import { MOBILE_BOTTOM_NAV_CONTENT_GAP } from "@/lib/layoutSpacing";
 
 const MOBILE_MQ = "(max-width: 1023px)";
 
-/** Section label row inside sticky stage (40px top + 40px bottom on mobile). */
-const SECTION_HEADER_PX = 80;
+/** Section label row — synced to {@link scrollLinkedSectionHeaderClass} padding. */
+const SECTION_HEADER_MIN_PX = 72;
+const SECTION_HEADER_VH_FACTOR = 0.095;
+const SECTION_HEADER_MAX_PX = 104;
+
+/** Min top/bottom breathing room inside the panel row (each side). */
+const PANEL_BREATHING_MIN_PX = 28;
+const PANEL_BREATHING_VH_FACTOR = 0.065;
+const PANEL_BREATHING_MAX_PX = 56;
 
 const CUSTOM_PROPS = [
   "--jade-vv-offset-top",
   "--jade-vv-height",
   "--jade-vv-nav-inset",
   "--jade-scroll-stage-mobile-height",
+  "--jade-scroll-section-header-block",
   "--jade-scroll-panel-row-height",
+  "--jade-scroll-panel-breathing-min",
   "--jade-scroll-text-reserve",
   "--jade-scroll-card-max-h",
   "--jade-scroll-card-max-h-featured",
@@ -89,8 +98,30 @@ export function syncScrollLinkedMobileViewport(): void {
     `${stageHeight}px`,
   );
 
-  const panelRow = Math.max(160, stageHeight - SECTION_HEADER_PX);
+  const headerBlock = clampGap(
+    stageHeight,
+    SECTION_HEADER_MIN_PX,
+    SECTION_HEADER_VH_FACTOR,
+    SECTION_HEADER_MAX_PX,
+  );
+  root.style.setProperty(
+    "--jade-scroll-section-header-block",
+    `${headerBlock}px`,
+  );
+
+  const panelRow = Math.max(160, stageHeight - headerBlock);
   root.style.setProperty("--jade-scroll-panel-row-height", `${panelRow}px`);
+
+  const breathingMin = clampGap(
+    panelRow,
+    PANEL_BREATHING_MIN_PX,
+    PANEL_BREATHING_VH_FACTOR,
+    PANEL_BREATHING_MAX_PX,
+  );
+  root.style.setProperty(
+    "--jade-scroll-panel-breathing-min",
+    `${breathingMin}px`,
+  );
 
   const panelGap = clampGap(panelRow, 6, 0.024, 12);
   const panelGapLg = clampGap(panelRow, 8, 0.032, 20);
@@ -101,7 +132,7 @@ export function syncScrollLinkedMobileViewport(): void {
     MOBILE_BOTTOM_NAV_CONTENT_GAP,
   );
 
-  setCardMaxHeights(root, panelRow, panelGap, panelGapLg);
+  setCardMaxHeights(root, panelRow, panelGap, panelGapLg, breathingMin);
 }
 
 function setCardMaxHeights(
@@ -109,20 +140,28 @@ function setCardMaxHeights(
   panelRowPx: number,
   panelGap: number,
   panelGapLg: number,
+  breathingMin: number,
 ): void {
+  /** Card stack budget — reserve proportional top/bottom gutters (matches grid 1fr rows). */
+  const stackBudget = Math.max(280, panelRowPx - breathingMin * 2);
   const stackGaps = panelGap * 3 + panelGapLg;
   const textReserve = Math.min(
-    240,
-    Math.max(200, Math.round(panelRowPx * 0.46) + stackGaps),
+    220,
+    Math.max(176, Math.round(stackBudget * 0.4) + stackGaps),
   );
   const tallHeaderReserve = textReserve + 28;
 
   root.style.setProperty("--jade-scroll-text-reserve", `${textReserve}px`);
 
-  const cardMax = Math.min(600, Math.max(132, panelRowPx - textReserve));
+  const cardMax = Math.min(
+    600,
+    Math.round(stackBudget * 0.58),
+    Math.max(120, stackBudget - textReserve),
+  );
   const cardMaxTall = Math.min(
     560,
-    Math.max(120, panelRowPx - tallHeaderReserve),
+    Math.round(stackBudget * 0.54),
+    Math.max(120, stackBudget - tallHeaderReserve),
   );
 
   root.style.setProperty("--jade-scroll-card-max-h", `${cardMax}px`);
@@ -136,13 +175,15 @@ function setCardMaxHeights(
    * + bottom padding, so the safe stack budget ≈ panelRow. Size the villa image to
    * that budget minus the text/CTA block — fills the frame without clipping the CTA.
    */
+  const featuredStackBudget = Math.max(260, panelRowPx - breathingMin * 2);
   const featuredTextReserve = Math.min(
     208,
-    Math.max(168, Math.round(panelRowPx * 0.36) + stackGaps),
+    Math.max(168, Math.round(featuredStackBudget * 0.38) + stackGaps),
   );
   const featuredCardMax = Math.min(
     600,
-    Math.max(150, panelRowPx - featuredTextReserve),
+    Math.round(featuredStackBudget * 0.56),
+    Math.max(150, featuredStackBudget - featuredTextReserve),
   );
   root.style.setProperty(
     "--jade-scroll-card-max-h-featured",

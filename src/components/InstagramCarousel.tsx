@@ -196,14 +196,28 @@ export default function InstagramCarousel() {
       return;
     }
 
+    let visible = false;
+    let rafId = 0;
+
     const io = new IntersectionObserver(
       ([entry]) => {
-        setInView(Boolean(entry?.isIntersecting));
+        const next =
+          Boolean(entry?.isIntersecting) &&
+          (entry?.intersectionRatio ?? 0) >= 0.06;
+        if (next === visible) return;
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          visible = next;
+          setInView(next);
+        });
       },
-      { threshold: 0.08, rootMargin: "0px 0px -10% 0px" },
+      { threshold: [0, 0.06, 0.12, 0.2], rootMargin: "0px 0px -4% 0px" },
     );
     io.observe(section);
-    return () => io.disconnect();
+    return () => {
+      cancelAnimationFrame(rafId);
+      io.disconnect();
+    };
   }, []);
 
   useEffect(() => {

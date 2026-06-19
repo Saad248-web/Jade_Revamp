@@ -2,26 +2,26 @@
 
 /** Pointer gain — near 1:1; scaling happens in {@link horizontalDragToScrollDelta}. */
 export const SCROLL_LINKED_DRAG_FACTOR = 1.0;
-export const SCROLL_LINKED_MOBILE_DRAG_FACTOR = 1.05;
+export const SCROLL_LINKED_MOBILE_DRAG_FACTOR = 1.12;
 
 /** Extra multiplier on trackpad horizontal wheel */
 export const SCROLL_LINKED_WHEEL_FACTOR = 1.15;
 
 /**
- * ~65% of viewport width horizontal drag ≈ one panel step (free carousel feel).
+ * ~55% of viewport width horizontal drag ≈ one panel step (mobile completes in one swipe).
  */
-export const SCROLL_LINKED_SWIPE_VIEWPORT_RATIO = 0.65;
+export const SCROLL_LINKED_SWIPE_VIEWPORT_RATIO = 0.55;
 
 /** Mobile vertical scroll → slightly faster panel drift (still smooth / not sticky) */
-export const SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN = 1.28;
+export const SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN = 1.35;
 
 /**
  * Pinned section height (vh). Taller = smoother vertical drift; mobile slightly shorter.
  */
 export const SCROLL_LINKED_SECTION_VH = {
-  home: { mobile: 480, desktop: 560 },
-  experiences: { mobile: 480, desktop: 560 },
-  wedding: { mobile: 400, desktop: 440 },
+  home: { mobile: 520, desktop: 560 },
+  experiences: { mobile: 520, desktop: 560 },
+  wedding: { mobile: 440, desktop: 440 },
 } as const;
 
 function readSectionScrollableHeight(sectionEl: HTMLElement): number {

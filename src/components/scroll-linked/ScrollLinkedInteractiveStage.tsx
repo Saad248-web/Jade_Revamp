@@ -1,16 +1,20 @@
 "use client";
 
 import type { PanInfo } from "framer-motion";
+import type { MotionValue } from "framer-motion";
 import type { ReactNode, Ref } from "react";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import type { ScrollLinkedStageNavigation } from "@/lib/useScrollLinkedManualNavigation";
 import { ScrollLinkedHorizontalHint } from "@/components/scroll-linked/ScrollLinkedHorizontalHint";
+import { ScrollLinkedHorizontalProgress } from "@/components/scroll-linked/ScrollLinkedHorizontalProgress";
 
 type ScrollLinkedInteractiveStageProps = {
   children: ReactNode;
   stageNavigation: ScrollLinkedStageNavigation | null;
   className?: string;
+  panelProgress?: MotionValue<number>;
+  showProgress?: boolean;
 };
 
 /**
@@ -22,6 +26,8 @@ export function ScrollLinkedInteractiveStage({
   children,
   stageNavigation,
   className,
+  panelProgress,
+  showProgress = true,
 }: ScrollLinkedInteractiveStageProps) {
   if (!stageNavigation) {
     return <div className={className}>{children}</div>;
@@ -44,6 +50,9 @@ export function ScrollLinkedInteractiveStage({
       onPanEnd={onPanEnd}
     >
       {children}
+      {showProgress && panelProgress ? (
+        <ScrollLinkedHorizontalProgress panelProgress={panelProgress} />
+      ) : null}
       {showHint ? <ScrollLinkedHorizontalHint /> : null}
     </motion.div>
   );

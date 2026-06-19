@@ -794,6 +794,14 @@ html.jade-scroll-chrome-hidden {
   }
 }
 
+/* Mobile: skip content-visibility defer — prevents section-boundary layout shake */
+@media (max-width: 1023px) {
+  .jade-defer-paint {
+    content-visibility: visible;
+    contain-intrinsic-size: auto;
+  }
+}
+
 body {
   position: relative; /* Fix: Ensures Framer Motion scroll calculations are accurate */
   overflow-x: hidden;
@@ -925,9 +933,11 @@ body {
     --jade-mobile-chrome-bottom: calc(
       0.5rem + 2.75rem + max(0.75rem, calc(env(safe-area-inset-bottom, 0px) + 0.875rem))
     );
-    --jade-scroll-panel-bottom-gap: clamp(1.25rem, 3.5vw, 1.5rem);
+    --jade-scroll-panel-bottom-gap: clamp(1.25rem, 3.5vh, 1.75rem);
     --jade-scroll-panel-gap: 0.5rem;
     --jade-scroll-panel-gap-lg: 0.625rem;
+    --jade-scroll-panel-breathing-min: clamp(1.75rem, 6.5svh, 3.5rem);
+    --jade-scroll-section-header-block: clamp(4.5rem, 9.5svh, 6.5rem);
     --jade-scroll-text-reserve: 12rem;
     /* svh = smallest viewport — stable frame. Navbar overlays the top (header row /
        Featured top padding provide its clearance); only the bottom nav is subtracted
@@ -936,11 +946,16 @@ body {
       100svh - var(--jade-mobile-chrome-bottom)
     );
     --jade-scroll-panel-row-height: calc(
-      var(--jade-scroll-stage-mobile-height) - 5rem
+      var(--jade-scroll-stage-mobile-height) -
+        var(--jade-scroll-section-header-block)
     );
     --jade-scroll-card-max-h: min(
-      55svh,
-      calc(var(--jade-scroll-panel-row-height) - var(--jade-scroll-text-reserve)),
+      52svh,
+      calc(
+        var(--jade-scroll-panel-row-height) -
+          var(--jade-scroll-panel-breathing-min) * 2 -
+          var(--jade-scroll-text-reserve)
+      ),
       600px
     );
     --jade-scroll-card-max-h-tall-header: min(
@@ -1033,10 +1048,15 @@ body {
       3.375rem,
       calc(env(safe-area-inset-top, 0px) + 3rem)
     );
+    --jade-scroll-panel-breathing-min: clamp(1.5rem, 5.5svh, 2.5rem);
     --jade-scroll-text-reserve: 11rem;
     --jade-scroll-card-max-h: min(
-      48svh,
-      calc(var(--jade-scroll-panel-row-height) - var(--jade-scroll-text-reserve)),
+      46svh,
+      calc(
+        var(--jade-scroll-panel-row-height) -
+          var(--jade-scroll-panel-breathing-min) * 2 -
+          var(--jade-scroll-text-reserve)
+      ),
       260px
     );
   }

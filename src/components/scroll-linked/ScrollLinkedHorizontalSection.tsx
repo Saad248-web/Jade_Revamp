@@ -62,6 +62,7 @@ export function ScrollLinkedStickyStage({
   return (
     <ScrollLinkedInteractiveStage
       stageNavigation={stageNavigation}
+      panelProgress={panelProgress}
       className={`${scrollLinkedStickyStageClass} ${scrollLinkedStickyStageInnerClass} ${bgClassName}`}
     >
       {headerLabel ? (

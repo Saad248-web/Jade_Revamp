@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import clsx from "clsx";
 import Image from "next/image";
 import { ArrowRight, ChevronRight } from "lucide-react";
@@ -28,7 +28,7 @@ const BlogCard = ({ post }: { post: any }) => {
 
       <div className="flex flex-col pr-4">
         {/* Title - Systematic size and clamping */}
-        <h3 className="font-philosopher text-[1.1rem] sm:text-[1.2rem] lg:text-[1.4rem] text-white group-hover:text-[#EFCD62] transition-colors mb-2.5 line-clamp-2 leading-normal">
+        <h3 className="font-philosopher text-gh-h3 text-white group-hover:text-[#EFCD62] transition-colors mb-2.5 line-clamp-2 leading-snug">
           {post.title}
         </h3>
         <p className="font-manrope text-white/60 text-[0.85rem] sm:text-[0.9rem] leading-relaxed line-clamp-2 mb-4 min-h-[3em]">
@@ -45,35 +45,6 @@ const BlogCard = ({ post }: { post: any }) => {
 
 export default function BlogSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  // Drag-to-scroll state
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!scrollContainerRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
-    setScrollLeft(scrollContainerRef.current.scrollLeft);
-  };
-
-  const handleMouseLeave = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !scrollContainerRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startX) * 2; // scroll speed multiplier
-    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
-  };
 
   return (
     <section
@@ -120,16 +91,8 @@ export default function BlogSection() {
       {/* Horizontal scroll bleeds to the viewport edge on both sides but items align with heading */}
       <div className="max-w-[1920px] mx-auto w-full min-w-0">
         <div
-          ref={scrollContainerRef}
           data-jade-hscroll
-          onMouseDown={handleMouseDown}
-          onMouseLeave={handleMouseLeave}
-          onMouseUp={handleMouseUp}
-          onMouseMove={handleMouseMove}
-          className={clsx(
-            "jade-hscroll-track flex gap-8 lg:gap-11 overflow-x-auto pb-8 md:pb-10 scrollbar-none snap-x snap-mandatory",
-            isDragging ? "cursor-grabbing" : "cursor-grab"
-          )}
+          className="jade-hscroll-track flex gap-8 lg:gap-11 overflow-x-auto pb-8 md:pb-10 scrollbar-none snap-x snap-mandatory overscroll-x-contain"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {BLOG_POSTS.map((post, index) => (

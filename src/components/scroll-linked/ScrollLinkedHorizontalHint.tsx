@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import { ChevronsLeft, ChevronsRight, Hand } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
+import { SCROLL_LINE_INDICATOR_BOTTOM_CLASS } from "@/lib/layoutSpacing";
 
 export type ScrollLinkedHorizontalHintProps = {
   className?: string;
@@ -19,7 +20,9 @@ export function ScrollLinkedHorizontalHint({
   return (
     <div
       className={clsx(
-        "pointer-events-none absolute inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-[70] flex flex-col items-center gap-2 px-4",
+        "pointer-events-none absolute inset-x-0 z-[70] flex flex-col items-center gap-2 px-4",
+        SCROLL_LINE_INDICATOR_BOTTOM_CLASS,
+        "max-lg:translate-y-[-1.75rem] lg:translate-y-[-2rem]",
         className,
       )}
       aria-hidden

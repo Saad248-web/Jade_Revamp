@@ -23,32 +23,52 @@ function emit(next: boolean) {
   listeners.forEach((fn) => fn(hidden));
 }
 
-/** Instant direction reflex — no px threshold, no delay (same as global Navbar). */
+/** Ignore micro-reversals while Lenis coasts between sections (prevents chrome shake). */
+const VELOCITY_DEADZONE = 0.85;
+/** Minimum travel before toggling hide direction. */
+const MIN_DIRECTION_DELTA_PX = 16;
+/** Always show chrome near the top of the page. */
+const TOP_SHOW_THRESHOLD_PX = 12;
+
+/** Navbar: hide on scroll down, show on scroll up — with coasting deadzone. */
 function attachScrollHideEngine(): () => void {
   let lastY = getLenis()?.scroll ?? window.scrollY;
+  let anchorY = lastY;
 
-  const evaluate = (y: number, direction?: number) => {
-    if (y <= 0) {
+  const evaluate = (y: number, velocity?: number, direction?: number) => {
+    if (y <= TOP_SHOW_THRESHOLD_PX) {
       lastY = y;
+      anchorY = y;
       emit(false);
       return;
     }
 
-    const previous = lastY;
-    lastY = y;
-
-    if (direction != null && direction !== 0) {
-      emit(direction > 0);
+    const absVel = Math.abs(velocity ?? 0);
+    if (absVel > 0 && absVel < VELOCITY_DEADZONE) {
+      lastY = y;
       return;
     }
 
-    const delta = y - previous;
-    if (delta > 0) emit(true);
-    else if (delta < 0) emit(false);
+    lastY = y;
+
+    if (direction != null && direction !== 0 && absVel >= VELOCITY_DEADZONE) {
+      emit(direction > 0);
+      anchorY = y;
+      return;
+    }
+
+    const deltaFromAnchor = y - anchorY;
+    if (deltaFromAnchor >= MIN_DIRECTION_DELTA_PX) {
+      emit(true);
+      anchorY = y;
+    } else if (deltaFromAnchor <= -MIN_DIRECTION_DELTA_PX) {
+      emit(false);
+      anchorY = y;
+    }
   };
 
-  const unsubLenis = subscribeLenisScrollImmediate(({ scroll, direction }) => {
-    evaluate(scroll, direction);
+  const unsubLenis = subscribeLenisScrollImmediate(({ scroll, direction, velocity }) => {
+    evaluate(scroll, velocity, direction);
   });
 
   const onWindowScroll = () => {
@@ -89,7 +109,7 @@ function releaseEngine() {
   }
 }
 
-/** Navbar: hide on any scroll down, show on any scroll up (immediate). */
+/** Navbar: hide on scroll down, show on scroll up (deadzone while coasting). */
 export function useBatchedScrollHide(): boolean {
   useEffect(() => {
     acquireEngine();

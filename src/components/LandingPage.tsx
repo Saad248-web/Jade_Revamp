@@ -57,9 +57,7 @@ export default function LandingPage() {
   const heroFallbackImage = "/Home Page/4-Venue Images/1.webp";
 
   useEffect(() => {
-    const timer = setTimeout(() => getLenis()?.resize(), 800);
     prefetchInstagramOembed();
-    return () => clearTimeout(timer);
   }, []);
 
   const { scrollY } = useScroll();
