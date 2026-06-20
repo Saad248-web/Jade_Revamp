@@ -19,6 +19,12 @@ export type UseScrollLinkedManualNavigationOptions = {
   sectionRef?: React.RefObject<HTMLElement | null>;
   /** Panel steps in the section (cards + end CTA) — drives swipe distance per card */
   stepCount?: number;
+  /**
+   * Snap the page scroll to the nearest card step when a drag/swipe ends. Only the
+   * snap (`mobileSnapOnly`) carousel wants this — for free sections it causes a jarring
+   * jump (e.g. snapping a just-pinned section to fill the screen on a slight touch).
+   */
+  snapOnRelease?: boolean;
 };
 
 export type ScrollLinkedStageNavigation = {
@@ -116,6 +122,7 @@ export function useScrollLinkedManualNavigation({
   showVerticalHint: showVerticalHintOption = true,
   sectionRef,
   stepCount = 2,
+  snapOnRelease = true,
 }: UseScrollLinkedManualNavigationOptions): ScrollLinkedStageNavigation {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef(false);
@@ -261,7 +268,7 @@ export function useScrollLinkedManualNavigation({
     };
 
     const onTouchEnd = () => {
-      if (axisLocked === "horizontal") {
+      if (snapOnRelease && axisLocked === "horizontal") {
         snapSectionToNearestStep(sectionRef, el, stepCount);
       }
       resetTouch();
@@ -278,7 +285,7 @@ export function useScrollLinkedManualNavigation({
       el.removeEventListener("touchend", onTouchEnd);
       el.removeEventListener("touchcancel", onTouchEnd);
     };
-  }, [enabled, dismissHint, applyHorizontalDelta, sectionRef, stepCount]);
+  }, [enabled, dismissHint, applyHorizontalDelta, sectionRef, stepCount, snapOnRelease]);
 
   const onPanStart = useCallback(
     (event: PointerEvent) => {
@@ -307,13 +314,13 @@ export function useScrollLinkedManualNavigation({
   );
 
   const onPanEnd = useCallback(() => {
-    if (!ignorePanRef.current && enabled) {
+    if (snapOnRelease && !ignorePanRef.current && enabled) {
       snapSectionToNearestStep(sectionRef, stageRef.current, stepCount);
     }
     ignorePanRef.current = false;
     draggingRef.current = false;
     setIsDragging(false);
-  }, [enabled, sectionRef, stepCount]);
+  }, [enabled, sectionRef, stepCount, snapOnRelease]);
 
   return {
     stageRef,
