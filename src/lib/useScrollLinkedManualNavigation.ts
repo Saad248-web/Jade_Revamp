@@ -19,6 +19,11 @@ export type UseScrollLinkedManualNavigationOptions = {
   sectionRef?: React.RefObject<HTMLElement | null>;
   /** Panel steps in the section (cards + end CTA) — drives swipe distance per card */
   stepCount?: number;
+  /**
+   * After vertical scroll momentum ends, snap to the nearest card.
+   * Only enable for `mobileSnapOnly` — free sections must not hijack page scroll.
+   */
+  snapOnScrollEnd?: boolean;
 };
 
 export type ScrollLinkedStageNavigation = {
@@ -77,6 +82,18 @@ function readSectionProgress(sectionEl: HTMLElement): number {
   );
 }
 
+/** True when scrollY is inside this section's pinned travel range (not above/below it). */
+function isSectionInActiveScrollRange(
+  section: HTMLElement,
+  tolerancePx = 8,
+): boolean {
+  const scrollY = window.scrollY;
+  const top = section.offsetTop;
+  const scrollable = Math.max(1, section.offsetHeight - window.innerHeight);
+  const maxY = top + scrollable;
+  return scrollY >= top - tolerancePx && scrollY <= maxY + tolerancePx;
+}
+
 function snapSectionToNearestStep(
   sectionRef: React.RefObject<HTMLElement | null> | undefined,
   stageEl: HTMLElement | null,
@@ -102,6 +119,7 @@ export function useScrollLinkedManualNavigation({
   showVerticalHint: showVerticalHintOption = true,
   sectionRef,
   stepCount = 2,
+  snapOnScrollEnd = false,
 }: UseScrollLinkedManualNavigationOptions): ScrollLinkedStageNavigation {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef(false);
@@ -155,9 +173,9 @@ export function useScrollLinkedManualNavigation({
     };
   }, [enabled, showVerticalHint, sectionRef, dismissVerticalHint]);
 
-  // After native touch momentum settles, snap to the nearest card.
+  // After native touch momentum settles, snap to the nearest card (mobileSnapOnly only).
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || !snapOnScrollEnd) return;
     if (!window.matchMedia("(pointer: coarse)").matches) return;
 
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -176,7 +194,7 @@ export function useScrollLinkedManualNavigation({
       window.removeEventListener("scroll", onScroll);
       if (timer) clearTimeout(timer);
     };
-  }, [enabled, sectionRef, stepCount]);
+  }, [enabled, snapOnScrollEnd, sectionRef, stepCount]);
 
   useEffect(() => {
     if (!enabled) return;
