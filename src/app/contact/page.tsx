@@ -18,6 +18,7 @@ import LiveBackground from "@/components/LiveBackground";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import GoldAccentLine from "@/components/ui/GoldAccentLine";
 
 /* ─────────────────────────────────────────────────────────────────────
    Glassmorphic Contact Card
@@ -142,6 +143,7 @@ export default function ContactPage() {
           1. HERO — Live Background, heading, contact cards
       ════════════════════════════════════════════════════════════════ */}
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 pb-12 pt-24 md:pt-24">
+        <GoldAccentLine className="absolute top-0 left-0 right-0 z-20" />
         {/* Live Background — matches UnifiedScrollSection: no heavy overlay */}
         <div className="absolute inset-0 z-0">
           <LiveBackground />

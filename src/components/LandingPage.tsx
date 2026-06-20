@@ -15,6 +15,7 @@ import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import dynamic from "next/dynamic";
 import { getLenis, scrollToY } from "@/lib/lenis";
 import LazyWhenNear from "@/components/ui/LazyWhenNear";
+import SectionFillTransition from "@/components/ui/SectionFillTransition";
 import { InstagramCarouselShell } from "@/components/InstagramCarouselShell";
 import { prefetchInstagramOembed } from "@/lib/instagramOembedCache";
 import {
@@ -190,6 +191,7 @@ export default function LandingPage() {
       >
         <InstagramCarousel />
       </LazyWhenNear>
+      <SectionFillTransition from="charcoal" to="green" />
       <LazyWhenNear
         minHeight="calc(75vh + 12vh)"
         className="bg-jade-green"
@@ -197,6 +199,7 @@ export default function LandingPage() {
         <ValuePropositionSection />
       </LazyWhenNear>
       <FeaturedVillas />
+      <SectionFillTransition from="green" to="charcoal" />
       <LazyWhenNear minHeight="80vh">
         <JadeAmenitiesSection />
       </LazyWhenNear>

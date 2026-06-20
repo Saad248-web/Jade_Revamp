@@ -20,7 +20,7 @@ const SECTION_HEADER_MAX_PX = 104;
 
 /** Min top/bottom breathing room inside the panel row (each side). */
 const PANEL_BREATHING_MIN_PX = 28;
-const PANEL_BREATHING_VH_FACTOR = 0.065;
+const PANEL_BREATHING_VH_FACTOR = 0.055;
 const PANEL_BREATHING_MAX_PX = 56;
 
 const CUSTOM_PROPS = [
@@ -155,12 +155,12 @@ function setCardMaxHeights(
 
   const cardMax = Math.min(
     600,
-    Math.round(stackBudget * 0.58),
+    Math.round(stackBudget * 0.67),
     Math.max(120, stackBudget - textReserve),
   );
   const cardMaxTall = Math.min(
     560,
-    Math.round(stackBudget * 0.54),
+    Math.round(stackBudget * 0.62),
     Math.max(120, stackBudget - tallHeaderReserve),
   );
 

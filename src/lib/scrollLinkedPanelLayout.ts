@@ -51,7 +51,7 @@ export const scrollLinkedPanelAreaFeaturedClass =
   "relative z-10 w-full min-h-0 flex-1 max-lg:max-h-[var(--jade-scroll-stage-mobile-height,100%)]";
 
 export const scrollLinkedSectionHeaderClass =
-  "relative z-50 flex w-full shrink-0 flex-col items-center pointer-events-none max-lg:pt-[clamp(2rem,5.5svh,2.75rem)] max-lg:pb-[clamp(1rem,3svh,1.75rem)] lg:py-[clamp(32px,4vh,51.2px)]";
+  "relative z-50 flex w-full shrink-0 flex-col items-center pointer-events-none max-lg:pt-[clamp(1.75rem,4.5svh,2.25rem)] max-lg:pb-[clamp(0.875rem,2.5svh,1.25rem)] lg:py-[clamp(32px,4vh,51.2px)]";
 
 export const scrollLinkedSectionHeaderTallClass =
   "relative z-50 flex w-full shrink-0 flex-col items-center pointer-events-none max-lg:py-[var(--jade-scroll-panel-gap,0.375rem)] lg:pt-[clamp(38.4px,4.8vh,64px)] lg:pb-8";

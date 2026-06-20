@@ -16,6 +16,7 @@ import TravelGuidelinesSection from "@/components/TravelGuidelinesSection";
 import { Info, Calendar } from "lucide-react";
 import { useAnimation } from "@/context/AnimationContext";
 import { scrollToExperienceHeroSection } from "@/lib/experiencePageVillaScroll";
+import SectionFillTransition from "@/components/ui/SectionFillTransition";
 import { useEffect, useMemo, useState } from "react";
 
 const DEFAULT_SLIDES = [
@@ -142,9 +143,11 @@ export default function CaravansPage() {
         />
       </section>
 
+      <SectionFillTransition from="deep" to="green" />
       <CaravanUsageSection />
       <CaravanJourneySection />
 
+      <SectionFillTransition from="green" to="deep" />
       <CuratedExperiencesGrid
         label="CURATED EXPERIENCES"
         title="Enhance Your Stay"
@@ -189,6 +192,7 @@ export default function CaravansPage() {
         experienceCta
       />
 
+      <SectionFillTransition from="deep" to="green" />
       <TravelGuidelinesSection />
 
       <Footer />

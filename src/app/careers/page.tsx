@@ -16,6 +16,8 @@ import OverlayEnquirySuccessContent from "@/components/overlays/OverlayEnquirySu
 import LiveBackground from "@/components/LiveBackground";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SectionFillTransition from "@/components/ui/SectionFillTransition";
+import GoldAccentLine from "@/components/ui/GoldAccentLine";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import {
   validateCareerResumeFile,
@@ -206,6 +208,7 @@ export default function CareersPage() {
       <MobileBottomNav />
       {/* 1. HERO SECTION */}
       <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
+        <GoldAccentLine className="absolute top-0 left-0 right-0 z-20" />
         {/* Live Background */}
         <div className="absolute inset-0 z-0 opacity-80">
           <LiveBackground />
@@ -252,7 +255,10 @@ export default function CareersPage() {
             VIEW OPEN ROLES
           </motion.button>
         </div>
+        <GoldAccentLine className="absolute bottom-0 left-0 right-0 z-20" />
       </section>
+
+      <GoldAccentLine />
 
       {/* 2. JOBS SECTION */}
       <section
@@ -357,6 +363,7 @@ export default function CareersPage() {
         </div>
       </section>
 
+      <SectionFillTransition from="green" to="deep" />
       {/* 3. CULTURE SECTION (Optimized for 100vh) */}
       <section className="jade-section relative min-h-[100svh] flex flex-col justify-center bg-[#1A1C1E] border-t border-white/5 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 text-center relative z-10 w-full">

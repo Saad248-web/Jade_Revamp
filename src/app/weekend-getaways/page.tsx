@@ -15,6 +15,7 @@ import ExperienceScrollSection from "@/components/ExperienceScrollSection";
 import ExperienceCarouselSection from "@/components/ExperienceCarouselSection";
 import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
 import WeekendThemedVillasSection from "@/components/weekend/WeekendThemedVillasSection";
+import SectionFillTransition from "@/components/ui/SectionFillTransition";
 
 // Per request: remove all image links from this page (text-first).
 

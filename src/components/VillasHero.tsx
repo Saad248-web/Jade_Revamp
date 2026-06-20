@@ -9,6 +9,7 @@ import {
   SCROLL_LINE_INDICATOR_CLICKABLE_CLASS,
   SCROLL_LINE_INDICATOR_HERO_WRAPPER_CLASS,
 } from "./ScrollLineIndicator";
+import GoldAccentLine from "@/components/ui/GoldAccentLine";
 
 export default function VillasHero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -17,6 +18,7 @@ export default function VillasHero() {
       ref={sectionRef}
       className="relative min-h-[100dvh] h-screen w-full overflow-hidden bg-[#050505] flex flex-col items-center justify-center text-center px-6"
     >
+      <GoldAccentLine className="absolute top-0 left-0 right-0 z-20" />
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
       {/* Live Background */}
       <div className="absolute inset-0 z-0">
@@ -76,6 +78,7 @@ export default function VillasHero() {
           }}
         />
       </motion.div>
+      <GoldAccentLine className="absolute bottom-0 left-0 right-0 z-20" />
     </section>
   );
 }

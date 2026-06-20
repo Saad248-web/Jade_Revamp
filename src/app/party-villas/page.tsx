@@ -41,6 +41,7 @@ import CuratedExperiencesGrid from "@/components/CuratedExperiencesGrid";
 import { useAnimation } from "@/context/AnimationContext";
 import { EXPERIENCE_PAGE_PATHS } from "@/lib/enquiryReturnPath";
 import { scrollToExperienceVillaSection } from "@/lib/experiencePageVillaScroll";
+import SectionFillTransition from "@/components/ui/SectionFillTransition";
 
 const partySlides = [
   {
@@ -160,6 +161,7 @@ export default function PartyVillasPage() {
       </div>
 
       {/* SECTION 6: FEATURED PARTY VILLAS */}
+      <SectionFillTransition from="deep" to="charcoal" />
       <PartyVillasCarousel />
 
       <Footer />

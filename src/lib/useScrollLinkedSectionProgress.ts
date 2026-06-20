@@ -37,6 +37,8 @@ export type UseScrollLinkedSectionProgressOptions = {
   enableManualNavigation?: boolean;
   /** Show swipe/drag hint while the section is first explored */
   showHorizontalHint?: boolean;
+  /** End-of-section vertical scroll cue (default on even when horizontal hint is off) */
+  showVerticalHint?: boolean;
 };
 
 export type UseScrollLinkedSectionProgressResult = {
@@ -60,6 +62,7 @@ export function useScrollLinkedSectionProgress(
     mobileSnapMaxProgress,
     enableManualNavigation,
     showHorizontalHint = true,
+    showVerticalHint = true,
   } = options;
 
   const mobileSnapDwell =
@@ -80,6 +83,7 @@ export function useScrollLinkedSectionProgress(
   });
 
   const mobileSnapActive = scrollMode === "mobileSnapOnly" && !isLg;
+  const mobileFreeSnapActive = scrollMode === "free" && !isLg && !mobileSnapActive;
   const useSmoothInput = smoothSpring && !mobileSnapActive;
   const inputProgress = useSmoothInput ? smoothProgress : scrollYProgress;
 
@@ -112,21 +116,38 @@ export function useScrollLinkedSectionProgress(
     return Math.min(p, mobileSnapMaxProgress);
   });
 
-  const freeProgress = useTransform(scrollYProgress, (p) => {
+  const freeProgressInput = useTransform(scrollYProgress, (p) => {
     if (isLg || mobileSnapActive) return p;
     return Math.min(1, p * SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN);
+  });
+
+  const freeSnappedInput = useSnappedScrollProgress(
+    freeProgressInput,
+    stepCount,
+    reducedMotion,
+    mobileFreeSnapActive ? 0.1 : 0.32,
+  );
+
+  const freeSnappedSpring = useSpring(freeSnappedInput, {
+    stiffness: mobileFreeSnapActive ? 220 : 120,
+    damping: mobileFreeSnapActive ? 30 : 26,
+    mass: mobileFreeSnapActive ? 0.38 : 0.5,
+    restDelta: 0.0006,
   });
 
   /** Free sections track scroll directly; snap sections use the snapped pipeline. */
   const panelProgress: MotionValue<number> = mobileSnapActive
     ? cappedSnapProgress
-    : freeProgress;
+    : mobileFreeSnapActive
+      ? freeSnappedSpring
+      : freeProgressInput;
 
   const manualNavEnabled = enableManualNavigation ?? true;
 
   const stageNavigation = useScrollLinkedManualNavigation({
     enabled: manualNavEnabled,
     showHint: showHorizontalHint,
+    showVerticalHint,
     sectionRef: targetRef,
     stepCount,
   });

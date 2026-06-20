@@ -24,6 +24,8 @@ import {
 import CarouselSwipeLayer from "@/components/ui/CarouselSwipeLayer";
 import SectionWrapper from "@/components/SectionWrapper";
 import { JADE_GREEN } from "@/lib/jadeSectionColors";
+import SectionFillTransition from "@/components/ui/SectionFillTransition";
+import GoldAccentLine from "@/components/ui/GoldAccentLine";
 
 /** Matches Featured Villas — green base + gold motif with top/bottom edge fade. */
 const OUR_STORY_SECTION_PATTERN = {
@@ -105,6 +107,7 @@ export default function AboutPage() {
       <MobileBottomNav />
       {/* 1. HERO SECTION */}
       <section className="relative min-h-[100svh] w-full flex flex-col items-center justify-end pb-20 overflow-hidden">
+        <GoldAccentLine className="absolute top-0 left-0 right-0 z-20" />
         {/* Live Background */}
         <div className="absolute inset-0 z-0">
           <LiveBackground />
@@ -152,9 +155,12 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <GoldAccentLine />
+
       {/* 2. TRUSTED BY SECTION */}
       <TrustedBySection />
 
+      <SectionFillTransition from="deep" to="green" />
       {/* 3. OUR STORY SECTION */}
       <SectionWrapper
         bg={JADE_GREEN}
@@ -203,6 +209,7 @@ export default function AboutPage() {
         </div>
       </SectionWrapper>
 
+      <SectionFillTransition from="green" to="deep" />
       {/* 4. WHY JADE SECTION */}
       <PremiumFeaturesSection
         subheading="WHY JADE"

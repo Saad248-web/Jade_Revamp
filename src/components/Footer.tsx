@@ -36,6 +36,7 @@ import {
   JadeFloatingTextarea,
 } from "@/components/ui/form";
 import JadeFormFieldError from "@/components/ui/form/JadeFormFieldError";
+import GoldAccentLine from "@/components/ui/GoldAccentLine";
 
 type FooterProps = {
   /** Tighter bottom padding when a fixed booking bar sits above the footer */
@@ -180,8 +181,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
         className="relative z-20 overflow-x-hidden"
         style={{ backgroundColor: "#2E3034" }}
       >
-        {/* Decorative top border */}
-        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#EFCD62]/40 to-transparent" />
+        <GoldAccentLine />
 
         {/* Background Watermark */}
         <div className="absolute top-1/2 right-0 w-[700px] h-[700px] opacity-[0.025] pointer-events-none -translate-y-1/2 translate-x-1/4">

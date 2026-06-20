@@ -22,7 +22,6 @@ export function ScrollLinkedHorizontalHint({
       className={clsx(
         "pointer-events-none absolute inset-x-0 z-[70] flex flex-col items-center gap-2 px-4",
         SCROLL_LINE_INDICATOR_BOTTOM_CLASS,
-        "max-lg:translate-y-[-1.75rem] lg:translate-y-[-2rem]",
         className,
       )}
       aria-hidden

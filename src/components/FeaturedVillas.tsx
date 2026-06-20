@@ -150,6 +150,7 @@ export default function FeaturedVillas() {
     mobileSnapZoneRatio: FEATURED_MOBILE_SNAP_PORTION,
     mobileSnapMaxProgress: mobileCarouselMaxProgress,
     showHorizontalHint: false,
+    showVerticalHint: true,
   });
 
   return (

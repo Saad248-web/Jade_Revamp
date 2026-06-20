@@ -19,6 +19,7 @@ import PremiumFeaturesSection from "@/components/PremiumFeaturesSection";
 import { useAnimation } from "@/context/AnimationContext";
 import { EXPERIENCE_PAGE_PATHS } from "@/lib/enquiryReturnPath";
 import { scrollToExperienceVillaSection } from "@/lib/experiencePageVillaScroll";
+import SectionFillTransition from "@/components/ui/SectionFillTransition";
 
 export default function CorporateRetreatsPage() {
   const { setEnquireOverlayOpen } = useAnimation();

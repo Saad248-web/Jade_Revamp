@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { PanInfo } from "framer-motion";
 import { getLenis } from "@/lib/lenis";
+import { subscribeLenisScroll } from "@/lib/lenisScrollBridge";
 import {
   SCROLL_LINKED_DRAG_FACTOR,
   SCROLL_LINKED_MOBILE_DRAG_FACTOR,
@@ -13,6 +14,8 @@ import {
 export type UseScrollLinkedManualNavigationOptions = {
   enabled: boolean;
   showHint?: boolean;
+  /** End-of-section “scroll down” cue — independent from horizontal hint */
+  showVerticalHint?: boolean;
   sectionRef?: React.RefObject<HTMLElement | null>;
   /** Panel steps in the section (cards + end CTA) — drives swipe distance per card */
   stepCount?: number;
@@ -24,6 +27,7 @@ export type ScrollLinkedStageNavigation = {
   onPan: (event: PointerEvent, info: PanInfo) => void;
   onPanEnd: () => void;
   showHint: boolean;
+  showVerticalHint: boolean;
   dismissHint: () => void;
   isDragging: boolean;
 };
@@ -65,9 +69,37 @@ function resolveSectionEl(
   return stageEl?.closest("section") ?? null;
 }
 
+function readSectionProgress(sectionEl: HTMLElement): number {
+  const scrollable = Math.max(1, sectionEl.offsetHeight - window.innerHeight);
+  return Math.max(
+    0,
+    Math.min(1, (window.scrollY - sectionEl.offsetTop) / scrollable),
+  );
+}
+
+function snapSectionToNearestStep(
+  sectionRef: React.RefObject<HTMLElement | null> | undefined,
+  stageEl: HTMLElement | null,
+  stepCount: number,
+): void {
+  const section = resolveSectionEl(sectionRef, stageEl);
+  if (!section) return;
+
+  const scrollable = Math.max(1, section.offsetHeight - window.innerHeight);
+  const progress = readSectionProgress(section);
+  const maxIndex = Math.max(1, stepCount - 1);
+  const snappedProgress = Math.round(progress * maxIndex) / maxIndex;
+  const targetY = section.offsetTop + snappedProgress * scrollable;
+  const dy = targetY - window.scrollY;
+
+  if (Math.abs(dy) < 3) return;
+  scrollByDelta(dy);
+}
+
 export function useScrollLinkedManualNavigation({
   enabled,
   showHint: showHintOption = true,
+  showVerticalHint: showVerticalHintOption = true,
   sectionRef,
   stepCount = 2,
 }: UseScrollLinkedManualNavigationOptions): ScrollLinkedStageNavigation {
@@ -77,8 +109,13 @@ export function useScrollLinkedManualNavigation({
   const pointerTypeRef = useRef<string>("mouse");
   const [isDragging, setIsDragging] = useState(false);
   const [showHint, setShowHint] = useState(enabled && showHintOption);
+  const [showVerticalHint, setShowVerticalHint] = useState(
+    enabled && showVerticalHintOption,
+  );
+  const lastScrollYRef = useRef(0);
 
   const dismissHint = useCallback(() => setShowHint(false), []);
+  const dismissVerticalHint = useCallback(() => setShowVerticalHint(false), []);
 
   const applyHorizontalDelta = useCallback(
     (deltaX: number, gain: number) => {
@@ -88,6 +125,58 @@ export function useScrollLinkedManualNavigation({
     },
     [sectionRef, stepCount],
   );
+
+  useEffect(() => {
+    if (!enabled || !showVerticalHint) return;
+
+    const onScrollSample = (scroll: number) => {
+      const section = resolveSectionEl(sectionRef, stageRef.current);
+      if (!section) return;
+
+      const progress = readSectionProgress(section);
+      const delta = scroll - lastScrollYRef.current;
+      lastScrollYRef.current = scroll;
+
+      // Dismiss only when user scrolls down near the section tail (leaving the end card).
+      if (progress > 0.94 && delta > 8) {
+        dismissVerticalHint();
+      }
+    };
+
+    const onWindowScroll = () => onScrollSample(window.scrollY);
+    window.addEventListener("scroll", onWindowScroll, { passive: true });
+
+    const unsub = subscribeLenisScroll(({ scroll }) => onScrollSample(scroll));
+
+    lastScrollYRef.current = getLenis()?.scroll ?? window.scrollY;
+    return () => {
+      window.removeEventListener("scroll", onWindowScroll);
+      unsub();
+    };
+  }, [enabled, showVerticalHint, sectionRef, dismissVerticalHint]);
+
+  // After native touch momentum settles, snap to the nearest card.
+  useEffect(() => {
+    if (!enabled) return;
+    if (!window.matchMedia("(pointer: coarse)").matches) return;
+
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const onScroll = () => {
+      if (draggingRef.current) return;
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        if (!draggingRef.current) {
+          snapSectionToNearestStep(sectionRef, stageRef.current, stepCount);
+        }
+      }, 90);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (timer) clearTimeout(timer);
+    };
+  }, [enabled, sectionRef, stepCount]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -172,7 +261,12 @@ export function useScrollLinkedManualNavigation({
       applyHorizontalDelta(step, SCROLL_LINKED_MOBILE_DRAG_FACTOR);
     };
 
-    const onTouchEnd = () => resetTouch();
+    const onTouchEnd = () => {
+      if (axisLocked === "horizontal") {
+        snapSectionToNearestStep(sectionRef, el, stepCount);
+      }
+      resetTouch();
+    };
 
     el.addEventListener("touchstart", onTouchStart, { passive: true });
     el.addEventListener("touchmove", onTouchMove, { passive: false });
@@ -185,7 +279,7 @@ export function useScrollLinkedManualNavigation({
       el.removeEventListener("touchend", onTouchEnd);
       el.removeEventListener("touchcancel", onTouchEnd);
     };
-  }, [enabled, dismissHint, applyHorizontalDelta]);
+  }, [enabled, dismissHint, applyHorizontalDelta, sectionRef, stepCount]);
 
   const onPanStart = useCallback(
     (event: PointerEvent) => {
@@ -214,10 +308,13 @@ export function useScrollLinkedManualNavigation({
   );
 
   const onPanEnd = useCallback(() => {
+    if (!ignorePanRef.current && enabled) {
+      snapSectionToNearestStep(sectionRef, stageRef.current, stepCount);
+    }
     ignorePanRef.current = false;
     draggingRef.current = false;
     setIsDragging(false);
-  }, []);
+  }, [enabled, sectionRef, stepCount]);
 
   return {
     stageRef,
@@ -225,6 +322,7 @@ export function useScrollLinkedManualNavigation({
     onPan,
     onPanEnd,
     showHint: enabled && showHint,
+    showVerticalHint: enabled && showVerticalHint,
     dismissHint,
     isDragging,
   };

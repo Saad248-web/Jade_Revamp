@@ -8,6 +8,7 @@ import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import PrimaryButton from "./PrimaryButton";
 import { useSafeBack } from "@/lib/safeBackNavigation";
 import { ScrollLineIndicator } from "./ScrollLineIndicator";
+import GoldAccentLine from "@/components/ui/GoldAccentLine";
 
 export interface ScrollSlide {
   label?: string;
@@ -34,6 +35,8 @@ interface ScrollSectionComposerProps {
   /** Safe back target when showNavigation is enabled */
   backFallbackPath?: string;
   showScrollIndicator?: boolean;
+  /** Footer-style gold accent at top and bottom of live-background scroll sections */
+  showGoldAccents?: boolean;
   /** Horizontal gutters for slide copy (e.g. `px-4 md:px-8` to match premium card rails) */
   slideGutterClassName?: string;
   /** Outer width constraint for slide copy (e.g. `w-full max-w-7xl mx-auto`) */
@@ -214,6 +217,7 @@ export default function ScrollSectionComposer({
   showNavigation = false,
   backFallbackPath = "/experiences",
   showScrollIndicator = true,
+  showGoldAccents = true,
   slideGutterClassName = "px-6 md:px-12",
   contentContainerClassName = "max-w-[90vw] md:max-w-4xl mx-auto",
 }: ScrollSectionComposerProps) {
@@ -231,6 +235,9 @@ export default function ScrollSectionComposer({
 
   return (
     <div ref={containerRef} className="relative" style={{ height }}>
+      {showGoldAccents ? (
+        <GoldAccentLine className="relative z-[60]" />
+      ) : null}
       <NavbarThemeTrigger theme={theme} sectionRef={containerRef} />
 
       <div className="sticky top-0 relative min-h-[100dvh] min-h-screen w-full overflow-hidden bg-[#050505]">
@@ -281,6 +288,9 @@ export default function ScrollSectionComposer({
           <ScrollLineIndicator floating />
         )}
       </div>
+      {showGoldAccents ? (
+        <GoldAccentLine className="absolute bottom-0 left-0 right-0 z-[60]" />
+      ) : null}
     </div>
   );
 }

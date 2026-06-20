@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { BLOG_POSTS, BlogPost } from "@/data/blogs";
+import SectionFillTransition from "@/components/ui/SectionFillTransition";
 
 const BlogCard = ({ post, index }: { post: BlogPost; index: number }) => {
   return (
@@ -112,6 +113,7 @@ export default function BlogsPage() {
         </div>
       </section>
 
+      <SectionFillTransition from="charcoal" to="deep" />
       {/* Newsletter Section */}
       <section className="jade-section bg-[#1E2023] border-t border-white/5">
         <div className="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
