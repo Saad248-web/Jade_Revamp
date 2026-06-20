@@ -977,6 +977,7 @@ body {
     max-height: var(--jade-scroll-stage-mobile-height);
     transform: translateZ(0);
     backface-visibility: hidden;
+    contain: layout style paint;
     /* Instant clamp — navbar hide/show must not resize this frame */
     transition: none;
   }

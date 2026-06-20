@@ -59,8 +59,15 @@ export default function SmoothScroll({
       return;
     }
 
-    const runtime = getLenisRuntimeOptions(preset);
     const profile = getLenisPointerProfile();
+
+    // Mobile/tablet: pure native touch scroll — no Lenis rAF loop competing with the
+    // browser compositor (eliminates stutter when sticky sections pin/unpin).
+    if (profile === "coarse") {
+      return;
+    }
+
+    const runtime = getLenisRuntimeOptions(preset);
 
     const root = document.documentElement;
     root.classList.add("lenis", "lenis-smooth");

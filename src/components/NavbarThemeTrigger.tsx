@@ -19,21 +19,17 @@ export default function NavbarThemeTrigger({
   theme,
   sectionRef,
 }: NavbarThemeTriggerProps) {
-  const { setNavbarTheme } = useAnimation();
+  const { navbarTheme, setNavbarTheme } = useAnimation();
 
-  // Trigger when the section hits the top area of the viewport
-  // We use a small horizontal strip near the top (around where the Navbar sits)
-  // margin: top right bottom left
-  // -10% from top, -85% from bottom = a 5% tall strip starting 10% from top
   const isInView = useInView(sectionRef, {
     margin: "-10% 0px -85% 0px",
   });
 
   useEffect(() => {
-    if (isInView) {
+    if (isInView && navbarTheme !== theme) {
       setNavbarTheme(theme);
     }
-  }, [isInView, theme, setNavbarTheme]);
+  }, [isInView, theme, navbarTheme, setNavbarTheme]);
 
   return null;
 }

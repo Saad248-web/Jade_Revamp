@@ -18,6 +18,7 @@ import {
   NAVBAR_WISHLIST_ICON_CLASS,
 } from "@/lib/navbarChrome";
 import { scrollChromeHideMotionProps } from "@/lib/scrollChromeMotion";
+import { useMediaMinLg } from "@/lib/useMediaMinLg";
 
 const NAV_HEADSET_ICON = (
   <svg
@@ -85,14 +86,19 @@ export default function Navbar() {
   const { count: wishlistCount } = useWishlist();
   const isHidden = useBatchedScrollHide();
   const reduceMotion = useReducedMotion();
-  const chromeMotion = scrollChromeHideMotionProps(isHidden, reduceMotion);
+  const isLg = useMediaMinLg();
+  const chromeMotion = scrollChromeHideMotionProps(isHidden, reduceMotion, {
+    fast: !isLg,
+  });
 
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
+  const progressSpring = useSpring(scrollYProgress, {
     stiffness: 120,
     damping: 28,
     restDelta: 0.002,
   });
+  /** Mobile: direct progress (no spring lag). Desktop: smoothed spring. */
+  const scaleX = isLg ? progressSpring : scrollYProgress;
 
   // Only hide navbar on home page if splash isn't complete
   if (pathname === "/" && !isSplashComplete) return null;
@@ -123,7 +129,7 @@ export default function Navbar() {
           className={
             isMenuPage
               ? "w-full border-b border-white/10 bg-[#1E2023]"
-              : "w-full bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm"
+              : "w-full bg-gradient-to-b from-black/90 via-black/75 to-black/30 max-lg:from-black/95 max-lg:via-black/85 max-lg:to-black/50 lg:from-black/70 lg:to-transparent lg:backdrop-blur-sm"
           }
         >
           <div className="jade-nav-inner mx-auto flex max-w-[1920px] items-center justify-between relative py-2.5 md:py-3">

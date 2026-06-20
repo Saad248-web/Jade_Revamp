@@ -67,8 +67,8 @@ function ScrollLinkedInteractiveStageShell({
       ref={stageRef as Ref<HTMLDivElement>}
       className={clsx(
         className,
-        "relative touch-pan-y select-none",
-        isDragging ? "cursor-grabbing" : "cursor-grab",
+        "relative touch-pan-y select-none max-lg:cursor-default",
+        isDragging ? "cursor-grabbing" : "max-lg:cursor-default lg:cursor-grab",
       )}
       onPanStart={(event) => onPanStart(event as PointerEvent)}
       onPan={(event, info: PanInfo) => onPan(event as PointerEvent, info)}

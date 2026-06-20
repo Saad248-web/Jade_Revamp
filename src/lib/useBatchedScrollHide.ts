@@ -23,10 +23,10 @@ function emit(next: boolean) {
   listeners.forEach((fn) => fn(hidden));
 }
 
-/** Ignore micro-reversals while Lenis coasts between sections (prevents chrome shake). */
-const VELOCITY_DEADZONE = 0.85;
+/** Ignore micro-reversals near sticky section boundaries (prevents chrome shake). */
+const VELOCITY_DEADZONE = 1.15;
 /** Minimum travel before toggling hide direction. */
-const MIN_DIRECTION_DELTA_PX = 16;
+const MIN_DIRECTION_DELTA_PX = 22;
 /** Always show chrome near the top of the page. */
 const TOP_SHOW_THRESHOLD_PX = 12;
 

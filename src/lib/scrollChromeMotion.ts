@@ -29,13 +29,18 @@ export function scrollChromeHideAnimate(isHidden: boolean) {
 export function scrollChromeHideMotionProps(
   isHidden: boolean,
   reduceMotion: boolean | null | undefined,
+  options?: { fast?: boolean },
 ) {
+  const transition = reduceMotion
+    ? { duration: 0 }
+    : options?.fast
+      ? { duration: 0.26, ease: [0.22, 1, 0.36, 1] as const }
+      : SCROLL_CHROME_HIDE_TRANSITION;
+
   return {
     initial: false as const,
     animate: scrollChromeHideAnimate(isHidden),
-    transition: reduceMotion
-      ? { duration: 0 }
-      : SCROLL_CHROME_HIDE_TRANSITION,
+    transition,
     "aria-hidden": isHidden,
     style: {
       pointerEvents: (isHidden ? "none" : "auto") as "none" | "auto",

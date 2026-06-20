@@ -25,6 +25,7 @@ import {
 } from "./ScrollLineIndicator";
 import PrimaryButton from "./PrimaryButton";
 import { carouselHeroLabelClass } from "@/lib/carouselHeroCopy";
+import { useMediaMinLg } from "@/lib/useMediaMinLg";
 
 const InstagramCarousel = dynamic(() => import("./InstagramCarousel"), {
   ssr: false,
@@ -52,6 +53,7 @@ const Footer = dynamic(() => import("./Footer"), { ssr: false });
 
 export default function LandingPage() {
   const { isSplashComplete } = useAnimation();
+  const isLg = useMediaMinLg();
   const containerRef = useRef(null);
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -84,10 +86,10 @@ export default function LandingPage() {
         style={{ height: "100dvh" }}
       >
         <NavbarThemeTrigger theme="white" sectionRef={heroRef} />
-        {/* Background Layer: Video Sequence */}
+        {/* Background Layer: Video Sequence — parallax desktop only (mobile: static = smoother) */}
         <motion.div
-          style={{ y: yBackground }}
-          className="absolute inset-0 w-full h-[120%] z-0"
+          style={isLg ? { y: yBackground } : undefined}
+          className="absolute inset-0 w-full h-[120%] z-0 max-lg:h-full"
         >
           <ResponsiveVideo
             slug="homepage"
@@ -107,9 +109,9 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
         </motion.div>
 
-        {/* Foreground — copy + CTA share the same scroll parallax */}
+        {/* Foreground — copy + CTA share the same scroll parallax (desktop only) */}
         <motion.div
-          style={{ y: heroContentY }}
+          style={isLg ? { y: heroContentY } : undefined}
           className="relative z-10 h-full flex flex-col justify-center items-center text-center px-6 md:px-12 max-w-[1920px] mx-auto pointer-events-none"
         >
           <motion.div className="flex-1 flex flex-col justify-center items-center w-full">
