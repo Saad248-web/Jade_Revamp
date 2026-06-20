@@ -6,7 +6,6 @@ import ScrollLinkedHorizontalSection from "@/components/scroll-linked/ScrollLink
 import ScrollLinkedPanelCard, {
   type ScrollLinkedPanelData,
 } from "@/components/scroll-linked/ScrollLinkedPanelCard";
-import MobileFreeCardRail from "@/components/scroll-linked/MobileFreeCardRail";
 import { experiencePanelHref, villaListingPath } from "@/lib/appRoutes";
 import { useScrollLinkedSectionHeight } from "@/lib/useScrollLinkedSectionHeight";
 
@@ -111,43 +110,28 @@ export default function ExperiencesScrollSection() {
   const sectionHeightVh = useScrollLinkedSectionHeight("experiences");
 
   return (
-    <>
-      {/* Mobile: genuinely free native horizontal swipe rail (no scroll-linking) */}
-      <div className="lg:hidden">
-        <MobileFreeCardRail
-          panels={PANELS}
-          headerLabel="WAYS JADE IS EXPERIENCED"
-          bgClassName="bg-[#1A1C1E]"
-          endCta={{ label: "See Best Experience Villas", href: villaListingPath() }}
-        />
-      </div>
-
-      {/* Desktop: scroll-linked horizontal stage (unchanged) */}
-      <div className="hidden lg:block">
-        <ScrollLinkedHorizontalSection
-          sectionHeightVh={sectionHeightVh}
-          stepCount={totalSteps}
-          bgClassName="bg-[#1A1C1E]"
-          headerLabel="WAYS JADE IS EXPERIENCED"
-          scrollMode="free"
-          endButton={(panelProgress) => (
-            <EndButton panelProgress={panelProgress} />
-          )}
-        >
-          {(panelProgress) =>
-            PANELS.map((panel, i) => (
-              <ScrollLinkedPanelCard
-                key={panel.id}
-                data={panel}
-                index={i}
-                panelProgress={panelProgress}
-                totalSteps={totalSteps}
-                panelCount={panelCount}
-              />
-            ))
-          }
-        </ScrollLinkedHorizontalSection>
-      </div>
-    </>
+    <ScrollLinkedHorizontalSection
+      sectionHeightVh={sectionHeightVh}
+      stepCount={totalSteps}
+      bgClassName="bg-[#1A1C1E]"
+      headerLabel="WAYS JADE IS EXPERIENCED"
+      scrollMode="free"
+      endButton={(panelProgress) => (
+        <EndButton panelProgress={panelProgress} />
+      )}
+    >
+      {(panelProgress) =>
+        PANELS.map((panel, i) => (
+          <ScrollLinkedPanelCard
+            key={panel.id}
+            data={panel}
+            index={i}
+            panelProgress={panelProgress}
+            totalSteps={totalSteps}
+            panelCount={panelCount}
+          />
+        ))
+      }
+    </ScrollLinkedHorizontalSection>
   );
 }

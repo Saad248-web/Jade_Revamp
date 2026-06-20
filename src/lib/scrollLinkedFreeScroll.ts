@@ -2,7 +2,8 @@
 
 /** Pointer gain — near 1:1; scaling happens in {@link horizontalDragToScrollDelta}. */
 export const SCROLL_LINKED_DRAG_FACTOR = 1.0;
-export const SCROLL_LINKED_MOBILE_DRAG_FACTOR = 1.12;
+/** Mobile finger swipe gain — slightly quicker free swipe (cards advance a touch faster). */
+export const SCROLL_LINKED_MOBILE_DRAG_FACTOR = 1.35;
 
 /** Extra multiplier on trackpad horizontal wheel */
 export const SCROLL_LINKED_WHEEL_FACTOR = 1.15;
