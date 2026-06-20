@@ -6,6 +6,7 @@ import ScrollLinkedHorizontalSection from "@/components/scroll-linked/ScrollLink
 import ScrollLinkedPanelCard, {
   type ScrollLinkedPanelData,
 } from "@/components/scroll-linked/ScrollLinkedPanelCard";
+import MobileFreeCardRail from "@/components/scroll-linked/MobileFreeCardRail";
 import { experiencesListingPath, experiencePanelHref } from "@/lib/appRoutes";
 import { useScrollLinkedSectionHeight } from "@/lib/useScrollLinkedSectionHeight";
 
@@ -106,28 +107,43 @@ export default function HorizontalScrollSection() {
   const sectionHeightVh = useScrollLinkedSectionHeight("home");
 
   return (
-    <ScrollLinkedHorizontalSection
-      sectionHeightVh={sectionHeightVh}
-      stepCount={totalSteps}
-      bgClassName="bg-[#25282C]"
-      headerLabel="WAYS JADE IS EXPERIENCED"
-      scrollMode="free"
-      endButton={(panelProgress) => (
-        <EndButton panelProgress={panelProgress} />
-      )}
-    >
-      {(panelProgress) =>
-        PANELS.map((panel, i) => (
-          <ScrollLinkedPanelCard
-            key={panel.id}
-            data={panel}
-            index={i}
-            panelProgress={panelProgress}
-            totalSteps={totalSteps}
-            panelCount={panelCount}
-          />
-        ))
-      }
-    </ScrollLinkedHorizontalSection>
+    <>
+      {/* Mobile: genuinely free native horizontal swipe rail (no scroll-linking) */}
+      <div className="lg:hidden">
+        <MobileFreeCardRail
+          panels={PANELS}
+          headerLabel="WAYS JADE IS EXPERIENCED"
+          bgClassName="bg-[#25282C]"
+          endCta={{ label: "View All Experiences", href: experiencesListingPath() }}
+        />
+      </div>
+
+      {/* Desktop: scroll-linked horizontal stage (unchanged) */}
+      <div className="hidden lg:block">
+        <ScrollLinkedHorizontalSection
+          sectionHeightVh={sectionHeightVh}
+          stepCount={totalSteps}
+          bgClassName="bg-[#25282C]"
+          headerLabel="WAYS JADE IS EXPERIENCED"
+          scrollMode="free"
+          endButton={(panelProgress) => (
+            <EndButton panelProgress={panelProgress} />
+          )}
+        >
+          {(panelProgress) =>
+            PANELS.map((panel, i) => (
+              <ScrollLinkedPanelCard
+                key={panel.id}
+                data={panel}
+                index={i}
+                panelProgress={panelProgress}
+                totalSteps={totalSteps}
+                panelCount={panelCount}
+              />
+            ))
+          }
+        </ScrollLinkedHorizontalSection>
+      </div>
+    </>
   );
 }
