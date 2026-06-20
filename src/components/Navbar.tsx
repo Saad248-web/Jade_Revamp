@@ -41,6 +41,44 @@ const NAV_HEADSET_ICON = (
   </svg>
 );
 
+/**
+ * Crossfade logo — both gold + white are mounted and preloaded, and we fade opacity
+ * between them on theme change. Swapping a single <Image src> instead causes a load
+ * flash; stacked crossfade is flicker-free and reads as a premium transition.
+ */
+function NavbarLogo({
+  theme,
+  className,
+  sizes,
+}: {
+  theme: "white" | "golden";
+  className: string;
+  sizes: string;
+}) {
+  const isWhite = theme === "white";
+  return (
+    <div className={`relative ${className}`}>
+      <Image
+        src="/assets/Golden_Logo.png"
+        alt="Jade Hospitainment"
+        fill
+        priority
+        sizes={sizes}
+        className={`object-contain transition-opacity duration-300 ease-out ${isWhite ? "opacity-0" : "opacity-100"}`}
+      />
+      <Image
+        src="/assets/White_Logo.png"
+        alt=""
+        aria-hidden
+        fill
+        priority
+        sizes={sizes}
+        className={`object-contain transition-opacity duration-300 ease-out ${isWhite ? "opacity-100" : "opacity-0"}`}
+      />
+    </div>
+  );
+}
+
 export default function Navbar() {
   const pathname = usePathname() ?? "";
   const { isSplashComplete, navbarTheme } = useAnimation();
@@ -130,39 +168,23 @@ export default function Navbar() {
 
           {/* ── MOBILE LEFT: Logo ── */}
           <div className="lg:hidden flex items-center">
-            <Link href="/">
-              <div className="relative w-9 h-9">
-                <Image
-                  src={
-                    navbarTheme === "white"
-                      ? "/assets/White_Logo.png"
-                      : "/assets/Golden_Logo.png"
-                  }
-                  alt="Jade Logo"
-                  fill
-                  className="object-contain"
-                  sizes="36px"
-                />
-              </div>
+            <Link href="/" aria-label="Jade home">
+              <NavbarLogo theme={navbarTheme} className="w-9 h-9" sizes="36px" />
             </Link>
           </div>
 
           {/* ── CENTER: Logo — absolute center on desktop ── */}
           <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center">
-            <Link href="/">
-              <div className="relative h-11 w-11 transition-opacity hover:opacity-80 lg:h-12 lg:w-12">
-                <Image
-                  src={
-                    navbarTheme === "white"
-                      ? "/assets/White_Logo.png"
-                      : "/assets/Golden_Logo.png"
-                  }
-                  alt="Jade Hospitainment"
-                  fill
-                  className="object-contain"
-                  sizes="56px"
-                />
-              </div>
+            <Link
+              href="/"
+              aria-label="Jade home"
+              className="block transition-opacity hover:opacity-80"
+            >
+              <NavbarLogo
+                theme={navbarTheme}
+                className="h-11 w-11 lg:h-12 lg:w-12"
+                sizes="56px"
+              />
             </Link>
           </div>
 

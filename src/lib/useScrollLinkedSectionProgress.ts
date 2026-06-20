@@ -89,20 +89,32 @@ export function useScrollLinkedSectionProgress(
   });
 
   /**
-   * Free mode: cards track scroll DIRECTLY with a sensitivity boost — no spring, no
-   * snap. Native mobile momentum (and Lenis on desktop) already provides the smooth
-   * drift, so there is zero added lag — it never feels sticky or rubber-banded, just
-   * a responsive, slightly-faster-than-1:1 drift.
+   * Free mode raw input — scroll position (mobile gets a small sensitivity boost).
+   * This is the target the carousel glides toward.
    */
   const freeProgressInput = useTransform(scrollYProgress, (p) => {
     if (isLg || mobileSnapActive) return p;
     return Math.min(1, p * SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN);
   });
 
-  /** Featured-mobile snaps to centred cards; free sections drift directly with scroll. */
+  /**
+   * Premium-carousel momentum: a snappy, near-critically-damped spring smooths the
+   * vertical→horizontal conversion AND drag/swipe/wheel input so movement glides with
+   * natural inertia instead of tracking scroll 1:1 (which reads as rigid/jittery).
+   * High stiffness + low mass keep it responsive (~90ms settle) — fluid, never sticky,
+   * no overshoot/rubber-banding. Applies on every device (desktop, tablet, mobile).
+   */
+  const freeSmoothed = useSpring(freeProgressInput, {
+    stiffness: 380,
+    damping: 26,
+    mass: 0.3,
+    restDelta: 0.0005,
+  });
+
+  /** Featured-mobile snaps to centred cards; free sections glide via the momentum spring. */
   const panelProgress: MotionValue<number> = mobileSnapActive
     ? snappedProgress
-    : freeProgressInput;
+    : freeSmoothed;
 
   const manualNavEnabled = enableManualNavigation ?? true;
 
