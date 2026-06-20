@@ -12,8 +12,8 @@ export const SCROLL_LINKED_WHEEL_FACTOR = 1.15;
  */
 export const SCROLL_LINKED_SWIPE_VIEWPORT_RATIO = 0.55;
 
-/** Mobile vertical scroll → slightly faster panel drift (still smooth / not sticky) */
-export const SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN = 1.35;
+/** Mobile vertical scroll → slightly faster panel drift (balanced sensitivity, not sticky/linked) */
+export const SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN = 1.45;
 
 /**
  * Pinned section height (vh). Taller = smoother vertical drift; mobile slightly shorter.

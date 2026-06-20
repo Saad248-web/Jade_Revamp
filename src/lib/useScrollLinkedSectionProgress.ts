@@ -2,13 +2,11 @@
 
 import { useRef } from "react";
 import {
-  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { useSnappedScrollProgress } from "@/lib/carouselMotion";
 import {
   useScrollLinkedManualNavigation,
   type ScrollLinkedStageNavigation,
@@ -54,10 +52,6 @@ export function useScrollLinkedSectionProgress(
   const {
     scrollMode = "free",
     stepCount = 2,
-    smoothSpring = false,
-    mobileSnapDwellRatio = 0.32,
-    mobileSnapAggressive = false,
-    mobileSnapScrollGain = 2.1,
     mobileSnapZoneRatio = 0.68,
     mobileSnapMaxProgress,
     enableManualNavigation,
@@ -65,81 +59,58 @@ export function useScrollLinkedSectionProgress(
     showVerticalHint = true,
   } = options;
 
-  const mobileSnapDwell =
-    mobileSnapAggressive && mobileSnapDwellRatio === 0.32
-      ? 0.12
-      : mobileSnapDwellRatio;
-
   const targetRef = useRef<HTMLElement>(null);
-  const reducedMotion = useReducedMotion();
   const isLg = useMediaMinLg();
   const { scrollYProgress } = useScroll({ target: targetRef });
 
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: smoothSpring ? 70 : 100,
-    damping: smoothSpring ? 24 : 30,
-    mass: smoothSpring ? 0.6 : 1,
-    restDelta: 0.001,
-  });
-
   const mobileSnapActive = scrollMode === "mobileSnapOnly" && !isLg;
-  const mobileFreeSnapActive = scrollMode === "free" && !isLg && !mobileSnapActive;
-  const useSmoothInput = smoothSpring && !mobileSnapActive;
-  const inputProgress = useSmoothInput ? smoothProgress : scrollYProgress;
+  const mobileFreeActive = scrollMode === "free" && !isLg && !mobileSnapActive;
 
-  const amplifiedInput = useTransform(inputProgress, (p) => {
-    if (!mobileSnapAggressive) return p;
-    if (p >= mobileSnapZoneRatio) return 1;
-    const t = p / mobileSnapZoneRatio;
-    return Math.min(1, t * mobileSnapScrollGain);
+  /**
+   * Featured-mobile snap: round raw scroll → nearest card index, then spring to it.
+   * Pure rounding guarantees a card always settles dead-centre (never between two),
+   * and is symmetric — a slight or long swipe, forward or reverse, snaps the same
+   * smooth way. The cap stops the carousel on the final card (CTA) while the leftover
+   * scroll runway exits to the next section.
+   */
+  const snapMaxProgress = mobileSnapMaxProgress ?? 1;
+  const roundedSnapInput = useTransform(scrollYProgress, (p) => {
+    const maxIndex = Math.max(1, stepCount - 1);
+    const zone = mobileSnapZoneRatio > 0 ? mobileSnapZoneRatio : 1;
+    const carouselP = Math.min(1, Math.max(0, p / zone));
+    const snapped = Math.round(carouselP * maxIndex) / maxIndex;
+    return Math.min(snapped, snapMaxProgress);
   });
 
-  const snapInput =
-    mobileSnapActive && mobileSnapAggressive ? amplifiedInput : inputProgress;
-
-  const dwellProgress = useSnappedScrollProgress(
-    snapInput,
-    stepCount,
-    reducedMotion,
-    mobileSnapActive ? mobileSnapDwell : 0.32,
-  );
-
-  const snappedProgress = useSpring(dwellProgress, {
-    stiffness: mobileSnapActive ? (mobileSnapAggressive ? 175 : 200) : 120,
-    damping: mobileSnapActive ? (mobileSnapAggressive ? 36 : 24) : 26,
-    mass: mobileSnapActive ? (mobileSnapAggressive ? 0.4 : 0.35) : 0.5,
-    restDelta: mobileSnapAggressive ? 0.0008 : 0.0005,
+  const snappedProgress = useSpring(roundedSnapInput, {
+    stiffness: 200,
+    damping: 30,
+    mass: 0.42,
+    restDelta: 0.0006,
   });
 
-  const cappedSnapProgress = useTransform(snappedProgress, (p) => {
-    if (!mobileSnapActive || mobileSnapMaxProgress == null) return p;
-    return Math.min(p, mobileSnapMaxProgress);
-  });
-
+  /**
+   * Free mode: progress tracks scroll directly with a slight sensitivity boost.
+   * NO snapping/dwell — cards drift, never feel sticky or "linked". Mobile adds a
+   * light spring for smooth drift; desktop relies on Lenis smoothing.
+   */
   const freeProgressInput = useTransform(scrollYProgress, (p) => {
     if (isLg || mobileSnapActive) return p;
     return Math.min(1, p * SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN);
   });
 
-  const freeSnappedInput = useSnappedScrollProgress(
-    freeProgressInput,
-    stepCount,
-    reducedMotion,
-    mobileFreeSnapActive ? 0.1 : 0.32,
-  );
-
-  const freeSnappedSpring = useSpring(freeSnappedInput, {
-    stiffness: mobileFreeSnapActive ? 220 : 120,
-    damping: mobileFreeSnapActive ? 30 : 26,
-    mass: mobileFreeSnapActive ? 0.38 : 0.5,
+  const freeDriftSpring = useSpring(freeProgressInput, {
+    stiffness: 115,
+    damping: 26,
+    mass: 0.36,
     restDelta: 0.0006,
   });
 
-  /** Free sections track scroll directly; snap sections use the snapped pipeline. */
+  /** Featured-mobile snaps to centred cards; free sections drift smoothly (no snap). */
   const panelProgress: MotionValue<number> = mobileSnapActive
-    ? cappedSnapProgress
-    : mobileFreeSnapActive
-      ? freeSnappedSpring
+    ? snappedProgress
+    : mobileFreeActive
+      ? freeDriftSpring
       : freeProgressInput;
 
   const manualNavEnabled = enableManualNavigation ?? true;

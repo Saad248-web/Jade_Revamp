@@ -34,6 +34,8 @@ export type ScrollLinkedStageNavigation = {
 
 const NO_PAN_SELECTOR = "[data-jade-stage-no-pan]";
 const TOUCH_AXIS_LOCK_PX = 10;
+/** Horizontal gesture must clearly out-pace vertical before we claim the swipe. */
+const HORIZONTAL_LOCK_BIAS = 1.3;
 
 function pointerGain(pointerType?: string): number {
   if (pointerType === "touch" || pointerType === "pen") {
@@ -232,7 +234,15 @@ export function useScrollLinkedManualNavigation({
         if (Math.abs(dx) < TOUCH_AXIS_LOCK_PX && Math.abs(dy) < TOUCH_AXIS_LOCK_PX) {
           return;
         }
-        axisLocked = Math.abs(dx) >= Math.abs(dy) ? "horizontal" : "vertical";
+        // Strong vertical bias: only claim the horizontal swipe on a clearly sideways
+        // gesture AND once the section is actually pinned. While it is still scrolling
+        // into view, leave scrolling fully native so it never jumps to cover the screen.
+        const section = resolveSectionEl(sectionRef, el);
+        const horizontalIntent =
+          Math.abs(dx) > Math.abs(dy) * HORIZONTAL_LOCK_BIAS &&
+          !!section &&
+          isSectionInActiveScrollRange(section);
+        axisLocked = horizontalIntent ? "horizontal" : "vertical";
         if (axisLocked === "vertical") {
           resetTouch();
           return;
