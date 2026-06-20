@@ -146,8 +146,8 @@ function setCardMaxHeights(
   const stackBudget = Math.max(280, panelRowPx - breathingMin * 2);
   const stackGaps = panelGap * 3 + panelGapLg;
   const textReserve = Math.min(
-    220,
-    Math.max(176, Math.round(stackBudget * 0.4) + stackGaps),
+    210,
+    Math.max(168, Math.round(stackBudget * 0.37) + stackGaps),
   );
   const tallHeaderReserve = textReserve + 28;
 
@@ -155,12 +155,12 @@ function setCardMaxHeights(
 
   const cardMax = Math.min(
     600,
-    Math.round(stackBudget * 0.67),
+    Math.round(stackBudget * 0.72),
     Math.max(120, stackBudget - textReserve),
   );
   const cardMaxTall = Math.min(
     560,
-    Math.round(stackBudget * 0.62),
+    Math.round(stackBudget * 0.67),
     Math.max(120, stackBudget - tallHeaderReserve),
   );
 
@@ -177,12 +177,12 @@ function setCardMaxHeights(
    */
   const featuredStackBudget = Math.max(260, panelRowPx - breathingMin * 2);
   const featuredTextReserve = Math.min(
-    208,
-    Math.max(168, Math.round(featuredStackBudget * 0.38) + stackGaps),
+    198,
+    Math.max(158, Math.round(featuredStackBudget * 0.35) + stackGaps),
   );
   const featuredCardMax = Math.min(
     600,
-    Math.round(featuredStackBudget * 0.56),
+    Math.round(featuredStackBudget * 0.61),
     Math.max(150, featuredStackBudget - featuredTextReserve),
   );
   root.style.setProperty(

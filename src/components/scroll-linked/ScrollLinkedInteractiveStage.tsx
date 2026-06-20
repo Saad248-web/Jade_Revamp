@@ -10,13 +10,15 @@ import type { ScrollLinkedStageNavigation } from "@/lib/useScrollLinkedManualNav
 import { ScrollLinkedHorizontalHint } from "@/components/scroll-linked/ScrollLinkedHorizontalHint";
 import { ScrollLinkedVerticalHint } from "@/components/scroll-linked/ScrollLinkedVerticalHint";
 
-const END_ZONE_PROGRESS = 0.82;
+const DEFAULT_END_ZONE_PROGRESS = 0.82;
 
 type ScrollLinkedInteractiveStageProps = {
   children: ReactNode;
   stageNavigation: ScrollLinkedStageNavigation | null;
   className?: string;
   panelProgress?: MotionValue<number>;
+  /** Progress at which the end-of-section (vertical scroll) cue appears. */
+  endZoneProgress?: number;
 };
 
 type StageShellProps = {
@@ -24,6 +26,7 @@ type StageShellProps = {
   className?: string;
   stageNavigation: ScrollLinkedStageNavigation;
   panelProgress?: MotionValue<number>;
+  endZoneProgress: number;
 };
 
 function ScrollLinkedInteractiveStageShell({
@@ -31,6 +34,7 @@ function ScrollLinkedInteractiveStageShell({
   className,
   stageNavigation,
   panelProgress,
+  endZoneProgress,
 }: StageShellProps) {
   const {
     stageRef,
@@ -48,7 +52,7 @@ function ScrollLinkedInteractiveStageShell({
   useEffect(() => {
     if (!panelProgress) return;
     const onChange = (value: number) => {
-      const enteringEnd = value >= END_ZONE_PROGRESS;
+      const enteringEnd = value >= endZoneProgress;
       setInEndZone(enteringEnd);
       if (enteringEnd) {
         dismissHint();
@@ -56,7 +60,7 @@ function ScrollLinkedInteractiveStageShell({
     };
     onChange(panelProgress.get());
     return panelProgress.on("change", onChange);
-  }, [panelProgress, dismissHint]);
+  }, [panelProgress, dismissHint, endZoneProgress]);
 
   return (
     <motion.div
@@ -87,6 +91,7 @@ export function ScrollLinkedInteractiveStage({
   stageNavigation,
   className,
   panelProgress,
+  endZoneProgress = DEFAULT_END_ZONE_PROGRESS,
 }: ScrollLinkedInteractiveStageProps) {
   if (!stageNavigation) {
     return <div className={className}>{children}</div>;
@@ -97,6 +102,7 @@ export function ScrollLinkedInteractiveStage({
       className={className}
       stageNavigation={stageNavigation}
       panelProgress={panelProgress}
+      endZoneProgress={endZoneProgress}
     >
       {children}
     </ScrollLinkedInteractiveStageShell>

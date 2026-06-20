@@ -171,6 +171,7 @@ export default function FeaturedVillas() {
         stepCount={totalSteps + 1}
         smoothSpring
         panelAreaVariant="featured"
+        endZoneProgress={mobileCarouselMaxProgress - 0.02}
       >
         {(progress) => (
           <>

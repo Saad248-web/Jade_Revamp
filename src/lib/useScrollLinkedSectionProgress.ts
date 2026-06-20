@@ -64,7 +64,6 @@ export function useScrollLinkedSectionProgress(
   const { scrollYProgress } = useScroll({ target: targetRef });
 
   const mobileSnapActive = scrollMode === "mobileSnapOnly" && !isLg;
-  const mobileFreeActive = scrollMode === "free" && !isLg && !mobileSnapActive;
 
   /**
    * Featured-mobile snap: round raw scroll → nearest card index, then spring to it.
@@ -90,28 +89,20 @@ export function useScrollLinkedSectionProgress(
   });
 
   /**
-   * Free mode: progress tracks scroll directly with a slight sensitivity boost.
-   * NO snapping/dwell — cards drift, never feel sticky or "linked". Mobile adds a
-   * light spring for smooth drift; desktop relies on Lenis smoothing.
+   * Free mode: cards track scroll DIRECTLY with a sensitivity boost — no spring, no
+   * snap. Native mobile momentum (and Lenis on desktop) already provides the smooth
+   * drift, so there is zero added lag — it never feels sticky or rubber-banded, just
+   * a responsive, slightly-faster-than-1:1 drift.
    */
   const freeProgressInput = useTransform(scrollYProgress, (p) => {
     if (isLg || mobileSnapActive) return p;
     return Math.min(1, p * SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN);
   });
 
-  const freeDriftSpring = useSpring(freeProgressInput, {
-    stiffness: 115,
-    damping: 26,
-    mass: 0.36,
-    restDelta: 0.0006,
-  });
-
-  /** Featured-mobile snaps to centred cards; free sections drift smoothly (no snap). */
+  /** Featured-mobile snaps to centred cards; free sections drift directly with scroll. */
   const panelProgress: MotionValue<number> = mobileSnapActive
     ? snappedProgress
-    : mobileFreeActive
-      ? freeDriftSpring
-      : freeProgressInput;
+    : freeProgressInput;
 
   const manualNavEnabled = enableManualNavigation ?? true;
 

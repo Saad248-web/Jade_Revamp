@@ -12,15 +12,20 @@ export const SCROLL_LINKED_WHEEL_FACTOR = 1.15;
  */
 export const SCROLL_LINKED_SWIPE_VIEWPORT_RATIO = 0.55;
 
-/** Mobile vertical scroll → slightly faster panel drift (balanced sensitivity, not sticky/linked) */
-export const SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN = 1.45;
+/**
+ * Mobile vertical scroll → panel drift sensitivity. Kept near 1:1 so cards track the
+ * native scroll directly (responsive, not sticky); a small boost adds "slight high
+ * sensitivity" without a long end dead-zone (dead-zone ≈ 1 − 1/gain of the section).
+ */
+export const SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN = 1.12;
 
 /**
- * Pinned section height (vh). Taller = smoother vertical drift; mobile slightly shorter.
+ * Pinned section height (vh). Shorter mobile heights make the free cards traverse more
+ * readily (drift feel) instead of needing a full screen of scroll per card.
  */
 export const SCROLL_LINKED_SECTION_VH = {
-  home: { mobile: 520, desktop: 560 },
-  experiences: { mobile: 520, desktop: 560 },
+  home: { mobile: 400, desktop: 560 },
+  experiences: { mobile: 400, desktop: 560 },
   wedding: { mobile: 440, desktop: 440 },
 } as const;
 

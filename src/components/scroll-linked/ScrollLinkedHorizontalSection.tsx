@@ -33,6 +33,8 @@ export type ScrollLinkedHorizontalSectionProps = {
   stageNavigation?: ScrollLinkedStageNavigation | null;
   /** Featured §6 — full mobile stage height (no header row). */
   panelAreaVariant?: "default" | "featured";
+  /** Progress at which the end-of-section vertical scroll cue appears (default 0.82). */
+  endZoneProgress?: number;
 };
 
 export function ScrollLinkedStickyStage({
@@ -44,6 +46,7 @@ export function ScrollLinkedStickyStage({
   panelProgress,
   panelAreaClassName = scrollLinkedPanelAreaClass,
   stageNavigation = null,
+  endZoneProgress,
 }: {
   bgClassName: string;
   headerLabel?: string;
@@ -53,6 +56,7 @@ export function ScrollLinkedStickyStage({
   panelProgress: MotionValue<number>;
   panelAreaClassName?: string;
   stageNavigation?: ScrollLinkedStageNavigation | null;
+  endZoneProgress?: number;
 }) {
   const resolvedEndButton =
     typeof endButton === "function" ? endButton(panelProgress) : endButton;
@@ -63,6 +67,7 @@ export function ScrollLinkedStickyStage({
     <ScrollLinkedInteractiveStage
       stageNavigation={stageNavigation}
       panelProgress={panelProgress}
+      endZoneProgress={endZoneProgress}
       className={`${scrollLinkedStickyStageClass} ${scrollLinkedStickyStageInnerClass} ${bgClassName}`}
     >
       {headerLabel ? (
@@ -91,6 +96,7 @@ export default function ScrollLinkedHorizontalSection({
   panelProgress: externalProgress,
   stageNavigation: externalStageNavigation,
   panelAreaVariant = "default",
+  endZoneProgress,
 }: ScrollLinkedHorizontalSectionProps) {
   const panelAreaClassName =
     panelAreaVariant === "featured"
@@ -118,6 +124,7 @@ export default function ScrollLinkedHorizontalSection({
       panelProgress={panelProgress}
       panelAreaClassName={panelAreaClassName}
       stageNavigation={stageNavigation}
+      endZoneProgress={endZoneProgress}
     >
       {children}
     </ScrollLinkedStickyStage>
