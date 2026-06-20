@@ -129,7 +129,7 @@ export default function Navbar() {
           className={
             isMenuPage
               ? "w-full border-b border-white/10 bg-[#1E2023]"
-              : "w-full bg-gradient-to-b from-black/90 via-black/75 to-black/30 max-lg:from-black/95 max-lg:via-black/85 max-lg:to-black/50 lg:from-black/70 lg:to-transparent lg:backdrop-blur-sm"
+              : "w-full bg-gradient-to-b from-black/70 to-transparent backdrop-blur-sm"
           }
         >
           <div className="jade-nav-inner mx-auto flex max-w-[1920px] items-center justify-between relative py-2.5 md:py-3">

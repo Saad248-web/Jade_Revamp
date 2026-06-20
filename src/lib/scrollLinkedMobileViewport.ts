@@ -9,19 +9,22 @@
  * This keeps the frame "unshakable" while the header slides in (overlay-only).
  */
 
-import { MOBILE_BOTTOM_NAV_CONTENT_GAP } from "@/lib/layoutSpacing";
-
 const MOBILE_MQ = "(max-width: 1023px)";
 
 /** Section label row — synced to {@link scrollLinkedSectionHeaderClass} padding. */
-const SECTION_HEADER_MIN_PX = 72;
-const SECTION_HEADER_VH_FACTOR = 0.095;
-const SECTION_HEADER_MAX_PX = 104;
+const SECTION_HEADER_MIN_PX = 52;
+const SECTION_HEADER_VH_FACTOR = 0.068;
+const SECTION_HEADER_MAX_PX = 80;
 
 /** Min top/bottom breathing room inside the panel row (each side). */
 const PANEL_BREATHING_MIN_PX = 28;
 const PANEL_BREATHING_VH_FACTOR = 0.055;
 const PANEL_BREATHING_MAX_PX = 56;
+
+/** Standard horizontal sections — tighter gutters (title↔card, card↔bottom nav). */
+const PANEL_BREATHING_STANDARD_MIN_PX = 10;
+const PANEL_BREATHING_STANDARD_VH_FACTOR = 0.022;
+const PANEL_BREATHING_STANDARD_MAX_PX = 20;
 
 const CUSTOM_PROPS = [
   "--jade-vv-offset-top",
@@ -31,6 +34,7 @@ const CUSTOM_PROPS = [
   "--jade-scroll-section-header-block",
   "--jade-scroll-panel-row-height",
   "--jade-scroll-panel-breathing-min",
+  "--jade-scroll-panel-breathing-min-standard",
   "--jade-scroll-text-reserve",
   "--jade-scroll-card-max-h",
   "--jade-scroll-card-max-h-featured",
@@ -123,13 +127,24 @@ export function syncScrollLinkedMobileViewport(): void {
     `${breathingMin}px`,
   );
 
+  const breathingStandard = clampGap(
+    panelRow,
+    PANEL_BREATHING_STANDARD_MIN_PX,
+    PANEL_BREATHING_STANDARD_VH_FACTOR,
+    PANEL_BREATHING_STANDARD_MAX_PX,
+  );
+  root.style.setProperty(
+    "--jade-scroll-panel-breathing-min-standard",
+    `${breathingStandard}px`,
+  );
+
   const panelGap = clampGap(panelRow, 6, 0.024, 12);
   const panelGapLg = clampGap(panelRow, 8, 0.032, 20);
   root.style.setProperty("--jade-scroll-panel-gap", `${panelGap}px`);
   root.style.setProperty("--jade-scroll-panel-gap-lg", `${panelGapLg}px`);
   root.style.setProperty(
     "--jade-scroll-panel-bottom-gap",
-    MOBILE_BOTTOM_NAV_CONTENT_GAP,
+    "clamp(0.75rem, 2vw, 1rem)",
   );
 
   setCardMaxHeights(root, panelRow, panelGap, panelGapLg, breathingMin);
@@ -146,16 +161,16 @@ function setCardMaxHeights(
   const stackBudget = Math.max(280, panelRowPx - breathingMin * 2);
   const stackGaps = panelGap * 3 + panelGapLg;
   const textReserve = Math.min(
-    210,
-    Math.max(168, Math.round(stackBudget * 0.37) + stackGaps),
+    196,
+    Math.max(152, Math.round(stackBudget * 0.34) + stackGaps),
   );
   const tallHeaderReserve = textReserve + 28;
 
   root.style.setProperty("--jade-scroll-text-reserve", `${textReserve}px`);
 
   const cardMax = Math.min(
-    600,
-    Math.round(stackBudget * 0.72),
+    620,
+    Math.round(stackBudget * 0.78),
     Math.max(120, stackBudget - textReserve),
   );
   const cardMaxTall = Math.min(

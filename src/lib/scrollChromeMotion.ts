@@ -23,6 +23,7 @@ export const NAVBAR_SCROLL_CHROME_TRANSITION = SCROLL_CHROME_HIDE_TRANSITION;
 export function scrollChromeHideAnimate(isHidden: boolean) {
   return {
     y: isHidden ? "-100%" : "0%",
+    opacity: isHidden ? 0 : 1,
   };
 }
 
@@ -34,7 +35,13 @@ export function scrollChromeHideMotionProps(
   const transition = reduceMotion
     ? { duration: 0 }
     : options?.fast
-      ? { duration: 0.26, ease: [0.22, 1, 0.36, 1] as const }
+      ? {
+          type: "spring" as const,
+          stiffness: 480,
+          damping: 40,
+          mass: 0.42,
+          restDelta: 0.001,
+        }
       : SCROLL_CHROME_HIDE_TRANSITION;
 
   return {
