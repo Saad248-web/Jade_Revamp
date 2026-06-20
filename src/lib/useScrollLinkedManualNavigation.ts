@@ -19,11 +19,6 @@ export type UseScrollLinkedManualNavigationOptions = {
   sectionRef?: React.RefObject<HTMLElement | null>;
   /** Panel steps in the section (cards + end CTA) — drives swipe distance per card */
   stepCount?: number;
-  /**
-   * After vertical scroll momentum ends, snap to the nearest card.
-   * Only enable for `mobileSnapOnly` — free sections must not hijack page scroll.
-   */
-  snapOnScrollEnd?: boolean;
 };
 
 export type ScrollLinkedStageNavigation = {
@@ -119,7 +114,6 @@ export function useScrollLinkedManualNavigation({
   showVerticalHint: showVerticalHintOption = true,
   sectionRef,
   stepCount = 2,
-  snapOnScrollEnd = false,
 }: UseScrollLinkedManualNavigationOptions): ScrollLinkedStageNavigation {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef(false);
@@ -172,29 +166,6 @@ export function useScrollLinkedManualNavigation({
       unsub();
     };
   }, [enabled, showVerticalHint, sectionRef, dismissVerticalHint]);
-
-  // After native touch momentum settles, snap to the nearest card (mobileSnapOnly only).
-  useEffect(() => {
-    if (!enabled || !snapOnScrollEnd) return;
-    if (!window.matchMedia("(pointer: coarse)").matches) return;
-
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    const onScroll = () => {
-      if (draggingRef.current) return;
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        if (!draggingRef.current) {
-          snapSectionToNearestStep(sectionRef, stageRef.current, stepCount);
-        }
-      }, 90);
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (timer) clearTimeout(timer);
-    };
-  }, [enabled, snapOnScrollEnd, sectionRef, stepCount]);
 
   useEffect(() => {
     if (!enabled) return;

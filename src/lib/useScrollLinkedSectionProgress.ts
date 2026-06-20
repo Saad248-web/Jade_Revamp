@@ -150,7 +150,6 @@ export function useScrollLinkedSectionProgress(
     showVerticalHint,
     sectionRef: targetRef,
     stepCount,
-    snapOnScrollEnd: scrollMode === "mobileSnapOnly",
   });
 
   return {

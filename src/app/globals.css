@@ -603,10 +603,15 @@ html.jade-splash-locked main {
   isolation: isolate;
 }
 
-/* Navbar shell — slide hide/show driven by Framer Motion in Navbar.tsx */
+/* Navbar shell — slide hide/show driven by Framer Motion in Navbar.tsx.
+ * Promote to its own GPU layer + contain paint so the child backdrop-blur is
+ * composited once and not re-rasterized against moving content each frame. */
 .jade-nav-chrome {
   will-change: transform;
   isolation: isolate;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout paint;
 }
 
 /*
