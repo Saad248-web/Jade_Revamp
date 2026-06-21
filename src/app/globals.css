@@ -943,8 +943,9 @@ body {
     --jade-scroll-panel-gap-lg: 0.625rem;
     --jade-scroll-panel-breathing-min: clamp(1.5rem, 5.5svh, 3rem);
     --jade-scroll-panel-breathing-min-standard: clamp(0.625rem, 2svh, 1.25rem);
-    --jade-scroll-section-header-block: clamp(3.25rem, 6.8svh, 5rem);
-    --jade-scroll-text-reserve: 10.5rem;
+    --jade-scroll-panel-edge-pad-standard: 0.875rem;
+    --jade-scroll-section-header-block: clamp(4.25rem, 8.8svh, 6.25rem);
+    --jade-scroll-text-reserve: 10rem;
     /* svh = smallest viewport — stable frame. Navbar overlays the top (header row /
        Featured top padding provide its clearance); only the bottom nav is subtracted
        so cards fill to the bottom nav without leaving a navbar-height empty gap. */
@@ -959,7 +960,7 @@ body {
       58svh,
       calc(
         var(--jade-scroll-panel-row-height) -
-          var(--jade-scroll-panel-breathing-min-standard, 0.75rem) * 2 -
+          var(--jade-scroll-panel-edge-pad-standard, 0.875rem) * 2 -
           var(--jade-scroll-text-reserve)
       ),
       620px

@@ -12,9 +12,9 @@
 const MOBILE_MQ = "(max-width: 1023px)";
 
 /** Section label row — synced to {@link scrollLinkedSectionHeaderClass} padding. */
-const SECTION_HEADER_MIN_PX = 52;
-const SECTION_HEADER_VH_FACTOR = 0.068;
-const SECTION_HEADER_MAX_PX = 80;
+const SECTION_HEADER_MIN_PX = 68;
+const SECTION_HEADER_VH_FACTOR = 0.088;
+const SECTION_HEADER_MAX_PX = 100;
 
 /** Min top/bottom breathing room inside the panel row (each side). */
 const PANEL_BREATHING_MIN_PX = 28;
@@ -35,6 +35,7 @@ const CUSTOM_PROPS = [
   "--jade-scroll-panel-row-height",
   "--jade-scroll-panel-breathing-min",
   "--jade-scroll-panel-breathing-min-standard",
+  "--jade-scroll-panel-edge-pad-standard",
   "--jade-scroll-text-reserve",
   "--jade-scroll-card-max-h",
   "--jade-scroll-card-max-h-featured",
@@ -157,12 +158,13 @@ function setCardMaxHeights(
   panelGapLg: number,
   breathingMin: number,
 ): void {
-  /** Card stack budget — reserve proportional top/bottom gutters (matches grid 1fr rows). */
-  const stackBudget = Math.max(280, panelRowPx - breathingMin * 2);
   const stackGaps = panelGap * 3 + panelGapLg;
+
+  /** Standard Ways Jade — fixed stack height; symmetric edge pad (no 1fr grid drift). */
+  const standardStackBudget = Math.max(260, panelRowPx);
   const textReserve = Math.min(
-    196,
-    Math.max(152, Math.round(stackBudget * 0.34) + stackGaps),
+    188,
+    Math.max(148, Math.round(standardStackBudget * 0.32) + stackGaps),
   );
   const tallHeaderReserve = textReserve + 28;
 
@@ -170,13 +172,13 @@ function setCardMaxHeights(
 
   const cardMax = Math.min(
     620,
-    Math.round(stackBudget * 0.78),
-    Math.max(120, stackBudget - textReserve),
+    Math.round(standardStackBudget * 0.76),
+    Math.max(120, standardStackBudget - textReserve),
   );
   const cardMaxTall = Math.min(
     560,
-    Math.round(stackBudget * 0.67),
-    Math.max(120, stackBudget - tallHeaderReserve),
+    Math.round(standardStackBudget * 0.67),
+    Math.max(120, standardStackBudget - tallHeaderReserve),
   );
 
   root.style.setProperty("--jade-scroll-card-max-h", `${cardMax}px`);
@@ -185,10 +187,18 @@ function setCardMaxHeights(
     `${cardMaxTall}px`,
   );
 
+  const standardStackHeight = cardMax + textReserve;
+  const edgePadStandard = Math.max(
+    10,
+    Math.round((panelRowPx - standardStackHeight) / 2),
+  );
+  root.style.setProperty(
+    "--jade-scroll-panel-edge-pad-standard",
+    `${edgePadStandard}px`,
+  );
+
   /**
-   * Featured §6 has no header row but its outer grid reserves navbar clearance (top)
-   * + bottom padding, so the safe stack budget ≈ panelRow. Size the villa image to
-   * that budget minus the text/CTA block — fills the frame without clipping the CTA.
+   * Featured §6 — keep 1fr grid breathing (unchanged layout contract).
    */
   const featuredStackBudget = Math.max(260, panelRowPx - breathingMin * 2);
   const featuredTextReserve = Math.min(
