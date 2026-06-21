@@ -45,6 +45,13 @@ export const MOBILE_BOTTOM_NAV_CLEARANCE_CLASS =
 export const SCROLL_LINE_INDICATOR_BOTTOM_CLASS =
   "max-lg:bottom-[calc(0.5rem+2.75rem+max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))+clamp(1.25rem,3.5vw,1.5rem))] lg:bottom-10";
 
+/**
+ * Horizontal swipe hint inside scroll-linked sticky stages — stage height already
+ * ends above the bottom nav, so use a small inset from the stage bottom only.
+ */
+export const SCROLL_LINKED_HORIZONTAL_HINT_BOTTOM_CLASS =
+  "bottom-[clamp(0.625rem,2vh,0.875rem)] lg:bottom-10";
+
 /** In-flow hero CTA (margin above mobile nav) */
 export const SCROLL_LINE_INDICATOR_MB_CLASS =
   "max-lg:mb-[calc(0.5rem+2.75rem+max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))+clamp(1.25rem,3.5vw,1.5rem))] lg:mb-8";
