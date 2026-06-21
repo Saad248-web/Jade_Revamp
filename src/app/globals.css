@@ -855,20 +855,43 @@ body {
 
 /* ============================================================
    ZOOM-SAFE VIEWPORT OVERRIDES
-   Convert h-screen / min-h-screen / max-h-screen to use `dvh`
-   (dynamic viewport) which correctly tracks mobile browser
-   chrome AND Windows display scaling. One change = every
-   `h-screen` in the codebase becomes zoom-safe.
+   Mobile: `svh` (smallest viewport) — height stays fixed while the
+   browser URL bar shows/hides on scroll (stops the “everything scales” jerk).
+   Desktop: `dvh` — tracks layout viewport / display scaling.
    ============================================================ */
+@supports (height: 100svh) {
+  @media (max-width: 1023px) {
+    .h-screen {
+      height: 100svh;
+    }
+    .min-h-screen {
+      min-height: 100svh;
+    }
+    .max-h-screen {
+      max-height: 100svh;
+    }
+    .zoom-safe-screen {
+      min-height: 100svh;
+      height: 100svh;
+    }
+  }
+}
+
 @supports (height: 100dvh) {
-  .h-screen {
-    height: 100dvh;
-  }
-  .min-h-screen {
-    min-height: 100dvh;
-  }
-  .max-h-screen {
-    max-height: 100dvh;
+  @media (min-width: 1024px) {
+    .h-screen {
+      height: 100dvh;
+    }
+    .min-h-screen {
+      min-height: 100dvh;
+    }
+    .max-h-screen {
+      max-height: 100dvh;
+    }
+    .zoom-safe-screen {
+      min-height: 100dvh;
+      height: 100dvh;
+    }
   }
 }
 
@@ -883,10 +906,19 @@ body {
    .zoom-safe-media       — cap media height so CTAs stay visible
    ============================================================ */
 .zoom-safe-screen {
-  min-height: 100dvh;
-  height: 100dvh;
+  min-height: 100svh;
+  height: 100svh;
   display: flex;
   flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  @supports (height: 100dvh) {
+    .zoom-safe-screen {
+      min-height: 100dvh;
+      height: 100dvh;
+    }
+  }
 }
 
 .zoom-safe-stack {
@@ -1341,6 +1373,33 @@ body {
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Mobile: opacity-only reveal — scale on scroll feels jerky with native touch scroll */
+@media (max-width: 1023px) {
+  @keyframes jade-hscroll-scroll-reveal {
+    from {
+      opacity: 0.72;
+      transform: none;
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes jade-hscroll-fallback-reveal {
+    from {
+      opacity: 0.88;
+      transform: none;
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 }
 

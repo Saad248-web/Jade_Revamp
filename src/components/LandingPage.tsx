@@ -82,8 +82,7 @@ export default function LandingPage() {
       {/* 2. Hero Section (Parallax) — fixed viewport height so absolute children anchor correctly */}
       <div
         ref={heroRef}
-        className="relative w-full overflow-hidden"
-        style={{ height: "100dvh" }}
+        className="relative w-full overflow-hidden h-[100svh] lg:h-[100dvh]"
       >
         <NavbarThemeTrigger theme="white" sectionRef={heroRef} />
         {/* Background Layer: Video Sequence — parallax desktop only (mobile: static = smoother) */}

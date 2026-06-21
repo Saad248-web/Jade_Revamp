@@ -325,7 +325,7 @@ export default function MenuPage() {
     }`;
 
   return (
-    <main className="relative flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden bg-[#1E2023] text-white">
+    <main className="relative flex h-[100svh] max-h-[100svh] flex-col overflow-hidden bg-[#1E2023] text-white lg:h-[100dvh] lg:max-h-[100dvh]">
       {/* ── Navigation ── */}
       <Navbar />
       <MobileBottomNav />

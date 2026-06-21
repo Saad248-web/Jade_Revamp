@@ -122,7 +122,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
     return (
       <section
         ref={ref}
-        className="major-section relative flex min-h-[100dvh] min-h-screen w-full flex-col items-center justify-end overflow-hidden"
+        className="major-section relative flex min-h-screen w-full flex-col items-center justify-end overflow-hidden"
         onMouseEnter={hasBgCarousel ? pauseBgLoop : undefined}
         onMouseLeave={hasBgCarousel ? resumeBgLoop : undefined}
         onFocusCapture={hasBgCarousel ? pauseBgLoop : undefined}

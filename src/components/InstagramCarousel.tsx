@@ -263,7 +263,7 @@ export default function InstagramCarousel() {
     <SectionWrapper
       ref={sectionRef}
       bg={JADE_CHARCOAL}
-      className="jade-section min-h-[80dvh] lg:min-h-[100dvh] flex flex-col justify-center overflow-x-hidden"
+      className="jade-section min-h-[80svh] lg:min-h-[100dvh] flex flex-col justify-center overflow-x-hidden"
     >
       {showTrack ? (
         <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />

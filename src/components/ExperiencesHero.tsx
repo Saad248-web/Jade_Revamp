@@ -16,7 +16,7 @@ export default function ExperiencesHero() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[100dvh] h-screen w-full overflow-hidden bg-[#050505] flex flex-col items-center justify-center text-center px-6"
+      className="relative min-h-screen h-screen w-full overflow-hidden bg-[#050505] flex flex-col items-center justify-center text-center px-6"
     >
       <GoldAccentLine className="absolute top-0 left-0 right-0 z-20" />
       <NavbarThemeTrigger theme="golden" sectionRef={sectionRef} />
