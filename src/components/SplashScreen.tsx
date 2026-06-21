@@ -185,25 +185,24 @@ export default function SplashScreen() {
 
             {/* 2. Main Title Group — Proximity: zero gap = one visual unit */}
             <div className="flex flex-col items-center" style={{ gap: 0 }}>
-              <div className="overflow-hidden pt-[0.14em] -mt-[0.14em]">
+              <div className="overflow-hidden pt-[0.12em] pb-[0.14em] -mt-[0.12em] -mb-[0.06em]">
                 <motion.h1
                   variants={textItemVars}
                   style={{
                     fontSize: "clamp(32px, 8.5vw, 54px)",
-                    lineHeight: 1.12,
-                    marginBottom: "clamp(-4px, -0.192vw, -4px)",
+                    lineHeight: 1.22,
                   }}
                   className="font-philosopher text-white text-center"
                 >
                   Jade
                 </motion.h1>
               </div>
-              <div className="overflow-hidden">
+              <div className="overflow-hidden -mt-[clamp(3px,0.96vw,6px)]">
                 <motion.h2
                   variants={textItemVars}
                   style={{
                     fontSize: "clamp(32px, 8.5vw, 54px)",
-                    lineHeight: 1.05,
+                    lineHeight: 1.22,
                   }}
                   className="font-philosopher text-white/90 text-center"
                 >
