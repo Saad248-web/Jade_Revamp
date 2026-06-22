@@ -655,6 +655,15 @@ html.jade-scroll-chrome-hidden {
   transition: top 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Mobile: snap sticky offset instantly — avoids scroll jerk while keeping rails under navbar */
+@media (max-width: 1023px) {
+  .jade-sticky-below-global-nav,
+  .jade-sticky-below-villa-action-compact,
+  .jade-sticky-below-villa-action-full {
+    transition: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .jade-sticky-below-global-nav,
   .jade-sticky-below-villa-action-compact,

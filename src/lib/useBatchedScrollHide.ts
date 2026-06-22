@@ -13,9 +13,6 @@ let disposeEngine: (() => void) | undefined;
 
 function syncChromeHiddenClass(next: boolean): void {
   if (typeof document === "undefined") return;
-  // Touch devices: navbar is overlay-only — skip sticky-offset CSS var shifts that
-  // animate `top` on sticky rails and jerk the page body when chrome hides.
-  if (window.matchMedia("(pointer: coarse)").matches) return;
   document.documentElement.classList.toggle("jade-scroll-chrome-hidden", next);
 }
 
