@@ -29,15 +29,15 @@ export function scrollLinkedMobileSnapPortion(stepCount: number): number {
 }
 
 /**
- * Cap snapped progress so the carousel rests on the last panel;
- * remaining scroll runway reveals the end CTA overlay.
+ * Cap snapped progress on the end CTA-only stage (after the final card),
+ * matching Featured Villas CTA slide index — not the last content card.
  */
 export function scrollLinkedMobileSnapMaxProgress(
   panelCount: number,
   totalSteps: number,
 ): number {
   if (totalSteps <= 0 || panelCount <= 0) return 1;
-  return Math.min(1, (panelCount - 1) / totalSteps);
+  return Math.min(1, panelCount / totalSteps);
 }
 
 /** Progress at which the vertical “scroll on” cue appears (Featured parity). */

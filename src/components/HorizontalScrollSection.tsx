@@ -1,11 +1,10 @@
 "use client";
 
-import { motion, useTransform, type MotionValue } from "framer-motion";
-import PrimaryButton from "@/components/PrimaryButton";
 import ScrollLinkedHorizontalSection from "@/components/scroll-linked/ScrollLinkedHorizontalSection";
 import ScrollLinkedPanelCard, {
   type ScrollLinkedPanelData,
 } from "@/components/scroll-linked/ScrollLinkedPanelCard";
+import ScrollLinkedSectionEndButton from "@/components/scroll-linked/ScrollLinkedSectionEndButton";
 import { experiencesListingPath, experiencePanelHref } from "@/lib/appRoutes";
 import { useScrollLinkedSectionHeight } from "@/lib/useScrollLinkedSectionHeight";
 import { scrollLinkedMobileSnapHookStepCount } from "@/lib/scrollLinkedMobileSnap";
@@ -78,29 +77,6 @@ const PANELS: ScrollLinkedPanelData[] = [
   },
 ];
 
-function EndButton({ panelProgress }: { panelProgress: MotionValue<number> }) {
-  const opacity = useTransform(panelProgress, [0.85, 1.0], [0, 1]);
-  const scale = useTransform(panelProgress, [0.85, 1.0], [0.8, 1]);
-  const y = useTransform(panelProgress, [0.85, 1.0], [60, 0]);
-
-  return (
-    <motion.div
-      style={{ opacity, scale, y, zIndex: 100 }}
-      className="absolute inset-0 flex items-center justify-center pointer-events-none"
-    >
-      <div className="pointer-events-auto">
-        <PrimaryButton
-          href={experiencesListingPath()}
-          width="section"
-          className="shadow-[0_16px_40px_rgba(239,205,98,0.4)] hover:shadow-[0_20px_50px_rgba(239,205,98,0.6)] transition-transform duration-300 hover:scale-[1.03]"
-        >
-          <span className="font-bold whitespace-nowrap">View All Experiences</span>
-        </PrimaryButton>
-      </div>
-    </motion.div>
-  );
-}
-
 export default function HorizontalScrollSection() {
   const totalSteps = PANELS.length + 1;
   const panelCount = PANELS.length;
@@ -118,7 +94,13 @@ export default function HorizontalScrollSection() {
       headerLabel="WAYS JADE IS EXPERIENCED"
       scrollMode="mobileSnapOnly"
       endButton={(panelProgress) => (
-        <EndButton panelProgress={panelProgress} />
+        <ScrollLinkedSectionEndButton
+          panelProgress={panelProgress}
+          panelCount={panelCount}
+          cardStepCount={totalSteps}
+          href={experiencesListingPath()}
+          label="View All Experiences"
+        />
       )}
     >
       {(panelProgress) =>
