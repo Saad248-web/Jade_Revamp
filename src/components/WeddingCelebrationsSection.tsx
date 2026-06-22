@@ -7,6 +7,7 @@ import ScrollLinkedPanelCard, {
   type ScrollLinkedPanelData,
 } from "@/components/scroll-linked/ScrollLinkedPanelCard";
 import { useScrollLinkedSectionHeight } from "@/lib/useScrollLinkedSectionHeight";
+import { scrollLinkedMobileSnapHookStepCount } from "@/lib/scrollLinkedMobileSnap";
 
 const CELEBRATIONS: ScrollLinkedPanelData[] = [
   {
@@ -87,7 +88,7 @@ export default function WeddingCelebrationsSection() {
   const sectionHeightVh = useScrollLinkedSectionHeight(
     "wedding",
     "mobileSnapOnly",
-    totalSteps,
+    scrollLinkedMobileSnapHookStepCount(totalSteps),
   );
 
   return (
@@ -112,6 +113,7 @@ export default function WeddingCelebrationsSection() {
             totalSteps={totalSteps}
             panelCount={panelCount}
             gapVariant="wide"
+            snapCentered
           />
         ))
       }

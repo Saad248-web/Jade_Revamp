@@ -8,6 +8,7 @@ import ScrollLinkedPanelCard, {
 } from "@/components/scroll-linked/ScrollLinkedPanelCard";
 import { experiencesListingPath, experiencePanelHref } from "@/lib/appRoutes";
 import { useScrollLinkedSectionHeight } from "@/lib/useScrollLinkedSectionHeight";
+import { scrollLinkedMobileSnapHookStepCount } from "@/lib/scrollLinkedMobileSnap";
 
 const PANELS: ScrollLinkedPanelData[] = [
   {
@@ -106,7 +107,7 @@ export default function HorizontalScrollSection() {
   const sectionHeightVh = useScrollLinkedSectionHeight(
     "home",
     "mobileSnapOnly",
-    totalSteps,
+    scrollLinkedMobileSnapHookStepCount(totalSteps),
   );
 
   return (
@@ -129,6 +130,7 @@ export default function HorizontalScrollSection() {
             panelProgress={panelProgress}
             totalSteps={totalSteps}
             panelCount={panelCount}
+            snapCentered
           />
         ))
       }

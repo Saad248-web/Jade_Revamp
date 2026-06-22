@@ -13,6 +13,8 @@ export type UseScrollLinkedPanelOffsetOptions = {
   /** @deprecated Use variant — visibleGap overrides breakpoint constants when set. */
   visibleGap?: number;
   variant?: ScrollLinkedPanelGapVariant;
+  /** Mobile snap — full viewport between card centres so neighbours stay off-screen. */
+  snapCentered?: boolean;
 };
 
 /** Tailwind max-width fallbacks when measure ref is not mounted. */
@@ -64,19 +66,28 @@ function computeOffsetPx(
   panelWidth: number,
   variant: ScrollLinkedPanelGapVariant,
   visibleGapOverride: number | undefined,
+  snapCentered: boolean,
 ): number {
   const isDesktop = window.matchMedia(DESKTOP_MQ).matches;
   if (visibleGapOverride !== undefined) {
-    return computeLegacyOffsetPx(viewportWidth, panelWidth, visibleGapOverride);
+    const legacy = computeLegacyOffsetPx(
+      viewportWidth,
+      panelWidth,
+      visibleGapOverride,
+    );
+    return snapCentered && !isDesktop
+      ? Math.max(viewportWidth, legacy)
+      : legacy;
   }
   if (isDesktop) {
     return computeDesktopOffsetPx(viewportWidth, panelWidth, variant);
   }
-  return computeLegacyOffsetPx(
+  const legacy = computeLegacyOffsetPx(
     viewportWidth,
     panelWidth,
     resolveScrollLinkedLegacyGapAddon(variant),
   );
+  return snapCentered ? Math.max(viewportWidth, legacy) : legacy;
 }
 
 /**
@@ -89,6 +100,7 @@ export function useScrollLinkedPanelOffset(
 ): { offsetPx: number; viewportWidth: number } {
   const variant = options.variant ?? "standard";
   const visibleGapOverride = options.visibleGap;
+  const snapCentered = options.snapCentered ?? false;
   const [offsetPx, setOffsetPx] = useState(1000);
   const [viewportWidth, setViewportWidth] = useState(1920);
 
@@ -102,7 +114,7 @@ export function useScrollLinkedPanelOffset(
           : fallbackScrollLinkedPanelWidth(vw);
       setViewportWidth(vw);
       setOffsetPx(
-        computeOffsetPx(vw, panelWidth, variant, visibleGapOverride),
+        computeOffsetPx(vw, panelWidth, variant, visibleGapOverride, snapCentered),
       );
     };
 
@@ -118,7 +130,7 @@ export function useScrollLinkedPanelOffset(
       window.removeEventListener("orientationchange", recompute);
       mq.removeEventListener("change", recompute);
     };
-  }, [measureRef, visibleGapOverride, variant]);
+  }, [measureRef, visibleGapOverride, variant, snapCentered]);
 
   return { offsetPx, viewportWidth };
 }

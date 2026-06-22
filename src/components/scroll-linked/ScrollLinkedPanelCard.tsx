@@ -39,6 +39,8 @@ export type ScrollLinkedPanelCardProps = {
   panelCount: number;
   imageFrameClassName?: string;
   gapVariant?: "standard" | "wide";
+  /** Mobile snap — one centred card, no neighbour peek (Featured Villas parity). */
+  snapCentered?: boolean;
 };
 
 export default function ScrollLinkedPanelCard({
@@ -49,6 +51,7 @@ export default function ScrollLinkedPanelCard({
   panelCount,
   imageFrameClassName = scrollLinkedPanelImageFrameClass,
   gapVariant = "standard",
+  snapCentered = false,
 }: ScrollLinkedPanelCardProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const isLg = useMediaMinLg();
@@ -61,6 +64,7 @@ export default function ScrollLinkedPanelCard({
   const stackWrapRef = useRef<HTMLDivElement>(null);
   const { offsetPx } = useScrollLinkedPanelOffset(stackWrapRef, {
     variant: gapVariant,
+    snapCentered: snapCentered && !isLg,
   });
 
   const x = useTransform(panelProgress, (p: number) => {

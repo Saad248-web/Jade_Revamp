@@ -8,7 +8,13 @@ const SNAP_BASELINE_STEP_COUNT = 6;
 const SNAP_ZONE_VH = 200;
 const SNAP_EXIT_VH = 12;
 
-/** Total pinned section height on mobile for snap carousels. */
+/** Featured-parity hook step count — aligns snap positions with card `index / cardStepCount`. */
+export function scrollLinkedMobileSnapHookStepCount(
+  cardStepCount: number,
+): number {
+  return cardStepCount + 1;
+}
+
 export function scrollLinkedMobileSnapHeight(stepCount: number): number {
   const scaledSnap = Math.round(
     SNAP_ZONE_VH * (Math.max(2, stepCount) / SNAP_BASELINE_STEP_COUNT),

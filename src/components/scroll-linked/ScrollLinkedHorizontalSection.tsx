@@ -108,15 +108,23 @@ export default function ScrollLinkedHorizontalSection({
       ? scrollLinkedPanelAreaFeaturedClass
       : scrollLinkedPanelAreaClass;
 
+  const cardStepCount = stepCount;
+  const hookStepCount =
+    scrollMode === "mobileSnapOnly" && cardStepCount != null
+      ? cardStepCount + 1
+      : cardStepCount;
   const panelCount =
-    stepCount != null ? Math.max(1, stepCount - 1) : undefined;
+    cardStepCount != null ? Math.max(1, cardStepCount - 1) : undefined;
   const mobileSnapProgressOptions =
-    scrollMode === "mobileSnapOnly" && stepCount != null && panelCount != null
+    scrollMode === "mobileSnapOnly" &&
+    cardStepCount != null &&
+    hookStepCount != null &&
+    panelCount != null
       ? {
-          mobileSnapZoneRatio: scrollLinkedMobileSnapPortion(stepCount),
+          mobileSnapZoneRatio: scrollLinkedMobileSnapPortion(hookStepCount),
           mobileSnapMaxProgress: scrollLinkedMobileSnapMaxProgress(
             panelCount,
-            stepCount,
+            cardStepCount,
           ),
           showHorizontalHint: false,
         }
@@ -124,7 +132,7 @@ export default function ScrollLinkedHorizontalSection({
 
   const internal = useScrollLinkedSectionProgress({
     scrollMode,
-    stepCount,
+    stepCount: hookStepCount,
     smoothSpring,
     ...mobileSnapProgressOptions,
   });
@@ -139,9 +147,9 @@ export default function ScrollLinkedHorizontalSection({
   const resolvedEndZoneProgress =
     endZoneProgress ??
     (scrollMode === "mobileSnapOnly" &&
-    stepCount != null &&
+    cardStepCount != null &&
     panelCount != null
-      ? scrollLinkedMobileSnapEndZone(panelCount, stepCount)
+      ? scrollLinkedMobileSnapEndZone(panelCount, cardStepCount)
       : undefined);
 
   const stage = (
