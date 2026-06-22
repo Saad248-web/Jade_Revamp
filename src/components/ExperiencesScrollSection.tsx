@@ -107,7 +107,11 @@ function EndButton({ panelProgress }: { panelProgress: MotionValue<number> }) {
 export default function ExperiencesScrollSection() {
   const totalSteps = PANELS.length + 1;
   const panelCount = PANELS.length;
-  const sectionHeightVh = useScrollLinkedSectionHeight("experiences");
+  const sectionHeightVh = useScrollLinkedSectionHeight(
+    "experiences",
+    "mobileSnapOnly",
+    totalSteps,
+  );
 
   return (
     <ScrollLinkedHorizontalSection
@@ -115,7 +119,7 @@ export default function ExperiencesScrollSection() {
       stepCount={totalSteps}
       bgClassName="bg-[#1A1C1E]"
       headerLabel="WAYS JADE IS EXPERIENCED"
-      scrollMode="free"
+      scrollMode="mobileSnapOnly"
       endButton={(panelProgress) => (
         <EndButton panelProgress={panelProgress} />
       )}

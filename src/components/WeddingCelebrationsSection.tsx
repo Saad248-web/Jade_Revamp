@@ -84,7 +84,11 @@ function EndButton({ panelProgress }: { panelProgress: MotionValue<number> }) {
 export default function WeddingCelebrationsSection() {
   const totalSteps = CELEBRATIONS.length + 1;
   const panelCount = CELEBRATIONS.length;
-  const sectionHeightVh = useScrollLinkedSectionHeight("wedding");
+  const sectionHeightVh = useScrollLinkedSectionHeight(
+    "wedding",
+    "mobileSnapOnly",
+    totalSteps,
+  );
 
   return (
     <ScrollLinkedHorizontalSection
@@ -93,7 +97,7 @@ export default function WeddingCelebrationsSection() {
       bgClassName="bg-[#1A1C1E]"
       headerLabel="PRE WEDDING CELEBRATIONS"
       headerLabelClassName="font-manrope text-gh-label tracking-[0.3em] uppercase font-semibold text-[#EFCD62] drop-shadow-lg block"
-      scrollMode="free"
+      scrollMode="mobileSnapOnly"
       endButton={(panelProgress) => (
         <EndButton panelProgress={panelProgress} />
       )}

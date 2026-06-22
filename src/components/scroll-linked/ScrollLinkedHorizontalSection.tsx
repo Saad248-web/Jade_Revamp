@@ -15,6 +15,11 @@ import {
 } from "@/lib/useScrollLinkedSectionProgress";
 import type { ScrollLinkedStageNavigation } from "@/lib/useScrollLinkedManualNavigation";
 import { ScrollLinkedInteractiveStage } from "@/components/scroll-linked/ScrollLinkedInteractiveStage";
+import {
+  scrollLinkedMobileSnapEndZone,
+  scrollLinkedMobileSnapMaxProgress,
+  scrollLinkedMobileSnapPortion,
+} from "@/lib/scrollLinkedMobileSnap";
 
 export type ScrollLinkedHorizontalSectionProps = {
   sectionHeightVh?: number;
@@ -102,10 +107,26 @@ export default function ScrollLinkedHorizontalSection({
     panelAreaVariant === "featured"
       ? scrollLinkedPanelAreaFeaturedClass
       : scrollLinkedPanelAreaClass;
+
+  const panelCount =
+    stepCount != null ? Math.max(1, stepCount - 1) : undefined;
+  const mobileSnapProgressOptions =
+    scrollMode === "mobileSnapOnly" && stepCount != null && panelCount != null
+      ? {
+          mobileSnapZoneRatio: scrollLinkedMobileSnapPortion(stepCount),
+          mobileSnapMaxProgress: scrollLinkedMobileSnapMaxProgress(
+            panelCount,
+            stepCount,
+          ),
+          showHorizontalHint: false,
+        }
+      : {};
+
   const internal = useScrollLinkedSectionProgress({
     scrollMode,
     stepCount,
     smoothSpring,
+    ...mobileSnapProgressOptions,
   });
 
   const targetRef = externalRef ?? internal.targetRef;
@@ -114,6 +135,14 @@ export default function ScrollLinkedHorizontalSection({
     externalStageNavigation !== undefined
       ? externalStageNavigation
       : internal.stageNavigation;
+
+  const resolvedEndZoneProgress =
+    endZoneProgress ??
+    (scrollMode === "mobileSnapOnly" &&
+    stepCount != null &&
+    panelCount != null
+      ? scrollLinkedMobileSnapEndZone(panelCount, stepCount)
+      : undefined);
 
   const stage = (
     <ScrollLinkedStickyStage
@@ -124,7 +153,7 @@ export default function ScrollLinkedHorizontalSection({
       panelProgress={panelProgress}
       panelAreaClassName={panelAreaClassName}
       stageNavigation={stageNavigation}
-      endZoneProgress={endZoneProgress}
+      endZoneProgress={resolvedEndZoneProgress}
     >
       {children}
     </ScrollLinkedStickyStage>
