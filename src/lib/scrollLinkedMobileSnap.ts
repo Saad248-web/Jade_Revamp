@@ -47,3 +47,55 @@ export function scrollLinkedMobileSnapEndZone(
 ): number {
   return scrollLinkedMobileSnapMaxProgress(panelCount, totalSteps) - 0.02;
 }
+
+export type MobileSnapProgressOptions = {
+  /** Hook step count (cardStepCount + 1). */
+  stepCount: number;
+  snapZoneRatio: number;
+  snapMaxProgress: number;
+};
+
+/** First card snap threshold in scroll progress — below half of this, exit scroll-up is free. */
+export function mobileSnapEntryThreshold(options: MobileSnapProgressOptions): number {
+  const maxIndex = Math.max(1, options.stepCount - 1);
+  return (options.snapZoneRatio / maxIndex) * 0.55;
+}
+
+export function isInMobileSnapEntryZone(
+  progress: number,
+  options: MobileSnapProgressOptions,
+): boolean {
+  return progress <= mobileSnapEntryThreshold(options);
+}
+
+export function isInMobileSnapExitZone(
+  progress: number,
+  options: MobileSnapProgressOptions,
+): boolean {
+  return progress >= options.snapZoneRatio * 0.98;
+}
+
+/**
+ * Snap scroll progress to card centres — floor bias near entry so a slight scroll-up
+ * is not rounded forward to the next card (which pins the section fullscreen).
+ */
+export function computeMobileSnappedProgress(
+  progress: number,
+  options: MobileSnapProgressOptions,
+): number {
+  const { stepCount, snapZoneRatio: zone, snapMaxProgress } = options;
+  const maxIndex = Math.max(1, stepCount - 1);
+
+  if (progress >= zone) {
+    return snapMaxProgress;
+  }
+
+  const carouselP = Math.min(1, Math.max(0, progress / zone));
+  const entryThreshold = mobileSnapEntryThreshold(options);
+  const useFloor = progress < entryThreshold;
+  const snappedIndex = useFloor
+    ? Math.floor(carouselP * maxIndex + 1e-6)
+    : Math.round(carouselP * maxIndex);
+
+  return Math.min(snappedIndex / maxIndex, snapMaxProgress);
+}

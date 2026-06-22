@@ -10,9 +10,11 @@ import {
 import {
   useScrollLinkedManualNavigation,
   type ScrollLinkedStageNavigation,
+  type ScrollLinkedSnapBoundary,
 } from "@/lib/useScrollLinkedManualNavigation";
 import { useMediaMinLg } from "@/lib/useMediaMinLg";
 import { SCROLL_LINKED_FREE_MOBILE_PROGRESS_GAIN } from "@/lib/scrollLinkedFreeScroll";
+import { computeMobileSnappedProgress } from "@/lib/scrollLinkedMobileSnap";
 
 export type ScrollLinkedScrollMode = "free" | "mobileSnapOnly";
 
@@ -73,7 +75,18 @@ export function useScrollLinkedSectionProgress(
    * scroll runway exits to the next section.
    */
   const snapMaxProgress = mobileSnapMaxProgress ?? 1;
+  const snapBoundary: ScrollLinkedSnapBoundary | undefined = mobileSnapActive
+    ? {
+        stepCount,
+        snapZoneRatio: mobileSnapZoneRatio,
+        snapMaxProgress,
+      }
+    : undefined;
+
   const roundedSnapInput = useTransform(scrollYProgress, (p) => {
+    if (snapBoundary) {
+      return computeMobileSnappedProgress(p, snapBoundary);
+    }
     const maxIndex = Math.max(1, stepCount - 1);
     const zone = mobileSnapZoneRatio > 0 ? mobileSnapZoneRatio : 1;
     const carouselP = Math.min(1, Math.max(0, p / zone));
@@ -124,6 +137,7 @@ export function useScrollLinkedSectionProgress(
     showVerticalHint,
     sectionRef: targetRef,
     stepCount,
+    snapBoundary,
     // Only the snap carousel re-aligns on release; free sections settle freely so a
     // slight touch never jumps the just-pinned section to fill the screen.
     snapOnRelease: scrollMode === "mobileSnapOnly",

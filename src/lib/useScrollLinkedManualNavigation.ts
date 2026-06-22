@@ -10,6 +10,14 @@ import {
   SCROLL_LINKED_WHEEL_FACTOR,
   horizontalDragToScrollDelta,
 } from "@/lib/scrollLinkedFreeScroll";
+import {
+  computeMobileSnappedProgress,
+  isInMobileSnapEntryZone,
+  isInMobileSnapExitZone,
+  type MobileSnapProgressOptions,
+} from "@/lib/scrollLinkedMobileSnap";
+
+export type ScrollLinkedSnapBoundary = MobileSnapProgressOptions;
 
 export type UseScrollLinkedManualNavigationOptions = {
   enabled: boolean;
@@ -19,6 +27,8 @@ export type UseScrollLinkedManualNavigationOptions = {
   sectionRef?: React.RefObject<HTMLElement | null>;
   /** Panel steps in the section (cards + end CTA) — drives swipe distance per card */
   stepCount?: number;
+  /** Mobile snap — entry/exit dead zones + aligned snap math (see scrollLinkedMobileSnap). */
+  snapBoundary?: ScrollLinkedSnapBoundary;
   /**
    * Snap the page scroll to the nearest card step when a drag/swipe ends. Only the
    * snap (`mobileSnapOnly`) carousel wants this — for free sections it causes a jarring
@@ -101,12 +111,29 @@ function snapSectionToNearestStep(
   sectionRef: React.RefObject<HTMLElement | null> | undefined,
   stageEl: HTMLElement | null,
   stepCount: number,
+  snapBoundary?: ScrollLinkedSnapBoundary,
 ): void {
   const section = resolveSectionEl(sectionRef, stageEl);
   if (!section) return;
 
   const scrollable = Math.max(1, section.offsetHeight - window.innerHeight);
   const progress = readSectionProgress(section);
+
+  if (snapBoundary) {
+    if (
+      isInMobileSnapEntryZone(progress, snapBoundary) ||
+      isInMobileSnapExitZone(progress, snapBoundary)
+    ) {
+      return;
+    }
+    const snappedProgress = computeMobileSnappedProgress(progress, snapBoundary);
+    const targetY = section.offsetTop + snappedProgress * scrollable;
+    const dy = targetY - window.scrollY;
+    if (Math.abs(dy) < 3) return;
+    scrollByDelta(dy);
+    return;
+  }
+
   const maxIndex = Math.max(1, stepCount - 1);
   const snappedProgress = Math.round(progress * maxIndex) / maxIndex;
   const targetY = section.offsetTop + snappedProgress * scrollable;
@@ -122,6 +149,7 @@ export function useScrollLinkedManualNavigation({
   showVerticalHint: showVerticalHintOption = true,
   sectionRef,
   stepCount = 2,
+  snapBoundary,
   snapOnRelease = true,
 }: UseScrollLinkedManualNavigationOptions): ScrollLinkedStageNavigation {
   const stageRef = useRef<HTMLDivElement | null>(null);
@@ -269,7 +297,7 @@ export function useScrollLinkedManualNavigation({
 
     const onTouchEnd = () => {
       if (snapOnRelease && axisLocked === "horizontal") {
-        snapSectionToNearestStep(sectionRef, el, stepCount);
+        snapSectionToNearestStep(sectionRef, el, stepCount, snapBoundary);
       }
       resetTouch();
     };
@@ -285,7 +313,7 @@ export function useScrollLinkedManualNavigation({
       el.removeEventListener("touchend", onTouchEnd);
       el.removeEventListener("touchcancel", onTouchEnd);
     };
-  }, [enabled, dismissHint, applyHorizontalDelta, sectionRef, stepCount, snapOnRelease]);
+  }, [enabled, dismissHint, applyHorizontalDelta, sectionRef, stepCount, snapOnRelease, snapBoundary]);
 
   const onPanStart = useCallback(
     (event: PointerEvent) => {
@@ -315,12 +343,12 @@ export function useScrollLinkedManualNavigation({
 
   const onPanEnd = useCallback(() => {
     if (snapOnRelease && !ignorePanRef.current && enabled) {
-      snapSectionToNearestStep(sectionRef, stageRef.current, stepCount);
+      snapSectionToNearestStep(sectionRef, stageRef.current, stepCount, snapBoundary);
     }
     ignorePanRef.current = false;
     draggingRef.current = false;
     setIsDragging(false);
-  }, [enabled, sectionRef, stepCount, snapOnRelease]);
+  }, [enabled, sectionRef, stepCount, snapOnRelease, snapBoundary]);
 
   return {
     stageRef,
