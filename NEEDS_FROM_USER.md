@@ -98,9 +98,11 @@ Canonical source: `src/Jade Property Data/Jade_Property_Data.md`
 ```
 GET /api/cron/expire-pending-bookings   Authorization: Bearer <CRON_SECRET>
 GET /api/cron/axisrooms-retry           Authorization: Bearer <CRON_SECRET>
+GET /api/cron/publish-scheduled-blogs   Authorization: Bearer <CRON_SECRET>
+GET /api/cron/purge-trashed-blogs       Authorization: Bearer <CRON_SECRET>
 ```
 
-`vercel.json` configures these on Vercel deploy.
+**Vercel Hobby:** only **once-per-day** crons are allowed in `vercel.json` (scheduled blogs 06:00 UTC, trash purge 03:00 UTC). Sub-daily jobs (`expire-pending-bookings` every 5m, `axisrooms-retry` every 15m) need **Vercel Pro** or an external cron (e.g. [cron-job.org](https://cron-job.org)) POSTing to those URLs with `Authorization: Bearer <CRON_SECRET>`.
 
 ## DPDP erasure (ops-only)
 
