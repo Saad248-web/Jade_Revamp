@@ -1,4 +1,3 @@
-import fs from "fs";
 import path from "path";
 import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
 
@@ -69,64 +68,38 @@ function collectManifestUrls(): string[] {
   return Array.from(urls).sort();
 }
 
-function walkPublicDir(absDir: string, publicRoot: string): string[] {
-  const out: string[] = [];
-  let entries: fs.Dirent[];
-  try {
-    entries = fs.readdirSync(absDir, { withFileTypes: true });
-  } catch {
-    return out;
-  }
-  for (const ent of entries) {
-    const full = path.join(absDir, ent.name);
-    if (ent.isDirectory()) {
-      out.push(...walkPublicDir(full, publicRoot));
-    } else if (IMAGE_EXT.has(path.extname(ent.name).toLowerCase())) {
-      const rel = path.relative(publicRoot, full).replace(/\\/g, "/");
-      out.push(`/${rel}`);
-    }
-  }
-  return out;
+/** Build-time index of public images (see scripts/generate_media_manifest.mjs). */
+function getAllStaticImageUrls(): string[] {
+  const indexed = (
+    MEDIA_MANIFEST as { allStaticImages?: readonly string[] }
+  ).allStaticImages;
+  if (indexed?.length) return [...indexed];
+  return collectManifestUrls();
 }
 
 /** Top-level image folders under `public/` (excludes assets). */
 export function listPublicRootFolders(): { name: string; path: string }[] {
-  const publicRoot = path.join(process.cwd(), "public");
-  try {
-    return fs
-      .readdirSync(publicRoot, { withFileTypes: true })
-      .filter((d) => d.isDirectory() && !EXCLUDED_PUBLIC_FOLDERS.has(d.name))
-      .map((d) => ({ name: d.name, path: d.name }))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  } catch {
-    return [];
+  const roots = new Set<string>();
+  for (const url of getAllStaticImageUrls()) {
+    const top = url.split("/").filter(Boolean)[0];
+    if (top && !EXCLUDED_PUBLIC_FOLDERS.has(top)) roots.add(top);
   }
+  return Array.from(roots)
+    .sort((a, b) => a.localeCompare(b))
+    .map((name) => ({ name, path: name }));
 }
 
 /**
- * Image URLs from manifest + filesystem.
- * When `rootFolder` is set, only scan that subtree (faster for Media Library).
+ * Image URLs from the prebuild manifest index.
+ * When `rootFolder` is set, only URLs under that subtree are returned.
  */
 export function listStaticMediaUrls(rootFolder?: string): string[] {
-  const publicRoot = path.join(process.cwd(), "public");
-  const fromManifest = collectManifestUrls();
+  const all = getAllStaticImageUrls();
+  if (!rootFolder) return all;
 
-  let scanned: string[] = [];
-  if (rootFolder) {
-    const safe = rootFolder.replace(/^\/+/, "").replace(/\.\./g, "");
-    const subDir = path.join(publicRoot, safe);
-    if (subDir.startsWith(publicRoot) && fs.existsSync(subDir)) {
-      scanned = walkPublicDir(subDir, publicRoot);
-    }
-    const prefix = `/${safe}`;
-    const fromManifestInFolder = fromManifest.filter(
-      (u) => u === prefix || u.startsWith(`${prefix}/`),
-    );
-    return Array.from(new Set([...fromManifestInFolder, ...scanned])).sort();
-  }
-
-  scanned = walkPublicDir(publicRoot, publicRoot);
-  return Array.from(new Set([...fromManifest, ...scanned])).sort();
+  const safe = rootFolder.replace(/^\/+/, "").replace(/\.\./g, "");
+  const prefix = `/${safe}`;
+  return all.filter((u) => u === prefix || u.startsWith(`${prefix}/`));
 }
 
 export function staticItemFromUrl(url: string): StaticMediaItem {

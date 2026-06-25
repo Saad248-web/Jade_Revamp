@@ -35,6 +35,35 @@ function uniq(arr) {
   return Array.from(new Set(arr));
 }
 
+const IMAGE_EXTENSIONS = new Set([
+  ".webp",
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".gif",
+  ".svg",
+]);
+
+/** Top-level public folders omitted from the Media Library index. */
+const EXCLUDED_PUBLIC_FOLDERS = new Set(["assets"]);
+
+/** Full public image index for dashboard media APIs (avoids fs walks in serverless). */
+function collectAllStaticImages() {
+  const out = [];
+  function walk(absDir) {
+    for (const ent of safeReadDir(absDir)) {
+      if (absDir === PUBLIC_DIR && EXCLUDED_PUBLIC_FOLDERS.has(ent.name)) continue;
+      const full = path.join(absDir, ent.name);
+      if (ent.isDirectory()) walk(full);
+      else if (IMAGE_EXTENSIONS.has(path.extname(ent.name).toLowerCase())) {
+        out.push(toPublicUrl(full));
+      }
+    }
+  }
+  walk(PUBLIC_DIR);
+  return uniq(out).sort();
+}
+
 function collectWebps(absDir) {
   return walk(absDir)
     .filter((f) => {
@@ -416,10 +445,14 @@ async function main() {
   console.log(`Generating blur placeholders for ${blurCandidates.length} URLs…`);
   const blurByUrl = await buildBlurByUrl(blurCandidates);
 
+  const allStaticImages = collectAllStaticImages();
+  console.log(`Indexed ${allStaticImages.length} static images for Media Library…`);
+
   const out = {
     generatedAt: new Date().toISOString(),
     villasByFolder,
     experiencesByFolder,
+    allStaticImages,
     blurByUrl,
   };
 

@@ -3,7 +3,25 @@ import { withSentryConfig } from "@sentry/nextjs";
 /** @type {import('next').NextConfig} */
 const isProd = process.env.NODE_ENV === "production";
 
+/** Keep Vercel serverless bundles under the 250 MB limit (media APIs must not trace public/). */
+const mediaApiTraceExcludes = [
+  "./public/**/*",
+  "./node_modules/@img/sharp-libvips-darwin-x64/**/*",
+  "./node_modules/@img/sharp-libvips-darwin-arm64/**/*",
+  "./node_modules/@img/sharp-wasm32/**/*",
+];
+
 const nextConfig = {
+  experimental: {
+    outputFileTracingExcludes: {
+      "/api/dashboard/media": mediaApiTraceExcludes,
+      "/api/dashboard/media/[id]": mediaApiTraceExcludes,
+      "/api/dashboard/media/bulk": mediaApiTraceExcludes,
+      "/api/dashboard/media/folders": mediaApiTraceExcludes,
+      "/api/dashboard/media/static": mediaApiTraceExcludes,
+      "/api/dashboard/media/upload": mediaApiTraceExcludes,
+    },
+  },
   // Remove X-Powered-By header for security
   poweredByHeader: false,
 
