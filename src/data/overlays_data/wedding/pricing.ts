@@ -1,12 +1,8 @@
-import { WEDDING_VILLAS_OVERLAY_DATA } from "./villas/index";
+import { buildOnwardsPriceMap } from "@/lib/villas/canonicalOverlayHelpers";
+import { WEDDING_VILLA_IDS } from "./villas/index";
 
-/** Derived from per-villa `overlay.onwardsPrice` (single source of truth). */
+/** Derived from Jade_Property_Data.md via canonical portfolio. */
 export const WEDDING_PRICING_ONWARDS: Record<string, string> = {
-  default: "₹75,000",
-  ...Object.fromEntries(
-    Object.entries(WEDDING_VILLAS_OVERLAY_DATA).map(([id, entry]) => [
-      id,
-      entry.overlay.onwardsPrice,
-    ]),
-  ),
+  default: "₹1,00,000 + GST",
+  ...buildOnwardsPriceMap("wedding", WEDDING_VILLA_IDS),
 };

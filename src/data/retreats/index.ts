@@ -18,6 +18,9 @@ import { lemonTree } from "./lemon-tree";
 import { loungeFly } from "./lounge-fly";
 import { palatio } from "./palatio";
 
+import { enrichAllVillas } from "@/lib/villas/applyCanonicalOperational";
+import type { Villa } from "@/lib/types";
+
 export {
   magnolia,
   tranquil,
@@ -39,7 +42,7 @@ export {
 };
 
 /** Estate dome + hidden VILLAS stay in VILLAS for detail/booking; directory filters `hideFromVillasDirectory`. */
-export const VILLAS = [
+const VILLAS_RAW = [
   magnolia,
   tranquil,
   royalty,
@@ -58,6 +61,9 @@ export const VILLAS = [
   domeVillas,
   vannani,
 ];
+
+/** Public + booking villa records with canonical pricing/stats from Jade_Property_Data.md */
+export const VILLAS = enrichAllVillas(VILLAS_RAW) as Villa[];
 
 export const CATEGORIES = [
   "All",

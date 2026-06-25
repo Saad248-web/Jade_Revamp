@@ -1,6 +1,6 @@
 # Jade Hospitainment — ReVamp
 
-Marketing and booking platform for **Jade Hospitainment**: luxury private retreats, destination weddings, corporate offsites, and curated experiences near Bangalore. The site is a **Next.js 14** App Router application with typed retreat data in the repo, **PostgreSQL** for bookings and leads, optional **Razorpay** checkout, and a strong **SEO / GEO** layer (`sitemap`, `robots`, JSON-LD, `llms.txt`).
+Marketing and booking platform for **Jade Hospitainment**: luxury private retreats, destination weddings, corporate offsites, and curated experiences near Bangalore. The site is a **Next.js 14** App Router application with typed retreat data in the repo, **MongoDB** for bookings/leads/CMS/users, optional **Razorpay** checkout, **Jade Host** staff dashboard (NextAuth RBAC), and a strong **SEO / GEO** layer (`sitemap`, `robots`, JSON-LD, `llms.txt`).
 
 **Revision:** 2026-05-20
 
@@ -12,7 +12,7 @@ Marketing and booking platform for **Jade Hospitainment**: luxury private retrea
 |------|---------|
 | **Marketing** | Home, villa directory + detail, experience category pages, blogs, about, contact, careers |
 | **Conversion** | Global enquire overlay, wedding/Rathaa/partner flows, `/book` + success + Razorpay |
-| **Operations** | Password-gated `/admin`, booking APIs, optional Resend notifications |
+| **Operations** | Jade Host `/dashboard` (NextAuth RBAC), booking APIs, Axis Rooms integration stubs, optional Resend notifications |
 | **Discovery** | Per-villa metadata, spaces galleries, IndexNow hook, AI-oriented `public/llms.txt` |
 | **UX** | Lenis smooth scroll, GSAP/Framer sections, venue overlays with section tabs + scroll spy |
 
@@ -26,7 +26,7 @@ Marketing and booking platform for **Jade Hospitainment**: luxury private retrea
 | Styling | Tailwind CSS 3, container queries |
 | Motion | GSAP, Framer Motion (`MotionConfig` + `prefers-reduced-motion`), Lenis |
 | Media | `next/image`, prebuild blur manifest (`sharp` in scripts) |
-| Database | PostgreSQL via `pg` (local Docker Compose) |
+| Database | MongoDB via Mongoose (`MONGODB_URI`) |
 | Payments | Razorpay (order API + signed webhook) |
 | Email | Resend (optional) |
 | Observability | Sentry (`@sentry/nextjs`, optional DSN) |
@@ -148,8 +148,10 @@ Full template: [`.env.example`](.env.example).
 
 | Variable | Required | Purpose |
 |----------|----------|---------|
-| `POSTGRES_*` | For bookings | Connection used by `src/lib/db.ts` |
-| `ADMIN_PASSWORD` | Admin APIs | `x-admin-password` on GET/PATCH/DELETE bookings |
+| `MONGODB_URI` | Bookings + leads + CMS | Single MongoDB via `connectDB()` in `src/lib/db.ts` |
+| `ADMIN_PASSWORD` | Staff login | Legacy `/login` + `x-admin-password` on admin APIs |
+| `NEXTAUTH_SECRET` | Dashboard RBAC | NextAuth JWT (Phase 2b) |
+| `CRON_SECRET` | Cron routes | `Authorization: Bearer` on `/api/cron/*` |
 | `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` | Payments | `POST /api/payments/razorpay-order` |
 | `RAZORPAY_WEBHOOK_SECRET` | Webhook | HMAC verify on `POST /api/webhooks/razorpay` |
 | `NEXT_PUBLIC_PAYMENT_GATEWAY_KEY` | Checkout UI | Razorpay Checkout on `/book/success` |
@@ -174,7 +176,8 @@ Full template: [`.env.example`](.env.example).
 | `test` | Vitest — `bookingDetailsValidation`, `paymentService` |
 | `test:e2e` | Playwright vs dev server |
 | `test:e2e:ci` | `build` + production server + Playwright (`CI=true`) |
-| `db:up` / `db:down` / `db:reset` | Docker Compose PostgreSQL |
+| `db:up` / `db:down` / `db:reset` | **Legacy** Docker Compose PostgreSQL (deprecated — use Atlas/local Mongo) |
+| `db:seed` | `node scripts/seed-villas.mjs` — seed confirmed villas |
 | `db:migrate` | Apply SQL migrations (weekend source, careers indexing, etc.) |
 | `db:reset:schema` | `scripts/reset-local-db.mjs` |
 | `api:smoke` | Phase 2 smoke: POST leads + careers apply (dev server running) |

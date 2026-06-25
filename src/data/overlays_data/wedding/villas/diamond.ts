@@ -1,13 +1,10 @@
-import { diamond } from "@/data/retreats/diamond";
 import type { WeddingVillaOverlayEntry } from "../types";
 
-/** Wedding overlay — source: public/Wedding_Villa_Overlay/Daimond.svg */
 export const diamondWeddingOverlay = {
-  ...diamond,
-  type: "EXPANSIVE POOLSIDE WEDDING VENUE",
-  location: "Kanakapura Road",
+  id: "diamond",
+  type: "9-BEDROOM EVENT ESTATE",
   description:
-    "Diamond is a three-acre private event venue designed for large-format weddings and social gatherings. Surrounded by coconut trees and anchored by a 50,000 sq ft lawn and poolside setup, the space supports high-capacity celebrations with clear zoning for ceremonies, dining, and entertainment.",
+    "Diamond Pavilion is built for large-scale weddings on a 1-acre lawn with infinity pool and dormitory support. Clear zoning for ceremonies, dining, and entertainment — seated 200–400, floating up to 2,000 guests.",
   perfectForTags: [
     "Wedding",
     "Reception",
@@ -15,11 +12,6 @@ export const diamondWeddingOverlay = {
     "Sangeet",
     "Large Celebrations",
   ],
-  stats: {
-    ...diamond.stats,
-    stay: "50 Guests",
-    events: "1500 Guests",
-  },
   categories: [
     "Wedding",
     "Reception",
@@ -28,7 +20,6 @@ export const diamondWeddingOverlay = {
     "Large Celebrations",
   ],
   overlay: {
-    onwardsPrice: "₹99,000",
-    parking: "150+",
+    parking: "500+",
   },
 } as WeddingVillaOverlayEntry;

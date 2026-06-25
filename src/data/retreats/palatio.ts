@@ -222,34 +222,7 @@ const palatioBase = {
       ],
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 12 PAX",
-          sublabel: "≈ ₹2,708 / head",
-          price: "₹32,500 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: ["Full venue access", "Overnight villa stay", "Pool access"],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (2 PM · 12 AM)",
-      packages: [
-        {
-          label: "Up to 20 PAX",
-          sublabel: "≈ ₹1,125 / head",
-          price: "₹22,500 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,099 + taxes" },
-      ],
-      features: ["Private venue access", "Complimentary high tea"],
-    },
-  },
+
   locationDetails: {
     mapImage: "/Villa_Retreats/Palatio/1-Hero/Hero 1.webp",
     address: "Palatio, Harohalli, Near Art of Living, Bangalore — 562112",

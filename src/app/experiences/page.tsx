@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
-import ExperiencesHero from "@/components/ExperiencesHero";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import Footer from "@/components/Footer";
 import JsonLd from "@/components/seo/JsonLd";
-import dynamic from "next/dynamic";
+import { resolveLandingSections } from "@/lib/cms/landingCms";
+import { LandingPageRenderer } from "@/components/landing/LandingPageRenderer";
 
-const ExperiencesScrollSection = dynamic(
-  () => import("@/components/ExperiencesScrollSection"),
-  { ssr: false },
-);
-const Footer = dynamic(() => import("@/components/Footer"), { ssr: false });
+const TEMPLATE_KEY = "landing/experiences";
 
 export const metadata: Metadata = {
   title: "Curated Experiences",
@@ -23,6 +20,8 @@ export const metadata: Metadata = {
     url: "https://jadehospitainment.com/experiences",
   },
 };
+
+export const revalidate = 60;
 
 const breadcrumbSchema = {
   "@context": "https://schema.org",
@@ -57,16 +56,14 @@ const tripSchema = {
 };
 
 export default function ExperiencesPage() {
+  const sections = resolveLandingSections(TEMPLATE_KEY, null);
+
   return (
-    <main className="bg-[#1A1C1E] min-h-screen">
+    <main className="min-h-screen bg-[#1A1C1E]">
       <JsonLd schema={breadcrumbSchema} />
       <JsonLd schema={tripSchema} />
       <Navbar />
-      <ExperiencesHero />
-      {/* Start of Content Sections - Reusing existing sections or placeholders for now */}
-      <div id="experiences-list">
-        <ExperiencesScrollSection />
-      </div>
+      <LandingPageRenderer templateKey={TEMPLATE_KEY} sections={sections} />
       <Footer />
       <MobileBottomNav />
     </main>

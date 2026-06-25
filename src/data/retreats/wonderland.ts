@@ -154,34 +154,7 @@ const wonderlandBase = {
       icon: "Heart",
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 4 PAX",
-          sublabel: "≈ ₹3,750 / head",
-          price: "₹14,999 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: ["Full villa access", "Complimentary breakfast", "Rock Pool"],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (Selectable between 2 PM and 12 AM)",
-      packages: [
-        {
-          label: "Up to 8 PAX",
-          sublabel: "≈ ₹1,875 / head",
-          price: "₹14,999 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,099 + taxes" },
-      ],
-      features: ["Party Deck", "Music System", "Complimentary high-tea"],
-    },
-  },
+
   locationDetails: {
     mapImage: "",
     address:

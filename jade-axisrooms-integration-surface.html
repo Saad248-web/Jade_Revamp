@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Jade ReVamp — Axis Rooms Integration Surface</title>
+<style>
+  :root { --ink: #1a1c1e; --muted: #555; --border: #ddd; --accent: #b8860b; }
+  * { box-sizing: border-box; }
+  body { font-family: Georgia, "Times New Roman", serif; color: var(--ink); max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; line-height: 1.5; }
+  h1 { font-size: 1.75rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; }
+  h2 { font-size: 1.35rem; margin-top: 2.5rem; color: var(--accent); page-break-after: avoid; }
+  h3 { font-size: 1.05rem; margin-top: 1.25rem; font-family: ui-sans-serif, system-ui, sans-serif; }
+  p, li { font-size: 0.95rem; }
+  .meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 2rem; }
+  pre { background: #f6f6f6; border: 1px solid var(--border); padding: 1rem; overflow-x: auto; font-size: 0.72rem; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 1rem 0; }
+  th, td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; vertical-align: top; }
+  th { background: #f0f0f0; }
+  .note { background: #fff8e6; border-left: 4px solid var(--accent); padding: 0.75rem 1rem; margin: 1rem 0; font-size: 0.9rem; }
+  @media print { body { max-width: none; } pre { font-size: 0.65rem; } }
+</style>
+</head>
+<body>
+<h1>Jade ReVamp — Axis Rooms Integration Surface</h1>
+<p class="meta">Generated 2026-06-24 · Factual verbatim audit · Repo: Jade_ReVamp</p>
+
+<div class="note">
+  <strong>Legacy path note:</strong> The audit template references <code>staah/*</code> paths. Those files do not exist in this repo.
+  The live channel-manager implementation uses <code>axisRooms/*</code> and <code>axisrooms</code> API routes (documented below).
+</div>
+
+<h2>1. CHANNEL-MANAGER STUBS (requested staah paths)</h2>
+<h3>src/lib/staah/client.ts</h3><p><strong>NOT FOUND</strong></p>
+<p><em>Exported functions: NOT FOUND (file absent)</em></p>
+<h3>src/app/api/webhooks/staah/route.ts</h3><p><strong>NOT FOUND</strong></p>
+<p><em>Exported functions: NOT FOUND (file absent)</em></p>
+<h3>src/app/api/cron/staah-retry/route.ts</h3><p><strong>NOT FOUND</strong></p>
+<p><em>Exported functions: NOT FOUND (file absent)</em></p>
+
+<h2>1b. ACTUAL AXIS ROOMS IMPLEMENTATION</h2>
+<h3>src/lib/axisRooms/client.ts</h3><pre>/** Axis Rooms channel manager client — live HTTP when credentials + endpoint spec arrive. */
+
+import { auditLog } from "@/lib/audit/auditLog";
+import type { AxisRoomsPushResult } from "./types";
+
+type AxisRoomsBooking = {
+  _id: unknown;
+  checkIn?: string;
+  checkOut?: string;
+};
+
+function getApiKey(): string | null {
+  return process.env.AXIS_ROOMS_API_KEY?.trim() || null;
+}
+
+function getBaseUrl(): string {
+  return (
+    process.env.AXIS_ROOMS_API_BASE_URL?.trim() ||
+    "https://api.axisrooms.com"
+  );
+}
+
+/**
+ * Push a confirmed reservation to Axis Rooms.
+ * Returns ok:false until certified endpoint is wired; never throws on stub.
+ */
+export async function pushAxisRoomsReservation(
+  booking: AxisRoomsBooking,
+): Promise&lt;AxisRoomsPushResult&gt; {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    return { ok: false, error: "AXIS_ROOMS_API_KEY not configured" };
+  }
+
+  const baseUrl = getBaseUrl();
+  const endpoint = `${baseUrl.replace(/\/$/, "")}/reservations`;
+
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        externalBookingId: String(booking._id),
+        checkIn: booking.checkIn,
+        checkOut: booking.checkOut,
+      }),
+      signal: AbortSignal.timeout(25_000),
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() =&gt; "");
+      await auditLog({
+        action: "axisrooms.push",
+        targetType: "booking",
+        targetId: String(booking._id),
+        metadata: { ok: false, status: res.status, body: text.slice(0, 500) },
+      });
+      return {
+        ok: false,
+        error: `Axis Rooms push failed (${res.status})`,
+      };
+    }
+
+    let data: { reservationId?: string; id?: string } = {};
+    try {
+      data = (await res.json()) as typeof data;
+    } catch {
+      /* empty body ok */
+    }
+
+    const reservationId = data.reservationId ?? data.id;
+    await auditLog({
+      action: "axisrooms.push",
+      targetType: "booking",
+      targetId: String(booking._id),
+      metadata: { ok: true, reservationId },
+    });
+
+    return { ok: true, reservationId };
+  } catch {
+    // Endpoint not live yet — audit stub, do not mark synced
+    await auditLog({
+      action: "axisrooms.push",
+      targetType: "booking",
+      targetId: String(booking._id),
+      metadata: { stub: true, endpoint },
+    });
+    return {
+      ok: false,
+      error: "Axis Rooms endpoint unreachable — awaiting certified API",
+      stub: true,
+    };
+  }
+}
+
+export async function pushAxisRoomsCancellation(
+  booking: AxisRoomsBooking,
+): Promise&lt;AxisRoomsPushResult&gt; {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    return { ok: false, error: "AXIS_ROOMS_API_KEY not configured" };
+  }
+
+  const baseUrl = getBaseUrl();
+  const endpoint = `${baseUrl.replace(/\/$/, "")}/reservations/${String(booking._id)}/cancel`;
+
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({ externalBookingId: String(booking._id) }),
+      signal: AbortSignal.timeout(25_000),
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() =&gt; "");
+      await auditLog({
+        action: "axisrooms.cancel",
+        targetType: "booking",
+        targetId: String(booking._id),
+        metadata: { ok: false, status: res.status, body: text.slice(0, 500) },
+      });
+      return { ok: false, error: `Axis Rooms cancel failed (${res.status})` };
+    }
+
+    await auditLog({
+      action: "axisrooms.cancel",
+      targetType: "booking",
+      targetId: String(booking._id),
+      metadata: { ok: true },
+    });
+    return { ok: true };
+  } catch {
+    await auditLog({
+      action: "axisrooms.cancel",
+      targetType: "booking",
+      targetId: String(booking._id),
+      metadata: { stub: true, endpoint },
+    });
+    return {
+      ok: false,
+      error: "Axis Rooms cancel endpoint unreachable",
+      stub: true,
+    };
+  }
+}
+</pre>
+<h3>Exported functions — src/lib/axisRooms/client.ts</h3>
+<table>
+<tr><th>Function</th><th>Signature</th><th>Description</th></tr>
+<tr><td><code>pushAxisRoomsReservation</code></td><td><code>(booking: AxisRoomsBooking) =&gt; Promise&lt;AxisRoomsPushResult&gt;</code></td><td>POST confirmed reservation to Axis Rooms API; returns ok:false when key missing or endpoint unreachable.</td></tr>
+<tr><td><code>pushAxisRoomsCancellation</code></td><td><code>(booking: AxisRoomsBooking) =&gt; Promise&lt;AxisRoomsPushResult&gt;</code></td><td>POST cancellation to Axis Rooms API for a booking.</td></tr>
+</table>
+
+<h3>src/app/api/webhooks/axisrooms/route.ts</h3><pre>import { NextRequest, NextResponse } from "next/server";
+import { auditLog } from "@/lib/audit/auditLog";
+import { timingSafeStringEqual } from "@/lib/security/timingSafe";
+
+export const dynamic = "force-dynamic";
+
+function verifyAxisRoomsWebhook(req: NextRequest): boolean {
+  const webhookSecret = process.env.AXIS_ROOMS_WEBHOOK_SECRET?.trim();
+  if (webhookSecret) {
+    const authHeader = req.headers.get("authorization") ?? "";
+    const token = authHeader.startsWith("Bearer ")
+      ? authHeader.slice(7)
+      : authHeader;
+    return timingSafeStringEqual(token, webhookSecret);
+  }
+
+  const apiKey = process.env.AXIS_ROOMS_API_KEY?.trim();
+  if (!apiKey) return false;
+  const authHeader = req.headers.get("authorization") ?? "";
+  const token = authHeader.startsWith("Bearer ")
+    ? authHeader.slice(7)
+    : authHeader;
+  return timingSafeStringEqual(token, apiKey);
+}
+
+/** Axis Rooms inbound webhook — processes OTA reservations when payload spec is live. */
+export async function POST(req: NextRequest) {
+  if (!process.env.AXIS_ROOMS_API_KEY?.trim()) {
+    return NextResponse.json(
+      {
+        ok: false,
+        blocked: "AXIS_ROOMS_API_KEY not configured — see NEEDS_FROM_USER.md",
+      },
+      { status: 503 },
+    );
+  }
+
+  if (!verifyAxisRoomsWebhook(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const payload = await req.json();
+    const { parseAxisRoomsInbound } = await import(
+      "@/lib/axisRooms/parseInbound"
+    );
+    const parsed = parseAxisRoomsInbound(payload);
+
+    await auditLog({
+      action: "axisrooms.inbound",
+      targetType: "webhook",
+      metadata: {
+        eventType: parsed?.eventType ?? "unknown",
+        keys: Object.keys((payload as object) ?? {}),
+      },
+    });
+
+    // Full booking upsert wired when Axis Rooms provides payload contract
+    return NextResponse.json({
+      ok: true,
+      received: true,
+      eventType: parsed?.eventType ?? "unknown",
+    });
+  } catch (e) {
+    console.error("[POST /api/webhooks/axisrooms]", e);
+    return NextResponse.json({ error: "Failed" }, { status: 500 });
+  }
+}
+</pre>
+<h3>Exported functions — src/app/api/webhooks/axisrooms/route.ts</h3>
+<table>
+<tr><th>Function</th><th>Signature</th><th>Description</th></tr>
+<tr><td><code>POST</code></td><td><code>(req: NextRequest) =&gt; Promise&lt;NextResponse&gt;</code></td><td>Verifies Bearer token, parses inbound payload stub, audits event; does not upsert bookings yet.</td></tr>
+<tr><td><code>verifyAxisRoomsWebhook</code></td><td><code>(req: NextRequest) =&gt; boolean</code> (module-private)</td><td>Compares Authorization header to AXIS_ROOMS_WEBHOOK_SECRET or AXIS_ROOMS_API_KEY.</td></tr>
+</table>
+
+<h3>src/app/api/cron/axisrooms-retry/route.ts</h3><pre>import { NextRequest, NextResponse } from "next/server";
+import { connectDB } from "@/lib/db";
+import { BookingModel } from "@/models/Booking";
+import {
+  pushAxisRoomsCancellation,
+  pushAxisRoomsReservation,
+} from "@/lib/axisRooms/client";
+
+export const dynamic = "force-dynamic";
+
+function verifyCron(req: NextRequest): boolean {
+  const secret = process.env.CRON_SECRET?.trim();
+  if (!secret) return false;
+  return req.headers.get("authorization") === `Bearer ${secret}`;
+}
+
+export async function GET(req: NextRequest) {
+  if (!verifyCron(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (!process.env.AXIS_ROOMS_API_KEY?.trim()) {
+    return NextResponse.json({
+      ok: true,
+      blocked: "AXIS_ROOMS_API_KEY not configured — see NEEDS_FROM_USER.md",
+      processed: 0,
+    });
+  }
+
+  try {
+    await connectDB();
+    const pending = await BookingModel.find({
+      $or: [
+        {
+          status: "confirmed",
+          axisRoomsSynced: false,
+          axisRoomsSyncAttempts: { $lt: 10 },
+        },
+        {
+          status: { $in: ["cancelled", "conflict"] },
+          axisRoomsCancelSynced: false,
+          axisRoomsSyncAttempts: { $lt: 10 },
+        },
+      ],
+    }).limit(20);
+
+    let processed = 0;
+    for (const b of pending) {
+      let succeeded = false;
+      try {
+        if (b.status === "confirmed" &amp;&amp; !b.axisRoomsSynced) {
+          const result = await pushAxisRoomsReservation(b);
+          if (result.ok) {
+            b.axisRoomsSynced = true;
+            if (result.reservationId) {
+              b.axisRoomsReservationId = result.reservationId;
+            }
+            b.axisRoomsLastError = undefined;
+            succeeded = true;
+          } else {
+            b.axisRoomsLastError = result.error ?? "push failed";
+          }
+        } else if (
+          ["cancelled", "conflict"].includes(b.status) &amp;&amp;
+          !b.axisRoomsCancelSynced
+        ) {
+          const result = await pushAxisRoomsCancellation(b);
+          if (result.ok) {
+            b.axisRoomsCancelSynced = true;
+            b.axisRoomsLastError = undefined;
+            succeeded = true;
+          } else {
+            b.axisRoomsLastError = result.error ?? "cancel failed";
+          }
+        }
+        processed += 1;
+      } catch (e) {
+        b.axisRoomsLastError = e instanceof Error ? e.message : "unknown";
+      }
+      if (!succeeded) {
+        b.axisRoomsSyncAttempts = (b.axisRoomsSyncAttempts ?? 0) + 1;
+      }
+      await b.save();
+    }
+
+    return NextResponse.json({ ok: true, processed });
+  } catch (e) {
+    console.error("[cron/axisrooms-retry]", e);
+    return NextResponse.json({ error: "Failed" }, { status: 500 });
+  }
+}
+</pre>
+<h3>Exported functions — src/app/api/cron/axisrooms-retry/route.ts</h3>
+<table>
+<tr><th>Function</th><th>Signature</th><th>Description</th></tr>
+<tr><td><code>GET</code></td><td><code>(req: NextRequest) =&gt; Promise&lt;NextResponse&gt;</code></td><td>Cron job: retries outbound push/cancel for unsynced bookings (max 20, attempts &lt; 10).</td></tr>
+<tr><td><code>verifyCron</code></td><td><code>(req: NextRequest) =&gt; boolean</code> (module-private)</td><td>Requires Authorization: Bearer CRON_SECRET.</td></tr>
+</table>
+
+<h2>2. BOOKING MODEL — src/models/Booking.ts</h2>
+<h3>Full file</h3><pre>import { Schema, model, models, type InferSchemaType } from "mongoose";
+
+const AddOnLineSchema = new Schema(
+  { id: String, quantity: { type: Number, default: 1 } },
+  { _id: false },
+);
+
+const PricingSnapshotSchema = new Schema(
+  {
+    basePricePaise: Number,
+    dayOutBasePricePaise: Number,
+    stayBasePax: Number,
+    dayOutBasePax: Number,
+    extraPaxStayPaise: Number,
+    extraPaxDayOutPaise: Number,
+    chargeableHeadsRule: {
+      childFreeAgeLimit: Number,
+      countInfants: Boolean,
+    },
+    eventTier: {
+      id: String,
+      label: String,
+      mode: String,
+      pricePaise: Number,
+      stayIncludedPax: Number,
+    },
+    cleaningFeePaise: Number,
+    securityDepositPaise: Number,
+    taxPercent: Number,
+  },
+  { _id: false },
+);
+
+const PricingSchema = new Schema(
+  {
+    basePaise: Number,
+    extraPaxPaise: Number,
+    eventPaise: Number,
+    addOnPaise: Number,
+    taxPaise: Number,
+    totalPaise: Number,
+    quoteOnlyAddOns: [String],
+    snapshot: PricingSnapshotSchema,
+  },
+  { _id: false },
+);
+
+const PaymentSchema = new Schema(
+  {
+    gateway: { type: String, enum: ["razorpay", "external"], default: "razorpay" },
+    paymentPlan: { type: String, enum: ["full", "deposit"], default: "full" },
+    orderId: String,
+    paymentId: String,
+    processedPaymentId: String,
+    amountDuePaise: Number,
+    depositPaise: Number,
+    depositPaidPaise: { type: Number, default: 0 },
+    balancePaise: Number,
+    balanceDueDate: String,
+    refundedPaise: { type: Number, default: 0 },
+    status: {
+      type: String,
+      enum: [
+        "pending",
+        "paid",
+        "deposit_paid",
+        "failed",
+        "refunded",
+        "partially_refunded",
+        "external",
+        "not_applicable",
+      ],
+      default: "pending",
+    },
+  },
+  { _id: false },
+);
+
+const BookingSchema = new Schema(
+  {
+    villaId: { type: Schema.Types.ObjectId, ref: "Villa", required: true },
+    bookingType: {
+      type: String,
+      enum: ["stay", "day_out", "event"],
+      default: "stay",
+    },
+    guestDetails: {
+      name: String,
+      email: String,
+      phone: String,
+    },
+    checkIn: { type: String, required: true },
+    checkOut: { type: String, required: true },
+    guests: { type: Number, default: 1 },
+    adults: { type: Number, default: 1 },
+    children: { type: Number, default: 0 },
+    pets: { type: Number, default: 0 },
+    eventType: String,
+    eventGuests: Number,
+    eventTierId: String,
+    eventStartDate: String,
+    eventEndDate: String,
+    addOns: [AddOnLineSchema],
+    pricing: PricingSchema,
+    payment: PaymentSchema,
+    bookingToken: { type: String, required: true, unique: true },
+    status: {
+      type: String,
+      enum: ["pending", "confirmed", "cancelled", "expired", "conflict"],
+      default: "pending",
+    },
+    expiresAt: Date,
+    stayStatus: {
+      type: String,
+      enum: ["upcoming", "in_house", "departed", "turnover", "ready"],
+      default: "upcoming",
+    },
+    source: {
+      type: String,
+      enum: [
+        "website",
+        "axisrooms_airbnb",
+        "axisrooms_booking_com",
+        "admin_manual",
+      ],
+      default: "website",
+    },
+    axisRoomsSynced: { type: Boolean, default: false },
+    axisRoomsCancelSynced: { type: Boolean, default: true },
+    axisRoomsSyncAttempts: { type: Number, default: 0 },
+    axisRoomsLastError: String,
+    axisRoomsReservationId: String,
+    notes: String,
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: Date,
+    deletedBy: { type: Schema.Types.ObjectId, ref: "User" },
+  },
+  { timestamps: true },
+);
+
+BookingSchema.index(
+  { "payment.processedPaymentId": 1 },
+  { unique: true, partialFilterExpression: { "payment.processedPaymentId": { $exists: true, $type: "string" } } },
+);
+
+export type BookingDoc = InferSchemaType&lt;typeof BookingSchema&gt;;
+export const BookingModel = models.Booking ?? model("Booking", BookingSchema);
+</pre>
+<h3>Field call-outs</h3>
+<ul>
+<li><strong>checkIn / checkOut:</strong> <code>String</code>, both <code>required: true</code>. No inclusivity comment in schema; night locks use <code>cur &lt; checkOut</code> (check-out exclusive for stay nights).</li>
+<li><strong>guestDetails:</strong> <code>{ name: String, email: String, phone: String }</code> (sub-schema, not individually required).</li>
+<li><strong>pricing:</strong> <code>basePaise, extraPaxPaise, eventPaise, addOnPaise, taxPaise, totalPaise, quoteOnlyAddOns[], snapshot</code>.</li>
+<li><strong>payment:</strong> gateway enum <code>["razorpay","external"]</code>; status enum <code>pending|paid|deposit_paid|failed|refunded|partially_refunded|external|not_applicable</code>.</li>
+<li><strong>status enum:</strong> <code>pending, confirmed, cancelled, expired, conflict</code> (default pending).</li>
+<li><strong>stayStatus enum:</strong> <code>upcoming, in_house, departed, turnover, ready</code> (default upcoming).</li>
+<li><strong>source enum:</strong> <code>website, axisrooms_airbnb, axisrooms_booking_com, admin_manual</code> (default website).</li>
+<li><strong>Channel-manager fields:</strong> <code>axisRoomsSynced</code> (Boolean, default false), <code>axisRoomsCancelSynced</code> (Boolean, default true), <code>axisRoomsSyncAttempts</code> (Number, default 0), <code>axisRoomsLastError</code> (String), <code>axisRoomsReservationId</code> (String). No <code>staah*</code> fields.</li>
+<li><strong>Indexes:</strong> unique partial on <code>payment.processedPaymentId</code>; plus Mongoose <code>bookingToken</code> unique from field definition.</li>
+</ul>
+
+<h2>3. VILLA MODEL — src/models/Villa.ts (+ AxisRoomsSchema)</h2>
+<h3>src/models/Villa.ts</h3><pre>import { Schema, model, models, type InferSchemaType } from "mongoose";
+import { AxisRoomsSchema, VillaContentSchema } from "./VillaContent";
+
+const WeddingTierSchema = new Schema(
+  {
+    id: { type: String, required: true },
+    label: { type: String, required: true },
+    mode: { type: String, enum: ["half_day", "full_day"], required: true },
+    maxGuests: { type: Number, required: true },
+    pricePaise: { type: Number, required: true },
+    stayIncludedPax: { type: Number, default: 0 },
+  },
+  { _id: false },
+);
+
+const VillaSettingsSchema = new Schema(
+  {
+    checkInTime: { type: String, default: "14:00" },
+    checkOutTime: { type: String, default: "11:00" },
+    securityDepositPaise: { type: Number, default: 0 },
+    taxPercent: { type: Number, default: 18 },
+    cleaningFeePaise: { type: Number, default: 0 },
+    cancellationPolicy: { type: String, default: "[TO BE CONFIRMED]" },
+  },
+  { _id: false },
+);
+
+const VillaSchema = new Schema(
+  {
+    slug: { type: String, required: true },
+    retreatId: { type: String },
+    shortName: { type: String },
+    type: { type: String },
+    location: { type: String },
+    thumbnail: { type: String },
+    portfolioSource: {
+      type: String,
+      enum: ["canonical", "legacy", "coming_soon"],
+    },
+    displayStats: {
+      stay: String,
+      events: String,
+      bhk: String,
+      lawn: String,
+      villaArea: String,
+      pool: String,
+    },
+    notes: { type: String, default: "" },
+    name: { type: String, required: true },
+    basePricePaise: { type: Number, required: true },
+    dayOutBasePricePaise: { type: Number, required: true },
+    stayBasePax: { type: Number, required: true },
+    dayOutBasePax: { type: Number, required: true },
+    stayMaxPax: { type: Number, required: true },
+    extraPaxStayPaise: { type: Number, default: 200000 },
+    extraPaxDayOutPaise: { type: Number, default: 100000 },
+    weddingVenue: { type: Boolean, default: false },
+    weddingTiers: [WeddingTierSchema],
+    settings: { type: VillaSettingsSchema, required: true },
+    addOnAvailability: [String],
+    depositPercent: { type: Number, default: 0 },
+    depositPaise: { type: Number },
+    /** Axis Rooms channel manager mapping. */
+    axisRooms: { type: AxisRoomsSchema, default: undefined },
+    /** Marketing + detail-page content (drives public /villas/[id]). */
+    content: { type: VillaContentSchema, default: () =&gt; ({}) },
+    status: {
+      type: String,
+      enum: ["active", "maintenance", "hidden"],
+      default: "active",
+    },
+    bookable: { type: Boolean, default: true },
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: Date,
+    deletedBy: { type: Schema.Types.ObjectId, ref: "User" },
+  },
+  { timestamps: true },
+);
+
+VillaSchema.index(
+  { slug: 1 },
+  { unique: true, partialFilterExpression: { isDeleted: false } },
+);
+VillaSchema.index(
+  { retreatId: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      isDeleted: false,
+      retreatId: { $type: "string" },
+    },
+  },
+);
+
+export type VillaDoc = InferSchemaType&lt;typeof VillaSchema&gt;;
+export const VillaModel = models.Villa ?? model("Villa", VillaSchema);
+</pre>
+<h3>src/models/VillaContent.ts (AxisRoomsSchema excerpt)</h3><pre>import { Schema } from "mongoose";
+
+export const VillaContentSchema = new Schema(
+  {
+    description: { type: String, default: "" },
+    socialProof: { type: String, default: "" },
+    categories: { type: [String], default: [] },
+    perfectForTags: { type: [String], default: [] },
+    perfectForCards: {
+      type: [{ title: String, image: String }],
+      default: [],
+    },
+    amenities: {
+      type: [
+        {
+          label: String,
+          icon: String,
+          description: String,
+        },
+      ],
+      default: [],
+    },
+    services: {
+      type: [
+        {
+          title: String,
+          description: String,
+          footer: String,
+          icon: String,
+        },
+      ],
+      default: [],
+    },
+    propertyDetails: {
+      type: [
+        {
+          label: String,
+          description: String,
+          icon: String,
+        },
+      ],
+      default: [],
+    },
+    activities: {
+      type: [
+        {
+          title: String,
+          image: String,
+          description: String,
+        },
+      ],
+      default: [],
+    },
+    categorizedSpaces: {
+      type: [
+        {
+          id: String,
+          title: String,
+          category: String,
+          amenities: [String],
+          images: [String],
+        },
+      ],
+      default: [],
+    },
+    spaces: {
+      type: [{ name: String, image: String }],
+      default: [],
+    },
+    images: { type: [String], default: [] },
+    locationDetails: {
+      mapImage: { type: String, default: "" },
+      address: { type: String, default: "" },
+      distance: { type: String, default: "" },
+      nearby: {
+        type: [{ label: String, distance: String }],
+        default: [],
+      },
+      googleMapsUrl: { type: String, default: "" },
+    },
+    video: {
+      youtubeUrl: { type: String, default: "" },
+      thumbnail: { type: String, default: "" },
+      duration: { type: String, default: "" },
+    },
+    faq: {
+      type: [{ question: String, answer: String }],
+      default: [],
+    },
+    hideFromVillasDirectory: { type: Boolean, default: false },
+  },
+  { _id: false },
+);
+
+export const AxisRoomsSchema = new Schema(
+  {
+    propertyId: String,
+    roomTypeId: String,
+    ratePlanId: String,
+    apiKeyConfigured: { type: Boolean, default: false },
+  },
+  { _id: false },
+);
+</pre>
+<h3>Field call-outs</h3>
+<ul>
+<li><strong>axisRooms shape:</strong> <code>{ propertyId: String, roomTypeId: String, ratePlanId: String, apiKeyConfigured: Boolean (default false) }</code></li>
+<li><strong>staah object:</strong> NOT FOUND on Villa schema.</li>
+<li><strong>basePricePaise:</strong> Number, required.</li>
+<li><strong>Occupancy:</strong> <code>stayBasePax</code>, <code>dayOutBasePax</code>, <code>stayMaxPax</code> — all Number, required.</li>
+<li><strong>Per-extra-guest:</strong> <code>extraPaxStayPaise</code> (default 200000), <code>extraPaxDayOutPaise</code> (default 100000).</li>
+<li><strong>Wedding/event tiers:</strong> <code>weddingTiers[]</code> with <code>id, label, mode (half_day|full_day), maxGuests, pricePaise, stayIncludedPax</code>; <code>weddingVenue</code> Boolean.</li>
+<li><strong>Indexes:</strong> unique partial <code>slug</code> (isDeleted false); unique partial <code>retreatId</code>.</li>
+</ul>
+
+<h2>4. IDEMPOTENCY + LOCKS</h2>
+<h3>WebhookEvent — src/models/WebhookEvent.ts</h3>
+<h3>Full file</h3><pre>import { Schema, model, models } from "mongoose";
+
+const WebhookEventSchema = new Schema(
+  {
+    eventId: { type: String, required: true },
+    source: { type: String, enum: ["razorpay", "axisrooms"], required: true },
+    status: { type: String, default: "processed" },
+  },
+  { timestamps: { createdAt: true, updatedAt: false } },
+);
+
+WebhookEventSchema.index({ eventId: 1, source: 1 }, { unique: true });
+
+export const WebhookEventModel =
+  models.WebhookEvent ?? model("WebhookEvent", WebhookEventSchema);
+</pre>
+<p>Unique compound index: <code>{ eventId: 1, source: 1 }</code> where source enum is <code>razorpay | axisrooms</code>.</p>
+
+<h3>VillaNightlock — src/models/VillaNightlock.ts</h3>
+<h3>Full file</h3><pre>import { Schema, model, models } from "mongoose";
+
+const VillaNightlockSchema = new Schema(
+  {
+    villaId: { type: Schema.Types.ObjectId, ref: "Villa", required: true },
+    date: { type: String, required: true },
+    bookingId: { type: Schema.Types.ObjectId, ref: "Booking", required: true },
+  },
+  { timestamps: false },
+);
+
+VillaNightlockSchema.index({ villaId: 1, date: 1 }, { unique: true });
+
+export const VillaNightlockModel =
+  models.VillaNightlock ?? model("VillaNightlock", VillaNightlockSchema);
+</pre>
+<p>Unique compound index: <code>{ villaId: 1, date: 1 }</code>.</p>
+
+<h2>5. BOOKING SERVICE</h2>
+<h3>Exported functions — src/lib/bookings/mongoStore.ts (MongoBookingStore + helpers)</h3>
+<table>
+<tr><th>Name</th><th>Params</th><th>Return</th></tr>
+<tr><td>createPending</td><td><code>params: CreateBookingParams</code></td><td><code>Promise&lt;BookingRecord&gt;</code></td></tr>
+<tr><td>findById</td><td><code>id: string</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
+<tr><td>findByToken</td><td><code>token: string</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
+<tr><td>findByOrderId</td><td><code>orderId: string</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
+<tr><td>listActive</td><td><code>filters?: { villaId?: string }</code></td><td><code>Promise&lt;BookingRecord[]&gt;</code></td></tr>
+<tr><td>confirmPayment</td><td><code>{ bookingId, orderId, paymentId, eventId }</code></td><td><code>Promise&lt;{ ok: boolean; alreadyConfirmed?: boolean }&gt;</code></td></tr>
+<tr><td>expirePending</td><td><code>now: Date</code></td><td><code>Promise&lt;number&gt;</code></td></tr>
+<tr><td>updateStayStatus</td><td><code>id: string, stayStatus: StayStatus</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
+<tr><td>cancelBooking</td><td><code>id: string, userId?: string</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
+<tr><td>updateNotes</td><td><code>id: string, notes: string</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
+<tr><td>createManual</td><td><code>CreateBookingParams &amp; { source?, status? }</code></td><td><code>Promise&lt;BookingRecord&gt;</code></td></tr>
+<tr><td>softDelete</td><td><code>id: string, userId?: string</code></td><td><code>Promise&lt;boolean&gt;</code></td></tr>
+<tr><td>getAvailability</td><td><code>villaId, from, to: string</code></td><td><code>Promise&lt;{ bookedDates, blockedDates }&gt;</code></td></tr>
+<tr><td>getBookingStore</td><td><code>()</code></td><td><code>MongoBookingStore</code></td></tr>
+<tr><td>getStubVillaBySlug</td><td><code>slug: string</code></td><td>stub object or undefined</td></tr>
+<tr><td>findVillaBySlug</td><td><code>slug: string</code></td><td><code>Promise&lt;Villa doc | stub&gt;</code></td></tr>
+</table>
+
+<h3>Exported functions — src/lib/bookings/nightLocks.ts</h3>
+<table>
+<tr><th>Name</th><th>Params</th><th>Return</th></tr>
+<tr><td>acquireNightLocks</td><td><code>{ villaId: ObjectId, bookingId: ObjectId, dates: string[], session }</code></td><td><code>Promise&lt;{ ok: true } | { ok: false, conflictDate: string }&gt;</code></td></tr>
+<tr><td>releaseNightLocks</td><td><code>bookingId: ObjectId, session?</code></td><td><code>Promise&lt;void&gt;</code></td></tr>
+<tr><td>withTransaction</td><td><code>fn: (session) =&gt; Promise&lt;T&gt;</code></td><td><code>Promise&lt;T&gt;</code></td></tr>
+</table>
+
+<h3>Exported functions — src/lib/bookings/pricing.ts</h3>
+<table>
+<tr><th>Name</th><th>Params</th><th>Return</th></tr>
+<tr><td>computeBookingPricing</td><td><code>input: ComputePricingInput</code></td><td><code>{ pricing, depositPaise, errors }</code></td></tr>
+<tr><td>lockDatesForBooking</td><td><code>{ bookingType, checkIn, checkOut, eventStartDate?, eventEndDate? }</code></td><td><code>string[]</code></td></tr>
+</table>
+
+<h3>Full bodies — createPending, confirmPayment, getAvailability, softDelete</h3>
+<p>See verbatim <code>src/lib/bookings/mongoStore.ts</code> above (lines 80–526).</p>
+
+<h3>Full bodies — acquireNightLocks, releaseNightLocks</h3>
+<h3>src/lib/bookings/nightLocks.ts</h3><pre>import { connectDB, mongoose } from "@/lib/db";
+import type { ClientSession, Types } from "mongoose";
+
+export async function acquireNightLocks(params: {
+  villaId: Types.ObjectId;
+  bookingId: Types.ObjectId;
+  dates: string[];
+  session: ClientSession;
+}): Promise&lt;{ ok: true } | { ok: false; conflictDate: string }&gt; {
+  const { VillaNightlockModel } = await import("@/models/VillaNightlock");
+
+  for (const date of params.dates) {
+    try {
+      await VillaNightlockModel.create(
+        [
+          {
+            villaId: params.villaId,
+            date,
+            bookingId: params.bookingId,
+          },
+        ],
+        { session: params.session },
+      );
+    } catch (e: unknown) {
+      const err = e as { code?: number };
+      if (err.code === 11000) {
+        return { ok: false, conflictDate: date };
+      }
+      throw e;
+    }
+  }
+  return { ok: true };
+}
+
+export async function releaseNightLocks(
+  bookingId: Types.ObjectId,
+  session?: ClientSession,
+): Promise&lt;void&gt; {
+  const { VillaNightlockModel } = await import("@/models/VillaNightlock");
+  await VillaNightlockModel.deleteMany({ bookingId }, { session });
+}
+
+export async function withTransaction&lt;T&gt;(
+  fn: (session: ClientSession) =&gt; Promise&lt;T&gt;,
+): Promise&lt;T&gt; {
+  await connectDB();
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const result = await fn(session);
+    await session.commitTransaction();
+    return result;
+  } catch (e) {
+    await session.abortTransaction();
+    throw e;
+  } finally {
+    session.endSession();
+  }
+}
+</pre>
+
+<h2>6. VILLA LOOKUP BY CM ID</h2>
+<p><strong>NOT FOUND — no lookup by CM id</strong></p>
+<p>Grep for <code>axisRooms.propertyId</code>, <code>roomTypeId</code>, or staah ids returned no Villa find queries.</p>
+<p>Existing villa lookup: <code>findVillaBySlug(slug)</code> and <code>VillaModel.findOne({ slug, isDeleted: false })</code> only.</p>
+
+<h2>7. ENV VARIABLES (names only)</h2>
+<h3>From .env.example</h3>
+<h3>.env.example</h3><pre># Jade Hospitainment — Environment Variables
+# Copy this file to .env.local and fill in your values.
+# NEVER commit .env.local to version control.
+
+# ─── Hero videos (CDN) ────────────────────────────────────
+NEXT_PUBLIC_CDN_BASE=https://jadehospitainment.com/videos
+
+# ─── API ──────────────────────────────────────────────────
+NEXT_PUBLIC_API_BASE_URL=https://api.jadehospitainment.com
+NEXT_PUBLIC_SITE_URL=https://jadehospitainment.com
+
+# ─── MongoDB (single database — bookings, leads, CMS, users) ─
+# Tier 1: Atlas free tier replica set or local Docker with rs.initiate()
+MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/jade?retryWrites=true&amp;w=majority
+
+# ─── Payment Gateway (Razorpay) ───────────────────────────
+NEXT_PUBLIC_PAYMENT_GATEWAY_KEY=your_razorpay_test_key_id
+RAZORPAY_KEY_ID=your_razorpay_test_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_test_key_secret
+RAZORPAY_WEBHOOK_SECRET=your_razorpay_webhook_secret
+
+# ─── Auth &amp; cron ──────────────────────────────────────────
+NEXTAUTH_SECRET=generate_with_openssl_rand_base64_32
+NEXTAUTH_URL=http://localhost:3000
+CRON_SECRET=your_long_random_cron_secret
+
+# ─── Axis Rooms channel manager ─────────────────────────────
+AXIS_ROOMS_API_KEY=
+AXIS_ROOMS_WEBHOOK_SECRET=
+# AXIS_ROOMS_API_BASE_URL=https://sandbox.axisrooms.example/api
+
+# ─── Transactional email (Resend, optional) ───────────────
+RESEND_API_KEY=re_xxxxxxxx
+RESEND_FROM=Jade Hospitainment &lt;bookings@yourdomain.com&gt;
+LEADS_NOTIFY_EMAIL=concierge@yourdomain.com
+CAREERS_NOTIFY_EMAIL=careers@yourdomain.com
+BOOKING_NOTIFY_EMAIL=bookings@yourdomain.com
+
+# ─── Observability (optional) ───────────────────────────────
+NEXT_PUBLIC_SENTRY_DSN=
+
+# ─── Analytics ────────────────────────────────────────────
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+
+# ─── Seed users (npm run db:seed:users) ─────────────────────
+# Default password for all seeded accounts if unset: JadeHost2026!
+# Rotate before production — see NEEDS_FROM_USER.md
+# SEED_USER_PASSWORD=
+
+# ─── IndexNow (required in production) ────────────────────
+INDEXNOW_KEY=
+INDEXNOW_HOST=jadehospitainment.com
+INDEXNOW_API_SECRET=your_long_random_indexnow_hook_secret_here
+
+# ─── Optional degraded read-only fallback when Mongo unreachable ─
+# BOOKINGS_STORE_FALLBACK=true
+</pre>
+<ul>
+<li><strong>Channel-manager / webhook / cron:</strong> <code>CRON_SECRET</code>, <code>AXIS_ROOMS_API_KEY</code>, <code>AXIS_ROOMS_WEBHOOK_SECRET</code>, <code>AXIS_ROOMS_API_BASE_URL</code> (commented optional)</li>
+<li><strong>Related payment webhook:</strong> <code>RAZORPAY_WEBHOOK_SECRET</code></li>
+<li><strong>Auth (dashboard):</strong> <code>NEXTAUTH_SECRET</code>, <code>NEXTAUTH_URL</code></li>
+</ul>
+<p><strong>Referenced in code but missing from .env.example:</strong> none for Axis Rooms specifically. <code>STAAH_*</code> variables: NOT FOUND in codebase.</p>
+
+<h2>8. BOOKING.SOURCE ENUM</h2>
+<table>
+<tr><th>Value</th><th>Category</th></tr>
+<tr><td><code>website</code></td><td>Direct (public booking flow)</td></tr>
+<tr><td><code>admin_manual</code></td><td>Manual (staff dashboard)</td></tr>
+<tr><td><code>axisrooms_airbnb</code></td><td>OTA channel (Axis Rooms → Airbnb)</td></tr>
+<tr><td><code>axisrooms_booking_com</code></td><td>OTA channel (Axis Rooms → Booking.com)</td></tr>
+</table>
+
+</body>
+</html>

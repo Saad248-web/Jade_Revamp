@@ -10,7 +10,7 @@ describe("initiatePayment", () => {
     vi.unstubAllGlobals();
   });
 
-  it("sends booking_uuid when opts.bookingUuid is set", async () => {
+  it("sends bookingId when opts.bookingId is set", async () => {
     const fetchMock = vi.mocked(fetch);
     fetchMock.mockResolvedValue(
       new Response(
@@ -24,17 +24,17 @@ describe("initiatePayment", () => {
       ),
     );
 
-    const uuid = "a1b2c3d4-5e6f-4789-a012-3456789abcde";
-    await initiatePayment(1000, "ref-1", { bookingUuid: uuid });
+    const bookingId = "a1b2c3d4-5e6f-4789-a012-3456789abcde";
+    await initiatePayment(1000, "ref-1", { bookingId });
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [, init] = fetchMock.mock.calls[0];
     const body = JSON.parse((init as RequestInit).body as string);
-    expect(body.booking_uuid).toBe(uuid);
-    expect(body.amountSubunits).toBe(100_000);
+    expect(body.bookingId).toBe(bookingId);
+    expect(body.amountSubunits).toBeUndefined();
   });
 
-  it("omits booking_uuid when not provided", async () => {
+  it("sends amountSubunits when no booking id", async () => {
     const fetchMock = vi.mocked(fetch);
     fetchMock.mockResolvedValue(
       new Response(
@@ -51,6 +51,7 @@ describe("initiatePayment", () => {
 
     const [, init] = fetchMock.mock.calls[0];
     const body = JSON.parse((init as RequestInit).body as string);
-    expect(body.booking_uuid).toBeUndefined();
+    expect(body.bookingId).toBeUndefined();
+    expect(body.amountSubunits).toBe(500_000);
   });
 });

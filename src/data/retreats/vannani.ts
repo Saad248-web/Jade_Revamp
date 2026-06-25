@@ -152,34 +152,7 @@ const vannaniBase = {
       images: [],
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 10 PAX",
-          sublabel: "≈ ₹2,500 / head",
-          price: "₹24,999 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: ["Full estate access", "Overnight stay", "Pool access"],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (2 PM · 12 AM)",
-      packages: [
-        {
-          label: "Up to 20 PAX",
-          sublabel: "≈ ₹1,250 / head",
-          price: "₹24,999 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,099 + taxes" },
-      ],
-      features: ["Private venue access", "Basic event support"],
-    },
-  },
+
   locationDetails: {
     mapImage: "",
     address: "Vannani, Outskirts of Bangalore, Karnataka",

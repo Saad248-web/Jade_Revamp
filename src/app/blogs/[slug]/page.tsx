@@ -1,31 +1,32 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPostBySlug, getPublishedPosts } from "@/data/blogs";
 import PostContent from "./PostContent";
 import JsonLd from "@/components/seo/JsonLd";
+import {
+  getMergedPostBySlug,
+  getMergedPublishedPosts,
+  getStaticBlogSlugs,
+} from "@/lib/cms/blogStore";
+import {
+  defaultCanonicalUrl,
+  resolvePostFaqs,
+  resolvePostSchemas,
+  SITE_ORIGIN,
+} from "@/lib/cms/blogCms";
+import type { BlogPost } from "@/data/blogs";
 
-// Configure Incremental Static Regeneration (ISR)
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 60;
 
 interface Props {
   params: { slug: string };
 }
 
-/**
- * Generate static paths for all published blog posts at build time
- */
 export async function generateStaticParams() {
-  const posts = getPublishedPosts();
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+  return getStaticBlogSlugs().map((slug) => ({ slug }));
 }
 
-/**
- * Dynamically generate metadata for each blog post
- */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = getPostBySlug(params.slug);
+  const post = await getMergedPostBySlug(params.slug);
 
   if (!post) {
     return {
@@ -33,129 +34,175 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const seo = post.seo;
+  const title = seo?.metaTitle || post.title;
   const description =
     post.description ||
     post.sections.find((s) => s.type === "text")?.content?.slice(0, 160) ||
     "Read the latest from Jade Hospitainment Journal.";
+  const canonical = seo?.canonicalUrl || defaultCanonicalUrl(post.slug);
+  const ogTitle = seo?.ogTitle || title;
+  const ogDescription = seo?.ogDescription || description;
+  const ogImage = seo?.ogImage || post.image;
+  const index = seo?.robotsIndex !== false;
+  const follow = seo?.robotsFollow !== false;
 
   return {
-    title: post.title,
+    title,
     description,
-    alternates: {
-      canonical: `https://jadehospitainment.com/blogs/${post.slug}`,
+    alternates: { canonical },
+    robots: {
+      index,
+      follow,
+      googleBot: { index, follow },
     },
     openGraph: {
-      title: post.title,
-      description,
-      url: `https://jadehospitainment.com/blogs/${post.slug}`,
+      title: ogTitle,
+      description: ogDescription,
+      url: `${SITE_ORIGIN}/blogs/${post.slug}`,
       type: "article",
       publishedTime: post.date,
       modifiedTime: post.dateModified || post.date,
       images: [
         {
-          url: post.image,
+          url: ogImage,
           width: 1200,
           height: 630,
-          alt: post.title,
+          alt: title,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
-      description,
-      images: [post.image],
+      title: ogTitle,
+      description: ogDescription,
+      images: [ogImage],
     },
   };
 }
 
-export default function BlogPage({ params }: Props) {
-  const post = getPostBySlug(params.slug);
+function buildSchemas(post: BlogPost) {
+  const flags = resolvePostSchemas(post);
+  const pageUrl = `${SITE_ORIGIN}/blogs/${post.slug}`;
+
+  const articleSchema = flags.article
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: post.title,
+        description: post.description,
+        image: [post.image],
+        datePublished: post.date,
+        dateModified: post.dateModified || post.date,
+        author: {
+          "@type": "Organization",
+          name: post.author || "Jade Hospitainment",
+          url: SITE_ORIGIN,
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "Jade Hospitainment",
+          logo: {
+            "@type": "ImageObject",
+            url: `${SITE_ORIGIN}/logo.png`,
+          },
+        },
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": pageUrl,
+        },
+      }
+    : null;
+
+  const faqItems = resolvePostFaqs(post).filter(
+    (f) => f.question.trim() && f.answer.trim(),
+  );
+  const faqSchema =
+    flags.faq && faqItems.length
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqItems.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: faq.answer,
+            },
+          })),
+        }
+      : null;
+
+  const listSteps = post.sections
+    .filter((s) => s.type === "list" && s.items?.length)
+    .flatMap((s) => s.items ?? []);
+  const howToSchema =
+    flags.howTo && listSteps.length
+      ? {
+          "@context": "https://schema.org",
+          "@type": "HowTo",
+          name: post.title,
+          description: post.description,
+          step: listSteps.map((item, i) => ({
+            "@type": "HowToStep",
+            position: i + 1,
+            name: item,
+            text: item,
+          })),
+        }
+      : null;
+
+  const breadcrumbSchema = flags.breadcrumb
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: SITE_ORIGIN,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Blog",
+            item: `${SITE_ORIGIN}/blogs`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: post.title,
+            item: pageUrl,
+          },
+        ],
+      }
+    : null;
+
+  return { articleSchema, faqSchema, howToSchema, breadcrumbSchema };
+}
+
+export default async function BlogPage({ params }: Props) {
+  const post = await getMergedPostBySlug(params.slug);
 
   if (!post) {
     notFound();
   }
 
-  // Get related posts (excluding current)
-  const allPosts = getPublishedPosts();
-  const relatedPosts = allPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
+  const allPosts = await getMergedPublishedPosts();
+  const relatedPosts = allPosts
+    .filter((p) => p.slug !== post.slug)
+    .slice(0, 3);
 
-  // Article Schema
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: post.title,
-    description: post.description,
-    image: [post.image],
-    datePublished: post.date,
-    dateModified: post.dateModified || post.date,
-    author: {
-      "@type": "Organization",
-      name: "Jade Hospitainment",
-      url: "https://jadehospitainment.com",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Jade Hospitainment",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://jadehospitainment.com/logo.png", // Ensure actual logo exists
-      },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `https://jadehospitainment.com/blogs/${post.slug}`,
-    },
-  };
-
-  // FAQ Schema if present
-  const faqSection = post.sections.find((s) => s.type === "faq");
-  const faqSchema = faqSection?.faqs
-    ? {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: faqSection.faqs.map((faq) => ({
-          "@type": "Question",
-          name: faq.question,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: faq.answer,
-          },
-        })),
-      }
-    : null;
-
-  // Breadcrumb Schema
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://jadehospitainment.com",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Blog",
-        item: "https://jadehospitainment.com/blogs",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: post.title,
-        item: `https://jadehospitainment.com/blogs/${post.slug}`,
-      },
-    ],
-  };
+  const { articleSchema, faqSchema, howToSchema, breadcrumbSchema } =
+    buildSchemas(post);
 
   return (
     <>
-      <JsonLd schema={articleSchema} />
-      <JsonLd schema={breadcrumbSchema} />
+      {articleSchema && <JsonLd schema={articleSchema} />}
+      {breadcrumbSchema && <JsonLd schema={breadcrumbSchema} />}
       {faqSchema && <JsonLd schema={faqSchema} />}
+      {howToSchema && <JsonLd schema={howToSchema} />}
       <PostContent post={post} relatedPosts={relatedPosts} />
     </>
   );

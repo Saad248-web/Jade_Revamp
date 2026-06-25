@@ -8,12 +8,19 @@ export interface BlogSection {
     | "table"
     | "faq"
     | "heading"
-    | "cta";
+    | "cta"
+    | "html"
+    | "gallery"
+    | "button"
+    | "video"
+    | "callout"
+    | "divider";
   content?: string;
   image?: string;
   caption?: string;
   items?: string[];
-  level?: 2 | 3;
+  level?: 2 | 3 | 4 | 5 | 6 | 1;
+  rawHtml?: string;
   tableData?: {
     headers: string[];
     rows: string[][];
@@ -25,8 +32,24 @@ export interface BlogSection {
   ctas?: {
     label: string;
     link: string;
-    variant: "primary" | "outline";
+    variant: "primary" | "outline" | "secondary";
   }[];
+  settings?: {
+    alt?: string;
+    alignment?: "left" | "center" | "right";
+    width?: "full" | "large" | "medium";
+    rounded?: boolean;
+    layout?: "grid" | "carousel";
+    galleryImages?: { url: string; alt?: string; caption?: string }[];
+    listStyle?: "bullet" | "ordered" | "checklist";
+    checklistItems?: { text: string; checked: boolean }[];
+    buttonVariant?: "primary" | "secondary" | "outline";
+    openInNewTab?: boolean;
+    ctaTitle?: string;
+    ctaDescription?: string;
+    videoUrl?: string;
+    calloutType?: "info" | "warning" | "success" | "note" | "tip";
+  };
 }
 
 // ─── BlogPost interface ───────────────────────────────────────────────────────
@@ -46,6 +69,28 @@ export interface BlogPost {
   tags: string[]; // For filtering & schema keywords
   isFeatured?: boolean;
   isPublished: boolean; // false = draft, excluded from listing and sitemap
+  thumbnail?: string;
+  faqs?: { question: string; answer: string }[];
+  schemas?: {
+    article: boolean;
+    faq: boolean;
+    howTo: boolean;
+    breadcrumb: boolean;
+  };
+  seo?: {
+    metaTitle?: string;
+    focusKeyword?: string;
+    canonicalUrl?: string;
+    ogTitle?: string;
+    ogDescription?: string;
+    ogImage?: string;
+    robotsIndex?: boolean;
+    robotsFollow?: boolean;
+  };
+  advancedSchema?: {
+    type: "none" | "faq" | "howto" | "article";
+    faqs?: { question: string; answer: string }[];
+  };
   sections: BlogSection[];
 }
 

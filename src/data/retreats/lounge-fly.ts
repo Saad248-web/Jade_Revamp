@@ -221,41 +221,7 @@ const loungeFlyBase = {
       images: ["/Villa_Retreats/Lounge Fly/Spaces/IMG_9296.webp"],
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 2 PAX",
-          sublabel: "≈ ₹6,250 / head",
-          price: "₹12,500 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: [
-        "Full suite access",
-        "Dual balcony access",
-        "Urban stay experience",
-      ],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (2 PM · 12 AM)",
-      packages: [
-        {
-          label: "Up to 20 PAX",
-          sublabel: "≈ ₹3,000 / head",
-          price: "₹59,999 + taxes",
-        },
-      ],
-      features: [
-        "Private suite for events",
-        "Mall proximity",
-        "Basic event support",
-      ],
-    },
-  },
+
   locationDetails: {
     mapImage: "",
     address:

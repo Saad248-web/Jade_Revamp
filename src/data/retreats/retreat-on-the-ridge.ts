@@ -26,14 +26,14 @@ const retreat_on_the_ridgePerfectForCards = [
 const retreatOnTheRidgeBase = {
   id: "retreat-on-the-ridge",
   name: "Retreat on the Ridge",
-  type: "HILLSIDE PRIVATE RETREAT",
-  location: "Near Nandi Hills, Bangalore",
+  type: "4-BEDROOM HILLSIDE VILLA",
+  location: "Near Varalakonda Hill · Nandi Hills",
   stats: {
-    stay: "8-12 Guests",
-    events: "20 Guests",
+    stay: "Up to 10 Guests (18 max)",
+    events: "Up to 40 Guests",
     bhk: "4 BHK",
-    lawn: "Ridge-view Terrace",
-    villaArea: "Hillside Property",
+    lawn: "2,990 sq.ft Lawn",
+    villaArea: "Hilltop · pool + waterfall",
   },
   description:
     "Retreat on the Ridge is a private hillside villa designed for small group stays with open views and outdoor-focused living. The 4-bedroom layout combines indoor comfort with elevated natural surroundings, making it suitable for getaways and small gatherings. With a private pool, lawn spaces, and ridge-facing views, the property offers a quiet setting close to Nandi Hills while maintaining privacy.",
@@ -221,39 +221,7 @@ const retreatOnTheRidgeBase = {
       ],
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 10 PAX",
-          sublabel: "≈ ₹3,000 / head",
-          price: "₹29,999 + taxes",
-        },
-        {
-          label: "Up to 12 PAX",
-          sublabel: "≈ ₹2,917 / head",
-          price: "₹34,999 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: ["Ridge-view access", "Overnight stay", "Pool access"],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (2 PM · 12 AM)",
-      packages: [
-        {
-          label: "Up to 20 PAX",
-          sublabel: "≈ ₹1,500 / head",
-          price: "₹29,999 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,099 + taxes" },
-      ],
-      features: ["Private venue access", "Hillside setting"],
-    },
-  },
+
   locationDetails: {
     mapImage: "",
     address: "Near Nandi Hills, Chikkaballapur, Karnataka — 562101",

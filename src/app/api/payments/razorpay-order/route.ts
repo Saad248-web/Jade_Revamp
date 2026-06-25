@@ -1,41 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { query } from "@/lib/db";
-import { getClientIpFromHeaders, rateLimit } from "@/lib/rateLimit";
+import { getBookingStore } from "@/lib/bookings/mongoStore";
+import { isBookingRef } from "@/lib/bookings/ids";
+import { getClientIpFromHeaders } from "@/lib/rateLimit";
+import { persistentRateLimit } from "@/lib/rateLimit/persistentRateLimit";
 import { readJsonBody, SafeJsonError } from "@/lib/security/safeJson";
+import { assertPlainObject } from "@/lib/security/validateInput";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const MAX_BODY = 12 * 1024;
-
-function isBookingUuid(id: unknown): id is string {
-  if (typeof id !== "string" || id.length > 48) return false;
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-    id,
-  );
-}
-
-/** Creates a Razorpay order server-side when keys are configured. Amount is in INR sub-units (paise). */
+/** Creates Razorpay order — amount re-derived server-side from booking.pricing (client amount ignored). */
 export async function POST(req: NextRequest) {
   try {
     const ip = req.ip ?? getClientIpFromHeaders(req.headers);
-    const rl = rateLimit({
+    const rl = await persistentRateLimit({
       key: `payments:rzp:${ip}`,
       limit: 30,
       windowMs: 10 * 60 * 1000,
     });
     if (!rl.ok) {
-      return new NextResponse(
-        JSON.stringify({ error: "Too many requests" }),
-        {
-          status: 429,
-          headers: {
-            "Content-Type": "application/json",
-            "Retry-After": String(rl.retryAfterSeconds),
-            "Cache-Control": "no-store",
-          },
-        },
-      );
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
     }
 
     const keyId = process.env.RAZORPAY_KEY_ID?.trim();
@@ -43,55 +27,52 @@ export async function POST(req: NextRequest) {
     if (!keyId || !keySecret) {
       return NextResponse.json(
         { configured: false, error: "Payments are not configured" },
-        {
-          status: 501,
-          headers: { "Cache-Control": "no-store" },
-        },
+        { status: 501 },
       );
     }
 
     let body: unknown;
     try {
-      body = await readJsonBody(req, MAX_BODY);
+      body = await readJsonBody(req, 12 * 1024);
+      assertPlainObject(body);
     } catch (e) {
       if (e instanceof SafeJsonError) {
-        return NextResponse.json(
-          { error: e.message },
-          { status: e.status, headers: { "Cache-Control": "no-store" } },
-        );
+        return NextResponse.json({ error: e.message }, { status: e.status });
       }
-      throw e;
+      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
-    const b =
-      typeof body === "object" && body !== null ? (body as Record<string, unknown>) : {};
-    const amountSubunits = typeof b.amountSubunits === "number" ? b.amountSubunits : NaN;
-    const receiptRaw =
-      typeof b.receipt === "string" && b.receipt.trim()
-        ? b.receipt.trim()
-        : `rc${Date.now()}`;
-    const receipt = receiptRaw.replace(/\W+/g, "").slice(0, 40) || `rc${Date.now()}`;
+    const b = body as Record<string, unknown>;
+    const bookingId =
+      typeof b.bookingId === "string" && isBookingRef(b.bookingId)
+        ? b.bookingId
+        : null;
+    const bookingToken =
+      typeof b.bookingToken === "string" ? b.bookingToken : null;
 
-    const booking_uuid =
-      typeof b.booking_uuid === "string" && isBookingUuid(b.booking_uuid)
-        ? b.booking_uuid
-        : typeof b.bookingId === "string" && isBookingUuid(b.bookingId)
-          ? b.bookingId
-          : null;
+    const store = getBookingStore();
+    const booking = bookingId
+      ? await store.findById(bookingId)
+      : bookingToken
+        ? await store.findByToken(bookingToken)
+        : null;
+
+    if (!booking || booking.status !== "pending") {
+      return NextResponse.json({ error: "Booking not found or expired" }, { status: 404 });
+    }
+
+    // Server-derived amount — ignore client amountSubunits
+    const amountSubunits =
+      booking.payment.paymentPlan === "deposit"
+        ? booking.payment.depositPaise
+        : booking.pricing.totalPaise;
 
     if (!Number.isInteger(amountSubunits) || amountSubunits < 100) {
-      return NextResponse.json(
-        { error: "amountSubunits must be an integer paise >= 100" },
-        { status: 400, headers: { "Cache-Control": "no-store" } },
-      );
+      return NextResponse.json({ error: "Invalid booking amount" }, { status: 400 });
     }
 
     const auth = Buffer.from(`${keyId}:${keySecret}`, "utf8").toString("base64");
-
-    const notes: Record<string, string> = {};
-    if (booking_uuid) {
-      notes.booking_uuid = booking_uuid;
-    }
+    const receipt = `bk${booking.id.slice(-8)}${Date.now()}`.slice(0, 40);
 
     const res = await fetch("https://api.razorpay.com/v1/orders", {
       method: "POST",
@@ -104,7 +85,7 @@ export async function POST(req: NextRequest) {
         currency: "INR",
         receipt,
         payment_capture: 1,
-        ...(Object.keys(notes).length ? { notes } : {}),
+        notes: { booking_id: booking.id, booking_token: booking.bookingToken },
       }),
     });
 
@@ -112,47 +93,31 @@ export async function POST(req: NextRequest) {
     if (!res.ok) {
       return NextResponse.json(
         { error: "Razorpay order failed", detail: payload },
-        { status: 502, headers: { "Cache-Control": "no-store" } },
+        { status: 502 },
       );
     }
 
     const orderId = (payload as { id?: string }).id;
-
-    if (booking_uuid && orderId) {
-      try {
-        await query(
-          `UPDATE bookings
-           SET razorpay_order_id = $1,
-               payment_gateway_state = CASE
-                 WHEN COALESCE(trim(payment_gateway_state), '') IN ('none', '', 'failed')
-                 THEN 'checkout_started'
-                 ELSE payment_gateway_state
-               END
-           WHERE id = $2::uuid
-             AND status != 'cancelled'
-             AND (razorpay_order_id IS NULL OR trim(razorpay_order_id) = '')`,
-          [orderId, booking_uuid],
-        );
-      } catch (e) {
-        console.warn("[POST /api/payments/razorpay-order] booking link skipped", e);
-      }
+    if (orderId) {
+      const { connectDB } = await import("@/lib/db");
+      const { BookingModel } = await import("@/models/Booking");
+      await connectDB();
+      await BookingModel.updateOne(
+        { _id: booking.id },
+        { $set: { "payment.orderId": orderId } },
+      );
     }
 
-    return NextResponse.json(
-      {
-        configured: true,
-        orderId,
-        amount: amountSubunits,
-        currency: "INR",
-        keyId,
-      },
-      { headers: { "Cache-Control": "no-store" } },
-    );
+    return NextResponse.json({
+      configured: true,
+      orderId,
+      amount: amountSubunits,
+      currency: "INR",
+      keyId,
+      bookingId: booking.id,
+    });
   } catch (err) {
     console.error("[POST /api/payments/razorpay-order]", err);
-    return NextResponse.json(
-      { error: "Unexpected error" },
-      { status: 500, headers: { "Cache-Control": "no-store" } },
-    );
+    return NextResponse.json({ error: "Unexpected error" }, { status: 500 });
   }
 }

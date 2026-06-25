@@ -27,7 +27,21 @@ const nextConfig = {
           "camera=(), microphone=(), geolocation=(), interest-cohort=(), payment=(), usb=()",
       },
       { key: "X-DNS-Prefetch-Control", value: "off" },
-      { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
+      {
+        key: "Content-Security-Policy",
+        value: [
+          "default-src 'self'",
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://www.googletagmanager.com",
+          "style-src 'self' 'unsafe-inline'",
+          "img-src 'self' data: blob: https:",
+          "font-src 'self' data:",
+          "connect-src 'self' https://api.razorpay.com https://*.sentry.io https://www.google-analytics.com",
+          "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com",
+          "object-src 'none'",
+          "base-uri 'self'",
+          "form-action 'self'",
+        ].join("; "),
+      },
       {
         key: "Cross-Origin-Opener-Policy",
         value: "same-origin-allow-popups",
@@ -102,6 +116,29 @@ const nextConfig = {
         permanent: true,
       },
 
+      // Legacy monolithic admin → dashboard PMS
+      {
+        source: "/admin",
+        destination: "/dashboard",
+        permanent: false,
+      },
+      {
+        source: "/admin/:path*",
+        destination: "/dashboard/:path*",
+        permanent: false,
+      },
+
+      {
+        source: "/dashboard/settings/staah",
+        destination: "/dashboard/settings/axis-rooms",
+        permanent: true,
+      },
+      {
+        source: "/dashboard/settings/staah/:path*",
+        destination: "/dashboard/settings/axis-rooms/:path*",
+        permanent: true,
+      },
+
       // Example pattern — update with actual old URLs when migrating
       // {
       //   source: "/blog/:slug",
@@ -112,6 +149,10 @@ const nextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
-  silent: true,
-});
+const sentryEnabled = Boolean(
+  process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN,
+);
+
+export default sentryEnabled
+  ? withSentryConfig(nextConfig, { silent: true })
+  : nextConfig;

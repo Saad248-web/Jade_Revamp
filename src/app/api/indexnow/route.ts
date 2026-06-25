@@ -2,8 +2,15 @@ import { NextResponse } from "next/server";
 import { getClientIpFromHeaders, rateLimit } from "@/lib/rateLimit";
 import { readJsonBody, SafeJsonError } from "@/lib/security/safeJson";
 
-const INDEXNOW_KEY =
-  process.env.INDEXNOW_KEY ?? "a8f9c1b2d4e64f789012345678abcdef";
+function getIndexNowKey(): string | null {
+  const key = process.env.INDEXNOW_KEY?.trim();
+  if (key) return key;
+  if (process.env.NODE_ENV !== "production") {
+    return "dev-indexnow-key-set-INDEXNOW_KEY-in-env";
+  }
+  return null;
+}
+
 const HOST = process.env.INDEXNOW_HOST ?? "jadehospitainment.com";
 
 const MAX_URLS = 80;
@@ -63,6 +70,14 @@ export async function POST(request: Request) {
       );
     }
 
+    const indexNowKey = getIndexNowKey();
+    if (!indexNowKey) {
+      return NextResponse.json(
+        { error: "INDEXNOW_KEY is not configured" },
+        { status: 503 },
+      );
+    }
+
     let parsed: unknown;
     try {
       parsed = await readJsonBody(request, MAX_BODY);
@@ -110,8 +125,8 @@ export async function POST(request: Request) {
 
     const payload = {
       host,
-      key: INDEXNOW_KEY,
-      keyLocation: `https://${host}/${INDEXNOW_KEY}.txt`,
+      key: indexNowKey,
+      keyLocation: `https://${host}/${indexNowKey}.txt`,
       urlList: clean,
     };
 

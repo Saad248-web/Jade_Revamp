@@ -1,19 +1,13 @@
-import type { VillaStats } from "@/lib/types";
-
+/** Corporate page overlay — marketing fields only; pricing/stats merged at runtime. */
 export type CorporateOverlayMeta = {
-  onwardsPrice: string;
+  onwardsPrice?: string;
 };
 
-/** Corporate page overlay entry (retreat spread + SVG overrides). */
-export type CorporateVillaOverlayEntry = Record<string, unknown> & {
+export type CorporateVillaOverlayEntry = {
   id: string;
-  name: string;
-  type: string;
-  location: string;
-  description: string;
-  image: string;
-  stats: VillaStats;
-  perfectForTags: string[];
-  categories: string[];
-  overlay: CorporateOverlayMeta;
+  type?: string;
+  description?: string;
+  perfectForTags?: string[];
+  categories?: string[];
+  overlay?: CorporateOverlayMeta;
 };

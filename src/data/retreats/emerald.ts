@@ -22,14 +22,14 @@ const emeraldPerfectForCards = [
 const emeraldBase = {
   id: "emerald",
   name: "Emerald",
-  type: "GLASSHOUSE COURTYARD RETREAT",
-  location: "Near Embassy Riding School, Bangalore",
+  type: "HERITAGE GLASSHOUSE VILLA",
+  location: "5 min Embassy Riding School",
   stats: {
-    stay: "10 Guests",
-    events: "30 Guests",
+    stay: "Up to 6 Guests (8 max)",
+    events: "Up to 25 Guests",
     bhk: "2 BHK",
-    lawn: "3,000 sqft",
-    villaArea: "Boutique Villa",
+    lawn: "2,800 sq.ft Garden",
+    villaArea: "2,016 sq.ft · 1 acre",
   },
   description:
     "Emerald is a private pool villa designed as a traditional glasshouse around a central courtyard. This 2-bedroom villa combines indoor transparency with lush greenery, creating a setting suited for small group stays, intimate gatherings, and weekend getaways near Bangalore. With a private pool featuring an 8 ft waterfall, garden sit-outs, and courtyard living, the villa balances built space with open areas. Located 5 minutes from Embassy Riding School and 35 minutes from Hebbal, it offers accessibility with complete privacy.",
@@ -141,38 +141,7 @@ const emeraldBase = {
       icon: "Users",
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 12 PAX",
-          sublabel: "≈ ₹3,625 / head",
-          price: "₹43,500 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: [
-        "Private pool access",
-        "Overnight villa stay",
-        "Complimentary breakfast",
-      ],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (2 PM · 12 AM)",
-      packages: [
-        {
-          label: "Up to 30 PAX",
-          sublabel: "≈ ₹883 / head",
-          price: "₹26,500 + taxes",
-        },
-        { label: "Additional Guest", price: "₹999 + taxes" },
-      ],
-      features: ["Private venue access", "Complimentary high tea"],
-    },
-  },
+
   locationDetails: {
     mapImage: "",
     address:

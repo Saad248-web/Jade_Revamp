@@ -1,44 +1,13 @@
-import type { Metadata } from "next";
-import WeddingHero from "@/components/WeddingHero";
 import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/seo/JsonLd";
-import dynamic from "next/dynamic";
-import MeanderStrip from "@/components/ui/MeanderStrip";
+import { resolveLandingSections } from "@/lib/cms/landingCms";
+import { LandingPageRenderer } from "@/components/landing/LandingPageRenderer";
 
-const WeddingScrollSection = dynamic(
-  () => import("@/components/WeddingScrollSection"),
-  { ssr: false },
-);
-const WeddingVillasCarousel = dynamic(
-  () => import("@/components/WeddingVillasCarousel"),
-  { ssr: false },
-);
-const WeddingServicesSection = dynamic(
-  () => import("@/components/WeddingServicesSection"),
-  { ssr: false },
-);
-const WhyJadeWeddings = dynamic(() => import("@/components/WhyJadeWeddings"), {
-  ssr: false,
-});
-const WeddingCelebrationsSection = dynamic(
-  () => import("@/components/WeddingCelebrationsSection"),
-  { ssr: false },
-);
+const TEMPLATE_KEY = "landing/weddings";
 
-export const metadata: Metadata = {
-  title: "Destination Weddings",
-  description:
-    "Host your dream wedding at Jade Hospitainment's boutique private estates near Bangalore — farmhouse gardens, private pools, and bespoke ceremonial experiences.",
-  alternates: { canonical: "https://jadehospitainment.com/weddings" },
-  openGraph: {
-    title: "Destination Weddings | Jade Hospitainment",
-    description:
-      "Bespoke Garden & Farmhouse Weddings near Bangalore. Private estates. Intimate ceremonies. Unforgettable celebrations.",
-    url: "https://jadehospitainment.com/weddings",
-  },
-};
+export const revalidate = 60;
 
 const breadcrumbSchema = {
   "@context": "https://schema.org",
@@ -82,26 +51,16 @@ const eventSchema = {
 };
 
 export default function WeddingPage() {
+  const sections = resolveLandingSections(TEMPLATE_KEY, null);
+
   return (
-      <main className="relative bg-[#1A1C1E] min-h-screen">
-        <JsonLd schema={breadcrumbSchema} />
-        <JsonLd schema={eventSchema} />
-        <Navbar />
-
-        <WeddingHero />
-
-        <div className="relative z-10">
-          <WeddingScrollSection id="wedding-philosophy" />
-          <WeddingVillasCarousel />
-          <MeanderStrip accentLine="green" />
-          <WeddingServicesSection />
-          <WhyJadeWeddings />
-          <MeanderStrip track="green" />
-          <WeddingCelebrationsSection />
-        </div>
-
-        <Footer />
-        <MobileBottomNav />
-      </main>
+    <main className="relative min-h-screen bg-[#1A1C1E]">
+      <JsonLd schema={breadcrumbSchema} />
+      <JsonLd schema={eventSchema} />
+      <Navbar />
+      <LandingPageRenderer templateKey={TEMPLATE_KEY} sections={sections} />
+      <Footer />
+      <MobileBottomNav />
+    </main>
   );
 }

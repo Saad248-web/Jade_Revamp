@@ -24,14 +24,14 @@ const tranquilPerfectForCards = [
 const tranquilBase = {
   id: "tranquil",
   name: "Tranquil Woods",
-  type: "LUXURY GARDEN RETREAT",
-  location: "Near Art of Living, Kanakapura Road, Bangalore",
+  type: "6-BEDROOM GARDEN ESTATE",
+  location: "5 min Art of Living · Kanakapura Road",
   stats: {
-    stay: "15-35 Guests",
-    events: "500 Guests",
+    stay: "Up to 15 Guests (30 max)",
+    events: "300 seated · 500–1,000 floating",
     bhk: "6 BHK",
-    lawn: "Multi-layered Garden",
-    villaArea: "6 Bedrooms · Glass Villa & Suites",
+    lawn: "50,000+ sq.ft Gardens",
+    villaArea: "6,000 sq.ft · 2 acres",
   },
   description:
     "Tranquil Woods is a six-bedroom private pool estate set within an expansive landscaped property designed for both stays and large-format events. The estate sits within a multi-layered garden layout — a glass pool villa and four garden-facing family suites — creating a natural flow between indoor spaces and open grounds. With a large pool, glass-walled living area, and undulating lawns, the property supports everything from relaxed stays to weddings and corporate gatherings. Located close to the Art of Living, it offers a balance of accessibility and seclusion.",
@@ -263,38 +263,7 @@ const tranquilBase = {
       ],
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 20 PAX",
-          sublabel: "≈ ₹2,175 / head",
-          price: "₹43,500 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: [
-        "Full venue access",
-        "Overnight stay across 6 bedrooms",
-        "Complimentary breakfast",
-      ],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (2 PM · 12 AM)",
-      packages: [
-        {
-          label: "Up to 30 PAX",
-          sublabel: "≈ ₹1,450 / head",
-          price: "₹43,500 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: ["Private venue access", "Complimentary high tea"],
-    },
-  },
+
   locationDetails: {
     mapImage: "",
     address: "Kanakapura Main Rd, Badamanavarathekaval, Bangalore — 560082",

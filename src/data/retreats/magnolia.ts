@@ -22,14 +22,14 @@ const magnoliaPerfectForCards = [
 const magnoliaBase = {
   id: "magnolia",
   name: "Magnolia",
-  type: "CONTEMPORARY GLASS FARM VILLA",
-  location: "Harohalli · Near Art of Living",
+  type: "CONTEMPORARY GLASS HOUSE VILLA",
+  location: "Kanakapura Road · Near Art of Living",
   stats: {
-    stay: "10-30 Guests",
-    events: "50-500 Guests",
-    bhk: "3 BHK",
-    lawn: "25,000 sq.ft Lawn",
-    villaArea: "7,000 sq.ft Built-up",
+    stay: "Up to 12 Guests (40 max)",
+    events: "50–500 Guests",
+    bhk: "3 BR + family room",
+    lawn: "21,000 sq.ft Lawn",
+    villaArea: "4,800 sq.ft · 1 acre",
   },
   description:
     "Magnolia is a contemporary private villa designed for immersive stays and large-scale gatherings. This modern three-bedroom glass villa brings together luxury, scale, and ambience, making it ideal for weekend getaways, private parties, corporate outings, and wedding celebrations. Featuring a massive private pool, bar and lounge, personal home theatre, conference hall, and a basketball court, the property also includes a 25,000 sq. ft. landscaped lawn. Located 20 minutes from the Art of Living International Centre and opposite Pyramid Valley, it offers a rare balance of accessibility and complete privacy.",
@@ -87,7 +87,7 @@ const magnoliaBase = {
       label: "Home Theatre",
       icon: "Projector",
       description:
-        "A private 12-seater home theatre designed for immersive movie watching and group indoor entertainment.",
+        "A private 8-seater home theatre for immersive movies and group indoor entertainment.",
     },
     {
       label: "Bar Lounge",
@@ -285,38 +285,6 @@ const magnoliaBase = {
       ],
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 8 PAX",
-          sublabel: "≈ ₹3,625 / head",
-          price: "₹29,599 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: [
-        "Venue access",
-        "Overnight villa stay",
-        "Complimentary breakfast",
-      ],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (Selectable between 2 PM and 12 AM)",
-      packages: [
-        {
-          label: "Up to 20 PAX",
-          sublabel: "≈ ₹3,625 / head",
-          price: "₹29,599 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: ["Private venue access", "Complimentary high tea"],
-    },
-  },
   locationDetails: {
     mapImage: "",
     address:

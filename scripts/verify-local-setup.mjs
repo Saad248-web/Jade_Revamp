@@ -78,15 +78,21 @@ async function main() {
   const env = loadEnvLocal();
   if (env) {
     pass(".env.local exists", path.join(root, ".env.local"));
-    if (env.ADMIN_PASSWORD?.length >= 12) {
-      pass("ADMIN_PASSWORD set");
+    if (env.NEXTAUTH_SECRET?.length >= 16) {
+      pass("NEXTAUTH_SECRET set");
     } else {
-      fail("ADMIN_PASSWORD set", "Use a long random password in .env.local");
+      fail(
+        "NEXTAUTH_SECRET set",
+        "Generate with: openssl rand -base64 32",
+      );
     }
-    if (env.POSTGRES_PASSWORD) {
-      pass("POSTGRES_* configured");
+    if (env.MONGODB_URI?.startsWith("mongodb")) {
+      pass("MONGODB_URI configured");
     } else {
-      fail("POSTGRES_* configured", "Add database vars to .env.local");
+      fail(
+        "MONGODB_URI configured",
+        "Add MongoDB Atlas or local replica-set URI — see NEEDS_FROM_USER.md",
+      );
     }
     const enquiryDemo = env.NEXT_PUBLIC_ENQUIRY_DEMO_MODE?.toLowerCase();
     const careersDemo = env.NEXT_PUBLIC_CAREERS_DEMO_MODE?.toLowerCase();

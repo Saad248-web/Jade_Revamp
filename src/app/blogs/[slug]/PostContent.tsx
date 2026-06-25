@@ -18,7 +18,9 @@ import PrimaryButton from "@/components/PrimaryButton";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
-import { BlogPost, BLOG_POSTS } from "@/data/blogs";
+import { BlogPost } from "@/data/blogs";
+import { BlogSectionRenderer } from "@/components/blog/BlogSectionRenderer";
+import { shouldShowProseLead } from "@/components/blog/blogProseUtils";
 import { useAnimation } from "@/context/AnimationContext";
 
 interface PostContentProps {
@@ -28,6 +30,12 @@ interface PostContentProps {
 
 export default function PostContent({ post, relatedPosts }: PostContentProps) {
   const { setEnquireOverlayOpen } = useAnimation();
+  const showLead = shouldShowProseLead(post);
+  const heroImage =
+    post.image && post.image !== "/og-default.jpg"
+      ? post.image
+      : post.sections.find((s) => s.type === "image" && s.image)?.image ??
+        post.image;
   return (
     <main className="relative min-h-screen bg-[#25282C] text-white">
       <Navbar />
@@ -96,7 +104,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
             className="relative aspect-[21/9] w-full overflow-hidden"
           >
             <Image
-              src={post.image}
+              src={heroImage}
               alt={post.title}
               fill
               className="object-cover"
@@ -112,180 +120,14 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
       <section className="jade-section px-6 md:px-12 lg:px-24">
         <div className="max-w-[1920px] mx-auto flex flex-col lg:flex-row gap-16">
           {/* Main Article Content */}
-          <article className="lg:w-[65%] space-y-10">
-            {post.sections.map((section, idx) => {
-              switch (section.type) {
-                case "text":
-                  return (
-                    <p
-                      key={idx}
-                      className="font-manrope text-gh-body text-white/80 leading-[1.8] text-lg md:text-xl"
-                    >
-                      {section.content}
-                    </p>
-                  );
-                case "quote":
-                  return (
-                    <blockquote
-                      key={idx}
-                      className="relative py-6 md:py-10 border-y border-white/10"
-                    >
-                      <div className="absolute -top-6 -left-4 text-[120px] font-philosopher text-[#EFCD62] opacity-10 leading-none">
-                        "
-                      </div>
-                      <p className="font-philosopher text-gh-h2 md:text-4xl text-white italic leading-relaxed text-center px-8">
-                        {section.content}
-                      </p>
-                    </blockquote>
-                  );
-                case "image":
-                  return (
-                    <div key={idx} className="space-y-3">
-                      <div className="relative aspect-video overflow-hidden">
-                        <Image
-                          src={section.image || ""}
-                          alt={section.caption || "Content image"}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      {section.caption && (
-                        <p className="text-center text-white/40 text-gh-label italic uppercase tracking-widest pt-2">
-                          — {section.caption}
-                        </p>
-                      )}
-                    </div>
-                  );
-                case "list":
-                  return (
-                    <ul
-                      key={idx}
-                      className="space-y-5 pl-6 border-l-2 border-[#EFCD62]/30"
-                    >
-                      {section.items?.map((item, i) => (
-                        <li key={i} className="flex gap-3 items-start">
-                          <span className="w-2 h-2 rounded-full bg-[#EFCD62] mt-2 shrink-0" />
-                          <span className="font-manrope text-gh-body text-white/70 leading-relaxed text-lg italic">
-                            {item}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  );
-                case "table":
-                  return (
-                    <div
-                      key={idx}
-                      className="overflow-x-auto my-10 border border-white/10 rounded-sm bg-[#1A1C1E]/50"
-                    >
-                      <table className="w-full text-left border-collapse min-w-[600px]">
-                        <thead>
-                          <tr className="border-b border-white/20 bg-[#EFCD62]/5 font-philosopher">
-                            {section.tableData?.headers.map((header, i) => (
-                              <th
-                                key={i}
-                                className="p-6 text-gh-label text-[#EFCD62] uppercase tracking-widest font-bold"
-                              >
-                                {header}
-                              </th>
-                            ))}
-                          </tr>
-                        </thead>
-                        <tbody className="font-manrope text-gh-body">
-                          {section.tableData?.rows.map((row, i) => (
-                            <tr
-                              key={i}
-                              className="border-b border-white/5 hover:bg-white/[0.02] transition-colors"
-                            >
-                              {row.map((cell, j) => (
-                                <td
-                                  key={j}
-                                  className="p-6 text-white/70 italic lg:not-italic"
-                                >
-                                  {cell}
-                                </td>
-                              ))}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  );
-                case "faq":
-                  return (
-                    <div key={idx} className="space-y-3 my-10">
-                      <h3 className="font-philosopher text-gh-h2 text-[#EFCD62] mb-6">
-                        Guided Insights
-                      </h3>
-                      {section.faqs?.map((faq, i) => (
-                        <details
-                          key={i}
-                          className="group border border-white/10 bg-white/5 rounded-sm overflow-hidden"
-                        >
-                          <summary className="flex items-center justify-between p-6 cursor-pointer list-none hover:bg-white/[0.02] transition-all">
-                            <span className="font-philosopher text-gh-h3 text-white pr-8">
-                              {faq.question}
-                            </span>
-                            <ChevronRight className="w-5 h-5 text-[#EFCD62] transition-transform group-open:rotate-90" />
-                          </summary>
-                          <div className="p-8 pt-0 font-manrope text-gh-body text-white/60 leading-relaxed border-t border-white/5 bg-black/20">
-                            {faq.answer}
-                          </div>
-                        </details>
-                      ))}
-                    </div>
-                  );
-                case "heading":
-                  return section.level === 2 ? (
-                    <h2
-                      key={idx}
-                      className="font-philosopher text-gh-h2 text-white border-b-2 border-white/10 pb-4 mb-6 mt-12 flex items-center gap-3"
-                    >
-                      {section.content}
-                    </h2>
-                  ) : (
-                    <h3
-                      key={idx}
-                      className="font-philosopher text-gh-h3 text-[#EFCD62] mb-3 mt-10"
-                    >
-                      {section.content}
-                    </h3>
-                  );
-                case "cta":
-                  return (
-                    <div key={idx} className="flex flex-wrap gap-5 my-10">
-                      {section.ctas?.map((cta, i) => {
-                        const isEnquire = cta.link === "/contact";
-                        const isPrimary = cta.variant === "primary";
-
-                        return (
-                          <PrimaryButton
-                            key={i}
-                            href={isEnquire ? undefined : cta.link}
-                            onClick={
-                              isEnquire
-                                ? () => setEnquireOverlayOpen(true)
-                                : undefined
-                            }
-                            withArrow={false}
-                            width="compact"
-                            variant={isPrimary ? "primary" : "secondary"}
-                            className={
-                              isPrimary
-                                ? undefined
-                                : "!border-[#EFCD62] !text-[#EFCD62] hover:!bg-[#EFCD62]/10 !bg-transparent"
-                            }
-                          >
-                            {cta.label}
-                          </PrimaryButton>
-                        );
-                      })}
-                    </div>
-                  );
-                default:
-                  return null;
-              }
-            })}
+          <article className="lg:w-[65%]">
+            {showLead && (
+              <p className="blog-prose-lead">{post.excerpt}</p>
+            )}
+            <BlogSectionRenderer
+              sections={post.sections}
+              onEnquireClick={() => setEnquireOverlayOpen(true)}
+            />
 
             {/* Tags & Footer Meta */}
             <div className="pt-16 border-t border-white/10 flex flex-wrap gap-3">

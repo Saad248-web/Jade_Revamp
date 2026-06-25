@@ -1,20 +1,14 @@
-import type { VillaStats } from "@/lib/types";
-
+/** Wedding page overlay — marketing fields only; pricing/stats merged at runtime. */
 export type WeddingOverlayMeta = {
-  onwardsPrice: string;
-  parking: string;
+  onwardsPrice?: string;
+  parking?: string;
 };
 
-/** Wedding page overlay entry (retreat spread + SVG overrides). */
-export type WeddingVillaOverlayEntry = Record<string, unknown> & {
+export type WeddingVillaOverlayEntry = {
   id: string;
-  name: string;
-  type: string;
-  location: string;
-  description: string;
-  image: string;
-  stats: VillaStats;
-  perfectForTags: string[];
-  categories: string[];
-  overlay: WeddingOverlayMeta;
+  type?: string;
+  description?: string;
+  perfectForTags?: string[];
+  categories?: string[];
+  overlay?: WeddingOverlayMeta;
 };

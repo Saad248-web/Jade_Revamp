@@ -23,14 +23,14 @@ const havenPerfectForCards = [
 const havenBase = {
   id: "haven",
   name: "Haven",
-  type: "PRIVATE LUXURY VILLA",
-  location: "Marenahalli, Bengaluru",
+  type: "5-BEDROOM POOL VILLA",
+  location: "10 min Byg Brewski · Hennur",
   stats: {
-    stay: "Up to 20 Guests",
-    events: "100 Guests",
-    bhk: "4 BHK",
-    lawn: "Lawn Area Outdoor Space",
-    villaArea: "Private Standalone Property",
+    stay: "Up to 12 Guests (25 max)",
+    events: "100–150 seated · 800 floating",
+    bhk: "5 BHK",
+    lawn: "17,600 sq.ft Lawn",
+    villaArea: "3,500 sq.ft · race-track view",
   },
   description:
     "Haven is a 4-bedroom private villa designed for group stays and social gatherings, combining modern interiors with open outdoor spaces. With a private pool, lawn, and large shared areas, the villa supports both relaxed stays and larger gatherings in a controlled, private setting.",
@@ -216,38 +216,7 @@ const havenBase = {
       ],
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 12 PAX",
-          sublabel: "≈ ₹4,042 / head",
-          price: "₹48,500 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: [
-        "Full venue access",
-        "Overnight villa stay",
-        "Private pool access",
-      ],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (2 PM · 12 AM)",
-      packages: [
-        {
-          label: "Up to 24 PAX",
-          sublabel: "≈ ₹1,604 / head",
-          price: "₹38,500 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: ["Private venue access", "On-site parking"],
-    },
-  },
+
   locationDetails: {
     mapImage: "",
     address: "Netaji Road, Mitganahalli, Marenahalli, Bengaluru — 562149",

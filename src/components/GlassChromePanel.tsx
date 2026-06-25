@@ -37,9 +37,12 @@ export function GlassChromePanel({
   );
 }
 
-type GlassChromeButtonPanelProps = GlassChromePanelProps & {
-  onClick?: () => void;
-  type?: "button" | "submit";
+type GlassChromeButtonPanelProps = Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  "children"
+> & {
+  children: React.ReactNode;
+  contentClassName?: string;
 };
 
 /**
@@ -49,14 +52,14 @@ export function GlassChromeButtonPanel({
   children,
   className = "",
   contentClassName = "",
-  onClick,
   type = "button",
+  ...rest
 }: GlassChromeButtonPanelProps) {
   return (
     <button
       type={type}
-      onClick={onClick}
       className={`${GLASS_BUTTON_RESET_CLASS} ${GLASS_CHROME_FRAME_CLASS} ${className}`.trim()}
+      {...rest}
     >
       <span
         aria-hidden

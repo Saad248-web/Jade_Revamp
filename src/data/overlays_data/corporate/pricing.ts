@@ -1,12 +1,8 @@
-import { CORPORATE_VILLAS_OVERLAY_DATA } from "./villas/index";
+import { buildOnwardsPriceMap } from "@/lib/villas/canonicalOverlayHelpers";
+import { CORPORATE_VILLA_IDS } from "./villas/index";
 
-/** Derived from per-villa `overlay.onwardsPrice` (single source of truth). */
+/** Derived from Jade_Property_Data.md via canonical portfolio. */
 export const CORPORATE_PRICING_ONWARDS: Record<string, string> = {
-  default: "₹75,000",
-  ...Object.fromEntries(
-    Object.entries(CORPORATE_VILLAS_OVERLAY_DATA).map(([id, entry]) => [
-      id,
-      entry.overlay.onwardsPrice,
-    ]),
-  ),
+  default: "₹31,000 + GST / night",
+  ...buildOnwardsPriceMap("corporate", CORPORATE_VILLA_IDS),
 };

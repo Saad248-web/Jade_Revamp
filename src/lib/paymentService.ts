@@ -21,8 +21,9 @@ export interface PaymentSession {
 }
 
 export interface InitiatePaymentOptions {
-  /** Links the Razorpay order to `bookings.id` server-side */
-  bookingUuid?: string;
+  /** Links the Razorpay order to booking — amount derived server-side */
+  bookingId?: string;
+  bookingToken?: string;
 }
 
 export async function initiatePayment(
@@ -31,15 +32,14 @@ export async function initiatePayment(
   opts?: InitiatePaymentOptions,
 ): Promise<PaymentSession> {
   try {
-    const amountSubunits = Math.max(100, Math.round(amountRupees * 100));
-    const receipt =
-      referenceId.replace(/[^\w-]/g, "").slice(0, 40) || `rc${Date.now()}`;
-    const body: Record<string, unknown> = {
-      amountSubunits,
-      receipt,
-    };
-    if (opts?.bookingUuid) {
-      body.booking_uuid = opts.bookingUuid;
+    const body: Record<string, unknown> = {};
+    if (opts?.bookingId) {
+      body.bookingId = opts.bookingId;
+    } else if (opts?.bookingToken) {
+      body.bookingToken = opts.bookingToken;
+    } else {
+      body.receipt = referenceId.replace(/[^\w-]/g, "").slice(0, 40) || `rc${Date.now()}`;
+      body.amountSubunits = Math.max(100, Math.round(amountRupees * 100));
     }
 
     const res = await fetch("/api/payments/razorpay-order", {
@@ -60,7 +60,7 @@ export async function initiatePayment(
       const amtSub =
         typeof data.amount === "number"
           ? data.amount
-          : amountSubunits;
+          : Math.max(100, Math.round(amountRupees * 100));
       return {
         orderId: referenceId,
         amount: amountRupees,

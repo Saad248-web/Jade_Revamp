@@ -200,7 +200,27 @@ export default function VillaDetailsPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const id = params?.id as string;
-  const villa = VILLAS.find((v) => v.id === id) as Villa | undefined;
+  const staticVilla = VILLAS.find((v) => v.id === id) as Villa | undefined;
+  const [liveVilla, setLiveVilla] = useState<Villa | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+    fetch(`/api/public/villas/${encodeURIComponent(id)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { villa?: Villa } | null) => {
+        if (!cancelled && data?.villa) setLiveVilla(data.villa);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  const villa = useMemo(() => {
+    if (liveVilla) return liveVilla;
+    return staticVilla;
+  }, [liveVilla, staticVilla]);
   const retreatLogoSrc = getVillaRetreatLogoSrc(id);
   const { setEnquireOverlayOpen, isEnquireOverlayOpen } = useAnimation();
   const goBack = useSafeBack(villaListingPath());

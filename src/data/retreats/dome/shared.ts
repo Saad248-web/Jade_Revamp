@@ -175,66 +175,25 @@ const DOME_AMENITIES = [
 
 /** Estate-wide capacity (dome-villas listing + detail). */
 export const DOME_ESTATE_STATS: VillaStats = {
-  stay: "Up to 18 Guests",
-  events: "25 Guests",
-  bhk: "3 Villas",
-  lawn: "Landscaped Pathways",
-  villaArea: "Private Estate",
+  stay: "Up to 24 Guests (3 villas)",
+  events: "Up to 35 Guests (cluster)",
+  bhk: "3 Domes · 3 BR each",
+  lawn: "Shared cluster stage",
+  villaArea: "Doddaballapur hills",
 };
 
 /** Per-dome showcase pages (blue / red / yellow detail). */
 export const DOME_SINGLE_UNIT_STATS: VillaStats = {
-  stay: "6 Guests",
-  events: "8 Guests",
-  bhk: "1 Dome",
-  lawn: "Outdoor Sit-out",
-  villaArea: "Hobbit-Themed Dome",
+  stay: "Up to 8 Guests",
+  events: "Up to 16 Guests",
+  bhk: "3 BR",
+  lawn: "Private plunge pool",
+  villaArea: "Dome villa",
 };
 
-const DOME_ESTATE_PRICING = {
-  stay: {
-    title: "Stay Experience",
-    subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-    packages: [
-      {
-        label: "Up to 4 PAX",
-        sublabel: "≈ ₹3,750 / head",
-        price: "₹14,999 + taxes",
-      },
-      { label: "Additional Guest", price: "₹1,999 + taxes" },
-    ],
-    features: ["Full estate access", "All 3 domes", "Pool access"],
-  },
-  event: {
-    title: "Event Experience",
-    subtitle: "8 hours (2 PM · 12 AM)",
-    packages: [
-      {
-        label: "Up to 8 PAX",
-        sublabel: "≈ ₹1,875 / head",
-        price: "₹14,999 + taxes",
-      },
-      { label: "Additional Guest", price: "₹1,099 + taxes" },
-    ],
-    features: ["Private venue access", "Parking included"],
-  },
-} as const;
-
-/** Pricing copy on color-dome showcase pages (book the full estate). */
-const DOME_SINGLE_UNIT_PRICING = {
-  stay: {
-    ...DOME_ESTATE_PRICING.stay,
-    features: ["Full estate booking", "All 3 domes included", "Pool access"],
-  },
-  event: {
-    ...DOME_ESTATE_PRICING.event,
-    features: ["Estate event access", "All domes & grounds", "Parking included"],
-  },
-} as const;
-
 export const DOME_ESTATE_SHARED = {
-  type: "HOBBIT THEMED VILLA RETREAT",
-  location: "Outskirts of Bangalore",
+  type: "DOME VILLA CLUSTER · 3 PRIVATE VILLAS",
+  location: "Doddaballapur · 30 min airport toll",
   stats: DOME_ESTATE_STATS,
   categories: ["Nature Retreats", "Weekend Getaways", "Luxury Stays"],
   amenities: DOME_AMENITIES,
@@ -269,7 +228,6 @@ export const DOME_ESTATE_SHARED = {
       icon: "PartyPopper",
     },
   ],
-  pricing: DOME_ESTATE_PRICING,
   locationDetails: {
     mapImage: "",
     address: "Chinnapathirali Village, Shoolagiri, Tamil Nadu 635105",
@@ -304,8 +262,8 @@ export function buildSingleDomeVilla(color: DomeColorKey) {
     name: meta.name,
     type: `HOBBIT THEMED · ${meta.categoryLabel.toUpperCase()}`,
     stats: DOME_SINGLE_UNIT_STATS,
-    pricing: DOME_SINGLE_UNIT_PRICING,
-    description: `The ${meta.shortLabel} is one of three Hobbit-themed Dome Villas at the Dome Villas private estate near Bangalore. Book the full estate for exclusive use of all three domes, or explore this dome’s spaces, pool areas, and landscaped sit-outs in detail below.`,
+    pricing: undefined,
+    description: `The ${meta.shortLabel} is one of three dome villas at the Doddaballapur cluster. Book the full estate for all three domes, or explore this villa's plunge pool, outdoor dining, and hill views below.`,
     thumbnail: heroes[0] ?? colorImages[0],
     image: heroes[0] ?? colorImages[0],
     images: colorImages,

@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
-import { getPublishedPosts } from "@/data/blogs";
+import { getMergedPublishedPosts } from "@/lib/cms/blogStore";
 import { VILLAS } from "@/lib/mockData";
 
 const BASE = "https://jadehospitainment.com";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [
     {
@@ -114,8 +114,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]);
 
-  // Dynamic blog routes
-  const posts = getPublishedPosts();
+  // Dynamic blog routes (CMS + static)
+  const posts = await getMergedPublishedPosts();
   const blogRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${BASE}/blogs/${post.slug}`,
     lastModified: new Date(post.dateModified ?? post.date),

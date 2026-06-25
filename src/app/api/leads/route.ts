@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { query } from "@/lib/db";
 import { getClientIpFromHeaders, rateLimit } from "@/lib/rateLimit";
 import { readJsonBody, SafeJsonError } from "@/lib/security/safeJson";
 import { notifyNewLead } from "@/lib/email/leadsNotifications";
@@ -184,14 +183,25 @@ export async function POST(req: NextRequest) {
       ].join("\n");
     }
 
-    const result = await query<{ id: string }>(
-      `INSERT INTO leads (source, payload, email)
-       VALUES ($1, $2::jsonb, $3)
-       RETURNING id`,
-      [source as string, JSON.stringify(b.payload ?? {}), email],
-    );
+    const { connectDB } = await import("@/lib/db");
+    const { LeadModel } = await import("@/models/Lead");
+    const { auditLog } = await import("@/lib/audit/auditLog");
 
-    const id = result.rows[0]?.id;
+    await connectDB();
+    const doc = await LeadModel.create({
+      source,
+      payload: b.payload ?? {},
+      email,
+    });
+
+    await auditLog({
+      action: "lead.create",
+      targetType: "lead",
+      targetId: String(doc._id),
+      ip,
+    });
+
+    const id = String(doc._id);
     await notifyNewLead({
       source,
       preview: `${preview}\n\nLead row id: ${id ?? "(unknown)"}`,
@@ -209,7 +219,7 @@ export async function POST(req: NextRequest) {
         : "";
     const devDbHint =
       process.env.NODE_ENV !== "production" && code === "ECONNREFUSED"
-        ? "Database is not running. Start Postgres (npm run db:up with Docker, or a local server on port 5432) and ensure POSTGRES_* in .env.local matches."
+        ? "Database is not running. Set MONGODB_URI in .env.local — see NEEDS_FROM_USER.md."
         : null;
     return NextResponse.json(
       {

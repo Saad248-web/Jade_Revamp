@@ -1,33 +1,20 @@
-import { domeVillas } from "@/data/retreats/dome/estate";
 import type { CorporateVillaOverlayEntry } from "../types";
 
-/** Corporate overlay — source: public/Corporate_Villa_Overlay/Dome.svg */
 export const domeVillasCorporateOverlay = {
-  ...domeVillas,
-  type: "HOBBIT-INSPIRED CORPORATE RETREAT",
-  location: "Doddaballapur",
+  id: "dome-villas",
+  type: "DOME VILLA CLUSTER",
   description:
-    "Dome Villas by Jade is a 2-acre hobbit-inspired corporate retreat featuring three private dome homes, expansive lawns, and dedicated outdoor spaces. Designed for corporate offsites, team celebrations, and immersive workations, the venue balances structured productivity with open-air engagement.",
+    "Dome Villas books as a private three-villa estate for team offsites — distributed living, plunge pools, and outdoor zones across the Doddaballapur hillside cluster.",
   perfectForTags: [
     "Corporate Offsites",
-    "Leadership Retreats",
-    "Team Outings",
-    "Workations",
-    "Recognition Events",
+    "Team Bonding",
+    "Creative Retreats",
+    "Day Outings",
   ],
-  stats: {
-    ...domeVillas.stats,
-    stay: "30 Guests",
-    events: "200 Guests",
-    lawn: "1.5 Acre · Expansive Lawn",
-    villaArea: "2-acre private retreat",
-  },
   categories: [
     "Corporate Offsites",
-    "Leadership Retreats",
-    "Team Outings",
-    "Workations",
-    "Recognition Events",
+    "Team Bonding",
+    "Creative Retreats",
+    "Day Outings",
   ],
-  overlay: { onwardsPrice: "₹75,000" },
 } as CorporateVillaOverlayEntry;

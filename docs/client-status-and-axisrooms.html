@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jade Hospitainment — Project Status &amp; AxisRooms</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #1a1c1e;
+        --surface: #222528;
+        --surface-2: #2a2d31;
+        --border: rgba(255, 255, 255, 0.1);
+        --border-gold: rgba(239, 205, 98, 0.35);
+        --gold: #efcd62;
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.6);
+        --done: #34d399;
+        --done-bg: rgba(52, 211, 153, 0.15);
+        --pending: #fbbf24;
+        --pending-bg: rgba(251, 191, 36, 0.12);
+        --need: #38bdf8;
+        --need-bg: rgba(56, 189, 248, 0.12);
+        --radius: 12px;
+        --max: 960px;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: "DM Sans", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.55;
+        font-size: 16px;
+      }
+
+      .glow {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(ellipse 70% 40% at 50% -10%, rgba(239, 205, 98, 0.08), transparent);
+      }
+
+      .wrap {
+        position: relative;
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 2.5rem 1.25rem 4rem;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem 1.5rem;
+        border: 1px solid var(--border-gold);
+        border-radius: var(--radius);
+        background: var(--surface);
+      }
+
+      h1 {
+        font-family: Fraunces, Georgia, serif;
+        font-size: clamp(1.75rem, 5vw, 2.25rem);
+        color: var(--gold);
+        margin: 0 0 0.5rem;
+        line-height: 1.2;
+      }
+
+      .subtitle { color: var(--muted); font-size: 1rem; margin: 0; }
+      .date { margin-top: 1rem; font-size: 0.85rem; color: rgba(255, 255, 255, 0.4); }
+
+      section {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+      }
+
+      section h2 {
+        font-family: Fraunces, Georgia, serif;
+        font-size: 1.35rem;
+        margin: 0 0 0.25rem;
+        color: var(--gold);
+      }
+
+      .section-desc {
+        color: var(--muted);
+        font-size: 0.92rem;
+        margin: 0 0 1rem;
+      }
+
+      /* Legend */
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem 1.5rem;
+        margin-bottom: 1.25rem;
+        padding: 0.85rem 1rem;
+        background: var(--surface-2);
+        border-radius: 8px;
+        font-size: 0.88rem;
+        color: var(--muted);
+      }
+
+      .legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+      .legend .mark { font-weight: 700; font-size: 1.1rem; }
+
+      /* Status tables */
+      .table-wrap { overflow-x: auto; margin: 0 -0.25rem; }
+
+      table.status {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.92rem;
+      }
+
+      table.status thead th {
+        text-align: left;
+        padding: 0.65rem 0.75rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        border-bottom: 2px solid var(--border);
+        white-space: nowrap;
+      }
+
+      table.status thead th.col-check {
+        text-align: center;
+        width: 4.5rem;
+      }
+
+      table.status thead th.col-check.done-h { color: var(--done); }
+      table.status thead th.col-check.pending-h { color: var(--pending); }
+      table.status thead th.col-check.need-h { color: var(--need); }
+
+      table.status tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      table.status tbody tr:last-child { border-bottom: none; }
+
+      table.status tbody tr.cat-row td {
+        padding: 0.85rem 0.75rem 0.4rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--gold);
+        background: rgba(239, 205, 98, 0.06);
+        border-bottom: 1px solid rgba(239, 205, 98, 0.15);
+      }
+
+      table.status td {
+        padding: 0.7rem 0.75rem;
+        vertical-align: top;
+        color: var(--muted);
+      }
+
+      table.status td.feature {
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      table.status td.feature small {
+        display: block;
+        font-weight: 400;
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin-top: 0.15rem;
+      }
+
+      table.status td.check {
+        text-align: center;
+        vertical-align: middle;
+        width: 4.5rem;
+      }
+
+      .mark-done {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: 6px;
+        background: var(--done-bg);
+        color: var(--done);
+        font-weight: 700;
+        font-size: 1rem;
+      }
+
+      .mark-pending {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: 6px;
+        background: var(--pending-bg);
+        color: var(--pending);
+        font-weight: 700;
+        font-size: 0.95rem;
+      }
+
+      .mark-need {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: 6px;
+        background: var(--need-bg);
+        color: var(--need);
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+
+      .mark-empty {
+        color: rgba(255, 255, 255, 0.15);
+        font-size: 1.1rem;
+      }
+
+      /* Summary counts */
+      .counts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+      }
+
+      @media (max-width: 520px) {
+        .counts { grid-template-columns: 1fr; }
+      }
+
+      .count-card {
+        text-align: center;
+        padding: 1rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+      }
+
+      .count-card.done { border-color: rgba(52, 211, 153, 0.4); background: var(--done-bg); }
+      .count-card.pending { border-color: rgba(251, 191, 36, 0.4); background: var(--pending-bg); }
+      .count-card.need { border-color: rgba(56, 189, 248, 0.4); background: var(--need-bg); }
+
+      .count-card .n {
+        font-family: Fraunces, Georgia, serif;
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 1;
+      }
+
+      .count-card.done .n { color: var(--done); }
+      .count-card.pending .n { color: var(--pending); }
+      .count-card.need .n { color: var(--need); }
+
+      .count-card .lbl {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-top: 0.35rem;
+      }
+
+      .note {
+        margin-top: 1rem;
+        padding: 0.9rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .note strong { color: var(--text); }
+
+      .flow-simple {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+        font-size: 0.85rem;
+      }
+
+      .flow-box {
+        padding: 0.45rem 0.65rem;
+        background: rgba(0, 0, 0, 0.25);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+      }
+
+      .flow-arrow { color: var(--gold); font-weight: bold; }
+
+      footer {
+        text-align: center;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.35);
+        margin-top: 1.5rem;
+      }
+
+      @media print {
+        .glow { display: none; }
+        body { background: #fff; color: #111; font-size: 10pt; }
+        section, header, .count-card { break-inside: avoid; border-color: #ccc; background: #f9f9f9; }
+        h1, h2, .feature { color: #111 !important; }
+        .mark-done { background: #d4edda; color: #155724; }
+        .mark-pending { background: #fff3cd; color: #856404; }
+        .mark-need { background: #cce5ff; color: #004085; }
+        td, .section-desc, .note { color: #333 !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glow" aria-hidden="true"></div>
+    <div class="wrap">
+
+      <header>
+        <h1>Jade Hospitainment — Project Status</h1>
+        <p class="subtitle">
+          What is done, what is still pending, and what we need from AxisRooms.
+        </p>
+        <p class="date">June 2026 · Jade ReVamp platform</p>
+      </header>
+
+      <div class="counts">
+        <div class="count-card done">
+          <div class="n">18</div>
+          <div class="lbl">✓ Done</div>
+        </div>
+        <div class="count-card pending">
+          <div class="n">10</div>
+          <div class="lbl">⏳ Pending (our side)</div>
+        </div>
+        <div class="count-card need">
+          <div class="n">10</div>
+          <div class="lbl">→ From AxisRooms</div>
+        </div>
+      </div>
+
+      <div class="note" style="margin-bottom: 2rem;">
+        <strong>Bottom line:</strong> Guests can book and pay on the Jade website today.
+        Staff manage everything in <strong>Jade Host</strong>. OTA sync (Airbnb, Booking.com, etc.)
+        is <strong>not live</strong> — we need AxisRooms API access and mapping to finish that.
+      </div>
+
+      <!-- MASTER STATUS TABLE -->
+      <section id="master">
+        <h2>Full project checklist</h2>
+        <p class="section-desc">One row per capability. Only one column is marked per item.</p>
+
+        <div class="legend">
+          <span><span class="mark mark-done">✓</span> Done — built and working</span>
+          <span><span class="mark mark-pending">⏳</span> Pending — we are still building</span>
+          <span><span class="mark mark-need">→</span> Need from AxisRooms — blocked until they provide</span>
+        </div>
+
+        <div class="table-wrap">
+          <table class="status">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th class="col-check done-h">✓ Done</th>
+                <th class="col-check pending-h">⏳ Pending</th>
+                <th class="col-check need-h">→ AxisRooms</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Website -->
+              <tr class="cat-row"><td colspan="4">Public website</td></tr>
+              <tr>
+                <td class="feature">Marketing pages &amp; villa listings<small>Villa detail pages, experiences, galleries</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Contact, careers &amp; partner enquiry forms<small>Leads saved to database</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">SEO (sitemap, metadata, structured data)<small>Crawlable by Google &amp; AI search</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+
+              <!-- Direct booking -->
+              <tr class="cat-row"><td colspan="4">Direct booking (jadehospitainment.com)</td></tr>
+              <tr>
+                <td class="feature">4-step booking flow<small>Villa → dates → guests → pay</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Live availability calendar on booking page<small>Based on confirmed bookings + staff blocks</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Server-side pricing<small>Rates calculated securely — not in the browser</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Double-booking protection<small>Only one guest wins if two book same dates</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">15-minute hold while guest pays<small>Pending booking expires if payment not completed</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Booking add-ons (experiences)<small>Extra items on booking form</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-pending">⏳</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Cancellation &amp; refund policy<small>Business rules for website terms &amp; refunds</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-pending">⏳</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+
+              <!-- Payments -->
+              <tr class="cat-row"><td colspan="4">Payments</td></tr>
+              <tr>
+                <td class="feature">Razorpay checkout (card / UPI)<small>Guest pays online at time of booking</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Auto-confirm booking after payment<small>Webhook updates status — no manual step</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Payments list in dashboard<small>Staff can view payment records</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+
+              <!-- Jade Host -->
+              <tr class="cat-row"><td colspan="4">Jade Host staff dashboard</td></tr>
+              <tr>
+                <td class="feature">Operations calendar<small>All villas, bookings, blocks in one view</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Booking folio (guest details, notes, status)<small>Full booking record per reservation</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Manual date blocks<small>Close dates for maintenance, owner use, etc.</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Housekeeping board<small>Turnover status per villa</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Villa settings (rates, capacity, bookable on/off)<small>Managed per property in dashboard</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Staff logins &amp; role permissions<small>Admin, staff, team, SEO, dev — access control</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Blog &amp; landing page editor<small>Basic CMS from dashboard</small></td>
+                <td class="check"><span class="mark-done">✓</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Dashboard UI polish<small>Ongoing layout &amp; usability improvements</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-pending">⏳</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+
+              <!-- Data -->
+              <tr class="cat-row"><td colspan="4">Property data (needs Jade sign-off)</td></tr>
+              <tr>
+                <td class="feature">All 16 villas loaded with final rates<small>Some prices still marked “to be confirmed”</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-pending">⏳</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">End-to-end go-live testing<small>Book → pay → calendar → housekeeping checklist</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-pending">⏳</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+
+              <!-- AxisRooms - our build -->
+              <tr class="cat-row"><td colspan="4">AxisRooms integration (our technical build)</td></tr>
+              <tr>
+                <td class="feature">Mapping fields per villa (Property / Room / Rate IDs)<small>Schema ready — values not filled in yet</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-pending">⏳</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Push direct bookings to AxisRooms<small>So OTAs see dates as sold</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-pending">⏳</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Import OTA bookings into Jade Host<small>Airbnb / Booking.com reservations on calendar</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-pending">⏳</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Cancellation sync to OTAs<small>Release dates when we cancel on our side</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-pending">⏳</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Overbooking conflict screen<small>UI exists — needs live OTA data to be useful</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-pending">⏳</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+              </tr>
+
+              <!-- AxisRooms - need from them -->
+              <tr class="cat-row"><td colspan="4">What we need from AxisRooms</td></tr>
+              <tr>
+                <td class="feature">API documentation &amp; sandbox access<small>Test environment + keys</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-need">→</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Property mapping sheet (all Jade villas)<small>Property ID, Room Type ID, Rate Plan ID each</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-need">→</span></td>
+              </tr>
+              <tr>
+                <td class="feature">OTA booking webhook spec<small>How Airbnb / Booking.com bookings reach us</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-need">→</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Outbound reservation API<small>How we send our website bookings to AxisRooms</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-need">→</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Outbound cancellation API<small>How we release dates on OTAs when we cancel</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-need">→</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Overbooking rules<small>What happens if website &amp; OTA sell same night</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-need">→</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Direct vs OTA pricing strategy<small>Can website keep its own rates?</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-need">→</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Active OTA channel list<small>Airbnb, Booking.com, etc. + source codes</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-need">→</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Availability update method<small>Push vs poll — how often</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-need">→</span></td>
+              </tr>
+              <tr>
+                <td class="feature">Integration contact &amp; go-live timeline<small>Named tech contact + UAT property</small></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-empty">—</span></td>
+                <td class="check"><span class="mark-need">→</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- QUICK VIEW: DONE ONLY -->
+      <section id="done-only">
+        <h2>✓ What we have — quick view</h2>
+        <p class="section-desc">Everything with a green check today.</p>
+        <div class="table-wrap">
+          <table class="status">
+            <thead>
+              <tr>
+                <th>Done</th>
+                <th class="col-check done-h">✓</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="feature">Marketing website &amp; villa pages</td><td class="check"><span class="mark-done">✓</span></td></tr>
+              <tr><td class="feature">Enquiry &amp; careers forms</td><td class="check"><span class="mark-done">✓</span></td></tr>
+              <tr><td class="feature">SEO &amp; sitemap</td><td class="check"><span class="mark-done">✓</span></td></tr>
+              <tr><td class="feature">4-step direct booking flow</td><td class="check"><span class="mark-done">✓</span></td></tr>
+              <tr><td class="feature">Live availability on booking page</td><td class="check"><span class="mark-done">✓</span></td></tr>
+              <tr><td class="feature">Server-side pricing &amp; double-booking protection</td><td class="check"><span class="mark-done">✓</span></td></tr>
+              <tr><td class="feature">Razorpay payments &amp; auto-confirm</td><td class="check"><span class="mark-done">✓</span></td></tr>
+              <tr><td class="feature">Jade Host calendar, folio, blocks, housekeeping</td><td class="check"><span class="mark-done">✓</span></td></tr>
+              <tr><td class="feature">Villa settings &amp; staff permissions</td><td class="check"><span class="mark-done">✓</span></td></tr>
+              <tr><td class="feature">Basic CMS (blogs &amp; landing pages)</td><td class="check"><span class="mark-done">✓</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="flow-simple">
+          <span class="flow-box">Guest books</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-box">Pays (Razorpay)</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-box">Confirmed</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-box">On staff calendar</span>
+        </div>
+      </section>
+
+      <!-- QUICK VIEW: PENDING ONLY -->
+      <section id="pending-only">
+        <h2>⏳ What is still pending — quick view</h2>
+        <p class="section-desc">Our team is working on these. Direct booking still works without them.</p>
+        <div class="table-wrap">
+          <table class="status">
+            <thead>
+              <tr>
+                <th>Still pending (our side)</th>
+                <th class="col-check pending-h">⏳</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="feature">AxisRooms two-way sync (technical build)<small>Plumbing sketched — not connected to live API</small></td><td class="check"><span class="mark-pending">⏳</span></td></tr>
+              <tr><td class="feature">Villa → AxisRooms ID mapping<small>Waiting on IDs from AxisRooms</small></td><td class="check"><span class="mark-pending">⏳</span></td></tr>
+              <tr><td class="feature">OTA bookings into calendar<small>Airbnb / Booking.com auto-import</small></td><td class="check"><span class="mark-pending">⏳</span></td></tr>
+              <tr><td class="feature">Push website bookings to OTAs<small>Close dates on channels when we sell direct</small></td><td class="check"><span class="mark-pending">⏳</span></td></tr>
+              <tr><td class="feature">Cancellation sync to OTAs</td><td class="check"><span class="mark-pending">⏳</span></td></tr>
+              <tr><td class="feature">Full 16-villa rates &amp; policies<small>Jade sign-off needed</small></td><td class="check"><span class="mark-pending">⏳</span></td></tr>
+              <tr><td class="feature">Booking add-ons aligned with price list</td><td class="check"><span class="mark-pending">⏳</span></td></tr>
+              <tr><td class="feature">Cancellation &amp; refund policy (business rules)</td><td class="check"><span class="mark-pending">⏳</span></td></tr>
+              <tr><td class="feature">Dashboard UI polish</td><td class="check"><span class="mark-pending">⏳</span></td></tr>
+              <tr><td class="feature">End-to-end go-live testing</td><td class="check"><span class="mark-pending">⏳</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- QUICK VIEW: AXISROOMS -->
+      <section id="axisrooms-only">
+        <h2>→ What we need from AxisRooms — quick view</h2>
+        <p class="section-desc">Bring this table to your AxisRooms integration meeting.</p>
+        <div class="table-wrap">
+          <table class="status">
+            <thead>
+              <tr>
+                <th>Needed from AxisRooms</th>
+                <th class="col-check need-h">→</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="feature">API docs &amp; sandbox access</td><td class="check"><span class="mark-need">→</span></td></tr>
+              <tr><td class="feature">Property mapping sheet (all villas)</td><td class="check"><span class="mark-need">→</span></td></tr>
+              <tr><td class="feature">How OTA bookings are sent to us (webhook)</td><td class="check"><span class="mark-need">→</span></td></tr>
+              <tr><td class="feature">How we send website bookings to them</td><td class="check"><span class="mark-need">→</span></td></tr>
+              <tr><td class="feature">How we send cancellations</td><td class="check"><span class="mark-need">→</span></td></tr>
+              <tr><td class="feature">Overbooking policy</td><td class="check"><span class="mark-need">→</span></td></tr>
+              <tr><td class="feature">Direct vs OTA pricing — yes or no</td><td class="check"><span class="mark-need">→</span></td></tr>
+              <tr><td class="feature">Which OTAs are connected + source codes</td><td class="check"><span class="mark-need">→</span></td></tr>
+              <tr><td class="feature">Availability updates (push or poll)</td><td class="check"><span class="mark-need">→</span></td></tr>
+              <tr><td class="feature">Integration contact &amp; go-live date</td><td class="check"><span class="mark-need">→</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note">
+          <strong>Please confirm:</strong> Native <strong>Axis Rooms API</strong> credentials and webhook signing method (legacy STAAH ChannelConnect naming has been removed from code).
+          <strong>native Axis Rooms API</strong>? Our system is prepared for either — steps differ slightly.
+        </div>
+      </section>
+
+      <footer>
+        Jade Hospitainment · Client status summary · June 2026
+      </footer>
+    </div>
+  </body>
+</html>

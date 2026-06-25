@@ -1,17 +1,14 @@
-// Route-segment layout — Server Component exports metadata for this client-component page
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Book a Villa",
+  title: "Book Your Stay",
   description:
-    "Book your stay at an exclusive Jade Hospitainment private villa near Bangalore. Select dates, guests, and add curated experiences.",
+    "Book a private luxury villa near Bangalore — check availability, select dates, and pay securely with Jade Hospitainment.",
   alternates: { canonical: "https://jadehospitainment.com/book" },
-  // Prevent Google from indexing the booking flow — it's a functional page not a content page
-  robots: { index: false, follow: false },
   openGraph: {
-    title: "Book a Villa | Jade Hospitainment",
+    title: "Book Your Stay | Jade Hospitainment",
     description:
-      "Reserve your exclusive private villa stay at Jade Hospitainment. Curated experiences available.",
+      "Reserve exclusive private villas near Bangalore with instant availability and secure payment.",
     url: "https://jadehospitainment.com/book",
   },
 };
@@ -21,5 +18,5 @@ export default function BookLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return children;
 }

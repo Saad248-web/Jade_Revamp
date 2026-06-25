@@ -1,0 +1,227 @@
+import { VILLAS as STATIC_VILLAS } from "@/data/retreats";
+import { connectDB } from "@/lib/db";
+import { paiseToRupees } from "@/lib/money";
+import type { Villa } from "@/lib/types";
+import { VillaModel } from "@/models/Villa";
+import { buildPricingDisplay } from "@/lib/villas/pricingDisplay";
+import { CANONICAL_BY_RETREAT_ID } from "@/lib/villas/canonicalPortfolio";
+
+type MongoVilla = {
+  slug: string;
+  retreatId?: string;
+  shortName?: string;
+  name: string;
+  type?: string;
+  location?: string;
+  thumbnail?: string;
+  basePricePaise: number;
+  dayOutBasePricePaise: number;
+  stayBasePax: number;
+  dayOutBasePax: number;
+  stayMaxPax: number;
+  bookable?: boolean;
+  status?: string;
+  displayStats?: Record<string, string | undefined>;
+  content?: Record<string, unknown>;
+  updatedAt?: Date;
+};
+
+function statsFromDoc(doc: MongoVilla) {
+  const d = doc.displayStats ?? {};
+  return {
+    stay: d.stay ?? `Up to ${doc.stayBasePax} guests`,
+    events: d.events ?? "",
+    bhk: d.bhk ?? "",
+    lawn: d.lawn,
+    villaArea: d.villaArea,
+    pool: d.pool,
+  };
+}
+
+function operationalPricing(doc: MongoVilla) {
+  const c = CANONICAL_BY_RETREAT_ID.get(doc.retreatId ?? doc.slug);
+  if (c) return buildPricingDisplay(c);
+  const stayBase = paiseToRupees(doc.basePricePaise);
+  const dayBase = paiseToRupees(doc.dayOutBasePricePaise);
+  return {
+    stay: {
+      title: "Stay Experience",
+      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
+      packages: [
+        {
+          label: `Up to ${doc.stayBasePax} PAX`,
+          sublabel: "",
+          price: `${stayBase > 0 ? `₹${stayBase.toLocaleString("en-IN")}` : "—"} + GST`,
+        },
+      ],
+      features: ["Private villa access", "Overnight stay"],
+    },
+    event: {
+      title: "Day-out Experience",
+      subtitle: "Single day · no overnight",
+      packages: [
+        {
+          label: `Up to ${doc.dayOutBasePax} PAX`,
+          sublabel: "",
+          price: `${dayBase > 0 ? `₹${dayBase.toLocaleString("en-IN")}` : "—"} + GST`,
+        },
+      ],
+      features: ["Venue access"],
+    },
+  };
+}
+
+function shellFromMongo(doc: MongoVilla): Villa {
+  const retreatId = doc.retreatId ?? doc.slug;
+  const content = (doc.content ?? {}) as Partial<Villa>;
+  const thumb = doc.thumbnail || content.images?.[0] || "";
+  return {
+    id: retreatId,
+    name: doc.shortName ?? doc.name,
+    type: doc.type ?? "",
+    location: doc.location ?? "",
+    description: content.description ?? "",
+    image: thumb,
+    images: content.images ?? (thumb ? [thumb] : []),
+    stats: statsFromDoc(doc),
+    perfectForTags: content.perfectForTags ?? [],
+    perfectForCards: content.perfectForCards ?? [],
+    amenityHighlights: content.amenityHighlights ?? [],
+    categories: content.categories ?? [],
+    amenities: content.amenities ?? [],
+    services: content.services,
+    propertyDetails: content.propertyDetails,
+    spaces: content.spaces,
+    activities: content.activities,
+    categorizedSpaces: content.categorizedSpaces,
+    pricing: operationalPricing(doc) as Villa["pricing"],
+    locationDetails: content.locationDetails,
+    video: content.video,
+    faq: content.faq,
+    bookable: doc.bookable ?? true,
+    hideFromVillasDirectory:
+      content.hideFromVillasDirectory ??
+      (doc.status === "hidden" || !(doc.bookable ?? true)),
+    socialProof: content.socialProof,
+  } as Villa;
+}
+
+function mergeStaticWithMongo(staticVilla: Villa, doc: MongoVilla): Villa {
+  const content = (doc.content ?? {}) as Partial<Villa>;
+  const retreatId = doc.retreatId ?? doc.slug;
+  const thumb =
+    doc.thumbnail ||
+    staticVilla.image ||
+    content.images?.[0] ||
+    "";
+
+  return {
+    ...staticVilla,
+    name: doc.shortName ?? doc.name ?? staticVilla.name,
+    type: doc.type ?? staticVilla.type,
+    location: doc.location ?? staticVilla.location,
+    description: content.description ?? staticVilla.description,
+    image: thumb || staticVilla.image,
+    images:
+      content.images && content.images.length > 0
+        ? content.images
+        : staticVilla.images,
+    stats: { ...staticVilla.stats, ...statsFromDoc(doc) },
+    perfectForTags:
+      content.perfectForTags && content.perfectForTags.length > 0
+        ? content.perfectForTags
+        : staticVilla.perfectForTags,
+    perfectForCards:
+      content.perfectForCards && content.perfectForCards.length > 0
+        ? content.perfectForCards
+        : staticVilla.perfectForCards,
+    amenities:
+      content.amenities && content.amenities.length > 0
+        ? content.amenities
+        : staticVilla.amenities,
+    services:
+      content.services && content.services.length > 0
+        ? content.services
+        : staticVilla.services,
+    propertyDetails:
+      content.propertyDetails && content.propertyDetails.length > 0
+        ? content.propertyDetails
+        : staticVilla.propertyDetails,
+    activities:
+      content.activities && content.activities.length > 0
+        ? content.activities
+        : staticVilla.activities,
+    categorizedSpaces:
+      content.categorizedSpaces && content.categorizedSpaces.length > 0
+        ? content.categorizedSpaces
+        : staticVilla.categorizedSpaces,
+    spaces:
+      content.spaces && content.spaces.length > 0
+        ? content.spaces
+        : staticVilla.spaces,
+    pricing: operationalPricing(doc) as Villa["pricing"],
+    locationDetails: content.locationDetails ?? staticVilla.locationDetails,
+    video: content.video?.youtubeUrl ? content.video : staticVilla.video,
+    faq:
+      content.faq && content.faq.length > 0 ? content.faq : staticVilla.faq,
+    bookable: doc.bookable ?? staticVilla.bookable ?? true,
+    hideFromVillasDirectory:
+      content.hideFromVillasDirectory ??
+      staticVilla.hideFromVillasDirectory ??
+      doc.status === "hidden",
+    socialProof: content.socialProof ?? staticVilla.socialProof,
+    categories:
+      content.categories && content.categories.length > 0
+        ? content.categories
+        : staticVilla.categories,
+  };
+}
+
+/** Resolve public villa: MongoDB overrides + static retreats fallback. */
+export async function resolvePublicVilla(
+  retreatId: string,
+): Promise<Villa | null> {
+  const staticVilla = STATIC_VILLAS.find(
+    (v) => v.id === retreatId,
+  ) as Villa | undefined;
+
+  await connectDB();
+  const doc = (await VillaModel.findOne({
+    $or: [{ retreatId }, { slug: retreatId }],
+    isDeleted: false,
+  }).lean()) as MongoVilla | null;
+
+  if (!doc && !staticVilla) return null;
+  if (!doc) return staticVilla ?? null;
+  if (!staticVilla) return shellFromMongo(doc);
+  return mergeStaticWithMongo(staticVilla, doc);
+}
+
+/** Directory list — merges all Mongo villas + static not yet in DB. */
+export async function resolvePublicVillaList(): Promise<Villa[]> {
+  await connectDB();
+  const docs = (await VillaModel.find({ isDeleted: false }).lean()) as MongoVilla[];
+  const byRetreatId = new Map<string, Villa>();
+
+  for (const doc of docs) {
+    const id = doc.retreatId ?? doc.slug;
+    if (doc.status === "hidden" && doc.content?.hideFromVillasDirectory !== false) {
+      continue;
+    }
+    const staticV = STATIC_VILLAS.find((v) => v.id === id) as Villa | undefined;
+    byRetreatId.set(
+      id,
+      staticV ? mergeStaticWithMongo(staticV, doc) : shellFromMongo(doc),
+    );
+  }
+
+  for (const staticV of STATIC_VILLAS as Villa[]) {
+    if (!byRetreatId.has(staticV.id)) {
+      byRetreatId.set(staticV.id, staticV);
+    }
+  }
+
+  return Array.from(byRetreatId.values()).filter(
+    (v) => !v.hideFromVillasDirectory,
+  );
+}

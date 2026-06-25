@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jade ReVamp — Architecture &amp; AxisRooms Integration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #1a1c1e;
+        --surface: #222528;
+        --surface-2: #2a2d31;
+        --border: rgba(255, 255, 255, 0.1);
+        --border-gold: rgba(239, 205, 98, 0.35);
+        --gold: #efcd62;
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.55);
+        --subtle: rgba(255, 255, 255, 0.38);
+        --yes: #34d399;
+        --yes-bg: rgba(52, 211, 153, 0.12);
+        --no: #f87171;
+        --no-bg: rgba(248, 113, 113, 0.1);
+        --partial: #fbbf24;
+        --partial-bg: rgba(251, 191, 36, 0.12);
+        --stub: #38bdf8;
+        --stub-bg: rgba(56, 189, 248, 0.12);
+        --code-bg: #141618;
+        --radius: 10px;
+        --sidebar-w: 260px;
+      }
+
+      * { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
+
+      body {
+        margin: 0;
+        font-family: "DM Sans", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        font-size: 15px;
+      }
+
+      .bg-glow {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(ellipse 70% 45% at 10% -5%, rgba(239, 205, 98, 0.07), transparent),
+          radial-gradient(ellipse 50% 35% at 95% 10%, rgba(255, 255, 255, 0.03), transparent);
+        z-index: 0;
+      }
+
+      .layout {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: var(--sidebar-w) 1fr;
+        min-height: 100vh;
+      }
+
+      nav.toc {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        height: 100vh;
+        overflow-y: auto;
+        padding: 1.5rem 1rem 2rem;
+        border-right: 1px solid var(--border);
+        background: rgba(26, 28, 30, 0.96);
+        backdrop-filter: blur(12px);
+      }
+
+      nav.toc h2 {
+        font-family: Fraunces, Georgia, serif;
+        font-size: 0.95rem;
+        color: var(--gold);
+        margin: 0 0 1rem;
+        letter-spacing: 0.04em;
+      }
+
+      nav.toc a {
+        display: block;
+        padding: 0.35rem 0.5rem;
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.82rem;
+        border-radius: 6px;
+        border-left: 2px solid transparent;
+      }
+
+      nav.toc a:hover,
+      nav.toc a:focus {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.04);
+        border-left-color: var(--gold);
+      }
+
+      nav.toc .toc-section {
+        margin-top: 0.75rem;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--subtle);
+        padding: 0.25rem 0.5rem;
+      }
+
+      main {
+        padding: 2rem 2.5rem 4rem;
+        max-width: 1100px;
+      }
+
+      header.doc-header {
+        margin-bottom: 2.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      h1 {
+        font-family: Fraunces, Georgia, serif;
+        font-weight: 600;
+        font-size: clamp(1.85rem, 4vw, 2.5rem);
+        margin: 0 0 0.5rem;
+        color: var(--gold);
+        line-height: 1.15;
+      }
+
+      .doc-meta {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin: 0;
+      }
+
+      .doc-meta strong { color: var(--text); }
+
+      section {
+        margin-bottom: 2.75rem;
+        scroll-margin-top: 1rem;
+      }
+
+      h2 {
+        font-family: Fraunces, Georgia, serif;
+        font-size: 1.45rem;
+        color: var(--text);
+        margin: 0 0 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      h3 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin: 1.5rem 0 0.75rem;
+        color: var(--gold);
+      }
+
+      h4 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 1.25rem 0 0.5rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      p { margin: 0 0 1rem; color: var(--muted); }
+      p.lead { font-size: 1.05rem; color: var(--text); }
+
+      .callout {
+        border: 1px solid var(--border-gold);
+        background: rgba(239, 205, 98, 0.06);
+        border-radius: var(--radius);
+        padding: 1rem 1.25rem;
+        margin: 1rem 0 1.5rem;
+      }
+
+      .callout.warn {
+        border-color: rgba(248, 113, 113, 0.4);
+        background: var(--no-bg);
+      }
+
+      .callout.info {
+        border-color: rgba(56, 189, 248, 0.35);
+        background: var(--stub-bg);
+      }
+
+      .callout strong { color: var(--text); }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.3rem 0.65rem;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        border: 1px solid var(--border);
+      }
+
+      .pill-yes { background: var(--yes-bg); color: var(--yes); border-color: rgba(52, 211, 153, 0.35); }
+      .pill-partial { background: var(--partial-bg); color: var(--partial); border-color: rgba(251, 191, 36, 0.35); }
+      .pill-no { background: var(--no-bg); color: var(--no); border-color: rgba(248, 113, 113, 0.35); }
+      .pill-stub { background: var(--stub-bg); color: var(--stub); border-color: rgba(56, 189, 248, 0.35); }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+        margin: 1rem 0 1.5rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+
+      thead { background: var(--surface-2); }
+
+      th {
+        text-align: left;
+        padding: 0.65rem 0.85rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        border-bottom: 1px solid var(--border);
+      }
+
+      td {
+        padding: 0.65rem 0.85rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        vertical-align: top;
+        color: var(--muted);
+      }
+
+      tr:last-child td { border-bottom: none; }
+      td strong, td code { color: var(--text); }
+
+      code, .path {
+        font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+        font-size: 0.82em;
+        background: var(--code-bg);
+        padding: 0.12em 0.4em;
+        border-radius: 4px;
+        color: #e8d48a;
+      }
+
+      .path { display: inline-block; margin: 0.1rem 0; }
+
+      pre {
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1rem 1.25rem;
+        overflow-x: auto;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        margin: 1rem 0;
+      }
+
+      pre code {
+        background: none;
+        padding: 0;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .flow {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.35rem;
+        margin: 1rem 0 1.5rem;
+        padding: 1rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        font-size: 0.82rem;
+      }
+
+      .flow-step {
+        padding: 0.45rem 0.75rem;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        white-space: nowrap;
+      }
+
+      .flow-arrow { color: var(--gold); font-weight: 700; }
+
+      .arch-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .arch-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1rem;
+      }
+
+      .arch-card h4 {
+        margin: 0 0 0.5rem;
+        color: var(--gold);
+        text-transform: none;
+        letter-spacing: 0;
+        font-size: 0.95rem;
+      }
+
+      .arch-card ul {
+        margin: 0;
+        padding-left: 1.1rem;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .arch-card li { margin-bottom: 0.25rem; }
+
+      ol.checklist {
+        margin: 0;
+        padding-left: 1.25rem;
+        color: var(--muted);
+      }
+
+      ol.checklist li {
+        margin-bottom: 0.65rem;
+        padding-left: 0.25rem;
+      }
+
+      ol.checklist li strong { color: var(--text); }
+
+      .status-yes { color: var(--yes); font-weight: 700; }
+      .status-no { color: var(--no); font-weight: 700; }
+      .status-partial { color: var(--partial); font-weight: 700; }
+      .status-stub { color: var(--stub); font-weight: 700; }
+
+      footer.doc-footer {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+        font-size: 0.82rem;
+        color: var(--subtle);
+      }
+
+      @media (max-width: 900px) {
+        .layout { grid-template-columns: 1fr; }
+        nav.toc {
+          position: relative;
+          height: auto;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        main { padding: 1.5rem 1.25rem 3rem; }
+      }
+
+      @media print {
+        .bg-glow, nav.toc { display: none; }
+        .layout { display: block; }
+        main { max-width: 100%; padding: 0; }
+        body { background: #fff; color: #111; }
+        h1, h2, h3, .arch-card h4 { color: #111; }
+        table, .arch-card, pre, .callout { break-inside: avoid; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-glow" aria-hidden="true"></div>
+
+    <div class="layout">
+      <nav class="toc" aria-label="Table of contents">
+        <h2>Jade ReVamp</h2>
+        <div class="toc-section">Overview</div>
+        <a href="#summary">Executive summary</a>
+        <a href="#stack">Stack &amp; repo map</a>
+        <a href="#capabilities">What we built</a>
+        <div class="toc-section">Booking &amp; data</div>
+        <a href="#flows">Booking flows</a>
+        <a href="#models">Database models</a>
+        <a href="#apis">API routes</a>
+        <div class="toc-section">AxisRooms</div>
+        <a href="#axis-gap">Integration gaps</a>
+        <a href="#feature-matrix">Feature matrix</a>
+        <a href="#integration-points">Code integration points</a>
+        <a href="#source-of-truth">Source of truth</a>
+        <a href="#consumers">Dashboard consumers</a>
+        <div class="toc-section">Delivery</div>
+        <a href="#readiness">Readiness report</a>
+        <a href="#requirements">AxisRooms checklist</a>
+        <a href="#meeting">10-item meeting list</a>
+        <a href="#files">Key file index</a>
+      </nav>
+
+      <main>
+        <header class="doc-header">
+          <h1>Project Architecture &amp; AxisRooms Integration</h1>
+          <p class="doc-meta">
+            <strong>Jade Hospitainment — ReVamp</strong> · Codebase analysis ·
+            Generated from actual <code>src/</code> models, APIs, and dashboard modules ·
+            <strong>June 2026</strong>
+          </p>
+          <div class="pill-row">
+            <span class="pill pill-yes">Direct booking: live architecture</span>
+            <span class="pill pill-stub">AxisRooms / STAAH: stub only</span>
+            <span class="pill pill-yes">MongoDB sole database</span>
+          </div>
+        </header>
+
+        <!-- 1. Executive summary -->
+        <section id="summary">
+          <h2>1. Executive summary</h2>
+          <p class="lead">
+            Jade ReVamp is a <strong>Next.js 14</strong> marketing site plus a <strong>custom villa PMS</strong>
+            (<em>Jade Host</em> dashboard) with a <strong>direct booking engine</strong>, <strong>Razorpay payments</strong>,
+            and <strong>MongoDB</strong> as the single operational database.
+          </p>
+          <div class="callout">
+            <strong>Important:</strong> The root <code>README.md</code> still mentions PostgreSQL.
+            The running app uses <strong>MongoDB only</strong> — see <code>src/lib/db.ts</code> and
+            <code>NEEDS_FROM_USER.md</code>. Legacy PG scripts are not used.
+          </div>
+          <p>
+            <strong>AxisRooms</strong> (replacing legacy <strong>STAAH ChannelConnect</strong> naming in code) is
+            <em>architecturally planned</em> but <em>not implemented</em>. Outbound push, inbound webhooks, and API clients
+            are stubs. Direct website bookings work end-to-end without a channel manager.
+          </p>
+          <div class="arch-grid">
+            <div class="arch-card">
+              <h4>Public site</h4>
+              <ul>
+                <li>Villa marketing pages</li>
+                <li><code>/book</code> booking wizard</li>
+                <li>Leads, careers, SEO</li>
+              </ul>
+            </div>
+            <div class="arch-card">
+              <h4>Jade Host PMS</h4>
+              <ul>
+                <li>Calendar &amp; folio</li>
+                <li>Housekeeping &amp; blocks</li>
+                <li>Staff RBAC (5 roles)</li>
+              </ul>
+            </div>
+            <div class="arch-card">
+              <h4>Operations DB</h4>
+              <ul>
+                <li>MongoDB Atlas / local</li>
+                <li>Bookings + night locks</li>
+                <li>Villas + CMS pages</li>
+              </ul>
+            </div>
+            <div class="arch-card">
+              <h4>Channel manager</h4>
+              <ul>
+                <li>Mapping fields on Villa</li>
+                <li>Sync flags on Booking</li>
+                <li>Retry cron (stub push)</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Stack -->
+        <section id="stack">
+          <h2>2. Stack &amp; repository map</h2>
+          <table>
+            <thead>
+              <tr><th>Layer</th><th>Technology</th><th>Location</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Framework</strong></td><td>Next.js 14 App Router, React 18, TypeScript</td><td><code>src/app/</code></td></tr>
+              <tr><td><strong>Database</strong></td><td>MongoDB via Mongoose</td><td><code>src/lib/db.ts</code>, <code>src/models/</code></td></tr>
+              <tr><td><strong>Auth</strong></td><td>NextAuth (staff dashboard)</td><td><code>src/lib/auth/</code>, <code>src/middleware.ts</code></td></tr>
+              <tr><td><strong>Payments</strong></td><td>Razorpay orders + signed webhooks</td><td><code>src/lib/paymentService.ts</code></td></tr>
+              <tr><td><strong>Booking logic</strong></td><td>Server pricing, night locks, transactions</td><td><code>src/lib/bookings/</code></td></tr>
+              <tr><td><strong>Channel manager</strong></td><td>STAAH client stub (AxisRooms cutover planned)</td><td><code>src/lib/staah/client.ts</code></td></tr>
+              <tr><td><strong>Dashboard UI</strong></td><td>Jade Host — scoped CSS <code>dashboard.css</code></td><td><code>src/app/dashboard/</code></td></tr>
+              <tr><td><strong>Public styles</strong></td><td>Tailwind + global tokens</td><td><code>src/app/globals.css</code></td></tr>
+            </tbody>
+          </table>
+
+          <h3>High-level architecture</h3>
+          <pre><code>┌─────────────────────────────────────────────────────────────────────────┐
+│                         PUBLIC WEBSITE (Next.js)                        │
+│  Marketing pages · /villas · /book · leads · SEO · Razorpay checkout    │
+└───────────────────────────────┬─────────────────────────────────────────┘
+                                │ REST API
+                                ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    API LAYER (src/app/api/*)                            │
+│  bookings · payments · webhooks/razorpay · webhooks/staah (stub)      │
+│  dashboard/* (RBAC) · cron (expire-pending, staah-retry)                │
+└───────────────────────────────┬─────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│              BOOKING SERVICE (src/lib/bookings/mongoStore.ts)           │
+│  createPending · confirmPayment · getAvailability · night locks       │
+└───────────────────────────────┬─────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         MongoDB (sole DB)                               │
+│  villas · bookings · villa_nightlocks · villa_blocks · users · …        │
+└───────────────────────────────┬─────────────────────────────────────────┘
+                                │ outbound push (STUB)
+                                ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│              AxisRooms / STAAH Channel Manager (NOT WIRED)              │
+│  OTA distribution · inbound reservations · availability sync            │
+└─────────────────────────────────────────────────────────────────────────┘</code></pre>
+        </section>
+
+        <!-- 3. Capabilities -->
+        <section id="capabilities">
+          <h2>3. What this project contains</h2>
+          <table>
+            <thead>
+              <tr><th>Capability</th><th>Status</th><th>Evidence</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Custom CMS</strong></td>
+                <td><span class="status-partial">Partial</span></td>
+                <td><code>ContentPage</code> model + dashboard content API. Villa marketing in <code>Villa.content</code>. Much of the public site is still static/JSON-driven.</td>
+              </tr>
+              <tr>
+                <td><strong>Custom PMS</strong></td>
+                <td><span class="status-yes">Yes</span></td>
+                <td>Jade Host dashboard: calendar, housekeeping, blocks, conflicts, payments, villa settings, staff RBAC.</td>
+              </tr>
+              <tr>
+                <td><strong>Custom booking engine</strong></td>
+                <td><span class="status-yes">Yes</span></td>
+                <td><code>src/app/book/page.tsx</code> — dates → guests → details → review → pay.</td>
+              </tr>
+              <tr>
+                <td><strong>Reservation management</strong></td>
+                <td><span class="status-yes">Yes</span></td>
+                <td><code>Booking</code> model, folio UI, status lifecycle, stay status for HK.</td>
+              </tr>
+              <tr>
+                <td><strong>Availability management</strong></td>
+                <td><span class="status-yes">Yes (internal)</span></td>
+                <td>Derived from bookings + <code>VillaBlock</code> + <code>VillaNightlock</code>. Not from CM.</td>
+              </tr>
+              <tr>
+                <td><strong>Inventory management</strong></td>
+                <td><span class="status-partial">Partial</span></td>
+                <td>One bookable unit per villa. No <code>Room</code> collection. <code>roomTypeId</code> is a CM mapping field only.</td>
+              </tr>
+              <tr>
+                <td><strong>Rate management</strong></td>
+                <td><span class="status-yes">Yes (internal)</span></td>
+                <td>Rates on <code>Villa</code>; server pricing in <code>pricing.ts</code>. No external ARI/rate feed.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 4. Flows -->
+        <section id="flows">
+          <h2>4. Booking flows</h2>
+
+          <h3>4.1 Website (guest) booking flow</h3>
+          <div class="flow">
+            <span class="flow-step">Guest · /book</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">GET /api/bookings/availability</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">POST /api/bookings/preview</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">POST /api/bookings</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">pending + night locks</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">POST /api/payments/razorpay-order</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Razorpay checkout</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">POST /api/webhooks/razorpay</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">confirmed · staahSynced=false</span>
+          </div>
+          <table>
+            <thead><tr><th>Step</th><th>Behaviour</th><th>Key file</th></tr></thead>
+            <tbody>
+              <tr><td>Availability</td><td>Returns <code>bookedDates</code> + <code>blockedDates</code> from Mongo only</td><td><code>availability/route.ts</code></td></tr>
+              <tr><td>Pricing</td><td>Server-side only; client amounts never trusted</td><td><code>pricing.ts</code></td></tr>
+              <tr><td>Hold</td><td>15 min pending; per-night locks in transaction</td><td><code>nightLocks.ts</code></td></tr>
+              <tr><td>Double-book guard</td><td>Overlap check + unique index on <code>{villaId, date}</code></td><td><code>mongoStore.ts</code></td></tr>
+              <tr><td>Confirm</td><td>Idempotent webhook via <code>WebhookEvent</code></td><td><code>webhooks/razorpay/route.ts</code></td></tr>
+              <tr><td>CM queue</td><td>Sets <code>staahSynced: false</code> — push is stub</td><td><code>staah/client.ts</code></td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.2 Admin / PMS flow</h3>
+          <table>
+            <thead><tr><th>Action</th><th>Route / UI</th><th>Storage</th></tr></thead>
+            <tbody>
+              <tr><td>Portfolio calendar</td><td><code>/dashboard</code></td><td><code>GET /api/dashboard/calendar</code></td></tr>
+              <tr><td>Manual blocks</td><td><code>/dashboard/blocks</code></td><td><code>VillaBlock</code></td></tr>
+              <tr><td>OTA conflicts</td><td><code>/dashboard/conflicts</code></td><td><code>Booking.status = conflict</code></td></tr>
+              <tr><td>Housekeeping</td><td><code>/dashboard/housekeeping</code></td><td><code>Booking.stayStatus</code></td></tr>
+              <tr><td>Villa settings</td><td><code>/dashboard/settings/villas</code></td><td><code>Villa</code> document</td></tr>
+              <tr><td>Axis mapping view</td><td><code>/dashboard/settings/staah</code></td><td><code>Villa.axisRooms</code> / <code>staah</code></td></tr>
+              <tr><td>Booking folio</td><td><code>/dashboard/bookings/[id]</code></td><td><code>Booking</code></td></tr>
+              <tr><td>Payments</td><td><code>/dashboard/payments</code></td><td><code>Booking.payment</code> embed</td></tr>
+            </tbody>
+          </table>
+          <div class="callout info">
+            <strong>Note:</strong> No dedicated admin UI creates a paid reservation without the public booking + Razorpay path.
+            <code>Booking.source</code> includes <code>admin_manual</code> but no full admin booking wizard exists yet.
+          </div>
+
+          <h3>4.3 Payment flow</h3>
+          <table>
+            <thead><tr><th>Step</th><th>Implementation</th></tr></thead>
+            <tbody>
+              <tr><td>Order</td><td><code>POST /api/payments/razorpay-order</code> — amount from server <code>Booking.pricing</code></td></tr>
+              <tr><td>Webhook</td><td><code>POST /api/webhooks/razorpay</code> — HMAC verify, idempotent confirm</td></tr>
+              <tr><td>Refund</td><td><code>src/lib/payments/refund.ts</code> — conflict resolution</td></tr>
+              <tr><td>OTA payment</td><td>Planned <code>payment.status: external</code> — inbound OTA handler not built</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 5. Models -->
+        <section id="models">
+          <h2>5. Database models (MongoDB collections)</h2>
+          <p>All models live under <code>src/models/</code>. There is <strong>no PostgreSQL</strong> in the running app.</p>
+
+          <h3>5.1 Booking &amp; availability</h3>
+          <table>
+            <thead><tr><th>Collection</th><th>Purpose</th><th>Key fields</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>bookings</strong></td>
+                <td>Reservations</td>
+                <td><code>villaId</code>, <code>guestDetails</code>, dates, <code>pricing</code>, <code>payment</code>, <code>status</code>, <code>stayStatus</code>, <code>source</code>, <code>staahSynced</code>, <code>staahReservationId</code></td>
+              </tr>
+              <tr>
+                <td><strong>villa_nightlocks</strong></td>
+                <td>Race-condition guard</td>
+                <td>Unique <code>{ villaId, date }</code> per pending hold</td>
+              </tr>
+              <tr>
+                <td><strong>villa_blocks</strong></td>
+                <td>Manual admin blocks</td>
+                <td><code>checkIn</code>, <code>checkOut</code>, <code>reason</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>5.2 Properties &amp; channel mapping</h3>
+          <table>
+            <thead><tr><th>Collection</th><th>Purpose</th><th>Key fields</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>villas</strong></td>
+                <td>Portfolio + pricing + CM map</td>
+                <td><code>basePricePaise</code>, wedding tiers, <code>bookable</code>, <code>axisRooms</code>, <code>staah</code>, <code>content</code></td>
+              </tr>
+            </tbody>
+          </table>
+          <p><code>axisRooms</code> / <code>staah</code> shape: <code>{ propertyId, roomTypeId, ratePlanId }</code> (+ <code>apiKeyConfigured</code> on schema — never set in code).</p>
+
+          <h3>5.3 What does NOT exist</h3>
+          <table>
+            <thead><tr><th>Domain</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Rooms collection</td><td><span class="status-no">No</span> — <code>roomTypeId</code> is external mapping only</td></tr>
+              <tr><td>Guests collection</td><td><span class="status-no">No</span> — embedded in <code>Booking.guestDetails</code></td></tr>
+              <tr><td>RatePlan collection</td><td><span class="status-no">No</span> — rates on Villa + pricing snapshot on booking</td></tr>
+              <tr><td>OTA channels collection</td><td><span class="status-no">No</span> — only <code>Booking.source</code> enum</td></tr>
+              <tr><td>ari_cache</td><td><span class="status-no">No</span> — mentioned in plan doc, not in <code>src/models/</code></td></tr>
+            </tbody>
+          </table>
+
+          <h3>5.4 Supporting collections</h3>
+          <table>
+            <thead><tr><th>Collection</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>users</code></td><td>Staff accounts, roles, sessionVersion</td></tr>
+              <tr><td><code>content_pages</code></td><td>CMS (blogs, landing pages, meta)</td></tr>
+              <tr><td><code>webhook_events</code></td><td>Idempotency — <code>razorpay</code> | <code>staah</code></td></tr>
+              <tr><td><code>audit_logs</code></td><td>Append-only audit trail</td></tr>
+              <tr><td><code>leads</code>, <code>careers</code>, <code>partner_leads</code></td><td>Marketing forms</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 6. APIs -->
+        <section id="apis">
+          <h2>6. API routes inventory</h2>
+
+          <h3>Public booking &amp; payments</h3>
+          <table>
+            <thead><tr><th>Route</th><th>Role</th></tr></thead>
+            <tbody>
+              <tr><td><code>POST /api/bookings</code></td><td>Create pending booking + night locks</td></tr>
+              <tr><td><code>POST /api/bookings/preview</code></td><td>Server pricing preview</td></tr>
+              <tr><td><code>GET /api/bookings/availability</code></td><td>Booked + blocked dates (Mongo)</td></tr>
+              <tr><td><code>GET /api/bookings/lookup</code></td><td>Token lookup for success page</td></tr>
+              <tr><td><code>GET/PATCH/DELETE /api/bookings/[id]</code></td><td>Folio / stay status / cancel</td></tr>
+              <tr><td><code>POST /api/payments/razorpay-order</code></td><td>Create Razorpay order</td></tr>
+              <tr><td><code>POST /api/webhooks/razorpay</code></td><td>Confirm payment (production-ready)</td></tr>
+              <tr><td><code>POST /api/webhooks/staah</code></td><td><span class="status-stub">STUB</span> — logs only</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Cron (requires <code>CRON_SECRET</code>)</h3>
+          <table>
+            <thead><tr><th>Route</th><th>Role</th></tr></thead>
+            <tbody>
+              <tr><td><code>GET /api/cron/expire-pending-bookings</code></td><td>Expire holds, release night locks</td></tr>
+              <tr><td><code>GET /api/cron/staah-retry</code></td><td>Retry CM sync — push calls are stub</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Dashboard (RBAC via middleware + <code>requireRole</code>)</h3>
+          <table>
+            <thead><tr><th>Route</th><th>Role</th></tr></thead>
+            <tbody>
+              <tr><td><code>GET /api/dashboard/calendar</code></td><td>Calendar grid + stats</td></tr>
+              <tr><td><code>GET/PATCH /api/dashboard/conflicts</code></td><td>Conflict queue</td></tr>
+              <tr><td><code>GET/POST /api/dashboard/blocks</code></td><td>Manual blocks</td></tr>
+              <tr><td><code>GET/POST/PATCH /api/dashboard/villas</code></td><td>Villa CRUD + CM mapping</td></tr>
+              <tr><td><code>GET /api/dashboard/payments</code></td><td>Payment list</td></tr>
+              <tr><td><code>GET/POST/PATCH /api/dashboard/users</code></td><td>Staff management</td></tr>
+              <tr><td><code>GET /api/dashboard/content</code></td><td>CMS pages</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 7. AxisRooms gaps -->
+        <section id="axis-gap">
+          <h2>7. AxisRooms — what must come from the channel manager</h2>
+          <p class="lead">Direct bookings work without AxisRooms. AxisRooms is required for <strong>OTA distribution</strong> and <strong>two-way sync</strong>.</p>
+
+          <div class="callout warn">
+            <strong>Code reality:</strong> Integration code is named <code>staah</code> (<code>STAAH_API_KEY</code>, <code>staahSynced</code>).
+            UI and Villa schema reference <strong>Axis Rooms</strong> as the cutover target. There is no <code>src/lib/axisRooms/</code> client.
+          </div>
+
+          <h3>Must obtain from AxisRooms</h3>
+          <table>
+            <thead><tr><th>Item</th><th>Why (code gap)</th></tr></thead>
+            <tbody>
+              <tr><td>Property / room-type / rate-plan IDs</td><td><code>Villa.axisRooms</code> fields empty after seed</td></tr>
+              <tr><td>Inbound reservation webhooks</td><td><code>/api/webhooks/staah</code> is stub — no booking creation</td></tr>
+              <tr><td>Outbound reservation push API</td><td><code>pushStaahReservation()</code> — audit log only</td></tr>
+              <tr><td>Outbound cancellation API</td><td><code>pushStaahCancellation()</code> — stub</td></tr>
+              <tr><td>OTA source identifiers</td><td><code>Booking.source</code> enum exists; nothing writes OTA sources</td></tr>
+              <tr><td>API auth specification</td><td><code>AXIS_ROOMS_API_KEY</code> checked; not in <code>.env.example</code></td></tr>
+            </tbody>
+          </table>
+
+          <h3>Does NOT need AxisRooms (built locally)</h3>
+          <ul style="color: var(--muted); margin: 0 0 1rem; padding-left: 1.25rem;">
+            <li>Direct website booking + 15 min holds</li>
+            <li>Razorpay payment collection</li>
+            <li>Direct-booking pricing (<code>computeBookingPricing</code>)</li>
+            <li>PMS calendar, blocks, housekeeping, folio</li>
+            <li>Staff RBAC dashboard</li>
+            <li>Partial CMS (<code>ContentPage</code> + <code>Villa.content</code>)</li>
+          </ul>
+        </section>
+
+        <!-- 8. Feature matrix -->
+        <section id="feature-matrix">
+          <h2>8. Feature matrix</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Already in our system</th>
+                <th>Required from AxisRooms</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Public booking engine</td><td class="status-yes">Yes</td><td class="status-no">No</td></tr>
+              <tr><td>Server-side pricing (direct)</td><td class="status-yes">Yes</td><td class="status-no">No</td></tr>
+              <tr><td>Razorpay payments</td><td class="status-yes">Yes</td><td class="status-no">No</td></tr>
+              <tr><td>Reservation storage</td><td class="status-yes">Yes</td><td class="status-partial">Yes (OTA ingest)</td></tr>
+              <tr><td>Availability (direct)</td><td class="status-yes">Yes</td><td class="status-no">No</td></tr>
+              <tr><td>Availability (OTA)</td><td class="status-no">No</td><td class="status-yes">Yes</td></tr>
+              <tr><td>Night-lock double-book prevention</td><td class="status-yes">Yes</td><td class="status-partial">Partial</td></tr>
+              <tr><td>Manual blocks</td><td class="status-yes">Yes</td><td class="status-no">No</td></tr>
+              <tr><td>PMS calendar</td><td class="status-yes">Yes</td><td class="status-no">No</td></tr>
+              <tr><td>Conflict queue UI</td><td class="status-yes">Yes</td><td class="status-yes">Yes (data)</td></tr>
+              <tr><td>Outbound reservation sync</td><td class="status-stub">Stub</td><td class="status-yes">Yes</td></tr>
+              <tr><td>Inbound reservation sync</td><td class="status-stub">Stub</td><td class="status-yes">Yes</td></tr>
+              <tr><td>Cancellation sync to OTAs</td><td class="status-stub">Stub</td><td class="status-yes">Yes</td></tr>
+              <tr><td>Dynamic OTA rates</td><td class="status-no">No</td><td class="status-partial">Optional</td></tr>
+              <tr><td>Room-level inventory</td><td class="status-no">No</td><td class="status-partial">If 1:1 villa→roomType</td></tr>
+              <tr><td>OTA channel registry</td><td class="status-no">No</td><td class="status-yes">Yes</td></tr>
+              <tr><td>ARI cache</td><td class="status-no">No</td><td class="status-partial">If push ARI</td></tr>
+            </tbody>
+          </table>
+
+          <h3>API capabilities needed</h3>
+          <table>
+            <thead><tr><th>Capability</th><th>Needed?</th><th>Current state</th></tr></thead>
+            <tbody>
+              <tr><td>Availability API</td><td class="status-yes">Yes</td><td>Local Mongo only</td></tr>
+              <tr><td>Reservation API (inbound)</td><td class="status-yes">Yes</td><td>Webhook stub</td></tr>
+              <tr><td>Booking creation API (outbound)</td><td class="status-yes">Yes</td><td>Stub client</td></tr>
+              <tr><td>Cancellation API (outbound)</td><td class="status-yes">Yes</td><td>Stub client</td></tr>
+              <tr><td>Rate API</td><td class="status-partial">Conditional</td><td>Local Villa rates</td></tr>
+              <tr><td>Inventory API</td><td class="status-partial">Conditional</td><td>Villa-level only</td></tr>
+              <tr><td>OTA synchronization</td><td class="status-yes">Yes</td><td>Not wired</td></tr>
+              <tr><td>Webhooks / events</td><td class="status-yes">Yes</td><td>Inbound stub only</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 9. Integration points -->
+        <section id="integration-points">
+          <h2>9. Code integration points for AxisRooms</h2>
+          <table>
+            <thead><tr><th>#</th><th>File / route</th><th>Integration action</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><code>src/lib/staah/client.ts</code></td><td>Implement real outbound reservation + cancellation HTTP</td></tr>
+              <tr><td>2</td><td><code>src/app/api/webhooks/staah/route.ts</code></td><td>Process inbound OTA bookings / cancels</td></tr>
+              <tr><td>3</td><td><code>src/app/api/cron/staah-retry/route.ts</code></td><td>Wire to real client (retry logic exists)</td></tr>
+              <tr><td>4</td><td><code>mongoStore.confirmPayment()</code></td><td>Sets <code>staahSynced: false</code> — triggers outbound queue</td></tr>
+              <tr><td>5</td><td><code>mongoStore.softDelete()</code></td><td>Must set <code>staahCancelSynced: false</code> on cancel</td></tr>
+              <tr><td>6</td><td><code>src/models/Villa.ts</code></td><td><code>axisRooms</code> / <code>staah</code> mapping IDs</td></tr>
+              <tr><td>7</td><td><code>src/lib/villas/adminVilla.ts</code></td><td>Dual-write axisRooms → staah during migration</td></tr>
+              <tr><td>8</td><td><code>src/models/Booking.ts</code></td><td><code>source</code>, <code>staahReservationId</code>, sync flags</td></tr>
+              <tr><td>9</td><td><code>GET /api/bookings/availability</code></td><td>May need merge with CM ARI</td></tr>
+              <tr><td>10</td><td><code>GET /api/dashboard/calendar</code></td><td>Will show OTA bookings once ingested</td></tr>
+              <tr><td>11</td><td><code>/api/dashboard/conflicts</code></td><td>OTA vs direct overlap resolution</td></tr>
+              <tr><td>12</td><td><code>AxisRoomsSettings.tsx</code></td><td>Mapping UI (read-only today)</td></tr>
+              <tr><td>13</td><td><code>WebhookEvent</code> model</td><td>Inbound idempotency</td></tr>
+              <tr><td>14</td><td><em>Missing</em> <code>src/lib/axisRooms/</code></td><td>New client module to create</td></tr>
+              <tr><td>15</td><td><em>Missing</em> <code>ari_cache</code></td><td>Planned in PMS plan, not implemented</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 10. Source of truth -->
+        <section id="source-of-truth">
+          <h2>10. Recommended source of truth</h2>
+          <table>
+            <thead><tr><th>Data domain</th><th>Source of truth</th><th>Rationale</th></tr></thead>
+            <tbody>
+              <tr><td>Direct reservations</td><td><strong>Our MongoDB</strong></td><td>Created locally first; CM is downstream via push queue</td></tr>
+              <tr><td>OTA reservations</td><td><strong>AxisRooms</strong> → Mongo</td><td>No OTA ingest exists today</td></tr>
+              <tr><td>Availability (direct)</td><td><strong>Our MongoDB</strong></td><td>Night locks + bookings + blocks</td></tr>
+              <tr><td>Availability (OTA)</td><td><strong>AxisRooms</strong></td><td>Calendar blind to OTA without inbound sync</td></tr>
+              <tr><td>Rates (direct website)</td><td><strong>Our MongoDB (Villa)</strong></td><td><code>computeBookingPricing()</code> never calls CM</td></tr>
+              <tr><td>Rates (OTAs)</td><td><strong>AxisRooms</strong> (typical)</td><td>Confirm with AxisRooms</td></tr>
+              <tr><td>Inventory</td><td><strong>Hybrid</strong></td><td>1 villa ≈ 1 <code>roomTypeId</code>, inventory likely 1</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 11. Consumers -->
+        <section id="consumers">
+          <h2>11. Dashboard modules that consume AxisRooms data</h2>
+          <table>
+            <thead><tr><th>Module</th><th>Route</th><th>Today</th><th>After integration</th></tr></thead>
+            <tbody>
+              <tr><td>Booking engine</td><td><code>/book</code></td><td>Local availability</td><td>May merge CM ARI</td></tr>
+              <tr><td>Calendar</td><td><code>/dashboard</code></td><td>Direct bookings only</td><td>Direct + OTA</td></tr>
+              <tr><td>Reservations / folio</td><td><code>/dashboard/bookings/[id]</code></td><td>Direct only</td><td>OTA folios</td></tr>
+              <tr><td>Conflicts</td><td><code>/dashboard/conflicts</code></td><td>Empty until inbound built</td><td>OTA vs direct</td></tr>
+              <tr><td>Housekeeping</td><td><code>/dashboard/housekeeping</code></td><td>All confirmed stays</td><td>Includes OTA stays</td></tr>
+              <tr><td>Payments</td><td><code>/dashboard/payments</code></td><td>Razorpay only</td><td>+ external OTA payments</td></tr>
+              <tr><td>Property management</td><td><code>/dashboard/settings/villas</code></td><td>CM IDs editable</td><td>Same</td></tr>
+              <tr><td>Axis settings</td><td><code>/dashboard/settings/staah</code></td><td>Read-only mapping table</td><td>Sync status</td></tr>
+              <tr><td>Analytics</td><td><code>/dashboard/seo/analytics</code></td><td>Local aggregates</td><td>+ OTA mix</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 12. Readiness -->
+        <section id="readiness">
+          <h2>12. Integration readiness report</h2>
+
+          <h3>Existing (production-ready for direct channel)</h3>
+          <ul style="color: var(--muted); padding-left: 1.25rem;">
+            <li>MongoDB booking lifecycle with transactional night locks</li>
+            <li>Public <code>/book</code> engine with server-side pricing</li>
+            <li>Razorpay orders + idempotent webhook confirmation</li>
+            <li>Jade Host PMS: calendar, blocks, HK, payments, folio, RBAC</li>
+            <li>Conflict resolution UI (awaiting OTA data)</li>
+            <li>Retry cron skeleton + Villa CM ID schema</li>
+          </ul>
+
+          <h3>Missing (blocks AxisRooms go-live)</h3>
+          <ul style="color: var(--muted); padding-left: 1.25rem;">
+            <li>Real AxisRooms / ChannelConnect HTTP client</li>
+            <li>Inbound webhook processing</li>
+            <li>OTA booking creation + conflict detection</li>
+            <li>Outbound push on payment confirm (flag only today)</li>
+            <li>Cancellation sync on booking cancel</li>
+            <li><code>ari_cache</code> or equivalent</li>
+            <li>Villa seed does not populate CM mapping IDs</li>
+            <li>Add-on UI IDs mismatch server catalog (<code>NEEDS_FROM_USER.md</code>)</li>
+            <li>Cancellation policy still <code>[TO BE CONFIRMED]</code></li>
+          </ul>
+
+          <h3>Estimated complexity</h3>
+          <table>
+            <thead><tr><th>Area</th><th>Complexity</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Outbound direct booking push</td><td>Medium</td><td>Retry cron exists</td></tr>
+              <tr><td>Inbound OTA reservations</td><td>High</td><td>Conflict + idempotency + payments</td></tr>
+              <tr><td>Availability merge</td><td>Medium–High</td><td>No ARI cache yet</td></tr>
+              <tr><td>Villa mapping onboarding</td><td>Low</td><td>~16 properties manual</td></tr>
+              <tr><td>STAAH → AxisRooms rename</td><td>Low</td><td>Dual-write in adminVilla</td></tr>
+            </tbody>
+          </table>
+          <p><strong>Overall:</strong> Medium–High (approximately 6–10 engineering weeks, depending on AxisRooms API quality).</p>
+
+          <h3>Risks</h3>
+          <table>
+            <thead><tr><th>Risk</th><th>Impact</th></tr></thead>
+            <tbody>
+              <tr><td>Villa vs room-type model mismatch</td><td>Double inventory or phantom blocks</td></tr>
+              <tr><td>Two availability sources without merge</td><td>OTA + website sell same dates</td></tr>
+              <tr><td>STAAH naming vs AxisRooms API</td><td>Wrong endpoints / auth</td></tr>
+              <tr><td>No inbound processor</td><td>Conflict dashboard never populates</td></tr>
+              <tr><td>Failed outbound push</td><td>OTAs sell dates already booked direct</td></tr>
+              <tr><td>Missing cancel sync</td><td>OTA dates stay blocked after cancel</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 13. Requirements checklist -->
+        <section id="requirements">
+          <h2>13. AxisRooms requirements checklist (request from vendor)</h2>
+          <ol class="checklist">
+            <li><strong>API documentation</strong> — reservation create/update/cancel and availability (push and/or pull), including sandbox access.</li>
+            <li><strong>Authentication</strong> — API key format, webhook <code>Authorization</code> header, IP allowlist, rate limits.</li>
+            <li><strong>Property mapping sheet</strong> — per Jade villa: <code>propertyId</code>, <code>roomTypeId</code>, <code>ratePlanId</code>; confirm 1:1 villa-to-room-type with inventory = 1.</li>
+            <li><strong>Inbound webhook contract</strong> — JSON schema for new/modified/cancelled reservations; idempotency key; retry policy.</li>
+            <li><strong>Outbound reservation API</strong> — push direct <code>confirmed</code> bookings so OTAs see reduced availability.</li>
+            <li><strong>Cancellation / release API</strong> — notify when direct booking cancelled or conflict resolved.</li>
+            <li><strong>Overbooking rules</strong> — behaviour when direct push overlaps OTA-sold dates.</li>
+            <li><strong>Rate strategy</strong> — can website keep independent direct rates while OTAs use CM rates?</li>
+            <li><strong>Supported OTAs</strong> — channel identifiers mapping to our <code>Booking.source</code> enum.</li>
+            <li><strong>ARI model</strong> — push vs pull for availability/rate updates.</li>
+            <li><strong>Stay date semantics</strong> — check-in/check-out exclusive vs inclusive (we use exclusive checkout for stays).</li>
+            <li><strong>Certified integration path</strong> — STAAH ChannelConnect vs native Axis Rooms API.</li>
+            <li><strong>SLA</strong> — payload limits, rate limits, webhook delivery guarantees.</li>
+            <li><strong>Integration contact + UAT timeline</strong> — test property setup and production cutover plan.</li>
+            <li><strong>Payment handling</strong> — how OTA-collected payments appear in payloads (we use Razorpay for direct only).</li>
+          </ol>
+        </section>
+
+        <!-- 14. Meeting checklist -->
+        <section id="meeting">
+          <h2>14. Ten-item checklist for AxisRooms meeting</h2>
+          <p>Send this list directly to AxisRooms:</p>
+          <ol class="checklist">
+            <li>Provide complete <strong>API documentation</strong> for reservation create, modify, cancel, and availability — plus <strong>sandbox credentials</strong>.</li>
+            <li>Confirm <strong>authentication method</strong> (API key, Bearer token, IP restrictions) and rate limits.</li>
+            <li>Deliver <strong>property mapping sheet</strong> for all Jade villas: Property ID, Room Type ID, Rate Plan ID — confirm one room type per villa with inventory = 1.</li>
+            <li>Define <strong>inbound webhook contract</strong> (new / modified / cancelled reservation) including idempotency key field.</li>
+            <li>Define <strong>outbound reservation API</strong> for pushing our direct website confirmed bookings to block OTA channels.</li>
+            <li>Define <strong>cancellation / inventory-release API</strong> when we cancel a synced direct booking.</li>
+            <li>Clarify <strong>overbooking behaviour</strong> when our push conflicts with an existing OTA reservation.</li>
+            <li>Confirm <strong>rate strategy</strong>: independent direct website rates vs OTA rates managed only in AxisRooms.</li>
+            <li>List <strong>supported OTA channels</strong> and the source identifier we should store per booking.</li>
+            <li>Confirm whether integration uses <strong>STAAH ChannelConnect</strong> or a <strong>native Axis Rooms API</strong>, and assign an integration contact with UAT timeline.</li>
+          </ol>
+        </section>
+
+        <!-- 15. File index -->
+        <section id="files">
+          <h2>15. Key file index (quick reference)</h2>
+          <table>
+            <thead><tr><th>Area</th><th>Path</th></tr></thead>
+            <tbody>
+              <tr><td>DB connection</td><td><span class="path">src/lib/db.ts</span></td></tr>
+              <tr><td>Booking store</td><td><span class="path">src/lib/bookings/mongoStore.ts</span></td></tr>
+              <tr><td>Pricing engine</td><td><span class="path">src/lib/bookings/pricing.ts</span></td></tr>
+              <tr><td>Night locks</td><td><span class="path">src/lib/bookings/nightLocks.ts</span></td></tr>
+              <tr><td>Booking model</td><td><span class="path">src/models/Booking.ts</span></td></tr>
+              <tr><td>Villa model</td><td><span class="path">src/models/Villa.ts</span></td></tr>
+              <tr><td>CM client (stub)</td><td><span class="path">src/lib/staah/client.ts</span></td></tr>
+              <tr><td>Inbound webhook (stub)</td><td><span class="path">src/app/api/webhooks/staah/route.ts</span></td></tr>
+              <tr><td>Retry cron</td><td><span class="path">src/app/api/cron/staah-retry/route.ts</span></td></tr>
+              <tr><td>Public booking UI</td><td><span class="path">src/app/book/page.tsx</span></td></tr>
+              <tr><td>Create booking API</td><td><span class="path">src/app/api/bookings/route.ts</span></td></tr>
+              <tr><td>Razorpay webhook</td><td><span class="path">src/app/api/webhooks/razorpay/route.ts</span></td></tr>
+              <tr><td>Dashboard calendar API</td><td><span class="path">src/app/api/dashboard/calendar/route.ts</span></td></tr>
+              <tr><td>Axis mapping UI</td><td><span class="path">src/components/dashboard/AxisRoomsSettings.tsx</span></td></tr>
+              <tr><td>RBAC middleware</td><td><span class="path">src/middleware.ts</span></td></tr>
+              <tr><td>Env / setup gaps</td><td><span class="path">NEEDS_FROM_USER.md</span></td></tr>
+              <tr><td>PMS plan (STAAH detail)</td><td><span class="path">.cursor/plans/custom_villa_pms_36203919.plan.md</span></td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <footer class="doc-footer">
+          <p>
+            Jade ReVamp — internal engineering document. Open in any browser; use Print → Save as PDF for sharing.
+            For local setup see <code>docs/local-dev-setup-guide.html</code>.
+          </p>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>

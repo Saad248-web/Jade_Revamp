@@ -1,13 +1,11 @@
-import { magnolia } from "@/data/retreats/magnolia";
 import type { WeddingVillaOverlayEntry } from "../types";
 
-/** Wedding overlay — source: public/Wedding_Villa_Overlay/Magnolia.svg */
+/** Page-specific wedding copy — stats/pricing from canonical portfolio at runtime. */
 export const magnoliaWeddingOverlay = {
-  ...magnolia,
-  type: "CONTEMPORARY GLASS VILLA",
-  location: "Harohalli · Near Art of Living",
+  id: "magnolia",
+  type: "CONTEMPORARY GLASS HOUSE VILLA",
   description:
-    "Magnolia is a contemporary private villa designed for large-format weddings and celebrations. With a spacious landscaped lawn, poolside zones, and indoor areas, the venue supports seamless movement across ceremonies, dining, and entertainment.",
+    "Magnolia is designed for large-format weddings and celebrations on Kanakapura Road. A 21,000 sq.ft lawn, poolside zones, home theatre, and multipurpose hall support ceremonies, dining, and entertainment for intimate functions through grand receptions.",
   perfectForTags: [
     "Wedding",
     "Reception",
@@ -15,11 +13,6 @@ export const magnoliaWeddingOverlay = {
     "Sangeet",
     "Pre-wedding",
   ],
-  stats: {
-    ...magnolia.stats,
-    stay: "20 Guests",
-    events: "1200 Guests",
-  },
   categories: [
     "Wedding",
     "Reception",
@@ -28,7 +21,6 @@ export const magnoliaWeddingOverlay = {
     "Pre-wedding",
   ],
   overlay: {
-    onwardsPrice: "₹99,000",
-    parking: "80",
+    parking: "200+",
   },
 } as WeddingVillaOverlayEntry;

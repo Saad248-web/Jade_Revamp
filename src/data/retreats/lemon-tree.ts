@@ -11,14 +11,14 @@ const lemonTreePerfectForLegacy = [
 const lemonTreeBase = {
   id: "lemon-tree",
   name: "Lemon Tree",
-  type: "LEMON ORCHARD RETREAT · PRIVATE ROOFTOP POOL",
-  location: "Sadahalli · North Bangalore",
+  type: "3-BEDROOM FARMSTAY · ROOFTOP POOL",
+  location: "25 min IKEA · lemon plantation",
   stats: {
-    stay: "25 Guests",
-    events: "50 Guests",
+    stay: "Up to 10 Guests (25 max)",
+    events: "Up to 50–60 Guests",
     bhk: "3 BHK",
-    lawn: "3-Acre Orchard Property",
-    villaArea: "Multipurpose Hall",
+    lawn: "Plantation grounds",
+    villaArea: "5,000 sq.ft · rooftop pool",
   },
   description:
     "Lemon Tree is a nature retreat set within a lemon orchard, designed for relaxed stays and group gatherings. The 3-bedroom villa combines indoor comfort with expansive outdoor spaces, creating a countryside experience within close reach of the city. With a private rooftop pool, multipurpose hall, and orchard setting, the property supports both stays and small events. Surrounded by greenery and open views, it offers a quiet environment for extended stays and group retreats.",
@@ -162,43 +162,7 @@ const lemonTreeBase = {
       images: [],
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 10 PAX",
-          sublabel: "≈ ₹2,700 / head",
-          price: "₹26,999 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: [
-        "Orchard estate access",
-        "Overnight villa stay",
-        "Rooftop pool access",
-      ],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (2 PM · 12 AM)",
-      packages: [
-        {
-          label: "Up to 20 PAX",
-          sublabel: "≈ ₹1,350 / head",
-          price: "₹26,999 + taxes",
-        },
-        {
-          label: "Up to 30 PAX",
-          sublabel: "≈ ₹1,500 / head",
-          price: "₹45,000 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,099 + taxes" },
-      ],
-      features: ["Private venue access", "Basic event support"],
-    },
-  },
+
   locationDetails: {
     mapImage: "",
     address: "735, Jade Garden Phase II, Sadahalli, Bangalore — 562110",

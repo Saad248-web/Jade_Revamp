@@ -188,43 +188,7 @@ const royaltyBase = {
       ],
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 10 PAX",
-          sublabel: "≈ ₹3,700 / head",
-          price: "₹36,999 + taxes",
-        },
-        {
-          label: "Up to 20 PAX",
-          sublabel: "≈ ₹1,850 / head",
-          price: "₹36,999 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: [
-        "Full venue access",
-        "Overnight stay",
-        "Pool & Jacuzzi access",
-      ],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (2 PM · 12 AM)",
-      packages: [
-        {
-          label: "Up to 20 PAX",
-          sublabel: "≈ ₹1,850 / head",
-          price: "₹36,999 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,099 + taxes" },
-      ],
-      features: ["Private venue access", "Equestrian grounds"],
-    },
-  },
+
   locationDetails: {
     mapImage: "/Villa_Retreats/Royalty/1-Hero/Hero 1.webp",
     address: "Gudibanda road, Varlakonda, Chikkaballapur, Karnataka 562104",

@@ -1,35 +1,25 @@
-import { haven } from "@/data/retreats/haven";
 import type { WeddingVillaOverlayEntry } from "../types";
 
-/** Wedding overlay — source: public/Wedding_Villa_Overlay/The Haven.svg */
 export const havenWeddingOverlay = {
-  ...haven,
-  name: "The Haven",
-  type: "FARMHOUSE WEDDING VENUE",
-  location: "Bangalore",
+  id: "haven",
+  type: "5-BEDROOM POOL VILLA",
   description:
-    "Haven is a private farmhouse retreat designed for intimate weddings and experience-led celebrations. The property features a 15,000 sq ft lawn along with a villa setup, allowing events to scale while maintaining a personal and relaxed atmosphere. With a private pool, jacuzzi, and curated group experiences, the venue supports celebrations that extend beyond a single event into a full-stay format.",
+    "Haven combines a race-track-view pool villa with a 17,600 sq.ft lawn and built-in event stage — ideal for weddings and receptions from intimate gatherings to 100–150 seated (up to 800 floating).",
   perfectForTags: [
-    "Intimate Weddings",
+    "Wedding",
     "Reception",
     "Mehendi",
     "Sangeet",
+    "Pre-wedding",
   ],
-  stats: {
-    ...haven.stats,
-    stay: "50 Guests",
-    events: "150 Guests",
-    bhk: "5 BHK",
-    lawn: "15,000 sq. ft. lawn",
-  },
   categories: [
-    "Intimate Weddings",
+    "Wedding",
     "Reception",
     "Mehendi",
     "Sangeet",
+    "Pre-wedding",
   ],
   overlay: {
-    onwardsPrice: "₹75,000",
-    parking: "—",
+    parking: "50+",
   },
 } as WeddingVillaOverlayEntry;

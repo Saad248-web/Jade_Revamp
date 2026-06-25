@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { query } from "@/lib/db";
 import { getClientIpFromHeaders, rateLimit } from "@/lib/rateLimit";
 import { notifyNewLead } from "@/lib/email/leadsNotifications";
 
@@ -150,34 +149,54 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const leadIns = await query<{ id: string }>(
-      `INSERT INTO partner_leads (email, payload)
-       VALUES ($1, $2::jsonb)
-       RETURNING id`,
-      [email, JSON.stringify(meta)],
-    );
+    const { connectDB } = await import("@/lib/db");
+    const { PartnerLeadModel } = await import("@/models/PartnerLead");
+    const { uploadToGridFS } = await import("@/lib/storage/gridfs");
+    const { auditLog } = await import("@/lib/audit/auditLog");
 
-    const leadId = leadIns.rows[0]?.id;
-    if (!leadId) {
-      throw new Error("partner_lead_insert_failed");
-    }
+    await connectDB();
+
+    const photos: Array<{
+      ordinal: number;
+      filename: string;
+      mime: string;
+      size: number;
+      gridFsId: string;
+    }> = [];
 
     for (let i = 0; i < files.length; i++) {
       const f = files[i]!;
       const buf = Buffer.from(await f.arrayBuffer());
-      await query(
-        `INSERT INTO partner_lead_photos
-           (partner_lead_id, ordinal, filename, mime, bytes)
-         VALUES ($1, $2, $3, $4, $5)`,
-        [
-          leadId,
-          i,
-          f.name.slice(0, 260),
-          f.type.slice(0, 120) || "application/octet-stream",
-          buf,
-        ],
-      );
+      const mime = f.type.slice(0, 120) || "application/octet-stream";
+      const { gridFsId, size } = await uploadToGridFS({
+        filename: f.name.slice(0, 260),
+        mime,
+        buffer: buf,
+        bucketName: "partner_photos",
+      });
+      photos.push({
+        ordinal: i,
+        filename: f.name.slice(0, 260),
+        mime,
+        size,
+        gridFsId,
+      });
     }
+
+    const doc = await PartnerLeadModel.create({
+      email,
+      payload: meta,
+      photos,
+    });
+
+    const leadId = String(doc._id);
+
+    await auditLog({
+      action: "partner.create",
+      targetType: "partner_lead",
+      targetId: leadId,
+      ip,
+    });
 
     const preview = [
       `Source: Partner programme (multipart)`,

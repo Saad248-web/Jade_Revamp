@@ -1,6 +1,7 @@
 // Route-segment layout — Server Component exports metadata for this client-component blogs list page
 import type { Metadata } from "next";
 import JsonLd from "@/components/seo/JsonLd";
+import "@/styles/blog-prose.css";
 
 export const metadata: Metadata = {
   title: "Blog — Luxury Travel & Villa Living",

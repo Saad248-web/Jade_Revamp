@@ -1,20 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { query } from "@/lib/db";
+import { findVillaBySlug, getBookingStore } from "@/lib/bookings/mongoStore";
+import { isMongoConfigured } from "@/lib/db";
 import { getClientIpFromHeaders, rateLimit } from "@/lib/rateLimit";
-import { isRegisteredVillaId } from "@/lib/security/villaId";
 
-/*
-  GET /api/bookings/availability?villaId=magnolia&year=2026&month=0
+export const dynamic = "force-dynamic";
 
-  Returns an array of ISO date strings (YYYY-MM-DD) that are booked
-  for the given villa in the given month (year + 0-indexed month).
-  The frontend uses this to grey out dates on the calendar.
-*/
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const villaId = searchParams.get("villaId");
+  const villaSlug = searchParams.get("villaId") ?? searchParams.get("villaSlug");
   const year = Number(searchParams.get("year"));
-  const month = Number(searchParams.get("month")); // 0-indexed
+  const month = Number(searchParams.get("month"));
 
   const ip = req.ip ?? getClientIpFromHeaders(req.headers);
   const rl = rateLimit({
@@ -23,56 +18,39 @@ export async function GET(req: NextRequest) {
     windowMs: 5 * 60 * 1000,
   });
   if (!rl.ok) {
-    return new NextResponse(
-      JSON.stringify({ error: "Too many requests. Please try again later." }),
-      {
-        status: 429,
-        headers: { "Content-Type": "application/json", "Retry-After": String(rl.retryAfterSeconds) },
-      },
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } },
     );
   }
 
-  if (
-    !villaId ||
-    isNaN(year) ||
-    isNaN(month) ||
-    !isRegisteredVillaId(villaId)
-  ) {
+  if (!villaSlug || isNaN(year) || isNaN(month) || month < 0 || month > 11) {
     return NextResponse.json(
-      { error: "Valid villaId, year, and month are required" },
+      { error: "Valid villaId/villaSlug, year, and month are required" },
       { status: 400 },
     );
   }
 
-  const y = Number(year);
-  const m = Number(month);
-  if (y < 2024 || y > 2045 || m < 0 || m > 11) {
-    return NextResponse.json(
-      { error: "year or month out of allowed range" },
-      { status: 400 },
-    );
-  }
+  const firstDay = new Date(year, month, 1).toISOString().slice(0, 10);
+  const lastDay = new Date(year, month + 1, 0).toISOString().slice(0, 10);
 
-  // First day and last day of requested month
-  const firstDay = new Date(y, m, 1).toISOString().split("T")[0];
-  const lastDay = new Date(y, m + 1, 0).toISOString().split("T")[0];
+  if (!isMongoConfigured()) {
+    return NextResponse.json({ bookedDates: [], blockedDates: [] });
+  }
 
   try {
-    // Use PostgreSQL generate_series to expand bookings into individual days.
-    // This avoids all JS timezone issues — dates stay as plain text.
-    const result = await query<{ booked_date: string }>(
-      `SELECT DISTINCT gs::date::text AS booked_date
-       FROM bookings,
-            generate_series(check_in, check_out - interval '1 day', '1 day') gs
-       WHERE villa_id = $1
-         AND status != 'cancelled'
-         AND check_in <= $3::date
-         AND check_out > $2::date`,
-      [villaId, firstDay, lastDay],
+    const villa = await findVillaBySlug(villaSlug);
+    if (!villa) {
+      return NextResponse.json({ bookedDates: [], blockedDates: [] });
+    }
+    const villaId = "_id" in villa ? String(villa._id) : villa.slug;
+    const store = getBookingStore();
+    const { bookedDates, blockedDates } = await store.getAvailability(
+      villaId,
+      firstDay,
+      lastDay,
     );
-
-    const bookedDates = result.rows.map((r) => r.booked_date);
-    return NextResponse.json({ bookedDates });
+    return NextResponse.json({ bookedDates, blockedDates });
   } catch (err) {
     console.error("[GET /api/bookings/availability]", err);
     return NextResponse.json(

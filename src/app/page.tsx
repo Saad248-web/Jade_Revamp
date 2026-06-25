@@ -3,6 +3,8 @@ import SplashScreen from "@/components/SplashScreen";
 import LandingPage from "@/components/LandingPage";
 import JsonLd from "@/components/seo/JsonLd";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Jade Hospitainment — Luxury Villas, Weddings & Experiences",
   description:

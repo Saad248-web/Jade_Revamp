@@ -21,18 +21,15 @@ const diamondPerfectForCards = [
 
 const diamondBase = {
   id: "diamond",
-  name: "Diamond",
-  type: "LARGE-FORMAT EVENT & WEDDING VENUE",
-  location: "Kanakapura Road, Bangalore",
+  name: "Diamond Pavilion",
+  type: "9-BEDROOM EVENT ESTATE",
+  location: "Kanakapura Road · 10 min Art of Living",
   stats: {
-    stay: "50 Guests Stay",
-    events: "500 Guests Event",
-    bhk: "9 BHK",
-    lawn: "50,000 sqft Lawn Area",
-    villaArea: "3 Acre Private Property",
-    banquet: "Semi-open Banquet Hall",
-    gazebo: "Two-deck Gazebo",
-    stage: "Event Stage Setup",
+    stay: "Up to 20 Guests (70 dorm max)",
+    events: "200–400 seated · 2,000 floating",
+    bhk: "9 BR + dormitory",
+    lawn: "1 acre event lawn",
+    villaArea: "10,000 sq.ft · infinity pool",
   },
   description:
     "Diamond by Jade is a large-scale private event venue set across a 3-acre property surrounded by coconut groves. Designed for weddings, corporate events, and large gatherings, it combines expansive outdoor spaces with structured indoor facilities.\n\nWith a 50,000 sq ft lawn, banquet hall, multiple accommodation blocks, and event-ready infrastructure, the property supports both high-capacity events and group stays. The layout enables simultaneous setups across zones.",
@@ -258,26 +255,7 @@ const diamondBase = {
       icon: "Car",
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 2 PAX",
-          sublabel: "≈ ₹3,700 / head",
-          price: "₹14,999 + taxes",
-        },
-        {
-          label: "Up to 4 PAX",
-          sublabel: "≈ ₹3,700 / head",
-          price: "₹19,999 + taxes",
-        },
-        { label: "Additional Guest", price: "₹3,000 + taxes" },
-      ],
-      features: ["Venue access", "Overnight villa stay"],
-    },
-  },
+
   locationDetails: {
     mapImage: "",
     address: "Gudibanda road, Varlakonda, Chikkaballapur, Karnataka 562104",

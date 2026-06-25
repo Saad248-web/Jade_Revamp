@@ -22,14 +22,14 @@ const jade_735PerfectForCards = [
 const jade735Base = {
   id: "jade-735",
   name: "Jade 735",
-  type: "BOUTIQUE PRIVATE RETREAT VILLA",
-  location: "Jade Gardens, near club Kabana",
+  type: "4-BEDROOM BALINESE VILLA",
+  location: "Sadahalli · 5 min Airport Toll",
   stats: {
-    stay: "20 Guests",
-    events: "30 Guests",
-    bhk: "4+1 BHK",
-    lawn: "Private Gazebo Lounge",
-    villaArea: "10ft Waterfall Pool",
+    stay: "Up to 10 Guests (family only)",
+    events: "Not available",
+    bhk: "4 BHK",
+    lawn: "Small lawn",
+    villaArea: "5,000 sq.ft · rooftop jacuzzi",
   },
   description:
     "Jade 735 is a private boutique villa designed as a personal retreat within a resort-like setting. The 4+1 bedroom layout combines curated interiors with multiple experiential zones, creating a space suited for both stays and hosted gatherings. With a private pool featuring a 10 ft waterfall, jacuzzi lounge, gazebo seating, and multiple indoor-outdoor zones, the property offers a layered experience across spaces. Designed for privacy, it supports celebrations, retreats, and social stays within a controlled environment.",
@@ -214,48 +214,7 @@ const jade735Base = {
       ],
     },
   ],
-  pricing: {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: "Up to 10 PAX",
-          sublabel: "≈ ₹3,500 / head",
-          price: "₹35,000 + taxes",
-        },
-        {
-          label: "Up to 20 PAX",
-          sublabel: "≈ ₹2,250 / head",
-          price: "₹45,000 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: [
-        "Full villa access",
-        "Waterfall pool access",
-        "Overnight stay",
-      ],
-    },
-    event: {
-      title: "Event Experience",
-      subtitle: "8 hours (2 PM · 12 AM)",
-      packages: [
-        {
-          label: "Up to 20 PAX",
-          sublabel: "≈ ₹1,750 / head",
-          price: "₹35,000 + taxes",
-        },
-        {
-          label: "Up to 30 PAX",
-          sublabel: "≈ ₹1,500 / head",
-          price: "₹45,000 + taxes",
-        },
-        { label: "Additional Guest", price: "₹1,999 + taxes" },
-      ],
-      features: ["Private venue access", "Basic event support"],
-    },
-  },
+
   locationDetails: {
     mapImage: "",
     address: "735, Jade Garden Phase II, Sadahalli, Bangalore — 562110",

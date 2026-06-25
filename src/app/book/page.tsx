@@ -27,10 +27,17 @@ import type { UserDetails } from "@/lib/types";
 import { useBooking, DateRange, Guests } from "@/context/BookingContext";
 import BookingDetailsFormFields from "@/components/booking/BookingDetailsFormFields";
 import { initiatePayment } from "@/lib/paymentService";
+import { formatPaise } from "@/lib/money";
+import type { BookingPricing } from "@/lib/bookings/types";
 import { villaListingPath } from "@/lib/appRoutes";
 import { useSafeBack } from "@/lib/safeBackNavigation";
 import { openRazorpayCheckout } from "@/lib/payments/razorpayCheckout";
 import { isVillaBookable } from "@/lib/villaBooking";
+import {
+  estimateAddOnPaise,
+  formatBookAddOnPrice,
+  getBookPageAddOns,
+} from "@/lib/bookings/bookPageAddOns";
 
 /* ─────────────────────────────────────────────────────────────────────
    Types
@@ -53,16 +60,6 @@ const MONTH_NAMES = [
   "October",
   "November",
   "December",
-];
-
-const ADD_ONS = [
-  { id: "bonfire", label: "Bonfire Setup", price: 99000 },
-  { id: "bbq", label: "Private BBQ Experience", price: 99000 },
-  { id: "movie", label: "Movie Under the Stars", price: 99000 },
-  { id: "candle", label: "Candle-Lit Dinner", price: 99000 },
-  { id: "dj", label: "DJ & Sound Setup", price: 99000 },
-  { id: "wellness", label: "Guided Wellness Session", price: 99000 },
-  { id: "culinary", label: "Culinary Experience", price: 0 },
 ];
 
 const NIGHT_TAX = 99000;
@@ -493,6 +490,16 @@ function StepDetails({
 /* ─────────────────────────────────────────────────────────────────────
    Step 4: Review & Pay
 ───────────────────────────────────────────────────────────────────── */
+type ServerPreview = {
+  pricing: BookingPricing;
+  payment: {
+    amountDuePaise: number;
+    depositPaise: number;
+    balancePaise: number;
+    paymentPlan: string;
+  };
+};
+
 function StepReview({
   dateRange,
   guests,
@@ -501,7 +508,8 @@ function StepReview({
   goToStep,
   selectedAddOns,
   setSelectedAddOns,
-  basePrice,
+  serverPreview,
+  previewLoading,
 }: {
   dateRange: DateRange;
   guests: Guests;
@@ -510,17 +518,22 @@ function StepReview({
   goToStep: (s: Step) => void;
   selectedAddOns: string[];
   setSelectedAddOns: React.Dispatch<React.SetStateAction<string[]>>;
-  basePrice: number;
+  serverPreview: ServerPreview | null;
+  previewLoading: boolean;
 }) {
   const toggleAddOn = (id: string) =>
     setSelectedAddOns((prev) =>
       prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id],
     );
 
-  const addOnTotal = selectedAddOns.reduce(
-    (sum, id) => sum + (ADD_ONS.find((a) => a.id === id)?.price ?? 0),
-    0,
-  );
+  const bookAddOns = getBookPageAddOns(selectedVilla?.id);
+  const addOnTotal = serverPreview?.pricing.addOnPaise ?? 0;
+  const displayTotal = serverPreview?.pricing.totalPaise ?? 0;
+  const displayTax = serverPreview?.pricing.taxPaise ?? 0;
+  const displayBase =
+    (serverPreview?.pricing.basePaise ?? 0) +
+    (serverPreview?.pricing.extraPaxPaise ?? 0) +
+    (serverPreview?.pricing.eventPaise ?? 0);
 
   return (
     <div className="flex flex-col h-full bg-transparent">
@@ -624,7 +637,7 @@ function StepReview({
             Pricing is subject to confirmation based on group size.
           </p>
           <div className="space-y-2.5">
-            {ADD_ONS.map((addon) => (
+            {bookAddOns.map((addon) => (
               <label
                 key={addon.id}
                 className="flex items-center justify-between py-1 cursor-pointer group"
@@ -643,9 +656,7 @@ function StepReview({
                   </span>
                 </div>
                 <span className="text-white text-gh-desc font-manrope font-bold">
-                  {addon.price > 0
-                    ? formatRupees(addon.price)
-                    : "Price on request"}
+                  {formatBookAddOnPrice(addon.pricePaise)}
                 </span>
               </label>
             ))}
@@ -657,28 +668,50 @@ function StepReview({
           <h4 className="text-white font-manrope font-bold text-gh-body mb-3">
             Price details
           </h4>
-          <div className="space-y-2 text-gh-desc font-manrope">
-            <div className="flex items-center justify-between text-white/90">
-              <span className="text-white/80">
-                1 Night × {formatRupees(basePrice)}
-              </span>
-              <span className="font-bold text-white">
-                {formatRupees(basePrice)}
-              </span>
+          {previewLoading ? (
+            <p className="flex items-center gap-2 text-white/60 font-manrope text-gh-desc">
+              <Loader2 className="w-4 h-4 animate-spin" /> Calculating price…
+            </p>
+          ) : serverPreview ? (
+            <div className="space-y-2 text-gh-desc font-manrope">
+              <div className="flex items-center justify-between text-white/90">
+                <span className="text-white/80">Stay / package</span>
+                <span className="font-bold text-white">
+                  {formatPaise(displayBase)}
+                </span>
+              </div>
+              {addOnTotal > 0 && (
+                <div className="flex items-center justify-between text-white/90">
+                  <span className="text-white/80">Add On Experiences</span>
+                  <span className="font-bold text-white">
+                    {formatPaise(addOnTotal)}
+                  </span>
+                </div>
+              )}
+              <div className="flex items-center justify-between text-white/90">
+                <span className="text-white/80">GST</span>
+                <span className="font-bold text-white">
+                  {formatPaise(displayTax)}
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-white pt-2 border-t border-white/10">
+                <span className="font-bold">Total</span>
+                <span className="font-bold text-[#EFCD62]">
+                  {formatPaise(displayTotal)}
+                </span>
+              </div>
+              {serverPreview.payment.paymentPlan === "deposit" && (
+                <p className="text-white/50 text-gh-label">
+                  Pay now: {formatPaise(serverPreview.payment.depositPaise)} ·
+                  Balance: {formatPaise(serverPreview.payment.balancePaise)}
+                </p>
+              )}
             </div>
-            <div className="flex items-center justify-between text-white/90">
-              <span className="text-white/80">Add On Experiences</span>
-              <span className="font-bold text-white">
-                {formatRupees(addOnTotal)}
-              </span>
-            </div>
-            <div className="flex items-center justify-between text-white/90">
-              <span className="text-white/80">Taxes</span>
-              <span className="font-bold text-white">
-                {formatRupees(NIGHT_TAX)}
-              </span>
-            </div>
-          </div>
+          ) : (
+            <p className="text-white/50 font-manrope text-gh-desc">
+              Select dates and add-ons to see server-calculated pricing.
+            </p>
+          )}
           <div className="flex items-center gap-3 text-white/50 text-gh-label font-manrope mt-4">
             <span>Cancel within 24 hours for refund</span>
             <span>Full Policy</span>
@@ -724,7 +757,7 @@ function SuccessScreen({
   villaName,
   checkIn,
   checkOut,
-  totalPriceRupees,
+  payPaise,
   guestName,
   guestEmail,
   guestPhone,
@@ -734,7 +767,7 @@ function SuccessScreen({
   villaName: string;
   checkIn: { month: number; day: number } | null;
   checkOut: { month: number; day: number } | null;
-  totalPriceRupees: number;
+  payPaise: number;
   guestName: string;
   guestEmail: string;
   guestPhone: string;
@@ -751,8 +784,8 @@ function SuccessScreen({
     setPayBusy(true);
     try {
       const receipt = `book-${bookingId.replace(/-/g, "").slice(0, 36)}`;
-      const session = await initiatePayment(totalPriceRupees, receipt, {
-        bookingUuid: bookingId,
+      const session = await initiatePayment(payPaise / 100, receipt, {
+        bookingId,
       });
 
       if (
@@ -841,7 +874,7 @@ function SuccessScreen({
         ) : (
           <>
             <p className="text-white/50 text-gh-label font-manrope mb-2.5">
-              Pay {formatRupees(totalPriceRupees)} now with Razorpay, or we'll
+              Pay {formatPaise(payPaise)} now with Razorpay, or we'll
               follow up on the phone or email you provided.
             </p>
             {payError && (
@@ -858,7 +891,7 @@ function SuccessScreen({
               className="mb-2.5"
             >
               {payBusy && <Loader2 className="w-4 h-4 animate-spin" />}
-              {payBusy ? "OPENING…" : `PAY ${formatRupees(totalPriceRupees)}`}
+              {payBusy ? "OPENING…" : `PAY ${formatPaise(payPaise)}`}
             </PrimaryButton>
           </>
         )}
@@ -920,9 +953,15 @@ function BookPageContent() {
   // Submission state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [bookingResult, setBookingResult] = useState<{ id: string } | null>(
+  const [bookingResult, setBookingResult] = useState<{
+    id: string;
+    depositPaise: number;
+    totalPaise: number;
+  } | null>(null);
+  const [serverPreview, setServerPreview] = useState<ServerPreview | null>(
     null,
   );
+  const [previewLoading, setPreviewLoading] = useState(false);
   const [detailsForceErrors, setDetailsForceErrors] = useState(false);
 
   const villaBookingDisabled =
@@ -974,9 +1013,9 @@ function BookPageContent() {
       ) || 99000
     : 99000;
 
-  const addOnTotal = selectedAddOns.reduce(
-    (sum, id) => sum + (ADD_ONS.find((a) => a.id === id)?.price ?? 0),
-    0,
+  const addOnTotal = estimateAddOnPaise(
+    selectedAddOns,
+    guests.adults + guests.children,
   );
 
   const handleClose = useSafeBack(villaListingPath());
@@ -1011,6 +1050,58 @@ function BookPageContent() {
     }
   };
 
+  const buildPreviewPayload = useCallback(() => {
+    if (!selectedVillaId || !dateRange.checkIn || !dateRange.checkOut) {
+      return null;
+    }
+    const thisYear = new Date().getFullYear();
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const checkInISO = `${thisYear}-${pad(dateRange.checkIn.month + 1)}-${pad(dateRange.checkIn.day)}`;
+    const checkOutISO = `${thisYear}-${pad(dateRange.checkOut.month + 1)}-${pad(dateRange.checkOut.day)}`;
+    return {
+      villaSlug: selectedVillaId,
+      bookingType: "stay" as const,
+      checkIn: checkInISO,
+      checkOut: checkOutISO,
+      guests: guests.adults + guests.children,
+      adults: guests.adults,
+      children: guests.children,
+      pets: guests.pets,
+      addOns: selectedAddOns.map((id) => ({ id, quantity: 1 })),
+      paymentPlan: "full" as const,
+    };
+  }, [selectedVillaId, dateRange, guests, selectedAddOns]);
+
+  useEffect(() => {
+    if (step !== "review") return;
+    const payload = buildPreviewPayload();
+    if (!payload) return;
+
+    let cancelled = false;
+    setPreviewLoading(true);
+    fetch("/api/bookings/preview", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!cancelled && res.ok) {
+          setServerPreview(data as ServerPreview);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setServerPreview(null);
+      })
+      .finally(() => {
+        if (!cancelled) setPreviewLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [step, buildPreviewPayload]);
+
   /* ── Submit booking to API ── */
   const handlePayNow = useCallback(async () => {
     if (!selectedVilla || !dateRange.checkIn || !dateRange.checkOut) return;
@@ -1037,10 +1128,11 @@ function BookPageContent() {
     const checkOutISO = `${thisYear}-${pad(dateRange.checkOut.month + 1)}-${pad(dateRange.checkOut.day)}`;
 
     const payload = {
-      villaId: selectedVilla.id,
-      villaName: selectedVilla.name,
+      villaSlug: selectedVillaId,
+      bookingType: "stay" as const,
       checkIn: checkInISO,
       checkOut: checkOutISO,
+      guests: guests.adults + guests.children,
       adults: guests.adults,
       children: guests.children,
       pets: guests.pets,
@@ -1048,11 +1140,8 @@ function BookPageContent() {
       phone: details.phone,
       email: details.email,
       notes: details.notes,
-      addOns: selectedAddOns,
-      basePrice,
-      addOnTotal,
-      taxAmount: NIGHT_TAX,
-      totalPrice: basePrice + addOnTotal + NIGHT_TAX,
+      addOns: selectedAddOns.map((id) => ({ id, quantity: 1 })),
+      paymentPlan: "full" as const,
     };
 
     try {
@@ -1069,7 +1158,11 @@ function BookPageContent() {
         return;
       }
 
-      setBookingResult({ id: data.bookingId });
+      setBookingResult({
+        id: data.bookingId,
+        depositPaise: data.payment?.depositPaise ?? data.pricing?.totalPaise ?? 0,
+        totalPaise: data.pricing?.totalPaise ?? 0,
+      });
     } catch {
       setSubmitError(
         "Network error. Please check your connection and try again.",
@@ -1078,25 +1171,23 @@ function BookPageContent() {
       setIsSubmitting(false);
     }
   }, [
-    selectedVilla,
-    dateRange,
+    selectedVillaId,
     guests,
     details,
     selectedAddOns,
-    basePrice,
-    addOnTotal,
   ]);
 
   /* ── Show success screen ── */
   if (bookingResult) {
-    const totalPriceRupees = basePrice + addOnTotal + NIGHT_TAX;
+    const payPaise =
+      bookingResult.depositPaise || bookingResult.totalPaise;
     return (
       <SuccessScreen
         bookingId={bookingResult.id}
         villaName={selectedVilla?.name ?? "Jade Villa"}
         checkIn={dateRange.checkIn}
         checkOut={dateRange.checkOut}
-        totalPriceRupees={totalPriceRupees}
+        payPaise={payPaise}
         guestName={details.fullName}
         guestEmail={details.email}
         guestPhone={details.phone}
@@ -1225,7 +1316,7 @@ function BookPageContent() {
     }
 
     if (step === "review") {
-      const total = basePrice + addOnTotal + NIGHT_TAX;
+      const total = serverPreview?.pricing.totalPaise ?? 0;
       return (
         <div className="flex flex-col gap-2.5 w-full">
           {/* Error message */}
@@ -1245,7 +1336,7 @@ function BookPageContent() {
 
           <div className="flex items-center justify-between w-full gap-3">
             <div className="text-white font-manrope text-gh-label font-bold tracking-wide whitespace-nowrap">
-              Total Price: {formatRupees(total)}
+              Total: {total > 0 ? formatPaise(total) : previewLoading ? "…" : "—"}
             </div>
             <div className="flex items-center gap-5 sm:gap-6 shrink-0">
               <button
@@ -1394,7 +1485,8 @@ function BookPageContent() {
                 goToStep={setStep}
                 selectedAddOns={selectedAddOns}
                 setSelectedAddOns={setSelectedAddOns}
-                basePrice={basePrice}
+                serverPreview={serverPreview}
+                previewLoading={previewLoading}
               />
             </motion.div>
           )}

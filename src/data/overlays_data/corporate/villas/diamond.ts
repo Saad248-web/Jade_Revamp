@@ -1,34 +1,20 @@
-import { diamond } from "@/data/retreats/diamond";
 import type { CorporateVillaOverlayEntry } from "../types";
 
-/** Corporate overlay — source: public/Corporate_Villa_Overlay/Diamond.svg */
 export const diamondCorporateOverlay = {
-  ...diamond,
-  name: "Diamond Pavilion",
-  type: "GRAND CORPORATE EVENT RETREAT",
-  location: "Kanakapura Road",
+  id: "diamond",
+  type: "9-BEDROOM EVENT ESTATE",
   description:
-    "Diamond Pavilion by Jade is a large-format corporate venue designed for conferences, recognition programmes, and milestone celebrations. With expansive lawns, multi-purpose halls, and structured breakout spaces, it supports high-capacity events without compromising privacy or operational flow.",
+    "Diamond Pavilion scales for large corporate events and offsites — infinity pool, 1-acre lawn, dormitory, and indoor entertainment across a 9-bedroom estate.",
   perfectForTags: [
     "Corporate Offsites",
-    "Cocktail Evenings",
-    "Recognition & Award Nights",
-    "Large Team Offsites",
-    "Annual Gatherings",
+    "Large Team Events",
+    "Product Launches",
+    "Award Nights",
   ],
-  stats: {
-    ...diamond.stats,
-    stay: "50 Guests",
-    events: "500 Guests",
-    lawn: "3 Acres",
-    villaArea: "3-Acre Private Estate",
-  },
   categories: [
     "Corporate Offsites",
-    "Cocktail Evenings",
-    "Recognition & Award Nights",
-    "Large Team Offsites",
-    "Annual Gatherings",
+    "Large Team Events",
+    "Product Launches",
+    "Award Nights",
   ],
-  overlay: { onwardsPrice: "₹75,000" },
 } as CorporateVillaOverlayEntry;

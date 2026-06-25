@@ -1,31 +1,8 @@
-import {
-  domeVillas,
-  emerald,
-  magnolia,
-  tranquil,
-  wonderland,
-} from "@/data/retreats";
-
+/** Party page — marketing ids only; pricing/stats from canonical at runtime. */
 export const PARTY_VILLAS_OVERLAY_DATA = {
-  "dome-villas": {
-    ...domeVillas,
-    overlay: { onwardsPrice: "₹35,000 per night" },
-  },
-  emerald: {
-    ...emerald,
-    overlay: { onwardsPrice: "₹65,000 per night onwards" },
-  },
-  magnolia: {
-    ...magnolia,
-    overlay: { onwardsPrice: "₹50,000 per night" },
-  },
-  tranquil: {
-    ...tranquil,
-    overlay: { onwardsPrice: "₹70,000 per night onwards" },
-  },
-  wonderland: {
-    ...wonderland,
-    overlay: { onwardsPrice: "₹30,000 per night onwards" },
-  },
+  "dome-villas": { id: "dome-villas" },
+  emerald: { id: "emerald" },
+  magnolia: { id: "magnolia" },
+  tranquil: { id: "tranquil" },
+  wonderland: { id: "wonderland" },
 } as const;
-

@@ -1,9 +1,15 @@
-export const PARTY_PRICING_ONWARDS: Record<string, string> = {
-  magnolia: "₹50,000 per night",
-  emerald: "₹65,000 per night onwards",
-  tranquil: "₹70,000 per night onwards",
-  wonderland: "₹30,000 per night onwards",
-  "dome-villas": "₹35,000 per night",
-  default: "₹35,000 per night",
-};
+import { buildOnwardsPriceMap } from "@/lib/villas/canonicalOverlayHelpers";
 
+const PARTY_VILLA_IDS = [
+  "dome-villas",
+  "emerald",
+  "magnolia",
+  "tranquil",
+  "wonderland",
+] as const;
+
+/** Derived from Jade_Property_Data.md via canonical portfolio. */
+export const PARTY_PRICING_ONWARDS: Record<string, string> = {
+  default: "₹15,000 + GST / night",
+  ...buildOnwardsPriceMap("party", PARTY_VILLA_IDS),
+};
