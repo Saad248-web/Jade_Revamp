@@ -245,6 +245,16 @@ E2E coverage today:
 
 CI (`.github/workflows/ci.yml`): `npm ci` → `npm test` → `npm run build` on `main` / `master` PRs and pushes. Playwright is local/optional in CI (not in workflow) due to weight.
 
+### Vercel production deploy
+
+If Vercel **Deployments** still show an old commit (e.g. `88649c3`) after pushing to `main`, the Git webhook is stale. Fix it once:
+
+1. **Fastest (no code):** Vercel → **jade-revamp** → **Deployments** → **Create Deployment** → branch **`main`** → latest commit → **Deploy**.
+2. **Automatic (recommended):** Vercel → **Settings** → **Git** → **Deploy Hooks** → create hook for **`main`** → copy URL. GitHub → repo **Settings** → **Secrets** → add `VERCEL_DEPLOY_HOOK` with that URL. The workflow `.github/workflows/vercel-production.yml` will POST to it on every `main` push.
+3. **Reconnect Git:** Vercel → **Settings** → **Git** → disconnect and reconnect `Saad248-web/Jade_Revamp`, production branch **`main`**.
+
+Production env vars on Vercel: `MONGODB_URI`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, Razorpay keys (see `.env.example`).
+
 ---
 
 ## Performance and assets

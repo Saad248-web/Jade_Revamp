@@ -1,13 +1,4 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "git": {
-    "deploymentEnabled": {
-      "main": true
-    }
-  },
-  "buildCommand": "npm run build",
-  "installCommand": "npm ci",
-  "framework": "nextjs",
   "crons": [
     {
       "path": "/api/cron/expire-pending-bookings",
@@ -16,6 +7,14 @@
     {
       "path": "/api/cron/axisrooms-retry",
       "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/publish-scheduled-blogs",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/purge-trashed-blogs",
+      "schedule": "0 3 * * *"
     }
   ]
 }

@@ -1,0 +1,32 @@
+# Triggers a Vercel production build on every push to main.
+# One-time setup: GitHub repo secret VERCEL_DEPLOY_HOOK
+# (Vercel → jade-revamp → Settings → Git → Deploy Hooks → main)
+name: Vercel Production Deploy
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: vercel-production-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger Vercel production deploy
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$VERCEL_DEPLOY_HOOK" ]; then
+            echo "::error::Missing GitHub secret VERCEL_DEPLOY_HOOK."
+            echo "Vercel → Settings → Git → Deploy Hooks → main → copy URL"
+            echo "GitHub → Settings → Secrets → VERCEL_DEPLOY_HOOK"
+            echo "Or deploy manually: Vercel → Deployments → Create Deployment → main"
+            exit 1
+          fi
+          echo "Triggering Vercel deploy for ${GITHUB_SHA}"
+          curl -fsS -X POST "$VERCEL_DEPLOY_HOOK"
+          echo "Deploy hook accepted — check Vercel Deployments."
