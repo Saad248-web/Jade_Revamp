@@ -2,7 +2,7 @@
 
 Marketing and booking platform for **Jade Hospitainment**: luxury private retreats, destination weddings, corporate offsites, and curated experiences near Bangalore. The site is a **Next.js 14** App Router application with typed retreat data in the repo, **MongoDB** for bookings/leads/CMS/users, optional **Razorpay** checkout, **Jade Host** staff dashboard (NextAuth RBAC), and a strong **SEO / GEO** layer (`sitemap`, `robots`, JSON-LD, `llms.txt`).
 
-**Revision:** 2026-05-20
+**Revision:** 2026-06-25 — Jade Host PMS + dashboard deploy
 
 ---
 
