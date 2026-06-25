@@ -212,7 +212,7 @@ export const API_ROUTE_CASES: ApiRouteCase[] = [
     label: "media upload",
     pathname: "/api/dashboard/media/upload",
     method: "POST",
-    permPath: "/dashboard/settings/villas",
+    permPath: "/dashboard/media",
     min: "write",
   },
   {
