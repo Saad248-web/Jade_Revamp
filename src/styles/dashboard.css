@@ -110,37 +110,53 @@
   padding-bottom: max(var(--dash-space-5), env(safe-area-inset-bottom, 0px));
 }
 
-/* Mobile: lock shell to viewport — single native scroll root (dashboard only). */
-@media (max-width: 1023px) {
-  html.jade-dashboard,
-  html.jade-dashboard body {
-    height: 100%;
-    overflow: hidden;
-    overscroll-behavior: none;
-  }
+/*
+ * Dashboard app shell — one scroll root in .dashboard-content (all viewports).
+ * Public marketing pages keep body/Lenis scroll; only active when .jade-dashboard is on <html>.
+ */
+html.jade-dashboard,
+html.jade-dashboard body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
 
+html.jade-dashboard .dashboard-root {
+  height: 100dvh;
+  height: 100svh;
+  max-height: 100dvh;
+  max-height: 100svh;
+  min-height: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+html.jade-dashboard .dashboard-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  height: 100%;
+}
+
+html.jade-dashboard .dashboard-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+}
+
+@media (max-width: 1023px) {
   html.jade-dashboard .dashboard-root {
     display: flex;
     flex-direction: column;
-    height: 100dvh;
-    height: 100svh;
-    max-height: 100dvh;
-    max-height: 100svh;
-    min-height: 0;
-    overflow: hidden;
-    overscroll-behavior: none;
   }
 
   html.jade-dashboard .dashboard-main {
     flex: 1;
-    min-height: 0;
-    min-width: 0;
-    overflow: hidden;
-  }
-
-  html.jade-dashboard .dashboard-content {
-    overflow-x: hidden;
-    overscroll-behavior-y: contain;
+    height: auto;
   }
 }
 
