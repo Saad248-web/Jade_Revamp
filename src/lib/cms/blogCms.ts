@@ -22,6 +22,16 @@ export type CmsBlogSchemas = Record<BlogSchemaId, boolean>;
 
 export type CmsBlogFaq = { question: string; answer: string };
 
+/** Mongo may return Date objects; UI/API expect YYYY-MM-DD strings. */
+export function coerceIsoDateOnly(value: unknown): string | undefined {
+  if (value == null || value === "") return undefined;
+  if (typeof value === "string") return value.slice(0, 10);
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString().slice(0, 10);
+  }
+  return undefined;
+}
+
 export type CmsBlogSeo = {
   metaTitle?: string;
   focusKeyword?: string;
@@ -205,10 +215,15 @@ export function normalizeBlogMeta(
     isFeatured: raw?.isFeatured ?? false,
     isPinned: raw?.isPinned ?? false,
     featuredOrder: raw?.featuredOrder ?? 0,
-    publishedAt: raw?.publishedAt?.slice(0, 10) ?? today,
-    dateModified: raw?.dateModified?.slice(0, 10),
-    scheduledAt: raw?.scheduledAt?.slice(0, 10),
-    scheduledPublishAt: raw?.scheduledPublishAt,
+    publishedAt: coerceIsoDateOnly(raw?.publishedAt) ?? today,
+    dateModified: coerceIsoDateOnly(raw?.dateModified),
+    scheduledAt: coerceIsoDateOnly(raw?.scheduledAt),
+    scheduledPublishAt:
+      typeof raw?.scheduledPublishAt === "string"
+        ? raw.scheduledPublishAt
+        : raw?.scheduledPublishAt instanceof Date
+          ? raw.scheduledPublishAt.toISOString()
+          : raw?.scheduledPublishAt,
     faqs,
     schemas,
     seo: { ...defaultBlogSeo(), ...raw?.seo },

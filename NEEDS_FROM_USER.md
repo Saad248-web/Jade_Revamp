@@ -10,9 +10,9 @@ After pushing to `main`, set these in **Vercel → jade-revamp → Settings → 
 
 | Variable | Value |
 |----------|--------|
-| `MONGODB_URI` | Same Atlas connection string as `.env.local` |
+| `MONGODB_URI` | Same Atlas connection string as `.env.local` — prefer **`mongodb+srv://...`** from Atlas → Connect → Drivers (not the expanded `mongodb://host1,host2,...` list) |
 | `NEXTAUTH_SECRET` | Same as local (`openssl rand -base64 32`) |
-| `NEXTAUTH_URL` | `https://jade-revamp.vercel.app` (or your custom domain) |
+| `NEXTAUTH_URL` | `https://jade-revamp.vercel.app` (no trailing slash) |
 
 Then **Redeploy** (Deployments → ⋯ → Redeploy) so env vars apply.
 
