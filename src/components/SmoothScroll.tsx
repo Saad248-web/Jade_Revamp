@@ -52,10 +52,13 @@ export default function SmoothScroll({
   }, [pathname, presetProp]);
 
   useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const path = pathname ?? "/";
+    // Dashboard uses its own scroll roots — Lenis must not hijack wheel/touch there.
+    if (path.startsWith("/dashboard") || path === "/login") {
       return;
     }
 
@@ -121,7 +124,7 @@ export default function SmoothScroll({
       delete root.dataset.jadeLenisPreset;
       delete root.dataset.jadeLenisProfile;
     };
-  }, [preset, pointerProfile]);
+  }, [preset, pointerProfile, pathname]);
 
   return <>{children}</>;
 }

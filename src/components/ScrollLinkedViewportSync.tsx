@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import {
   clearScrollLinkedMobileViewport,
   isScrollLinkedMobileViewport,
@@ -14,10 +15,15 @@ import {
  * overlay navbar appearing) are ignored so the body never jerks while scrolling.
  */
 export default function ScrollLinkedViewportSync() {
+  const pathname = usePathname() ?? "";
   const lastWidthRef = useRef(0);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (pathname.startsWith("/dashboard") || pathname === "/login") {
+      clearScrollLinkedMobileViewport();
+      return;
+    }
 
     const mq = window.matchMedia("(max-width: 1023px)");
 
@@ -54,7 +60,7 @@ export default function ScrollLinkedViewportSync() {
       mq.removeEventListener("change", recompute);
       if (isScrollLinkedMobileViewport()) clearScrollLinkedMobileViewport();
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }

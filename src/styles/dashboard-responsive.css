@@ -45,6 +45,7 @@
     overflow-x: auto;
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
     scroll-snap-type: x proximity;
     scrollbar-width: none;
     padding-bottom: 2px;
@@ -76,6 +77,7 @@
   overflow-x: auto;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
   scrollbar-width: none;
 }
 
@@ -245,6 +247,11 @@
   .dashboard-data-table {
     min-width: 36rem;
     font-size: var(--dash-fs-small);
+  }
+
+  .dashboard-table-wrap,
+  .dashboard-data-table-wrap--menus {
+    touch-action: pan-x pan-y;
   }
 
   .dashboard-data-table th,

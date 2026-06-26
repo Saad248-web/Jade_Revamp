@@ -84,6 +84,14 @@ export function DashboardShell({
   }, [pathname]);
 
   useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add("jade-dashboard");
+    return () => {
+      root.classList.remove("jade-dashboard");
+    };
+  }, []);
+
+  useEffect(() => {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
@@ -138,7 +146,7 @@ export function DashboardShell({
           refreshing={refreshing}
         />
 
-        <main className={dash.content}>
+        <main className={dash.content} data-page-scroll-root>
           <div className={dash.page}>{children}</div>
         </main>
       </div>

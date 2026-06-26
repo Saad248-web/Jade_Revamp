@@ -13,6 +13,11 @@ export function resetMainScrollContainers() {
   const main = document.querySelector("main");
   if (!main) return;
 
+  if (main instanceof HTMLElement && main.hasAttribute("data-page-scroll-root")) {
+    main.scrollTop = 0;
+    main.scrollLeft = 0;
+  }
+
   main
     .querySelectorAll<HTMLElement>(
       '[data-page-scroll-root], [class*="overflow-y-auto"], [class*="overflow-y-scroll"]',
