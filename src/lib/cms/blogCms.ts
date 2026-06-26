@@ -32,6 +32,16 @@ export function coerceIsoDateOnly(value: unknown): string | undefined {
   return undefined;
 }
 
+/** Mongo may return Date for datetime fields (e.g. scheduledPublishAt). */
+export function coerceIsoDateTime(value: unknown): string | undefined {
+  if (value == null || value === "") return undefined;
+  if (typeof value === "string") return value;
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString();
+  }
+  return undefined;
+}
+
 export type CmsBlogSeo = {
   metaTitle?: string;
   focusKeyword?: string;
@@ -218,12 +228,7 @@ export function normalizeBlogMeta(
     publishedAt: coerceIsoDateOnly(raw?.publishedAt) ?? today,
     dateModified: coerceIsoDateOnly(raw?.dateModified),
     scheduledAt: coerceIsoDateOnly(raw?.scheduledAt),
-    scheduledPublishAt:
-      typeof raw?.scheduledPublishAt === "string"
-        ? raw.scheduledPublishAt
-        : raw?.scheduledPublishAt instanceof Date
-          ? raw.scheduledPublishAt.toISOString()
-          : raw?.scheduledPublishAt,
+    scheduledPublishAt: coerceIsoDateTime(raw?.scheduledPublishAt),
     faqs,
     schemas,
     seo: { ...defaultBlogSeo(), ...raw?.seo },
