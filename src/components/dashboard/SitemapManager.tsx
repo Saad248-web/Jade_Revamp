@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { ExternalLink } from "lucide-react";
-import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
+import { dashboardFetch, readDashboardApiError } from "@/lib/dashboard/dashboardFetch";
 import { DataTable, type DataTableColumn } from "./DataTable";
 import { DashboardListToolbar } from "./ui/DashboardListToolbar";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
@@ -24,7 +24,7 @@ export function SitemapManager() {
     setError(null);
     try {
       const res = await dashboardFetch("/api/dashboard/seo/sitemap");
-      if (!res.ok) throw new Error("Failed to load sitemap");
+      if (!res.ok) throw new Error(await readDashboardApiError(res, "Failed to load sitemap"));
       const data = (await res.json()) as {
         urls?: SitemapRow[];
         base?: string;

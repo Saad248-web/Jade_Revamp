@@ -36,7 +36,7 @@ import {
 } from "@/lib/cms/blogCms";
 import { STATUS_LABELS } from "@/lib/cms/blogWorkflow";
 import type { SeoHealthResult } from "@/lib/cms/blogSeoHealth";
-import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
+import { dashboardFetch, readDashboardApiError } from "@/lib/dashboard/dashboardFetch";
 import { dash } from "@/lib/dashboard/dashboardClasses";
 import { roleCanWrite, type Role } from "@/lib/auth/permissions";
 import { DataTable, type DataTableColumn } from "../DataTable";
@@ -169,7 +169,7 @@ export function BlogListDashboard() {
       if (dateTo) params.set("dateTo", dateTo);
 
       const res = await dashboardFetch(`/api/dashboard/blogs?${params}`);
-      if (!res.ok) throw new Error("Failed to load blogs");
+      if (!res.ok) throw new Error(await readDashboardApiError(res, "Failed to load blogs"));
       const data = (await res.json()) as {
         items?: BlogListItem[];
         total?: number;

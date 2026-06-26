@@ -8,7 +8,7 @@ import { AlertTriangle, Loader2, RefreshCw } from "lucide-react";
 
 import { useSession } from "next-auth/react";
 
-import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
+import { dashboardFetch, readDashboardApiError } from "@/lib/dashboard/dashboardFetch";
 
 import { dash } from "@/lib/dashboard/dashboardClasses";
 
@@ -118,7 +118,7 @@ export function SeoManagerDashboard() {
 
       const res = await dashboardFetch("/api/dashboard/seo/manager?refresh=1");
 
-      if (!res.ok) throw new Error("Failed to load SEO report");
+      if (!res.ok) throw new Error(await readDashboardApiError(res, "Failed to load SEO report"));
 
       const data = (await res.json()) as { report?: HealthReport };
 

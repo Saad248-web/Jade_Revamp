@@ -41,3 +41,25 @@ export async function dashboardFetch(
 
   return res;
 }
+
+/** Human-readable message from a failed dashboard API response. */
+export async function readDashboardApiError(
+  res: Response,
+  fallback: string,
+): Promise<string> {
+  try {
+    const data = (await res.json()) as {
+      error?: string;
+      hint?: string;
+      code?: string;
+    };
+    const parts = [data.error ?? fallback];
+    if (data.hint) parts.push(data.hint);
+    if (data.code === "MONGODB_NOT_CONFIGURED") {
+      parts.push("Copy MONGODB_URI from .env.local into Vercel env vars.");
+    }
+    return parts.filter(Boolean).join(" — ");
+  } catch {
+    return fallback;
+  }
+}

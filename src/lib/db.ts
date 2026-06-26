@@ -22,6 +22,31 @@ export function isMongoConfigured(): boolean {
   return Boolean(MONGODB_URI);
 }
 
+function isConnectionLive(): boolean {
+  return mongoose.connection.readyState === 1;
+}
+
+async function openConnection(): Promise<typeof mongoose> {
+  if (!MONGODB_URI) {
+    throw new Error(
+      "MONGODB_URI is not configured. Set it in .env.local (see .env.example).",
+    );
+  }
+
+  mongoose.set("strictQuery", true);
+  configureMongoDns(MONGODB_URI);
+
+  const conn = await mongoose.connect(MONGODB_URI, {
+    maxPoolSize: 10,
+    serverSelectionTimeoutMS: 15_000,
+    socketTimeoutMS: 45_000,
+    /** Serverless: fail fast instead of buffering commands while disconnected. */
+    bufferCommands: false,
+  });
+
+  return conn;
+}
+
 /**
  * MongoDB connection — sole DB entry point (Mongo-only PMS).
  * BLOCKED: requires MONGODB_URI (Tier 1 test replica set or Tier 2 production).
@@ -46,14 +71,22 @@ export async function connectDB(): Promise<typeof mongoose> {
   }
 
   if (global.__jadeMongooseConn) {
-    return global.__jadeMongooseConn;
+    try {
+      const conn = await global.__jadeMongooseConn;
+      if (isConnectionLive()) return conn;
+      global.__jadeMongooseConn = undefined;
+    } catch {
+      global.__jadeMongooseConn = undefined;
+    }
   }
 
-  mongoose.set("strictQuery", true);
-  configureMongoDns(MONGODB_URI);
+  if (isConnectionLive()) {
+    return mongoose;
+  }
 
-  global.__jadeMongooseConn = mongoose.connect(MONGODB_URI, {
-    maxPoolSize: 10,
+  global.__jadeMongooseConn = openConnection().catch((err) => {
+    global.__jadeMongooseConn = undefined;
+    throw err;
   });
 
   return global.__jadeMongooseConn;

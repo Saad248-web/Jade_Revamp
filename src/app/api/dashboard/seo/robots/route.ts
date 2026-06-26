@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth/requireRole";
+import { withMongo } from "@/lib/api/mongoRoute";
 import { getSeoSiteSettings } from "@/lib/seo/siteHealth";
-import { connectDB } from "@/lib/db";
 import { SeoSiteSettingsModel } from "@/models/SeoSiteSettings";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 const DEFAULT_ROBOTS = `User-agent: *
 Allow: /
@@ -26,23 +27,26 @@ export async function GET(req: NextRequest) {
   const auth = await requireRole(req, "/dashboard/seo/manager", "read");
   if (!auth.ok) return auth.response;
 
-  const settings = await getSeoSiteSettings();
-  const override = (settings as { robotsTxtOverride?: string | null })?.robotsTxtOverride;
-  return NextResponse.json({
-    content: override ?? DEFAULT_ROBOTS,
-    isOverride: Boolean(override),
-    defaultContent: DEFAULT_ROBOTS,
+  const result = await withMongo(async () => {
+    const settings = await getSeoSiteSettings();
+    const override = (settings as { robotsTxtOverride?: string | null })
+      ?.robotsTxtOverride;
+    return {
+      content: override ?? DEFAULT_ROBOTS,
+      isOverride: Boolean(override),
+      defaultContent: DEFAULT_ROBOTS,
+    };
   });
+  if (result instanceof NextResponse) return result;
+  return NextResponse.json(result);
 }
 
 export async function PATCH(req: NextRequest) {
   const auth = await requireRole(req, "/dashboard/seo/manager", "write");
   if (!auth.ok) return auth.response;
 
-  try {
-    const body = (await req.json()) as { content?: string | null; restoreDefault?: boolean };
-    await connectDB();
-
+  const body = (await req.json()) as { content?: string | null; restoreDefault?: boolean };
+  const result = await withMongo(async () => {
     const update =
       body.restoreDefault === true
         ? { robotsTxtOverride: null }
@@ -54,8 +58,8 @@ export async function PATCH(req: NextRequest) {
       { upsert: true, new: true },
     );
 
-    return NextResponse.json({ settings: doc });
-  } catch (e) {
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
-  }
+    return { settings: doc };
+  });
+  if (result instanceof NextResponse) return result;
+  return NextResponse.json(result);
 }

@@ -1,16 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth/requireRole";
+import { withMongo } from "@/lib/api/mongoRoute";
 import { duplicateBlogPost, listBlogPosts } from "@/lib/cms/blogAdmin";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
   const auth = await requireRole(req, "/dashboard/seo", "read");
   if (!auth.ok) return auth.response;
 
   const sp = req.nextUrl.searchParams;
-  try {
-    const result = await listBlogPosts({
+  const result = await withMongo(() =>
+    listBlogPosts({
       q: sp.get("q") ?? undefined,
       status: sp.get("status") ?? undefined,
       category: sp.get("category") ?? undefined,
@@ -25,12 +27,10 @@ export async function GET(req: NextRequest) {
       page: Number(sp.get("page") ?? "1"),
       limit: Number(sp.get("limit") ?? "50"),
       sort: (sp.get("sort") as "updated" | "published" | "title") ?? "updated",
-    });
-    return NextResponse.json(result);
-  } catch (e) {
-    console.error("[GET /api/dashboard/blogs]", e);
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
-  }
+    }),
+  );
+  if (result instanceof NextResponse) return result;
+  return NextResponse.json(result);
 }
 
 export async function POST(req: NextRequest) {

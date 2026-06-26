@@ -4,6 +4,31 @@ Items the agent **cannot** complete without your input. Build passes with stubs;
 
 ---
 
+## Vercel production (required for live dashboard)
+
+After pushing to `main`, set these in **Vercel → jade-revamp → Settings → Environment Variables → Production**:
+
+| Variable | Value |
+|----------|--------|
+| `MONGODB_URI` | Same Atlas connection string as `.env.local` |
+| `NEXTAUTH_SECRET` | Same as local (`openssl rand -base64 32`) |
+| `NEXTAUTH_URL` | `https://jade-revamp.vercel.app` (or your custom domain) |
+
+Then **Redeploy** (Deployments → ⋯ → Redeploy) so env vars apply.
+
+Atlas **Network Access** must allow Vercel (you already have `0.0.0.0/0` — OK).
+
+Seed production DB once from your machine (with `MONGODB_URI` pointing at Atlas):
+
+```bash
+npm run db:seed:users
+npm run db:seed
+```
+
+Without `MONGODB_URI` on Vercel, dashboard APIs return **503** (blogs, SEO, bookings, villas all empty/error).
+
+---
+
 ## Tier 1 — verify Phase 1 (free / test)
 
 | Variable | Purpose | Status |

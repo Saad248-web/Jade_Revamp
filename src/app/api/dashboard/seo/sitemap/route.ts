@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/lib/db";
 import { requireRole } from "@/lib/auth/requireRole";
+import { withMongo } from "@/lib/api/mongoRoute";
 import { VillaModel } from "@/models/Villa";
 import { getMergedPublishedPosts } from "@/lib/cms/blogStore";
 
@@ -31,8 +31,7 @@ export async function GET(req: NextRequest) {
     "/privacy",
   ];
 
-  try {
-    await connectDB();
+  const result = await withMongo(async () => {
     const villas = await VillaModel.find({
       isDeleted: false,
       status: { $ne: "hidden" },
@@ -60,9 +59,9 @@ export async function GET(req: NextRequest) {
       })),
     ];
 
-    return NextResponse.json({ urls, total: urls.length, base: BASE });
-  } catch (e) {
-    console.error("[GET /api/dashboard/seo/sitemap]", e);
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
-  }
+    return { urls, total: urls.length, base: BASE };
+  });
+
+  if (result instanceof NextResponse) return result;
+  return NextResponse.json(result);
 }
