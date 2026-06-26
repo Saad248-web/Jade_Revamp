@@ -139,21 +139,16 @@ export function SeoManagerDashboard() {
 
 
   const loadRobots = useCallback(async () => {
-
     const res = await dashboardFetch("/api/dashboard/seo/robots");
-
-    if (!res.ok) return;
-
+    if (!res.ok) {
+      setError(await readDashboardApiError(res, "Failed to load robots.txt"));
+      return;
+    }
     const data = (await res.json()) as { content?: string; defaultContent?: string };
-
     setRobots(data.content ?? "");
-
     setRobotsDefault(data.defaultContent ?? "");
-
     setRobotsDirty(false);
-
     setRobotsErrors([]);
-
   }, []);
 
 

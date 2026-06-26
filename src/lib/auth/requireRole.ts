@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import type { Role } from "./permissions";
 import { canAccess } from "./permissions";
-import { connectDB } from "@/lib/db";
+import { connectDB, mongoose } from "@/lib/db";
 import { UserModel } from "@/models/User";
 
 export type RequireRoleSuccess = {
@@ -61,6 +61,16 @@ export async function requireRole(
           code:
             token?.active === false ? "ACCOUNT_SUSPENDED" : "UNAUTHENTICATED",
         },
+        { status: 401, headers: noStore },
+      ),
+    };
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(sessionUserId)) {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { error: "Invalid session", code: "INVALID_SESSION" },
         { status: 401, headers: noStore },
       ),
     };

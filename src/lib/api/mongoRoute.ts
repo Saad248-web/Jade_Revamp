@@ -27,13 +27,16 @@ export function mongoConnectionFailedResponse(
   e: unknown,
 ): NextResponse<MongoApiErrorBody> {
   const detail = e instanceof Error ? e.message : "Connection failed";
+  const safeDetail = detail
+    .replace(/mongodb(\+srv)?:\/\/[^@\s]+@/gi, "mongodb$1://***@")
+    .slice(0, 280);
   return NextResponse.json(
     {
       error: "Database connection failed",
       code: "MONGODB_CONNECTION_FAILED",
       hint:
         "Verify MONGODB_URI, Atlas database user password, and Network Access (0.0.0.0/0 or Vercel IPs).",
-      detail: process.env.NODE_ENV === "production" ? undefined : detail,
+      detail: safeDetail,
     },
     { status: 503 },
   );

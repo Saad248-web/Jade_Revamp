@@ -204,9 +204,8 @@ export async function runSiteSeoAudit(): Promise<SiteHealthReport> {
 
 export async function getSeoSiteSettings() {
   await connectDB();
-  return SeoSiteSettingsModel.findOneAndUpdate(
-    { key: "default" },
-    {},
-    { upsert: true, new: true },
-  ).lean();
+  const existing = await SeoSiteSettingsModel.findOne({ key: "default" }).lean();
+  if (existing) return existing;
+  const created = await SeoSiteSettingsModel.create({ key: "default" });
+  return created.toObject();
 }
