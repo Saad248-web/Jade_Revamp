@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import type { Role } from "./permissions";
 import { canAccess } from "./permissions";
-import { authOptions } from "./authOptions";
 import { connectDB } from "@/lib/db";
 import { UserModel } from "@/models/User";
 
@@ -32,15 +31,36 @@ export async function requireRole(
   path: string,
   min: "read" | "write" = "write",
 ): Promise<RequireRoleSuccess | RequireRoleFailure> {
-  void req;
-  const session = await getServerSession(authOptions);
-  const sessionUserId = session?.user?.id;
-
-  if (!sessionUserId) {
+  let token;
+  try {
+    token = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET,
+      secureCookie: process.env.NODE_ENV === "production",
+    });
+  } catch (e) {
+    console.error("[requireRole] getToken failed", e);
     return {
       ok: false,
       response: NextResponse.json(
-        { error: "Unauthorized" },
+        { error: "Authorization check failed", code: "AUTH_CHECK_FAILED" },
+        { status: 503, headers: noStore },
+      ),
+    };
+  }
+
+  const sessionUserId =
+    typeof token?.uid === "string" ? token.uid : undefined;
+
+  if (!sessionUserId || token?.active === false) {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        {
+          error: "Unauthorized",
+          code:
+            token?.active === false ? "ACCOUNT_SUSPENDED" : "UNAUTHENTICATED",
+        },
         { status: 401, headers: noStore },
       ),
     };

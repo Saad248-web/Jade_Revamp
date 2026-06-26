@@ -52,8 +52,10 @@ export async function readDashboardApiError(
       error?: string;
       hint?: string;
       code?: string;
+      detail?: string;
     };
     const parts = [data.error ?? fallback];
+    if (data.detail) parts.push(data.detail);
     if (data.hint) parts.push(data.hint);
     if (data.code === "MONGODB_NOT_CONFIGURED") {
       parts.push("Copy MONGODB_URI from .env.local into Vercel env vars.");

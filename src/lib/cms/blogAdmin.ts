@@ -100,6 +100,30 @@ async function uniqueSlug(base: string, excludePageKey?: string): Promise<string
   }
 }
 
+function serializeEditLock(
+  lock: BlogListItem["editLock"] | undefined,
+): BlogListItem["editLock"] | undefined {
+  if (!lock) return undefined;
+  const lockedAt = lock.lockedAt as unknown;
+  const expiresAt = lock.expiresAt as unknown;
+  return {
+    userId: lock.userId != null ? String(lock.userId) : undefined,
+    userName: lock.userName,
+    lockedAt:
+      lockedAt instanceof Date
+        ? lockedAt.toISOString()
+        : typeof lockedAt === "string"
+          ? lockedAt
+          : undefined,
+    expiresAt:
+      expiresAt instanceof Date
+        ? expiresAt.toISOString()
+        : typeof expiresAt === "string"
+          ? expiresAt
+          : undefined,
+  };
+}
+
 export async function listBlogPosts(query: BlogListQuery) {
   await connectDB();
 
@@ -178,7 +202,7 @@ export async function listBlogPosts(query: BlogListQuery) {
       updatedAt: d.updatedAt?.toISOString(),
       createdAt: d.createdAt?.toISOString(),
       trashedAt: d.trashedAt?.toISOString(),
-      editLock: d.editLock,
+      editLock: serializeEditLock(d.editLock),
       seoHealth,
       sectionCount: sections.length,
     };

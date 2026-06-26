@@ -220,7 +220,11 @@ export function normalizeBlogMeta(
     thumbnailImage: raw?.thumbnailImage,
     author: raw?.author ?? "Jade Hospitainment",
     category: raw?.category ?? "",
-    tags: raw?.tags ?? [],
+    tags: Array.isArray(raw?.tags)
+      ? raw.tags.map(String)
+      : raw?.tags
+        ? [String(raw.tags)]
+        : [],
     readTime: raw?.readTime ?? "5 min read",
     isFeatured: raw?.isFeatured ?? false,
     isPinned: raw?.isPinned ?? false,

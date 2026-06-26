@@ -3,8 +3,11 @@ import { connectDB, isMongoConfigured } from "@/lib/db";
 
 export type MongoApiErrorBody = {
   error: string;
-  code: "MONGODB_NOT_CONFIGURED" | "MONGODB_CONNECTION_FAILED";
-  hint: string;
+  code:
+    | "MONGODB_NOT_CONFIGURED"
+    | "MONGODB_CONNECTION_FAILED"
+    | "HANDLER_ERROR";
+  hint?: string;
   detail?: string;
 };
 
@@ -45,9 +48,23 @@ export async function withMongo<T>(
   }
   try {
     await connectDB();
+  } catch (e) {
+    console.error("[withMongo] connect failed", e);
+    return mongoConnectionFailedResponse(e);
+  }
+
+  try {
     return await handler();
   } catch (e) {
-    console.error("[withMongo]", e);
-    return mongoConnectionFailedResponse(e);
+    console.error("[withMongo] handler error", e);
+    const detail = e instanceof Error ? e.message : "Handler failed";
+    return NextResponse.json(
+      {
+        error: "Request failed",
+        code: "HANDLER_ERROR",
+        detail,
+      },
+      { status: 500 },
+    );
   }
 }
