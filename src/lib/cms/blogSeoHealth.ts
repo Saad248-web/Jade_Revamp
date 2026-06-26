@@ -1,5 +1,5 @@
-import type { CmsBlogMeta, CmsBlogSection } from "@/lib/cms/blogCms";
-import { resolvePostSchemas } from "@/lib/cms/blogCms";
+import type { CmsBlogMeta, CmsBlogSection } from "@/lib/cms/blogCmsMeta";
+import { resolvePostSchemas } from "@/lib/cms/blogCmsMeta";
 
 export type SeoHealthIssue = {
   id: string;

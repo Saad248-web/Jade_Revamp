@@ -5,7 +5,7 @@ import { auditLog } from "@/lib/audit/auditLog";
 import { connectDB } from "@/lib/db";
 import { requireRole } from "@/lib/auth/requireRole";
 import { ContentPageModel } from "@/models/ContentPage";
-import { sanitizeHtmlSection } from "@/lib/cms/blogCms";
+import { sanitizeHtmlSection } from "@/lib/cms/blogCmsSanitize";
 import { z } from "zod";
 
 export const dynamic = "force-dynamic";

@@ -11,7 +11,7 @@ import {
   type CmsBlogMeta,
   type CmsBlogSection,
   type CmsPageStatus,
-} from "@/lib/cms/blogCms";
+} from "@/lib/cms/blogCmsMeta";
 import { computeBlogSeoHealth, seoScoreBucket } from "@/lib/cms/blogSeoHealth";
 import { canTransition, nextStatus, type WorkflowAction } from "@/lib/cms/blogWorkflow";
 

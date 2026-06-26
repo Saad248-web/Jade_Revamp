@@ -12,6 +12,8 @@ const mediaApiTraceExcludes = [
 ];
 
 const nextConfig = {
+  /** Prevent mongoose/jsdom from being incorrectly bundled into serverless functions. */
+  serverExternalPackages: ["mongoose", "mongodb", "bson", "isomorphic-dompurify", "jsdom"],
   experimental: {
     outputFileTracingExcludes: {
       "/api/dashboard/media": mediaApiTraceExcludes,

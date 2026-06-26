@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth/requireRole";
 import { withMongo } from "@/lib/api/mongoRoute";
-import { getSeoSiteSettings } from "@/lib/seo/siteHealth";
+import { getSeoSiteSettings } from "@/lib/seo/seoSiteSettings";
 import { SeoSiteSettingsModel } from "@/models/SeoSiteSettings";
 
 export const dynamic = "force-dynamic";

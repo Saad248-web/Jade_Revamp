@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth/requireRole";
 import { withMongo } from "@/lib/api/mongoRoute";
 import { toJsonSafe } from "@/lib/api/safeJson";
-import { runSiteSeoAudit, getSeoSiteSettings } from "@/lib/seo/siteHealth";
+import { runSiteSeoAudit } from "@/lib/seo/siteHealth";
+import { getSeoSiteSettings } from "@/lib/seo/seoSiteSettings";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";

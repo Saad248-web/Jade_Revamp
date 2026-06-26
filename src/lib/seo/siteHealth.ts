@@ -15,6 +15,9 @@ import {
   type SeoIssue,
 } from "@/lib/seo/seoAudit";
 import { testRedirect } from "@/lib/seo/redirectService";
+import { getSeoSiteSettings } from "@/lib/seo/seoSiteSettings";
+
+export { getSeoSiteSettings };
 
 export type SiteHealthReport = {
   generatedAt: string;
@@ -200,12 +203,4 @@ export async function runSiteSeoAudit(): Promise<SiteHealthReport> {
     redirectIssues,
     recentFixes: [],
   };
-}
-
-export async function getSeoSiteSettings() {
-  await connectDB();
-  const existing = await SeoSiteSettingsModel.findOne({ key: "default" }).lean();
-  if (existing) return existing;
-  const created = await SeoSiteSettingsModel.create({ key: "default" });
-  return created.toObject();
 }

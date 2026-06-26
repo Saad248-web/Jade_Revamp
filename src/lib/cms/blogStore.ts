@@ -11,7 +11,7 @@ import {
   normalizeBlogMeta,
   type CmsBlogMeta,
   type CmsBlogSection,
-} from "@/lib/cms/blogCms";
+} from "@/lib/cms/blogCmsMeta";
 
 const DEFAULT_HERO = "/og-default.jpg";
 

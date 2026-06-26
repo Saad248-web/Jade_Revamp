@@ -1,4 +1,11 @@
-import { SITE_ORIGIN, defaultCanonicalUrl, normalizeBlogMeta, resolvePostSchemas, type CmsBlogMeta, type CmsBlogSection } from "@/lib/cms/blogCms";
+import {
+  SITE_ORIGIN,
+  defaultCanonicalUrl,
+  normalizeBlogMeta,
+  resolvePostSchemas,
+  type CmsBlogMeta,
+  type CmsBlogSection,
+} from "@/lib/cms/blogCmsMeta";
 import { computeBlogSeoHealth } from "@/lib/cms/blogSeoHealth";
 import { LANDING_TEMPLATES } from "@/lib/cms/landingTemplates";
 
