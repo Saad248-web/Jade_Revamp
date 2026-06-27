@@ -64,7 +64,6 @@ export default function LandingPage() {
   }, []);
 
   const { scrollY } = useScroll();
-  const yBackground = useTransform(scrollY, [0, 1000], ["0%", "40%"]);
   const heroContentY = useTransform(scrollY, [0, 500], ["0%", "15%"]);
 
   return (
@@ -85,11 +84,8 @@ export default function LandingPage() {
         className="relative w-full overflow-hidden h-[100svh] lg:h-[100dvh]"
       >
         <NavbarThemeTrigger theme="white" sectionRef={heroRef} />
-        {/* Background Layer: Video Sequence — parallax desktop only (mobile: static = smoother) */}
-        <motion.div
-          style={isLg ? { y: yBackground } : undefined}
-          className="absolute inset-0 w-full h-[120%] z-0 max-lg:h-full"
-        >
+        {/* Background: static video layer (no scroll parallax — keeps decode smooth) */}
+        <div className="absolute inset-0 w-full h-full z-0">
           <div className="absolute inset-0 z-0">
             <Image
               src={heroFallbackImage}
@@ -103,11 +99,11 @@ export default function LandingPage() {
           <ResponsiveVideo
             slug="homepage"
             poster={heroFallbackImage}
-            className="absolute inset-0 z-[1] h-full w-full object-cover"
+            className="absolute inset-0 z-[1] h-full w-full object-cover [transform:translateZ(0)]"
           />
           <div className="absolute inset-0 bg-black/40" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
-        </motion.div>
+        </div>
 
         {/* Foreground — copy + CTA share the same scroll parallax (desktop only) */}
         <motion.div

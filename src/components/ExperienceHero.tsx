@@ -146,7 +146,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
               <ResponsiveVideo
                 slug={videoSlug}
                 poster={backgroundImage}
-                className="absolute inset-0 z-[1] h-full w-full object-cover"
+                className="absolute inset-0 z-[1] h-full w-full object-cover [transform:translateZ(0)]"
               />
               <div className="absolute inset-0 bg-black/40" />
             </>

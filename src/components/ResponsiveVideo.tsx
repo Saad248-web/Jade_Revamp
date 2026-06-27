@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import clsx from "clsx";
+import { useEffect, useRef } from "react";
 import { videoSources, type VideoSlug } from "@/lib/videoSources";
 
 export type { VideoSlug };
@@ -25,6 +24,20 @@ function pickSrc(slug: VideoSlug): string {
   return useMobile ? videoSources[slug].mobile : videoSources[slug].landscape;
 }
 
+function srcMatches(video: HTMLVideoElement, target: string): boolean {
+  if (!target) return false;
+  if (video.src === target) return true;
+  try {
+    return new URL(video.src).pathname.endsWith(new URL(target).pathname);
+  } catch {
+    return video.getAttribute("src") === target;
+  }
+}
+
+function isActivelyPlaying(video: HTMLVideoElement): boolean {
+  return !video.paused && !video.ended && video.readyState >= 2;
+}
+
 export default function ResponsiveVideo({
   slug,
   className = "",
@@ -35,111 +48,98 @@ export default function ResponsiveVideo({
 }: ResponsiveVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const triedFallback = useRef(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const ensurePlay = useCallback(() => {
-    const video = videoRef.current;
-    if (!video || !autoPlay) return;
-    if (video.paused && !video.ended) {
-      void video.play().catch(() => {
-        /* Autoplay blocked until gesture — visibility handler retries */
-      });
-    }
-  }, [autoPlay]);
+  const playInFlight = useRef(false);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     triedFallback.current = false;
-    setIsPlaying(false);
 
-    const applySrc = () => {
-      const src = pickSrc(slug);
-      if (video.getAttribute("src") !== src) {
-        video.src = src;
-        video.load();
-        ensurePlay();
+    const markStarted = () => {
+      if (isActivelyPlaying(video) || video.readyState >= 3) {
+        video.removeAttribute("poster");
       }
     };
 
-    applySrc();
+    const requestPlay = () => {
+      if (!autoPlay || playInFlight.current) return;
+      if (isActivelyPlaying(video)) {
+        markStarted();
+        return;
+      }
+      playInFlight.current = true;
+      void video
+        .play()
+        .then(markStarted)
+        .catch(() => {
+          /* Autoplay policy — visibility handler retries */
+        })
+        .finally(() => {
+          playInFlight.current = false;
+        });
+    };
 
-    const onPlaying = () => {
-      video.removeAttribute("poster");
-      setIsPlaying(true);
+    const applySrc = () => {
+      const target = pickSrc(slug);
+      if (!srcMatches(video, target)) {
+        triedFallback.current = false;
+        video.src = target;
+        video.load();
+      }
+      requestPlay();
     };
 
     const onError = () => {
       if (triedFallback.current) return;
       triedFallback.current = true;
       const fallback = videoSources[slug].landscape;
-      if (video.src !== fallback && !video.src.endsWith(fallback)) {
+      if (!srcMatches(video, fallback)) {
         video.src = fallback;
         video.load();
-        ensurePlay();
+        requestPlay();
       }
     };
 
     const onVisibility = () => {
-      if (document.visibilityState === "visible") ensurePlay();
+      if (document.visibilityState === "visible") requestPlay();
     };
 
     const onPageShow = (event: PageTransitionEvent) => {
-      if (event.persisted) ensurePlay();
+      if (event.persisted) requestPlay();
     };
-
-    const onPause = () => {
-      if (!autoPlay || video.ended) return;
-      if (document.visibilityState === "visible") ensurePlay();
-    };
-
-    const onStalled = () => ensurePlay();
 
     const mobileMq = window.matchMedia(
       "(max-width: 768px) and (orientation: portrait)",
     );
     const onLayoutChange = () => applySrc();
 
-    video.addEventListener("playing", onPlaying);
-    video.addEventListener("canplay", ensurePlay);
-    video.addEventListener("loadeddata", ensurePlay);
-    video.addEventListener("ended", ensurePlay);
+    video.addEventListener("playing", markStarted);
+    video.addEventListener("canplay", requestPlay);
     video.addEventListener("error", onError);
-    video.addEventListener("pause", onPause);
-    video.addEventListener("stalled", onStalled);
-    video.addEventListener("waiting", ensurePlay);
     document.addEventListener("visibilitychange", onVisibility);
     window.addEventListener("pageshow", onPageShow);
     mobileMq.addEventListener("change", onLayoutChange);
     window.addEventListener("orientationchange", onLayoutChange);
 
-    ensurePlay();
+    applySrc();
+    markStarted();
 
     return () => {
-      video.removeEventListener("playing", onPlaying);
-      video.removeEventListener("canplay", ensurePlay);
-      video.removeEventListener("loadeddata", ensurePlay);
-      video.removeEventListener("ended", ensurePlay);
+      video.removeEventListener("playing", markStarted);
+      video.removeEventListener("canplay", requestPlay);
       video.removeEventListener("error", onError);
-      video.removeEventListener("pause", onPause);
-      video.removeEventListener("stalled", onStalled);
-      video.removeEventListener("waiting", ensurePlay);
       document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("pageshow", onPageShow);
       mobileMq.removeEventListener("change", onLayoutChange);
       window.removeEventListener("orientationchange", onLayoutChange);
     };
-  }, [slug, autoPlay, ensurePlay]);
+  }, [slug, autoPlay]);
 
   return (
     <video
       ref={videoRef}
-      className={clsx(
-        className,
-        "transition-opacity duration-500",
-        isPlaying ? "opacity-100" : "opacity-0",
-      )}
+      className={className}
       autoPlay={autoPlay}
       loop={loop}
       muted={muted}
@@ -149,7 +149,6 @@ export default function ResponsiveVideo({
       disablePictureInPicture
       disableRemotePlayback
       aria-hidden
-      src={videoSources[slug].landscape}
     />
   );
 }
