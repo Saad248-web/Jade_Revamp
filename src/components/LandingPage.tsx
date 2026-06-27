@@ -26,6 +26,7 @@ import {
 import PrimaryButton from "./PrimaryButton";
 import { carouselHeroLabelClass } from "@/lib/carouselHeroCopy";
 import { useMediaMinLg } from "@/lib/useMediaMinLg";
+import HeroVideoScrim from "@/components/ui/HeroVideoScrim";
 
 const InstagramCarousel = dynamic(() => import("./InstagramCarousel"), {
   ssr: false,
@@ -101,8 +102,7 @@ export default function LandingPage() {
             poster={heroFallbackImage}
             className="absolute inset-0 z-[1] h-full w-full object-cover [transform:translateZ(0)]"
           />
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
+          <HeroVideoScrim />
         </div>
 
         {/* Foreground — copy + CTA share the same scroll parallax (desktop only) */}

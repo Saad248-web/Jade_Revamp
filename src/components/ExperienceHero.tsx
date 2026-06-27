@@ -22,6 +22,7 @@ import {
   SCROLL_LINE_INDICATOR_CLICKABLE_CLASS,
 } from "./ScrollLineIndicator";
 import ResponsiveVideo, { type VideoSlug } from "./ResponsiveVideo";
+import HeroVideoScrim from "@/components/ui/HeroVideoScrim";
 
 export interface HeroButton {
   icon: React.ReactNode;
@@ -148,7 +149,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
                 poster={backgroundImage}
                 className="absolute inset-0 z-[1] h-full w-full object-cover [transform:translateZ(0)]"
               />
-              <div className="absolute inset-0 bg-black/40" />
+              <HeroVideoScrim />
             </>
           ) : hasBgCarousel ? (
             <div
