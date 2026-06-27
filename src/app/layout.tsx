@@ -4,6 +4,7 @@ import "./globals.css";
 import clsx from "clsx";
 import Providers from "./providers";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import { VIDEO_CDN_ORIGIN } from "@/lib/videoSources";
 
 const philosopher = Philosopher({
   weight: ["400", "700"],
@@ -158,6 +159,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href={VIDEO_CDN_ORIGIN} crossOrigin="" />
+        <link rel="dns-prefetch" href={VIDEO_CDN_ORIGIN} />
+      </head>
       <body
         suppressHydrationWarning
         className={clsx(

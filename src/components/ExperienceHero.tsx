@@ -137,7 +137,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
                   src={backgroundImage}
                   alt=""
                   fill
-                  className="object-cover"
+                  className="object-cover z-0"
                   priority
                   sizes="100vw"
                   aria-hidden
@@ -146,7 +146,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
               <ResponsiveVideo
                 slug={videoSlug}
                 poster={backgroundImage}
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 z-[1] h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-black/40" />
             </>

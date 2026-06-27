@@ -1,4 +1,11 @@
-const CDN = process.env.NEXT_PUBLIC_CDN_BASE ?? "/videos";
+/** Production hero videos live on jadehospitainment.com — never fall back to /videos (not in public/). */
+export const VIDEO_CDN_BASE =
+  process.env.NEXT_PUBLIC_CDN_BASE ?? "https://jadehospitainment.com/videos";
+
+/** Origin for preconnect — videos are served from jadehospitainment.com CDN. */
+export const VIDEO_CDN_ORIGIN = new URL(VIDEO_CDN_BASE).origin;
+
+const CDN = VIDEO_CDN_BASE;
 
 export const videoSources = {
   homepage: {

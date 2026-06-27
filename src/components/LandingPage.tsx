@@ -90,20 +90,21 @@ export default function LandingPage() {
           style={isLg ? { y: yBackground } : undefined}
           className="absolute inset-0 w-full h-[120%] z-0 max-lg:h-full"
         >
-          <ResponsiveVideo
-            slug="homepage"
-            poster={heroFallbackImage}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 z-[-1]">
+          <div className="absolute inset-0 z-0">
             <Image
               src={heroFallbackImage}
               alt=""
               fill
               priority
               className="object-cover"
+              aria-hidden
             />
           </div>
+          <ResponsiveVideo
+            slug="homepage"
+            poster={heroFallbackImage}
+            className="absolute inset-0 z-[1] h-full w-full object-cover"
+          />
           <div className="absolute inset-0 bg-black/40" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
         </motion.div>
