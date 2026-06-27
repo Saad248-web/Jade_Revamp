@@ -25,8 +25,8 @@ const wonderlandBase = {
   type: "TREEHOUSE NATURE RETREAT",
   location: "Hosur, Near Bangalore",
   stats: {
-    stay: "Up to 6 Guests",
-    events: "15 Guests",
+    stay: "Up to 4 Guests (6 max)",
+    events: "Up to 15 Guests",
     bhk: "2 BHK",
     pool: "Natural Rock Pool",
   },
@@ -225,7 +225,7 @@ const wonderlandBase = {
   faq: [
     {
       question: "How many guests can stay overnight?",
-      answer: "Up to 6 guests can be accommodated.",
+      answer: "Up to 4 guests can stay overnight (6 max).",
     },
     {
       question: "What is the event capacity?",

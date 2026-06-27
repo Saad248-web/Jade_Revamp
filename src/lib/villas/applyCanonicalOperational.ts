@@ -6,11 +6,24 @@ import { resolveCanonicalForRetreat } from "./canonicalOverlayHelpers";
 import { buildPricingDisplay } from "./pricingDisplay";
 import { applyMdContentPatch } from "./retreatMdContent";
 
-export function enrichVilla<T extends { id: string }>(villa: T): T {
+export function enrichVilla<T extends { id: string; categories?: string[] }>(
+  villa: T,
+): T {
   const canonical = resolveCanonicalForRetreat(villa.id);
   const withMd = applyMdContentPatch(villa);
-  if (!canonical) return withMd;
-  return applyCanonical(withMd, canonical);
+  const merged = canonical ? applyCanonical(withMd, canonical) : withMd;
+  return ensurePetFriendlyCategory(merged);
+}
+
+/** All Jade villas accept pets — ensure directory tag without editing every retreat file. */
+function ensurePetFriendlyCategory<T extends { categories?: string[] }>(
+  villa: T,
+): T {
+  const cats = villa.categories ?? [];
+  if (cats.some((c) => c.trim().toLowerCase() === "pet friendly")) {
+    return villa;
+  }
+  return { ...villa, categories: [...cats, "Pet Friendly"] };
 }
 
 function applyCanonical<T extends { id: string }>(

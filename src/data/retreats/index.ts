@@ -69,11 +69,9 @@ export const CATEGORIES = [
   "All",
   "Pet Friendly",
   "Weddings",
-  "Pre-wedding",
-  "Wellness Retreats",
+  "Party Venues",
   "Corporate Retreats",
   "Weekend Getaways",
   "Luxury Stays",
   "Nature Retreats",
-  "Party Venues",
 ];

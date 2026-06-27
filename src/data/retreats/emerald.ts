@@ -25,7 +25,7 @@ const emeraldBase = {
   type: "HERITAGE GLASSHOUSE VILLA",
   location: "5 min Embassy Riding School",
   stats: {
-    stay: "Up to 6 Guests (8 max)",
+    stay: "Up to 8 Guests (10 max)",
     events: "Up to 25 Guests",
     bhk: "2 BHK",
     lawn: "2,800 sq.ft Garden",
@@ -35,7 +35,7 @@ const emeraldBase = {
     "Emerald is a private pool villa designed as a traditional glasshouse around a central courtyard. This 2-bedroom villa combines indoor transparency with lush greenery, creating a setting suited for small group stays, intimate gatherings, and weekend getaways near Bangalore. With a private pool featuring an 8 ft waterfall, garden sit-outs, and courtyard living, the villa balances built space with open areas. Located 5 minutes from Embassy Riding School and 35 minutes from Hebbal, it offers accessibility with complete privacy.",
   perfectForCards: emeraldPerfectForCards,
   perfectForTags: perfectForTagsFromCards(emeraldPerfectForCards),
-  categories: ["Luxury Stays", "Party Venues", "Weekend Getaways"],
+  categories: ["Luxury Stays", "Party Venues", "Weekend Getaways", "Pet Friendly"],
   image: "/Villa_Retreats/Emerald/Hero/hero.webp",
   images: [
     "/Villa_Retreats/Emerald/Spaces/Villa.webp",

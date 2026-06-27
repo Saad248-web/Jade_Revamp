@@ -90,7 +90,7 @@ export const RETREAT_MD_CONTENT: Record<string, MdPatch> = {
   },
   emerald: {
     description:
-      "Emerald is a 2-bedroom heritage glasshouse villa with sky-lit central courtyard, aqua-blue pool with 8-ft waterfall, and private garden exits. Farm-to-table butler dining and semi-open gazebo on 1 acre — 5 min Embassy Riding School, 35 min Hebbal. Stay base 6 guests (8 max); events up to 25–30.",
+      "Emerald is a 2-bedroom heritage glasshouse villa with sky-lit central courtyard, aqua-blue pool with 8-ft waterfall, and private garden exits. Farm-to-table butler dining and semi-open gazebo on 1 acre — 5 min Embassy Riding School, 35 min Hebbal. Stay base 8 guests (10 max); events up to 25–30.",
     propertyDetails: [
       {
         label: "2 BHK heritage villa",

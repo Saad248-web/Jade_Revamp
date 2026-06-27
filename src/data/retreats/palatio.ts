@@ -36,13 +36,12 @@ const palatioBase = {
   description:
     "Palatio is a 2-bedroom private villa set on a 2-acre estate, designed with stone architecture and open natural elements. The layout integrates indoor and outdoor spaces through courtyards, water features, and expansive greens. With a stone pool, inner courtyard, and large lawn, the property is suited for intimate stays as well as larger social gatherings in a natural setting.",
   perfectForCards: palatioPerfectForCards,
-  perfectForTags: ["Private Celebrations", "Couple Retreat"],
+  perfectForTags: ["Intimate Social Events", "Couple Retreats"],
   categories: [
     "Nature Retreats",
-    "Wellness Retreats",
     "Party Venues",
     "Weekend Getaways",
-    "Weddings",
+    "Pet Friendly",
   ],
   thumbnail: "/Villa_Retreats/Palatio/1-Hero/Hero 1.webp",
   image: "/Villa_Retreats/Palatio/1-Hero/Hero 1.webp",

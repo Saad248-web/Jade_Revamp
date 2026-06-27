@@ -1,9 +1,15 @@
 import type { VillaPerfectForCard } from "@/lib/types";
 
 type VillaCategorySource = {
+  id?: string;
   categories?: string[];
   perfectForTags?: string[];
   perfectForCards?: VillaPerfectForCard[];
+};
+
+/** Villas excluded from specific directory tabs (data tags may still overlap aliases). */
+const CATEGORY_EXCLUDED_VILLA_IDS: Partial<Record<string, readonly string[]>> = {
+  Weddings: ["palatio"],
 };
 
 /** Rail labels on `/villas` → related tag/card strings shown on villa cards. */
@@ -58,6 +64,9 @@ export function villaMatchesCategory(
   category: string,
 ): boolean {
   if (category === "All") return true;
+
+  const excluded = CATEGORY_EXCLUDED_VILLA_IDS[category];
+  if (excluded?.includes(villa.id ?? "")) return false;
 
   const tokens = matchTokensForCategory(category);
   const sources = [
