@@ -36,9 +36,10 @@ export function RedirectSuggestModal({
   return (
     <div className={dash.modalOverlay} onClick={onClose}>
       <div
-        className={`${GLASS_CHROME_FRAME_CLASS} max-w-md p-6`}
+        className={`${GLASS_CHROME_FRAME_CLASS} ${dash.modal}`}
         onClick={(e) => e.stopPropagation()}
       >
+        <div className={dash.modalBody}>
         <h3 className="font-philosopher text-xl text-white">Create 301 redirect?</h3>
         <p className="mt-2 text-sm text-white/60">
           The slug changed. A redirect preserves SEO equity from the old URL.
@@ -54,6 +55,7 @@ export function RedirectSuggestModal({
           <button type="button" onClick={() => void create()} className={`${dash.btn} ${dash.btnAccent}`}>
             Create 301 redirect
           </button>
+        </div>
         </div>
       </div>
     </div>

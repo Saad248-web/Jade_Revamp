@@ -24,7 +24,9 @@
     "db:test": "node scripts/test-mongo.mjs",
     "api:smoke": "node scripts/smoke-api-live.mjs",
     "setup:check": "node scripts/verify-local-setup.mjs",
-    "setup:guide": "node scripts/open-setup-guide.mjs"
+    "setup:guide": "node scripts/open-setup-guide.mjs",
+    "generate:axisrooms-surface": "node scripts/generate-axisrooms-surface-html.mjs",
+    "generate:axisrooms-status": "node scripts/generate-axisrooms-status-html.mjs"
   },
   "dependencies": {
     "@codemirror/lang-html": "^6.4.11",

@@ -13,6 +13,8 @@ export type AxisRoomsPushResult = {
 
 export type AxisRoomsInboundEvent = {
   eventType: "create" | "modify" | "cancel" | "unknown";
+  bookingNo?: string;
+  bookingStatus?: "confirmed" | "modified" | "cancelled" | "unknown";
   reservationId?: string;
   propertyId?: string;
   roomTypeId?: string;
@@ -22,5 +24,10 @@ export type AxisRoomsInboundEvent = {
   guestEmail?: string;
   guestPhone?: string;
   channel?: "airbnb" | "booking_com" | "other";
+  totalPax?: number;
+  children?: number;
+  totalAmountPaise?: number;
+  taxPaise?: number;
+  accessKey?: string;
   raw: Record<string, unknown>;
 };

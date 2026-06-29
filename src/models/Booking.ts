@@ -57,6 +57,7 @@ const PaymentSchema = new Schema(
     depositPaidPaise: { type: Number, default: 0 },
     balancePaise: Number,
     balanceDueDate: String,
+    externalPaymentRef: String,
     refundedPaise: { type: Number, default: 0 },
     status: {
       type: String,
@@ -106,7 +107,7 @@ const BookingSchema = new Schema(
     bookingToken: { type: String, required: true, unique: true },
     status: {
       type: String,
-      enum: ["pending", "confirmed", "cancelled", "expired", "conflict"],
+      enum: ["pending", "on_hold", "confirmed", "cancelled", "expired", "conflict"],
       default: "pending",
     },
     expiresAt: Date,

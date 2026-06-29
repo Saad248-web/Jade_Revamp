@@ -1,6 +1,34 @@
 import type { AxisRoomsInboundEvent } from "./types";
 
-/** Parse Axis Rooms inbound webhook payload — extend when vendor spec arrives. */
+function asString(v: unknown): string | undefined {
+  if (typeof v === "string" && v.trim() && v !== "NA") return v.trim();
+  return undefined;
+}
+
+function parseMoneyPaise(v: unknown): number {
+  if (typeof v !== "string" && typeof v !== "number") return 0;
+  const n = Number(v);
+  if (!Number.isFinite(n)) return 0;
+  return Math.round(n * 100);
+}
+
+function mapOtaSource(ota: string): AxisRoomsInboundEvent["channel"] {
+  if (/airbnb/i.test(ota)) return "airbnb";
+  if (/booking/i.test(ota)) return "booking_com";
+  return "other";
+}
+
+function mapBookingStatus(
+  raw: string,
+): "confirmed" | "modified" | "cancelled" | "unknown" {
+  const s = raw.toLowerCase();
+  if (s === "cancelled" || s === "canceled") return "cancelled";
+  if (s === "modified") return "modified";
+  if (s === "confirmed") return "confirmed";
+  return "unknown";
+}
+
+/** Parse Axis Rooms API 9 inbound payload. */
 export function parseAxisRoomsInbound(
   payload: unknown,
 ): AxisRoomsInboundEvent | null {
@@ -9,6 +37,66 @@ export function parseAxisRoomsInbound(
   }
   const p = payload as Record<string, unknown>;
 
+  const details = (p.BookingDetails ?? p.bookingDetails) as
+    | Record<string, unknown>
+    | undefined;
+  const checkin = (p.CheckinDetails ?? p.checkinDetails) as
+    | Record<string, unknown>
+    | undefined;
+  const guest = (p.GuestDetails ?? p.guestDetails) as
+    | Record<string, unknown>
+    | undefined;
+
+  if (!details) {
+    return parseLegacyPayload(p);
+  }
+
+  const bookingNo = asString(details.bookingNo) ?? asString(details.booking_no);
+  const bookingStatus = mapBookingStatus(
+    asString(details.bookingStatus) ?? asString(details.booking_status) ?? "",
+  );
+  const hotelId = asString(details.hotelId) ?? asString(details.hotel_id);
+  const ota = asString(details.ota) ?? "AxisRooms";
+
+  let eventType: AxisRoomsInboundEvent["eventType"] = "unknown";
+  if (bookingStatus === "cancelled") eventType = "cancel";
+  else if (bookingStatus === "modified") eventType = "modify";
+  else if (bookingStatus === "confirmed") eventType = "create";
+
+  const checkIn =
+    asString(checkin?.checkInDate) ??
+    asString(checkin?.checkInDateTime)?.split("T")[0] ??
+    asString(checkin?.check_in);
+  const checkOut =
+    asString(checkin?.checkOutDate) ??
+    asString(checkin?.checkOutDateTime)?.split("T")[0] ??
+    asString(checkin?.check_out);
+
+  const totalPax = Number(checkin?.totalPax ?? checkin?.total_pax ?? 1);
+  const children = Number(checkin?.children ?? 0);
+
+  return {
+    eventType,
+    bookingNo,
+    bookingStatus,
+    reservationId: bookingNo,
+    propertyId: hotelId,
+    checkIn,
+    checkOut,
+    guestName: asString(guest?.guestName) ?? asString(guest?.guest_name),
+    guestEmail: asString(guest?.emailId) ?? asString(guest?.email),
+    guestPhone: asString(guest?.mobileNo) ?? asString(guest?.phone),
+    channel: mapOtaSource(ota),
+    totalPax: Number.isFinite(totalPax) ? totalPax : 1,
+    children: Number.isFinite(children) ? children : 0,
+    totalAmountPaise: parseMoneyPaise(checkin?.totalAmount ?? checkin?.total_amount),
+    taxPaise: parseMoneyPaise(checkin?.taxes ?? checkin?.tax),
+    accessKey: asString(p.accessKey),
+    raw: p,
+  };
+}
+
+function parseLegacyPayload(p: Record<string, unknown>): AxisRoomsInboundEvent | null {
   const eventRaw =
     typeof p.event === "string"
       ? p.event
@@ -30,9 +118,6 @@ export function parseAxisRoomsInbound(
       : typeof p.source === "string"
         ? p.source
         : "";
-  let channel: AxisRoomsInboundEvent["channel"] = "other";
-  if (/airbnb/i.test(channelRaw)) channel = "airbnb";
-  else if (/booking/i.test(channelRaw)) channel = "booking_com";
 
   return {
     eventType,
@@ -49,34 +134,34 @@ export function parseAxisRoomsInbound(
     checkIn:
       typeof p.checkIn === "string"
         ? p.checkIn.split("T")[0]
-        : typeof p.check_in === "string"
-          ? p.check_in.split("T")[0]
-          : undefined,
+        : undefined,
     checkOut:
       typeof p.checkOut === "string"
         ? p.checkOut.split("T")[0]
-        : typeof p.check_out === "string"
-          ? p.check_out.split("T")[0]
-          : undefined,
-    guestName:
-      typeof p.guestName === "string"
-        ? p.guestName
-        : typeof p.guest_name === "string"
-          ? p.guest_name
-          : undefined,
-    guestEmail:
-      typeof p.guestEmail === "string"
-        ? p.guestEmail
-        : typeof p.guest_email === "string"
-          ? p.guest_email
-          : undefined,
-    guestPhone:
-      typeof p.guestPhone === "string"
-        ? p.guestPhone
-        : typeof p.guest_phone === "string"
-          ? p.guest_phone
-          : undefined,
-    channel,
+        : undefined,
+    guestName: typeof p.guestName === "string" ? p.guestName : undefined,
+    guestEmail: typeof p.guestEmail === "string" ? p.guestEmail : undefined,
+    guestPhone: typeof p.guestPhone === "string" ? p.guestPhone : undefined,
+    channel: /airbnb/i.test(channelRaw)
+      ? "airbnb"
+      : /booking/i.test(channelRaw)
+        ? "booking_com"
+        : "other",
+    accessKey: typeof p.accessKey === "string" ? p.accessKey : undefined,
     raw: p,
   };
+}
+
+export function validateAxisRoomsAccessKey(payload: unknown): boolean {
+  const key = process.env.AXIS_ROOMS_API_KEY?.trim();
+  if (!key) return false;
+  if (!payload || typeof payload !== "object") return false;
+  const bodyKey = (payload as Record<string, unknown>).accessKey;
+  if (typeof bodyKey !== "string") return false;
+  if (bodyKey.length !== key.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i < key.length; i++) {
+    mismatch |= bodyKey.charCodeAt(i) ^ key.charCodeAt(i);
+  }
+  return mismatch === 0;
 }

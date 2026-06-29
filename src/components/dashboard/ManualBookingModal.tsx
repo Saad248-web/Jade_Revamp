@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { AlertTriangle, Loader2 } from "lucide-react";
 import {
   GLASS_CHROME_FRAME_CLASS,
   GLASS_INNER_SURFACE,
@@ -26,7 +26,8 @@ type ManualBookingFormProps = {
     email: string;
     phone: string;
     guests: number;
-    paymentMode: "external" | "none";
+    externalPaymentRef: string;
+    balanceDueDate: string;
     notes: string;
   }) => Promise<string | null>;
 };
@@ -50,7 +51,8 @@ export function ManualBookingModal({
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [guests, setGuests] = useState(4);
-  const [paymentMode, setPaymentMode] = useState<"external" | "none">("external");
+  const [externalPaymentRef, setExternalPaymentRef] = useState("");
+  const [balanceDueDate, setBalanceDueDate] = useState("");
   const [notes, setNotes] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
@@ -96,7 +98,8 @@ export function ManualBookingModal({
     setSaving(true);
     const err = await onSubmit({
       ...trimmed,
-      paymentMode,
+      externalPaymentRef: externalPaymentRef.trim(),
+      balanceDueDate: balanceDueDate.trim(),
       notes: trimmed.notes,
     });
     setSaving(false);
@@ -123,15 +126,26 @@ export function ManualBookingModal({
           aria-hidden
           className={`pointer-events-none absolute inset-px block ${GLASS_INNER_SURFACE}`}
         />
-        <form onSubmit={handleSubmit} className="flex min-h-0 flex-col" noValidate>
+        <form onSubmit={handleSubmit} className={`${dash.modalFrame} flex min-h-0 flex-col`} noValidate>
           <DashboardModalHeader
             section="Calendar"
-            title="Manual booking"
-            description="Create a confirmed booking without guest checkout."
+            title="Reserve dates"
+            description="Payment is collected externally. OTAs are blocked as soon as you place the hold."
             onClose={onClose}
             titleId="manual-booking-title"
           />
           <div className={`${dash.modalBody} ${dash.stack}`}>
+            <div
+              className="flex items-start gap-3 border border-amber-400/30 bg-amber-500/10 px-4 py-3 font-manrope text-sm text-amber-100"
+              role="status"
+            >
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" aria-hidden />
+              <p>
+                These dates block Airbnb and Booking.com immediately. Confirm or cancel
+                from the booking folio after external payment is settled.
+              </p>
+            </div>
+
             <div>
               <label className={labelClass} htmlFor="mb-villa">
                 Villa
@@ -289,25 +303,39 @@ export function ManualBookingModal({
               )}
             </div>
 
-            <div>
-              <label className={labelClass} htmlFor="mb-payment">
-                Payment
-              </label>
-              <select
-                id="mb-payment"
-                className={inputClass}
-                value={paymentMode}
-                onChange={(e) =>
-                  setPaymentMode(e.target.value as "external" | "none")
-                }
-              >
-                <option value="external" className="bg-[#1A1C1E]">
-                  Paid externally (confirm now)
-                </option>
-                <option value="none" className="bg-[#1A1C1E]">
-                  No payment / comp
-                </option>
-              </select>
+            <div className={dash.formGrid2}>
+              <div>
+                <label className={labelClass} htmlFor="mb-payment-ref">
+                  External payment ref
+                  <span className="ml-2 font-normal normal-case tracking-normal text-white/50">
+                    (optional)
+                  </span>
+                </label>
+                <input
+                  id="mb-payment-ref"
+                  className={inputClass}
+                  value={externalPaymentRef}
+                  onChange={(e) => setExternalPaymentRef(e.target.value)}
+                  placeholder="UTR, receipt #, bank ref"
+                  maxLength={200}
+                />
+              </div>
+              <div>
+                <label className={labelClass} htmlFor="mb-balance-due">
+                  Balance due date
+                  <span className="ml-2 font-normal normal-case tracking-normal text-white/50">
+                    (optional)
+                  </span>
+                </label>
+                <input
+                  id="mb-balance-due"
+                  type="date"
+                  className={inputClass}
+                  value={balanceDueDate}
+                  min={todayIST()}
+                  onChange={(e) => setBalanceDueDate(e.target.value)}
+                />
+              </div>
             </div>
 
             <div>
@@ -342,7 +370,7 @@ export function ManualBookingModal({
               {saving ? (
                 <Loader2 className="h-5 w-5 animate-spin" aria-label="Saving" />
               ) : (
-                "Create booking"
+                "Place on hold"
               )}
             </button>
           </div>

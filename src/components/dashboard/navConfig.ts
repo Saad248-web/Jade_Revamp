@@ -4,6 +4,7 @@ import {
   BedDouble,
   Blocks,
   CalendarDays,
+  ClipboardList,
   CreditCard,
   Database,
   FileText,
@@ -36,6 +37,14 @@ export const DASHBOARD_NAV: NavItem[] = [
     section: "Operations",
     description:
       "Full portfolio availability — bookings, manual blocks, and occupancy at a glance.",
+  },
+  {
+    href: "/dashboard/bookings",
+    label: "Booking Records",
+    icon: ClipboardList,
+    section: "Operations",
+    description:
+      "All reservations — direct, staff manual, and OTA — with folio and activity history.",
   },
   {
     href: "/dashboard/housekeeping",
@@ -189,7 +198,11 @@ export const DASHBOARD_BRAND = {
 
 /** Resolve page label from pathname for dynamic document titles. */
 export function dashboardTitleForPath(pathname: string): string {
-  if (/^\/dashboard\/bookings\/[^/]+$/.test(pathname)) {
+  const normalized = pathname.replace(/\/+$/, "") || "/dashboard";
+  if (normalized === "/dashboard/bookings") {
+    return "Booking Records";
+  }
+  if (/^\/dashboard\/bookings\/[^/]+$/.test(normalized)) {
     return "Booking folio";
   }
   const match = matchNavForPath(pathname);
@@ -198,7 +211,11 @@ export function dashboardTitleForPath(pathname: string): string {
 
 /** Section label for current route (e.g. Operations, Settings). */
 export function dashboardSectionForPath(pathname: string): string | null {
-  if (/^\/dashboard\/bookings\/[^/]+$/.test(pathname)) {
+  const normalized = pathname.replace(/\/+$/, "") || "/dashboard";
+  if (
+    normalized === "/dashboard/bookings" ||
+    /^\/dashboard\/bookings\/[^/]+$/.test(normalized)
+  ) {
     return "Operations";
   }
   return matchNavForPath(pathname)?.section ?? null;
@@ -206,8 +223,12 @@ export function dashboardSectionForPath(pathname: string): string | null {
 
 /** Page subtitle shown under the header title. */
 export function dashboardDescriptionForPath(pathname: string): string | undefined {
-  if (/^\/dashboard\/bookings\/[^/]+$/.test(pathname)) {
-    return "Guest booking folio and payment summary.";
+  const normalized = pathname.replace(/\/+$/, "") || "/dashboard";
+  if (normalized === "/dashboard/bookings") {
+    return "Search and open any reservation — direct, staff hold, or OTA.";
+  }
+  if (/^\/dashboard\/bookings\/[^/]+$/.test(normalized)) {
+    return "Guest booking folio — channel, payment, and full activity history.";
   }
   return matchNavForPath(pathname)?.description;
 }

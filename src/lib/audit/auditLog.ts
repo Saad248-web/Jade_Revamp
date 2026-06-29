@@ -5,6 +5,7 @@ export type AuditAction =
   | "booking.create"
   | "booking.update"
   | "booking.cancel"
+  | "booking.confirm_hold"
   | "booking.expire"
   | "block.create"
   | "block.delete"

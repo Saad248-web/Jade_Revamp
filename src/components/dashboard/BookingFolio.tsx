@@ -13,23 +13,61 @@ import {
   User,
 } from "lucide-react";
 import { nightCount } from "@/lib/bookingDates";
+import type { BookingHistoryEntry } from "@/lib/bookings/bookingHistory";
 import type { BookingRecord } from "@/lib/bookings/store";
+import { formatBookingSource } from "@/lib/bookings/sourceLabels";
 import { useSession } from "next-auth/react";
 import { roleCanWrite, type Role } from "@/lib/auth/permissions";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import { dash } from "@/lib/dashboard/dashboardClasses";
 import { formatPaise } from "@/lib/money";
+import { BookingFolioHistory } from "./BookingFolioHistory";
 import { DashboardPanel } from "./DashboardPanel";
 import { EmptyState } from "./EmptyState";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
 
+type FolioBooking = BookingRecord & {
+  villaSlug?: string;
+  villaName?: string;
+  axisRoomsReservationId?: string;
+};
+
+const CHANNEL_BADGE: Record<string, string> = {
+  direct: "border-sky-500/30 bg-sky-500/10 text-sky-200",
+  staff: "border-violet-500/30 bg-violet-500/10 text-violet-200",
+  ota: "border-amber-500/30 bg-amber-500/10 text-amber-200",
+};
+
 const STATUS_BADGE: Record<string, string> = {
   confirmed: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
+  on_hold: "border-violet-500/30 bg-violet-500/10 text-violet-300",
   pending: "border-amber-500/30 bg-amber-500/10 text-amber-300",
   conflict: "border-red-500/30 bg-red-500/10 text-red-300",
   cancelled: "border-white/20 bg-white/5 text-white/50",
   expired: "border-white/20 bg-white/5 text-white/50",
 };
+
+function axisSyncLabel(booking: BookingRecord): {
+  text: string;
+  className: string;
+} {
+  if (booking.axisRoomsSynced) {
+    return {
+      text: "Axis Rooms · synced",
+      className: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
+    };
+  }
+  if (booking.axisRoomsLastError) {
+    return {
+      text: "Axis Rooms · sync failed",
+      className: "border-red-500/30 bg-red-500/10 text-red-300",
+    };
+  }
+  return {
+    text: "Axis Rooms · pending",
+    className: "border-amber-500/30 bg-amber-500/10 text-amber-300",
+  };
+}
 
 function fmtDate(dateStr: string): string {
   const d = new Date(`${dateStr.split("T")[0]}T00:00:00.000Z`);
@@ -78,7 +116,8 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
   const role = session?.user?.role as Role | undefined;
   const canWrite = role ? roleCanWrite("/dashboard/bookings", role) : false;
 
-  const [booking, setBooking] = useState<BookingRecord | null>(null);
+  const [booking, setBooking] = useState<FolioBooking | null>(null);
+  const [history, setHistory] = useState<BookingHistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -89,14 +128,18 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
     setError(null);
 
     try {
-      const res = await dashboardFetch(`/api/bookings/${bookingId}`);
+      const res = await dashboardFetch(`/api/dashboard/bookings/${bookingId}`);
       if (!res.ok) {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
         throw new Error(data.error ?? "Booking not found");
       }
-      const data = (await res.json()) as { booking: BookingRecord };
+      const data = (await res.json()) as {
+        booking: FolioBooking;
+        history: BookingHistoryEntry[];
+      };
       setBooking(data.booking);
-      setNotesDraft((data.booking as { notes?: string }).notes ?? "");
+      setHistory(data.history ?? []);
+      setNotesDraft(data.booking.notes ?? "");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load booking");
       setBooking(null);
@@ -162,6 +205,11 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
   const badge =
     STATUS_BADGE[booking.status] ??
     "border-white/20 bg-white/5 text-white/60";
+  const axisSync = axisSyncLabel(booking);
+  const hasRazorpayPayment = Boolean(booking.payment.paymentId);
+  const sourceInfo = formatBookingSource(booking.source);
+  const channelBadge =
+    CHANNEL_BADGE[sourceInfo.channel] ?? CHANNEL_BADGE.direct;
 
   return (
     <DashboardModuleFrame error={error}>
@@ -174,27 +222,96 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
           <ArrowLeft className="h-4 w-4" />
           Calendar
         </Link>
-        <span
-          className={`inline-flex items-center rounded-none border px-3 py-1 font-manrope text-xs font-bold uppercase tracking-widest ${badge}`}
-        >
-          {booking.status}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          <span
+            className={`inline-flex items-center rounded-none border px-3 py-1 font-manrope text-xs font-bold uppercase tracking-widest ${channelBadge}`}
+          >
+            {sourceInfo.shortLabel}
+          </span>
+          <span
+            className={`inline-flex items-center rounded-none border px-3 py-1 font-manrope text-xs font-bold uppercase tracking-widest ${badge}`}
+          >
+            {booking.status.replace("_", " ")}
+          </span>
+          <span
+            className={`inline-flex items-center rounded-none border px-3 py-1 font-manrope text-xs font-bold uppercase tracking-widest ${axisSync.className}`}
+            title={booking.axisRoomsLastError ?? undefined}
+          >
+            {axisSync.text}
+          </span>
+        </div>
       </div>
 
-      {canWrite && booking.status !== "cancelled" && (
+      {canWrite && booking.status === "on_hold" && (
+        <DashboardPanel pad>
+          <p className="mb-3 font-manrope text-sm text-white/70">
+            This hold blocks OTAs. Confirm after external payment is received, or
+            cancel to release inventory.
+          </p>
+          <div className="booking-folio__actions flex flex-wrap gap-2">
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() =>
+                runAction(
+                  { action: "confirm_hold" },
+                  "Confirm this booking? External payment should be settled.",
+                )
+              }
+              className="min-h-[44px] border border-emerald-400/40 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-emerald-300 hover:bg-emerald-500/10 disabled:opacity-50"
+            >
+              Confirm booking
+            </button>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() =>
+                runAction(
+                  { action: "confirm_hold", waivePayment: true },
+                  "Confirm as comp / waived payment?",
+                )
+              }
+              className="min-h-[44px] border border-white/20 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-white/70 hover:bg-white/5 disabled:opacity-50"
+            >
+              Confirm (waive payment)
+            </button>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() =>
+                runAction(
+                  { action: "cancel" },
+                  "Cancel this hold? OTAs will be reopened for these dates.",
+                )
+              }
+              className="min-h-[44px] border border-red-400/40 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-red-300 hover:bg-red-500/10 disabled:opacity-50"
+            >
+              Cancel hold
+            </button>
+          </div>
+        </DashboardPanel>
+      )}
+
+      {canWrite &&
+        booking.status !== "cancelled" &&
+        booking.status !== "on_hold" && (
         <div className="booking-folio__actions flex flex-wrap gap-2">
           <button
             type="button"
             disabled={busy}
             onClick={() =>
-              runAction({ action: "cancel" }, "Cancel this booking?")
+              runAction(
+                { action: "cancel" },
+                "Cancel this booking? OTAs will be reopened if inventory was synced.",
+              )
             }
             className="min-h-[44px] border border-red-400/40 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-red-300 hover:bg-red-500/10 disabled:opacity-50"
           >
             Cancel
           </button>
-          {(booking.payment.status === "paid" ||
-            booking.payment.status === "deposit_paid") && (
+          {hasRazorpayPayment &&
+            (booking.payment.status === "paid" ||
+              booking.payment.status === "deposit_paid") && (
             <button
               type="button"
               disabled={busy}
@@ -279,8 +396,9 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
           <dl>
             <DetailRow
               label="Villa"
-              value={booking.villaSlug ?? booking.villaId}
+              value={booking.villaName ?? booking.villaSlug ?? booking.villaId}
             />
+            <DetailRow label="Channel" value={sourceInfo.label} />
             <DetailRow label="Type" value={booking.bookingType} />
             <DetailRow
               label="Dates"
@@ -293,6 +411,26 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
               }
             />
             <DetailRow label="Booking ID" value={booking.id} />
+            <DetailRow
+              label="Guest reference"
+              value={
+                <span className="font-mono text-sm">{booking.bookingToken}</span>
+              }
+            />
+            {booking.axisRoomsReservationId && (
+              <DetailRow
+                label="OTA / Axis reservation #"
+                value={
+                  <span className="font-mono text-sm">
+                    {booking.axisRoomsReservationId}
+                  </span>
+                }
+              />
+            )}
+            <DetailRow
+              label="Created"
+              value={new Date(booking.createdAt).toLocaleString("en-IN")}
+            />
           </dl>
         </FolioSection>
       </div>
@@ -380,9 +518,31 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
                 }
               />
             )}
+            {booking.payment.externalPaymentRef && (
+              <DetailRow
+                label="External payment ref"
+                value={booking.payment.externalPaymentRef}
+              />
+            )}
+            {booking.payment.balanceDueDate && (
+              <DetailRow
+                label="Balance due"
+                value={fmtDate(booking.payment.balanceDueDate)}
+              />
+            )}
+            {booking.axisRoomsLastError && (
+              <DetailRow
+                label="Axis sync error"
+                value={
+                  <span className="text-red-300">{booking.axisRoomsLastError}</span>
+                }
+              />
+            )}
           </dl>
         </FolioSection>
       </div>
+
+      <BookingFolioHistory entries={history} />
       </div>
     </DashboardModuleFrame>
   );

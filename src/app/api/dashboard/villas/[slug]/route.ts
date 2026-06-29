@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auditLog } from "@/lib/audit/auditLog";
+import { syncVillaChannelState } from "@/lib/axisRooms/sync";
 import { connectDB } from "@/lib/db";
 import { requireRole } from "@/lib/auth/requireRole";
 import { VillaModel } from "@/models/Villa";
@@ -105,8 +106,16 @@ export async function PATCH(
       retreatId: villa.retreatId ?? params.slug,
     });
 
+    const channelFieldsChanged =
+      applied.status !== undefined ||
+      applied.bookable !== undefined ||
+      applied.basePriceRupees !== undefined;
+    const axisSync = channelFieldsChanged
+      ? await syncVillaChannelState(villa as never)
+      : undefined;
+
     return NextResponse.json(
-      { villa: toAdminVilla(villa as never) },
+      { villa: toAdminVilla(villa as never), axisSync },
       { headers: noStore },
     );
   } catch (e) {

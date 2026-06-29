@@ -138,6 +138,7 @@ export const dash = {
   modal: "dashboard-modal",
   modalWide: "dashboard-modal dashboard-modal--wide",
   modalBody: "dashboard-modal__body",
+  modalFrame: "dashboard-modal__frame",
   modalBodyPicker: "dashboard-modal__body dashboard-modal__body--picker",
   modalPicker: "dashboard-modal dashboard-modal--picker",
   stack: "dashboard-stack",

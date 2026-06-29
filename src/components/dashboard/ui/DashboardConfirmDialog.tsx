@@ -51,7 +51,7 @@ export function DashboardConfirmDialog({
         aria-modal="true"
         aria-labelledby="dash-confirm-title"
       >
-        <div className="flex min-h-0 flex-col">
+        <div className={`${dash.modalFrame} flex min-h-0 flex-col`}>
           <DashboardModalHeader
             title={title}
             onClose={onCancel}

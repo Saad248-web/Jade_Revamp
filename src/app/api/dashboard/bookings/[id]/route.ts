@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auditLog } from "@/lib/audit/auditLog";
+import { getBookingFolioDetail } from "@/lib/bookings/bookingFolio";
 import { getBookingStore } from "@/lib/bookings/mongoStore";
 import { isBookingRef } from "@/lib/bookings/ids";
 import { issueRazorpayRefund } from "@/lib/payments/refund";
 import { requireRole } from "@/lib/auth/requireRole";
+import { queueBookingInventorySync } from "@/lib/axisRooms/sync";
 import { readJsonBody, SafeJsonError } from "@/lib/security/safeJson";
 import { assertPlainObject } from "@/lib/security/validateInput";
 import { z } from "zod";
@@ -16,6 +18,11 @@ const patchSchema = z.discriminatedUnion("action", [
     reason: z.string().max(500).optional(),
   }),
   z.object({
+    action: z.literal("confirm_hold"),
+    waivePayment: z.boolean().optional(),
+    reason: z.string().max(500).optional(),
+  }),
+  z.object({
     action: z.literal("refund"),
     reason: z.string().max(500).optional(),
     refundPaise: z.number().int().min(1).optional(),
@@ -25,6 +32,26 @@ const patchSchema = z.discriminatedUnion("action", [
     notes: z.string().max(2000),
   }),
 ]);
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const auth = await requireRole(req, "/dashboard/bookings", "read");
+  if (!auth.ok) return auth.response;
+
+  if (!isBookingRef(params.id)) {
+    return NextResponse.json({ error: "Invalid booking id" }, { status: 400 });
+  }
+
+  const folio = await getBookingFolioDetail(params.id);
+  if (!folio) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+  return NextResponse.json(folio, {
+    headers: { "Cache-Control": "no-store" },
+  });
+}
 
 export async function PATCH(
   req: NextRequest,
@@ -74,15 +101,37 @@ export async function PATCH(
       return NextResponse.json({ booking: updated });
     }
 
+    if (parsed.data.action === "confirm_hold") {
+      const updated = await store.confirmHold(
+        params.id,
+        auth.userId,
+        parsed.data.waivePayment,
+      );
+      if (!updated) {
+        return NextResponse.json(
+          { error: "Not found or not on hold" },
+          { status: 404 },
+        );
+      }
+      return NextResponse.json({ booking: updated });
+    }
+
     if (parsed.data.action === "cancel") {
-      const updated = await store.cancelBooking(params.id, auth.userId);
+      const updated = await store.cancelBooking(params.id, auth.userId, {
+        reason: parsed.data.reason,
+      });
       if (!updated) {
         return NextResponse.json(
           { error: "Not found or already cancelled" },
           { status: 404 },
         );
       }
-      return NextResponse.json({ booking: updated });
+      const sync = await queueBookingInventorySync(params.id, "open");
+      const refreshed = await store.findById(params.id);
+      return NextResponse.json({
+        booking: refreshed ?? updated,
+        axisSync: sync,
+      });
     }
 
     const result = await issueRazorpayRefund({

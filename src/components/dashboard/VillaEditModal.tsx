@@ -204,7 +204,7 @@ export function VillaEditModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex justify-end bg-black/75">
+    <div className="fixed inset-0 z-[60] flex justify-end overflow-y-auto overscroll-behavior-contain bg-black/75">
       <button
         type="button"
         className="absolute inset-0 cursor-default"
@@ -243,7 +243,7 @@ export function VillaEditModal({
         />
 
         {/* Body — scrolls inside panel */}
-        <div className="relative z-10 min-h-0 flex-1 overflow-y-auto overscroll-contain">
+        <div className="relative z-[1] min-h-0 flex-1 overflow-y-auto overscroll-contain">
           <div className="p-5">
             {loading ? (
               <div className="flex justify-center py-24">

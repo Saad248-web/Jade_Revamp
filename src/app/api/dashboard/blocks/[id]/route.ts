@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auditLog } from "@/lib/audit/auditLog";
+import { syncBlockInventory } from "@/lib/axisRooms/sync";
 import { connectDB } from "@/lib/db";
 import { requireRole } from "@/lib/auth/requireRole";
 import { VillaBlockModel } from "@/models/VillaBlock";
@@ -43,6 +44,8 @@ export async function DELETE(
     block.deletedBy = auth.userId as never;
     await block.save();
 
+    const axisSync = await syncBlockInventory(block, 1);
+
     await auditLog({
       action: "block.delete",
       targetType: "villa_block",
@@ -55,7 +58,7 @@ export async function DELETE(
       },
     });
 
-    return NextResponse.json({ ok: true }, { headers: noStore });
+    return NextResponse.json({ ok: true, axisSync }, { headers: noStore });
   } catch (e) {
     console.error("[DELETE /api/dashboard/blocks/[id]]", e);
     return NextResponse.json(

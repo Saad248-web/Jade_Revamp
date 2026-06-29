@@ -120,6 +120,15 @@ describe("RBAC permissions matrix", () => {
     ).toEqual({ permPath: "/dashboard/bookings", min: "write" });
     expect(roleMeetsAccess("/dashboard/bookings", "staff", "write")).toBe(true);
     expect(roleMeetsAccess("/dashboard/bookings", "team", "write")).toBe(false);
+    expect(roleMeetsAccess("/dashboard/bookings", "team", "read")).toBe(true);
+  });
+
+  it("maps booking records list GET to bookings read", () => {
+    expect(resolveApiPermission("/api/dashboard/bookings", "GET")).toEqual({
+      permPath: "/dashboard/bookings",
+      min: "read",
+    });
+    expect(roleMeetsAccess("/dashboard/bookings", "team", "read")).toBe(true);
   });
 
   it("maps public booking PATCH to housekeeping only (stayStatus)", () => {

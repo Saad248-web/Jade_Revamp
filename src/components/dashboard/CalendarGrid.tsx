@@ -40,6 +40,7 @@ import { DashboardPanel } from "./DashboardPanel";
 
 const STATUS_LEGEND: Record<BookingStatus, { className: string; label: string }> = {
   confirmed: { className: "dashboard-cal-booking--confirmed", label: "Confirmed" },
+  on_hold: { className: "dashboard-cal-booking--on-hold", label: "On hold" },
   pending: { className: "dashboard-cal-booking--pending", label: "Pending" },
   conflict: { className: "dashboard-cal-booking--conflict", label: "Conflict" },
   cancelled: { className: "dashboard-cal-booking--cancelled", label: "Cancelled" },
@@ -248,7 +249,8 @@ export function CalendarGrid({
     email: string;
     phone: string;
     guests: number;
-    paymentMode: "external" | "none";
+    externalPaymentRef: string;
+    balanceDueDate: string;
     notes: string;
   }): Promise<string | null> => {
     const res = await dashboardFetch("/api/dashboard/bookings", {
@@ -265,7 +267,8 @@ export function CalendarGrid({
         email: values.email,
         phone: values.phone,
         notes: values.notes,
-        paymentMode: values.paymentMode,
+        externalPaymentRef: values.externalPaymentRef || undefined,
+        balanceDueDate: values.balanceDueDate || undefined,
         paymentPlan: "full",
       }),
     });
@@ -283,8 +286,16 @@ export function CalendarGrid({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     });
-    const data = (await res.json().catch(() => ({}))) as { error?: string };
+    const data = (await res.json().catch(() => ({}))) as {
+      error?: string;
+      axisSync?: { ok: boolean; error?: string };
+    };
     if (!res.ok) return data.error ?? "Failed to create block";
+    if (data.axisSync && !data.axisSync.ok) {
+      window.alert(
+        `Block saved. OTA sync ${data.axisSync.error ? `failed: ${data.axisSync.error}` : "pending — check Axis Rooms mapping"}.`,
+      );
+    }
     await fetchCalendar();
     return null;
   };

@@ -2,6 +2,7 @@ export type BookingType = "stay" | "day_out" | "event";
 
 export type BookingStatus =
   | "pending"
+  | "on_hold"
   | "confirmed"
   | "cancelled"
   | "expired"
@@ -73,6 +74,7 @@ export interface BookingPayment {
   depositPaidPaise: number;
   balancePaise: number;
   balanceDueDate?: string;
+  externalPaymentRef?: string;
   refundedPaise?: number;
   status: PaymentStatus;
 }

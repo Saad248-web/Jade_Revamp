@@ -13,6 +13,7 @@ import type {
 } from "@/lib/bookings/store";
 import type { StayStatus } from "@/lib/bookings/types";
 import { connectDB } from "@/lib/db";
+import { queueBookingInventorySync } from "@/lib/axisRooms/sync";
 import { notifyBookingCreated } from "@/lib/email/bookingNotifications";
 import { BookingModel } from "@/models/Booking";
 import { VillaBlockModel } from "@/models/VillaBlock";
@@ -32,7 +33,13 @@ function toRecord(doc: {
   pricing?: CreateBookingParams["pricing"];
   payment?: CreateBookingParams["payment"];
   status: string;
+  source?: string;
+  notes?: string;
   stayStatus?: string;
+  axisRoomsSynced?: boolean;
+  axisRoomsCancelSynced?: boolean;
+  axisRoomsLastError?: string;
+  axisRoomsReservationId?: string;
   addOns?: CreateBookingParams["addOns"];
   expiresAt?: Date | null;
   createdAt?: Date;
@@ -54,7 +61,13 @@ function toRecord(doc: {
     pricing: doc.pricing as BookingRecord["pricing"],
     payment: doc.payment as BookingRecord["payment"],
     status: doc.status as BookingRecord["status"],
+    source: doc.source,
+    notes: doc.notes,
     stayStatus: doc.stayStatus as StayStatus | undefined,
+    axisRoomsSynced: doc.axisRoomsSynced,
+    axisRoomsCancelSynced: doc.axisRoomsCancelSynced,
+    axisRoomsLastError: doc.axisRoomsLastError,
+    axisRoomsReservationId: doc.axisRoomsReservationId,
     addOns: doc.addOns,
     expiresAt: doc.expiresAt,
     createdAt: doc.createdAt ?? new Date(),
@@ -67,6 +80,7 @@ async function activeBookingFilter(now: Date) {
     isDeleted: false,
     $or: [
       { status: "confirmed" },
+      { status: "on_hold" },
       { status: "conflict" },
       {
         status: "pending",
@@ -289,6 +303,8 @@ export class MongoBookingStore implements BookingStore {
         totalPrice: Math.round((doc.pricing?.totalPaise ?? 0) / 100),
       });
 
+      void queueBookingInventorySync(params.bookingId, "close");
+
       return { ok: true };
     });
   }
@@ -331,11 +347,13 @@ export class MongoBookingStore implements BookingStore {
   async cancelBooking(
     id: string,
     userId?: string,
+    options?: { reason?: string },
   ): Promise<BookingRecord | null> {
     await connectDB();
     const doc = await BookingModel.findOne({ _id: id, isDeleted: false });
     if (!doc || doc.status === "cancelled") return null;
 
+    const previousStatus = doc.status;
     doc.status = "cancelled";
     doc.axisRoomsCancelSynced = false;
     await doc.save();
@@ -346,6 +364,48 @@ export class MongoBookingStore implements BookingStore {
       targetType: "booking",
       targetId: id,
       userId,
+      metadata: {
+        previousStatus,
+        reason: options?.reason,
+        cancelledBy: userId ? "staff" : "system",
+        source: doc.source,
+        checkIn: doc.checkIn,
+        checkOut: doc.checkOut,
+      },
+    });
+
+    return toRecord(doc);
+  }
+
+  async confirmHold(
+    id: string,
+    userId?: string,
+    waivePayment = false,
+  ): Promise<BookingRecord | null> {
+    await connectDB();
+    const doc = await BookingModel.findOne({
+      _id: id,
+      isDeleted: false,
+      status: "on_hold",
+    });
+    if (!doc) return null;
+
+    doc.status = "confirmed";
+    if (doc.payment) {
+      doc.payment.status = waivePayment ? "not_applicable" : "external";
+    }
+    await doc.save();
+
+    await auditLog({
+      action: "booking.confirm_hold",
+      targetType: "booking",
+      targetId: id,
+      userId,
+      metadata: {
+        waivePayment,
+        previousStatus: "on_hold",
+        newStatus: "confirmed",
+      },
     });
 
     return toRecord(doc);
@@ -445,7 +505,7 @@ export class MongoBookingStore implements BookingStore {
         targetType: "booking",
         targetId: String(doc._id),
         userId: params.ip,
-        metadata: { villaSlug: params.villaSlug, status, source: "admin_manual" },
+        metadata: { villaSlug: params.villaSlug, status, source: "admin_manual", onHold: status === "on_hold" },
       });
 
       return toRecord(doc);

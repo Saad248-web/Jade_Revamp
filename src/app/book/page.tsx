@@ -169,6 +169,7 @@ function StepDates({
   // Compute months only on the client (after mount) to avoid hydration mismatch
   const MONTHS = mounted ? generateMonths(3) : [];
   const [bookedDates, setBookedDates] = useState<Set<string>>(new Set());
+  const [blockedDates, setBlockedDates] = useState<Set<string>>(new Set());
   const [loadingMonths, setLoadingMonths] = useState<Set<string>>(new Set());
 
   // Fetch availability for each displayed month when villaId is known
@@ -183,10 +184,16 @@ function StepDates({
           `/api/bookings/availability?villaId=${villaId}&year=${year}&month=${month}`,
         );
         if (!res.ok) return;
-        const data: { bookedDates: string[] } = await res.json();
+        const data: { bookedDates: string[]; blockedDates?: string[] } =
+          await res.json();
         setBookedDates((prev) => {
           const next = new Set(prev);
           data.bookedDates.forEach((d) => next.add(d));
+          return next;
+        });
+        setBlockedDates((prev) => {
+          const next = new Set(prev);
+          (data.blockedDates ?? []).forEach((d) => next.add(d));
           return next;
         });
       } finally {
@@ -211,6 +218,7 @@ function StepDates({
     const iso = toISO(year, month, day);
     if (
       bookedDates.has(iso) ||
+      blockedDates.has(iso) ||
       isPastDate(year, month, day, todayRef.y, todayRef.m, todayRef.d)
     )
       return;
@@ -327,6 +335,7 @@ function StepDates({
               {Array.from({ length: days }, (_, i) => i + 1).map((day) => {
                 const iso = toISO(year, month, day);
                 const booked = bookedDates.has(iso);
+                const blocked = blockedDates.has(iso);
                 const past = isPastDate(
                   year,
                   month,
@@ -335,7 +344,7 @@ function StepDates({
                   todayRef.m,
                   todayRef.d,
                 );
-                const unavail = bookingDisabled || booked || past;
+                const unavail = bookingDisabled || booked || blocked || past;
                 const sel = isSelected(month, day);
                 const inRange = isInRange(year, month, day);
 
@@ -349,9 +358,11 @@ function StepDates({
                         ? "Online booking unavailable"
                         : booked
                           ? "Already booked"
-                          : past
-                            ? "Past date"
-                            : undefined
+                          : blocked
+                            ? "Unavailable (blocked)"
+                            : past
+                              ? "Past date"
+                              : undefined
                     }
                     className={`w-[35px] h-[35px] mx-auto flex items-center justify-center text-gh-body font-manrope transition-colors rounded-[3px] relative overflow-hidden ${sel ? "bg-[#EFCD62] text-[#0B2C23] font-bold" : ""} ${inRange ? "bg-[#EFCD62]/20 text-white" : ""} ${!sel && !inRange && !unavail ? "bg-[#165040] text-white hover:bg-[#1e6050]" : ""} ${unavail ? "bg-[#165040]/50 text-white/25 cursor-not-allowed" : ""}`}
                   >

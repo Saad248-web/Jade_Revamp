@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
@@ -521,7 +522,7 @@ export function PropertyWizard({
   };
 
   return (
-    <div className="property-wizard fixed inset-0 z-[70] flex items-center justify-center bg-black/80 p-4">
+    <div className="property-wizard fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto overscroll-behavior-contain bg-black/80 p-4">
       <div
         className={`property-wizard__shell ${GLASS_CHROME_FRAME_CLASS} relative flex max-h-[95dvh] w-full max-w-4xl flex-col border border-white/10 shadow-2xl`}
         onClick={(e) => e.stopPropagation()}
@@ -1368,6 +1369,34 @@ export function PropertyWizard({
                         uncheck booking — guests see Enquire + View Villa.{" "}
                         <strong className="text-white/50">Hidden:</strong> villa disappears from the site.
                       </p>
+                    </div>
+
+                    <div className="border border-[var(--dash-accent-border)]/40 bg-[var(--dash-accent-muted)]/30 p-4">
+                      <p className={labelClass}>Go-live checklist</p>
+                      <ul className="mt-2 space-y-2 font-manrope text-sm text-white/75">
+                        <li>
+                          {basics.status === "active"
+                            ? "✓"
+                            : "○"}{" "}
+                          Set visibility to <strong className="text-white">Live</strong> for /villas listing
+                        </li>
+                        <li>
+                          {basics.bookable ? "✓" : "○"} Enable online booking if guests should use /book
+                        </li>
+                        <li>
+                          ○ Add Axis Rooms property / room / rate IDs in{" "}
+                          <Link
+                            href="/dashboard/settings/staah"
+                            className="text-[var(--dash-accent)] hover:underline"
+                          >
+                            Axis Rooms settings
+                          </Link>{" "}
+                          (CSV export for onboarding team)
+                        </li>
+                        <li>
+                          {previewId ? "✓" : "○"} Preview public page before sharing links
+                        </li>
+                      </ul>
                     </div>
 
                     {previewId && (

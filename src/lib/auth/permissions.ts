@@ -29,8 +29,8 @@ export const ROUTE_MATRIX: RouteMatrixEntry[] = [
   },
   {
     path: "/dashboard/bookings",
-    label: "Bookings",
-    perms: { admin: "write", staff: "write", team: "none", seo: "none", dev: "write" },
+    label: "Booking Records",
+    perms: { admin: "write", staff: "write", team: "read", seo: "none", dev: "write" },
   },
   {
     path: "/dashboard/housekeeping",

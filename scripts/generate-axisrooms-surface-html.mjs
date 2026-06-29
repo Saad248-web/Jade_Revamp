@@ -99,9 +99,95 @@ ${pre(axisWebhook, "src/app/api/webhooks/axisrooms/route.ts")}
 <h3>Exported functions — src/app/api/webhooks/axisrooms/route.ts</h3>
 <table>
 <tr><th>Function</th><th>Signature</th><th>Description</th></tr>
-<tr><td><code>POST</code></td><td><code>(req: NextRequest) =&gt; Promise&lt;NextResponse&gt;</code></td><td>Verifies Bearer token, parses inbound payload stub, audits event; does not upsert bookings yet.</td></tr>
-<tr><td><code>verifyAxisRoomsWebhook</code></td><td><code>(req: NextRequest) =&gt; boolean</code> (module-private)</td><td>Compares Authorization header to AXIS_ROOMS_WEBHOOK_SECRET or AXIS_ROOMS_API_KEY.</td></tr>
+<tr><td><code>POST</code></td><td><code>(req: NextRequest) =&gt; Promise&lt;NextResponse&gt;</code></td><td>API 9 receiver: validates <code>accessKey</code> in JSON body, upserts OTA bookings, conflict detection; responds <code>{"status":"success","message":"Booking Update Received"}</code>.</td></tr>
 </table>
+
+<h2>1c. DASHBOARD PAGES → JADE API ROUTES</h2>
+<table>
+<tr><th>Dashboard page</th><th>Jade API routes</th><th>Axis Rooms role</th></tr>
+<tr><td>Calendar + manual booking</td><td><code>GET /api/dashboard/calendar</code>, <code>POST /api/dashboard/bookings</code>, <code>GET/PATCH /api/dashboard/bookings/[id]</code></td><td>On-hold create → API 1 <code>free:0</code>; cancel → <code>free:1</code>; confirm_hold → status only</td></tr>
+<tr><td>Booking Records</td><td><code>GET /api/dashboard/bookings</code> (list + filters)</td><td>PMS-only — all channels in one table</td></tr>
+<tr><td>Booking folio + history</td><td><code>GET /api/dashboard/bookings/[id]</code> (booking + activity timeline)</td><td>Sync badge; cancel/confirm require write role</td></tr>
+<tr><td>Manual blocks</td><td><code>GET/POST /api/dashboard/blocks</code>, <code>DELETE /api/dashboard/blocks/[id]</code></td><td>Create → API 1 <code>free:0</code>; delete → <code>free:1</code></td></tr>
+<tr><td>Conflicts</td><td><code>GET/PATCH /api/dashboard/conflicts</code></td><td>Populated when API 9 inbound overlaps direct booking</td></tr>
+<tr><td>Villa settings / wizard</td><td><code>GET/POST /api/dashboard/villas</code>, <code>GET/PATCH /api/dashboard/villas/[slug]</code></td><td>Status/bookable/price PATCH → API 15 + API 6</td></tr>
+<tr><td>Axis Rooms settings</td><td><code>GET /api/dashboard/settings/axis-rooms/csv</code></td><td>CSV export for Axis onboarding team</td></tr>
+<tr><td>Housekeeping</td><td><code>PATCH /api/bookings/[id]</code> (stayStatus)</td><td>PMS-only — no CM API</td></tr>
+<tr><td>Payments</td><td><code>GET /api/dashboard/payments</code>, Razorpay webhooks</td><td>Razorpay confirm → API 1 close</td></tr>
+<tr><td>Dev webhook logs</td><td><code>GET /api/dashboard/dev/logs/webhooks</code></td><td>API 9 inbound audit trail</td></tr>
+</table>
+
+<h2>1d. INBOUND RECEIVER (you host)</h2>
+<table>
+<tr><th>Route</th><th>Axis API</th><th>Auth</th><th>Response</th></tr>
+<tr><td><code>POST /api/webhooks/axisrooms</code></td><td>API 9 booking push</td><td><code>accessKey</code> in JSON body (<code>AXIS_ROOMS_API_KEY</code>)</td><td><code>{"status":"success","message":"Booking Update Received"}</code></td></tr>
+</table>
+
+<h2>1e. OUTBOUND POST TO AXIS ROOMS</h2>
+<table>
+<tr><th>Axis API</th><th>Path</th><th>Jade trigger</th><th>Module</th></tr>
+<tr><td>1</td><td><code>/api/daywiseInventory</code></td><td>On-hold create, Razorpay confirm, manual block create, cancel/release</td><td><code>src/lib/axisRooms/inventory.ts</code></td></tr>
+<tr><td>2</td><td><code>/api/inventory</code></td><td>Bulk availability (helper available)</td><td><code>inventory.ts</code></td></tr>
+<tr><td>6</td><td><code>/api/daywisePrice</code></td><td>Villa price save / channel sync</td><td><code>src/lib/axisRooms/pricing.ts</code></td></tr>
+<tr><td>7</td><td><code>/api/bulkPriceUpdate</code></td><td>Not wired (bulk helper stub)</td><td><code>pricing.ts</code></td></tr>
+<tr><td>15</td><td><code>/api/cm-restrictions</code></td><td>Hidden / not bookable villa</td><td><code>src/lib/axisRooms/restrictions.ts</code></td></tr>
+<tr><td>3/4</td><td><code>blockChannel</code> / <code>unblockChannel</code></td><td>Not started (optional per-OTA blocks)</td><td>—</td></tr>
+<tr><td>12</td><td><code>/api/pullBooking</code></td><td>Not started (optional reconciliation cron)</td><td>—</td></tr>
+</table>
+
+<h2>1f. FEATURE MATRIX</h2>
+<table>
+<tr><th>Feature</th><th>Status</th></tr>
+<tr><td>API 9 inbound webhook + upsert</td><td>Built</td></tr>
+<tr><td>API 1 inventory close/open (bookings)</td><td>Built</td></tr>
+<tr><td>Staff on-hold manual booking (Option B)</td><td>Built</td></tr>
+<tr><td>Folio confirm_hold / cancel hold</td><td>Built</td></tr>
+<tr><td>Manual blocks → API 1</td><td>Built</td></tr>
+<tr><td>Villa visibility → API 15 + price push</td><td>Built (on PATCH)</td></tr>
+<tr><td>Conflict queue from inbound</td><td>Built</td></tr>
+<tr><td>axisrooms-retry cron</td><td>Built</td></tr>
+<tr><td>Public /book blockedDates UI</td><td>Built</td></tr>
+<tr><td>Booking Records list (<code>/dashboard/bookings</code>)</td><td>Built</td></tr>
+<tr><td>Booking folio activity history</td><td>Built</td></tr>
+<tr><td>API 12 pull-booking reconciliation</td><td>Not started</td></tr>
+<tr><td>Per-OTA blockChannel (API 3/4)</td><td>Not started</td></tr>
+</table>
+
+<h2>1g. FLOW (CM + PMS)</h2>
+<pre>OTAs → Axis Rooms CM → POST /api/webhooks/axisrooms (API 9) → Jade calendar
+Staff calendar → POST /api/dashboard/bookings (on_hold) → API 1 free:0 → OTAs blocked
+Staff folio confirm_hold → status confirmed (inventory already closed)
+Staff cancel → API 1 free:1 → OTAs reopened
+Villa PATCH (hidden/bookable/price) → API 15 + API 6</pre>
+
+<h2>1h. ENV CHECKLIST</h2>
+<ul>
+<li><code>AXIS_ROOMS_API_KEY</code> — accessKey for outbound + inbound body validation</li>
+<li><code>AXIS_ROOMS_CHANNEL_ID</code> — channelId / pmsId on outbound payloads</li>
+<li><code>AXIS_ROOMS_API_BASE_URL</code> — e.g. <code>https://sandbox1.axisrooms.com</code></li>
+<li><code>CRON_SECRET</code> — protects <code>/api/cron/axisrooms-retry</code></li>
+<li>Register inbound URL: <code>https://&lt;domain&gt;/api/webhooks/axisrooms</code></li>
+<li>See <code>NEEDS_FROM_USER.md</code> for CSV templates, sandbox credentials, sample API 9 payloads</li>
+</ul>
+
+<h2>1i. RBAC — OPERATIONS MODULES (<code>src/lib/auth/permissions.ts</code>)</h2>
+<p>Source of truth for the Roles &amp; Permissions dashboard matrix. <strong>Team</strong> has <strong>read</strong> on Booking Records and folio (no cancel/confirm/refund).</p>
+<table>
+<tr><th>Route</th><th>Label</th><th>Admin</th><th>Staff</th><th>Team</th><th>SEO</th><th>Dev</th></tr>
+<tr><td><code>/dashboard</code></td><td>Calendar</td><td>write</td><td>write</td><td>read</td><td>—</td><td>write</td></tr>
+<tr><td><code>/dashboard/bookings</code></td><td>Booking Records</td><td>write</td><td>write</td><td><strong>read</strong></td><td>—</td><td>write</td></tr>
+<tr><td><code>/dashboard/housekeeping</code></td><td>Housekeeping</td><td>write</td><td>write</td><td>write</td><td>—</td><td>read</td></tr>
+<tr><td><code>/dashboard/blocks</code></td><td>Manual Blocks</td><td>write</td><td>write</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td><code>/dashboard/conflicts</code></td><td>Conflicts</td><td>write</td><td>read</td><td>—</td><td>—</td><td>read</td></tr>
+<tr><td><code>/dashboard/payments</code></td><td>Payments</td><td>write</td><td>—</td><td>—</td><td>—</td><td>write</td></tr>
+<tr><td><code>/dashboard/settings/axis-rooms</code></td><td>Axis Rooms</td><td>write</td><td>—</td><td>—</td><td>—</td><td>write</td></tr>
+</table>
+<p>Folio path <code>/dashboard/bookings/[id]</code> inherits <code>/dashboard/bookings</code> permissions. Team: view list + folio + history; staff/admin: write actions (cancel, confirm hold, notes).</p>
+
+${pre(read("src/lib/bookings/bookingHistory.ts"), "src/lib/bookings/bookingHistory.ts")}
+${pre(read("src/lib/axisRooms/inventory.ts"), "src/lib/axisRooms/inventory.ts")}
+${pre(read("src/lib/axisRooms/parseInbound.ts"), "src/lib/axisRooms/parseInbound.ts")}
+${pre(read("src/lib/axisRooms/upsertInboundBooking.ts"), "src/lib/axisRooms/upsertInboundBooking.ts")}
 
 ${pre(axisCron, "src/app/api/cron/axisrooms-retry/route.ts")}
 <h3>Exported functions — src/app/api/cron/axisrooms-retry/route.ts</h3>
@@ -119,7 +205,7 @@ ${pre(booking, "Full file")}
 <li><strong>guestDetails:</strong> <code>{ name: String, email: String, phone: String }</code> (sub-schema, not individually required).</li>
 <li><strong>pricing:</strong> <code>basePaise, extraPaxPaise, eventPaise, addOnPaise, taxPaise, totalPaise, quoteOnlyAddOns[], snapshot</code>.</li>
 <li><strong>payment:</strong> gateway enum <code>["razorpay","external"]</code>; status enum <code>pending|paid|deposit_paid|failed|refunded|partially_refunded|external|not_applicable</code>.</li>
-<li><strong>status enum:</strong> <code>pending, confirmed, cancelled, expired, conflict</code> (default pending).</li>
+<li><strong>status enum:</strong> <code>pending, on_hold, confirmed, cancelled, expired, conflict</code> (default pending).</li>
 <li><strong>stayStatus enum:</strong> <code>upcoming, in_house, departed, turnover, ready</code> (default upcoming).</li>
 <li><strong>source enum:</strong> <code>website, axisrooms_airbnb, axisrooms_booking_com, admin_manual</code> (default website).</li>
 <li><strong>Channel-manager fields:</strong> <code>axisRoomsSynced</code> (Boolean, default false), <code>axisRoomsCancelSynced</code> (Boolean, default true), <code>axisRoomsSyncAttempts</code> (Number, default 0), <code>axisRoomsLastError</code> (String), <code>axisRoomsReservationId</code> (String). No <code>staah*</code> fields.</li>
@@ -163,6 +249,7 @@ ${pre(nightlock, "Full file")}
 <tr><td>updateStayStatus</td><td><code>id: string, stayStatus: StayStatus</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
 <tr><td>cancelBooking</td><td><code>id: string, userId?: string</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
 <tr><td>updateNotes</td><td><code>id: string, notes: string</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
+<tr><td>confirmHold</td><td><code>id: string, userId?: string, waivePayment?: boolean</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
 <tr><td>createManual</td><td><code>CreateBookingParams &amp; { source?, status? }</code></td><td><code>Promise&lt;BookingRecord&gt;</code></td></tr>
 <tr><td>softDelete</td><td><code>id: string, userId?: string</code></td><td><code>Promise&lt;boolean&gt;</code></td></tr>
 <tr><td>getAvailability</td><td><code>villaId, from, to: string</code></td><td><code>Promise&lt;{ bookedDates, blockedDates }&gt;</code></td></tr>
@@ -201,7 +288,7 @@ ${pre(nightLocks, "src/lib/bookings/nightLocks.ts")}
 <h3>From .env.example</h3>
 ${pre(envExample, ".env.example")}
 <ul>
-<li><strong>Channel-manager / webhook / cron:</strong> <code>CRON_SECRET</code>, <code>AXIS_ROOMS_API_KEY</code>, <code>AXIS_ROOMS_WEBHOOK_SECRET</code>, <code>AXIS_ROOMS_API_BASE_URL</code> (commented optional)</li>
+<li><strong>Channel-manager / webhook / cron:</strong> <code>CRON_SECRET</code>, <code>AXIS_ROOMS_API_KEY</code>, <code>AXIS_ROOMS_CHANNEL_ID</code>, <code>AXIS_ROOMS_API_BASE_URL</code>, <code>AXIS_ROOMS_WEBHOOK_SECRET</code> (legacy)</li>
 <li><strong>Related payment webhook:</strong> <code>RAZORPAY_WEBHOOK_SECRET</code></li>
 <li><strong>Auth (dashboard):</strong> <code>NEXTAUTH_SECRET</code>, <code>NEXTAUTH_URL</code></li>
 </ul>

@@ -66,7 +66,7 @@ export function PasswordResetModal({
           aria-hidden
           className={`pointer-events-none absolute inset-px block ${GLASS_INNER_SURFACE}`}
         />
-        <form onSubmit={handleSubmit} className="flex min-h-0 flex-col">
+        <form onSubmit={handleSubmit} className={`${dash.modalFrame} flex min-h-0 flex-col`}>
           <DashboardModalHeader
             section="Staff"
             title="Reset password"

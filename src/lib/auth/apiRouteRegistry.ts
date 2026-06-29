@@ -138,6 +138,13 @@ export function resolveApiPermission(
  */
 export const API_ROUTE_CASES: ApiRouteCase[] = [
   {
+    label: "booking records list",
+    pathname: "/api/dashboard/bookings",
+    method: "GET",
+    permPath: "/dashboard/bookings",
+    min: "read",
+  },
+  {
     label: "manual booking create",
     pathname: "/api/dashboard/bookings",
     method: "POST",

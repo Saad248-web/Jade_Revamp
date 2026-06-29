@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auditLog } from "@/lib/audit/auditLog";
+import { syncBlockInventory } from "@/lib/axisRooms/sync";
 import { connectDB } from "@/lib/db";
 import { requireRole } from "@/lib/auth/requireRole";
 import { VillaBlockModel } from "@/models/VillaBlock";
@@ -120,6 +121,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    const axisSync = await syncBlockInventory(block, 0);
+
     return NextResponse.json(
       {
         block: serializeBlock(block as never, {
@@ -127,6 +130,7 @@ export async function POST(req: NextRequest) {
           slug: villa.slug,
           name: villa.name,
         }),
+        axisSync,
       },
       { status: 201, headers: noStore },
     );

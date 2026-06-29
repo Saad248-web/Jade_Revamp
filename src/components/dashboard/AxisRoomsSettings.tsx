@@ -1,8 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { Globe } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { Download, Globe } from "lucide-react";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
+import { dash } from "@/lib/dashboard/dashboardClasses";
 import { DataTable, type DataTableColumn } from "./DataTable";
 import { DashboardListToolbar } from "./ui/DashboardListToolbar";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
@@ -20,6 +22,34 @@ export function AxisRoomsSettings() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [apiStatus, setApiStatus] = useState<"set" | "missing">("missing");
+  const [exporting, setExporting] = useState(false);
+
+  const unmappedCount = useMemo(
+    () =>
+      rows.filter(
+        (r) => !r.axisPropertyId || !r.axisRoomTypeId || !r.axisRatePlanId,
+      ).length,
+    [rows],
+  );
+
+  const exportCsv = async () => {
+    setExporting(true);
+    try {
+      const res = await dashboardFetch("/api/dashboard/settings/axis-rooms/csv");
+      if (!res.ok) throw new Error("Export failed");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "jade-axisrooms-properties.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Export failed");
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -117,6 +147,18 @@ export function AxisRoomsSettings() {
         </span>
       ),
     },
+    {
+      key: "edit",
+      header: "",
+      cell: (r) => (
+        <Link
+          href={`/dashboard/settings/villas?edit=${encodeURIComponent(r.slug)}`}
+          className="font-manrope text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)] hover:underline"
+        >
+          Edit mapping
+        </Link>
+      ),
+    },
   ];
 
   return (
@@ -135,13 +177,29 @@ export function AxisRoomsSettings() {
                 >
                   {apiStatus === "set" ? "Configured" : "Awaiting credentials"}
                 </span>
-                . Edit IDs per villa under Villa Settings → Full editor.
+                {unmappedCount > 0 && (
+                  <>
+                    {" "}
+                    · {unmappedCount} villa{unmappedCount === 1 ? "" : "s"} need
+                    Axis IDs
+                  </>
+                )}
               </span>
             </span>
           }
           onRefresh={load}
           refreshing={loading}
-        />
+        >
+          <button
+            type="button"
+            onClick={exportCsv}
+            disabled={exporting || loading}
+            className={`${dash.btn} ${dash.btnGhost}`}
+          >
+            <Download className="h-4 w-4" />
+            Export CSV
+          </button>
+        </DashboardListToolbar>
       }
       error={error}
       loading={loading}

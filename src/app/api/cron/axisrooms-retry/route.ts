@@ -5,6 +5,7 @@ import {
   pushAxisRoomsCancellation,
   pushAxisRoomsReservation,
 } from "@/lib/axisRooms/client";
+import { markBookingSyncResult } from "@/lib/axisRooms/sync";
 
 export const dynamic = "force-dynamic";
 
@@ -32,12 +33,12 @@ export async function GET(req: NextRequest) {
     const pending = await BookingModel.find({
       $or: [
         {
-          status: "confirmed",
+          status: { $in: ["confirmed", "on_hold"] },
           axisRoomsSynced: false,
           axisRoomsSyncAttempts: { $lt: 10 },
         },
         {
-          status: { $in: ["cancelled", "conflict"] },
+          status: "cancelled",
           axisRoomsCancelSynced: false,
           axisRoomsSyncAttempts: { $lt: 10 },
         },
@@ -46,41 +47,26 @@ export async function GET(req: NextRequest) {
 
     let processed = 0;
     for (const b of pending) {
-      let succeeded = false;
       try {
-        if (b.status === "confirmed" && !b.axisRoomsSynced) {
-          const result = await pushAxisRoomsReservation(b);
-          if (result.ok) {
-            b.axisRoomsSynced = true;
-            if (result.reservationId) {
-              b.axisRoomsReservationId = result.reservationId;
-            }
-            b.axisRoomsLastError = undefined;
-            succeeded = true;
-          } else {
-            b.axisRoomsLastError = result.error ?? "push failed";
-          }
-        } else if (
-          ["cancelled", "conflict"].includes(b.status) &&
-          !b.axisRoomsCancelSynced
+        if (
+          ["confirmed", "on_hold"].includes(b.status) &&
+          !b.axisRoomsSynced
         ) {
+          const result = await pushAxisRoomsReservation(b);
+          await markBookingSyncResult(String(b._id), result, "close");
+        } else if (b.status === "cancelled" && !b.axisRoomsCancelSynced) {
           const result = await pushAxisRoomsCancellation(b);
-          if (result.ok) {
-            b.axisRoomsCancelSynced = true;
-            b.axisRoomsLastError = undefined;
-            succeeded = true;
-          } else {
-            b.axisRoomsLastError = result.error ?? "cancel failed";
-          }
+          await markBookingSyncResult(String(b._id), result, "open");
         }
         processed += 1;
       } catch (e) {
-        b.axisRoomsLastError = e instanceof Error ? e.message : "unknown";
+        const doc = await BookingModel.findById(b._id);
+        if (doc) {
+          doc.axisRoomsLastError = e instanceof Error ? e.message : "unknown";
+          doc.axisRoomsSyncAttempts = (doc.axisRoomsSyncAttempts ?? 0) + 1;
+          await doc.save();
+        }
       }
-      if (!succeeded) {
-        b.axisRoomsSyncAttempts = (b.axisRoomsSyncAttempts ?? 0) + 1;
-      }
-      await b.save();
     }
 
     return NextResponse.json({ ok: true, processed });

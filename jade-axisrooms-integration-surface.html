@@ -23,7 +23,7 @@
 </head>
 <body>
 <h1>Jade ReVamp — Axis Rooms Integration Surface</h1>
-<p class="meta">Generated 2026-06-24 · Factual verbatim audit · Repo: Jade_ReVamp</p>
+<p class="meta">Generated 2026-06-29 · Factual verbatim audit · Repo: Jade_ReVamp</p>
 
 <div class="note">
   <strong>Legacy path note:</strong> The audit template references <code>staah/*</code> paths. Those files do not exist in this repo.
@@ -39,157 +39,36 @@
 <p><em>Exported functions: NOT FOUND (file absent)</em></p>
 
 <h2>1b. ACTUAL AXIS ROOMS IMPLEMENTATION</h2>
-<h3>src/lib/axisRooms/client.ts</h3><pre>/** Axis Rooms channel manager client — live HTTP when credentials + endpoint spec arrive. */
+<h3>src/lib/axisRooms/client.ts</h3><pre>/** Axis Rooms channel manager — inventory push via API 1 (not reservation REST). */
 
-import { auditLog } from "@/lib/audit/auditLog";
 import type { AxisRoomsPushResult } from "./types";
+import {
+  syncBookingInventoryClose,
+  syncBookingInventoryOpen,
+} from "./sync";
 
 type AxisRoomsBooking = {
   _id: unknown;
+  villaId: unknown;
   checkIn?: string;
   checkOut?: string;
+  status?: string;
+  axisRoomsSynced?: boolean;
+  source?: string;
 };
 
-function getApiKey(): string | null {
-  return process.env.AXIS_ROOMS_API_KEY?.trim() || null;
-}
-
-function getBaseUrl(): string {
-  return (
-    process.env.AXIS_ROOMS_API_BASE_URL?.trim() ||
-    "https://api.axisrooms.com"
-  );
-}
-
-/**
- * Push a confirmed reservation to Axis Rooms.
- * Returns ok:false until certified endpoint is wired; never throws on stub.
- */
+/** Close OTA inventory for booked nights (free: 0). */
 export async function pushAxisRoomsReservation(
   booking: AxisRoomsBooking,
 ): Promise&lt;AxisRoomsPushResult&gt; {
-  const apiKey = getApiKey();
-  if (!apiKey) {
-    return { ok: false, error: "AXIS_ROOMS_API_KEY not configured" };
-  }
-
-  const baseUrl = getBaseUrl();
-  const endpoint = `${baseUrl.replace(/\/$/, "")}/reservations`;
-
-  try {
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        externalBookingId: String(booking._id),
-        checkIn: booking.checkIn,
-        checkOut: booking.checkOut,
-      }),
-      signal: AbortSignal.timeout(25_000),
-    });
-
-    if (!res.ok) {
-      const text = await res.text().catch(() =&gt; "");
-      await auditLog({
-        action: "axisrooms.push",
-        targetType: "booking",
-        targetId: String(booking._id),
-        metadata: { ok: false, status: res.status, body: text.slice(0, 500) },
-      });
-      return {
-        ok: false,
-        error: `Axis Rooms push failed (${res.status})`,
-      };
-    }
-
-    let data: { reservationId?: string; id?: string } = {};
-    try {
-      data = (await res.json()) as typeof data;
-    } catch {
-      /* empty body ok */
-    }
-
-    const reservationId = data.reservationId ?? data.id;
-    await auditLog({
-      action: "axisrooms.push",
-      targetType: "booking",
-      targetId: String(booking._id),
-      metadata: { ok: true, reservationId },
-    });
-
-    return { ok: true, reservationId };
-  } catch {
-    // Endpoint not live yet — audit stub, do not mark synced
-    await auditLog({
-      action: "axisrooms.push",
-      targetType: "booking",
-      targetId: String(booking._id),
-      metadata: { stub: true, endpoint },
-    });
-    return {
-      ok: false,
-      error: "Axis Rooms endpoint unreachable — awaiting certified API",
-      stub: true,
-    };
-  }
+  return syncBookingInventoryClose(booking);
 }
 
+/** Release OTA inventory on cancel (free: 1). */
 export async function pushAxisRoomsCancellation(
   booking: AxisRoomsBooking,
 ): Promise&lt;AxisRoomsPushResult&gt; {
-  const apiKey = getApiKey();
-  if (!apiKey) {
-    return { ok: false, error: "AXIS_ROOMS_API_KEY not configured" };
-  }
-
-  const baseUrl = getBaseUrl();
-  const endpoint = `${baseUrl.replace(/\/$/, "")}/reservations/${String(booking._id)}/cancel`;
-
-  try {
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({ externalBookingId: String(booking._id) }),
-      signal: AbortSignal.timeout(25_000),
-    });
-
-    if (!res.ok) {
-      const text = await res.text().catch(() =&gt; "");
-      await auditLog({
-        action: "axisrooms.cancel",
-        targetType: "booking",
-        targetId: String(booking._id),
-        metadata: { ok: false, status: res.status, body: text.slice(0, 500) },
-      });
-      return { ok: false, error: `Axis Rooms cancel failed (${res.status})` };
-    }
-
-    await auditLog({
-      action: "axisrooms.cancel",
-      targetType: "booking",
-      targetId: String(booking._id),
-      metadata: { ok: true },
-    });
-    return { ok: true };
-  } catch {
-    await auditLog({
-      action: "axisrooms.cancel",
-      targetType: "booking",
-      targetId: String(booking._id),
-      metadata: { stub: true, endpoint },
-    });
-    return {
-      ok: false,
-      error: "Axis Rooms cancel endpoint unreachable",
-      stub: true,
-    };
-  }
+  return syncBookingInventoryOpen(booking);
 }
 </pre>
 <h3>Exported functions — src/lib/axisRooms/client.ts</h3>
@@ -201,79 +80,977 @@ export async function pushAxisRoomsCancellation(
 
 <h3>src/app/api/webhooks/axisrooms/route.ts</h3><pre>import { NextRequest, NextResponse } from "next/server";
 import { auditLog } from "@/lib/audit/auditLog";
-import { timingSafeStringEqual } from "@/lib/security/timingSafe";
+import {
+  parseAxisRoomsInbound,
+  validateAxisRoomsAccessKey,
+} from "@/lib/axisRooms/parseInbound";
+import { upsertAxisRoomsInbound } from "@/lib/axisRooms/upsertInboundBooking";
 
 export const dynamic = "force-dynamic";
 
-function verifyAxisRoomsWebhook(req: NextRequest): boolean {
-  const webhookSecret = process.env.AXIS_ROOMS_WEBHOOK_SECRET?.trim();
-  if (webhookSecret) {
-    const authHeader = req.headers.get("authorization") ?? "";
-    const token = authHeader.startsWith("Bearer ")
-      ? authHeader.slice(7)
-      : authHeader;
-    return timingSafeStringEqual(token, webhookSecret);
-  }
+const SUCCESS_BODY = {
+  status: "success",
+  message: "Booking Update Received",
+} as const;
 
-  const apiKey = process.env.AXIS_ROOMS_API_KEY?.trim();
-  if (!apiKey) return false;
-  const authHeader = req.headers.get("authorization") ?? "";
-  const token = authHeader.startsWith("Bearer ")
-    ? authHeader.slice(7)
-    : authHeader;
-  return timingSafeStringEqual(token, apiKey);
-}
-
-/** Axis Rooms inbound webhook — processes OTA reservations when payload spec is live. */
+/** Axis Rooms API 9 — inbound OTA booking receiver. */
 export async function POST(req: NextRequest) {
   if (!process.env.AXIS_ROOMS_API_KEY?.trim()) {
     return NextResponse.json(
       {
-        ok: false,
-        blocked: "AXIS_ROOMS_API_KEY not configured — see NEEDS_FROM_USER.md",
+        status: "failure",
+        message: "AXIS_ROOMS_API_KEY not configured",
       },
       { status: 503 },
     );
   }
 
-  if (!verifyAxisRoomsWebhook(req)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  let payload: unknown;
+  try {
+    payload = await req.json();
+  } catch {
+    return NextResponse.json(
+      { status: "failure", message: "Invalid JSON" },
+      { status: 400 },
+    );
+  }
+
+  if (!validateAxisRoomsAccessKey(payload)) {
+    return NextResponse.json(
+      { status: "failure", message: "Unauthorized" },
+      { status: 401 },
+    );
   }
 
   try {
-    const payload = await req.json();
-    const { parseAxisRoomsInbound } = await import(
-      "@/lib/axisRooms/parseInbound"
-    );
     const parsed = parseAxisRoomsInbound(payload);
+    if (!parsed) {
+      await auditLog({
+        action: "axisrooms.inbound",
+        targetType: "webhook",
+        metadata: { error: "parse_failed" },
+      });
+      return NextResponse.json(SUCCESS_BODY);
+    }
+
+    const result = await upsertAxisRoomsInbound(parsed);
 
     await auditLog({
       action: "axisrooms.inbound",
       targetType: "webhook",
+      targetId: result.bookingId,
       metadata: {
-        eventType: parsed?.eventType ?? "unknown",
-        keys: Object.keys((payload as object) ?? {}),
+        eventType: parsed.eventType,
+        bookingNo: parsed.bookingNo,
+        conflict: result.conflict,
+        duplicate: result.duplicate,
+        error: result.error,
       },
     });
 
-    // Full booking upsert wired when Axis Rooms provides payload contract
-    return NextResponse.json({
-      ok: true,
-      received: true,
-      eventType: parsed?.eventType ?? "unknown",
-    });
+    return NextResponse.json(SUCCESS_BODY);
   } catch (e) {
     console.error("[POST /api/webhooks/axisrooms]", e);
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    return NextResponse.json(
+      { status: "failure", message: "Internal error" },
+      { status: 500 },
+    );
   }
 }
 </pre>
 <h3>Exported functions — src/app/api/webhooks/axisrooms/route.ts</h3>
 <table>
 <tr><th>Function</th><th>Signature</th><th>Description</th></tr>
-<tr><td><code>POST</code></td><td><code>(req: NextRequest) =&gt; Promise&lt;NextResponse&gt;</code></td><td>Verifies Bearer token, parses inbound payload stub, audits event; does not upsert bookings yet.</td></tr>
-<tr><td><code>verifyAxisRoomsWebhook</code></td><td><code>(req: NextRequest) =&gt; boolean</code> (module-private)</td><td>Compares Authorization header to AXIS_ROOMS_WEBHOOK_SECRET or AXIS_ROOMS_API_KEY.</td></tr>
+<tr><td><code>POST</code></td><td><code>(req: NextRequest) =&gt; Promise&lt;NextResponse&gt;</code></td><td>API 9 receiver: validates <code>accessKey</code> in JSON body, upserts OTA bookings, conflict detection; responds <code>{"status":"success","message":"Booking Update Received"}</code>.</td></tr>
 </table>
+
+<h2>1c. DASHBOARD PAGES → JADE API ROUTES</h2>
+<table>
+<tr><th>Dashboard page</th><th>Jade API routes</th><th>Axis Rooms role</th></tr>
+<tr><td>Calendar + manual booking</td><td><code>GET /api/dashboard/calendar</code>, <code>POST /api/dashboard/bookings</code>, <code>GET/PATCH /api/dashboard/bookings/[id]</code></td><td>On-hold create → API 1 <code>free:0</code>; cancel → <code>free:1</code>; confirm_hold → status only</td></tr>
+<tr><td>Booking Records</td><td><code>GET /api/dashboard/bookings</code> (list + filters)</td><td>PMS-only — all channels in one table</td></tr>
+<tr><td>Booking folio + history</td><td><code>GET /api/dashboard/bookings/[id]</code> (booking + activity timeline)</td><td>Sync badge; cancel/confirm require write role</td></tr>
+<tr><td>Manual blocks</td><td><code>GET/POST /api/dashboard/blocks</code>, <code>DELETE /api/dashboard/blocks/[id]</code></td><td>Create → API 1 <code>free:0</code>; delete → <code>free:1</code></td></tr>
+<tr><td>Conflicts</td><td><code>GET/PATCH /api/dashboard/conflicts</code></td><td>Populated when API 9 inbound overlaps direct booking</td></tr>
+<tr><td>Villa settings / wizard</td><td><code>GET/POST /api/dashboard/villas</code>, <code>GET/PATCH /api/dashboard/villas/[slug]</code></td><td>Status/bookable/price PATCH → API 15 + API 6</td></tr>
+<tr><td>Axis Rooms settings</td><td><code>GET /api/dashboard/settings/axis-rooms/csv</code></td><td>CSV export for Axis onboarding team</td></tr>
+<tr><td>Housekeeping</td><td><code>PATCH /api/bookings/[id]</code> (stayStatus)</td><td>PMS-only — no CM API</td></tr>
+<tr><td>Payments</td><td><code>GET /api/dashboard/payments</code>, Razorpay webhooks</td><td>Razorpay confirm → API 1 close</td></tr>
+<tr><td>Dev webhook logs</td><td><code>GET /api/dashboard/dev/logs/webhooks</code></td><td>API 9 inbound audit trail</td></tr>
+</table>
+
+<h2>1d. INBOUND RECEIVER (you host)</h2>
+<table>
+<tr><th>Route</th><th>Axis API</th><th>Auth</th><th>Response</th></tr>
+<tr><td><code>POST /api/webhooks/axisrooms</code></td><td>API 9 booking push</td><td><code>accessKey</code> in JSON body (<code>AXIS_ROOMS_API_KEY</code>)</td><td><code>{"status":"success","message":"Booking Update Received"}</code></td></tr>
+</table>
+
+<h2>1e. OUTBOUND POST TO AXIS ROOMS</h2>
+<table>
+<tr><th>Axis API</th><th>Path</th><th>Jade trigger</th><th>Module</th></tr>
+<tr><td>1</td><td><code>/api/daywiseInventory</code></td><td>On-hold create, Razorpay confirm, manual block create, cancel/release</td><td><code>src/lib/axisRooms/inventory.ts</code></td></tr>
+<tr><td>2</td><td><code>/api/inventory</code></td><td>Bulk availability (helper available)</td><td><code>inventory.ts</code></td></tr>
+<tr><td>6</td><td><code>/api/daywisePrice</code></td><td>Villa price save / channel sync</td><td><code>src/lib/axisRooms/pricing.ts</code></td></tr>
+<tr><td>7</td><td><code>/api/bulkPriceUpdate</code></td><td>Not wired (bulk helper stub)</td><td><code>pricing.ts</code></td></tr>
+<tr><td>15</td><td><code>/api/cm-restrictions</code></td><td>Hidden / not bookable villa</td><td><code>src/lib/axisRooms/restrictions.ts</code></td></tr>
+<tr><td>3/4</td><td><code>blockChannel</code> / <code>unblockChannel</code></td><td>Not started (optional per-OTA blocks)</td><td>—</td></tr>
+<tr><td>12</td><td><code>/api/pullBooking</code></td><td>Not started (optional reconciliation cron)</td><td>—</td></tr>
+</table>
+
+<h2>1f. FEATURE MATRIX</h2>
+<table>
+<tr><th>Feature</th><th>Status</th></tr>
+<tr><td>API 9 inbound webhook + upsert</td><td>Built</td></tr>
+<tr><td>API 1 inventory close/open (bookings)</td><td>Built</td></tr>
+<tr><td>Staff on-hold manual booking (Option B)</td><td>Built</td></tr>
+<tr><td>Folio confirm_hold / cancel hold</td><td>Built</td></tr>
+<tr><td>Manual blocks → API 1</td><td>Built</td></tr>
+<tr><td>Villa visibility → API 15 + price push</td><td>Built (on PATCH)</td></tr>
+<tr><td>Conflict queue from inbound</td><td>Built</td></tr>
+<tr><td>axisrooms-retry cron</td><td>Built</td></tr>
+<tr><td>Public /book blockedDates UI</td><td>Built</td></tr>
+<tr><td>Booking Records list (<code>/dashboard/bookings</code>)</td><td>Built</td></tr>
+<tr><td>Booking folio activity history</td><td>Built</td></tr>
+<tr><td>API 12 pull-booking reconciliation</td><td>Not started</td></tr>
+<tr><td>Per-OTA blockChannel (API 3/4)</td><td>Not started</td></tr>
+</table>
+
+<h2>1g. FLOW (CM + PMS)</h2>
+<pre>OTAs → Axis Rooms CM → POST /api/webhooks/axisrooms (API 9) → Jade calendar
+Staff calendar → POST /api/dashboard/bookings (on_hold) → API 1 free:0 → OTAs blocked
+Staff folio confirm_hold → status confirmed (inventory already closed)
+Staff cancel → API 1 free:1 → OTAs reopened
+Villa PATCH (hidden/bookable/price) → API 15 + API 6</pre>
+
+<h2>1h. ENV CHECKLIST</h2>
+<ul>
+<li><code>AXIS_ROOMS_API_KEY</code> — accessKey for outbound + inbound body validation</li>
+<li><code>AXIS_ROOMS_CHANNEL_ID</code> — channelId / pmsId on outbound payloads</li>
+<li><code>AXIS_ROOMS_API_BASE_URL</code> — e.g. <code>https://sandbox1.axisrooms.com</code></li>
+<li><code>CRON_SECRET</code> — protects <code>/api/cron/axisrooms-retry</code></li>
+<li>Register inbound URL: <code>https://&lt;domain&gt;/api/webhooks/axisrooms</code></li>
+<li>See <code>NEEDS_FROM_USER.md</code> for CSV templates, sandbox credentials, sample API 9 payloads</li>
+</ul>
+
+<h2>1i. RBAC — OPERATIONS MODULES (<code>src/lib/auth/permissions.ts</code>)</h2>
+<p>Source of truth for the Roles &amp; Permissions dashboard matrix. <strong>Team</strong> has <strong>read</strong> on Booking Records and folio (no cancel/confirm/refund).</p>
+<table>
+<tr><th>Route</th><th>Label</th><th>Admin</th><th>Staff</th><th>Team</th><th>SEO</th><th>Dev</th></tr>
+<tr><td><code>/dashboard</code></td><td>Calendar</td><td>write</td><td>write</td><td>read</td><td>—</td><td>write</td></tr>
+<tr><td><code>/dashboard/bookings</code></td><td>Booking Records</td><td>write</td><td>write</td><td><strong>read</strong></td><td>—</td><td>write</td></tr>
+<tr><td><code>/dashboard/housekeeping</code></td><td>Housekeeping</td><td>write</td><td>write</td><td>write</td><td>—</td><td>read</td></tr>
+<tr><td><code>/dashboard/blocks</code></td><td>Manual Blocks</td><td>write</td><td>write</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td><code>/dashboard/conflicts</code></td><td>Conflicts</td><td>write</td><td>read</td><td>—</td><td>—</td><td>read</td></tr>
+<tr><td><code>/dashboard/payments</code></td><td>Payments</td><td>write</td><td>—</td><td>—</td><td>—</td><td>write</td></tr>
+<tr><td><code>/dashboard/settings/axis-rooms</code></td><td>Axis Rooms</td><td>write</td><td>—</td><td>—</td><td>—</td><td>write</td></tr>
+</table>
+<p>Folio path <code>/dashboard/bookings/[id]</code> inherits <code>/dashboard/bookings</code> permissions. Team: view list + folio + history; staff/admin: write actions (cancel, confirm hold, notes).</p>
+
+<h3>src/lib/bookings/bookingHistory.ts</h3><pre>import { connectDB } from "@/lib/db";
+import { AuditLogModel } from "@/models/AuditLog";
+import { BookingModel } from "@/models/Booking";
+import { UserModel } from "@/models/User";
+import { WebhookEventModel } from "@/models/WebhookEvent";
+import { formatBookingSource } from "./sourceLabels";
+
+export type BookingHistoryEntry = {
+  id: string;
+  at: string;
+  action: string;
+  title: string;
+  detail?: string;
+  actor?: string;
+  actorType: "staff" | "system" | "ota" | "payment" | "guest";
+  metadata?: Record&lt;string, unknown&gt;;
+};
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&amp;");
+}
+
+function describeAuditEntry(
+  action: string,
+  metadata: Record&lt;string, unknown&gt;,
+): { title: string; detail?: string; actorType: BookingHistoryEntry["actorType"] } {
+  switch (action) {
+    case "booking.create": {
+      const src = metadata.source as string | undefined;
+      if (src === "axisrooms_inbound") {
+        return {
+          title: "OTA reservation received",
+          detail: metadata.bookingNo
+            ? `Axis booking #${metadata.bookingNo}${metadata.conflict ? " — conflict with direct booking" : ""}`
+            : undefined,
+          actorType: "ota",
+        };
+      }
+      if (metadata.onHold || metadata.status === "on_hold") {
+        return {
+          title: "Staff placed dates on hold",
+          detail: "OTA inventory blocked immediately",
+          actorType: "staff",
+        };
+      }
+      const channel = formatBookingSource(
+        (metadata.source as string) ?? "website",
+      );
+      return {
+        title: `Booking created — ${channel.shortLabel}`,
+        detail:
+          metadata.status === "pending"
+            ? "Awaiting Razorpay payment"
+            : undefined,
+        actorType: metadata.source === "admin_manual" ? "staff" : "guest",
+      };
+    }
+    case "booking.confirm_hold":
+      return {
+        title: metadata.waivePayment
+          ? "Hold confirmed (payment waived)"
+          : "Hold confirmed — external payment received",
+        detail: "Status changed from on hold to confirmed",
+        actorType: "staff",
+      };
+    case "booking.update": {
+      if (metadata.source === "axisrooms_inbound" &amp;&amp; metadata.eventType === "modify") {
+        return {
+          title: "OTA reservation modified",
+          detail: `Dates updated — ${metadata.checkIn ?? "?"} to ${metadata.checkOut ?? "?"}`,
+          actorType: "ota",
+        };
+      }
+      if (metadata.stayStatus) {
+        return {
+          title: `Housekeeping — ${metadata.stayStatus}`,
+          actorType: "staff",
+        };
+      }
+      if (metadata.notes) {
+        return { title: "Staff notes updated", actorType: "staff" };
+      }
+      if (metadata.status === "confirmed" &amp;&amp; metadata.paymentId) {
+        return {
+          title: "Payment confirmed — booking confirmed",
+          detail: `Razorpay payment ${metadata.paymentId}`,
+          actorType: "payment",
+        };
+      }
+      return {
+        title: "Booking updated",
+        detail: metadata.status ? `Status: ${metadata.status}` : undefined,
+        actorType: "staff",
+      };
+    }
+    case "booking.cancel":
+      return {
+        title: "Reservation cancelled",
+        detail:
+          metadata.source === "axisrooms_inbound"
+            ? "Cancelled via Axis Rooms / OTA channel"
+            : metadata.reason
+              ? String(metadata.reason)
+              : metadata.previousStatus
+                ? `Was ${String(metadata.previousStatus).replace("_", " ")}`
+                : undefined,
+        actorType:
+          metadata.source === "axisrooms_inbound"
+            ? "ota"
+            : metadata.cancelledBy === "staff"
+              ? "staff"
+              : "system",
+      };
+    case "booking.expire":
+      return {
+        title: "Pending booking expired",
+        detail: "Payment window closed — dates released",
+        actorType: "system",
+      };
+    case "axisrooms.inventory.close":
+      return {
+        title: "OTA inventory blocked",
+        detail: metadata.error
+          ? `Sync failed: ${metadata.error}`
+          : `${metadata.nights ?? "?"} night(s) closed on channel manager`,
+        actorType: "system",
+      };
+    case "axisrooms.inventory.open":
+      return {
+        title: "OTA inventory released",
+        detail: metadata.error
+          ? `Sync failed: ${metadata.error}`
+          : `${metadata.nights ?? "?"} night(s) reopened on channel manager`,
+        actorType: "system",
+      };
+    case "refund.issue":
+      return {
+        title: "Razorpay refund issued",
+        detail: metadata.reason ? String(metadata.reason) : undefined,
+        actorType: "staff",
+      };
+    default:
+      return {
+        title: action.replace(/[._]/g, " "),
+        actorType: "system",
+      };
+  }
+}
+
+/** Chronological activity log for a booking folio. */
+export async function getBookingHistory(
+  bookingId: string,
+): Promise&lt;BookingHistoryEntry[]&gt; {
+  await connectDB();
+
+  const booking = await BookingModel.findOne({
+    _id: bookingId,
+    isDeleted: false,
+  }).lean();
+  if (!booking) return [];
+
+  const auditRows = await AuditLogModel.find({
+    targetType: "booking",
+    targetId: bookingId,
+  })
+    .sort({ createdAt: 1 })
+    .lean();
+
+  const userIds = Array.from(
+    new Set(
+      auditRows
+        .map((r) =&gt; r.userId)
+        .filter((id): id is NonNullable&lt;typeof id&gt; =&gt; id != null)
+        .map(String),
+    ),
+  );
+  const users =
+    userIds.length &gt; 0
+      ? await UserModel.find({ _id: { $in: userIds } })
+          .select("name email role")
+          .lean()
+      : [];
+  const userMap = new Map(users.map((u) =&gt; [String(u._id), u]));
+
+  const entries: BookingHistoryEntry[] = auditRows.map((row) =&gt; {
+    const meta = (row.metadata ?? {}) as Record&lt;string, unknown&gt;;
+    const described = describeAuditEntry(row.action, meta);
+    const user = row.userId ? userMap.get(String(row.userId)) : undefined;
+    let actor = described.actorType === "ota"
+      ? "Axis Rooms / OTA"
+      : described.actorType === "payment"
+        ? "Razorpay"
+        : described.actorType === "system"
+          ? "System"
+          : user?.name ?? (row.userId ? "Staff" : "Guest");
+
+    if (meta.source === "axisrooms_inbound" &amp;&amp; row.action === "booking.cancel") {
+      actor = "Axis Rooms / OTA";
+    }
+
+    return {
+      id: String(row._id),
+      at: (row.createdAt ?? new Date()).toISOString(),
+      action: row.action,
+      title: described.title,
+      detail: described.detail,
+      actor,
+      actorType: described.actorType,
+      metadata: meta,
+    };
+  });
+
+  if (booking.axisRoomsReservationId) {
+    const prefix = escapeRegex(booking.axisRoomsReservationId);
+    const webhooks = await WebhookEventModel.find({
+      source: "axisrooms",
+      eventId: { $regex: `^${prefix}:` },
+    })
+      .sort({ createdAt: 1 })
+      .lean();
+
+    for (const wh of webhooks) {
+      const statusPart = wh.eventId?.split(":").slice(1).join(":") ?? "update";
+      const duplicate = entries.some(
+        (e) =&gt;
+          e.action === "booking.create" &amp;&amp;
+          e.at === (wh.createdAt ?? new Date()).toISOString(),
+      );
+      if (duplicate) continue;
+
+      entries.push({
+        id: `wh-${wh._id}`,
+        at: (wh.createdAt ?? new Date()).toISOString(),
+        action: "webhook.axisrooms",
+        title: `Axis Rooms webhook — ${statusPart}`,
+        detail: `Event ${wh.eventId}`,
+        actor: "Axis Rooms",
+        actorType: "ota",
+      });
+    }
+  }
+
+  const hasCreate = entries.some((e) =&gt; e.action === "booking.create");
+  if (!hasCreate &amp;&amp; booking.createdAt) {
+    const src = formatBookingSource(booking.source);
+    entries.unshift({
+      id: `milestone-created-${bookingId}`,
+      at: new Date(booking.createdAt).toISOString(),
+      action: "milestone.created",
+      title: `Booking created — ${src.shortLabel}`,
+      actor: src.channel === "ota" ? "Axis Rooms / OTA" : src.channel === "staff" ? "Staff" : "Guest",
+      actorType:
+        src.channel === "ota"
+          ? "ota"
+          : src.channel === "staff"
+            ? "staff"
+            : "guest",
+    });
+  }
+
+  if (booking.status === "cancelled" &amp;&amp; booking.updatedAt) {
+    const hasCancel = entries.some((e) =&gt; e.action === "booking.cancel");
+    if (!hasCancel) {
+      entries.push({
+        id: `milestone-cancelled-${bookingId}`,
+        at: new Date(booking.updatedAt).toISOString(),
+        action: "milestone.cancelled",
+        title: "Reservation cancelled",
+        actor: booking.source?.startsWith("axisrooms_")
+          ? "Axis Rooms / OTA"
+          : "System",
+        actorType: booking.source?.startsWith("axisrooms_") ? "ota" : "system",
+      });
+    }
+  }
+
+  entries.sort(
+    (a, b) =&gt; new Date(a.at).getTime() - new Date(b.at).getTime(),
+  );
+
+  return entries;
+}
+</pre>
+<h3>src/lib/axisRooms/inventory.ts</h3><pre>import { expandNightDates } from "@/lib/bookingDates";
+import { auditLog } from "@/lib/audit/auditLog";
+import {
+  axisRoomsApiUrl,
+  getAxisRoomsAccessKey,
+  getAxisRoomsChannelId,
+} from "./config";
+import type { AxisRoomsPushResult } from "./types";
+
+type InventoryPushParams = {
+  hotelId: string;
+  roomId: string;
+  checkIn: string;
+  checkOut: string;
+  /** 0 = booked/closed, 1 = open */
+  free: 0 | 1;
+  auditTargetId?: string;
+  auditTargetType?: string;
+};
+
+async function postDaywiseInventory(body: Record&lt;string, unknown&gt;): Promise&lt;{
+  ok: boolean;
+  error?: string;
+  status?: number;
+}&gt; {
+  const accessKey = getAxisRoomsAccessKey();
+  const channelId = getAxisRoomsChannelId();
+  if (!accessKey || !channelId) {
+    return { ok: false, error: "Axis Rooms not configured" };
+  }
+
+  try {
+    const res = await fetch(axisRoomsApiUrl("/api/daywiseInventory"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ accessKey, channelId, ...body }),
+      signal: AbortSignal.timeout(25_000),
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() =&gt; "");
+      return {
+        ok: false,
+        error: `Inventory push failed (${res.status})`,
+        status: res.status,
+      };
+    }
+
+    const data = (await res.json().catch(() =&gt; ({}))) as {
+      status?: string;
+      message?: string;
+      errorCode?: string;
+    };
+    if (data.status?.toLowerCase() === "failure" || data.status === "Error") {
+      return {
+        ok: false,
+        error: data.message || `errorCode ${data.errorCode ?? "unknown"}`,
+      };
+    }
+    return { ok: true };
+  } catch (e) {
+    return {
+      ok: false,
+      error: e instanceof Error ? e.message : "Inventory push failed",
+    };
+  }
+}
+
+/** Push day-wise inventory for a date range (check-out exclusive). */
+export async function pushInventoryForRange(
+  params: InventoryPushParams,
+): Promise&lt;AxisRoomsPushResult&gt; {
+  const nights = expandNightDates(params.checkIn, params.checkOut);
+  if (nights.length === 0) {
+    return { ok: true };
+  }
+
+  const result = await postDaywiseInventory({
+    hotels: [
+      {
+        hotelId: params.hotelId,
+        rooms: [
+          {
+            roomId: params.roomId,
+            availability: nights.map((date) =&gt; ({
+              date,
+              free: params.free,
+            })),
+          },
+        ],
+      },
+    ],
+  });
+
+  await auditLog({
+    action: params.free === 0 ? "axisrooms.inventory.close" : "axisrooms.inventory.open",
+    targetType: params.auditTargetType ?? "booking",
+    targetId: params.auditTargetId,
+    metadata: {
+      hotelId: params.hotelId,
+      roomId: params.roomId,
+      nights: nights.length,
+      free: params.free,
+      ok: result.ok,
+      error: result.error,
+    },
+  });
+
+  if (!result.ok) {
+    return { ok: false, error: result.error };
+  }
+  return { ok: true };
+}
+</pre>
+<h3>src/lib/axisRooms/parseInbound.ts</h3><pre>import type { AxisRoomsInboundEvent } from "./types";
+
+function asString(v: unknown): string | undefined {
+  if (typeof v === "string" &amp;&amp; v.trim() &amp;&amp; v !== "NA") return v.trim();
+  return undefined;
+}
+
+function parseMoneyPaise(v: unknown): number {
+  if (typeof v !== "string" &amp;&amp; typeof v !== "number") return 0;
+  const n = Number(v);
+  if (!Number.isFinite(n)) return 0;
+  return Math.round(n * 100);
+}
+
+function mapOtaSource(ota: string): AxisRoomsInboundEvent["channel"] {
+  if (/airbnb/i.test(ota)) return "airbnb";
+  if (/booking/i.test(ota)) return "booking_com";
+  return "other";
+}
+
+function mapBookingStatus(
+  raw: string,
+): "confirmed" | "modified" | "cancelled" | "unknown" {
+  const s = raw.toLowerCase();
+  if (s === "cancelled" || s === "canceled") return "cancelled";
+  if (s === "modified") return "modified";
+  if (s === "confirmed") return "confirmed";
+  return "unknown";
+}
+
+/** Parse Axis Rooms API 9 inbound payload. */
+export function parseAxisRoomsInbound(
+  payload: unknown,
+): AxisRoomsInboundEvent | null {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return null;
+  }
+  const p = payload as Record&lt;string, unknown&gt;;
+
+  const details = (p.BookingDetails ?? p.bookingDetails) as
+    | Record&lt;string, unknown&gt;
+    | undefined;
+  const checkin = (p.CheckinDetails ?? p.checkinDetails) as
+    | Record&lt;string, unknown&gt;
+    | undefined;
+  const guest = (p.GuestDetails ?? p.guestDetails) as
+    | Record&lt;string, unknown&gt;
+    | undefined;
+
+  if (!details) {
+    return parseLegacyPayload(p);
+  }
+
+  const bookingNo = asString(details.bookingNo) ?? asString(details.booking_no);
+  const bookingStatus = mapBookingStatus(
+    asString(details.bookingStatus) ?? asString(details.booking_status) ?? "",
+  );
+  const hotelId = asString(details.hotelId) ?? asString(details.hotel_id);
+  const ota = asString(details.ota) ?? "AxisRooms";
+
+  let eventType: AxisRoomsInboundEvent["eventType"] = "unknown";
+  if (bookingStatus === "cancelled") eventType = "cancel";
+  else if (bookingStatus === "modified") eventType = "modify";
+  else if (bookingStatus === "confirmed") eventType = "create";
+
+  const checkIn =
+    asString(checkin?.checkInDate) ??
+    asString(checkin?.checkInDateTime)?.split("T")[0] ??
+    asString(checkin?.check_in);
+  const checkOut =
+    asString(checkin?.checkOutDate) ??
+    asString(checkin?.checkOutDateTime)?.split("T")[0] ??
+    asString(checkin?.check_out);
+
+  const totalPax = Number(checkin?.totalPax ?? checkin?.total_pax ?? 1);
+  const children = Number(checkin?.children ?? 0);
+
+  return {
+    eventType,
+    bookingNo,
+    bookingStatus,
+    reservationId: bookingNo,
+    propertyId: hotelId,
+    checkIn,
+    checkOut,
+    guestName: asString(guest?.guestName) ?? asString(guest?.guest_name),
+    guestEmail: asString(guest?.emailId) ?? asString(guest?.email),
+    guestPhone: asString(guest?.mobileNo) ?? asString(guest?.phone),
+    channel: mapOtaSource(ota),
+    totalPax: Number.isFinite(totalPax) ? totalPax : 1,
+    children: Number.isFinite(children) ? children : 0,
+    totalAmountPaise: parseMoneyPaise(checkin?.totalAmount ?? checkin?.total_amount),
+    taxPaise: parseMoneyPaise(checkin?.taxes ?? checkin?.tax),
+    accessKey: asString(p.accessKey),
+    raw: p,
+  };
+}
+
+function parseLegacyPayload(p: Record&lt;string, unknown&gt;): AxisRoomsInboundEvent | null {
+  const eventRaw =
+    typeof p.event === "string"
+      ? p.event
+      : typeof p.eventType === "string"
+        ? p.eventType
+        : "";
+
+  let eventType: AxisRoomsInboundEvent["eventType"] = "unknown";
+  const lower = eventRaw.toLowerCase();
+  if (lower.includes("cancel")) eventType = "cancel";
+  else if (lower.includes("modify") || lower.includes("update"))
+    eventType = "modify";
+  else if (lower.includes("create") || lower.includes("book"))
+    eventType = "create";
+
+  const channelRaw =
+    typeof p.channel === "string"
+      ? p.channel
+      : typeof p.source === "string"
+        ? p.source
+        : "";
+
+  return {
+    eventType,
+    reservationId:
+      typeof p.reservationId === "string"
+        ? p.reservationId
+        : typeof p.id === "string"
+          ? p.id
+          : undefined,
+    propertyId:
+      typeof p.propertyId === "string" ? p.propertyId : undefined,
+    roomTypeId:
+      typeof p.roomTypeId === "string" ? p.roomTypeId : undefined,
+    checkIn:
+      typeof p.checkIn === "string"
+        ? p.checkIn.split("T")[0]
+        : undefined,
+    checkOut:
+      typeof p.checkOut === "string"
+        ? p.checkOut.split("T")[0]
+        : undefined,
+    guestName: typeof p.guestName === "string" ? p.guestName : undefined,
+    guestEmail: typeof p.guestEmail === "string" ? p.guestEmail : undefined,
+    guestPhone: typeof p.guestPhone === "string" ? p.guestPhone : undefined,
+    channel: /airbnb/i.test(channelRaw)
+      ? "airbnb"
+      : /booking/i.test(channelRaw)
+        ? "booking_com"
+        : "other",
+    accessKey: typeof p.accessKey === "string" ? p.accessKey : undefined,
+    raw: p,
+  };
+}
+
+export function validateAxisRoomsAccessKey(payload: unknown): boolean {
+  const key = process.env.AXIS_ROOMS_API_KEY?.trim();
+  if (!key) return false;
+  if (!payload || typeof payload !== "object") return false;
+  const bodyKey = (payload as Record&lt;string, unknown&gt;).accessKey;
+  if (typeof bodyKey !== "string") return false;
+  if (bodyKey.length !== key.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i &lt; key.length; i++) {
+    mismatch |= bodyKey.charCodeAt(i) ^ key.charCodeAt(i);
+  }
+  return mismatch === 0;
+}
+</pre>
+<h3>src/lib/axisRooms/upsertInboundBooking.ts</h3><pre>import { connectDB } from "@/lib/db";
+import {
+  acquireNightLocks,
+  releaseNightLocks,
+  withTransaction,
+} from "@/lib/bookings/nightLocks";
+import { lockDatesForBooking } from "@/lib/bookings/pricing";
+import { BookingModel } from "@/models/Booking";
+import { VillaModel } from "@/models/Villa";
+import { WebhookEventModel } from "@/models/WebhookEvent";
+import { auditLog } from "@/lib/audit/auditLog";
+import type { AxisRoomsInboundEvent } from "./types";
+import type { Types } from "mongoose";
+
+export type InboundUpsertResult = {
+  ok: boolean;
+  bookingId?: string;
+  conflict?: boolean;
+  duplicate?: boolean;
+  error?: string;
+};
+
+function sourceFromChannel(
+  channel: AxisRoomsInboundEvent["channel"],
+): "axisrooms_airbnb" | "axisrooms_booking_com" {
+  if (channel === "airbnb") return "axisrooms_airbnb";
+  return "axisrooms_booking_com";
+}
+
+export async function upsertAxisRoomsInbound(
+  parsed: AxisRoomsInboundEvent,
+): Promise&lt;InboundUpsertResult&gt; {
+  if (!parsed.bookingNo &amp;&amp; !parsed.reservationId) {
+    return { ok: false, error: "Missing bookingNo" };
+  }
+  if (!parsed.propertyId || !parsed.checkIn || !parsed.checkOut) {
+    return { ok: false, error: "Missing hotelId or dates" };
+  }
+
+  const bookingNo = parsed.bookingNo ?? parsed.reservationId!;
+  const eventId = `${bookingNo}:${parsed.bookingStatus ?? parsed.eventType}`;
+
+  await connectDB();
+
+  try {
+    await WebhookEventModel.create({
+      eventId,
+      source: "axisrooms",
+      status: "processed",
+    });
+  } catch (e: unknown) {
+    if ((e as { code?: number }).code === 11000) {
+      return { ok: true, duplicate: true };
+    }
+    throw e;
+  }
+
+  const villa = await VillaModel.findOne({
+    "axisRooms.propertyId": parsed.propertyId,
+    isDeleted: false,
+  });
+  if (!villa) {
+    return { ok: false, error: `Unknown hotelId: ${parsed.propertyId}` };
+  }
+
+  if (parsed.eventType === "cancel" || parsed.bookingStatus === "cancelled") {
+    const existing = await BookingModel.findOne({
+      axisRoomsReservationId: bookingNo,
+      isDeleted: false,
+    });
+    if (!existing) {
+      return { ok: true };
+    }
+    const previousStatus = existing.status;
+    existing.status = "cancelled";
+    existing.axisRoomsCancelSynced = true;
+    existing.axisRoomsSynced = true;
+    await existing.save();
+    await releaseNightLocks(existing._id);
+    await auditLog({
+      action: "booking.cancel",
+      targetType: "booking",
+      targetId: String(existing._id),
+      metadata: {
+        source: "axisrooms_inbound",
+        bookingNo,
+        cancelledBy: "ota",
+        previousStatus,
+        channel: parsed.channel,
+      },
+    });
+    return { ok: true, bookingId: String(existing._id) };
+  }
+
+  const existing = await BookingModel.findOne({
+    axisRoomsReservationId: bookingNo,
+    isDeleted: false,
+  });
+
+  if (existing &amp;&amp; parsed.eventType === "modify") {
+    existing.checkIn = parsed.checkIn;
+    existing.checkOut = parsed.checkOut;
+    existing.guestDetails = {
+      name: parsed.guestName ?? existing.guestDetails?.name ?? "",
+      email: parsed.guestEmail ?? existing.guestDetails?.email ?? "",
+      phone: parsed.guestPhone ?? existing.guestDetails?.phone ?? "",
+    };
+    await existing.save();
+    await auditLog({
+      action: "booking.update",
+      targetType: "booking",
+      targetId: String(existing._id),
+      metadata: {
+        source: "axisrooms_inbound",
+        eventType: "modify",
+        bookingNo,
+        checkIn: parsed.checkIn,
+        checkOut: parsed.checkOut,
+      },
+    });
+    return { ok: true, bookingId: String(existing._id) };
+  }
+
+  if (existing) {
+    return { ok: true, bookingId: String(existing._id), duplicate: true };
+  }
+
+  const lockDates = lockDatesForBooking({
+    bookingType: "stay",
+    checkIn: parsed.checkIn,
+    checkOut: parsed.checkOut,
+  });
+
+  try {
+    return await withTransaction(async (session) =&gt; {
+      const now = new Date();
+      const overlaps = await BookingModel.find({
+        villaId: villa._id,
+        isDeleted: false,
+        $or: [
+          { status: "confirmed" },
+          { status: "on_hold" },
+          { status: "conflict" },
+          { status: "pending", expiresAt: { $gt: now } },
+        ],
+        checkIn: { $lt: parsed.checkOut },
+        checkOut: { $gt: parsed.checkIn },
+      }).session(session);
+
+      const hasDirectConflict = overlaps.some(
+        (b) =&gt;
+          b.source === "website" || b.source === "admin_manual",
+      );
+
+      const totalPaise = parsed.totalAmountPaise ?? 0;
+      const taxPaise = parsed.taxPaise ?? 0;
+      const basePaise = Math.max(0, totalPaise - taxPaise);
+
+      const [doc] = await BookingModel.create(
+        [
+          {
+            villaId: villa._id,
+            bookingType: "stay",
+            guestDetails: {
+              name: parsed.guestName ?? "OTA Guest",
+              email: parsed.guestEmail ?? "",
+              phone: parsed.guestPhone ?? "",
+            },
+            checkIn: parsed.checkIn,
+            checkOut: parsed.checkOut,
+            guests: parsed.totalPax ?? 1,
+            adults: parsed.totalPax ?? 1,
+            children: parsed.children ?? 0,
+            pricing: {
+              basePaise,
+              extraPaxPaise: 0,
+              eventPaise: 0,
+              addOnPaise: 0,
+              taxPaise,
+              totalPaise: totalPaise || basePaise + taxPaise,
+            },
+            payment: {
+              gateway: "external",
+              paymentPlan: "full",
+              amountDuePaise: totalPaise,
+              depositPaise: 0,
+              depositPaidPaise: 0,
+              balancePaise: 0,
+              status: "external",
+            },
+            bookingToken: `axis_${bookingNo.replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 40)}_${Date.now().toString(36)}`,
+            status: hasDirectConflict ? "conflict" : "confirmed",
+            source: sourceFromChannel(parsed.channel),
+            axisRoomsReservationId: bookingNo,
+            axisRoomsSynced: true,
+            axisRoomsCancelSynced: true,
+          },
+        ],
+        { session },
+      );
+
+      if (!hasDirectConflict) {
+        const lock = await acquireNightLocks({
+          villaId: villa._id as Types.ObjectId,
+          bookingId: doc._id,
+          dates: lockDates,
+          session,
+        });
+        if (!lock.ok) {
+          doc.status = "conflict";
+          await doc.save({ session });
+          return { ok: true, bookingId: String(doc._id), conflict: true };
+        }
+      }
+
+      await auditLog({
+        action: "booking.create",
+        targetType: "booking",
+        targetId: String(doc._id),
+        metadata: {
+          source: "axisrooms_inbound",
+          bookingNo,
+          conflict: hasDirectConflict,
+        },
+      });
+
+      return {
+        ok: true,
+        bookingId: String(doc._id),
+        conflict: hasDirectConflict,
+      };
+    });
+  } catch (e) {
+    return {
+      ok: false,
+      error: e instanceof Error ? e.message : "Inbound upsert failed",
+    };
+  }
+}
+</pre>
 
 <h3>src/app/api/cron/axisrooms-retry/route.ts</h3><pre>import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
@@ -282,6 +1059,7 @@ import {
   pushAxisRoomsCancellation,
   pushAxisRoomsReservation,
 } from "@/lib/axisRooms/client";
+import { markBookingSyncResult } from "@/lib/axisRooms/sync";
 
 export const dynamic = "force-dynamic";
 
@@ -309,12 +1087,12 @@ export async function GET(req: NextRequest) {
     const pending = await BookingModel.find({
       $or: [
         {
-          status: "confirmed",
+          status: { $in: ["confirmed", "on_hold"] },
           axisRoomsSynced: false,
           axisRoomsSyncAttempts: { $lt: 10 },
         },
         {
-          status: { $in: ["cancelled", "conflict"] },
+          status: "cancelled",
           axisRoomsCancelSynced: false,
           axisRoomsSyncAttempts: { $lt: 10 },
         },
@@ -323,41 +1101,26 @@ export async function GET(req: NextRequest) {
 
     let processed = 0;
     for (const b of pending) {
-      let succeeded = false;
       try {
-        if (b.status === "confirmed" &amp;&amp; !b.axisRoomsSynced) {
-          const result = await pushAxisRoomsReservation(b);
-          if (result.ok) {
-            b.axisRoomsSynced = true;
-            if (result.reservationId) {
-              b.axisRoomsReservationId = result.reservationId;
-            }
-            b.axisRoomsLastError = undefined;
-            succeeded = true;
-          } else {
-            b.axisRoomsLastError = result.error ?? "push failed";
-          }
-        } else if (
-          ["cancelled", "conflict"].includes(b.status) &amp;&amp;
-          !b.axisRoomsCancelSynced
+        if (
+          ["confirmed", "on_hold"].includes(b.status) &amp;&amp;
+          !b.axisRoomsSynced
         ) {
+          const result = await pushAxisRoomsReservation(b);
+          await markBookingSyncResult(String(b._id), result, "close");
+        } else if (b.status === "cancelled" &amp;&amp; !b.axisRoomsCancelSynced) {
           const result = await pushAxisRoomsCancellation(b);
-          if (result.ok) {
-            b.axisRoomsCancelSynced = true;
-            b.axisRoomsLastError = undefined;
-            succeeded = true;
-          } else {
-            b.axisRoomsLastError = result.error ?? "cancel failed";
-          }
+          await markBookingSyncResult(String(b._id), result, "open");
         }
         processed += 1;
       } catch (e) {
-        b.axisRoomsLastError = e instanceof Error ? e.message : "unknown";
+        const doc = await BookingModel.findById(b._id);
+        if (doc) {
+          doc.axisRoomsLastError = e instanceof Error ? e.message : "unknown";
+          doc.axisRoomsSyncAttempts = (doc.axisRoomsSyncAttempts ?? 0) + 1;
+          await doc.save();
+        }
       }
-      if (!succeeded) {
-        b.axisRoomsSyncAttempts = (b.axisRoomsSyncAttempts ?? 0) + 1;
-      }
-      await b.save();
     }
 
     return NextResponse.json({ ok: true, processed });
@@ -434,6 +1197,7 @@ const PaymentSchema = new Schema(
     depositPaidPaise: { type: Number, default: 0 },
     balancePaise: Number,
     balanceDueDate: String,
+    externalPaymentRef: String,
     refundedPaise: { type: Number, default: 0 },
     status: {
       type: String,
@@ -483,7 +1247,7 @@ const BookingSchema = new Schema(
     bookingToken: { type: String, required: true, unique: true },
     status: {
       type: String,
-      enum: ["pending", "confirmed", "cancelled", "expired", "conflict"],
+      enum: ["pending", "on_hold", "confirmed", "cancelled", "expired", "conflict"],
       default: "pending",
     },
     expiresAt: Date,
@@ -529,7 +1293,7 @@ export const BookingModel = models.Booking ?? model("Booking", BookingSchema);
 <li><strong>guestDetails:</strong> <code>{ name: String, email: String, phone: String }</code> (sub-schema, not individually required).</li>
 <li><strong>pricing:</strong> <code>basePaise, extraPaxPaise, eventPaise, addOnPaise, taxPaise, totalPaise, quoteOnlyAddOns[], snapshot</code>.</li>
 <li><strong>payment:</strong> gateway enum <code>["razorpay","external"]</code>; status enum <code>pending|paid|deposit_paid|failed|refunded|partially_refunded|external|not_applicable</code>.</li>
-<li><strong>status enum:</strong> <code>pending, confirmed, cancelled, expired, conflict</code> (default pending).</li>
+<li><strong>status enum:</strong> <code>pending, on_hold, confirmed, cancelled, expired, conflict</code> (default pending).</li>
 <li><strong>stayStatus enum:</strong> <code>upcoming, in_house, departed, turnover, ready</code> (default upcoming).</li>
 <li><strong>source enum:</strong> <code>website, axisrooms_airbnb, axisrooms_booking_com, admin_manual</code> (default website).</li>
 <li><strong>Channel-manager fields:</strong> <code>axisRoomsSynced</code> (Boolean, default false), <code>axisRoomsCancelSynced</code> (Boolean, default true), <code>axisRoomsSyncAttempts</code> (Number, default 0), <code>axisRoomsLastError</code> (String), <code>axisRoomsReservationId</code> (String). No <code>staah*</code> fields.</li>
@@ -709,7 +1473,7 @@ export const VillaContentSchema = new Schema(
       address: { type: String, default: "" },
       distance: { type: String, default: "" },
       nearby: {
-        type: [{ label: String, distance: String }],
+        type: [{ label: String, distance: String, note: String }],
         default: [],
       },
       googleMapsUrl: { type: String, default: "" },
@@ -724,6 +1488,8 @@ export const VillaContentSchema = new Schema(
       default: [],
     },
     hideFromVillasDirectory: { type: Boolean, default: false },
+    brochureUrl: { type: String, default: "" },
+    brochureFilename: { type: String, default: "" },
   },
   { _id: false },
 );
@@ -802,6 +1568,7 @@ export const VillaNightlockModel =
 <tr><td>updateStayStatus</td><td><code>id: string, stayStatus: StayStatus</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
 <tr><td>cancelBooking</td><td><code>id: string, userId?: string</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
 <tr><td>updateNotes</td><td><code>id: string, notes: string</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
+<tr><td>confirmHold</td><td><code>id: string, userId?: string, waivePayment?: boolean</code></td><td><code>Promise&lt;BookingRecord | null&gt;</code></td></tr>
 <tr><td>createManual</td><td><code>CreateBookingParams &amp; { source?, status? }</code></td><td><code>Promise&lt;BookingRecord&gt;</code></td></tr>
 <tr><td>softDelete</td><td><code>id: string, userId?: string</code></td><td><code>Promise&lt;boolean&gt;</code></td></tr>
 <tr><td>getAvailability</td><td><code>villaId, from, to: string</code></td><td><code>Promise&lt;{ bookedDates, blockedDates }&gt;</code></td></tr>
@@ -925,8 +1692,10 @@ CRON_SECRET=your_long_random_cron_secret
 
 # ─── Axis Rooms channel manager ─────────────────────────────
 AXIS_ROOMS_API_KEY=
+AXIS_ROOMS_CHANNEL_ID=
+AXIS_ROOMS_API_BASE_URL=https://sandbox1.axisrooms.com
+# Legacy — API 9 uses accessKey in JSON body, not Bearer webhook secret
 AXIS_ROOMS_WEBHOOK_SECRET=
-# AXIS_ROOMS_API_BASE_URL=https://sandbox.axisrooms.example/api
 
 # ─── Transactional email (Resend, optional) ───────────────
 RESEND_API_KEY=re_xxxxxxxx
@@ -955,7 +1724,7 @@ INDEXNOW_API_SECRET=your_long_random_indexnow_hook_secret_here
 # BOOKINGS_STORE_FALLBACK=true
 </pre>
 <ul>
-<li><strong>Channel-manager / webhook / cron:</strong> <code>CRON_SECRET</code>, <code>AXIS_ROOMS_API_KEY</code>, <code>AXIS_ROOMS_WEBHOOK_SECRET</code>, <code>AXIS_ROOMS_API_BASE_URL</code> (commented optional)</li>
+<li><strong>Channel-manager / webhook / cron:</strong> <code>CRON_SECRET</code>, <code>AXIS_ROOMS_API_KEY</code>, <code>AXIS_ROOMS_CHANNEL_ID</code>, <code>AXIS_ROOMS_API_BASE_URL</code>, <code>AXIS_ROOMS_WEBHOOK_SECRET</code> (legacy)</li>
 <li><strong>Related payment webhook:</strong> <code>RAZORPAY_WEBHOOK_SECRET</code></li>
 <li><strong>Auth (dashboard):</strong> <code>NEXTAUTH_SECRET</code>, <code>NEXTAUTH_URL</code></li>
 </ul>

@@ -512,6 +512,7 @@
 
   .dashboard-modal__body {
     padding: var(--dash-modal-pad);
+    padding-bottom: max(var(--dash-modal-pad), env(safe-area-inset-bottom, 0px));
   }
 
   .dash-modal-header .dashboard-btn--icon {

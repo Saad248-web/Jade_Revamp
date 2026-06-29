@@ -39,6 +39,12 @@ export interface BookingRecord {
   payment: BookingPayment;
   status: BookingStatus;
   stayStatus?: StayStatus;
+  source?: string;
+  notes?: string;
+  axisRoomsSynced?: boolean;
+  axisRoomsCancelSynced?: boolean;
+  axisRoomsLastError?: string;
+  axisRoomsReservationId?: string;
   addOns?: AddOnLine[];
   expiresAt?: Date | null;
   createdAt: Date;
@@ -59,7 +65,12 @@ export interface BookingStore {
   }): Promise<{ ok: boolean; alreadyConfirmed?: boolean }>;
   expirePending(now: Date): Promise<number>;
   updateStayStatus(id: string, stayStatus: StayStatus): Promise<BookingRecord | null>;
-  cancelBooking(id: string, userId?: string): Promise<BookingRecord | null>;
+  cancelBooking(
+    id: string,
+    userId?: string,
+    options?: { reason?: string },
+  ): Promise<BookingRecord | null>;
+  confirmHold(id: string, userId?: string, waivePayment?: boolean): Promise<BookingRecord | null>;
   updateNotes(id: string, notes: string): Promise<BookingRecord | null>;
   createManual(params: CreateBookingParams & { source?: string; status?: BookingStatus }): Promise<BookingRecord>;
   softDelete(id: string, userId?: string): Promise<boolean>;

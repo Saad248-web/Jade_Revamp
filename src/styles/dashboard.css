@@ -1417,6 +1417,7 @@ html.jade-dashboard .dashboard-content {
 
 .dashboard-cal-booking--confirmed { background: rgba(16, 185, 129, 0.42); border-color: rgba(52, 211, 153, 0.45); }
 .dashboard-cal-booking--pending { background: rgba(245, 158, 11, 0.42); border-color: rgba(251, 191, 36, 0.45); }
+.dashboard-cal-booking--on-hold { background: rgba(139, 92, 246, 0.38); border-color: rgba(167, 139, 250, 0.45); }
 .dashboard-cal-booking--conflict { background: rgba(239, 68, 68, 0.45); border-color: rgba(248, 113, 113, 0.5); }
 .dashboard-cal-booking--cancelled,
 .dashboard-cal-booking--expired { background: rgba(255, 255, 255, 0.1); }
@@ -1523,6 +1524,9 @@ html.jade-dashboard .dashboard-content {
   justify-content: center;
   padding: var(--dash-gutter, clamp(0.875rem, 3vw, 1.5rem));
   background: rgba(0, 0, 0, 0.72);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Nested inside PropertyWizard (z-70) / other stacked modals — portaled to body */
@@ -1534,9 +1538,13 @@ html.jade-dashboard .dashboard-content {
 
 .dashboard-modal {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 32rem;
-  max-height: 90dvh;
+  max-height: min(90dvh, calc(100dvh - 2 * var(--dash-gutter, 1rem)));
+  margin: auto;
+  flex-shrink: 0;
   overflow: hidden;
 }
 
@@ -1547,19 +1555,40 @@ html.jade-dashboard .dashboard-content {
 .dashboard-modal--picker {
   width: min(96vw, 76rem);
   max-width: min(96vw, 76rem);
-  max-height: 94dvh;
+  max-height: min(94dvh, calc(100dvh - 2 * var(--dash-gutter, 1rem)));
   display: flex;
   flex-direction: column;
 }
 
+/* Glass fill slab — always behind modal content (titles were hidden under blur) */
+.dashboard-modal > [aria-hidden].pointer-events-none,
+.property-wizard__shell > [aria-hidden].pointer-events-none {
+  z-index: 0;
+}
+
+/* Form / frame shell — header fixed, body scrolls */
+.dashboard-modal > form,
+.dashboard-modal > .dashboard-modal__frame,
+.dashboard-modal > .flex.min-h-0.flex-col {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: inherit;
+  overflow: hidden;
+}
+
 .dashboard-modal__body--picker {
   position: relative;
-  z-index: 10;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  flex: 1 1 auto;
   min-height: 0;
-  max-height: 94dvh;
+  max-height: inherit;
   width: 100%;
   padding: 0;
   gap: 0;
@@ -1568,14 +1597,18 @@ html.jade-dashboard .dashboard-content {
 
 .dashboard-modal__body {
   position: relative;
-  z-index: 10;
+  z-index: 1;
   display: flex;
-  max-height: 90dvh;
+  flex: 1 1 auto;
+  min-height: 0;
   flex-direction: column;
   gap: var(--dash-space-4, 1rem);
   overflow-y: auto;
-  padding: var(--dash-space-5, 1.25rem);
+  overflow-x: hidden;
+  padding: var(--dash-modal-pad, var(--dash-space-5, 1.25rem));
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 @media (max-width: 639px) {

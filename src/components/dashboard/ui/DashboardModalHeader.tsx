@@ -25,12 +25,12 @@ export function DashboardModalHeader({
   actions,
 }: DashboardModalHeaderProps) {
   return (
-    <header className="dash-modal-header">
+    <header className={`${dash.modalHeader} relative z-[2]`}>
       <div className={dash.headerTitleBlock}>
         {section && <p className={dash.headerSection}>{section}</p>}
         <h2
           id={titleId}
-          className="dash-modal-header__title font-philosopher leading-tight text-[var(--dash-accent)]"
+          className="dash-modal-header__title font-philosopher leading-tight"
         >
           {title}
         </h2>

@@ -1,0 +1,358 @@
+#!/usr/bin/env node
+/**
+ * Generates jade-axisrooms-status.html — simplified integration status summary.
+ * Run: npm run generate:axisrooms-status
+ */
+import fs from "node:fs";
+import path from "node:path";
+
+const ROOT = path.resolve(import.meta.dirname, "..");
+const generated = new Date().toISOString().slice(0, 10);
+
+const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Jade PMS + Axis Rooms — Status Summary</title>
+<style>
+  :root {
+    --ink: #1a1c1e;
+    --muted: #5c5c5c;
+    --border: #e0e0e0;
+    --accent: #0d5c4b;
+    --gold: #b8860b;
+    --ready: #166534;
+    --ready-bg: #dcfce7;
+    --blocked: #b45309;
+    --blocked-bg: #fef3c7;
+    --todo: #6b7280;
+    --todo-bg: #f3f4f6;
+    --na: #9ca3af;
+    --na-bg: #fafafa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink);
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  h1 {
+    font-family: Georgia, serif;
+    font-size: 1.85rem;
+    color: var(--accent);
+    border-bottom: 3px solid var(--gold);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+  .meta { color: var(--muted); font-size: 0.875rem; margin-bottom: 2rem; }
+  h2 {
+    font-size: 1.2rem;
+    color: var(--accent);
+    margin: 2.25rem 0 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+  h2:first-of-type { border-top: none; margin-top: 1rem; }
+  h3 { font-size: 1rem; margin: 1.25rem 0 0.5rem; color: var(--ink); }
+  p, li { margin: 0.4rem 0; }
+  ul { padding-left: 1.25rem; }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin: 1rem 0 1.5rem;
+    font-size: 0.8rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .b-ready { background: var(--ready-bg); color: var(--ready); }
+  .b-blocked { background: var(--blocked-bg); color: var(--blocked); }
+  .b-todo { background: var(--todo-bg); color: var(--todo); }
+  .b-na { background: var(--na-bg); color: var(--na); border: 1px dashed #ccc; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    margin: 0.75rem 0 1rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 0.55rem 0.65rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: #f5f5f4; font-weight: 600; }
+  tr:nth-child(even) td { background: #fafaf9; }
+  code {
+    font-size: 0.8em;
+    background: #f0f0f0;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+  .callout {
+    border-left: 4px solid var(--gold);
+    background: #fffbeb;
+    padding: 0.85rem 1rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .callout strong { color: var(--accent); }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+  .card {
+    border: 1px solid var(--border);
+    padding: 1rem;
+    border-radius: 6px;
+    background: #fff;
+  }
+  .card h3 { margin-top: 0; font-size: 0.95rem; }
+  .card ul { margin: 0; padding-left: 1.1rem; font-size: 0.875rem; }
+  @media print {
+    body { max-width: none; font-size: 11pt; }
+    .legend { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Jade PMS + Axis Rooms — Status Summary</h1>
+<p class="meta">Generated ${generated} · Jade_ReVamp · Simplified overview (not a code audit)</p>
+
+<div class="callout">
+  <strong>Bottom line:</strong> Jade PMS is <strong>ready for daily operations</strong> without Axis Rooms (direct bookings, staff holds, calendar, folio, booking records).
+  Axis Rooms integration is <strong>built in code</strong> but <strong>not live</strong> until Axis provides credentials, property CSV onboarding, and registers your inbound webhook URL.
+</div>
+
+<div class="legend">
+  <span><span class="badge b-ready">Ready</span> Built &amp; works (or works without Axis)</span>
+  <span><span class="badge b-blocked">Blocked</span> Code ready — needs Axis credentials / UAT</span>
+  <span><span class="badge b-todo">Not integrated</span> Optional or future Jade work</span>
+  <span><span class="badge b-na">N/A</span> Axis does not provide this API</span>
+</div>
+
+<h2>1. Jade PMS — what is done</h2>
+<div class="grid-2">
+  <div class="card">
+    <h3><span class="badge b-ready">Ready</span> Operations (no Axis required)</h3>
+    <ul>
+      <li>Calendar + occupancy grid</li>
+      <li>Staff manual booking → <strong>on hold</strong> (external payment)</li>
+      <li>Booking Records list + filters</li>
+      <li>Booking folio + full activity history</li>
+      <li>Manual blocks (owner holds)</li>
+      <li>Housekeeping stay status</li>
+      <li>Conflict queue UI</li>
+      <li>Public <code>/book</code> + Razorpay direct bookings</li>
+      <li>Villa wizard, visibility, pricing</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3><span class="badge b-blocked">Blocked on Axis</span> Channel manager sync</h3>
+    <ul>
+      <li>OTA inventory close/open (API 1) — code wired, needs keys</li>
+      <li>OTA inbound bookings (API 9) — receiver built, needs registration</li>
+      <li>Price push on villa save (API 6)</li>
+      <li>Hidden / not bookable → OTA restrictions (API 15)</li>
+      <li>Retry cron <code>/api/cron/axisrooms-retry</code></li>
+      <li>Axis Rooms settings + CSV export for onboarding</li>
+    </ul>
+  </div>
+</div>
+
+<h2>2. What still needs to be done (Jade)</h2>
+<table>
+<tr><th>Item</th><th>Priority</th><th>Notes</th></tr>
+<tr><td>Live UAT with Axis sandbox</td><td><span class="badge b-blocked">Blocked</span></td><td>Cannot test real OTA push until credentials + mapped property</td></tr>
+<tr><td>API 12 Pull Booking reconciliation cron</td><td><span class="badge b-todo">Optional</span></td><td>10-day backup sync — not started</td></tr>
+<tr><td>API 3/4 per-OTA blockChannel</td><td><span class="badge b-todo">Optional</span></td><td>Using API 1 for all-channel block instead</td></tr>
+<tr><td>API 2 / 7 bulk inventory &amp; price</td><td><span class="badge b-todo">Optional</span></td><td>API 1 + 6 cover day-wise; bulk helpers not coded</td></tr>
+<tr><td>API 5 / 8 read-back (verify OTA state)</td><td><span class="badge b-todo">Optional</span></td><td>otaAvailability / otaRates — not integrated</td></tr>
+<tr><td>Real API 9 payload hardening</td><td><span class="badge b-blocked">Blocked</span></td><td>Need confirmed + cancelled samples from Axis</td></tr>
+<tr><td>Extra-pax price convention with Axis</td><td><span class="badge b-blocked">Blocked</span></td><td>Confirm Double vs Extra-person fields (doc §8)</td></tr>
+</table>
+
+<h2>3. What we need from Axis Rooms</h2>
+<p>From <code>NEEDS_FROM_USER.md</code> and <code>docs/axisrooms-api-reference.md</code> §11:</p>
+<table>
+<tr><th>#</th><th>Item</th><th>Maps to env / Jade</th></tr>
+<tr><td>1</td><td><strong>accessKey</strong> (sandbox)</td><td><code>AXIS_ROOMS_API_KEY</code></td></tr>
+<tr><td>2</td><td>Sandbox environment number (<code>E</code> in <code>sandboxE.axisrooms.com</code>)</td><td><code>AXIS_ROOMS_API_BASE_URL</code></td></tr>
+<tr><td>3</td><td><strong>channelId</strong> / pmsId</td><td><code>AXIS_ROOMS_CHANNEL_ID</code></td></tr>
+<tr><td>4</td><td>OTA id list (which integer = Airbnb, Booking.com, …)</td><td>Parser / future API 3/4</td></tr>
+<tr><td>5</td><td>Property setup <strong>CSV template</strong> + onboard one test property</td><td><code>Villa.axisRooms</code> mapping in dashboard</td></tr>
+<tr><td>6</td><td>Real API 9 JSON — one <strong>confirmed</strong> + one <strong>cancelled</strong></td><td>Validate inbound parser</td></tr>
+<tr><td>7</td><td>Register inbound URL</td><td><code>https://&lt;your-domain&gt;/api/webhooks/axisrooms</code></td></tr>
+<tr><td>8</td><td>Production base URL + production key</td><td>Go-live cutover</td></tr>
+</table>
+
+<h2>4. All 15 Axis Rooms APIs — status</h2>
+<table>
+<tr>
+  <th>#</th><th>API</th><th>Direction</th>
+  <th>Jade status</th><th>Axis provides?</th>
+</tr>
+<tr>
+  <td>1</td><td>Daywise Inventory</td><td>OUTBOUND</td>
+  <td><span class="badge b-ready">Integrated</span> — hold, cancel, blocks, Razorpay confirm</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td>2</td><td>Bulk Inventory</td><td>OUTBOUND</td>
+  <td><span class="badge b-todo">Not integrated</span> — API 1 used instead</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td>3</td><td>Block Channel (per OTA)</td><td>OUTBOUND</td>
+  <td><span class="badge b-todo">Not integrated</span></td>
+  <td>Yes (optional)</td>
+</tr>
+<tr>
+  <td>4</td><td>Unblock Channel</td><td>OUTBOUND</td>
+  <td><span class="badge b-todo">Not integrated</span></td>
+  <td>Yes (optional)</td>
+</tr>
+<tr>
+  <td>5</td><td>Fetch OTA Availability</td><td>READ</td>
+  <td><span class="badge b-todo">Not integrated</span></td>
+  <td>Yes (verify)</td>
+</tr>
+<tr>
+  <td>6</td><td>Daywise Price</td><td>OUTBOUND</td>
+  <td><span class="badge b-ready">Integrated</span> — villa price / channel sync</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td>7</td><td>Bulk Price Update</td><td>OUTBOUND</td>
+  <td><span class="badge b-todo">Not integrated</span> — API 6 used for 90-day window</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td>8</td><td>Fetch OTA Rates</td><td>READ</td>
+  <td><span class="badge b-todo">Not integrated</span></td>
+  <td>Yes (verify)</td>
+</tr>
+<tr>
+  <td>9</td><td>Bookings → Client (webhook)</td><td>INBOUND</td>
+  <td><span class="badge b-ready">Integrated</span> — <code>POST /api/webhooks/axisrooms</code></td>
+  <td>Yes — <strong>you host</strong></td>
+</tr>
+<tr>
+  <td>10</td><td>No-Show Enable (Booking.com)</td><td>OUTBOUND</td>
+  <td><span class="badge b-todo">Not integrated</span></td>
+  <td>Yes (optional)</td>
+</tr>
+<tr>
+  <td>11</td><td>Update MLOS</td><td>OUTBOUND</td>
+  <td><span class="badge b-todo">Not integrated</span></td>
+  <td>Yes (optional)</td>
+</tr>
+<tr>
+  <td>12</td><td>Pull Booking</td><td>READ</td>
+  <td><span class="badge b-todo">Not integrated</span> — planned reconciliation</td>
+  <td>Yes (backup)</td>
+</tr>
+<tr>
+  <td>13</td><td>Get Connected OTAs</td><td>READ</td>
+  <td><span class="badge b-todo">Not integrated</span></td>
+  <td>Yes (setup)</td>
+</tr>
+<tr>
+  <td>14</td><td>Update OTA Credentials</td><td>OUTBOUND</td>
+  <td><span class="badge b-todo">Not integrated</span></td>
+  <td>Yes (config)</td>
+</tr>
+<tr>
+  <td>15</td><td>CM Restrictions (open/close)</td><td>OUTBOUND</td>
+  <td><span class="badge b-ready">Integrated</span> — hidden / not bookable villas</td>
+  <td>Yes</td>
+</tr>
+</table>
+<p><strong>Integrated today:</strong> API 1, 6, 9, 15 (4 of 15). <strong>Not integrated:</strong> 11 APIs (mostly optional read/config or bulk variants).</p>
+
+<h2>5. What Axis Rooms does NOT provide</h2>
+<p>These are <strong>not missing Jade work</strong> — Axis has no REST API for them. Jade uses workarounds:</p>
+<table>
+<tr><th>Business need</th><th>Axis API?</th><th>Jade approach</th></tr>
+<tr>
+  <td>Push a <strong>reservation</strong> to OTAs (create booking on Airbnb/Booking.com)</td>
+  <td><span class="badge b-na">No API</span></td>
+  <td>API 1 — set <code>free: 0</code> on nights (blocks inventory, not a reservation record)</td>
+</tr>
+<tr>
+  <td><strong>On-hold</strong> / partial payment on channel manager</td>
+  <td><span class="badge b-na">No API</span></td>
+  <td>Staff hold → API 1 close immediately (Option B); confirm in folio only</td>
+</tr>
+<tr>
+  <td><strong>Create property</strong> on Axis via REST</td>
+  <td><span class="badge b-na">No API</span></td>
+  <td>CSV to Axis team → map IDs in Jade dashboard</td>
+</tr>
+<tr>
+  <td><strong>Refund</strong> OTA or direct guest via Axis</td>
+  <td><span class="badge b-na">No API</span></td>
+  <td>Razorpay refunds in Jade for website bookings; OTA refunds handled by OTA/Axis</td>
+</tr>
+<tr>
+  <td><strong>Housekeeping</strong> / stay operations</td>
+  <td><span class="badge b-na">No API</span></td>
+  <td>Jade PMS only — <code>stayStatus</code> on booking</td>
+</tr>
+<tr>
+  <td>Cancel OTA booking from Jade (outbound cancel reservation)</td>
+  <td><span class="badge b-na">No API</span></td>
+  <td>API 1 <code>free: 1</code> releases inventory; OTA cancel arrives via API 9 inbound</td>
+</tr>
+</table>
+
+<h2>6. Environment checklist</h2>
+<table>
+<tr><th>Variable</th><th>Required for</th><th>Status</th></tr>
+<tr><td><code>AXIS_ROOMS_API_KEY</code></td><td>Outbound + inbound body auth</td><td><span class="badge b-blocked">From Axis</span></td></tr>
+<tr><td><code>AXIS_ROOMS_CHANNEL_ID</code></td><td>All outbound POSTs</td><td><span class="badge b-blocked">From Axis</span></td></tr>
+<tr><td><code>AXIS_ROOMS_API_BASE_URL</code></td><td>Sandbox / prod host</td><td><span class="badge b-blocked">From Axis</span></td></tr>
+<tr><td><code>CRON_SECRET</code></td><td>axisrooms-retry cron</td><td><span class="badge b-todo">You set</span></td></tr>
+<tr><td><code>MONGODB_URI</code></td><td>All PMS data</td><td><span class="badge b-ready">Required</span></td></tr>
+<tr><td>Razorpay keys</td><td>Direct website pay</td><td><span class="badge b-ready">Separate from Axis</span></td></tr>
+</table>
+
+<h2>7. Key Jade routes (quick reference)</h2>
+<table>
+<tr><th>Page / endpoint</th><th>Purpose</th></tr>
+<tr><td><code>/dashboard/bookings</code></td><td>Booking Records — all channels</td></tr>
+<tr><td><code>/dashboard/bookings/[id]</code></td><td>Folio + activity history</td></tr>
+<tr><td><code>/dashboard/settings/axis-rooms</code></td><td>Mapping + CSV export</td></tr>
+<tr><td><code>POST /api/webhooks/axisrooms</code></td><td>API 9 — OTA bookings in</td></tr>
+<tr><td><code>GET /api/cron/axisrooms-retry</code></td><td>Retry failed inventory sync</td></tr>
+</table>
+
+<p class="meta" style="margin-top:2.5rem;">
+  Full technical audit: <code>jade-axisrooms-integration-surface.html</code> ·
+  API contract: <code>docs/axisrooms-api-reference.md</code> ·
+  Regenerate: <code>npm run generate:axisrooms-status</code>
+</p>
+
+</body>
+</html>`;
+
+const out = path.join(ROOT, "jade-axisrooms-status.html");
+fs.writeFileSync(out, html, "utf8");
+console.log(`Wrote ${out} (${html.length} bytes)`);

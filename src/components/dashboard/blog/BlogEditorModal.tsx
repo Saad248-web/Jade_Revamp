@@ -275,7 +275,7 @@ export function BlogEditorModal({
         />
         <form
           onSubmit={step === "faq" ? finish : (e) => e.preventDefault()}
-          className="flex min-h-0 flex-col"
+          className={`${dash.modalFrame} flex min-h-0 flex-col`}
         >
           <DashboardModalHeader
             section="Blog CMS"
