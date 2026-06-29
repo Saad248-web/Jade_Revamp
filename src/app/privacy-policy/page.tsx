@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Metadata } from "next";
 
@@ -18,7 +19,10 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="min-h-screen bg-[#0B2C23] text-white">{/* Hero Section */}
+    <main className="min-h-screen bg-[#0B2C23] text-white">
+      <Navbar />
+
+      {/* Hero Section */}
       <section className="relative pt-24 pb-16 px-6 md:px-12 lg:px-24 border-b border-white/10">
         <div className="max-w-4xl mx-auto">
           <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62]/70 mb-3 text-center md:text-left">

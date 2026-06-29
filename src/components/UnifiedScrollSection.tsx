@@ -2,6 +2,7 @@
 
 import ScrollSectionComposer, { ScrollSlide } from "./ScrollSectionComposer";
 import LiveBackground from "./LiveBackground";
+import { LIVE_BACKGROUND_SCROLL_SECTION_HEIGHT } from "@/lib/liveBackgroundScrollSection";
 
 const slides: ScrollSlide[] = [
   {
@@ -18,7 +19,7 @@ export default function UnifiedScrollSection() {
   return (
     <ScrollSectionComposer
       slides={slides}
-      height="120vh"
+      height={LIVE_BACKGROUND_SCROLL_SECTION_HEIGHT}
       fadeTiming="early"
       lineStaggerDelayMs={350}
       scrollEffects="performance"

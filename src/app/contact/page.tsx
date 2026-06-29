@@ -15,7 +15,9 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import PrimaryButton from "@/components/PrimaryButton";
 import LiveBackground from "@/components/LiveBackground";
+import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import MobileBottomNav from "@/components/MobileBottomNav";
 import GoldAccentLine from "@/components/ui/GoldAccentLine";
 
 /* ─────────────────────────────────────────────────────────────────────
@@ -133,7 +135,11 @@ export default function ContactPage() {
 
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
-      {/* ── Navigation ── */}{/* ═══════════════════════════════════════════════════════════════
+      {/* ── Navigation ── */}
+      <Navbar />
+      <MobileBottomNav />
+
+      {/* ═══════════════════════════════════════════════════════════════
           1. HERO — Live Background, heading, contact cards
       ════════════════════════════════════════════════════════════════ */}
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 pb-12 pt-24 md:pt-24">

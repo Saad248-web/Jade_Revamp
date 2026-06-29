@@ -9,6 +9,8 @@ import {
   useTransform,
 } from "framer-motion";
 import ResponsiveVideo from "./ResponsiveVideo";
+import Navbar from "./Navbar";
+import MobileBottomNav from "./MobileBottomNav";
 import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import dynamic from "next/dynamic";
 import { getLenis, scrollToY } from "@/lib/lenis";
@@ -72,7 +74,8 @@ export default function LandingPage() {
       initial={{ opacity: 1 }}
       animate={{ opacity: 1 }}
     >
-      {/* 1. Navigation & Header — SiteChrome in providers */}
+      {/* 1. Navigation & Header */}
+      <Navbar />
 
       {/* Fixed Header Elements (Logo & Contact) */}
 
@@ -174,6 +177,7 @@ export default function LandingPage() {
       </div>
 
       <UnifiedScrollSection />
+      <MobileBottomNav />
       <HorizontalScrollSection />
       <LazyWhenNear
         minHeight="90vh"

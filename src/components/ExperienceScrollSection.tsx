@@ -5,6 +5,7 @@ import {
   EXPERIENCE_SCROLL_SECTIONS,
   type ExperienceScrollVariant,
 } from "@/data/experienceScrollSections";
+import { LIVE_BACKGROUND_SCROLL_SECTION_HEIGHT } from "@/lib/liveBackgroundScrollSection";
 
 interface ExperienceScrollSectionProps {
   variant: ExperienceScrollVariant;
@@ -20,16 +21,17 @@ export default function ExperienceScrollSection({
 }: ExperienceScrollSectionProps) {
   const { label, body, height } = EXPERIENCE_SCROLL_SECTIONS[variant];
 
-  const isWedding = variant === "wedding";
   const isCorporate = variant === "corporate";
 
   return (
     <div id={id} className="relative">
       <ScrollSectionComposer
         slides={[{ label, lines: [body] }]}
-        height={heightOverride ?? height ?? "250vh"}
+        height={
+          heightOverride ?? height ?? LIVE_BACKGROUND_SCROLL_SECTION_HEIGHT
+        }
         fadeTiming="early"
-        scrollEffects={isWedding ? "performance" : "full"}
+        scrollEffects="performance"
         {...(isCorporate && {
           slideGutterClassName: "px-4 md:px-8",
           contentContainerClassName: "w-full max-w-7xl mx-auto",

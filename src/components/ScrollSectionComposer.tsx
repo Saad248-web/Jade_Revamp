@@ -282,7 +282,7 @@ const SlideLines = ({
   const early = fadeTiming === "early";
   const philosophy = lineStaggerDelayMs != null;
   const followOpacity = useMotionValue(0);
-  // Short home philosophy (120vh): tighter reveal + brief lock before exit.
+  // Short live-background philosophy (130vh): tighter reveal + brief lock before exit.
   const lockExitFrac = philosophy ? 0.38 : early ? 0.14 : 0.1;
   const fadeOut = end - span * lockExitFrac;
 

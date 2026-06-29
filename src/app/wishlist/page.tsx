@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Heart, MapPin, ArrowRight, Bed, Users, Home } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useWishlist } from "@/context/WishlistContext";
+import Navbar from "@/components/Navbar";
+import MobileBottomNav from "@/components/MobileBottomNav";
 import EmptyState from "@/components/ui/EmptyState";
 import { VILLAS } from "@/lib/mockData";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
@@ -18,7 +20,10 @@ export default function WishlistPage() {
   const { setEnquireOverlayOpen } = useAnimation();
 
   return (
-    <main className="min-h-screen bg-[#1A1C1E]"><div className="max-w-[1280px] mx-auto px-4 md:px-8 lg:px-16 pt-24 pb-24">
+    <main className="min-h-screen bg-[#1A1C1E]">
+      <Navbar />
+
+      <div className="max-w-[1280px] mx-auto px-4 md:px-8 lg:px-16 pt-24 pb-24">
         {/* Header */}
         <div className="mb-10">
           <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase">
@@ -224,6 +229,8 @@ export default function WishlistPage() {
         )}
       </div>
 
-      <div className="h-24 md:hidden" />    </main>
+      <div className="h-24 md:hidden" />
+      <MobileBottomNav />
+    </main>
   );
 }

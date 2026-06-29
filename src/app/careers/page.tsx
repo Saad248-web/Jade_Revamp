@@ -14,9 +14,11 @@ import PrimaryButton from "@/components/PrimaryButton";
 import FormOverlayLayout from "@/components/overlays/FormOverlayLayout";
 import OverlayEnquirySuccessContent from "@/components/overlays/OverlayEnquirySuccessContent";
 import LiveBackground from "@/components/LiveBackground";
+import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SectionFillTransition from "@/components/ui/SectionFillTransition";
 import GoldAccentLine from "@/components/ui/GoldAccentLine";
+import MobileBottomNav from "@/components/MobileBottomNav";
 import {
   validateCareerResumeFile,
   validateCareerResumeRequired,
@@ -201,6 +203,9 @@ export default function CareersPage() {
 
   return (
     <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
+      {/* ── Navigation ── */}
+      <Navbar />
+      <MobileBottomNav />
       {/* 1. HERO SECTION */}
       <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
         <GoldAccentLine className="absolute top-0 left-0 right-0 z-20" />
