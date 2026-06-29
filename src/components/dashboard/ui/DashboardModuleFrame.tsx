@@ -12,6 +12,7 @@ type DashboardModuleFrameProps = {
   success?: string | null;
   loading?: boolean;
   loadingLabel?: string;
+  compact?: boolean;
   children: ReactNode;
 };
 
@@ -22,10 +23,13 @@ export function DashboardModuleFrame({
   success,
   loading,
   loadingLabel = "Loading…",
+  compact = false,
   children,
 }: DashboardModuleFrameProps) {
+  const moduleClass = compact ? `${dash.module} dash-module--compact` : dash.module;
+
   return (
-    <div className={dash.module}>
+    <div className={moduleClass}>
       {toolbar}
       {note}
       {success && <DashboardAlert tone="success">{success}</DashboardAlert>}

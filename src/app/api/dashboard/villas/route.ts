@@ -5,6 +5,7 @@ import { requireRole } from "@/lib/auth/requireRole";
 import { VillaModel } from "@/models/Villa";
 import { paiseToRupees, rupeesToPaise } from "@/lib/money";
 import { createVillaSchema } from "@/lib/villas/adminVilla";
+import { revalidateVillaPublicPaths } from "@/lib/villas/revalidateVillaPaths";
 import { assertPlainObject } from "@/lib/security/validateInput";
 
 export const dynamic = "force-dynamic";
@@ -169,6 +170,12 @@ export async function POST(req: NextRequest) {
       content: input.content ?? {},
     });
 
+    const { syncVillaVisibilityFlags } = await import(
+      "@/lib/villas/villaVisibility"
+    );
+    syncVillaVisibilityFlags(doc);
+    await doc.save();
+
     await auditLog({
       action: "villa.create",
       targetType: "villa",
@@ -176,6 +183,8 @@ export async function POST(req: NextRequest) {
       userId: auth.userId,
       metadata: { slug: input.slug, retreatId },
     });
+
+    revalidateVillaPublicPaths({ slug: input.slug, retreatId });
 
     return NextResponse.json(
       { slug: input.slug, retreatId, id: String(doc._id) },

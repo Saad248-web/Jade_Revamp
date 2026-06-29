@@ -175,7 +175,7 @@ export function ConflictsManager() {
           <div className="flex flex-col items-end gap-2">
             <Link
               href={`/dashboard/bookings/${row.id}`}
-              className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#EFCD62] hover:text-white"
+              className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)] hover:text-white"
             >
               Folio
               <ExternalLink className="h-3 w-3" />
@@ -208,7 +208,7 @@ export function ConflictsManager() {
                 </button>
               </div>
             )}
-            {busy && <Loader2 className="h-4 w-4 animate-spin text-[#EFCD62]" />}
+            {busy && <Loader2 className="h-4 w-4 animate-spin text-[var(--dash-accent)]" />}
           </div>
         );
       },
@@ -240,6 +240,8 @@ export function ConflictsManager() {
           rows={conflicts}
           rowKey={(r) => r.id}
           caption="Booking conflicts"
+          stickyFirstColumn
+          dense
         />
       )}
     </DashboardModuleFrame>

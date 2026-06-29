@@ -1,12 +1,13 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { Loader2, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
   GLASS_CHROME_FRAME_CLASS,
   GLASS_INNER_SURFACE,
 } from "@/lib/glassChrome";
 import { dash } from "@/lib/dashboard/dashboardClasses";
+import { DashboardModalHeader } from "./ui/DashboardModalHeader";
 import { addDays, todayIST } from "@/lib/bookingDates";
 import { validateManualBlock } from "@/lib/dashboard/formValidation";
 
@@ -32,9 +33,9 @@ type BlockFormModalProps = {
 };
 
 const inputClass =
-  "w-full border border-white/15 bg-black/20 px-4 py-3 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[#EFCD62]/60 focus:outline-none";
+  "w-full border border-white/15 bg-black/20 px-4 py-3 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[var(--dash-accent-border)] focus:outline-none";
 const labelClass =
-  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[#EFCD62]";
+  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[var(--dash-accent)]";
 
 export function BlockFormModal({
   villas,
@@ -90,21 +91,13 @@ export function BlockFormModal({
           aria-hidden
           className={`pointer-events-none absolute inset-px block ${GLASS_INNER_SURFACE}`}
         />
-        <form onSubmit={handleSubmit} className={dash.modalBody}>
-          <div className="flex items-center justify-between">
-            <h2 className="font-philosopher text-[length:var(--fs-h3)] text-white">
-              {title}
-            </h2>
-            <button
-              type="button"
-              onClick={onClose}
-              className="text-white/55 hover:text-white"
-              aria-label="Close"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-
+        <form onSubmit={handleSubmit} className="flex min-h-0 flex-col">
+          <DashboardModalHeader
+            section="Operations"
+            title={title}
+            onClose={onClose}
+          />
+          <div className={`${dash.modalBody} ${dash.stack}`}>
           <div>
             <label className={labelClass} htmlFor="block-villa">
               Villa
@@ -176,10 +169,8 @@ export function BlockFormModal({
           <button
             type="submit"
             disabled={saving || !villaSlug}
-            className={`min-h-[48px] font-manrope text-sm font-bold uppercase tracking-widest transition-colors ${
-              saving
-                ? "cursor-not-allowed bg-white/10 text-white/30"
-                : "bg-[#EFCD62] text-[#1A1C1E] hover:bg-white"
+            className={`${dash.btn} ${dash.btnAccent} w-full sm:w-auto ${
+              saving ? "cursor-not-allowed opacity-40" : ""
             }`}
           >
             {saving ? (
@@ -188,6 +179,7 @@ export function BlockFormModal({
               "Create block"
             )}
           </button>
+          </div>
         </form>
       </div>
     </div>

@@ -7,6 +7,7 @@ import { signOut, useSession } from "next-auth/react";
 import { dash } from "@/lib/dashboard/dashboardClasses";
 import { DashboardHeader } from "./DashboardHeader";
 import { Sidebar } from "./Sidebar";
+import { DashboardSessionNotice } from "./ui/DashboardSessionNotice";
 import {
   dashboardSectionForPath,
   dashboardDescriptionForPath,
@@ -147,6 +148,7 @@ export function DashboardShell({
         />
 
         <main className={dash.content} data-page-scroll-root>
+          <DashboardSessionNotice />
           <div className={dash.page}>{children}</div>
         </main>
       </div>

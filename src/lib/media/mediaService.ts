@@ -150,12 +150,76 @@ export async function processAndUploadImage(params: {
 
   return {
     asset,
-    url: publicUrl,
+    url: variants.find((v) => v.label === "webp")?.url ?? publicUrl,
     gridFsId,
     size,
     width,
     height,
     variants,
+  };
+}
+
+const DOCUMENT_MIMES = new Set([
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+]);
+
+/** Store villa brochure / document in GridFS (no image processing). */
+export async function processAndUploadDocument(params: {
+  buffer: Buffer;
+  originalFilename: string;
+  mime: string;
+  folderSlug: string;
+  uploadedBy: string;
+  contextSlug?: string;
+}) {
+  if (!DOCUMENT_MIMES.has(params.mime)) {
+    throw new Error("Unsupported document type");
+  }
+
+  const folderSlug =
+    params.folderSlug ||
+    inferFolderFromContext(params.contextSlug ?? "general");
+
+  const safeName = params.originalFilename.replace(/[^\w.\-]+/g, "_");
+  const basePath = `${folderSlug}/${Date.now()}-${safeName}`;
+
+  const { gridFsId, size } = await uploadToGridFS({
+    filename: basePath,
+    mime: params.mime,
+    buffer: params.buffer,
+    bucketName: CMS_MEDIA_BUCKET,
+  });
+
+  const publicUrl = publicUrlForGridFs(gridFsId);
+  const asset = await MediaAssetModel.create({
+    storage: "gridfs",
+    gridFsId,
+    bucket: CMS_MEDIA_BUCKET,
+    publicUrl,
+    originalFilename: params.originalFilename,
+    filename: safeName,
+    mime: params.mime,
+    size,
+    folderSlug,
+    alt: "",
+    caption: "",
+    tags: ["brochure"],
+    variants: [],
+    uploadedBy: params.uploadedBy,
+    status: "active",
+  });
+
+  return {
+    asset,
+    url: publicUrl,
+    filename: safeName,
+    gridFsId,
+    size,
+    mime: params.mime,
   };
 }
 
@@ -171,10 +235,48 @@ type ListParams = {
 };
 
 export async function listMediaAssets(params: ListParams) {
-  await ensureDefaultFolders();
   const page = Math.max(1, params.page ?? 1);
   const limit = Math.min(100, Math.max(1, params.limit ?? 48));
   const source = params.source ?? "all";
+
+  /** Public-site picker — manifest only, no Mongo (avoids slow races with uploads tab). */
+  if (source === "static") {
+    const publicFolders = listPublicRootFolders();
+    const allStatic = filterStaticItems(
+      listStaticMediaUrls(params.folder),
+      { q: params.q, mime: params.mime },
+    );
+    const start = (page - 1) * limit;
+    const slice = allStatic.slice(start, start + limit);
+    const items = slice.map((s) => ({
+      _id: s.id,
+      storage: "static" as const,
+      publicUrl: s.publicUrl,
+      filename: s.filename,
+      mime: s.mime,
+      size: s.size,
+      width: s.width,
+      height: s.height,
+      folderSlug: s.folderPath.split("/")[0] || "public-site",
+      alt: "",
+      caption: "",
+      tags: [] as string[],
+      createdAt: new Date(0).toISOString(),
+      updatedAt: new Date(0).toISOString(),
+      missingAlt: true,
+      usageCount: 0,
+    }));
+    return {
+      items,
+      total: allStatic.length,
+      page,
+      limit,
+      folders: [],
+      publicFolders,
+    };
+  }
+
+  await ensureDefaultFolders();
 
   const uploadItems: MediaListItem[] = [];
   if (source === "all" || source === "uploads") {
@@ -233,21 +335,16 @@ export async function listMediaAssets(params: ListParams) {
   }
 
   let staticItems: StaticMediaItem[] = [];
-  if (source === "all" || source === "static") {
+  if (source === "all") {
     const allStatic = filterStaticItems(
-      listStaticMediaUrls(source === "static" ? params.folder : undefined),
+      listStaticMediaUrls(params.folder),
       {
         q: params.q,
-        folder: source === "all" ? params.folder : undefined,
+        folder: params.folder,
         mime: params.mime,
       },
     );
-    const staticStart = source === "static" ? (page - 1) * limit : 0;
-    const staticSlice =
-      source === "static"
-        ? allStatic.slice(staticStart, staticStart + limit)
-        : allStatic.slice(0, 200);
-    staticItems = staticSlice;
+    staticItems = allStatic.slice(0, 200);
   }
 
   const staticList: MediaListItem[] = staticItems.map((s) => ({
@@ -272,9 +369,7 @@ export async function listMediaAssets(params: ListParams) {
   let combined =
     source === "uploads"
       ? uploadItems
-      : source === "static"
-        ? staticList
-        : [...uploadItems, ...staticList];
+      : [...uploadItems, ...staticList];
 
   if (params.usage === "used" || params.usage === "unused") {
     combined = await Promise.all(
@@ -314,19 +409,8 @@ export async function listMediaAssets(params: ListParams) {
     };
   }
 
-  const uploadTotal =
-    source === "uploads"
-      ? await MediaAssetModel.countDocuments({ status: "active" })
-      : 0;
-  const staticTotal =
-    source === "static"
-      ? filterStaticItems(listStaticMediaUrls(params.folder), {
-          q: params.q,
-          mime: params.mime,
-        }).length
-      : 0;
-
-  const total = source === "uploads" ? uploadTotal : staticTotal;
+  const uploadTotal = await MediaAssetModel.countDocuments({ status: "active" });
+  const total = uploadTotal;
   const items = combined;
 
   const folders = await MediaFolderModel.find().sort({ sortOrder: 1 }).lean();

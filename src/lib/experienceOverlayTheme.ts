@@ -40,20 +40,23 @@ export const EXPERIENCE_OVERLAY_MOBILE_SCRIM_CLASS =
 export const EXPERIENCE_OVERLAY_ROOT_CLASS =
   "fixed inset-0 z-[9999] max-md:bg-transparent max-md:backdrop-blur-none md:bg-jade-charcoal backdrop-blur-sm md:backdrop-blur-none overflow-hidden text-white";
 
-/** Mobile bottom-sheet proportions (tap band + sheet = 100svh). */
+/** Mobile bottom-sheet proportions (8dvh tap band + flex-1 sheet = full viewport). */
 export const EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH = 8;
-export const EXPERIENCE_OVERLAY_MOBILE_SHEET_VH = 92;
 
-/** Top 8svh tap-to-dismiss band — solid 60% black (not transparent). */
+/** Top 8dvh tap-to-dismiss band — solid 60% black (not transparent). */
 export const EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_CLASS =
-  `h-[8svh] min-h-[8svh] shrink-0 ${EXPERIENCE_OVERLAY_MOBILE_CHROME_BG_CLASS}`;
+  `flex-[0_0_8dvh] min-h-[2.75rem] max-h-[4.5rem] shrink-0 ${EXPERIENCE_OVERLAY_MOBILE_CHROME_BG_CLASS}`;
 
 /** Gap between mobile close button and sheet top edge (below the 8vh band). */
 export const EXPERIENCE_OVERLAY_MOBILE_CLOSE_FRAME_GAP_REM = 1;
 
-/** 92svh zone — fills rounded-corner wedges with same chrome as top band. */
+/** Mobile close control — centered in top dismiss band. */
+export const EXPERIENCE_OVERLAY_CLOSE_BUTTON_FRAME_CLASS = "w-10 h-10";
+export const EXPERIENCE_OVERLAY_CLOSE_ICON_CLASS = "w-5 h-5 stroke-[1.5]";
+
+/** Sheet zone — flex-1 fills remaining viewport (avoids svh gap when browser chrome shifts). */
 export const EXPERIENCE_OVERLAY_MOBILE_SHEET_ZONE_CLASS =
-  `h-[92svh] min-h-0 shrink-0 relative ${EXPERIENCE_OVERLAY_MOBILE_CHROME_BG_CLASS}`;
+  `flex-1 min-h-0 relative ${EXPERIENCE_OVERLAY_MOBILE_CHROME_BG_CLASS}`;
 
 /** Scrim fill for sheet zone (corner wedges). */
 export const EXPERIENCE_OVERLAY_MOBILE_SHEET_SCRIM_CLASS = `absolute inset-0 pointer-events-none ${EXPERIENCE_OVERLAY_MOBILE_SCRIM_CLASS}`;

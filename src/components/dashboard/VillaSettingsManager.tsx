@@ -131,8 +131,8 @@ function VillaPortfolioCard({
               {v.weddingVenue && (
                 <DashboardStatusBadge tone="accent">Wedding</DashboardStatusBadge>
               )}
-              {!v.bookable && (
-                <DashboardStatusBadge tone="warning">Offline</DashboardStatusBadge>
+              {!v.bookable && v.status !== "hidden" && (
+                <DashboardStatusBadge tone="warning">Not bookable</DashboardStatusBadge>
               )}
               <span className="ml-auto text-[0.625rem] font-semibold uppercase tracking-wider text-white/35">
                 {SOURCE_LABEL[v.portfolioSource] ?? v.portfolioSource}
@@ -329,6 +329,7 @@ export function VillaSettingsManager() {
         loadingLabel="Loading portfolio…"
       >
         <DashboardFilterBar
+          split
           meta={
             <>
               <strong className="text-[var(--dash-accent)]">{filtered.length}</strong> of{" "}

@@ -650,7 +650,7 @@ export function BlogListDashboard() {
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <p className="truncate font-bold text-white">{displayTitleFromPage(r)}</p>
-            {r.meta.isPinned && <Pin className="h-3 w-3 shrink-0 text-[#EFCD62]" />}
+            {r.meta.isPinned && <Pin className="h-3 w-3 shrink-0 text-[var(--dash-accent)]" />}
             {r.meta.isFeatured && <Star className="h-3 w-3 shrink-0 text-amber-300" />}
             {r.meta.seo?.robotsIndex === false && (
               <DashboardStatusBadge tone="warning">Noindex</DashboardStatusBadge>
@@ -868,6 +868,7 @@ export function BlogListDashboard() {
       >
         <div className="blog-admin-filters">
           <DashboardFilterBar
+            split
             meta={
               activeFilterCount > 0 ? (
                 <>
@@ -1147,6 +1148,8 @@ export function BlogListDashboard() {
             rowKey={(r) => r.pageKey}
             emptyMessage="No blog posts match your filters."
             caption="Blog posts"
+            stickyFirstColumn
+            dense
             renderAfterRow={(r) =>
               expandedSeo.has(r.pageKey) ? (
                 <div className="blog-seo-expand">

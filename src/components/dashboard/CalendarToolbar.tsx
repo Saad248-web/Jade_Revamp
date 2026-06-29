@@ -75,7 +75,7 @@ export function CalendarToolbar({
       </div>
 
       <div
-        className={dash.toolbarActions}
+        className={`${dash.toolbarActions} dashboard-toolbar__actions--list dashboard-toolbar__actions--bordered calendar-toolbar-compact__actions`}
         role="toolbar"
         aria-label="Calendar controls"
       >
@@ -151,7 +151,7 @@ export function CalendarToolbar({
               onChange={(e) =>
                 onFiltersChange({ bookableOnly: e.target.checked })
               }
-              className="accent-[#EFCD62]"
+              className="accent-[var(--dash-accent)]"
             />
             Bookable only
           </label>
@@ -162,7 +162,7 @@ export function CalendarToolbar({
               onChange={(e) =>
                 onFiltersChange({ weddingOnly: e.target.checked })
               }
-              className="accent-[#EFCD62]"
+              className="accent-[var(--dash-accent)]"
             />
             Wedding venues
           </label>
@@ -173,7 +173,7 @@ export function CalendarToolbar({
               onChange={(e) =>
                 onFiltersChange({ hideOffline: e.target.checked })
               }
-              className="accent-[#EFCD62]"
+              className="accent-[var(--dash-accent)]"
             />
             Hide offline
           </label>

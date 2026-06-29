@@ -87,10 +87,10 @@ export function AnalyticsDashboard() {
 
           <DashboardPanel pad>
             <div className="flex items-start gap-3">
-              <BarChart3 className="mt-1 h-6 w-6 text-[#EFCD62]" />
+              <BarChart3 className="mt-1 h-6 w-6 text-[var(--dash-accent)]" />
               <div>
                 <p className="font-bold text-white">Paid revenue (confirmed)</p>
-                <p className="mt-1 font-philosopher text-2xl text-[#EFCD62]">
+                <p className="mt-1 font-philosopher text-2xl text-[var(--dash-accent)]">
                   {formatPaise(data.paidRevenuePaise)}
                 </p>
                 <p className="mt-3 text-sm text-white/45">

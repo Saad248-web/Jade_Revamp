@@ -45,7 +45,7 @@ export function RedirectSuggestModal({
         </p>
         <div className="mt-4 space-y-2 font-mono text-xs">
           <p className="text-white/50">{fromPath}</p>
-          <p className="text-[#EFCD62]">→ {toPath}</p>
+          <p className="text-[var(--dash-accent)]">→ {toPath}</p>
         </div>
         <div className="mt-5 flex justify-end gap-2">
           <button type="button" onClick={onClose} className={`${dash.btn} ${dash.btnText}`}>

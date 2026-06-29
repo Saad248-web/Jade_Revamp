@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { VILLAS, CATEGORIES } from "@/lib/mockData";
 import { villaMatchesCategory } from "@/lib/villaCategoryMatch";
+import { usePublicVillas } from "@/lib/villas/usePublicVillas";
 import ReservationOverlay from "./ReservationOverlay";
 import VillaCard from "./VillaCard";
 import BookingBanner from "./BookingBanner";
@@ -40,6 +41,7 @@ const NEXT_AVAILABLE = [
 ];
 
 export default function VillasCarousel() {
+  const { villas, loading: villasLoading } = usePublicVillas();
   const [activeCategory, setActiveCategory] = useState("All");
   const searchParams = useSearchParams();
 
@@ -129,7 +131,7 @@ export default function VillasCarousel() {
   })();
 
   const filteredVillas = sortVillasForDirectory(
-    VILLAS.filter(
+    villas.filter(
       (villa) =>
         !(villa as { hideFromVillasDirectory?: boolean })
           .hideFromVillasDirectory && villaMatchesCategory(villa, activeCategory),
@@ -322,7 +324,17 @@ export default function VillasCarousel() {
         </div>
       ) : (
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 w-full mt-10 pb-8 min-h-screen">
-          {filteredVillas.length > 0 ? (
+          {villasLoading ? (
+            <div className="flex flex-col gap-10">
+              {[0, 1].map((i) => (
+                <div
+                  key={i}
+                  className="h-[420px] animate-pulse rounded-sm bg-white/5"
+                  aria-hidden
+                />
+              ))}
+            </div>
+          ) : filteredVillas.length > 0 ? (
             <div className="flex flex-col">
               {filteredVillas.map((villa, index) => (
                 <div key={villa.id}>

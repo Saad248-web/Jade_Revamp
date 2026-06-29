@@ -254,8 +254,8 @@ export function HtmlBuilder({ page }: HtmlBuilderProps) {
           </div>
         </div>
       ) : (
-        <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[12rem_1fr_14rem]">
-          <aside className="overflow-y-auto border-r border-white/10 p-3 text-xs">
+        <div className="blog-builder-layout grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[12rem_1fr_14rem]">
+          <aside className="blog-builder-sidebar overflow-y-auto border-r border-white/10 p-3 text-xs">
             {HTML_ELEMENT_GROUPS.map((group) => (
               <div key={group.category} className="mb-4">
                 <p className={`${dash.label} mb-2`}>{group.category}</p>

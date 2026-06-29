@@ -8,6 +8,7 @@ import {
   toAdminVilla,
   updateVillaSchema,
 } from "@/lib/villas/adminVilla";
+import { revalidateVillaPublicPaths } from "@/lib/villas/revalidateVillaPaths";
 import { assertPlainObject } from "@/lib/security/validateInput";
 
 export const dynamic = "force-dynamic";
@@ -97,6 +98,11 @@ export async function PATCH(
       targetId: String(villa._id),
       userId: auth.userId,
       metadata: { slug: params.slug, ...applied },
+    });
+
+    revalidateVillaPublicPaths({
+      slug: params.slug,
+      retreatId: villa.retreatId ?? params.slug,
     });
 
     return NextResponse.json(

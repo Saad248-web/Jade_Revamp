@@ -3,6 +3,7 @@
 import { useEffect, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { dash } from "@/lib/dashboard/dashboardClasses";
+import { DashboardModalHeader } from "./DashboardModalHeader";
 
 type DashboardConfirmDialogProps = {
   open: boolean;
@@ -50,10 +51,13 @@ export function DashboardConfirmDialog({
         aria-modal="true"
         aria-labelledby="dash-confirm-title"
       >
-        <div className={dash.modalBody}>
-          <h3 id="dash-confirm-title" className="dash-confirm-dialog__title">
-            {title}
-          </h3>
+        <div className="flex min-h-0 flex-col">
+          <DashboardModalHeader
+            title={title}
+            onClose={onCancel}
+            titleId="dash-confirm-title"
+          />
+          <div className={dash.modalBody}>
           <p className="dash-confirm-dialog__message">{message}</p>
           <div className="dash-confirm-dialog__actions">
             <button
@@ -75,6 +79,7 @@ export function DashboardConfirmDialog({
             >
               {busy ? "Working…" : confirmLabel}
             </button>
+          </div>
           </div>
         </div>
       </div>

@@ -46,7 +46,7 @@ function MetadataCell({ metadata }: { metadata: Record<string, unknown> }) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-1 font-manrope text-xs text-[#EFCD62]/90 hover:underline"
+        className="inline-flex items-center gap-1 font-manrope text-xs text-[var(--dash-accent)] hover:underline"
       >
         {open ? (
           <ChevronDown className="h-3 w-3" />
@@ -114,7 +114,7 @@ export function AuditLogsViewer({
       key: "action",
       header: "Action",
       cell: (r) => (
-        <span className="font-mono text-xs text-[#EFCD62]/90">{r.action}</span>
+        <span className="font-mono text-xs text-[var(--dash-accent)]">{r.action}</span>
       ),
     },
     {

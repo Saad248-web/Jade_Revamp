@@ -107,7 +107,7 @@ export function RedirectManager() {
     {
       key: "to",
       header: "New URL",
-      cell: (r) => <code className="text-sm text-[#EFCD62]/90">{r.toPath}</code>,
+      cell: (r) => <code className="text-sm text-[var(--dash-accent)]">{r.toPath}</code>,
     },
     {
       key: "type",
@@ -150,7 +150,20 @@ export function RedirectManager() {
       loadingLabel="Loading redirects…"
     >
       {canWrite && (
-        <DashboardFilterBar>
+        <DashboardFilterBar
+          split
+          actions={
+            <button
+              type="button"
+              disabled={saving}
+              onClick={() => void create()}
+              className={`${dash.btn} ${dash.btnAccent} ${dash.btnDense}`}
+            >
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+              Add
+            </button>
+          }
+        >
           <input
             className={`${dash.inputCompact} flex-1 min-w-[8rem]`}
             placeholder="/old-blog-url"
@@ -171,15 +184,6 @@ export function RedirectManager() {
             <option value="301">301 Permanent</option>
             <option value="302">302 Temporary</option>
           </select>
-          <button
-            type="button"
-            disabled={saving}
-            onClick={() => void create()}
-            className={`${dash.btn} ${dash.btnAccent} ${dash.btnDense}`}
-          >
-            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
-            Add
-          </button>
         </DashboardFilterBar>
       )}
 
@@ -189,6 +193,8 @@ export function RedirectManager() {
         rowKey={(r) => r._id}
         emptyMessage="No redirects yet. Create one when slugs change or URLs move."
         caption="Redirects"
+        stickyFirstColumn
+        dense
       />
 
       {!canWrite && (

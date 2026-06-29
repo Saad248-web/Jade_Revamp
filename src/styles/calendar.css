@@ -66,4 +66,25 @@
     padding-inline: 0.5rem;
     font-size: 0.625rem;
   }
+
+  .dashboard-cal-day {
+    min-width: clamp(2rem, 8vw, 2.75rem);
+    padding: var(--dash-space-1);
+    font-size: 0.625rem;
+  }
+
+  .dashboard-cal-cell {
+    min-width: clamp(2rem, 8vw, 2.75rem);
+  }
+
+  .dashboard-cal-villa {
+    min-width: clamp(7rem, 28vw, 10.5rem);
+    max-width: clamp(7rem, 28vw, 10.5rem);
+    padding: var(--dash-space-2) var(--dash-space-3);
+  }
+
+  .dashboard-cal-cell__empty {
+    min-height: var(--dash-touch);
+    min-width: var(--dash-touch);
+  }
 }

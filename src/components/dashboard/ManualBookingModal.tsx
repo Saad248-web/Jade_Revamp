@@ -1,12 +1,13 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { Loader2, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
   GLASS_CHROME_FRAME_CLASS,
   GLASS_INNER_SURFACE,
 } from "@/lib/glassChrome";
 import { dash } from "@/lib/dashboard/dashboardClasses";
+import { DashboardModalHeader } from "./ui/DashboardModalHeader";
 import { addDays, todayIST } from "@/lib/bookingDates";
 import {
   normalizePhone,
@@ -31,11 +32,11 @@ type ManualBookingFormProps = {
 };
 
 const inputClass =
-  "w-full border border-white/15 bg-black/20 px-4 py-3 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[#EFCD62]/60 focus:outline-none";
+  "w-full border border-white/15 bg-black/20 px-4 py-3 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[var(--dash-accent-border)] focus:outline-none";
 const inputErrorClass =
   "border-red-400/70 focus:border-red-400/90";
 const labelClass =
-  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[#EFCD62]";
+  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[var(--dash-accent)]";
 
 export function ManualBookingModal({
   villas,
@@ -122,25 +123,15 @@ export function ManualBookingModal({
           aria-hidden
           className={`pointer-events-none absolute inset-px block ${GLASS_INNER_SURFACE}`}
         />
-        <form onSubmit={handleSubmit} className={dash.modalBody} noValidate>
-          <div className="flex items-center justify-between gap-3">
-            <h2
-              id="manual-booking-title"
-              className="font-philosopher text-[length:var(--fs-h3)] text-[#EFCD62]"
-            >
-              Manual booking
-            </h2>
-            <button
-              type="button"
-              onClick={onClose}
-              className="shrink-0 text-white/50 hover:text-white"
-              aria-label="Close"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-
-          <div className={dash.stack}>
+        <form onSubmit={handleSubmit} className="flex min-h-0 flex-col" noValidate>
+          <DashboardModalHeader
+            section="Calendar"
+            title="Manual booking"
+            description="Create a confirmed booking without guest checkout."
+            onClose={onClose}
+            titleId="manual-booking-title"
+          />
+          <div className={`${dash.modalBody} ${dash.stack}`}>
             <div>
               <label className={labelClass} htmlFor="mb-villa">
                 Villa
@@ -346,7 +337,7 @@ export function ManualBookingModal({
             <button
               type="submit"
               disabled={saving}
-              className="flex w-full min-h-[48px] items-center justify-center bg-[#EFCD62] font-manrope text-sm font-bold uppercase tracking-widest text-[#1A1C1E] hover:bg-white disabled:opacity-50"
+              className={`${dash.btn} ${dash.btnAccent} w-full`}
             >
               {saving ? (
                 <Loader2 className="h-5 w-5 animate-spin" aria-label="Saving" />

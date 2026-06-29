@@ -60,7 +60,7 @@ export function SitemapManager() {
           href={r.loc}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex max-w-md items-center gap-1 truncate font-mono text-xs text-[#EFCD62] hover:underline"
+          className="inline-flex max-w-md items-center gap-1 truncate font-mono text-xs text-[var(--dash-accent)] hover:underline"
         >
           {r.loc.replace(base, "") || "/"}
           <ExternalLink className="h-3 w-3 shrink-0" />
@@ -95,6 +95,8 @@ export function SitemapManager() {
         rowKey={(r) => r.loc}
         emptyMessage="No URLs"
         caption="Sitemap URLs"
+        stickyFirstColumn
+        dense
       />
     </DashboardModuleFrame>
   );

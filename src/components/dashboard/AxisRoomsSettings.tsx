@@ -125,8 +125,8 @@ export function AxisRoomsSettings() {
         <DashboardListToolbar
           meta={
             <span className="inline-flex items-center gap-2">
-              <Globe className="h-4 w-4 text-[#EFCD62]" />
-              <span>
+              <Globe className="h-4 w-4 text-[var(--dash-accent)]" />
+              <span className="dashboard-toolbar__meta--hide-sm">
                 Axis Rooms API key:{" "}
                 <span
                   className={
@@ -153,6 +153,8 @@ export function AxisRoomsSettings() {
         rowKey={(r) => r.slug}
         emptyMessage="No villas in portfolio."
         caption="Axis Rooms property mapping"
+        stickyFirstColumn
+        dense
       />
     </DashboardModuleFrame>
   );

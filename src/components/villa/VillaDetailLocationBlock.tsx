@@ -10,7 +10,7 @@ export type VillaLocationDetails = {
   mapImage?: string;
   address?: string;
   distance?: string;
-  nearby?: Array<{ label: string; distance?: string; dist?: string }>;
+  nearby?: Array<{ label: string; distance?: string; dist?: string; note?: string }>;
 };
 
 type Props = {
@@ -80,11 +80,15 @@ export default function VillaDetailLocationBlock({
                 key={`${item.label}-${idx}`}
                 className="flex items-center justify-between border-b border-white/5 pb-3"
               >
-                <div className="flex items-center gap-3">
-                  <div className="h-1.5 w-1.5 rotate-45 bg-jade-gold" />
+                <div className="flex flex-col gap-0.5">
                   <span className="font-manrope text-gh-desc font-medium uppercase tracking-wider text-white">
                     {item.label}
                   </span>
+                  {item.note ? (
+                    <span className="font-manrope text-[11px] text-white/45">
+                      {item.note}
+                    </span>
+                  ) : null}
                 </div>
                 <span className="font-manrope text-gh-desc text-white/60">
                   {item.distance ?? item.dist}

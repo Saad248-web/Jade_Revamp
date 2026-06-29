@@ -5,7 +5,9 @@
  * Glass values mirror `src/lib/glassChrome.ts` (public hero panels).
  */
 
-.dashboard-root {
+.dashboard-root,
+.dashboard-modal-overlay,
+.jade-dashboard {
   /* ── Brand primitives ── */
   --dash-bg: #1a1c1e;
   --dash-bg-elevated: #222528;
@@ -16,9 +18,9 @@
   --dash-accent-muted: rgba(239, 205, 98, 0.12);
   --dash-accent-border: rgba(239, 205, 98, 0.35);
   --dash-text: rgba(255, 255, 255, 0.92);
-  --dash-text-secondary: rgba(255, 255, 255, 0.65);
-  --dash-text-muted: rgba(255, 255, 255, 0.48);
-  --dash-text-subtle: rgba(255, 255, 255, 0.34);
+  --dash-text-secondary: rgba(255, 255, 255, 0.72);
+  --dash-text-muted: rgba(255, 255, 255, 0.55);
+  --dash-text-subtle: rgba(255, 255, 255, 0.4);
   --dash-danger: #f87171;
   --dash-success: #34d399;
   --dash-warning: #fbbf24;
@@ -65,11 +67,27 @@
   --dash-header-h: 3.75rem;
   --dash-content-max: 90rem;
   --dash-touch: 2.75rem;
-  --dash-control-h: 2.25rem;
+  --dash-control-h: clamp(2.5rem, 6vw, 2.75rem);
   --dash-row-h: 2.5rem;
   --dash-header-z: 30;
   --dash-sidebar-z: 40;
 
+  /*
+   * Spacing rhythm (8pt):
+   * --dash-gutter     page horizontal inset
+   * --dash-module-gap vertical gap between toolbar / filter / body
+   * --dash-space-4    default panel inner padding
+   * --dash-space-5    modal header / spacious panels
+   */
+}
+
+.dashboard-modal-overlay {
+  color: var(--dash-text);
+  font-family: var(--dash-font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+.dashboard-root {
   min-height: 100dvh;
   background-color: var(--dash-bg);
   background-image:
@@ -814,6 +832,19 @@ html.jade-dashboard .dashboard-content {
   color: var(--dash-text-muted);
 }
 
+.dashboard-data-table--sticky-first th:first-child,
+.dashboard-data-table--sticky-first td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--dash-bg-elevated);
+  box-shadow: 1px 0 0 var(--dash-border);
+}
+
+.dashboard-data-table--sticky-first thead th:first-child {
+  z-index: 3;
+}
+
 .dashboard-input-wrap {
   position: relative;
   width: 100%;
@@ -987,7 +1018,7 @@ html.jade-dashboard .dashboard-content {
 .dashboard-stat__value {
   margin: 0;
   font-family: var(--dash-font-display);
-  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  font-size: var(--dash-fs-kpi);
   line-height: 1.15;
   color: var(--dash-text);
   font-variant-numeric: tabular-nums;
@@ -1494,6 +1525,13 @@ html.jade-dashboard .dashboard-content {
   background: rgba(0, 0, 0, 0.72);
 }
 
+/* Nested inside PropertyWizard (z-70) / other stacked modals — portaled to body */
+.dashboard-modal-overlay--elevated {
+  z-index: 80;
+  background: rgba(0, 0, 0, 0.86);
+  backdrop-filter: blur(4px);
+}
+
 .dashboard-modal {
   position: relative;
   width: 100%;
@@ -1504,6 +1542,28 @@ html.jade-dashboard .dashboard-content {
 
 .dashboard-modal--wide {
   max-width: 42rem;
+}
+
+.dashboard-modal--picker {
+  width: min(96vw, 76rem);
+  max-width: min(96vw, 76rem);
+  max-height: 94dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-modal__body--picker {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 0;
+  max-height: 94dvh;
+  width: 100%;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
 }
 
 .dashboard-modal__body {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
   Check,
@@ -65,12 +65,31 @@ function formatBytes(n?: number) {
   return `${(n / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export function MediaLibraryManager() {
+type MediaLibraryManagerProps = {
+  mode?: "page" | "picker";
+  onPick?: (url: string, meta?: { alt?: string }) => void;
+  contextSlug?: string;
+  initialSource?: "uploads" | "static";
+};
+
+export function MediaLibraryManager({
+  mode = "page",
+  onPick,
+  contextSlug = "general",
+  initialSource,
+}: MediaLibraryManagerProps) {
+  const isPicker = mode === "picker";
   const { data: session } = useSession();
   const role = session?.user?.role as Role | undefined;
-  const canWrite = role ? roleCanWrite("/dashboard/media", role) : false;
+  const canWriteMedia = role ? roleCanWrite("/dashboard/media", role) : false;
+  const canWriteVillas = role
+    ? roleCanWrite("/dashboard/settings/villas", role)
+    : false;
+  const canWrite = canWriteMedia || (isPicker && canWriteVillas);
 
-  const [source, setSource] = useState<"uploads" | "static">("uploads");
+  const [source, setSource] = useState<"uploads" | "static">(
+    initialSource ?? (isPicker ? "static" : "uploads"),
+  );
   const [items, setItems] = useState<MediaItem[]>([]);
   const [folders, setFolders] = useState<MediaFolder[]>([]);
   const [publicFolders, setPublicFolders] = useState<PublicFolder[]>([]);
@@ -79,6 +98,7 @@ export function MediaLibraryManager() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
   const [folder, setFolder] = useState("");
   const [mime, setMime] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -89,8 +109,22 @@ export function MediaLibraryManager() {
   const [uploading, setUploading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [staticFolder, setStaticFolder] = useState("Villa_Retreats");
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    if (!isPicker) {
+      setDebouncedQ(q.trim());
+      return;
+    }
+    const t = window.setTimeout(() => setDebouncedQ(q.trim()), 300);
+    return () => window.clearTimeout(t);
+  }, [q, isPicker]);
 
   const load = useCallback(async () => {
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setLoading(true);
     setError(null);
     try {
@@ -99,14 +133,23 @@ export function MediaLibraryManager() {
         page: String(page),
         limit: "48",
       });
-      if (q.trim()) params.set("q", q.trim());
-      if (folder) params.set("folder", folder);
+      const searchQ = isPicker ? debouncedQ : q.trim();
+      if (searchQ) params.set("q", searchQ);
       if (mime) params.set("mime", mime);
       if (source === "static" && staticFolder) {
         params.set("folder", staticFolder);
+      } else if (source === "uploads" && folder) {
+        params.set(isPicker ? "uploadFolder" : "folder", folder);
       }
 
-      const res = await dashboardFetch(`/api/dashboard/media?${params}`);
+      const endpoint = isPicker
+        ? "/api/dashboard/media/picker"
+        : "/api/dashboard/media";
+
+      const res = await dashboardFetch(`${endpoint}?${params}`, {
+        signal: isPicker ? controller.signal : undefined,
+      });
+      if (controller.signal.aborted) return;
       if (!res.ok) throw new Error("Failed to load media");
       const data = (await res.json()) as {
         items?: MediaItem[];
@@ -114,6 +157,7 @@ export function MediaLibraryManager() {
         folders?: MediaFolder[];
         publicFolders?: PublicFolder[];
       };
+      if (controller.signal.aborted) return;
       setItems(data.items ?? []);
       setTotal(data.total ?? 0);
       setFolders(data.folders ?? []);
@@ -124,11 +168,12 @@ export function MediaLibraryManager() {
         }
       }
     } catch (e) {
+      if (controller.signal.aborted) return;
       setError(e instanceof Error ? e.message : "Failed to load");
     } finally {
-      setLoading(false);
+      if (!controller.signal.aborted) setLoading(false);
     }
-  }, [source, page, q, folder, mime, staticFolder]);
+  }, [source, page, q, debouncedQ, folder, mime, staticFolder, isPicker]);
 
   useEffect(() => {
     load();
@@ -187,12 +232,28 @@ export function MediaLibraryManager() {
       for (const file of Array.from(files)) {
         const fd = new FormData();
         fd.append("file", file);
-        fd.append("folderSlug", folder || "general-assets");
+        if (isPicker) {
+          fd.append("villaSlug", contextSlug);
+        } else {
+          fd.append("folderSlug", folder || "general-assets");
+        }
         const res = await dashboardFetch("/api/dashboard/media/upload", {
           method: "POST",
           body: fd,
         });
         if (!res.ok) throw new Error("Upload failed");
+        if (isPicker) {
+          const data = (await res.json()) as { url?: string; publicUrl?: string };
+          const url = data.publicUrl ?? data.url;
+          if (url) {
+            onPick?.(url);
+            return;
+          }
+        }
+      }
+      if (isPicker) {
+        setSource("uploads");
+        setPage(1);
       }
       await load();
     } catch (e) {
@@ -239,46 +300,65 @@ export function MediaLibraryManager() {
 
   const missingAltCount = items.filter((i) => i.missingAlt).length;
 
-  return (
-    <DashboardModuleFrame
-      toolbar={
-        <DashboardListToolbar onRefresh={load} refreshing={loading}>
-          <div className={dash.toolbarSegment}>
-            <DashboardTabBar
-              tabs={[
-                { id: "uploads", label: "Uploads", count: source === "uploads" ? total : undefined },
-                {
-                  id: "static",
-                  label: "Public site",
-                  count: source === "static" ? total : undefined,
-                },
-              ]}
-              active={source}
-              onChange={(id) => {
-                setSource(id as "uploads" | "static");
-                setPage(1);
-              }}
-            />
-          </div>
-        </DashboardListToolbar>
-      }
-      error={error}
-      loading={loading && items.length === 0}
-      loadingLabel="Loading media…"
+  const onCardClick = (item: MediaItem) => {
+    if (isPicker) {
+      onPick?.(item.publicUrl, { alt: item.alt });
+      return;
+    }
+    void loadDetail(item._id);
+  };
+
+  const assetCount = (
+    <span
+      className="dash-kpi dash-kpi--accent media-library-filter__kpi"
+      aria-label={`${total} assets`}
     >
-      <div className="media-library-layout">
+      <span className="dash-kpi__label">Assets</span>
+      <span className="dash-kpi__value">{total}</span>
+      {missingAltCount > 0 && source === "uploads" && !isPicker && (
+        <span className="dash-kpi__label media-library-filter__kpi-warn">
+          · {missingAltCount} missing alt
+        </span>
+      )}
+    </span>
+  );
+
+  const libraryBody = (
+    <div
+      className={`media-library-layout${isPicker ? " media-library-layout--picker" : ""}`}
+    >
         <DashboardFilterBar
-          meta={
+          split
+          className={isPicker ? "media-library-filter--picker" : undefined}
+          meta={assetCount}
+          actions={
             <>
-              <span className="dash-kpi__value" style={{ color: "var(--dash-accent)" }}>
-                {total}
-              </span>{" "}
-              assets
-              {missingAltCount > 0 && source === "uploads" && (
-                <>
-                  {" · "}
-                  <span style={{ color: "var(--dash-warning)" }}>{missingAltCount}</span> missing alt
-                </>
+              {canWrite && (source === "uploads" || isPicker) && (
+                <label className="media-library-dropzone">
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
+                    className="hidden"
+                    onChange={(e) => void onUpload(e.target.files)}
+                  />
+                  {uploading ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-[var(--dash-accent)]" />
+                  ) : (
+                    <Upload className="h-3.5 w-3.5" />
+                  )}
+                  Upload
+                </label>
+              )}
+              {selected.size > 0 && canWrite && !isPicker && (
+                <button
+                  type="button"
+                  onClick={() => void deleteSelected()}
+                  className={`${dash.btn} ${dash.btnText} ${dash.btnDense} text-red-300`}
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  Delete ({selected.size})
+                </button>
               )}
             </>
           }
@@ -293,6 +373,7 @@ export function MediaLibraryManager() {
                 setQ(e.target.value);
                 setPage(1);
               }}
+              aria-label="Search media"
             />
           </div>
 
@@ -304,6 +385,7 @@ export function MediaLibraryManager() {
                 setFolder(e.target.value);
                 setPage(1);
               }}
+              aria-label="Filter by folder"
             >
               <option value="">All folders</option>
               {folders.map((f) => (
@@ -322,6 +404,7 @@ export function MediaLibraryManager() {
                 setStaticFolder(e.target.value);
                 setPage(1);
               }}
+              aria-label="Filter by public folder"
             >
               {publicFolders.length > 0 ? (
                 publicFolders.map((f) => (
@@ -339,6 +422,7 @@ export function MediaLibraryManager() {
             className={`${dash.inputCompact} ${dash.filterSelect}`}
             value={mime}
             onChange={(e) => setMime(e.target.value)}
+            aria-label="Filter by file type"
           >
             <option value="">All types</option>
             <option value="webp">WebP</option>
@@ -346,36 +430,6 @@ export function MediaLibraryManager() {
             <option value="png">PNG</option>
             <option value="svg">SVG</option>
           </select>
-
-          <div className={dash.filterActions}>
-            {canWrite && source === "uploads" && (
-              <label className="media-library-dropzone">
-                <input
-                  type="file"
-                  multiple
-                  accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
-                  className="hidden"
-                  onChange={(e) => void onUpload(e.target.files)}
-                />
-                {uploading ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin text-[#EFCD62]" />
-                ) : (
-                  <Upload className="h-3.5 w-3.5" />
-                )}
-                Upload
-              </label>
-            )}
-            {selected.size > 0 && canWrite && (
-              <button
-                type="button"
-                onClick={() => void deleteSelected()}
-                className={`${dash.btn} ${dash.btnText} ${dash.btnDense} text-red-300`}
-              >
-                <Trash2 className="h-3.5 w-3.5" />
-                Delete ({selected.size})
-              </button>
-            )}
-          </div>
         </DashboardFilterBar>
 
         <div className="media-library-body">
@@ -394,61 +448,75 @@ export function MediaLibraryManager() {
             {items.map((item) => (
               <div
                 key={item._id}
-                className={`media-library-card group ${selected.has(item._id) ? "is-selected" : ""}`}
+                className={`media-library-card group${isPicker ? " media-library-card--picker" : ""} ${!isPicker && selected.has(item._id) ? "is-selected" : ""}`}
               >
                 <button
                   type="button"
                   className="media-library-card-preview"
-                  onClick={() => void loadDetail(item._id)}
+                  onClick={() => onCardClick(item)}
+                  title={isPicker ? `Select ${item.filename}` : undefined}
                 >
-                  <Image
-                    src={item.publicUrl}
-                    alt={item.alt || item.filename}
-                    fill
-                    className="object-cover"
-                    sizes="160px"
-                    unoptimized={isUnoptimizedMediaUrl(item.publicUrl)}
-                  />
+                  {isPicker ? (
+                    <img
+                      src={item.publicUrl}
+                      alt={item.alt || item.filename}
+                      className="media-library-card-preview__img"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <Image
+                      src={item.publicUrl}
+                      alt={item.alt || item.filename}
+                      fill
+                      className="object-cover"
+                      sizes="160px"
+                      unoptimized={isUnoptimizedMediaUrl(item.publicUrl)}
+                    />
+                  )}
                   {item.missingAlt && (
                     <span className="media-library-warn">No alt</span>
                   )}
                   {source === "static" && (
                     <span className="media-library-static-badge">Public</span>
                   )}
-                </button>
-                <div className="media-library-card-meta">
-                  <p className="truncate text-xs font-medium text-white">
-                    {item.filename}
-                  </p>
-                  <p className="truncate font-mono text-[10px] text-white/35">
-                    {item.publicUrl}
-                  </p>
-                  <div className="mt-1 flex items-center justify-between gap-1">
-                    <span className="text-[10px] text-white/40">
-                      {formatBytes(item.size)}
+                  {isPicker && (
+                    <span className="media-library-card__caption">
+                      {item.filename}
                     </span>
-                    <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                      <button
-                        type="button"
-                        title="Copy path"
-                        onClick={() => void copyPath(item.publicUrl)}
-                        className="p-1 text-white/50 hover:text-[#EFCD62]"
-                      >
-                        <Copy className="h-3 w-3" />
-                      </button>
-                      {canWrite && (
+                  )}
+                </button>
+                {!isPicker && (
+                  <div className="media-library-card-meta">
+                    <p className="truncate">{item.filename}</p>
+                    <p className="truncate font-mono">{item.publicUrl}</p>
+                    <div className="mt-1 flex items-center justify-between gap-1">
+                      <span className="text-[0.6875rem] text-[var(--dash-text-muted)]">
+                        {formatBytes(item.size)}
+                      </span>
+                      <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
                         <button
                           type="button"
-                          title="Select"
-                          onClick={() => toggleSelect(item._id)}
-                          className="p-1 text-white/50 hover:text-[#EFCD62]"
+                          title="Copy path"
+                          onClick={() => void copyPath(item.publicUrl)}
+                          className="p-1 text-white/50 hover:text-[var(--dash-accent)]"
                         >
-                          <Check className="h-3 w-3" />
+                          <Copy className="h-3 w-3" />
                         </button>
-                      )}
+                        {canWrite && (
+                          <button
+                            type="button"
+                            title="Select"
+                            onClick={() => toggleSelect(item._id)}
+                            className="p-1 text-white/50 hover:text-[var(--dash-accent)]"
+                          >
+                            <Check className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             ))}
           </div>
@@ -465,7 +533,7 @@ export function MediaLibraryManager() {
                   : "Upload images here or use Browse Library in the blog editor."
               }
               action={
-                canWrite && source === "uploads" ? (
+                canWrite && (source === "uploads" || isPicker) ? (
                   <label className="media-library-dropzone media-library-dropzone--panel">
                     <input
                       type="file"
@@ -475,9 +543,9 @@ export function MediaLibraryManager() {
                       onChange={(e) => void onUpload(e.target.files)}
                     />
                     {uploading ? (
-                      <Loader2 className="h-5 w-5 animate-spin text-[#EFCD62]" />
+                      <Loader2 className="h-5 w-5 animate-spin text-[var(--dash-accent)]" />
                     ) : (
-                      <Upload className="h-5 w-5 text-[#EFCD62]/70" />
+                      <Upload className="h-5 w-5 text-[var(--dash-accent)]" />
                     )}
                     Drag & drop or click to upload
                   </label>
@@ -508,7 +576,7 @@ export function MediaLibraryManager() {
           )}
         </div>
 
-        {detail && (
+        {!isPicker && detail && (
           <aside className="media-library-detail">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-philosopher text-lg text-white">Asset details</h3>
@@ -651,6 +719,44 @@ export function MediaLibraryManager() {
         )}
         </div>
       </div>
+  );
+
+  const toolbar = (
+    <div className={isPicker ? "media-library-picker-toolbar" : undefined}>
+      <DashboardListToolbar onRefresh={load} refreshing={loading} bordered={isPicker}>
+        <div className={dash.toolbarSegment}>
+          <DashboardTabBar
+          tabs={[
+            {
+              id: "uploads",
+              label: "Uploads",
+              count: source === "uploads" ? total : undefined,
+            },
+            {
+              id: "static",
+              label: "Public site",
+              count: source === "static" ? total : undefined,
+            },
+          ]}
+          active={source}
+          onChange={(id) => {
+            setSource(id as "uploads" | "static");
+            setPage(1);
+          }}
+        />
+        </div>
+      </DashboardListToolbar>
+    </div>
+  );
+
+  return (
+    <DashboardModuleFrame
+      toolbar={toolbar}
+      error={error}
+      loading={loading && items.length === 0}
+      loadingLabel="Loading media…"
+    >
+      {libraryBody}
     </DashboardModuleFrame>
   );
 }

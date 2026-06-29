@@ -9,6 +9,7 @@ type DashboardListToolbarProps = {
   meta?: ReactNode;
   onRefresh?: () => void;
   refreshing?: boolean;
+  bordered?: boolean;
   children?: ReactNode;
 };
 
@@ -16,13 +17,19 @@ export function DashboardListToolbar({
   meta,
   onRefresh,
   refreshing = false,
+  bordered = true,
   children,
 }: DashboardListToolbarProps) {
+  const actionsClass = [
+    dash.toolbarActions,
+    "dashboard-toolbar__actions--list",
+    bordered ? "dashboard-toolbar__actions--bordered" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div
-      className={`${dash.toolbarActions} dashboard-toolbar__actions--list`}
-      role="toolbar"
-    >
+    <div className={actionsClass} role="toolbar" data-shrink-label>
       {meta != null && meta !== "" && (
         <div className={dash.toolbarSegment}>
           {typeof meta === "string" ? (

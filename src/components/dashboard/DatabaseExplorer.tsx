@@ -76,7 +76,7 @@ export function DatabaseExplorer() {
         <button
           type="button"
           onClick={() => loadSamples(r.name)}
-          className="inline-flex items-center gap-1 font-mono text-sm text-white/80 hover:text-[#EFCD62]"
+          className="inline-flex items-center gap-1 font-mono text-sm text-white/80 hover:text-[var(--dash-accent)]"
         >
           {sampleCollection === r.name ? (
             <ChevronDown className="h-3.5 w-3.5" />
@@ -105,7 +105,7 @@ export function DatabaseExplorer() {
         <DashboardListToolbar
           meta={
             <span className="inline-flex items-center gap-2">
-              <Database className="h-4 w-4 text-[#EFCD62]" />
+              <Database className="h-4 w-4 text-[var(--dash-accent)]" />
               <span>
                 Read-only overview
                 {database && (

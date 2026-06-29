@@ -8,6 +8,7 @@ import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import { BuildChoice } from "./BuildChoice";
 import { ManualBuilder } from "./ManualBuilder";
 import { HtmlBuilder } from "./HtmlBuilder";
+import { DashboardPageFallback } from "@/components/dashboard/ui/DashboardPageFallback";
 import type { BuilderPageData } from "./shared/saveBlog";
 
 type BuildClientProps = {
@@ -55,9 +56,7 @@ export function BuildClient({ page, mode }: BuildClientProps) {
   }, [canWrite, page.pageKey, session?.user]);
 
   if (status === "loading" || !canWrite) {
-    return (
-      <p className="p-6 font-manrope text-sm text-white/50">Loading builder…</p>
-    );
+    return <DashboardPageFallback label="Loading builder…" />;
   }
 
   if (mode === "manual") {

@@ -54,6 +54,7 @@ import {
   Headset,
 } from "lucide-react"; // Import all potentially used icons
 import CallToEnquireLink from "@/components/ui/CallToEnquireLink";
+import { isVillaRecordBookable } from "@/lib/villaBooking";
 import ScrollHideTopChrome from "@/components/ui/ScrollHideTopChrome";
 import Footer from "@/components/Footer";
 import DetailsDrawer from "@/components/DetailsDrawer";
@@ -221,6 +222,7 @@ export default function VillaDetailsPage() {
     if (liveVilla) return liveVilla;
     return staticVilla;
   }, [liveVilla, staticVilla]);
+  const villaBookable = villa ? isVillaRecordBookable(villa) : false;
   const retreatLogoSrc = getVillaRetreatLogoSrc(id);
   const { setEnquireOverlayOpen, isEnquireOverlayOpen } = useAnimation();
   const goBack = useSafeBack(villaListingPath());
@@ -864,11 +866,20 @@ export default function VillaDetailsPage() {
           </div>
         ) : (
           <a
-            href="/All Properties - Jade Hospitainment.pdf"
-            download
+            href={
+              villa.brochureUrl ?? "/All Properties - Jade Hospitainment.pdf"
+            }
+            download={
+              villa.brochureFilename ||
+              (villa.brochureUrl ? undefined : "Jade-Hospitainment-Brochure.pdf")
+            }
             className="w-full bg-white/5 border border-white/10 text-white px-8 py-4 uppercase tracking-[0.2em] text-[11px] font-bold hover:bg-white hover:text-black transition-all flex items-center justify-between group rounded-sm"
           >
-            <span>Download Brochure</span>
+            <span>
+              {villa.brochureFilename
+                ? `Download ${villa.brochureFilename.replace(/\.[^.]+$/, "")}`
+                : "Download Brochure"}
+            </span>
             <Download className="w-4 h-4 text-white/40 group-hover:text-black transition-colors" />
           </a>
         )}
@@ -1216,14 +1227,16 @@ export default function VillaDetailsPage() {
           </div>
           <div className="flex items-center gap-4 md:gap-6">
             <button onClick={() => setEnquireOverlayOpen(true)} className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap">ENQUIRE</button>
-            <PrimaryButton
-              href={`/book?villa=${villa.id}`}
-              withArrow={false}
-              width="compact"
-              className="!px-6 md:!px-10 whitespace-nowrap"
-            >
-              BOOK VILLA
-            </PrimaryButton>
+            {villaBookable ? (
+              <PrimaryButton
+                href={`/book?villa=${villa.id}`}
+                withArrow={false}
+                width="compact"
+                className="!px-6 md:!px-10 whitespace-nowrap"
+              >
+                BOOK VILLA
+              </PrimaryButton>
+            ) : null}
           </div>
         </div>
       </div>

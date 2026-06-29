@@ -1,7 +1,18 @@
 import { z } from "zod";
 import { paiseToRupees, rupeesToPaise } from "@/lib/money";
+import { syncVillaVisibilityFlags } from "@/lib/villas/villaVisibility";
+import { normalizeVillaSlug } from "@/lib/villas/villaIds";
 
 export const villaStatusSchema = z.enum(["active", "maintenance", "hidden"]);
+
+const villaIdSchema = z
+  .string()
+  .min(2)
+  .max(80)
+  .transform((s) => normalizeVillaSlug(s))
+  .refine((s) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s), {
+    message: "Use lowercase letters, numbers, and hyphens only",
+  });
 
 const weddingTierUpdateSchema = z.object({
   id: z.string().min(1),
@@ -72,14 +83,41 @@ const villaContentUpdateSchema = z
     images: z.array(z.string().max(500)).optional(),
     locationDetails: z
       .object({
+        mapImage: z.string().max(500).optional(),
         address: z.string().optional(),
         distance: z.string().optional(),
         googleMapsUrl: z.string().optional(),
         nearby: z
-          .array(z.object({ label: z.string(), distance: z.string() }))
+          .array(
+            z.object({
+              label: z.string(),
+              distance: z.string(),
+              note: z.string().optional(),
+            }),
+          )
           .optional(),
       })
       .partial()
+      .optional(),
+    services: z
+      .array(
+        z.object({
+          title: z.string(),
+          description: z.string().optional(),
+          footer: z.string().optional(),
+          icon: z.string().optional(),
+        }),
+      )
+      .optional(),
+    propertyDetails: z
+      .array(
+        z.object({
+          title: z.string().optional(),
+          label: z.string().optional(),
+          description: z.string(),
+          icon: z.string().optional(),
+        }),
+      )
       .optional(),
     video: z
       .object({
@@ -93,22 +131,15 @@ const villaContentUpdateSchema = z
       .array(z.object({ question: z.string(), answer: z.string() }))
       .optional(),
     hideFromVillasDirectory: z.boolean().optional(),
+    brochureUrl: z.string().max(500).optional(),
+    brochureFilename: z.string().max(200).optional(),
   })
   .partial();
 
 export const createVillaSchema = z
   .object({
-    slug: z
-      .string()
-      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Lowercase slug with hyphens only")
-      .min(2)
-      .max(80),
-    retreatId: z
-      .string()
-      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
-      .min(2)
-      .max(80)
-      .optional(),
+    slug: villaIdSchema,
+    retreatId: villaIdSchema.optional(),
     name: z.string().min(2).max(120),
     shortName: z.string().min(1).max(80),
     type: z.string().max(160).default(""),
@@ -479,6 +510,13 @@ export function applyVillaUpdate(
   if (input.bookable !== undefined) {
     villa.bookable = input.bookable;
     applied.bookable = input.bookable;
+  }
+  if (input.status !== undefined) {
+    syncVillaVisibilityFlags(villa);
+    if (villa.status === "hidden") {
+      applied.hideFromVillasDirectory = true;
+      applied.bookable = false;
+    }
   }
   if (input.weddingVenue !== undefined) {
     villa.weddingVenue = input.weddingVenue;

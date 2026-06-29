@@ -16,13 +16,30 @@ import {
 import { dash } from "@/lib/dashboard/dashboardClasses";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import type { AdminVillaDetail } from "@/lib/villas/adminVilla";
+import {
+  formatZodValidationError,
+  normalizeVillaSlug,
+} from "@/lib/villas/villaIds";
 import { ImageUploadField } from "./ImageUploadField";
+import { AmenityEditorRows } from "./wizard/AmenityEditorRows";
+import { BrochureUploadField } from "./wizard/BrochureUploadField";
+import {
+  NearbyLandmarkRows,
+  nearbyDraftFromStored,
+  nearbyDraftToPayload,
+  type NearbyDraft,
+} from "./wizard/NearbyLandmarkRows";
+import {
+  wizardHintClass,
+  wizardInputClass,
+  wizardLabelClass,
+  wizardSectionClass,
+} from "./wizard/wizardFieldStyles";
+import { VILLA_AMENITY_ICON_OPTIONS } from "@/lib/villas/amenityIconOptions";
 
-const inputClass =
-  "w-full border border-white/15 bg-black/20 px-3 py-2.5 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[#EFCD62]/60 focus:outline-none";
-const labelClass =
-  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[#EFCD62]/90";
-const hintClass = "mt-1 font-manrope text-xs text-white/35";
+const inputClass = wizardInputClass;
+const labelClass = wizardLabelClass;
+const hintClass = wizardHintClass;
 
 type AmenityRow = { label: string; icon: string; description: string };
 type ActivityRow = { title: string; image: string; description: string };
@@ -34,12 +51,21 @@ type SpaceRow = {
   images: string;
 };
 type FaqRow = { question: string; answer: string };
+type PerfectForCardRow = { title: string; image: string };
+type ServiceRow = {
+  title: string;
+  description: string;
+  footer: string;
+  icon: string;
+};
+type PropertyDetailRow = { title: string; description: string; icon: string };
 
 type ContentDraft = {
   description: string;
   socialProof: string;
   categories: string;
   perfectForTags: string;
+  perfectForCards: PerfectForCardRow[];
   amenities: AmenityRow[];
   activities: ActivityRow[];
   categorizedSpaces: SpaceRow[];
@@ -49,6 +75,12 @@ type ContentDraft = {
   address: string;
   distance: string;
   googleMapsUrl: string;
+  mapImage: string;
+  nearbyRows: NearbyDraft[];
+  brochureUrl: string;
+  brochureFilename: string;
+  services: ServiceRow[];
+  propertyDetails: PropertyDetailRow[];
   faq: FaqRow[];
   hideFromVillasDirectory: boolean;
 };
@@ -67,11 +99,12 @@ type BasicsDraft = {
 
 const STEPS = [
   "Identity",
-  "Story",
-  "Amenities",
+  "Intro section",
+  "Amenity grid",
   "Spaces",
-  "Experiences",
-  "Publish",
+  "Experiences & video",
+  "Location",
+  "More & publish",
 ] as const;
 
 function slugify(s: string) {
@@ -99,6 +132,7 @@ function emptyContent(): ContentDraft {
     socialProof: "",
     categories: "",
     perfectForTags: "",
+    perfectForCards: [{ title: "", image: "" }],
     amenities: [{ label: "", icon: "Sparkles", description: "" }],
     activities: [{ title: "", image: "", description: "" }],
     categorizedSpaces: [
@@ -110,6 +144,12 @@ function emptyContent(): ContentDraft {
     address: "",
     distance: "",
     googleMapsUrl: "",
+    mapImage: "",
+    nearbyRows: [{ label: "", distance: "", note: "" }],
+    brochureUrl: "",
+    brochureFilename: "",
+    services: [{ title: "", description: "", footer: "", icon: "Sparkles" }],
+    propertyDetails: [{ title: "", description: "", icon: "Home" }],
     faq: [{ question: "", answer: "" }],
     hideFromVillasDirectory: false,
   };
@@ -123,6 +163,7 @@ function contentFromAdmin(
     socialProof?: string;
     categories?: string[];
     perfectForTags?: string[];
+    perfectForCards?: PerfectForCardRow[];
     amenities?: AmenityRow[];
     activities?: ActivityRow[];
     categorizedSpaces?: {
@@ -134,13 +175,19 @@ function contentFromAdmin(
     }[];
     images?: string[];
     locationDetails?: {
+      mapImage?: string;
       address?: string;
       distance?: string;
       googleMapsUrl?: string;
+      nearby?: { label: string; distance: string; note?: string }[];
     };
+    services?: Array<ServiceRow & { footer?: string }>;
+    propertyDetails?: PropertyDetailRow[];
     video?: { youtubeUrl?: string; thumbnail?: string };
     faq?: FaqRow[];
     hideFromVillasDirectory?: boolean;
+    brochureUrl?: string;
+    brochureFilename?: string;
   };
 
   return {
@@ -148,6 +195,13 @@ function contentFromAdmin(
     socialProof: c.socialProof ?? "",
     categories: listToLines(c.categories),
     perfectForTags: listToLines(c.perfectForTags),
+    perfectForCards:
+      c.perfectForCards && c.perfectForCards.length > 0
+        ? c.perfectForCards.map((card) => ({
+            title: card.title ?? "",
+            image: card.image ?? "",
+          }))
+        : [{ title: "", image: "" }],
     amenities:
       c.amenities && c.amenities.length > 0
         ? c.amenities.map((a) => ({
@@ -188,6 +242,30 @@ function contentFromAdmin(
     address: c.locationDetails?.address ?? "",
     distance: c.locationDetails?.distance ?? "",
     googleMapsUrl: c.locationDetails?.googleMapsUrl ?? "",
+    mapImage: c.locationDetails?.mapImage ?? "",
+    nearbyRows: nearbyDraftFromStored(c.locationDetails?.nearby),
+    brochureUrl: c.brochureUrl ?? "",
+    brochureFilename: c.brochureFilename ?? "",
+    services:
+      c.services && c.services.length > 0
+        ? c.services.map((s) => ({
+            title: s.title ?? "",
+            description: s.description ?? "",
+            footer: s.footer ?? "",
+            icon: s.icon ?? "Sparkles",
+          }))
+        : [{ title: "", description: "", footer: "", icon: "Sparkles" }],
+    propertyDetails:
+      c.propertyDetails && c.propertyDetails.length > 0
+        ? c.propertyDetails.map((p) => {
+            const row = p as PropertyDetailRow & { label?: string };
+            return {
+              title: row.title ?? row.label ?? "",
+              description: row.description ?? "",
+              icon: row.icon ?? "Home",
+            };
+          })
+        : [{ title: "", description: "", icon: "Home" }],
     faq:
       c.faq && c.faq.length > 0
         ? c.faq
@@ -202,6 +280,12 @@ function buildContentPayload(draft: ContentDraft) {
     socialProof: draft.socialProof.trim() || undefined,
     categories: linesToList(draft.categories),
     perfectForTags: linesToList(draft.perfectForTags),
+    perfectForCards: draft.perfectForCards
+      .filter((c) => c.title.trim())
+      .map((c) => ({
+        title: c.title.trim(),
+        image: c.image.trim(),
+      })),
     amenities: draft.amenities
       .filter((a) => a.label.trim())
       .map((a) => ({
@@ -230,16 +314,36 @@ function buildContentPayload(draft: ContentDraft) {
       })),
     images: linesToList(draft.images),
     locationDetails: {
+      mapImage: draft.mapImage.trim() || undefined,
       address: draft.address.trim() || undefined,
       distance: draft.distance.trim() || undefined,
       googleMapsUrl: draft.googleMapsUrl.trim() || undefined,
+      nearby: nearbyDraftToPayload(draft.nearbyRows),
     },
-    video: draft.youtubeUrl.trim()
-      ? {
-          youtubeUrl: draft.youtubeUrl.trim(),
-          thumbnail: draft.videoThumbnail.trim() || undefined,
-        }
-      : undefined,
+    services: draft.services
+      .filter((s) => s.title.trim())
+      .map((s) => ({
+        title: s.title.trim(),
+        description: s.description.trim() || undefined,
+        footer: s.footer.trim() || undefined,
+        icon: s.icon.trim() || undefined,
+      })),
+    propertyDetails: draft.propertyDetails
+      .filter((p) => p.title.trim() && p.description.trim())
+      .map((p) => ({
+        title: p.title.trim(),
+        description: p.description.trim(),
+        icon: p.icon.trim() || undefined,
+      })),
+    video: (() => {
+      const youtubeUrl = draft.youtubeUrl.trim();
+      const thumbnail = draft.videoThumbnail.trim();
+      if (!youtubeUrl && !thumbnail) return undefined;
+      return {
+        ...(youtubeUrl ? { youtubeUrl } : {}),
+        ...(thumbnail ? { thumbnail } : {}),
+      };
+    })(),
     faq: draft.faq
       .filter((f) => f.question.trim())
       .map((f) => ({
@@ -247,6 +351,8 @@ function buildContentPayload(draft: ContentDraft) {
         answer: f.answer.trim(),
       })),
     hideFromVillasDirectory: draft.hideFromVillasDirectory,
+    brochureUrl: draft.brochureUrl.trim() || undefined,
+    brochureFilename: draft.brochureFilename.trim() || undefined,
   };
 }
 
@@ -350,12 +456,19 @@ export function PropertyWizard({
     try {
       const contentPayload = buildContentPayload(content);
       if (mode === "create") {
+        const slug = normalizeVillaSlug(basics.slug);
+        const retreatId = normalizeVillaSlug(
+          basics.retreatId.trim() || basics.slug.trim(),
+        );
+        if (slug.length < 2) {
+          throw new Error("URL slug must be at least 2 characters.");
+        }
         const res = await dashboardFetch("/api/dashboard/villas", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            slug: basics.slug.trim(),
-            retreatId: basics.retreatId.trim() || basics.slug.trim(),
+            slug,
+            retreatId: retreatId.length >= 2 ? retreatId : slug,
             name: basics.name.trim(),
             shortName: basics.shortName.trim(),
             type: basics.type.trim(),
@@ -366,8 +479,14 @@ export function PropertyWizard({
             content: contentPayload,
           }),
         });
-        const data = (await res.json().catch(() => ({}))) as { error?: string };
-        if (!res.ok) throw new Error(data.error ?? "Create failed");
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: string;
+          details?: unknown;
+        };
+        if (!res.ok) {
+          const detail = formatZodValidationError(data.details);
+          throw new Error(detail ?? data.error ?? "Create failed");
+        }
       } else if (editSlug) {
         const res = await dashboardFetch(`/api/dashboard/villas/${editSlug}`, {
           method: "PATCH",
@@ -383,8 +502,14 @@ export function PropertyWizard({
             content: contentPayload,
           }),
         });
-        const data = (await res.json().catch(() => ({}))) as { error?: string };
-        if (!res.ok) throw new Error(data.error ?? "Save failed");
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: string;
+          details?: unknown;
+        };
+        if (!res.ok) {
+          const detail = formatZodValidationError(data.details);
+          throw new Error(detail ?? data.error ?? "Save failed");
+        }
       }
       onSaved();
       onClose();
@@ -396,9 +521,9 @@ export function PropertyWizard({
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 p-4">
+    <div className="property-wizard fixed inset-0 z-[70] flex items-center justify-center bg-black/80 p-4">
       <div
-        className={`${GLASS_CHROME_FRAME_CLASS} relative flex max-h-[95dvh] w-full max-w-4xl flex-col border border-white/10 shadow-2xl`}
+        className={`property-wizard__shell ${GLASS_CHROME_FRAME_CLASS} relative flex max-h-[95dvh] w-full max-w-4xl flex-col border border-white/10 shadow-2xl`}
         onClick={(e) => e.stopPropagation()}
       >
         <span
@@ -416,9 +541,8 @@ export function PropertyWizard({
                 {basics.shortName || basics.name || "New villa"}
               </h2>
               <p className={hintClass}>
-                Changes save to MongoDB and reflect on{" "}
-                <code className="text-[#EFCD62]/80">/villas/[id]</code> within
-                ~30s cache.
+                Saves to MongoDB — listing & detail pages refresh within seconds
+                after publish (no manual redeploy).
               </p>
             </div>
             <button
@@ -431,15 +555,15 @@ export function PropertyWizard({
             </button>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-2">
+          <div className="property-wizard__rail mt-6 flex flex-wrap gap-2">
             {STEPS.map((label, i) => (
               <button
                 key={label}
                 type="button"
                 onClick={() => setStep(i)}
-                className={`min-h-[36px] border px-3 font-manrope text-[11px] font-bold uppercase tracking-wider transition-colors ${
+                className={`min-h-[var(--dash-control-h)] border px-3 font-manrope text-[11px] font-bold uppercase tracking-wider transition-colors ${
                   step === i
-                    ? "border-[#EFCD62] bg-[#EFCD62]/15 text-[#EFCD62]"
+                    ? "border-[var(--dash-accent-border)] bg-[var(--dash-accent-muted)] text-[var(--dash-accent)]"
                     : i < step
                       ? "border-emerald-500/40 text-emerald-300/80"
                       : "border-white/15 text-white/40"
@@ -459,7 +583,7 @@ export function PropertyWizard({
           <div className="p-5">
             {loading ? (
               <div className="flex items-center justify-center gap-3 py-16 text-white/50">
-                <Loader2 className="h-6 w-6 animate-spin text-[#EFCD62]" />
+                <Loader2 className="h-6 w-6 animate-spin text-[var(--dash-accent)]" />
                 Loading property…
               </div>
             ) : (
@@ -474,7 +598,7 @@ export function PropertyWizard({
                             className={inputClass}
                             value={basics.slug}
                             onChange={(e) => {
-                              const v = e.target.value.toLowerCase();
+                              const v = normalizeVillaSlug(e.target.value);
                               setBasics({
                                 ...basics,
                                 slug: v,
@@ -494,10 +618,17 @@ export function PropertyWizard({
                             className={inputClass}
                             value={basics.retreatId}
                             onChange={(e) =>
-                              setBasics({ ...basics, retreatId: e.target.value })
+                              setBasics({
+                                ...basics,
+                                retreatId: normalizeVillaSlug(e.target.value),
+                              })
                             }
-                            placeholder="Usually same as slug"
+                            placeholder="saad-villa (hyphens, no underscores)"
                           />
+                          <p className={hintClass}>
+                            Used in booking URLs — underscores are converted to
+                            hyphens automatically.
+                          </p>
                         </div>
                       </>
                     )}
@@ -573,7 +704,11 @@ export function PropertyWizard({
                 )}
 
                 {step === 1 && (
-                  <div className="space-y-4">
+                  <div className="space-y-5">
+                    <p className={hintClass}>
+                      Section 1 on the public villa page — headline copy, tags, and
+                      brochure download.
+                    </p>
                     <div>
                       <label className={labelClass}>Description</label>
                       <textarea
@@ -583,6 +718,7 @@ export function PropertyWizard({
                           setContent({ ...content, description: e.target.value })
                         }
                         rows={6}
+                        placeholder="Main paragraph under the amenity grid…"
                       />
                     </div>
                     <div>
@@ -593,161 +729,172 @@ export function PropertyWizard({
                         onChange={(e) =>
                           setContent({ ...content, socialProof: e.target.value })
                         }
-                        placeholder="Loved by 500+ guests"
+                        placeholder="Optional trust line under the villa name"
                       />
                     </div>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className={labelClass}>Categories</label>
-                        <textarea
-                          className={`${inputClass} min-h-[100px]`}
-                          value={content.categories}
-                          onChange={(e) =>
-                            setContent({ ...content, categories: e.target.value })
-                          }
-                          placeholder="One per line"
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Perfect for tags</label>
-                        <textarea
-                          className={`${inputClass} min-h-[100px]`}
-                          value={content.perfectForTags}
-                          onChange={(e) =>
-                            setContent({
-                              ...content,
-                              perfectForTags: e.target.value,
-                            })
-                          }
-                          placeholder="Weddings&#10;Corporate offsites"
-                        />
-                      </div>
+                    <div>
+                      <label className={labelClass}>Perfect for tags</label>
+                      <textarea
+                        className={`${inputClass} min-h-[100px]`}
+                        value={content.perfectForTags}
+                        onChange={(e) =>
+                          setContent({
+                            ...content,
+                            perfectForTags: e.target.value,
+                          })
+                        }
+                        placeholder="Boutique Stays&#10;Family Gatherings"
+                      />
+                      <p className={hintClass}>One per line — chips below description.</p>
+                    </div>
+                    <BrochureUploadField
+                      url={content.brochureUrl}
+                      filename={content.brochureFilename}
+                      onChange={(url, filename) =>
+                        setContent({
+                          ...content,
+                          brochureUrl: url,
+                          brochureFilename: filename,
+                        })
+                      }
+                      villaSlug={slugForUpload}
+                      disabled={!canWrite}
+                    />
+                    <div>
+                      <label className={labelClass}>Listing filter categories</label>
+                      <textarea
+                        className={`${inputClass} min-h-[80px]`}
+                        value={content.categories}
+                        onChange={(e) =>
+                          setContent({ ...content, categories: e.target.value })
+                        }
+                        placeholder="Pet Friendly&#10;Weekend Getaways"
+                      />
                     </div>
                   </div>
                 )}
 
                 {step === 2 && (
-                  <div className="space-y-4">
-                    {content.amenities.map((row, i) => (
-                      <div
-                        key={i}
-                        className="grid gap-3 border border-white/10 bg-white/[0.02] p-4 sm:grid-cols-3"
-                      >
-                        <input
-                          className={inputClass}
-                          placeholder="Label"
-                          value={row.label}
-                          onChange={(e) => {
-                            const next = [...content.amenities];
-                            next[i] = { ...row, label: e.target.value };
-                            setContent({ ...content, amenities: next });
-                          }}
-                        />
-                        <input
-                          className={inputClass}
-                          placeholder="Lucide icon name"
-                          value={row.icon}
-                          onChange={(e) => {
-                            const next = [...content.amenities];
-                            next[i] = { ...row, icon: e.target.value };
-                            setContent({ ...content, amenities: next });
-                          }}
-                        />
-                        <input
-                          className={inputClass}
-                          placeholder="Short description"
-                          value={row.description}
-                          onChange={(e) => {
-                            const next = [...content.amenities];
-                            next[i] = { ...row, description: e.target.value };
-                            setContent({ ...content, amenities: next });
-                          }}
-                        />
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      className="font-manrope text-sm text-[#EFCD62] hover:underline"
-                      onClick={() =>
-                        setContent({
-                          ...content,
-                          amenities: [
-                            ...content.amenities,
-                            { label: "", icon: "Sparkles", description: "" },
-                          ],
-                        })
-                      }
-                    >
-                      + Add amenity
-                    </button>
-                  </div>
+                  <AmenityEditorRows
+                    rows={content.amenities}
+                    onChange={(amenities) => setContent({ ...content, amenities })}
+                    disabled={!canWrite}
+                  />
                 )}
 
                 {step === 3 && (
                   <div className="space-y-6">
-                    <div>
-                      <label className={labelClass}>Gallery paths</label>
+                    <p className={hintClass}>
+                      Spaces carousel on villa detail — gallery paths plus per-space
+                      images.
+                    </p>
+                    <div className={wizardSectionClass}>
+                      <label className={labelClass}>Hero gallery paths</label>
                       <textarea
-                        className={`${inputClass} min-h-[100px] font-mono text-sm`}
+                        className={`${inputClass} min-h-[80px] font-mono text-sm`}
                         value={content.images}
                         onChange={(e) =>
                           setContent({ ...content, images: e.target.value })
                         }
-                        placeholder="One image path per line"
+                        placeholder="/Villa_Retreats/.../Hero 1.webp"
                       />
+                      <div className="mt-3">
+                        <ImageUploadField
+                          label="Add gallery image"
+                          hint="Upload or pick from library — appends to the list above."
+                          value=""
+                          compact
+                          onChange={(url) => {
+                            if (!url) return;
+                            const prev = content.images.trim();
+                            setContent({
+                              ...content,
+                              images: prev ? `${prev}\n${url}` : url,
+                            });
+                          }}
+                          villaSlug={slugForUpload}
+                          disabled={!canWrite}
+                        />
+                      </div>
                     </div>
                     {content.categorizedSpaces.map((row, i) => (
-                      <div
-                        key={row.id}
-                        className="space-y-3 border border-white/10 p-4"
-                      >
+                      <div key={row.id} className={`${wizardSectionClass} space-y-3`}>
                         <div className="grid gap-3 sm:grid-cols-2">
+                          <div>
+                            <label className={labelClass}>Space title</label>
+                            <input
+                              className={inputClass}
+                              value={row.title}
+                              onChange={(e) => {
+                                const next = [...content.categorizedSpaces];
+                                next[i] = { ...row, title: e.target.value };
+                                setContent({ ...content, categorizedSpaces: next });
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <label className={labelClass}>Category</label>
+                            <input
+                              className={inputClass}
+                              value={row.category}
+                              placeholder="Indoor / Outdoor / Pool"
+                              onChange={(e) => {
+                                const next = [...content.categorizedSpaces];
+                                next[i] = { ...row, category: e.target.value };
+                                setContent({ ...content, categorizedSpaces: next });
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className={labelClass}>Space amenities</label>
                           <input
                             className={inputClass}
-                            placeholder="Space title"
-                            value={row.title}
+                            placeholder="Pool, BBQ, Lawn (comma-separated)"
+                            value={row.amenities}
                             onChange={(e) => {
                               const next = [...content.categorizedSpaces];
-                              next[i] = { ...row, title: e.target.value };
-                              setContent({ ...content, categorizedSpaces: next });
-                            }}
-                          />
-                          <input
-                            className={inputClass}
-                            placeholder="Category"
-                            value={row.category}
-                            onChange={(e) => {
-                              const next = [...content.categorizedSpaces];
-                              next[i] = { ...row, category: e.target.value };
+                              next[i] = { ...row, amenities: e.target.value };
                               setContent({ ...content, categorizedSpaces: next });
                             }}
                           />
                         </div>
-                        <input
-                          className={inputClass}
-                          placeholder="Amenities (comma-separated)"
-                          value={row.amenities}
-                          onChange={(e) => {
+                        <div>
+                          <label className={labelClass}>Image paths</label>
+                          <textarea
+                            className={`${inputClass} min-h-[60px] font-mono text-sm`}
+                            value={row.images}
+                            onChange={(e) => {
+                              const next = [...content.categorizedSpaces];
+                              next[i] = { ...row, images: e.target.value };
+                              setContent({ ...content, categorizedSpaces: next });
+                            }}
+                            placeholder="One path per line"
+                          />
+                        </div>
+                        <ImageUploadField
+                          label="Add space image"
+                          hint="Path, library, or upload — appends to image paths above."
+                          value=""
+                          compact
+                          onChange={(url) => {
+                            if (!url) return;
                             const next = [...content.categorizedSpaces];
-                            next[i] = { ...row, amenities: e.target.value };
+                            const prev = row.images.trim();
+                            next[i] = {
+                              ...row,
+                              images: prev ? `${prev}\n${url}` : url,
+                            };
                             setContent({ ...content, categorizedSpaces: next });
                           }}
-                        />
-                        <textarea
-                          className={`${inputClass} min-h-[80px] font-mono text-sm`}
-                          placeholder="Image paths (one per line)"
-                          value={row.images}
-                          onChange={(e) => {
-                            const next = [...content.categorizedSpaces];
-                            next[i] = { ...row, images: e.target.value };
-                            setContent({ ...content, categorizedSpaces: next });
-                          }}
+                          villaSlug={slugForUpload}
+                          disabled={!canWrite}
                         />
                       </div>
                     ))}
                     <button
                       type="button"
-                      className="font-manrope text-sm text-[#EFCD62] hover:underline"
+                      className="font-manrope text-sm text-[var(--dash-accent)] hover:underline"
                       onClick={() =>
                         setContent({
                           ...content,
@@ -771,21 +918,23 @@ export function PropertyWizard({
 
                 {step === 4 && (
                   <div className="space-y-6">
+                    <p className={hintClass}>
+                      Experiences carousel + video walkthrough section.
+                    </p>
                     {content.activities.map((row, i) => (
-                      <div
-                        key={i}
-                        className="space-y-3 border border-white/10 p-4"
-                      >
-                        <input
-                          className={inputClass}
-                          placeholder="Experience title"
-                          value={row.title}
-                          onChange={(e) => {
-                            const next = [...content.activities];
-                            next[i] = { ...row, title: e.target.value };
-                            setContent({ ...content, activities: next });
-                          }}
-                        />
+                      <div key={i} className={`${wizardSectionClass} space-y-3`}>
+                        <div>
+                          <label className={labelClass}>Experience title</label>
+                          <input
+                            className={inputClass}
+                            value={row.title}
+                            onChange={(e) => {
+                              const next = [...content.activities];
+                              next[i] = { ...row, title: e.target.value };
+                              setContent({ ...content, activities: next });
+                            }}
+                          />
+                        </div>
                         <ImageUploadField
                           label="Experience image"
                           value={row.image}
@@ -797,21 +946,23 @@ export function PropertyWizard({
                           villaSlug={slugForUpload}
                           disabled={!canWrite}
                         />
-                        <textarea
-                          className={`${inputClass} min-h-[60px]`}
-                          placeholder="Description"
-                          value={row.description}
-                          onChange={(e) => {
-                            const next = [...content.activities];
-                            next[i] = { ...row, description: e.target.value };
-                            setContent({ ...content, activities: next });
-                          }}
-                        />
+                        <div>
+                          <label className={labelClass}>Caption</label>
+                          <textarea
+                            className={`${inputClass} min-h-[60px]`}
+                            value={row.description}
+                            onChange={(e) => {
+                              const next = [...content.activities];
+                              next[i] = { ...row, description: e.target.value };
+                              setContent({ ...content, activities: next });
+                            }}
+                          />
+                        </div>
                       </div>
                     ))}
                     <button
                       type="button"
-                      className="font-manrope text-sm text-[#EFCD62] hover:underline"
+                      className="font-manrope text-sm text-[var(--dash-accent)] hover:underline"
                       onClick={() =>
                         setContent({
                           ...content,
@@ -824,31 +975,39 @@ export function PropertyWizard({
                     >
                       + Add experience
                     </button>
-                    <div className="border-t border-white/10 pt-4">
-                      <label className={labelClass}>YouTube walkthrough URL</label>
-                      <input
-                        className={inputClass}
-                        value={content.youtubeUrl}
-                        onChange={(e) =>
-                          setContent({ ...content, youtubeUrl: e.target.value })
-                        }
-                        placeholder="https://www.youtube.com/watch?v=..."
-                      />
-                      <div className="mt-4">
-                        <ImageUploadField
-                          label="Video thumbnail (optional)"
-                          value={content.videoThumbnail}
-                          onChange={(url) =>
-                            setContent({ ...content, videoThumbnail: url })
+                    <div className={`${wizardSectionClass} space-y-4`}>
+                      <div>
+                        <label className={labelClass}>YouTube walkthrough URL</label>
+                        <input
+                          className={inputClass}
+                          value={content.youtubeUrl}
+                          onChange={(e) =>
+                            setContent({ ...content, youtubeUrl: e.target.value })
                           }
-                          villaSlug={slugForUpload}
-                          disabled={!canWrite}
+                          placeholder="https://www.youtube.com/watch?v=..."
                         />
                       </div>
+                      <ImageUploadField
+                        label="Video thumbnail"
+                        hint="Poster before play — path, media library, or upload (WebP)."
+                        value={content.videoThumbnail}
+                        onChange={(url) =>
+                          setContent({ ...content, videoThumbnail: url })
+                        }
+                        villaSlug={slugForUpload}
+                        disabled={!canWrite}
+                        placeholder="/Villa_Retreats/.../walkthrough.webp"
+                      />
                     </div>
+                  </div>
+                )}
+
+                {step === 5 && (
+                  <div className="space-y-5">
+                    <p className={hintClass}>Location section on villa detail.</p>
                     <div className="grid gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className={labelClass}>Address</label>
+                      <div className="sm:col-span-2">
+                        <label className={labelClass}>Street address</label>
                         <input
                           className={inputClass}
                           value={content.address}
@@ -858,7 +1017,7 @@ export function PropertyWizard({
                         />
                       </div>
                       <div>
-                        <label className={labelClass}>Distance label</label>
+                        <label className={labelClass}>Distance summary</label>
                         <input
                           className={inputClass}
                           value={content.distance}
@@ -868,7 +1027,7 @@ export function PropertyWizard({
                           placeholder="45 min from Bangalore"
                         />
                       </div>
-                      <div className="sm:col-span-2">
+                      <div>
                         <label className={labelClass}>Google Maps URL</label>
                         <input
                           className={inputClass}
@@ -882,11 +1041,238 @@ export function PropertyWizard({
                         />
                       </div>
                     </div>
+                    <ImageUploadField
+                      label="Map preview image"
+                      hint="Optional static map graphic above the address."
+                      value={content.mapImage}
+                      onChange={(url) =>
+                        setContent({ ...content, mapImage: url })
+                      }
+                      villaSlug={slugForUpload}
+                      disabled={!canWrite}
+                    />
+                    <NearbyLandmarkRows
+                      rows={content.nearbyRows}
+                      onChange={(nearbyRows) =>
+                        setContent({ ...content, nearbyRows })
+                      }
+                      disabled={!canWrite}
+                    />
                   </div>
                 )}
 
-                {step === 5 && (
+                {step === 6 && (
                   <div className="space-y-6">
+                    <p className={hintClass}>
+                      Services, property highlights, perfect-for gallery, FAQ, and
+                      publish flags.
+                    </p>
+                    <div>
+                      <label className={labelClass}>Perfect-for image cards</label>
+                      <p className={hintClass}>
+                        Gallery section lower on the villa detail page.
+                      </p>
+                      <div className="mt-3 space-y-4">
+                        {content.perfectForCards.map((row, i) => (
+                          <div
+                            key={i}
+                            className={`${wizardSectionClass} grid gap-3 sm:grid-cols-2`}
+                          >
+                            <div>
+                              <label className={labelClass}>Card title</label>
+                              <input
+                                className={inputClass}
+                                value={row.title}
+                                onChange={(e) => {
+                                  const next = [...content.perfectForCards];
+                                  next[i] = { ...row, title: e.target.value };
+                                  setContent({ ...content, perfectForCards: next });
+                                }}
+                              />
+                            </div>
+                            <ImageUploadField
+                              label="Card image"
+                              value={row.image}
+                              onChange={(url) => {
+                                const next = [...content.perfectForCards];
+                                next[i] = { ...row, image: url };
+                                setContent({ ...content, perfectForCards: next });
+                              }}
+                              villaSlug={slugForUpload}
+                              disabled={!canWrite}
+                            />
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          className="font-manrope text-sm text-[var(--dash-accent)] hover:underline"
+                          onClick={() =>
+                            setContent({
+                              ...content,
+                              perfectForCards: [
+                                ...content.perfectForCards,
+                                { title: "", image: "" },
+                              ],
+                            })
+                          }
+                        >
+                          + Add perfect-for card
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className={labelClass}>Services</label>
+                      <div className="mt-3 space-y-3">
+                        {content.services.map((row, i) => (
+                          <div key={i} className={`${wizardSectionClass} grid gap-3`}>
+                            <div className="grid gap-3 sm:grid-cols-2">
+                              <div>
+                                <label className={labelClass}>Title</label>
+                                <input
+                                  className={inputClass}
+                                  value={row.title}
+                                  onChange={(e) => {
+                                    const next = [...content.services];
+                                    next[i] = { ...row, title: e.target.value };
+                                    setContent({ ...content, services: next });
+                                  }}
+                                />
+                              </div>
+                              <div>
+                                <label className={labelClass}>Icon</label>
+                                <select
+                                  className={inputClass}
+                                  value={row.icon}
+                                  onChange={(e) => {
+                                    const next = [...content.services];
+                                    next[i] = { ...row, icon: e.target.value };
+                                    setContent({ ...content, services: next });
+                                  }}
+                                >
+                                  {VILLA_AMENITY_ICON_OPTIONS.map((name) => (
+                                    <option
+                                      key={name}
+                                      value={name}
+                                      className="bg-[#1A1C1E]"
+                                    >
+                                      {name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                            <div>
+                              <label className={labelClass}>Description</label>
+                              <textarea
+                                className={`${inputClass} min-h-[60px]`}
+                                value={row.description}
+                                onChange={(e) => {
+                                  const next = [...content.services];
+                                  next[i] = { ...row, description: e.target.value };
+                                  setContent({ ...content, services: next });
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <label className={labelClass}>Footer note</label>
+                              <input
+                                className={inputClass}
+                                value={row.footer}
+                                placeholder="Optional small print under description"
+                                onChange={(e) => {
+                                  const next = [...content.services];
+                                  next[i] = { ...row, footer: e.target.value };
+                                  setContent({ ...content, services: next });
+                                }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          className="font-manrope text-sm text-[var(--dash-accent)] hover:underline"
+                          onClick={() =>
+                            setContent({
+                              ...content,
+                              services: [
+                                ...content.services,
+                                {
+                                  title: "",
+                                  description: "",
+                                  footer: "",
+                                  icon: "Sparkles",
+                                },
+                              ],
+                            })
+                          }
+                        >
+                          + Add service
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className={labelClass}>Property details</label>
+                      <p className={hintClass}>
+                        Highlight tiles on villa detail (title + description).
+                      </p>
+                      <div className="mt-3 space-y-3">
+                        {content.propertyDetails.map((row, i) => (
+                          <div
+                            key={i}
+                            className="grid gap-3 border border-white/10 p-4 sm:grid-cols-3"
+                          >
+                            <input
+                              className={inputClass}
+                              placeholder="Title"
+                              value={row.title}
+                              onChange={(e) => {
+                                const next = [...content.propertyDetails];
+                                next[i] = { ...row, title: e.target.value };
+                                setContent({ ...content, propertyDetails: next });
+                              }}
+                            />
+                            <input
+                              className={inputClass}
+                              placeholder="Icon name"
+                              value={row.icon}
+                              onChange={(e) => {
+                                const next = [...content.propertyDetails];
+                                next[i] = { ...row, icon: e.target.value };
+                                setContent({ ...content, propertyDetails: next });
+                              }}
+                            />
+                            <input
+                              className={inputClass}
+                              placeholder="Description"
+                              value={row.description}
+                              onChange={(e) => {
+                                const next = [...content.propertyDetails];
+                                next[i] = { ...row, description: e.target.value };
+                                setContent({ ...content, propertyDetails: next });
+                              }}
+                            />
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          className="font-manrope text-sm text-[var(--dash-accent)] hover:underline"
+                          onClick={() =>
+                            setContent({
+                              ...content,
+                              propertyDetails: [
+                                ...content.propertyDetails,
+                                { title: "", description: "", icon: "Home" },
+                              ],
+                            })
+                          }
+                        >
+                          + Add property detail
+                        </button>
+                      </div>
+                    </div>
+
                     {content.faq.map((row, i) => (
                       <div key={i} className="grid gap-3 sm:grid-cols-2">
                         <input
@@ -913,7 +1299,7 @@ export function PropertyWizard({
                     ))}
                     <button
                       type="button"
-                      className="font-manrope text-sm text-[#EFCD62] hover:underline"
+                      className="font-manrope text-sm text-[var(--dash-accent)] hover:underline"
                       onClick={() =>
                         setContent({
                           ...content,
@@ -925,51 +1311,63 @@ export function PropertyWizard({
                     </button>
 
                     <div className="grid gap-4 border border-white/10 bg-white/[0.02] p-4 sm:grid-cols-2">
-                      <div>
-                        <label className={labelClass}>Visibility status</label>
+                      <div className="sm:col-span-2">
+                        <label className={labelClass}>Public visibility</label>
                         <select
                           className={inputClass}
                           value={basics.status}
-                          onChange={(e) =>
-                            setBasics({ ...basics, status: e.target.value })
-                          }
+                          onChange={(e) => {
+                            const status = e.target.value;
+                            setBasics({
+                              ...basics,
+                              status,
+                              ...(status === "hidden" ? { bookable: false } : {}),
+                            });
+                          }}
                         >
                           <option value="active" className="bg-[#1A1C1E]">
-                            Active — visible
+                            Live — visible on /villas
                           </option>
                           <option value="maintenance" className="bg-[#1A1C1E]">
                             Maintenance
                           </option>
                           <option value="hidden" className="bg-[#1A1C1E]">
-                            Hidden — admin only
+                            Hidden — removed from public site
                           </option>
                         </select>
                       </div>
-                      <label className="flex cursor-pointer items-center gap-3 self-end border border-white/10 px-4 py-3 font-manrope text-sm text-white/75">
+                      <label className="flex cursor-pointer items-center gap-3 border border-white/10 px-4 py-3 font-manrope text-sm text-white/75">
                         <input
                           type="checkbox"
                           checked={basics.bookable}
+                          disabled={basics.status === "hidden"}
                           onChange={(e) =>
                             setBasics({ ...basics, bookable: e.target.checked })
                           }
-                          className="h-4 w-4 accent-[#EFCD62]"
+                          className="h-4 w-4 accent-[var(--dash-accent)] disabled:opacity-40"
                         />
-                        Bookable on /book
+                        Allow online booking (Book Villa)
                       </label>
-                      <label className="flex cursor-pointer items-center gap-3 border border-white/10 px-4 py-3 font-manrope text-sm text-white/75 sm:col-span-2">
+                      <label className="flex cursor-pointer items-center gap-3 border border-white/10 px-4 py-3 font-manrope text-sm text-white/75">
                         <input
                           type="checkbox"
                           checked={content.hideFromVillasDirectory}
+                          disabled={basics.status === "hidden"}
                           onChange={(e) =>
                             setContent({
                               ...content,
                               hideFromVillasDirectory: e.target.checked,
                             })
                           }
-                          className="h-4 w-4 accent-[#EFCD62]"
+                          className="h-4 w-4 accent-[var(--dash-accent)] disabled:opacity-40"
                         />
-                        Hide from /villas directory (detail page still reachable by URL)
+                        Hide from /villas only (detail URL still works)
                       </label>
+                      <p className={`sm:col-span-2 ${hintClass}`}>
+                        <strong className="text-white/50">Not bookable:</strong> leave visibility Live and
+                        uncheck booking — guests see Enquire + View Villa.{" "}
+                        <strong className="text-white/50">Hidden:</strong> villa disappears from the site.
+                      </p>
                     </div>
 
                     {previewId && (
@@ -977,7 +1375,7 @@ export function PropertyWizard({
                         href={`/villas/${previewId}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 font-manrope text-sm text-[#EFCD62] hover:underline"
+                        className="inline-flex items-center gap-2 font-manrope text-sm text-[var(--dash-accent)] hover:underline"
                       >
                         Preview public page
                         <ExternalLink className="h-4 w-4" />
@@ -993,7 +1391,7 @@ export function PropertyWizard({
             )}
           </div>
 
-          <div className="sticky bottom-0 z-10 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 bg-[#1A1C1E]/95 p-5 backdrop-blur-sm">
+          <div className="property-wizard__footer sticky bottom-0 z-10 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 bg-[#1A1C1E]/95 p-5 backdrop-blur-sm">
             <button
               type="button"
               onClick={() => (step > 0 ? setStep(step - 1) : onClose())}
@@ -1008,7 +1406,7 @@ export function PropertyWizard({
                   type="button"
                   disabled={!canAdvance}
                   onClick={() => setStep(step + 1)}
-                  className="inline-flex min-h-[44px] items-center gap-2 bg-[#EFCD62] px-5 font-manrope text-xs font-bold uppercase tracking-wider text-[#1A1C1E] hover:bg-white disabled:opacity-40"
+                  className={`${dash.btn} ${dash.btnAccent}`}
                 >
                   Next
                   <ArrowRight className="h-4 w-4" />
@@ -1018,7 +1416,7 @@ export function PropertyWizard({
                   <button
                     type="submit"
                     disabled={saving || loading}
-                    className="inline-flex min-h-[44px] items-center gap-2 bg-[#EFCD62] px-5 font-manrope text-xs font-bold uppercase tracking-wider text-[#1A1C1E] hover:bg-white disabled:opacity-40"
+                    className={`${dash.btn} ${dash.btnAccent}`}
                   >
                     {saving ? (
                       <Loader2 className="h-4 w-4 animate-spin" />

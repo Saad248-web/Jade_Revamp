@@ -59,7 +59,7 @@ function PayloadCell({ eventId, preview }: { eventId: string; preview?: string |
       <button
         type="button"
         onClick={toggle}
-        className="inline-flex items-center gap-1 font-manrope text-xs text-[#EFCD62]/90 hover:underline"
+        className="inline-flex items-center gap-1 font-manrope text-xs text-[var(--dash-accent)] hover:underline"
       >
         {open ? (
           <ChevronDown className="h-3 w-3" />
@@ -106,7 +106,7 @@ export function WebhookLogsManager() {
       key: "source",
       header: "Source",
       cell: (r) => (
-        <span className="text-xs font-bold uppercase tracking-widest text-[#EFCD62]/80">
+        <span className="text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)]">
           {r.source}
         </span>
       ),
@@ -158,6 +158,8 @@ export function WebhookLogsManager() {
         rowKey={(r) => r.eventId + r.source}
         emptyMessage="No webhook events recorded yet."
         caption="Webhook events"
+        stickyFirstColumn
+        dense
       />
     </DashboardModuleFrame>
   );

@@ -165,8 +165,8 @@ The codebase has a solid foundation: NextAuth JWT sessions, role-based API guard
 
 | ID | Severity | Issue | Recommendation |
 |----|----------|-------|----------------|
-| UX-01 | **Medium** | Calendar grid horizontal scroll on small screens | Continue responsive pass on `CalendarGrid` toolbar |
-| UX-02 | **Low** | Gold-on-dark contrast on labels | Tune `--dash-accent` contrast for WCAG AA |
+| UX-01 | **Medium** | Calendar grid horizontal scroll on small screens | **Addressed** — sticky villa column, clamped day cells, bordered toolbar, landscape scroll caps, modal full-viewport rules (2026-06 mobile component pass) |
+| UX-02 | **Low** | Gold-on-dark contrast on labels | **Addressed** — fluid type tokens, `--dash-text-secondary`/`--dash-text-muted` tuned; `#EFCD62` migrated to `--dash-accent` in dashboard components; focus-visible rings |
 
 ---
 

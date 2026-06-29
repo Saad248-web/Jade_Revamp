@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { ExternalLink, X } from "lucide-react";
 import { ROLE_LOGIN_CONFIG } from "@/lib/auth/roleConfig";
@@ -198,6 +199,26 @@ export function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
   const groups = groupNav(filterNavByRole(role));
+  const mobileAsideRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.activeElement as HTMLElement | null;
+    const aside = mobileAsideRef.current;
+    const focusable = aside?.querySelector<HTMLElement>(
+      'a[href], button:not([disabled])',
+    );
+    focusable?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      prev?.focus();
+    };
+  }, [open, onClose]);
 
   const isActive = (href: string) => {
     if (href === "/dashboard") return pathname === "/dashboard";
@@ -212,7 +233,12 @@ export function Sidebar({
         aria-hidden={!open}
       />
 
-      <aside className={open ? dash.sidebarMobileOpen : dash.sidebarMobile}>
+      <aside
+        ref={mobileAsideRef}
+        className={open ? dash.sidebarMobileOpen : dash.sidebarMobile}
+        aria-label="Dashboard navigation"
+        aria-hidden={!open}
+      >
         <div className={dash.sidebarFrame}>
           <div className={dash.sidebarGlassFill}>
             <SidebarInner

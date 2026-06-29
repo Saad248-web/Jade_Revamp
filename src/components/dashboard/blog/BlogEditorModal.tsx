@@ -23,6 +23,7 @@ import {
 import { STATUS_LABELS } from "@/lib/cms/blogWorkflow";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import { dash } from "@/lib/dashboard/dashboardClasses";
+import { DashboardModalHeader } from "@/components/dashboard/ui/DashboardModalHeader";
 import {
   GLASS_CHROME_FRAME_CLASS,
   GLASS_INNER_SURFACE,
@@ -274,17 +275,16 @@ export function BlogEditorModal({
         />
         <form
           onSubmit={step === "faq" ? finish : (e) => e.preventDefault()}
-          className={dash.modalBody}
+          className="flex min-h-0 flex-col"
         >
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <h2 className="font-philosopher text-[length:var(--fs-h3)] text-white">
-                {isNew ? "Add blog post" : "Edit blog post"}
-              </h2>
-              <p className="mt-1 font-mono text-xs text-white/40">{pageKey}</p>
-            </div>
+          <DashboardModalHeader
+            section="Blog CMS"
+            title={isNew ? "Add blog post" : "Edit blog post"}
+            description={pageKey}
+            onClose={onClose}
+            actions={
             <nav
-              className="flex flex-wrap gap-1"
+              className="flex max-w-full flex-wrap gap-1"
               aria-label="Onboarding steps"
             >
               {STEPS.map((s, i) => (
@@ -293,9 +293,9 @@ export function BlogEditorModal({
                   type="button"
                   onClick={() => i <= stepIndex && setStep(s)}
                   disabled={i > stepIndex}
-                  className={`min-h-[36px] px-3 font-manrope text-xs font-bold uppercase tracking-wider ${
+                  className={`min-h-[var(--dash-control-h)] px-3 font-manrope text-xs font-bold uppercase tracking-wider ${
                     step === s
-                      ? "bg-[#EFCD62]/20 text-[#EFCD62]"
+                      ? "bg-[var(--dash-accent-muted)] text-[var(--dash-accent)]"
                       : i < stepIndex
                         ? "text-white/70 hover:text-white"
                         : "text-white/30"
@@ -305,8 +305,9 @@ export function BlogEditorModal({
                 </button>
               ))}
             </nav>
-          </div>
-
+            }
+          />
+          <div className={`${dash.modalBody} ${dash.stack}`}>
           {step === "details" && (
             <div className={dash.stack}>
               <div>
@@ -536,7 +537,7 @@ export function BlogEditorModal({
                 </div>
               </div>
               <div className="border-t border-white/10 pt-4">
-                <p className="mb-3 font-manrope text-xs font-bold uppercase tracking-widest text-[#EFCD62]/80">
+                <p className="mb-3 font-manrope text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)]">
                   Open Graph
                 </p>
                 <div className={dash.stack}>
@@ -570,7 +571,7 @@ export function BlogEditorModal({
                 </div>
               </div>
               <div className="border-t border-white/10 pt-4">
-                <p className="mb-3 font-manrope text-xs font-bold uppercase tracking-widest text-[#EFCD62]/80">
+                <p className="mb-3 font-manrope text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)]">
                   Search engine controls
                 </p>
                 <div className="flex flex-wrap gap-6">
@@ -620,7 +621,7 @@ export function BlogEditorModal({
                 {BLOG_SCHEMA_IDS.map((id) => (
                   <label
                     key={id}
-                    className="flex cursor-pointer items-center gap-3 border border-white/10 bg-black/20 px-4 py-3 hover:border-[#EFCD62]/30"
+                    className="flex cursor-pointer items-center gap-3 border border-white/10 bg-black/20 px-4 py-3 hover:border-[var(--dash-accent-border)]"
                   >
                     <input
                       type="checkbox"
@@ -703,6 +704,7 @@ export function BlogEditorModal({
             >
               Cancel
             </button>
+          </div>
           </div>
         </form>
       </div>

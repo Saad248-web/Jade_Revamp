@@ -1,17 +1,18 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { Loader2, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
   GLASS_CHROME_FRAME_CLASS,
   GLASS_INNER_SURFACE,
 } from "@/lib/glassChrome";
 import { dash } from "@/lib/dashboard/dashboardClasses";
+import { DashboardModalHeader } from "./ui/DashboardModalHeader";
 
 const inputClass =
-  "w-full border border-white/15 bg-black/20 px-4 py-3 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[#EFCD62]/60 focus:outline-none";
+  "w-full border border-white/15 bg-black/20 px-4 py-3 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[var(--dash-accent-border)] focus:outline-none";
 const labelClass =
-  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[#EFCD62]";
+  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[var(--dash-accent)]";
 
 type PasswordResetModalProps = {
   userName: string;
@@ -65,25 +66,14 @@ export function PasswordResetModal({
           aria-hidden
           className={`pointer-events-none absolute inset-px block ${GLASS_INNER_SURFACE}`}
         />
-        <form onSubmit={handleSubmit} className={dash.modalBody}>
-          <div className="flex items-center justify-between">
-            <h2 className="font-philosopher text-[length:var(--fs-h3)] text-white">
-              Reset password
-            </h2>
-            <button
-              type="button"
-              onClick={onClose}
-              className="text-white/55 hover:text-white"
-              aria-label="Close"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-          <p className="font-manrope text-sm text-white/50">
-            Set a new password for <strong className="text-white">{userName}</strong>{" "}
-            ({userEmail})
-          </p>
-          <div>
+        <form onSubmit={handleSubmit} className="flex min-h-0 flex-col">
+          <DashboardModalHeader
+            section="Staff"
+            title="Reset password"
+            description={`Set a new password for ${userName} (${userEmail})`}
+            onClose={onClose}
+          />
+          <div className={`${dash.modalBody} ${dash.stack}`}>          <div>
             <label className={labelClass} htmlFor="pr-password">
               New password
             </label>
@@ -119,11 +109,7 @@ export function PasswordResetModal({
           <button
             type="submit"
             disabled={saving}
-            className={`min-h-[48px] font-manrope text-sm font-bold uppercase tracking-widest transition-colors ${
-              saving
-                ? "cursor-not-allowed bg-white/10 text-white/30"
-                : "bg-[#EFCD62] text-[#1A1C1E] hover:bg-white"
-            }`}
+            className={`${dash.btn} ${dash.btnAccent} w-full`}
           >
             {saving ? (
               <Loader2 className="mx-auto h-5 w-5 animate-spin" />
@@ -131,6 +117,7 @@ export function PasswordResetModal({
               "Update password"
             )}
           </button>
+          </div>
         </form>
       </div>
     </div>

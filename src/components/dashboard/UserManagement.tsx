@@ -40,7 +40,7 @@ function apiErrorMessage(
 }
 
 const ROLE_BADGE: Record<Role, string> = {
-  admin: "border-[#EFCD62]/40 bg-[#EFCD62]/10 text-[#EFCD62]",
+  admin: "border-[var(--dash-accent-border)] bg-[var(--dash-accent-muted)] text-[var(--dash-accent)]",
   dev: "border-sky-400/40 bg-sky-400/10 text-sky-300",
   staff: "border-emerald-400/40 bg-emerald-400/10 text-emerald-300",
   team: "border-violet-400/40 bg-violet-400/10 text-violet-300",
@@ -333,7 +333,7 @@ export function UserManagement() {
             <button
               type="button"
               onClick={() => setModal({ mode: "edit", user: u })}
-              className="inline-flex h-9 w-9 items-center justify-center text-white/55 hover:text-[#EFCD62]"
+              className="inline-flex h-9 w-9 items-center justify-center text-white/55 hover:text-[var(--dash-accent)]"
               title="Edit"
               disabled={busy}
             >
@@ -410,18 +410,20 @@ export function UserManagement() {
           rowKey={(u) => u.id}
           emptyMessage="No staff accounts yet. Seed defaults with npm run db:seed:users or create one."
           caption="Staff accounts"
+          stickyFirstColumn
+          dense
         />
       </DashboardModuleFrame>
 
       <DashboardPanel pad>
         <div className="flex items-start gap-3">
-          <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#EFCD62]" />
+          <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[var(--dash-accent)]" />
           <p className={dash.muted}>
             Permissions are enforced on the backend per role. View the full
             access matrix under{" "}
             <a
               href="/dashboard/staff/roles"
-              className="text-[#EFCD62] underline-offset-2 hover:underline"
+              className="text-[var(--dash-accent)] underline-offset-2 hover:underline"
             >
               Roles &amp; Permissions
             </a>

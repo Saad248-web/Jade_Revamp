@@ -130,7 +130,7 @@ export function PaymentsManager() {
         <div className="flex flex-wrap justify-end gap-3">
           <Link
             href={`/dashboard/bookings/${r.id}`}
-            className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#EFCD62] hover:underline"
+            className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[var(--dash-accent)] hover:underline"
           >
             Folio
             <ExternalLink className="h-3 w-3" />
@@ -168,6 +168,8 @@ export function PaymentsManager() {
         rowKey={(r) => r.id}
         emptyMessage="No payment activity yet. Confirmed Razorpay bookings will appear here."
         caption="Payment activity"
+        stickyFirstColumn
+        dense
       />
     </DashboardModuleFrame>
   );

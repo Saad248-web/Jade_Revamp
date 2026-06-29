@@ -32,7 +32,7 @@ import type { BookingPricing } from "@/lib/bookings/types";
 import { villaListingPath } from "@/lib/appRoutes";
 import { useSafeBack } from "@/lib/safeBackNavigation";
 import { openRazorpayCheckout } from "@/lib/payments/razorpayCheckout";
-import { isVillaBookable } from "@/lib/villaBooking";
+import { isVillaBookable, isVillaRecordBookable } from "@/lib/villaBooking";
 import {
   estimateAddOnPaise,
   formatBookAddOnPrice,
@@ -963,9 +963,36 @@ function BookPageContent() {
   );
   const [previewLoading, setPreviewLoading] = useState(false);
   const [detailsForceErrors, setDetailsForceErrors] = useState(false);
+  const [liveBookable, setLiveBookable] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!selectedVillaId) {
+      setLiveBookable(null);
+      return;
+    }
+    let cancelled = false;
+    fetch(`/api/public/villas/${encodeURIComponent(selectedVillaId)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { villa?: { bookable?: boolean } } | null) => {
+        if (cancelled) return;
+        if (data?.villa) {
+          setLiveBookable(isVillaRecordBookable(data.villa as { id: string; bookable?: boolean }));
+        } else {
+          setLiveBookable(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLiveBookable(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedVillaId]);
 
   const villaBookingDisabled =
-    selectedVillaId !== null && !isVillaBookable(selectedVillaId);
+    selectedVillaId !== null &&
+    (liveBookable === false ||
+      (liveBookable === null && !isVillaBookable(selectedVillaId)));
 
   useEffect(() => {
     if (villaParam) setSelectedVillaId(villaParam);
@@ -990,7 +1017,7 @@ function BookPageContent() {
   useEffect(() => {
     if (
       villaParam &&
-      isVillaBookable(villaParam) &&
+      !villaBookingDisabled &&
       !stepParam &&
       dateRange.checkIn &&
       dateRange.checkOut &&
@@ -1105,7 +1132,7 @@ function BookPageContent() {
   /* ── Submit booking to API ── */
   const handlePayNow = useCallback(async () => {
     if (!selectedVilla || !dateRange.checkIn || !dateRange.checkOut) return;
-    if (!isVillaBookable(selectedVilla.id)) {
+    if (villaBookingDisabled) {
       setSubmitError(
         "Online booking is not available for this villa. Please enquire instead.",
       );
@@ -1175,6 +1202,9 @@ function BookPageContent() {
     guests,
     details,
     selectedAddOns,
+    villaBookingDisabled,
+    dateRange,
+    selectedVilla,
   ]);
 
   /* ── Show success screen ── */

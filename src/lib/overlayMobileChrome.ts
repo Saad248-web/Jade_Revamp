@@ -45,6 +45,8 @@ export function subscribeOverlayMobileChrome(): () => void {
   };
 
   sync();
+  requestAnimationFrame(sync);
+  const settleTimer = window.setTimeout(sync, 120);
   const vv = window.visualViewport;
   vv?.addEventListener("resize", sync);
   vv?.addEventListener("scroll", sync);
@@ -52,6 +54,7 @@ export function subscribeOverlayMobileChrome(): () => void {
   window.addEventListener("orientationchange", sync);
 
   return () => {
+    window.clearTimeout(settleTimer);
     vv?.removeEventListener("resize", sync);
     vv?.removeEventListener("scroll", sync);
     window.removeEventListener("resize", sync);

@@ -3,8 +3,9 @@
  * Imported after dashboard-polish.css.
  */
 
-/* ── Breakpoint tokens ── */
-.dashboard-root {
+/* ── Breakpoint tokens (shell + portaled modals) ── */
+.dashboard-root,
+.dashboard-modal-overlay {
   --dash-bp-sm: 640px;
   --dash-bp-md: 768px;
   --dash-bp-lg: 1024px;
@@ -204,6 +205,10 @@
 
 @media (max-width: 639px) {
   .dashboard-toolbar__actions--list .dashboard-btn--text:not(.dashboard-btn--dense) {
+    display: none;
+  }
+
+  [data-shrink-label] .dashboard-toolbar__actions--list .dashboard-btn--text:not(.dashboard-btn--dense) {
     display: none;
   }
 }
@@ -407,5 +412,189 @@
 
   .media-library-detail {
     margin-top: var(--dash-space-2);
+  }
+}
+
+/* ── Booking folio ── */
+@media (max-width: 767px) {
+  .booking-folio .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-folio .dashboard-panel--pad .dashboard-panel__body {
+    padding: var(--dash-space-3);
+  }
+}
+
+/* ── Roles matrix ── */
+.dash-roles-table {
+  min-width: 36rem;
+}
+
+@media (max-width: 767px) {
+  .dash-roles-table {
+    font-size: var(--dash-fs-small);
+  }
+}
+
+/* ── Blog builder ── */
+@media (max-width: 1023px) {
+  .blog-builder-layout {
+    flex-direction: column;
+  }
+
+  .blog-builder-sidebar {
+    width: 100%;
+    max-width: none;
+    border-right: 0;
+    border-bottom: 1px solid var(--dash-border);
+  }
+}
+
+/* ── Debug panel ── */
+.dash-debug-results .dashboard-panel__body {
+  padding: var(--dash-space-3) var(--dash-space-4);
+}
+
+/* ── Main scroll — avoid double scroll on landscape phones ── */
+@media (max-height: 500px) and (orientation: landscape) {
+  .dashboard-main {
+    min-height: 0;
+  }
+
+  [data-page-scroll-root] {
+    max-height: calc(100dvh - var(--dash-header-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/* ── Dev log explorers ── */
+.dash-log-viewer,
+.dashboard-log-detail {
+  overflow-x: auto;
+  word-break: break-word;
+}
+
+.dash-log-viewer pre,
+.dashboard-log-detail pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* ── Sidebar section labels ── */
+.dashboard-sidebar__section-label {
+  color: var(--dash-text-secondary);
+  letter-spacing: 0.12em;
+}
+
+/* ── Toolbar meta — hide on narrow viewports ── */
+@media (max-width: 639px) {
+  .dashboard-toolbar__meta--hide-sm {
+    display: none;
+  }
+
+  .dash-filter-bar__actions-row .dashboard-btn--accent,
+  .dash-filter-bar__actions-row .dashboard-btn:not(.dashboard-btn--icon) {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dashboard-modal {
+    width: 100%;
+    max-width: none;
+    max-height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .dashboard-modal__body {
+    padding: var(--dash-modal-pad);
+  }
+
+  .dash-modal-header .dashboard-btn--icon {
+    min-height: var(--dash-touch);
+    min-width: var(--dash-touch);
+  }
+}
+
+@media (max-width: 639px) {
+  .blocks-manager__add .dashboard-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Property wizard — step rail scroll on narrow screens */
+@media (max-width: 1023px) {
+  .property-wizard__rail {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-inline: -0.25rem;
+    padding-inline: 0.25rem;
+  }
+
+  .property-wizard__rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .property-wizard__rail button {
+    flex-shrink: 0;
+  }
+}
+
+/* Property wizard — step rail stacks */
+@media (max-width: 1023px) {
+  .property-wizard__layout {
+    flex-direction: column;
+  }
+
+  .property-wizard__rail {
+    width: 100%;
+    max-width: none;
+    border-right: 0;
+    border-bottom: 1px solid var(--dash-border);
+  }
+
+  .property-wizard__footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    padding-bottom: max(var(--dash-space-3), env(safe-area-inset-bottom, 0px));
+    background: var(--dash-bg-elevated);
+    border-top: 1px solid var(--dash-border);
+  }
+}
+
+/* Housekeeping board — card stack */
+@media (max-width: 767px) {
+  .housekeeping-board__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .housekeeping-board__chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .housekeeping-board__chips::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Booking folio — stack timeline */
+@media (max-width: 767px) {
+  .booking-folio__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .booking-folio__actions .dashboard-btn {
+    width: 100%;
+    justify-content: center;
   }
 }

@@ -2,11 +2,12 @@
 
 import { Suspense } from "react";
 import { SeoManagerDashboard } from "@/components/dashboard/seo/SeoManagerDashboard";
+import { DashboardPageFallback } from "@/components/dashboard/ui/DashboardPageFallback";
 import "@/styles/seo-manager.css";
 
 export default function SeoManagerPage() {
   return (
-    <Suspense fallback={<p className="text-white/50">Loading SEO Manager…</p>}>
+    <Suspense fallback={<DashboardPageFallback label="Loading SEO Manager…" />}>
       <SeoManagerDashboard />
     </Suspense>
   );

@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { connectDB } from "@/lib/db";
 import { ContentPageModel } from "@/models/ContentPage";
 import { BuildClient } from "./BuildClient";
+import { DashboardPageFallback } from "@/components/dashboard/ui/DashboardPageFallback";
 import type { BuilderPageData } from "./shared/saveBlog";
 
 export const dynamic = "force-dynamic";
@@ -31,6 +33,8 @@ export default async function BlogBuildPage({ params, searchParams }: PageProps)
   };
 
   return (
-    <BuildClient page={page} mode={searchParams.mode ?? "choose"} />
+    <Suspense fallback={<DashboardPageFallback label="Loading blog builder…" />}>
+      <BuildClient page={page} mode={searchParams.mode ?? "choose"} />
+    </Suspense>
   );
 }

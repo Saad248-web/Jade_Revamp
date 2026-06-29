@@ -25,9 +25,9 @@ type DataTableProps<T> = {
   emptyMessage?: string;
   caption?: string;
   renderAfterRow?: (row: T) => ReactNode | null;
+  stickyFirstColumn?: boolean;
+  dense?: boolean;
 };
-
-
 
 export function DataTable<T>({
   columns,
@@ -36,10 +36,18 @@ export function DataTable<T>({
   emptyMessage = "No records yet.",
   caption,
   renderAfterRow,
+  stickyFirstColumn = false,
+  dense = false,
 }: DataTableProps<T>) {
+  const tableClass = [
+    dash.dataTable,
+    stickyFirstColumn ? "dashboard-data-table--sticky-first" : "",
+    dense ? "dashboard-data-table--dense" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-
     <DashboardPanel pad className="w-full min-w-0">
 
       <p className="dashboard-data-table-scroll-hint" aria-hidden>
@@ -49,7 +57,7 @@ export function DataTable<T>({
 
       <div className={dash.dataTableWrap}>
 
-        <table className={dash.dataTable}>
+        <table className={tableClass}>
 
           {caption && <caption className="sr-only">{caption}</caption>}
 

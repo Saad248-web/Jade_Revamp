@@ -10,6 +10,9 @@ import {
   EXPERIENCE_OVERLAY_BOOKING_BAR_SPACER_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS,
   EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS,
+  EXPERIENCE_OVERLAY_CLOSE_BUTTON_FRAME_CLASS,
+  EXPERIENCE_OVERLAY_CLOSE_ICON_CLASS,
+  EXPERIENCE_OVERLAY_BOTTOM_BAR_SHEET_CLASS,
   EXPERIENCE_OVERLAY_CONTENT_FRAME_CLASS,
   EXPERIENCE_OVERLAY_DESKTOP_BODY_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_HOST_CLASS,
@@ -155,8 +158,8 @@ export function VillaExperienceOverlayBody({
               {scrollContent}
             </div>
             {mobileFooter ? (
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[60]">
-                <div className="pointer-events-auto">{mobileFooter}</div>
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[60] bg-jade-charcoal">
+                <div className="pointer-events-auto w-full">{mobileFooter}</div>
               </div>
             ) : null}
           </div>
@@ -203,17 +206,20 @@ export function VillaExperienceOverlayCloseFramer({
       aria-label="Close"
       className={EXPERIENCE_OVERLAY_CLOSE_BUTTON_CLASS}
     >
-      <X className="w-6 h-6 stroke-[1.5]" />
+      <X className={EXPERIENCE_OVERLAY_CLOSE_ICON_CLASS} />
     </MotionButton>
   );
 
   if (variant === "above-sheet") {
-    const bandCenterTop = `calc(${EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH / 2}svh - 1.5rem)`;
+    const bandCenterTop = `calc(${EXPERIENCE_OVERLAY_MOBILE_TOP_SHADE_VH}dvh / 2 - 1.25rem)`;
     return (
       <div
-        className="md:hidden fixed left-0 right-0 mx-auto z-[210] w-12 h-12 pointer-events-none"
+        className={clsx(
+          "md:hidden fixed left-0 right-0 mx-auto z-[210] pointer-events-none",
+          EXPERIENCE_OVERLAY_CLOSE_BUTTON_FRAME_CLASS,
+        )}
         style={{
-          top: `max(0.5rem, ${bandCenterTop})`,
+          top: `max(0.625rem, env(safe-area-inset-top, 0px), ${bandCenterTop})`,
         }}
       >
         {button}
@@ -412,12 +418,14 @@ export function VillaExperienceBookingBottomBar({
       className={clsx(
         "jade-scroll-chrome flex w-full justify-center transition-all",
         placement === "sheet"
-          ? "relative"
-          : "fixed bottom-0 left-0 z-[150] hidden md:flex",
-        VILLA_DETAIL_PRICING_BOTTOM_BAR_CHROME_CLASS,
-        "pt-4",
-        OVERLAY_MOBILE_ACTION_BAR_PB_CLASS,
-        "md:pb-4",
+          ? clsx(EXPERIENCE_OVERLAY_BOTTOM_BAR_SHEET_CLASS, "bg-jade-charcoal")
+          : clsx(
+              "fixed bottom-0 left-0 z-[150] hidden md:flex",
+              VILLA_DETAIL_PRICING_BOTTOM_BAR_CHROME_CLASS,
+              "pt-4",
+              OVERLAY_MOBILE_ACTION_BAR_PB_CLASS,
+              "md:pb-4",
+            ),
       )}
     >
       <div

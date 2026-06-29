@@ -5,6 +5,11 @@ import type { Villa } from "@/lib/types";
 import { VillaModel } from "@/models/Villa";
 import { buildPricingDisplay } from "@/lib/villas/pricingDisplay";
 import { CANONICAL_BY_RETREAT_ID } from "@/lib/villas/canonicalPortfolio";
+import {
+  directoryHiddenForMergedVilla,
+  isHiddenFromVillasDirectory,
+  isVillaPubliclyHidden,
+} from "@/lib/villas/villaVisibility";
 
 type MongoVilla = {
   slug: string;
@@ -99,10 +104,10 @@ function shellFromMongo(doc: MongoVilla): Villa {
     video: content.video,
     faq: content.faq,
     bookable: doc.bookable ?? true,
-    hideFromVillasDirectory:
-      content.hideFromVillasDirectory ??
-      (doc.status === "hidden" || !(doc.bookable ?? true)),
+    hideFromVillasDirectory: directoryHiddenForMergedVilla(doc),
     socialProof: content.socialProof,
+    brochureUrl: content.brochureUrl as string | undefined,
+    brochureFilename: content.brochureFilename as string | undefined,
   } as Villa;
 }
 
@@ -161,19 +166,28 @@ function mergeStaticWithMongo(staticVilla: Villa, doc: MongoVilla): Villa {
         : staticVilla.spaces,
     pricing: operationalPricing(doc) as Villa["pricing"],
     locationDetails: content.locationDetails ?? staticVilla.locationDetails,
-    video: content.video?.youtubeUrl ? content.video : staticVilla.video,
+    video:
+      content.video &&
+      (content.video.youtubeUrl || content.video.thumbnail)
+        ? {
+            ...staticVilla.video,
+            ...content.video,
+          }
+        : staticVilla.video,
     faq:
       content.faq && content.faq.length > 0 ? content.faq : staticVilla.faq,
     bookable: doc.bookable ?? staticVilla.bookable ?? true,
-    hideFromVillasDirectory:
-      content.hideFromVillasDirectory ??
-      staticVilla.hideFromVillasDirectory ??
-      doc.status === "hidden",
+    hideFromVillasDirectory: directoryHiddenForMergedVilla(doc, staticVilla),
     socialProof: content.socialProof ?? staticVilla.socialProof,
     categories:
       content.categories && content.categories.length > 0
         ? content.categories
         : staticVilla.categories,
+    brochureUrl:
+      (content.brochureUrl as string | undefined) || staticVilla.brochureUrl,
+    brochureFilename:
+      (content.brochureFilename as string | undefined) ||
+      staticVilla.brochureFilename,
   };
 }
 
@@ -191,6 +205,7 @@ export async function resolvePublicVilla(
     isDeleted: false,
   }).lean()) as MongoVilla | null;
 
+  if (doc && isVillaPubliclyHidden(doc)) return null;
   if (!doc && !staticVilla) return null;
   if (!doc) return staticVilla ?? null;
   if (!staticVilla) return shellFromMongo(doc);
@@ -202,12 +217,12 @@ export async function resolvePublicVillaList(): Promise<Villa[]> {
   await connectDB();
   const docs = (await VillaModel.find({ isDeleted: false }).lean()) as MongoVilla[];
   const byRetreatId = new Map<string, Villa>();
+  const mongoRetreatIds = new Set<string>();
 
   for (const doc of docs) {
     const id = doc.retreatId ?? doc.slug;
-    if (doc.status === "hidden" && doc.content?.hideFromVillasDirectory !== false) {
-      continue;
-    }
+    mongoRetreatIds.add(id);
+    if (isHiddenFromVillasDirectory(doc)) continue;
     const staticV = STATIC_VILLAS.find((v) => v.id === id) as Villa | undefined;
     byRetreatId.set(
       id,
@@ -216,9 +231,9 @@ export async function resolvePublicVillaList(): Promise<Villa[]> {
   }
 
   for (const staticV of STATIC_VILLAS as Villa[]) {
-    if (!byRetreatId.has(staticV.id)) {
-      byRetreatId.set(staticV.id, staticV);
-    }
+    if (mongoRetreatIds.has(staticV.id)) continue;
+    if (staticV.hideFromVillasDirectory) continue;
+    byRetreatId.set(staticV.id, staticV);
   }
 
   return Array.from(byRetreatId.values()).filter(

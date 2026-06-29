@@ -2,21 +2,22 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import Image from "next/image";
-import { Loader2, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
   GLASS_CHROME_FRAME_CLASS,
   GLASS_INNER_SURFACE,
 } from "@/lib/glassChrome";
 import { dash } from "@/lib/dashboard/dashboardClasses";
+import { DashboardModalHeader } from "./ui/DashboardModalHeader";
 import { ADD_ON_CATALOG } from "@/lib/bookings/addOnCatalog";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import type { AdminVillaDetail, AdminWeddingTier } from "@/lib/villas/adminVilla";
 import { ImageUploadField } from "./ImageUploadField";
 
 const inputClass =
-  "w-full border border-white/15 bg-black/20 px-3 py-2.5 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[#EFCD62]/60 focus:outline-none";
+  "w-full border border-white/15 bg-black/20 px-3 py-2.5 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[var(--dash-accent-border)] focus:outline-none";
 const labelClass =
-  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[#EFCD62]/90";
+  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[var(--dash-accent)]";
 const hintClass = "mt-1 font-manrope text-xs text-white/35";
 const sectionTitleClass =
   "font-philosopher text-[length:var(--fs-h3)] text-white border-b border-white/10 pb-2";
@@ -221,24 +222,13 @@ export function VillaEditModal({
         />
 
         {/* Header — sticky */}
-        <div
-          className="relative z-10 shrink-0 border-b border-white/10 bg-[#1A1C1E]/90 p-5 backdrop-blur-sm"
-        >
-          <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0 flex-1">
-              <p className="font-manrope text-xs uppercase tracking-widest text-white/40">
-                Villa settings
-                {!canWrite && " · read-only"}
-              </p>
-              <h2 className="mt-1 font-philosopher text-2xl text-white">
-                {villa?.shortName ?? villa?.name ?? slug}
-              </h2>
-              <p className="mt-1 font-manrope text-sm text-white/45">
-                {slug}
-                {villa?.retreatId && ` · ${villa.retreatId}`}
-              </p>
-            </div>
-            {villa?.thumbnail && (
+        <DashboardModalHeader
+          section={`Villa settings${!canWrite ? " · read-only" : ""}`}
+          title={villa?.shortName ?? villa?.name ?? slug}
+          description={`${slug}${villa?.retreatId ? ` · ${villa.retreatId}` : ""}`}
+          onClose={onClose}
+          actions={
+            villa?.thumbnail ? (
               <div className="relative hidden h-16 w-24 shrink-0 overflow-hidden border border-white/15 sm:block">
                 <Image
                   src={villa.thumbnail}
@@ -248,24 +238,16 @@ export function VillaEditModal({
                   sizes="96px"
                 />
               </div>
-            )}
-            <button
-              type="button"
-              onClick={onClose}
-              className="shrink-0 text-white/55 hover:text-white"
-              aria-label="Close"
-            >
-              <X className="h-6 w-6" />
-            </button>
-          </div>
-        </div>
+            ) : undefined
+          }
+        />
 
         {/* Body — scrolls inside panel */}
         <div className="relative z-10 min-h-0 flex-1 overflow-y-auto overscroll-contain">
           <div className="p-5">
             {loading ? (
               <div className="flex justify-center py-24">
-                <Loader2 className="h-8 w-8 animate-spin text-[#EFCD62]" />
+                <Loader2 className="h-8 w-8 animate-spin text-[var(--dash-accent)]" />
               </div>
             ) : !villa ? (
               <p className="text-red-400">{error ?? "Villa not found"}</p>
@@ -340,7 +322,7 @@ export function VillaEditModal({
                           <button
                             type="button"
                             onClick={onOpenFullEditor}
-                            className="w-full border border-[#EFCD62]/30 bg-[#EFCD62]/5 px-4 py-3 text-left font-manrope text-sm text-[#EFCD62] transition-colors hover:bg-[#EFCD62]/10"
+                            className="w-full border border-[var(--dash-accent-border)] bg-[var(--dash-accent-muted)] px-4 py-3 text-left font-manrope text-sm text-[var(--dash-accent)] transition-colors hover:bg-[var(--dash-accent-muted)]"
                           >
                             Open full property editor — amenities, spaces,
                             experiences, video & FAQ
@@ -551,40 +533,50 @@ export function VillaEditModal({
 
                   <FormSection
                     title="Availability"
-                    description="Controls calendar visibility and online booking."
+                    description="Hidden removes the villa from /villas and public detail URLs. Not bookable keeps the listing live with Enquire only."
                   >
                     <div className="grid gap-4 sm:grid-cols-3">
-                      <div>
-                        <label className={labelClass}>Status</label>
+                      <div className="sm:col-span-3">
+                        <label className={labelClass}>Public visibility</label>
                         <select
                           className={inputClass}
                           value={villa.status}
-                          onChange={(e) =>
-                            setVilla({ ...villa, status: e.target.value })
-                          }
+                          onChange={(e) => {
+                            const status = e.target.value;
+                            setVilla({
+                              ...villa,
+                              status,
+                              ...(status === "hidden" ? { bookable: false } : {}),
+                            });
+                          }}
                         >
                           <option value="active" className="bg-[#1A1C1E]">
-                            Active
+                            Live — visible on /villas
                           </option>
                           <option value="maintenance" className="bg-[#1A1C1E]">
-                            Maintenance
+                            Maintenance — visible, booking may be limited
                           </option>
                           <option value="hidden" className="bg-[#1A1C1E]">
-                            Hidden
+                            Hidden — removed from public site
                           </option>
                         </select>
                       </div>
-                      <label className="flex cursor-pointer items-center gap-3 self-end border border-white/10 bg-white/[0.02] px-4 py-3 font-manrope text-sm text-white/75">
+                      <label className="flex cursor-pointer items-center gap-3 self-end border border-white/10 bg-white/[0.02] px-4 py-3 font-manrope text-sm text-white/75 sm:col-span-2">
                         <input
                           type="checkbox"
                           checked={villa.bookable}
+                          disabled={villa.status === "hidden"}
                           onChange={(e) =>
                             setVilla({ ...villa, bookable: e.target.checked })
                           }
-                          className="h-4 w-4 accent-[#EFCD62]"
+                          className="h-4 w-4 accent-[var(--dash-accent)] disabled:opacity-40"
                         />
-                        Bookable online
+                        Allow online booking (Book Villa on listing & detail)
                       </label>
+                      <p className={`sm:col-span-3 ${hintClass}`}>
+                        Uncheck booking to show <strong className="text-white/60">Enquire</strong> and{" "}
+                        <strong className="text-white/60">View Villa</strong> only — villa stays visible.
+                      </p>
                       <label className="flex cursor-pointer items-center gap-3 self-end border border-white/10 bg-white/[0.02] px-4 py-3 font-manrope text-sm text-white/75">
                         <input
                           type="checkbox"
@@ -595,7 +587,7 @@ export function VillaEditModal({
                               weddingVenue: e.target.checked,
                             })
                           }
-                          className="h-4 w-4 accent-[#EFCD62]"
+                          className="h-4 w-4 accent-[var(--dash-accent)]"
                         />
                         Wedding / event venue
                       </label>
@@ -744,7 +736,7 @@ export function VillaEditModal({
                             type="checkbox"
                             checked={villa.addOnAvailability.includes(opt.id)}
                             onChange={() => toggleAddOn(opt.id)}
-                            className="h-4 w-4 shrink-0 accent-[#EFCD62]"
+                            className="h-4 w-4 shrink-0 accent-[var(--dash-accent)]"
                           />
                           <span>{opt.label}</span>
                         </label>
@@ -859,7 +851,7 @@ export function VillaEditModal({
                 className={`min-h-[48px] flex-[2] font-manrope text-sm font-bold uppercase tracking-widest ${
                   saving
                     ? "cursor-not-allowed bg-white/10 text-white/30"
-                    : "bg-[#EFCD62] text-[#1A1C1E] hover:bg-white"
+                    : `${dash.btn} ${dash.btnAccent}`
                 }`}
               >
                 {saving ? (

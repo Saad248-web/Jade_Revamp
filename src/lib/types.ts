@@ -144,7 +144,7 @@ export interface Villa {
     mapImage: string;
     address: string;
     distance: string;
-    nearby: Array<{ label: string; distance: string }>;
+    nearby: Array<{ label: string; distance: string; note?: string }>;
     /** Full Google Maps URL when you need an exact listing pin */
     googleMapsUrl?: string;
     /** Prefer over address search when set */
@@ -158,6 +158,9 @@ export interface Villa {
     duration: string;
   };
   faq?: VillaFAQ[];
+  /** Public download — villa brochure PDF/DOC/PPT */
+  brochureUrl?: string;
+  brochureFilename?: string;
 }
 
 // ─── Blog ─────────────────────────────────────────────────

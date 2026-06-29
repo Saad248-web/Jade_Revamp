@@ -1,0 +1,33 @@
+/** Lucide icon names used on villa detail amenity / service tiles. */
+export const VILLA_AMENITY_ICON_OPTIONS = [
+  "Waves",
+  "Wind",
+  "Home",
+  "Trees",
+  "Sun",
+  "Bath",
+  "ChefHat",
+  "Sparkles",
+  "Bell",
+  "ShieldCheck",
+  "Heart",
+  "Coffee",
+  "Car",
+  "Dribbble",
+  "Presentation",
+  "Mountain",
+  "PartyPopper",
+  "SprayCan",
+  "User",
+  "Phone",
+  "Zap",
+  "LayoutGrid",
+  "Leaf",
+  "HandPlatter",
+  "Mic",
+  "Music",
+  "Search",
+  "Check",
+] as const;
+
+export type VillaAmenityIconName = (typeof VILLA_AMENITY_ICON_OPTIONS)[number];

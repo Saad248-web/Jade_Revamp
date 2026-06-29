@@ -14,7 +14,7 @@ import {
   Heart,
 } from "lucide-react";
 import Link from "next/link";
-import { VILLAS } from "@/lib/mockData";
+import type { Villa } from "@/lib/types";
 import PrimaryButton from "@/components/PrimaryButton";
 import { JADE_BTN_HEIGHT } from "@/lib/jadeButtonTokens";
 import { useBooking } from "@/context/BookingContext";
@@ -36,7 +36,7 @@ import {
 } from "@/lib/appRoutes";
 
 interface VillaCardProps {
-  villa: (typeof VILLAS)[0];
+  villa: Villa;
 }
 
 export default function VillaCard({ villa }: VillaCardProps) {

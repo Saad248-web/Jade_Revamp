@@ -134,9 +134,9 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-24">
-        <Loader2 className="h-8 w-8 animate-spin text-[#EFCD62]" />
-      </div>
+      <DashboardModuleFrame loading loadingLabel="Loading booking folio…">
+        <></>
+      </DashboardModuleFrame>
     );
   }
 
@@ -148,7 +148,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
         action={
           <Link
             href="/dashboard"
-            className="inline-flex min-h-[44px] items-center gap-2 border border-[#EFCD62]/40 px-5 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-[#EFCD62] transition-colors hover:bg-[#EFCD62]/10"
+            className="inline-flex min-h-[44px] items-center gap-2 border border-[var(--dash-accent-border)] px-5 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)] transition-colors hover:bg-[var(--dash-accent-muted)]"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to calendar
@@ -164,7 +164,8 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
     "border-white/20 bg-white/5 text-white/60";
 
   return (
-    <div className="flex flex-col gap-5">
+    <DashboardModuleFrame error={error}>
+      <div className="booking-folio flex flex-col gap-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/dashboard"
@@ -181,7 +182,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
       </div>
 
       {canWrite && booking.status !== "cancelled" && (
-        <div className="flex flex-wrap gap-2">
+        <div className="booking-folio__actions flex flex-wrap gap-2">
           <button
             type="button"
             disabled={busy}
@@ -223,18 +224,13 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
             type="button"
             disabled={busy}
             onClick={() => runAction({ action: "notes", notes: notesDraft }, "Save notes?")}
-            className="mt-3 min-h-[44px] border border-[#EFCD62]/40 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-[#EFCD62] hover:bg-[#EFCD62]/10 disabled:opacity-50"
+            className="mt-3 min-h-[44px] border border-[var(--dash-accent-border)] px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)] hover:bg-[var(--dash-accent-muted)] disabled:opacity-50"
           >
             Save notes
           </button>
         </DashboardPanel>
       )}
 
-      {error && (
-        <p className="text-sm text-red-300" role="alert">
-          {error}
-        </p>
-      )}
 
       <div className="grid gap-4 lg:grid-cols-2">
         <FolioSection title="Guest">
@@ -243,7 +239,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
               label="Name"
               value={
                 <span className="inline-flex items-center gap-2">
-                  <User className="h-4 w-4 text-[#EFCD62]" aria-hidden />
+                  <User className="h-4 w-4 text-[var(--dash-accent)]" aria-hidden />
                   {booking.guestDetails.name}
                 </span>
               }
@@ -253,7 +249,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
               value={
                 <a
                   href={`mailto:${booking.guestDetails.email}`}
-                  className="inline-flex items-center gap-2 text-[#EFCD62] hover:underline"
+                  className="inline-flex items-center gap-2 text-[var(--dash-accent)] hover:underline"
                 >
                   <Mail className="h-4 w-4" aria-hidden />
                   {booking.guestDetails.email}
@@ -265,7 +261,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
               value={
                 <a
                   href={`tel:${booking.guestDetails.phone}`}
-                  className="inline-flex items-center gap-2 text-[#EFCD62] hover:underline"
+                  className="inline-flex items-center gap-2 text-[var(--dash-accent)] hover:underline"
                 >
                   <Phone className="h-4 w-4" aria-hidden />
                   {booking.guestDetails.phone}
@@ -290,7 +286,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
               label="Dates"
               value={
                 <span className="inline-flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-[#EFCD62]" aria-hidden />
+                  <Calendar className="h-4 w-4 text-[var(--dash-accent)]" aria-hidden />
                   {fmtDate(booking.checkIn)} → {fmtDate(booking.checkOut)} (
                   {nights} night{nights === 1 ? "" : "s"})
                 </span>
@@ -333,7 +329,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
             <DetailRow
               label="Total"
               value={
-                <span className="font-philosopher text-xl text-[#EFCD62]">
+                <span className="font-philosopher text-xl text-[var(--dash-accent)]">
                   {formatPaise(booking.pricing.totalPaise)}
                 </span>
               }
@@ -347,7 +343,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
               label="Status"
               value={
                 <span className="inline-flex items-center gap-2">
-                  <CreditCard className="h-4 w-4 text-[#EFCD62]" aria-hidden />
+                  <CreditCard className="h-4 w-4 text-[var(--dash-accent)]" aria-hidden />
                   {booking.payment.status}
                 </span>
               }
@@ -387,6 +383,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
           </dl>
         </FolioSection>
       </div>
-    </div>
+      </div>
+    </DashboardModuleFrame>
   );
 }

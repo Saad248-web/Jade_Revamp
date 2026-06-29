@@ -364,7 +364,7 @@ export function CalendarGrid({
   if (loading && !stats) {
     return (
       <div className="flex items-center justify-center py-24">
-        <Loader2 className="h-8 w-8 animate-spin text-[#EFCD62]" />
+        <Loader2 className="h-8 w-8 animate-spin text-[var(--dash-accent)]" />
       </div>
     );
   }
@@ -378,7 +378,7 @@ export function CalendarGrid({
           <button
             type="button"
             onClick={fetchCalendar}
-            className="min-h-[44px] border border-[#EFCD62]/40 px-5 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-[#EFCD62] transition-colors hover:bg-[#EFCD62]/10"
+            className="min-h-[var(--dash-touch)] border border-[var(--dash-accent-border)] px-5 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)] transition-colors hover:bg-[var(--dash-accent-muted)]"
           >
             Retry
           </button>

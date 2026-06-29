@@ -24,7 +24,7 @@ const STATUS_STYLE: Record<StayStatus, string> = {
   in_house: "border-emerald-400/40 bg-emerald-400/10 text-emerald-300",
   departed: "border-white/15 bg-white/[0.04] text-white/60",
   turnover: "border-amber-400/40 bg-amber-400/10 text-amber-300",
-  ready: "border-[#EFCD62]/40 bg-[#EFCD62]/10 text-[#EFCD62]",
+  ready: "border-[var(--dash-accent-border)] bg-[var(--dash-accent-muted)] text-[var(--dash-accent)]",
 };
 
 type HKBooking = BookingRecord & { isAssigned?: boolean };
@@ -119,7 +119,7 @@ export function HousekeepingBoard() {
           description="Confirmed bookings with checkout on or after today appear here. After a guest pays on /book, you can update stay status (upcoming → in-house → turnover → ready)."
         />
       ) : (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="housekeeping-board__grid grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {rows.map((b) => {
             const current = (b.stayStatus ?? "upcoming") as StayStatus;
             const locked = b.isAssigned === false;
@@ -147,15 +147,15 @@ export function HousekeepingBoard() {
                       Not assigned to you — read only.
                     </p>
                   ) : (
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="housekeeping-board__chips flex flex-wrap gap-1.5">
                       {STAY_STATUSES.map((s) => (
                         <button
                           key={s.value}
                           onClick={() => setStatus(b, s.value)}
                           disabled={savingId === b.id || current === s.value}
-                          className={`min-h-[40px] border px-3 font-manrope text-xs font-bold uppercase tracking-widest transition-colors ${
+                          className={`min-h-[var(--dash-control-h)] border px-3 font-manrope text-xs font-bold uppercase tracking-widest transition-colors ${
                             current === s.value
-                              ? "border-[#EFCD62] bg-[#EFCD62] text-[#1A1C1E]"
+                              ? "border-[var(--dash-accent)] bg-[var(--dash-accent)] text-[#1A1C1E]"
                               : "border-white/15 text-white/70 hover:border-white/40 hover:text-white"
                           } disabled:opacity-50`}
                         >

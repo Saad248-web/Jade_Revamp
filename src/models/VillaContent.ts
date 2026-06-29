@@ -73,7 +73,7 @@ export const VillaContentSchema = new Schema(
       address: { type: String, default: "" },
       distance: { type: String, default: "" },
       nearby: {
-        type: [{ label: String, distance: String }],
+        type: [{ label: String, distance: String, note: String }],
         default: [],
       },
       googleMapsUrl: { type: String, default: "" },
@@ -88,6 +88,8 @@ export const VillaContentSchema = new Schema(
       default: [],
     },
     hideFromVillasDirectory: { type: Boolean, default: false },
+    brochureUrl: { type: String, default: "" },
+    brochureFilename: { type: String, default: "" },
   },
   { _id: false },
 );

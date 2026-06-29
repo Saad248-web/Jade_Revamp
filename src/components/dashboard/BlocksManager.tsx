@@ -210,7 +210,7 @@ export function BlocksManager() {
             refreshing={loading}
           >
             {canWrite && villas.length > 0 && (
-              <div className={dash.toolbarSegment}>
+              <div className={`${dash.toolbarSegment} blocks-manager__add`}>
                 <button
                   type="button"
                   onClick={() => setModalOpen(true)}
@@ -250,6 +250,8 @@ export function BlocksManager() {
             rows={blocks}
             rowKey={(r) => r.id}
             caption="Manual villa blocks"
+            stickyFirstColumn
+            dense
           />
         )}
       </DashboardModuleFrame>
