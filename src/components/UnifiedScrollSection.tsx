@@ -21,7 +21,7 @@ export default function UnifiedScrollSection() {
       slides={slides}
       height={LIVE_BACKGROUND_SCROLL_SECTION_HEIGHT}
       fadeTiming="early"
-      lineStaggerDelayMs={350}
+      lineStaggerDelayMs={280}
       scrollEffects="performance"
       background={<LiveBackground />}
       showScrollIndicator

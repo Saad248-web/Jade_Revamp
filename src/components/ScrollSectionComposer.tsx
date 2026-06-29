@@ -63,8 +63,14 @@ const ScrollButton = ({ href, label }: { href: string; label: string }) => (
   </div>
 );
 
-const LINE_REVEAL_DURATION_S = 0.55;
+const LINE_REVEAL_DURATION_S = 0.42;
 const LINE_REVEAL_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+/** Scroll-span fractions for live-background copy (130vh sections). Lower = faster fade-in. */
+const EARLY_LABEL_FADE_SPAN = 0.07;
+const EARLY_BODY_FADE_WIDTH_RATIO = 0.52;
+const PHILOSOPHY_FADE_WIDTH = 0.14;
+const PHILOSOPHY_LABEL_FADE_SPAN = 0.05;
 
 function scrollRevealT(value: number, fadeInStart: number, fadeInEnd: number): number {
   if (value <= fadeInStart) return 0;
@@ -299,40 +305,52 @@ const SlideLines = ({
   const opacity = useTransform(progress, [start, fadeOut, end], [1, 1, 0]);
   const scale = useTransform(
     progress,
-    [start, start + span * (philosophy ? 0.08 : early ? 0.12 : 0.2), fadeOut, end],
+    [start, start + span * (philosophy ? 0.06 : early ? 0.08 : 0.2), fadeOut, end],
     [0.985, 1, 1, 0.995],
   );
   const useBlur = scrollEffects === "full";
   const blurPx = useTransform(
     progress,
-    [start, start + span * (philosophy ? 0.08 : early ? 0.12 : 0.2), fadeOut, end],
+    [start, start + span * (philosophy ? 0.06 : early ? 0.08 : 0.2), fadeOut, end],
     useBlur ? [6, 0, 0, 4] : [0, 0, 0, 0],
   );
   const blurFilter = useTransform(blurPx, (v) => `blur(${v}px)`);
 
   // Per-line fade-in: early = quick reveal, then idle until slide fade-out.
   const labelOffset = philosophy
-    ? 0.04
+    ? 0.03
     : early
       ? slide.label
-        ? 0.06
-        : 0.03
+        ? 0.04
+        : 0.02
       : slide.label
         ? 0.15
         : 0.05;
   const tail = philosophy ? 0.1 : early ? 0.22 : 0.15;
   const lineCount = Math.max(slide.lines.length, 1);
   const perLineWindow = (1 - labelOffset - tail) / lineCount;
-  const fadeWidth = philosophy ? 0.2 : perLineWindow * (early ? 0.72 : 0.85);
+  const fadeWidth = philosophy
+    ? PHILOSOPHY_FADE_WIDTH
+    : perLineWindow * (early ? EARLY_BODY_FADE_WIDTH_RATIO : 0.85);
 
   const labelOpacity = useTransform(
     progress,
-    [start + span * 0.01, start + span * (philosophy ? 0.08 : 0.12)],
+    [
+      start + span * 0.01,
+      start +
+        span *
+          (philosophy ? PHILOSOPHY_LABEL_FADE_SPAN : EARLY_LABEL_FADE_SPAN),
+    ],
     [0, 1],
   );
   const labelY = useTransform(
     progress,
-    [start + span * 0.01, start + span * (philosophy ? 0.08 : 0.12)],
+    [
+      start + span * 0.01,
+      start +
+        span *
+          (philosophy ? PHILOSOPHY_LABEL_FADE_SPAN : EARLY_LABEL_FADE_SPAN),
+    ],
     [12, 0],
   );
 
