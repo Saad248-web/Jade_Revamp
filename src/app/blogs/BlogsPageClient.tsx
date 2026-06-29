@@ -6,9 +6,7 @@ import Link from "next/link";
 import { ArrowRight, Clock, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
 import PrimaryButton from "@/components/PrimaryButton";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import MobileBottomNav from "@/components/MobileBottomNav";
 import type { BlogPost } from "@/data/blogs";
 import SectionFillTransition from "@/components/ui/SectionFillTransition";
 
@@ -78,11 +76,7 @@ type BlogsPageClientProps = {
 
 export default function BlogsPageClient({ posts }: BlogsPageClientProps) {
   return (
-    <main className="relative min-h-screen bg-[#25282C] text-white">
-      <Navbar />
-      <MobileBottomNav />
-
-      <section className="pt-24 pb-12 md:pt-40 md:pb-20 px-6 md:px-12 lg:px-24">
+    <main className="relative min-h-screen bg-[#25282C] text-white"><section className="pt-24 pb-12 md:pt-40 md:pb-20 px-6 md:px-12 lg:px-24">
         <div className="max-w-[1920px] mx-auto">
           <div className="max-w-3xl">
             <p className="font-manrope text-gh-label tracking-[0.3em] uppercase text-[#EFCD62] mb-5">

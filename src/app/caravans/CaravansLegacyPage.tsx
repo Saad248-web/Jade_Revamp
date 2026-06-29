@@ -2,8 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-import Navbar from "@/components/Navbar";
-import MobileBottomNav from "@/components/MobileBottomNav";
 import Footer from "@/components/Footer";
 import ExperienceHero from "@/components/ExperienceHero";
 import ExperienceScrollSection from "@/components/ExperienceScrollSection";
@@ -96,11 +94,7 @@ export default function CaravansLegacyPage() {
   }, [heroImages, allImages]);
 
   return (
-    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">
-      <Navbar />
-      <MobileBottomNav />
-
-      {/* SECTION 1: HERO SECTION */}
+    <main className="relative min-h-screen bg-[#1A1C1E] text-white pb-16 lg:pb-0">{/* SECTION 1: HERO SECTION */}
       <ExperienceHero
         scrollTargetId="caravans-philosophy"
         backgroundImages={heroBackgrounds}

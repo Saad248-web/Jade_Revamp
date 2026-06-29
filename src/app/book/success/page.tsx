@@ -5,8 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle, Home, ArrowRight, Calendar, Users } from "lucide-react";
 import { motion } from "framer-motion";
-import Navbar from "@/components/Navbar";
-import MobileBottomNav from "@/components/MobileBottomNav";
 
 function BookingSuccessContent() {
   const searchParams = useSearchParams();
@@ -24,10 +22,7 @@ function BookingSuccessContent() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#0B2C23] flex flex-col">
-      <Navbar />
-
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-20 text-center">
+    <main className="min-h-screen bg-[#0B2C23] flex flex-col"><div className="flex-1 flex flex-col items-center justify-center px-6 py-20 text-center">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -110,9 +105,7 @@ function BookingSuccessContent() {
         </motion.div>
       </div>
 
-      <div className="h-24 md:hidden" />
-      <MobileBottomNav />
-    </main>
+      <div className="h-24 md:hidden" />    </main>
   );
 }
 

@@ -58,7 +58,6 @@ import { isVillaRecordBookable } from "@/lib/villaBooking";
 import ScrollHideTopChrome from "@/components/ui/ScrollHideTopChrome";
 import Footer from "@/components/Footer";
 import DetailsDrawer from "@/components/DetailsDrawer";
-import MobileBottomNav from "@/components/MobileBottomNav";
 import { VILLAS } from "@/lib/mockData";
 import type { Villa } from "@/lib/types";
 import { prettyMediaLabel } from "@/lib/mediaLabels";
@@ -91,6 +90,7 @@ import { VILLA_DETAIL_PRICING_BOTTOM_BAR_CHROME_CLASS } from "@/lib/scrollChrome
 import VillaDetailImageFrame from "@/components/villa/VillaDetailImageFrame";
 import VillaDetailCarouselControls from "@/components/villa/VillaDetailCarouselControls";
 import VillaDetailExperienceCarousel from "@/components/villa/VillaDetailExperienceCarousel";
+import VillaPricingBottomBarRow from "@/components/villa/VillaPricingBottomBarRow";
 import {
   VILLA_DETAIL_CHARCOAL,
   VILLA_DETAIL_SPACING,
@@ -1220,25 +1220,12 @@ export default function VillaDetailsPage() {
           "pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:pb-4",
         )}
       >
-        <div className={clsx(vd.contentInsetShell, "flex justify-between items-center gap-4")}>
-          <div className="flex flex-col font-manrope leading-tight">
-            <span className={vd.pricingBarLabel}>Starting from</span>
-            <span className={vd.pricingBarPrice}>{villaFooterPriceDisplay ?? "Contact for pricing"}</span>
-          </div>
-          <div className="flex items-center gap-4 md:gap-6">
-            <button onClick={() => setEnquireOverlayOpen(true)} className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap">ENQUIRE</button>
-            {villaBookable ? (
-              <PrimaryButton
-                href={`/book?villa=${villa.id}`}
-                withArrow={false}
-                width="compact"
-                className="!px-6 md:!px-10 whitespace-nowrap"
-              >
-                BOOK VILLA
-              </PrimaryButton>
-            ) : null}
-          </div>
-        </div>
+        <VillaPricingBottomBarRow
+          priceDisplay={villaFooterPriceDisplay ?? "Contact for pricing"}
+          onEnquireClick={() => setEnquireOverlayOpen(true)}
+          bookHref={`/book?villa=${villa.id}`}
+          showBook={villaBookable}
+        />
       </div>
       ) : null}
       <DetailsDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} title={drawerData.title} items={drawerData.items} />

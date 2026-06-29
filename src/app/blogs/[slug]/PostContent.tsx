@@ -15,9 +15,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import PrimaryButton from "@/components/PrimaryButton";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import MobileBottomNav from "@/components/MobileBottomNav";
 import { BlogPost } from "@/data/blogs";
 import { BlogSectionRenderer } from "@/components/blog/BlogSectionRenderer";
 import { shouldShowProseLead } from "@/components/blog/blogProseUtils";
@@ -37,11 +35,7 @@ export default function PostContent({ post, relatedPosts }: PostContentProps) {
       : post.sections.find((s) => s.type === "image" && s.image)?.image ??
         post.image;
   return (
-    <main className="relative min-h-screen bg-[#25282C] text-white">
-      <Navbar />
-      <MobileBottomNav />
-
-      {/* Hero Header */}
+    <main className="relative min-h-screen bg-[#25282C] text-white">{/* Hero Header */}
       <section className="relative pt-24 pb-12 md:pt-40 md:pb-24 px-6 md:px-12 lg:px-24 overflow-hidden">
         <div className="max-w-[1920px] mx-auto relative z-10">
           <motion.div

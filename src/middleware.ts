@@ -22,8 +22,6 @@ import {
 
 const noStoreJsonHeaders = { "Cache-Control": "no-store" } as const;
 
-
-
 function securityHeaders(res: NextResponse): NextResponse {
 
   res.headers.set("Cross-Origin-Resource-Policy", "same-site");
@@ -253,33 +251,6 @@ export async function middleware(request: NextRequest) {
     return securityHeaders(NextResponse.next());
 
   }
-
-
-
-  if (
-    !pathname.startsWith("/dashboard") &&
-    !pathname.startsWith("/api/") &&
-    method === "GET"
-  ) {
-    try {
-      const resolveUrl = new URL("/api/seo/resolve-redirect", request.url);
-      resolveUrl.searchParams.set("path", pathname);
-      const res = await fetch(resolveUrl);
-      if (res.ok) {
-        const data = (await res.json()) as {
-          redirect?: { toPath: string; type: "301" | "302" };
-        };
-        if (data.redirect?.toPath) {
-          const code = data.redirect.type === "302" ? 302 : 308;
-          return NextResponse.redirect(new URL(data.redirect.toPath, request.url), code);
-        }
-      }
-    } catch {
-      /* optional */
-    }
-  }
-
-
 
   return NextResponse.next();
 }

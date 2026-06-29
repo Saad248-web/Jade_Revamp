@@ -11,6 +11,10 @@ import SectionWrapper from "./SectionWrapper";
 import LuxuryPattern from "./LuxuryPattern";
 import { shouldDeferParallaxPatternToStickyStage } from "@/lib/backgroundAttachmentSupport";
 import { useScrollLinkedPanelOffset } from "@/lib/useScrollLinkedPanelOffset";
+import {
+  useScrollLinkedAxisMotion,
+  useScrollLinkedSlideAxis,
+} from "@/lib/useScrollLinkedSlideAxis";
 import { useMediaMinLg } from "@/lib/useMediaMinLg";
 import { JADE_GREEN } from "@/lib/jadeSectionColors";
 import PrimaryButton from "@/components/PrimaryButton";
@@ -198,30 +202,34 @@ export default function FeaturedVillas() {
   );
 }
 
-/** Shared horizontal snap offset — same math for villa cards and the CTA panel. */
-function useFeaturedCarouselX(
+/** Shared snap offset — same math for villa cards and the CTA panel. */
+function useFeaturedCarouselMotion(
   globalProgress: MotionValue<number>,
   totalSteps: number,
   index: number,
   measureRef: React.RefObject<HTMLElement | null>,
 ) {
-  const { offsetPx, viewportWidth: vw } = useScrollLinkedPanelOffset(
+  const axis = useScrollLinkedSlideAxis();
+  const { offsetPx, viewportWidth, stageHeight } = useScrollLinkedPanelOffset(
     measureRef,
-    { variant: "wide" },
+    { variant: "wide", snapCentered: axis === "vertical", mobileAxis: axis },
   );
 
-  return useTransform(globalProgress, (p: number) => {
+  const slideOffset = useTransform(globalProgress, (p: number) => {
     const slideTime = p * totalSteps;
+    const leadSpan = axis === "horizontal" ? viewportWidth : stageHeight;
 
-    let villa1Pos;
+    let leadPos;
     if (slideTime <= 1) {
-      villa1Pos = vw - slideTime * vw;
+      leadPos = leadSpan - slideTime * leadSpan;
     } else {
-      villa1Pos = -(slideTime - 1) * offsetPx;
+      leadPos = -(slideTime - 1) * offsetPx;
     }
 
-    return villa1Pos + (index - 1) * offsetPx;
+    return leadPos + (index - 1) * offsetPx;
   });
+
+  return useScrollLinkedAxisMotion(slideOffset, axis);
 }
 
 function IntroPanel({
@@ -232,30 +240,43 @@ function IntroPanel({
   totalSteps: number;
 }) {
   const step = 1 / totalSteps;
-  const isLg = useMediaMinLg();
+  const axis = useScrollLinkedSlideAxis();
   const introMeasureRef = useRef<HTMLDivElement>(null);
-  const { offsetPx } = useScrollLinkedPanelOffset(introMeasureRef, {
+  const { offsetPx, stageHeight } = useScrollLinkedPanelOffset(introMeasureRef, {
     variant: "wide",
+    snapCentered: axis === "vertical",
+    mobileAxis: axis,
   });
 
   const exitStart = step * 0.85;
   const exitEnd = step;
 
   const x = useTransform(globalProgress, (p: number) => {
-    if (p <= exitStart) return isLg ? "0%" : 0;
-    if (p >= exitEnd) return isLg ? "-100%" : -offsetPx;
+    if (axis === "vertical") return 0;
+    if (p <= exitStart) return "0%";
+    if (p >= exitEnd) return "-100%";
     const t = (p - exitStart) / (exitEnd - exitStart);
-    return isLg ? `${-t * 100}%` : -t * offsetPx;
+    return `${-t * 100}%`;
   });
 
-  // Parallax - Text and Image overlap initially (at center) and then separate
-  // Vertical animation finishes before horizontal slide starts
-  const textY = useTransform(globalProgress, [0, step * 0.8], [0, -600]);
+  const y = useTransform(globalProgress, (p: number) => {
+    if (axis === "horizontal") return 0;
+    if (p <= exitStart) return 0;
+    if (p >= exitEnd) return -stageHeight;
+    const t = (p - exitStart) / (exitEnd - exitStart);
+    return -t * offsetPx;
+  });
+
+  const textY = useTransform(
+    globalProgress,
+    [0, step * 0.8],
+    [0, axis === "horizontal" ? -600 : -120],
+  );
   const opacity = useTransform(globalProgress, [exitStart, exitEnd], [1, 0]);
 
   return (
     <motion.div
-      style={{ x, opacity, zIndex: 5 }}
+      style={{ x, y, opacity, zIndex: 5 }}
       className={scrollLinkedIntroSlideClass}
     >
       <div
@@ -337,11 +358,16 @@ function VillaSlide({
   totalSteps: number;
 }) {
   const innerRef = useRef<HTMLDivElement>(null);
-  const x = useFeaturedCarouselX(globalProgress, totalSteps, index, innerRef);
+  const { x, y } = useFeaturedCarouselMotion(
+    globalProgress,
+    totalSteps,
+    index,
+    innerRef,
+  );
 
   return (
     <motion.div
-      style={{ x, zIndex: totalSteps + 2 - index }}
+      style={{ x, y, zIndex: totalSteps + 2 - index }}
       className={`${scrollLinkedPanelSlideClass} bg-transparent`}
     >
       <div className={scrollLinkedPanelSlideShellClass}>
@@ -439,11 +465,16 @@ function CtaSlide({
   index: number;
 }) {
   const innerRef = useRef<HTMLDivElement>(null);
-  const x = useFeaturedCarouselX(globalProgress, totalSteps, index, innerRef);
+  const { x, y } = useFeaturedCarouselMotion(
+    globalProgress,
+    totalSteps,
+    index,
+    innerRef,
+  );
 
   return (
     <motion.div
-      style={{ x, zIndex: index * 10 }}
+      style={{ x, y, zIndex: index * 10 }}
       className={`${scrollLinkedPanelSlideClass} bg-transparent`}
     >
       <div className={scrollLinkedPanelSlideShellClass}>

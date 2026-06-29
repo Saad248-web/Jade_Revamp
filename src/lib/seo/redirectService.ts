@@ -98,7 +98,7 @@ export async function createRedirect(input: {
     throw new Error("This redirect would create a loop");
   }
 
-  return SeoRedirectModel.create({
+  const created = await SeoRedirectModel.create({
     fromPath,
     toPath,
     type: input.type ?? "301",
@@ -108,6 +108,8 @@ export async function createRedirect(input: {
     createdBy: input.userId,
     updatedBy: input.userId,
   });
+  invalidateRedirectCache();
+  return created;
 }
 
 export async function updateRedirect(
@@ -123,26 +125,68 @@ export async function updateRedirect(
   await connectDB();
   const update: Record<string, unknown> = { ...input, updatedBy: userId };
   if (input.toPath) update.toPath = normalizePath(input.toPath);
-  return SeoRedirectModel.findByIdAndUpdate(id, update, { new: true });
+  const updated = await SeoRedirectModel.findByIdAndUpdate(id, update, {
+    new: true,
+  });
+  invalidateRedirectCache();
+  return updated;
 }
 
 export async function deleteRedirect(id: string) {
   await connectDB();
-  return SeoRedirectModel.findByIdAndDelete(id);
+  const deleted = await SeoRedirectModel.findByIdAndDelete(id);
+  invalidateRedirectCache();
+  return deleted;
 }
 
-export async function resolveRedirectPath(pathname: string): Promise<{
-  toPath: string;
-  type: "301" | "302";
-} | null> {
+type RedirectHit = { toPath: string; type: "301" | "302" };
+
+const REDIRECT_MAP_CACHE_TTL_MS = 60_000;
+
+let activeRedirectCache: {
+  byFrom: Map<string, RedirectHit>;
+  expiresAt: number;
+} | null = null;
+
+/** Bust in-process redirect map after dashboard CRUD. */
+export function invalidateRedirectCache(): void {
+  activeRedirectCache = null;
+}
+
+async function getActiveRedirectMap(): Promise<Map<string, RedirectHit>> {
+  const now = Date.now();
+  if (activeRedirectCache && activeRedirectCache.expiresAt > now) {
+    return activeRedirectCache.byFrom;
+  }
+
   await connectDB();
-  const fromPath = normalizePath(pathname);
-  const row = await SeoRedirectModel.findOne({ fromPath, status: "active" }).lean();
-  if (!row) return null;
-  return {
-    toPath: (row as { toPath: string }).toPath,
-    type: ((row as { type?: string }).type as "301" | "302") ?? "301",
+  const rows = await SeoRedirectModel.find({ status: "active" })
+    .select("fromPath toPath type")
+    .lean();
+
+  const byFrom = new Map<string, RedirectHit>();
+  for (const row of rows) {
+    const r = row as { fromPath: string; toPath: string; type?: string };
+    byFrom.set(normalizePath(r.fromPath), {
+      toPath: r.toPath,
+      type: (r.type as "301" | "302") ?? "301",
+    });
+  }
+
+  activeRedirectCache = {
+    byFrom,
+    expiresAt: now + REDIRECT_MAP_CACHE_TTL_MS,
   };
+  return byFrom;
+}
+
+export async function resolveRedirectPath(pathname: string): Promise<RedirectHit | null> {
+  try {
+    const map = await getActiveRedirectMap();
+    return map.get(normalizePath(pathname)) ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export async function suggestRedirectFromSlugChange(

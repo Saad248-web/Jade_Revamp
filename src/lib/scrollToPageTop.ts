@@ -53,10 +53,10 @@ export function scrollToPageTopWithRetries() {
     getLenis()?.resize();
   });
 
-  for (const delay of [0, 50, 150, 400, 800]) {
+  for (const delay of [0, 100, 300]) {
     window.setTimeout(() => {
       scrollToPageTop();
-      if (delay >= 150) getLenis()?.resize();
+      if (delay >= 100) getLenis()?.resize();
     }, delay);
   }
 }

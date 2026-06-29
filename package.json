@@ -3,7 +3,8 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
+    "dev:webpack": "next dev",
     "prebuild": "node scripts/generate_media_manifest.mjs",
     "generate-favicons": "node scripts/generate_favicons.mjs",
     "build": "next build",

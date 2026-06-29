@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Waves, Warehouse, Menu, LucideIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAnimation } from "@/context/AnimationContext";
 import { GLASS_INNER_SURFACE } from "@/lib/glassChrome";
@@ -16,8 +16,12 @@ interface NavItem {
   href: string;
 }
 
+const PRIMARY_ROUTES = ["/", "/experiences", "/villas", "/menu"] as const;
+
 export default function MobileBottomNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const hasEnteredRef = useRef(false);
   const {
     isSplashComplete,
     isPartnerOverlayOpen,
@@ -26,6 +30,13 @@ export default function MobileBottomNav() {
     isGlobalBookingOpen,
   } = useAnimation();
   const [venueOverlayOpen, setVenueOverlayOpen] = useState(false);
+
+  const hideForRoute =
+    pathname.startsWith("/dashboard") || pathname === "/login";
+
+  useEffect(() => {
+    PRIMARY_ROUTES.forEach((href) => router.prefetch(href));
+  }, [router]);
 
   useEffect(() => {
     const sync = () =>
@@ -48,39 +59,57 @@ export default function MobileBottomNav() {
     isGlobalBookingOpen ||
     venueOverlayOpen;
 
-  const navItems: NavItem[] = [
-    {
-      label: "Home",
-      type: "logo",
-      href: "/",
-    },
-    {
-      label: "Experiences",
-      icon: Waves,
-      href: "/experiences",
-    },
-    {
-      label: "Villas",
-      icon: Warehouse,
-      href: "/villas",
-    },
-    {
-      label: "Menu",
-      icon: Menu,
-      href: "/menu",
-    },
-  ];
+  const navItems: NavItem[] = useMemo(
+    () => [
+      {
+        label: "Home",
+        type: "logo",
+        href: "/",
+      },
+      {
+        label: "Experiences",
+        icon: Waves,
+        href: "/experiences",
+      },
+      {
+        label: "Villas",
+        icon: Warehouse,
+        href: "/villas",
+      },
+      {
+        label: "Menu",
+        icon: Menu,
+        href: "/menu",
+      },
+    ],
+    [],
+  );
+
+  const shouldShow =
+    !hideForRoute && (isSplashComplete || pathname !== "/") && !hideForOverlay;
+
+  const skipIntro = hasEnteredRef.current;
+
+  useEffect(() => {
+    if (shouldShow) {
+      hasEnteredRef.current = true;
+    }
+  }, [shouldShow]);
+
+  if (hideForRoute) {
+    return null;
+  }
 
   return (
     <AnimatePresence>
-      {(isSplashComplete || pathname !== "/") && !hideForOverlay && (
+      {shouldShow && (
         <motion.div
-          initial={{ y: "100%", opacity: 0 }}
+          initial={skipIntro ? false : { y: "100%", opacity: 0 }}
           animate={{ y: "0%", opacity: 1 }}
           exit={{ y: "100%", opacity: 0 }}
           transition={{
-            duration: 0.8,
-            delay: 0.2,
+            duration: skipIntro ? 0.35 : 0.8,
+            delay: skipIntro ? 0 : 0.2,
             ease: [0.22, 1, 0.36, 1],
           }}
           className={`jade-mobile-bottom-nav jade-scroll-chrome lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-white/15 pt-2 shadow-[0_-8px_32px_rgba(0,0,0,0.35)] pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))] ${GLASS_INNER_SURFACE}`}
@@ -97,6 +126,7 @@ export default function MobileBottomNav() {
                   <Link
                     key={item.label}
                     href={item.href}
+                    prefetch
                     className={`flex flex-col items-center justify-center min-h-[44px] p-2 gap-1.5 w-16 ${colorClass}`}
                   >
                     <div
@@ -123,6 +153,7 @@ export default function MobileBottomNav() {
                 <Link
                   key={item.label}
                   href={item.href}
+                  prefetch
                   className={`flex flex-col items-center gap-1.5 w-16 ${colorClass}`}
                 >
                   <Icon className="w-5 h-5" strokeWidth={1.5} />

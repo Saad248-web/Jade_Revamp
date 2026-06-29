@@ -134,10 +134,19 @@ export const VILLA_DETAIL_SPACING = {
     "text-[11px] text-white/30 pt-2 text-center font-manrope leading-snug",
   /** Fixed pricing bar — "Starting from" label */
   pricingBarLabel:
-    "text-white/60 text-[11px] sm:text-[12px] md:text-[13px] font-bold font-manrope whitespace-nowrap",
-  /** Fixed pricing bar — price value */
+    "text-white/60 text-[10px] sm:text-[12px] md:text-[13px] font-bold font-manrope leading-tight",
+  /** Fixed pricing bar — price value (2 lines on phone, single line md+) */
   pricingBarPrice:
-    "text-white text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-extrabold font-manrope whitespace-nowrap",
+    "text-white text-[13px] sm:text-[15px] md:text-[18px] lg:text-[20px] font-extrabold font-manrope leading-tight line-clamp-2 sm:line-clamp-1 sm:truncate",
+  /** Pricing bar inner row — price column shrinks; actions stay fixed width */
+  pricingBarRow:
+    "relative z-[3] grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 sm:gap-x-4 md:gap-x-6",
+  pricingBarPriceCol: "min-w-0 overflow-hidden pr-0.5 sm:pr-1",
+  pricingBarActions: "flex shrink-0 items-center gap-1.5 sm:gap-3 md:gap-6",
+  pricingBarEnquire:
+    "text-[#EFCD62] text-[10px] sm:text-gh-label font-bold tracking-[0.1em] sm:tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap shrink-0",
+  pricingBarBookCta:
+    "!px-2.5 sm:!px-4 md:!px-5 !tracking-[0.1em] sm:!tracking-[0.15em]",
   heroInsetX: "px-4 sm:px-5 lg:px-6",
   /**
    * View villa detail — fixed action header (transparent shell).

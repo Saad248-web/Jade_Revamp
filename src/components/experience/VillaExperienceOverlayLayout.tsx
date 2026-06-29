@@ -5,7 +5,6 @@ import { useNestedLenisPanel } from "@/lib/nestedLenisPanel";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
-import PrimaryButton from "@/components/PrimaryButton";
 import {
   EXPERIENCE_OVERLAY_BOOKING_BAR_SPACER_CLASS,
   EXPERIENCE_OVERLAY_MOBILE_SHEET_TOP_EDGE_SHADE_CLASS,
@@ -45,6 +44,7 @@ import { useScrollTabIntoView } from "@/lib/useScrollTabIntoView";
 import { useOverlayMobileChrome } from "@/lib/useOverlayMobileChrome";
 import { OVERLAY_MOBILE_ACTION_BAR_PB_CLASS } from "@/lib/overlayMobileChrome";
 import { VILLA_DETAIL_SPACING } from "@/components/villa/villaDetailSpacing";
+import VillaPricingBottomBarRow from "@/components/villa/VillaPricingBottomBarRow";
 
 const vd = VILLA_DETAIL_SPACING;
 
@@ -428,38 +428,12 @@ export function VillaExperienceBookingBottomBar({
             ),
       )}
     >
-      <div
-        className={clsx(
-          vd.contentInsetShell,
-          "relative z-[3] flex w-full justify-between items-center gap-4 md:gap-6",
-        )}
-      >
-        <div className="flex flex-col font-manrope leading-tight">
-          <span className={vd.pricingBarLabel}>
-            Starting from
-          </span>
-          <span className={vd.pricingBarPrice}>
-            {priceMain}
-          </span>
-        </div>
-        <div className="flex items-center gap-4 md:gap-6">
-          <button
-            type="button"
-            onClick={onEnquireClick}
-            className="text-[#EFCD62] text-gh-label font-bold tracking-[0.2em] uppercase hover:text-white transition-colors whitespace-nowrap"
-          >
-            ENQUIRE
-          </button>
-          <PrimaryButton
-            href={`/book?villa=${villaId}`}
-            withArrow={false}
-            width="compact"
-            className="whitespace-nowrap"
-          >
-            BOOK VILLA
-          </PrimaryButton>
-        </div>
-      </div>
+      <VillaPricingBottomBarRow
+        priceDisplay={priceMain}
+        onEnquireClick={onEnquireClick}
+        bookHref={`/book?villa=${villaId}`}
+        className="relative z-[3]"
+      />
     </div>
   );
 }

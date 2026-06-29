@@ -141,6 +141,7 @@ export function useScrollLinkedSectionProgress(
     // Only the snap carousel re-aligns on release; free sections settle freely so a
     // slight touch never jumps the just-pinned section to fill the screen.
     snapOnRelease: scrollMode === "mobileSnapOnly",
+    verticalCarouselMobile: mobileSnapActive,
   });
 
   return {

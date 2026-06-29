@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Navbar from "@/components/Navbar";
 import VillasHero from "@/components/VillasHero";
-import MobileBottomNav from "@/components/MobileBottomNav";
 import JsonLd from "@/components/seo/JsonLd";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
@@ -64,14 +62,10 @@ export default function VillasPage() {
   return (
     <main className="bg-[#1A1C1E] min-h-screen">
       <JsonLd schema={breadcrumbSchema} />
-      <JsonLd schema={lodgingSchema} />
-      <Navbar />
-      <VillasHero />
+      <JsonLd schema={lodgingSchema} /><VillasHero />
       <Suspense fallback={<div className="h-screen bg-[#1A1C1E]" />}>
         <VillasCarousel />
       </Suspense>
-      <Footer />
-      <MobileBottomNav />
-    </main>
+      <Footer />    </main>
   );
 }

@@ -18,8 +18,9 @@ export default function UnifiedScrollSection() {
   return (
     <ScrollSectionComposer
       slides={slides}
-      height="260vh"
+      height="120vh"
       fadeTiming="early"
+      lineStaggerDelayMs={350}
       scrollEffects="performance"
       background={<LiveBackground />}
       showScrollIndicator

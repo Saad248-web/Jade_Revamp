@@ -35,6 +35,8 @@ export type UseScrollLinkedManualNavigationOptions = {
    * jump (e.g. snapping a just-pinned section to fill the screen on a slight touch).
    */
   snapOnRelease?: boolean;
+  /** Mobile / tablet vertical snap — native scroll only (no sideways swipe). */
+  verticalCarouselMobile?: boolean;
 };
 
 export type ScrollLinkedStageNavigation = {
@@ -151,6 +153,7 @@ export function useScrollLinkedManualNavigation({
   stepCount = 2,
   snapBoundary,
   snapOnRelease = true,
+  verticalCarouselMobile = false,
 }: UseScrollLinkedManualNavigationOptions): ScrollLinkedStageNavigation {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef(false);
@@ -205,7 +208,7 @@ export function useScrollLinkedManualNavigation({
   }, [enabled, showVerticalHint, sectionRef, dismissVerticalHint]);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || verticalCarouselMobile) return;
     const el = stageRef.current;
     if (!el) return;
 
@@ -221,11 +224,11 @@ export function useScrollLinkedManualNavigation({
 
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
-  }, [enabled, dismissHint, applyHorizontalDelta]);
+  }, [enabled, verticalCarouselMobile, dismissHint, applyHorizontalDelta]);
 
   // Mobile horizontal finger swipe — scaled to section width (Framer pan alone is 1:1 px → too stiff).
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || verticalCarouselMobile) return;
     const el = stageRef.current;
     if (!el) return;
 
@@ -313,11 +316,11 @@ export function useScrollLinkedManualNavigation({
       el.removeEventListener("touchend", onTouchEnd);
       el.removeEventListener("touchcancel", onTouchEnd);
     };
-  }, [enabled, dismissHint, applyHorizontalDelta, sectionRef, stepCount, snapOnRelease, snapBoundary]);
+  }, [enabled, verticalCarouselMobile, dismissHint, applyHorizontalDelta, sectionRef, stepCount, snapOnRelease, snapBoundary]);
 
   const onPanStart = useCallback(
     (event: PointerEvent) => {
-      if (!enabled) return;
+      if (!enabled || verticalCarouselMobile) return;
       if (event.pointerType === "touch") return;
       const target = event?.target as Element | null;
       if (target && target.closest(NO_PAN_SELECTOR)) {
@@ -330,32 +333,33 @@ export function useScrollLinkedManualNavigation({
       setIsDragging(true);
       dismissHint();
     },
-    [enabled, dismissHint],
+    [enabled, verticalCarouselMobile, dismissHint],
   );
 
   const onPan = useCallback(
     (_event: PointerEvent, info: PanInfo) => {
-      if (!enabled || ignorePanRef.current || !draggingRef.current) return;
+      if (!enabled || verticalCarouselMobile || ignorePanRef.current || !draggingRef.current) return;
       applyHorizontalDelta(info.delta.x, pointerGain(pointerTypeRef.current));
     },
-    [enabled, applyHorizontalDelta],
+    [enabled, verticalCarouselMobile, applyHorizontalDelta],
   );
 
   const onPanEnd = useCallback(() => {
+    if (verticalCarouselMobile) return;
     if (snapOnRelease && !ignorePanRef.current && enabled) {
       snapSectionToNearestStep(sectionRef, stageRef.current, stepCount, snapBoundary);
     }
     ignorePanRef.current = false;
     draggingRef.current = false;
     setIsDragging(false);
-  }, [enabled, sectionRef, stepCount, snapOnRelease, snapBoundary]);
+  }, [enabled, verticalCarouselMobile, sectionRef, stepCount, snapOnRelease, snapBoundary]);
 
   return {
     stageRef,
     onPanStart,
     onPan,
     onPanEnd,
-    showHint: enabled && showHint,
+    showHint: enabled && showHint && !verticalCarouselMobile,
     showVerticalHint: enabled && showVerticalHint,
     dismissHint,
     isDragging,

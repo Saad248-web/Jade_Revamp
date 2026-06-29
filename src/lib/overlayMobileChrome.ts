@@ -72,7 +72,7 @@ export const OVERLAY_MOBILE_ACTION_BAR_PB_CLASS =
  * @see EXPERIENCE_OVERLAY_BOOKING_BAR_SPACER_CLASS
  */
 export const OVERLAY_MOBILE_ACTION_BAR_SPACER_CLASS =
-  "h-[calc(4rem+max(0.75rem,calc(env(safe-area-inset-bottom,0px)+var(--jade-overlay-browser-bottom-inset,0px))))] shrink-0 md:hidden";
+  "h-[calc(4.5rem+max(0.75rem,calc(env(safe-area-inset-bottom,0px)+var(--jade-overlay-browser-bottom-inset,0px))))] shrink-0 md:hidden";
 
 /** Form overlay scroll container — CTA clearance above sheet lip + browser chrome. */
 export const OVERLAY_MOBILE_FORM_SCROLL_PAD_CLASS =

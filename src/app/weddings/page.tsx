@@ -1,11 +1,18 @@
-import Navbar from "@/components/Navbar";
-import MobileBottomNav from "@/components/MobileBottomNav";
-import Footer from "@/components/Footer";
+import dynamic from "next/dynamic";
 import JsonLd from "@/components/seo/JsonLd";
 import { resolveLandingSections } from "@/lib/cms/landingCms";
-import { LandingPageRenderer } from "@/components/landing/LandingPageRenderer";
 
 const TEMPLATE_KEY = "landing/weddings";
+
+const LandingPageRenderer = dynamic(
+  () =>
+    import("@/components/landing/LandingPageRenderer").then(
+      (m) => m.LandingPageRenderer,
+    ),
+  { loading: () => <div className="min-h-[60vh] bg-[#1A1C1E]" aria-hidden /> },
+);
+
+const Footer = dynamic(() => import("@/components/Footer"), { ssr: false });
 
 export const revalidate = 60;
 
@@ -57,10 +64,8 @@ export default function WeddingPage() {
     <main className="relative min-h-screen bg-[#1A1C1E]">
       <JsonLd schema={breadcrumbSchema} />
       <JsonLd schema={eventSchema} />
-      <Navbar />
       <LandingPageRenderer templateKey={TEMPLATE_KEY} sections={sections} />
       <Footer />
-      <MobileBottomNav />
     </main>
   );
 }

@@ -10,6 +10,10 @@ import { experiencePanelTextOpacity } from "@/lib/experiencePanelMotion";
 import { useMediaMinLg } from "@/lib/useMediaMinLg";
 import { useScrollLinkedPanelOffset } from "@/lib/useScrollLinkedPanelOffset";
 import {
+  useScrollLinkedAxisMotion,
+  useScrollLinkedSlideAxis,
+} from "@/lib/useScrollLinkedSlideAxis";
+import {
   scrollLinkedPanelBodyClass,
   scrollLinkedPanelCtaClass,
   scrollLinkedPanelImageFrameClass,
@@ -55,6 +59,7 @@ export default function ScrollLinkedPanelCard({
 }: ScrollLinkedPanelCardProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const isLg = useMediaMinLg();
+  const axis = useScrollLinkedSlideAxis();
   const panelImageSrc = data.mobileImage
     ? isLg
       ? data.image
@@ -65,11 +70,14 @@ export default function ScrollLinkedPanelCard({
   const { offsetPx } = useScrollLinkedPanelOffset(stackWrapRef, {
     variant: gapVariant,
     snapCentered: snapCentered && !isLg,
+    mobileAxis: axis,
   });
 
-  const x = useTransform(panelProgress, (p: number) => {
-    return (index - p * totalSteps) * offsetPx;
-  });
+  const slideOffset = useTransform(
+    panelProgress,
+    (p: number) => (index - p * totalSteps) * offsetPx,
+  );
+  const { x, y } = useScrollLinkedAxisMotion(slideOffset, axis);
 
   const zIndex = useTransform(panelProgress, (p: number) => {
     const centered = Math.min(Math.round(p * totalSteps), panelCount - 1);
@@ -82,7 +90,7 @@ export default function ScrollLinkedPanelCard({
 
   return (
     <motion.div
-      style={{ x, zIndex, willChange: "transform" }}
+      style={{ x, y, zIndex, willChange: "transform" }}
       className={`${scrollLinkedPanelSlideClass} bg-transparent`}
     >
       <div className={scrollLinkedPanelSlideInteractiveClass}>
