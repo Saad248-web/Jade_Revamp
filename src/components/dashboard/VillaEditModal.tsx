@@ -12,15 +12,22 @@ import { DashboardModalHeader } from "./ui/DashboardModalHeader";
 import { ADD_ON_CATALOG } from "@/lib/bookings/addOnCatalog";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import type { AdminVillaDetail, AdminWeddingTier } from "@/lib/villas/adminVilla";
+import { villaHideFromDirectoryFlag } from "@/lib/villas/villaVisibility";
 import { ImageUploadField } from "./ImageUploadField";
+import {
+  VillaFormField,
+  VillaFormGrid,
+  VillaFormNotice,
+  VillaFormSection,
+  VillaFormSelect,
+  VillaFormToggle,
+  villaFormInputClass,
+  villaFormTextareaClass,
+} from "./villa/VillaFormPrimitives";
 
-const inputClass =
-  "w-full border border-white/15 bg-black/20 px-3 py-2.5 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[var(--dash-accent-border)] focus:outline-none";
-const labelClass =
-  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[var(--dash-accent)]";
-const hintClass = "mt-1 font-manrope text-xs text-white/35";
-const sectionTitleClass =
-  "font-philosopher text-[length:var(--fs-h3)] text-white border-b border-white/10 pb-2";
+const inputClass = villaFormInputClass;
+const labelClass = dash.label;
+const hintClass = "villa-form-field__hint";
 
 const ADD_ON_OPTIONS = Object.values(ADD_ON_CATALOG).map((a) => ({
   id: a.id,
@@ -34,28 +41,6 @@ type VillaEditModalProps = {
   onSaved: () => void;
   onOpenFullEditor?: () => void;
 };
-
-function FormSection({
-  title,
-  description,
-  children,
-}: {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className={dash.stack}>
-      <div>
-        <h3 className={sectionTitleClass}>{title}</h3>
-        {description && (
-          <p className={`mt-1 ${hintClass}`}>{description}</p>
-        )}
-      </div>
-      {children}
-    </section>
-  );
-}
 
 export function VillaEditModal({
   slug,
@@ -151,6 +136,8 @@ export function VillaEditModal({
     setSaving(true);
     setError(null);
     try {
+      const publishOnDirectory =
+        villa.status === "active" || villa.status === "maintenance";
       const res = await dashboardFetch(`/api/dashboard/villas/${slug}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -190,6 +177,9 @@ export function VillaEditModal({
           displayStats: villa.displayStats,
           notes: villa.notes,
           axisRooms: villa.axisRooms,
+          ...(publishOnDirectory
+            ? { content: { hideFromVillasDirectory: false } }
+            : {}),
         }),
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
@@ -255,16 +245,16 @@ export function VillaEditModal({
               <form
                 id="villa-edit-form"
                 onSubmit={handleSubmit}
-                className="flex flex-col gap-8"
+                className="flex flex-col gap-6"
               >
                 <fieldset disabled={!canWrite} className="contents">
-                  <FormSection
+                  <VillaFormSection
                     title="Identity & listing"
                     description="How this property appears on /villas and in the dashboard."
+                    badge="Basics"
                   >
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div className="sm:col-span-2">
-                        <label className={labelClass}>Full legal name</label>
+                    <VillaFormGrid>
+                      <VillaFormField label="Full legal name" className="sm:col-span-2">
                         <input
                           className={inputClass}
                           value={villa.name}
@@ -273,9 +263,8 @@ export function VillaEditModal({
                           }
                           required
                         />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Short display name</label>
+                      </VillaFormField>
+                      <VillaFormField label="Short display name">
                         <input
                           className={inputClass}
                           value={villa.shortName}
@@ -283,32 +272,34 @@ export function VillaEditModal({
                             setVilla({ ...villa, shortName: e.target.value })
                           }
                         />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Property type</label>
+                      </VillaFormField>
+                      <VillaFormField
+                        label="Property type"
+                        hint="Shown as the gold tag on villa cards"
+                      >
                         <input
                           className={inputClass}
                           value={villa.type}
                           onChange={(e) =>
                             setVilla({ ...villa, type: e.target.value })
                           }
-                          placeholder="e.g. 4-BEDROOM HILLSIDE VILLA"
+                          placeholder="e.g. Private nature retreat"
                         />
-                      </div>
-                      <div className="sm:col-span-2">
-                        <label className={labelClass}>Location line</label>
+                      </VillaFormField>
+                      <VillaFormField label="Location line" className="sm:col-span-2">
                         <input
                           className={inputClass}
                           value={villa.location}
                           onChange={(e) =>
                             setVilla({ ...villa, location: e.target.value })
                           }
+                          placeholder="Area, city"
                         />
-                      </div>
+                      </VillaFormField>
                       <div className="sm:col-span-2">
                         <ImageUploadField
                           label="Hero thumbnail"
-                          hint="Public path under /public or uploaded /api/media/… — used on villa cards."
+                          hint="Used on villa cards and social previews."
                           value={villa.thumbnail}
                           onChange={(url) =>
                             setVilla({ ...villa, thumbnail: url })
@@ -322,21 +313,26 @@ export function VillaEditModal({
                           <button
                             type="button"
                             onClick={onOpenFullEditor}
-                            className="w-full border border-[var(--dash-accent-border)] bg-[var(--dash-accent-muted)] px-4 py-3 text-left font-manrope text-sm text-[var(--dash-accent)] transition-colors hover:bg-[var(--dash-accent-muted)]"
+                            className="villa-form-full-editor-cta"
                           >
-                            Open full property editor — amenities, spaces,
-                            experiences, video & FAQ
+                            <span className="villa-form-full-editor-cta__title">
+                              Open full property editor
+                            </span>
+                            <span className="villa-form-full-editor-cta__desc">
+                              Amenities, spaces, experiences, video, FAQ & brochure
+                            </span>
                           </button>
                         </div>
                       )}
-                    </div>
-                  </FormSection>
+                    </VillaFormGrid>
+                  </VillaFormSection>
 
-                  <FormSection
+                  <VillaFormSection
                     title="Pricing & capacity"
-                    description="Operational rates from Jade_Property_Data.md (+ 18% GST at checkout)."
+                    description="Stay and day-out base rates (+ GST at checkout)."
+                    badge="Rates"
                   >
-                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <VillaFormGrid cols={3}>
                       <div>
                         <label className={labelClass}>Stay base (₹)</label>
                         <input
@@ -421,10 +417,10 @@ export function VillaEditModal({
                           }
                         />
                       </div>
-                    </div>
-                  </FormSection>
+                    </VillaFormGrid>
+                  </VillaFormSection>
 
-                  <FormSection
+                  <VillaFormSection
                     title="Fees, tax & policies"
                     description="Applied at quote and on the booking folio."
                   >
@@ -517,7 +513,7 @@ export function VillaEditModal({
                       <div className="sm:col-span-2 lg:col-span-3">
                         <label className={labelClass}>Cancellation policy</label>
                         <textarea
-                          className={`${inputClass} min-h-[100px] resize-y`}
+                          className={villaFormTextareaClass}
                           value={villa.cancellationPolicy}
                           onChange={(e) =>
                             setVilla({
@@ -529,72 +525,71 @@ export function VillaEditModal({
                         />
                       </div>
                     </div>
-                  </FormSection>
+                  </VillaFormSection>
 
-                  <FormSection
-                    title="Availability"
-                    description="Hidden removes the villa from /villas and public detail URLs. Not bookable keeps the listing live with Enquire only."
+                  <VillaFormSection
+                    title="Visibility & booking"
+                    description="Control whether guests see this villa on the website and can book online."
+                    badge="Go live"
                   >
-                    <div className="grid gap-4 sm:grid-cols-3">
-                      <div className="sm:col-span-3">
-                        <label className={labelClass}>Public visibility</label>
-                        <select
-                          className={inputClass}
-                          value={villa.status}
-                          onChange={(e) => {
-                            const status = e.target.value;
-                            setVilla({
-                              ...villa,
-                              status,
-                              ...(status === "hidden" ? { bookable: false } : {}),
-                            });
-                          }}
-                        >
-                          <option value="active" className="bg-[#1A1C1E]">
-                            Live — visible on /villas
-                          </option>
-                          <option value="maintenance" className="bg-[#1A1C1E]">
-                            Maintenance — visible, booking may be limited
-                          </option>
-                          <option value="hidden" className="bg-[#1A1C1E]">
-                            Hidden — removed from public site
-                          </option>
-                        </select>
-                      </div>
-                      <label className="flex cursor-pointer items-center gap-3 self-end border border-white/10 bg-white/[0.02] px-4 py-3 font-manrope text-sm text-white/75 sm:col-span-2">
-                        <input
-                          type="checkbox"
-                          checked={villa.bookable}
-                          disabled={villa.status === "hidden"}
-                          onChange={(e) =>
-                            setVilla({ ...villa, bookable: e.target.checked })
-                          }
-                          className="h-4 w-4 accent-[var(--dash-accent)] disabled:opacity-40"
-                        />
-                        Allow online booking (Book Villa on listing & detail)
-                      </label>
-                      <p className={`sm:col-span-3 ${hintClass}`}>
-                        Uncheck booking to show <strong className="text-white/60">Enquire</strong> and{" "}
-                        <strong className="text-white/60">View Villa</strong> only — villa stays visible.
-                      </p>
-                      <label className="flex cursor-pointer items-center gap-3 self-end border border-white/10 bg-white/[0.02] px-4 py-3 font-manrope text-sm text-white/75">
-                        <input
-                          type="checkbox"
-                          checked={villa.weddingVenue}
-                          onChange={(e) =>
-                            setVilla({
-                              ...villa,
-                              weddingVenue: e.target.checked,
-                            })
-                          }
-                          className="h-4 w-4 accent-[var(--dash-accent)]"
-                        />
-                        Wedding / event venue
-                      </label>
-                    </div>
-                  </FormSection>
+                    {villa.status !== "hidden" &&
+                      villaHideFromDirectoryFlag(villa) && (
+                        <VillaFormNotice tone="warning">
+                          This villa is <strong>not listed on /villas</strong> yet.
+                          Set visibility to <strong>Live</strong> and save — it will
+                          appear on the public directory automatically.
+                        </VillaFormNotice>
+                      )}
+                    <VillaFormGrid cols={1}>
+                      <VillaFormSelect
+                        label="Public visibility"
+                        hint="Live = shows on /villas. Hidden = removed from the entire public site."
+                        value={villa.status}
+                        onChange={(status) => {
+                          setVilla({
+                            ...villa,
+                            status,
+                            ...(status === "hidden" ? { bookable: false } : {}),
+                            ...(status === "active" || status === "maintenance"
+                              ? {
+                                  content: {
+                                    ...villa.content,
+                                    hideFromVillasDirectory: false,
+                                  },
+                                }
+                              : {}),
+                          });
+                        }}
+                        options={[
+                          { value: "active", label: "Live — visible on /villas" },
+                          {
+                            value: "maintenance",
+                            label: "Maintenance — visible, booking may be limited",
+                          },
+                          { value: "hidden", label: "Hidden — removed from public site" },
+                        ]}
+                      />
+                      <VillaFormToggle
+                        label="Allow online booking"
+                        description="Guests see Book Villa. When off, they see Enquire + View Villa only."
+                        checked={villa.bookable}
+                        disabled={villa.status === "hidden"}
+                        onChange={(bookable) =>
+                          setVilla({ ...villa, bookable })
+                        }
+                      />
+                      <VillaFormToggle
+                        label="Wedding / event venue"
+                        description="Shows the Wedding badge in Villa Settings and wedding filters."
+                        checked={villa.weddingVenue}
+                        onChange={(weddingVenue) =>
+                          setVilla({ ...villa, weddingVenue })
+                        }
+                      />
+                    </VillaFormGrid>
+                  </VillaFormSection>
 
-                  <FormSection
+                  <VillaFormSection
                     title="Public card stats"
                     description="Shown on villa directory cards (/villas)."
                   >
@@ -619,10 +614,10 @@ export function VillaEditModal({
                         </div>
                       ))}
                     </div>
-                  </FormSection>
+                  </VillaFormSection>
 
                   {villa.weddingVenue && villa.weddingTiers.length > 0 && (
-                    <FormSection
+                    <VillaFormSection
                       title="Wedding & event tiers"
                       description="Half-day and full-day packages (+ GST). Catering billed separately."
                     >
@@ -719,10 +714,10 @@ export function VillaEditModal({
                           </div>
                         ))}
                       </div>
-                    </FormSection>
+                    </VillaFormSection>
                   )}
 
-                  <FormSection
+                  <VillaFormSection
                     title="Paid add-ons"
                     description="Which catalog add-ons guests can select for this villa."
                   >
@@ -742,9 +737,9 @@ export function VillaEditModal({
                         </label>
                       ))}
                     </div>
-                  </FormSection>
+                  </VillaFormSection>
 
-                  <FormSection
+                  <VillaFormSection
                     title="Axis Rooms"
                     description="Channel manager mapping — API sync when credentials are provided."
                   >
@@ -800,9 +795,9 @@ export function VillaEditModal({
                         />
                       </div>
                     </div>
-                  </FormSection>
+                  </VillaFormSection>
 
-                  <FormSection
+                  <VillaFormSection
                     title="Internal notes"
                     description="Staff-only — not shown on the public site."
                   >
@@ -820,7 +815,7 @@ export function VillaEditModal({
                         Last saved {new Date(villa.updatedAt).toLocaleString("en-IN")}
                       </p>
                     )}
-                  </FormSection>
+                  </VillaFormSection>
                 </fieldset>
 
                 {error && (

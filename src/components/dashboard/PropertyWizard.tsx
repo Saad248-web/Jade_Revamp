@@ -37,6 +37,12 @@ import {
   wizardSectionClass,
 } from "./wizard/wizardFieldStyles";
 import { VILLA_AMENITY_ICON_OPTIONS } from "@/lib/villas/amenityIconOptions";
+import {
+  VillaFormGrid,
+  VillaFormSection,
+  VillaFormSelect,
+  VillaFormToggle,
+} from "./villa/VillaFormPrimitives";
 
 const inputClass = wizardInputClass;
 const labelClass = wizardLabelClass;
@@ -352,6 +358,9 @@ function buildContentPayload(draft: ContentDraft) {
         answer: f.answer.trim(),
       })),
     hideFromVillasDirectory: draft.hideFromVillasDirectory,
+    ...(draft.hideFromVillasDirectory
+      ? { directoryListingOptOut: true }
+      : { directoryListingOptOut: false }),
     brochureUrl: draft.brochureUrl.trim() || undefined,
     brochureFilename: draft.brochureFilename.trim() || undefined,
   };
@@ -1311,65 +1320,71 @@ export function PropertyWizard({
                       + Add FAQ
                     </button>
 
-                    <div className="grid gap-4 border border-white/10 bg-white/[0.02] p-4 sm:grid-cols-2">
-                      <div className="sm:col-span-2">
-                        <label className={labelClass}>Public visibility</label>
-                        <select
-                          className={inputClass}
+                    <VillaFormSection
+                      title="Publish settings"
+                      description="Choose when this property appears on the public website."
+                      badge="Go live"
+                    >
+                      <VillaFormGrid cols={1}>
+                        <VillaFormSelect
+                          label="Public visibility"
                           value={basics.status}
-                          onChange={(e) => {
-                            const status = e.target.value;
+                          onChange={(status) => {
                             setBasics({
                               ...basics,
                               status,
                               ...(status === "hidden" ? { bookable: false } : {}),
                             });
+                            if (status === "active" || status === "maintenance") {
+                              setContent({
+                                ...content,
+                                hideFromVillasDirectory: false,
+                              });
+                            }
+                            if (status === "hidden") {
+                              setContent({
+                                ...content,
+                                hideFromVillasDirectory: true,
+                              });
+                            }
                           }}
-                        >
-                          <option value="active" className="bg-[#1A1C1E]">
-                            Live — visible on /villas
-                          </option>
-                          <option value="maintenance" className="bg-[#1A1C1E]">
-                            Maintenance
-                          </option>
-                          <option value="hidden" className="bg-[#1A1C1E]">
-                            Hidden — removed from public site
-                          </option>
-                        </select>
-                      </div>
-                      <label className="flex cursor-pointer items-center gap-3 border border-white/10 px-4 py-3 font-manrope text-sm text-white/75">
-                        <input
-                          type="checkbox"
+                          options={[
+                            { value: "active", label: "Live — visible on /villas" },
+                            { value: "maintenance", label: "Maintenance" },
+                            {
+                              value: "hidden",
+                              label: "Hidden — removed from public site",
+                            },
+                          ]}
+                        />
+                        <VillaFormToggle
+                          label="Allow online booking"
+                          description="Guests can book from the villa card and detail page."
                           checked={basics.bookable}
                           disabled={basics.status === "hidden"}
-                          onChange={(e) =>
-                            setBasics({ ...basics, bookable: e.target.checked })
+                          onChange={(bookable) =>
+                            setBasics({ ...basics, bookable })
                           }
-                          className="h-4 w-4 accent-[var(--dash-accent)] disabled:opacity-40"
                         />
-                        Allow online booking (Book Villa)
-                      </label>
-                      <label className="flex cursor-pointer items-center gap-3 border border-white/10 px-4 py-3 font-manrope text-sm text-white/75">
-                        <input
-                          type="checkbox"
+                        <VillaFormToggle
+                          label="Hide from /villas only"
+                          description="Detail page URL still works — useful for direct-link launches."
                           checked={content.hideFromVillasDirectory}
                           disabled={basics.status === "hidden"}
-                          onChange={(e) =>
+                          onChange={(hide) =>
                             setContent({
                               ...content,
-                              hideFromVillasDirectory: e.target.checked,
+                              hideFromVillasDirectory: hide,
                             })
                           }
-                          className="h-4 w-4 accent-[var(--dash-accent)] disabled:opacity-40"
                         />
-                        Hide from /villas only (detail URL still works)
-                      </label>
-                      <p className={`sm:col-span-2 ${hintClass}`}>
-                        <strong className="text-white/50">Not bookable:</strong> leave visibility Live and
-                        uncheck booking — guests see Enquire + View Villa.{" "}
-                        <strong className="text-white/50">Hidden:</strong> villa disappears from the site.
+                      </VillaFormGrid>
+                      <p className={hintClass}>
+                        <strong className="text-white/50">Tip:</strong> use{" "}
+                        <strong className="text-white/50">Not bookable</strong> (uncheck
+                        booking) to show Enquire only while keeping the villa visible.
                       </p>
-                    </div>
+                    </VillaFormSection>
 
                     <div className="border border-[var(--dash-accent-border)]/40 bg-[var(--dash-accent-muted)]/30 p-4">
                       <p className={labelClass}>Go-live checklist</p>

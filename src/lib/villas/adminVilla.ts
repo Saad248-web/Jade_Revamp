@@ -131,6 +131,7 @@ const villaContentUpdateSchema = z
       .array(z.object({ question: z.string(), answer: z.string() }))
       .optional(),
     hideFromVillasDirectory: z.boolean().optional(),
+    directoryListingOptOut: z.boolean().optional(),
     brochureUrl: z.string().max(500).optional(),
     brochureFilename: z.string().max(200).optional(),
   })
@@ -514,8 +515,9 @@ export function applyVillaUpdate(
   if (input.status !== undefined) {
     syncVillaVisibilityFlags(villa);
     if (villa.status === "hidden") {
-      applied.hideFromVillasDirectory = true;
       applied.bookable = false;
+    } else {
+      applied.hideFromVillasDirectory = false;
     }
   }
   if (input.weddingVenue !== undefined) {

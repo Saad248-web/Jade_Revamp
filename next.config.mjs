@@ -57,7 +57,7 @@ const nextConfig = {
           "media-src 'self' https://jadehospitainment.com blob:",
           "font-src 'self' data:",
           "connect-src 'self' https://api.razorpay.com https://*.sentry.io https://www.google-analytics.com",
-          "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com",
+          "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com https://www.youtube.com https://www.youtube-nocookie.com",
           "object-src 'none'",
           "base-uri 'self'",
           "form-action 'self'",

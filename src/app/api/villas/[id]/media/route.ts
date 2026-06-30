@@ -2,12 +2,17 @@ import { NextResponse } from "next/server"; // API cache busted for image optimi
 import { VILLAS } from "@/lib/mockData";
 import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
 import { getHeroOverrideForId } from "@/lib/heroOverrides";
+import { resolvePublicVilla } from "@/lib/villas/resolvePublicVilla";
+import type { Villa } from "@/lib/types";
 import {
   DOME_COLOR_META,
   getDomeColorFromVillaId,
   isDomeEstateId,
   isDomeVillaId,
 } from "@/lib/domeVillaIds";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 type CategorizedSpace = {
   id: string;
@@ -238,10 +243,17 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const villa = VILLAS.find((v: any) => v.id === id);
+  const merged = await resolvePublicVilla(id);
+  const villa = (merged ?? VILLAS.find((v: Villa) => v.id === id)) as
+    | Villa
+    | undefined;
   if (!villa) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
+
+  const mongoCategorized = villa.categorizedSpaces?.filter(
+    (g) => Array.isArray(g.images) && g.images.length > 0,
+  );
 
   const retreatFolders = resolveRetreatFolders(villa);
   const media = {
@@ -269,13 +281,14 @@ export async function GET(
   const other = uniq(media.other);
 
   const heroOverride = getHeroOverrideForId(id);
-  const finalHero = heroOverride ? heroOverride : hero;
+  let finalHero = heroOverride ? heroOverride : hero;
+  if (!finalHero.length && villa.image) finalHero = [villa.image];
+  if (!finalHero.length && villa.images?.length) {
+    finalHero = villa.images.filter(Boolean);
+  }
 
   const domeColor = getDomeColorFromVillaId(id);
 
-  // Dome Villas: pin Experiences/Perfect For to their dedicated folders, and
-  // build dome-color grouped sub-categorized spaces (Blue / Red / Yellow each
-  // containing Bedrooms, Pool & Water, Living & Dining, etc.).
   if (isDomeVillaId(id)) {
     experiences = experiences.filter((u) =>
       u.startsWith("/Villa_Retreats/Dome/3-Experienceee/"),
@@ -295,11 +308,16 @@ export async function GET(
 
   const res: MediaResponse = {
     hero: finalHero,
-    spaces,
-    experiences,
+    spaces: spaces.length
+      ? spaces
+      : (villa.spaces || []).map((s) => s.image).filter(Boolean),
+    experiences: experiences.length
+      ? experiences
+      : (villa.activities || []).map((a) => a.image).filter(Boolean),
     perfectFor,
     other,
     categorizedSpaces: (() => {
+      if (mongoCategorized?.length) return mongoCategorized;
       if (isDomeVillaId(id)) {
         const groups = buildDomeCategorizedSpaces(spaces);
         if (domeColor) {

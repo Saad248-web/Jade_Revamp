@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import SchemaMarkup from "@/components/SchemaMarkup";
-import { VILLAS } from "@/lib/mockData";
+import { resolvePublicVilla } from "@/lib/villas/resolvePublicVilla";
 import type { Villa } from "@/lib/types";
 import { SITE_ORIGIN, trimMetaDescription } from "@/lib/seo/meta";
 
@@ -37,8 +37,8 @@ function breadcrumbJsonLd(villa: Villa, canonical: string) {
   };
 }
 
-export function generateMetadata({ params }: Props): Metadata {
-  const villa = VILLAS.find((v) => v.id === params.id) as Villa | undefined;
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const villa = await resolvePublicVilla(params.id);
   if (!villa) {
     return { title: "Spaces", robots: { index: false, follow: false } };
   }
@@ -82,8 +82,8 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-export default function VillaSpacesLayout({ children, params }: Props) {
-  const villa = VILLAS.find((v) => v.id === params.id) as Villa | undefined;
+export default async function VillaSpacesLayout({ children, params }: Props) {
+  const villa = await resolvePublicVilla(params.id);
   if (!villa) notFound();
 
   const canonical = `${SITE_ORIGIN}/villas/${villa.id}/spaces`;

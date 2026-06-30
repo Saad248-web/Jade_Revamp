@@ -9,9 +9,11 @@ import {
   directoryHiddenForMergedVilla,
   isHiddenFromVillasDirectory,
   isVillaPubliclyHidden,
+  repairStaleDirectoryHideFlag,
 } from "@/lib/villas/villaVisibility";
 
 type MongoVilla = {
+  _id?: unknown;
   slug: string;
   retreatId?: string;
   shortName?: string;
@@ -206,6 +208,14 @@ export async function resolvePublicVilla(
   }).lean()) as MongoVilla | null;
 
   if (doc && isVillaPubliclyHidden(doc)) return null;
+  if (doc) {
+    if (repairStaleDirectoryHideFlag(doc) && doc._id) {
+      void VillaModel.updateOne(
+        { _id: doc._id },
+        { $set: { "content.hideFromVillasDirectory": false } },
+      );
+    }
+  }
   if (!doc && !staticVilla) return null;
   if (!doc) return staticVilla ?? null;
   if (!staticVilla) return shellFromMongo(doc);
@@ -222,6 +232,12 @@ export async function resolvePublicVillaList(): Promise<Villa[]> {
   for (const doc of docs) {
     const id = doc.retreatId ?? doc.slug;
     mongoRetreatIds.add(id);
+    if (repairStaleDirectoryHideFlag(doc) && doc._id) {
+      void VillaModel.updateOne(
+        { _id: doc._id },
+        { $set: { "content.hideFromVillasDirectory": false } },
+      );
+    }
     if (isHiddenFromVillasDirectory(doc)) continue;
     const staticV = STATIC_VILLAS.find((v) => v.id === id) as Villa | undefined;
     byRetreatId.set(

@@ -41,7 +41,29 @@ export default function VillaSpacesPage() {
   const params = useParams();
   const id = params?.id as string;
   const goBack = useSafeBack(villaDetailPath(id));
-  const villa = VILLAS.find((v) => v.id === id) as Villa | undefined;
+  const staticVilla = VILLAS.find((v) => v.id === id) as Villa | undefined;
+  const [liveVilla, setLiveVilla] = useState<Villa | null>(null);
+  const [liveFetchDone, setLiveFetchDone] = useState(false);
+
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+    setLiveFetchDone(false);
+    fetch(`/api/public/villas/${encodeURIComponent(id)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { villa?: Villa } | null) => {
+        if (!cancelled && data?.villa) setLiveVilla(data.villa);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setLiveFetchDone(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  const villa = liveVilla ?? staticVilla;
 
   const domeColor = getDomeColorFromVillaId(id);
   const isDomeEstate = isDomeEstateId(id);
@@ -92,6 +114,14 @@ export default function VillaSpacesPage() {
       spaceMatchesCategory(s.category, activeCategory),
     );
   }, [villa, activeCategory, overrideSpaces]);
+
+  if (!villa && !liveFetchDone) {
+    return (
+      <div className="min-h-screen bg-[#1A1C1E] flex items-center justify-center text-white font-manrope text-sm">
+        Loading spaces…
+      </div>
+    );
+  }
 
   if (!villa) {
     return (

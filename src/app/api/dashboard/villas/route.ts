@@ -6,6 +6,7 @@ import { VillaModel } from "@/models/Villa";
 import { paiseToRupees, rupeesToPaise } from "@/lib/money";
 import { createVillaSchema } from "@/lib/villas/adminVilla";
 import { revalidateVillaPublicPaths } from "@/lib/villas/revalidateVillaPaths";
+import { villaHideFromDirectoryFlag } from "@/lib/villas/villaVisibility";
 import { assertPlainObject } from "@/lib/security/validateInput";
 
 export const dynamic = "force-dynamic";
@@ -38,8 +39,10 @@ function serializeListVilla(v: {
     villaArea?: string;
     pool?: string;
   };
+  content?: Record<string, unknown>;
 }) {
   const stats = v.displayStats ?? {};
+  const hideFromVillasDirectory = villaHideFromDirectoryFlag(v);
   return {
     id: String(v._id),
     slug: v.slug,
@@ -52,6 +55,9 @@ function serializeListVilla(v: {
     bookable: v.bookable ?? true,
     weddingVenue: v.weddingVenue ?? false,
     portfolioSource: v.portfolioSource ?? "canonical",
+    hideFromVillasDirectory,
+    directoryListingVisible:
+      v.status !== "hidden" && !hideFromVillasDirectory,
     basePriceRupees: paiseToRupees(v.basePricePaise ?? 0),
     dayOutBasePriceRupees: paiseToRupees(v.dayOutBasePricePaise ?? 0),
     stayBasePax: v.stayBasePax ?? 0,

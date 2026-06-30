@@ -203,16 +203,21 @@ export default function VillaDetailsPage() {
   const id = params?.id as string;
   const staticVilla = VILLAS.find((v) => v.id === id) as Villa | undefined;
   const [liveVilla, setLiveVilla] = useState<Villa | null>(null);
+  const [liveFetchDone, setLiveFetchDone] = useState(false);
 
   useEffect(() => {
     if (!id) return;
     let cancelled = false;
+    setLiveFetchDone(false);
     fetch(`/api/public/villas/${encodeURIComponent(id)}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data: { villa?: Villa } | null) => {
         if (!cancelled && data?.villa) setLiveVilla(data.villa);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setLiveFetchDone(true);
+      });
     return () => {
       cancelled = true;
     };
@@ -303,16 +308,8 @@ export default function VillaDetailsPage() {
     };
   }, [id]);
 
-  if (!villa) {
-    return (
-      <div className="min-h-screen bg-[#0B2C23] flex items-center justify-center text-white font-philosopher text-2xl">
-        Villa Not Found
-      </div>
-    );
-  }
-
-  const manifestHero = getManifestEntry(villa)?.hero || [];
-  const overrideHero = getHeroOverrideForId(villa.id);
+  const manifestHero = villa ? getManifestEntry(villa)?.hero || [] : [];
+  const overrideHero = villa ? getHeroOverrideForId(villa.id) : undefined;
   const heroImages = overrideHero
     ? overrideHero
     : media?.hero?.length
@@ -323,8 +320,8 @@ export default function VillaDetailsPage() {
   const spaceImages = media?.spaces?.length ? media.spaces : [];
   const experienceImages = media?.experiences?.length ? media.experiences : [];
 
-  const domeColor = getDomeColorFromVillaId(villa.id);
-  const isDomeEstate = isDomeEstateId(villa.id);
+  const domeColor = villa ? getDomeColorFromVillaId(villa.id) : null;
+  const isDomeEstate = villa ? isDomeEstateId(villa.id) : false;
 
   // Per-color pages: filter spaces to one dome. Estate page: optional tab filter.
   const domeSpaceFilter = useMemo(() => {
@@ -342,7 +339,13 @@ export default function VillaDetailsPage() {
   const derivedSpaces = useMemo(() => {
     let list = spaceImages.length
       ? spaceImages
-      : (villa.spaces || []).map((s) => s.image);
+      : (villa?.spaces || []).map((s) => s.image).filter(Boolean);
+    if (!list.length && villa?.categorizedSpaces?.length) {
+      list = villa.categorizedSpaces.flatMap((g) => g.images ?? []).filter(Boolean);
+    }
+    if (!list.length && villa?.images?.length) {
+      list = villa.images.filter(Boolean);
+    }
     if (domeSpaceFilter) {
       list = list.filter((img) => img && img.includes(domeSpaceFilter));
     }
@@ -350,7 +353,13 @@ export default function VillaDetailsPage() {
       name: prettyMediaLabel({ url: img, fallback: "Space", kind: "space" }),
       image: img,
     }));
-  }, [spaceImages, villa.spaces, domeSpaceFilter]);
+  }, [
+    spaceImages,
+    villa?.spaces,
+    villa?.categorizedSpaces,
+    villa?.images,
+    domeSpaceFilter,
+  ]);
 
   useEffect(() => {
     setCurrentSpaceIndex(0);
@@ -363,7 +372,7 @@ export default function VillaDetailsPage() {
   const derivedActivities = useMemo(() => {
     const list = experienceImages.length
       ? experienceImages
-      : (villa.activities || []).map((a) => a.image);
+      : (villa?.activities || []).map((a) => a.image);
     return list.map((img) => ({
       title: prettyMediaLabel({
         url: img,
@@ -372,7 +381,7 @@ export default function VillaDetailsPage() {
       }),
       image: img,
     }));
-  }, [experienceImages, villa.activities]);
+  }, [experienceImages, villa?.activities]);
 
   // Filter out empty strings — "" is truthy in JS so we must check length
   const validImg = (s: string | undefined) => s && s.length > 0;
@@ -381,7 +390,7 @@ export default function VillaDetailsPage() {
       (img: string | undefined): img is string => validImg(img) === true,
     );
     if (gallery.length > 0) return gallery; // hero only, as requested
-    if (validImg(villa.image)) return [villa.image];
+    if (validImg(villa?.image)) return [villa!.image];
     return [];
   })();
 
@@ -588,6 +597,22 @@ export default function VillaDetailsPage() {
   }, [searchParams]);
 
   const domeVideoUrls = DOME_VIDEO_URLS;
+
+  if (!villa && !liveFetchDone) {
+    return (
+      <div className="min-h-screen bg-[#0B2C23] flex items-center justify-center text-white font-manrope text-sm">
+        Loading villa…
+      </div>
+    );
+  }
+
+  if (!villa) {
+    return (
+      <div className="min-h-screen bg-[#0B2C23] flex items-center justify-center text-white font-philosopher text-2xl">
+        Villa Not Found
+      </div>
+    );
+  }
 
   return (
     <main className="bg-jade-charcoal min-h-screen relative">
@@ -890,7 +915,10 @@ export default function VillaDetailsPage() {
       <VillaDetailStickyTabs activeTab={activeTab} onTabClick={scrollToSection} />
 
       {/* SPACES — Green */}
-      {(domeColor || isDomeEstate || currentSpace) && (
+      {(domeColor ||
+        isDomeEstate ||
+        derivedSpaces.length > 0 ||
+        (villa?.categorizedSpaces?.length ?? 0) > 0) && (
         <section id="spaces" className={VILLA_DETAIL_CHARCOAL}>
           <div className={vd.sectionShell}>
             <div className={clsx(vd.content, vd.mediaSectionStack)}>

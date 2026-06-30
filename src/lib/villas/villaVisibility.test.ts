@@ -3,6 +3,7 @@ import {
   isHiddenFromVillasDirectory,
   isVillaPubliclyHidden,
   isVillaRecordBookable,
+  repairStaleDirectoryHideFlag,
   syncVillaVisibilityFlags,
 } from "./villaVisibility";
 
@@ -36,7 +37,7 @@ describe("villaVisibility", () => {
     expect(isVillaRecordBookable({ id: "x", bookable: false })).toBe(false);
   });
 
-  it("sync forces hidden flags on save", () => {
+  it("sync forces bookable off when hidden", () => {
     const villa = {
       status: "hidden",
       bookable: true,
@@ -44,6 +45,50 @@ describe("villaVisibility", () => {
     };
     syncVillaVisibilityFlags(villa);
     expect(villa.bookable).toBe(false);
-    expect(villa.content?.hideFromVillasDirectory).toBe(true);
+  });
+
+  it("sync clears directory hide when publishing to active", () => {
+    const villa = {
+      status: "active",
+      bookable: true,
+      content: { hideFromVillasDirectory: true } as Record<string, unknown>,
+    };
+    syncVillaVisibilityFlags(villa);
+    expect(villa.content?.hideFromVillasDirectory).toBe(false);
+  });
+
+  it("sync clears directory hide for maintenance", () => {
+    const villa = {
+      status: "maintenance",
+      content: { hideFromVillasDirectory: true } as Record<string, unknown>,
+    };
+    syncVillaVisibilityFlags(villa);
+    expect(villa.content?.hideFromVillasDirectory).toBe(false);
+  });
+
+  it("maintenance villas remain on directory", () => {
+    expect(
+      isHiddenFromVillasDirectory({ status: "maintenance", bookable: false }),
+    ).toBe(false);
+  });
+
+  it("repairs stale hide flag without explicit opt-out", () => {
+    const doc = {
+      status: "active",
+      content: { hideFromVillasDirectory: true } as Record<string, unknown>,
+    };
+    expect(repairStaleDirectoryHideFlag(doc)).toBe(true);
+    expect(doc.content?.hideFromVillasDirectory).toBe(false);
+  });
+
+  it("keeps intentional directory opt-out", () => {
+    const doc = {
+      status: "active",
+      content: {
+        hideFromVillasDirectory: true,
+        directoryListingOptOut: true,
+      } as Record<string, unknown>,
+    };
+    expect(repairStaleDirectoryHideFlag(doc)).toBe(false);
   });
 });

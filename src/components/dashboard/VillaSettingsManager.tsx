@@ -49,6 +49,8 @@ type VillaRow = {
   bookable: boolean;
   weddingVenue: boolean;
   portfolioSource: string;
+  hideFromVillasDirectory: boolean;
+  directoryListingVisible: boolean;
   basePriceRupees: number;
   dayOutBasePriceRupees: number;
   stayBasePax: number;
@@ -133,6 +135,9 @@ function VillaPortfolioCard({
               )}
               {!v.bookable && v.status !== "hidden" && (
                 <DashboardStatusBadge tone="warning">Not bookable</DashboardStatusBadge>
+              )}
+              {v.status !== "hidden" && v.hideFromVillasDirectory && (
+                <DashboardStatusBadge tone="warning">Not on /villas</DashboardStatusBadge>
               )}
               <span className="ml-auto text-[0.625rem] font-semibold uppercase tracking-wider text-white/35">
                 {SOURCE_LABEL[v.portfolioSource] ?? v.portfolioSource}
