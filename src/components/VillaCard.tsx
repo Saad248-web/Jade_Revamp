@@ -109,10 +109,10 @@ export default function VillaCard({ villa }: VillaCardProps) {
   const startingPrice = getStartingPrice();
 
   return (
-    <motion.div className="pointer-events-auto flex w-full flex-col gap-4 md:flex-row md:items-start md:gap-6 lg:gap-8">
+    <motion.div className="pointer-events-auto flex w-full flex-col gap-4 md:flex-row md:items-stretch md:gap-6 lg:gap-8">
       {/* IMAGE CONTAINER — wider aspect + max height so listing cards do not dominate the viewport */}
       <div
-        className="relative w-full md:w-[45%] md:flex-shrink-0 aspect-[16/9] md:max-h-[min(360px,42dvh)] overflow-hidden rounded-md group bg-white/5"
+        className="relative w-full md:w-[45%] md:flex-shrink-0 aspect-[16/9] md:aspect-auto md:min-h-[min(360px,42dvh)] md:max-h-[min(360px,42dvh)] overflow-hidden rounded-md group bg-white/5"
         style={{ perspective: "1400px" }}
       >
         <AnimatePresence mode="sync" initial={false} custom={carouselCustom}>
@@ -201,81 +201,85 @@ export default function VillaCard({ villa }: VillaCardProps) {
         </div>
       </div>
 
-      {/* DETAILS CONTAINER — inset right so copy/CTAs don’t hug the page edge (cardless layout) */}
-      <div className="flex min-w-0 flex-1 flex-col gap-3.5 text-left max-md:pr-1 md:gap-4 md:py-1 md:pl-1 md:pr-8 lg:pr-10 xl:pr-12">
-        <div className="flex flex-col gap-2 md:gap-2.5">
-          <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase">
-            {villa.type}
-          </span>
-          <h2 className="font-philosopher text-gh-h2 text-white leading-snug">
-            {villa.name}
-          </h2>
-          <a
-            href={getVillaGoogleMapsUrl(villa)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-white/60 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
-          >
-            <MapPin className="w-4 h-4 shrink-0" />
-            <span className="font-manrope text-gh-body hover:underline underline-offset-4">
-              {villa.location}
+      {/* DETAILS — footer row pinned to bottom on md+ to align with image column */}
+      <div className="flex min-w-0 flex-1 flex-col justify-between gap-3.5 text-left max-md:pr-1 md:min-h-[min(360px,42dvh)] md:gap-4 md:py-1 md:pl-1 md:pr-8 lg:pr-10 xl:pr-12">
+        <div className="flex flex-col gap-3.5 md:gap-4">
+          <div className="flex flex-col gap-2 md:gap-2.5">
+            <span className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.2em] uppercase">
+              {villa.type}
             </span>
-          </a>
-
-          <p className="font-manrope text-white/70 leading-relaxed text-gh-desc line-clamp-3">
-            {villa.description}
-          </p>
-        </div>
-
-        {/* Stats Row */}
-        <div
-          data-jade-hscroll
-          className="jade-hscroll-track flex flex-nowrap overflow-x-auto items-center gap-x-4 scroll-pr-6 md:scroll-pr-8 text-white/80 font-manrope text-gh-label [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
-        >
-          <div className="flex shrink-0 items-center gap-2">
-            <Bed className="w-4 h-4 text-[#EFCD62]" />
-            <span className="whitespace-nowrap">{villa.stats.stay}</span>
-          </div>
-          <div className="shrink-0 w-1 h-1 rounded-full bg-white/20" />
-          <div className="flex shrink-0 items-center gap-2">
-            <Users className="w-4 h-4 text-[#EFCD62]" />
-            <span className="whitespace-nowrap">{villa.stats.events}</span>
-          </div>
-          <div className="shrink-0 w-1 h-1 rounded-full bg-white/20" />
-          <div className="flex shrink-0 items-center gap-2">
-            <Home className="w-4 h-4 text-[#EFCD62]" />
-            <span className="whitespace-nowrap">{villa.stats.bhk}</span>
-          </div>
-          {"lawn" in villa.stats && (villa.stats as any).lawn && (
-            <>
-              <div className="shrink-0 w-1 h-1 rounded-full bg-white/20" />
-              <span className="shrink-0 whitespace-nowrap">
-                {(villa.stats as any).lawn}
+            <h2 className="font-philosopher text-gh-h2 text-white leading-snug">
+              {villa.name}
+            </h2>
+            <a
+              href={getVillaGoogleMapsUrl(villa)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-white/60 w-fit max-w-full rounded-sm outline-none hover:text-[#EFCD62] transition-colors focus-visible:ring-2 focus-visible:ring-[#EFCD62]/55"
+            >
+              <MapPin className="w-4 h-4 shrink-0" />
+              <span className="font-manrope text-gh-body hover:underline underline-offset-4">
+                {villa.location}
               </span>
-            </>
-          )}
+            </a>
+
+            {villa.description?.trim() ? (
+              <p className="font-manrope text-white/70 leading-relaxed text-gh-desc line-clamp-3">
+                {villa.description}
+              </p>
+            ) : null}
+          </div>
+
+          {/* Stats Row */}
+          <div
+            data-jade-hscroll
+            className="jade-hscroll-track flex flex-nowrap overflow-x-auto items-center gap-x-4 scroll-pr-6 md:scroll-pr-8 text-white/80 font-manrope text-gh-label [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
+          >
+            <div className="flex shrink-0 items-center gap-2">
+              <Bed className="w-4 h-4 text-[#EFCD62]" />
+              <span className="whitespace-nowrap">{villa.stats.stay}</span>
+            </div>
+            <div className="shrink-0 w-1 h-1 rounded-full bg-white/20" />
+            <div className="flex shrink-0 items-center gap-2">
+              <Users className="w-4 h-4 text-[#EFCD62]" />
+              <span className="whitespace-nowrap">{villa.stats.events}</span>
+            </div>
+            <div className="shrink-0 w-1 h-1 rounded-full bg-white/20" />
+            <div className="flex shrink-0 items-center gap-2">
+              <Home className="w-4 h-4 text-[#EFCD62]" />
+              <span className="whitespace-nowrap">{villa.stats.bhk}</span>
+            </div>
+            {"lawn" in villa.stats && (villa.stats as any).lawn && (
+              <>
+                <div className="shrink-0 w-1 h-1 rounded-full bg-white/20" />
+                <span className="shrink-0 whitespace-nowrap">
+                  {(villa.stats as any).lawn}
+                </span>
+              </>
+            )}
+          </div>
+
+          {/* Perfect For Tags */}
+          <div
+            data-jade-hscroll
+            className="jade-hscroll-track flex flex-nowrap overflow-x-auto items-center gap-2 scroll-pr-6 md:scroll-pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
+          >
+            <span className="shrink-0 text-white/40 text-gh-label font-manrope font-bold uppercase tracking-wider mr-1">
+              Perfect for:
+            </span>
+            {(villa.perfectForTags ?? []).map((title, idx) => (
+                <span
+                  key={`${title}-${idx}`}
+                  className="shrink-0 whitespace-nowrap bg-white/5 border border-white/10 text-white/80 text-gh-label px-2.5 py-1 rounded-sm font-manrope"
+                >
+                  {title}
+                </span>
+              ))}
+          </div>
         </div>
 
-        {/* Perfect For Tags */}
-        <div
-          data-jade-hscroll
-          className="jade-hscroll-track flex flex-nowrap overflow-x-auto items-center gap-2 scroll-pr-6 md:scroll-pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]"
-        >
-          <span className="shrink-0 text-white/40 text-gh-label font-manrope font-bold uppercase tracking-wider mr-1">
-            Perfect for:
-          </span>
-          {(villa.perfectForTags ?? []).map((title, idx) => (
-              <span
-                key={`${title}-${idx}`}
-                className="shrink-0 whitespace-nowrap bg-white/5 border border-white/10 text-white/80 text-gh-label px-2.5 py-1 rounded-sm font-manrope"
-              >
-                {title}
-              </span>
-            ))}
-        </div>
-
-        {/* Action Row — price left, CTAs right, space-between fills the row */}
-        <div className="mt-auto flex w-full flex-row items-center justify-between gap-4 pt-2 md:pt-4">
+        {/* Action Row — price + CTAs fixed at card bottom */}
+        <div className="flex w-full shrink-0 flex-row items-center justify-between gap-4 pt-2 md:pt-4">
           {/* Price: stacked on mobile, single line from md up */}
           <div className="flex min-w-0 shrink-0 flex-col md:flex-row md:items-baseline md:gap-1.5">
             <span className="text-white font-manrope font-bold text-gh-villa-footer-row tracking-wide leading-tight">

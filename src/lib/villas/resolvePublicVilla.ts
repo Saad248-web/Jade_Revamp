@@ -1,10 +1,9 @@
 import { VILLAS as STATIC_VILLAS } from "@/data/retreats";
 import { connectDB } from "@/lib/db";
-import { paiseToRupees } from "@/lib/money";
 import type { Villa } from "@/lib/types";
 import { VillaModel } from "@/models/Villa";
-import { buildPricingDisplay } from "@/lib/villas/pricingDisplay";
-import { CANONICAL_BY_RETREAT_ID } from "@/lib/villas/canonicalPortfolio";
+import { buildPricingDisplayFromMongo } from "@/lib/villas/pricingDisplay";
+import { mergePublicText } from "@/lib/villas/mergePublicFields";
 import {
   directoryHiddenForMergedVilla,
   isHiddenFromVillasDirectory,
@@ -32,6 +31,15 @@ type MongoVilla = {
   content?: Record<string, unknown>;
   portfolioSource?: string;
   updatedAt?: Date;
+  extraPaxStayPaise?: number;
+  extraPaxDayOutPaise?: number;
+  weddingVenue?: boolean;
+  weddingTiers?: {
+    label: string;
+    maxGuests: number;
+    pricePaise: number;
+  }[];
+  settings?: { taxPercent?: number };
 };
 
 function statsFromDoc(doc: MongoVilla) {
@@ -46,37 +54,21 @@ function statsFromDoc(doc: MongoVilla) {
   };
 }
 
-function operationalPricing(doc: MongoVilla) {
-  const c = CANONICAL_BY_RETREAT_ID.get(doc.retreatId ?? doc.slug);
-  if (c) return buildPricingDisplay(c);
-  const stayBase = paiseToRupees(doc.basePricePaise);
-  const dayBase = paiseToRupees(doc.dayOutBasePricePaise);
-  return {
-    stay: {
-      title: "Stay Experience",
-      subtitle: "22 hours (1 PM check-in · 11 AM checkout)",
-      packages: [
-        {
-          label: `Up to ${doc.stayBasePax} PAX`,
-          sublabel: "",
-          price: `${stayBase > 0 ? `₹${stayBase.toLocaleString("en-IN")}` : "—"} + GST`,
-        },
-      ],
-      features: ["Private villa access", "Overnight stay"],
-    },
-    event: {
-      title: "Day-out Experience",
-      subtitle: "Single day · no overnight",
-      packages: [
-        {
-          label: `Up to ${doc.dayOutBasePax} PAX`,
-          sublabel: "",
-          price: `${dayBase > 0 ? `₹${dayBase.toLocaleString("en-IN")}` : "—"} + GST`,
-        },
-      ],
-      features: ["Venue access"],
-    },
-  };
+/** Dashboard Mongo record wins when rates are set; else keep static/canonical pricing. */
+function mergedPricing(doc: MongoVilla, staticVilla?: Villa) {
+  const hasMongoRates =
+    doc.basePricePaise > 0 || doc.dayOutBasePricePaise > 0;
+  if (hasMongoRates) {
+    return buildPricingDisplayFromMongo(doc) as Villa["pricing"];
+  }
+  if (staticVilla?.pricing) {
+    return staticVilla.pricing;
+  }
+  return buildPricingDisplayFromMongo(doc) as Villa["pricing"];
+}
+
+function operationalPricing(doc: MongoVilla, staticVilla?: Villa) {
+  return mergedPricing(doc, staticVilla);
 }
 
 function shellFromMongo(doc: MongoVilla): Villa {
@@ -127,9 +119,9 @@ function mergeStaticWithMongo(staticVilla: Villa, doc: MongoVilla): Villa {
   return {
     ...staticVilla,
     name: doc.shortName ?? doc.name ?? staticVilla.name,
-    type: doc.type ?? staticVilla.type,
-    location: doc.location ?? staticVilla.location,
-    description: content.description ?? staticVilla.description,
+    type: mergePublicText(doc.type, staticVilla.type),
+    location: mergePublicText(doc.location, staticVilla.location),
+    description: mergePublicText(content.description, staticVilla.description),
     image: thumb || staticVilla.image,
     images:
       content.images && content.images.length > 0
@@ -144,6 +136,10 @@ function mergeStaticWithMongo(staticVilla: Villa, doc: MongoVilla): Villa {
       content.perfectForCards && content.perfectForCards.length > 0
         ? content.perfectForCards
         : staticVilla.perfectForCards,
+    amenityHighlights:
+      content.amenityHighlights && content.amenityHighlights.length > 0
+        ? content.amenityHighlights
+        : staticVilla.amenityHighlights,
     amenities:
       content.amenities && content.amenities.length > 0
         ? content.amenities
@@ -168,7 +164,7 @@ function mergeStaticWithMongo(staticVilla: Villa, doc: MongoVilla): Villa {
       content.spaces && content.spaces.length > 0
         ? content.spaces
         : staticVilla.spaces,
-    pricing: operationalPricing(doc) as Villa["pricing"],
+    pricing: operationalPricing(doc, staticVilla) as Villa["pricing"],
     locationDetails: content.locationDetails ?? staticVilla.locationDetails,
     video:
       content.video &&
@@ -182,7 +178,10 @@ function mergeStaticWithMongo(staticVilla: Villa, doc: MongoVilla): Villa {
       content.faq && content.faq.length > 0 ? content.faq : staticVilla.faq,
     bookable: doc.bookable ?? staticVilla.bookable ?? true,
     hideFromVillasDirectory: directoryHiddenForMergedVilla(doc, staticVilla),
-    socialProof: content.socialProof ?? staticVilla.socialProof,
+    socialProof: mergePublicText(
+      content.socialProof,
+      staticVilla.socialProof,
+    ) || undefined,
     categories:
       content.categories && content.categories.length > 0
         ? content.categories
