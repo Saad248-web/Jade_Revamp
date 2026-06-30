@@ -1,15 +1,25 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 import {
   GLASS_CHROME_FRAME_CLASS,
   GLASS_INNER_SURFACE,
 } from "@/lib/glassChrome";
 import { dash } from "@/lib/dashboard/dashboardClasses";
+import {
+  useDashboardForm,
+  validateManualBlock,
+} from "@/lib/dashboard/dashboardFormValidation";
+import {
+  DashFloatingDate,
+  DashFloatingField,
+  DashFloatingSelect,
+  DashFormActionBar,
+  DashFormShell,
+} from "@/components/dashboard/form";
 import { DashboardModalHeader } from "./ui/DashboardModalHeader";
 import { addDays, todayIST } from "@/lib/bookingDates";
-import { validateManualBlock } from "@/lib/dashboard/formValidation";
 
 export type VillaOption = {
   slug: string;
@@ -32,11 +42,6 @@ type BlockFormModalProps = {
   title?: string;
 };
 
-const inputClass =
-  "w-full border border-white/15 bg-black/20 px-4 py-3 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[var(--dash-accent-border)] focus:outline-none";
-const labelClass =
-  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[var(--dash-accent)]";
-
 export function BlockFormModal({
   villas,
   onClose,
@@ -54,9 +59,35 @@ export function BlockFormModal({
     initialValues?.checkOut ?? addDays(initialValues?.checkIn ?? todayIST(), 1),
   );
   const [reason, setReason] = useState(initialValues?.reason ?? "");
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+
+  const {
+    fieldErrors,
+    showFieldError,
+    touch,
+    validateField,
+    runSubmit,
+  } = useDashboardForm({
+    validate: validateManualBlock,
+  });
+
+  const villaOptions = useMemo(
+    () => villas.map((v) => ({ value: v.slug, label: v.name })),
+    [villas],
+  );
+
+  const getValues = () => ({
+    villaSlug,
+    checkIn,
+    checkOut,
+    reason: reason.trim(),
+  });
+
+  const blur = (key: keyof ReturnType<typeof getValues>) => {
+    touch(key);
+    validateField(key, getValues());
+  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -66,16 +97,14 @@ export function BlockFormModal({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const errors = validateManualBlock({ villaSlug, checkIn, checkOut, reason });
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
+    const values = getValues();
+    if (!runSubmit(values)) {
       setError(null);
       return;
     }
-    setFieldErrors({});
     setError(null);
     setSaving(true);
-    const err = await onSubmit({ villaSlug, checkIn, checkOut, reason: reason.trim() });
+    const err = await onSubmit(values);
     setSaving(false);
     if (err) setError(err);
     else onClose();
@@ -91,95 +120,88 @@ export function BlockFormModal({
           aria-hidden
           className={`pointer-events-none absolute inset-px block ${GLASS_INNER_SURFACE}`}
         />
-        <form onSubmit={handleSubmit} className={`${dash.modalFrame} flex min-h-0 flex-col`}>
+        <form
+          onSubmit={handleSubmit}
+          className={`${dash.modalFrame} flex min-h-0 flex-col`}
+          noValidate
+        >
           <DashboardModalHeader
             section="Operations"
             title={title}
             onClose={onClose}
           />
-          <div className={`${dash.modalBody} ${dash.stack}`}>
-          <div>
-            <label className={labelClass} htmlFor="block-villa">
-              Villa
-            </label>
-            <select
-              id="block-villa"
-              className={inputClass}
+          <DashFormShell>
+            <DashFloatingSelect
+              id="villaSlug"
+              label="Villa"
               value={villaSlug}
-              onChange={(e) => setVillaSlug(e.target.value)}
+              optionItems={villaOptions}
+              onChange={setVillaSlug}
+              onBlur={() => blur("villaSlug")}
+              invalid={Boolean(fieldErrors.villaSlug)}
+              showError={showFieldError("villaSlug")}
+              errorMessage={fieldErrors.villaSlug}
               required
-            >
-              {villas.map((v) => (
-                <option key={v.slug} value={v.slug} className="bg-[#1A1C1E]">
-                  {v.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className={dash.formGrid2}>
-            <div>
-              <label className={labelClass} htmlFor="block-checkin">
-                Check-in
-              </label>
-              <input
-                id="block-checkin"
-                type="date"
-                className={inputClass}
-                value={checkIn}
-                onChange={(e) => setCheckIn(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label className={labelClass} htmlFor="block-checkout">
-                Check-out
-              </label>
-              <input
-                id="block-checkout"
-                type="date"
-                className={inputClass}
-                value={checkOut}
-                onChange={(e) => setCheckOut(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className={labelClass} htmlFor="block-reason">
-              Reason (optional)
-            </label>
-            <input
-              id="block-reason"
-              className={inputClass}
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              placeholder="Owner hold, maintenance, walk-in…"
-              maxLength={500}
             />
-          </div>
 
-          {error && (
-            <p className="font-manrope text-[length:var(--fs-body)] text-red-400">
-              {error}
-            </p>
-          )}
+            <div className={dash.formGrid2}>
+              <DashFloatingDate
+                id="checkIn"
+                label="Check-in"
+                value={checkIn}
+                onChange={setCheckIn}
+                onBlur={() => blur("checkIn")}
+                invalid={Boolean(fieldErrors.checkIn)}
+                showError={showFieldError("checkIn")}
+                errorMessage={fieldErrors.checkIn}
+                required
+              />
+              <DashFloatingDate
+                id="checkOut"
+                label="Check-out"
+                value={checkOut}
+                onChange={setCheckOut}
+                onBlur={() => blur("checkOut")}
+                invalid={Boolean(fieldErrors.checkOut)}
+                showError={showFieldError("checkOut")}
+                errorMessage={fieldErrors.checkOut}
+                required
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={saving || !villaSlug}
-            className={`${dash.btn} ${dash.btnAccent} w-full sm:w-auto ${
-              saving ? "cursor-not-allowed opacity-40" : ""
-            }`}
-          >
-            {saving ? (
-              <Loader2 className="mx-auto h-5 w-5 animate-spin" />
-            ) : (
-              "Create block"
+            <DashFloatingField
+              id="reason"
+              label="Reason (optional)"
+              value={reason}
+              onChange={setReason}
+              onBlur={() => blur("reason")}
+              invalid={Boolean(fieldErrors.reason)}
+              showError={showFieldError("reason")}
+              errorMessage={fieldErrors.reason}
+            />
+
+            {error && (
+              <p className={dash.errorText} role="alert">
+                {error}
+              </p>
             )}
-          </button>
-          </div>
+          </DashFormShell>
+
+          <DashFormActionBar>
+            <button
+              type="submit"
+              disabled={saving || !villaSlug}
+              className={`${dash.btn} ${dash.btnAccent} ${
+                saving ? "cursor-not-allowed opacity-40" : ""
+              }`}
+            >
+              {saving ? (
+                <Loader2 className="h-5 w-5 animate-spin" aria-label="Saving" />
+              ) : (
+                "Create block"
+              )}
+            </button>
+          </DashFormActionBar>
         </form>
       </div>
     </div>

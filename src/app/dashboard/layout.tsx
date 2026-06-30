@@ -4,6 +4,7 @@ import { AuthSessionProvider } from "@/components/auth/AuthSessionProvider";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import "@/styles/dashboard.css";
 import "@/styles/dashboard-polish.css";
+import "@/styles/dashboard-forms.css";
 import "@/styles/dashboard-responsive.css";
 import "@/styles/calendar.css";
 import "@/styles/villa-settings.css";

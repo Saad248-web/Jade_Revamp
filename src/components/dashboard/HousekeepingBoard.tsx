@@ -8,6 +8,7 @@ import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import { todayIST } from "@/lib/bookingDates";
 import { DashboardPanel } from "./DashboardPanel";
 import { EmptyState } from "./EmptyState";
+import { DashStatusChip } from "./form";
 import { DashboardListToolbar } from "./ui/DashboardListToolbar";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
 
@@ -19,12 +20,12 @@ const STAY_STATUSES: { value: StayStatus; label: string }[] = [
   { value: "ready", label: "Ready" },
 ];
 
-const STATUS_STYLE: Record<StayStatus, string> = {
-  upcoming: "border-sky-400/40 bg-sky-400/10 text-sky-300",
-  in_house: "border-emerald-400/40 bg-emerald-400/10 text-emerald-300",
-  departed: "border-white/15 bg-white/[0.04] text-white/60",
-  turnover: "border-amber-400/40 bg-amber-400/10 text-amber-300",
-  ready: "border-[var(--dash-accent-border)] bg-[var(--dash-accent-muted)] text-[var(--dash-accent)]",
+const STATUS_VARIANT: Record<StayStatus, "info" | "success" | "warning" | "accent" | "neutral"> = {
+  upcoming: "info",
+  in_house: "success",
+  departed: "neutral",
+  turnover: "warning",
+  ready: "accent",
 };
 
 type HKBooking = BookingRecord & { isAssigned?: boolean };
@@ -135,11 +136,9 @@ export function HousekeepingBoard() {
                         {fmt(b.checkIn)} → {fmt(b.checkOut)}
                       </p>
                     </div>
-                    <span
-                      className={`shrink-0 border px-2 py-1 text-xs font-bold uppercase tracking-widest ${STATUS_STYLE[current]}`}
-                    >
+                    <DashStatusChip variant={STATUS_VARIANT[current]}>
                       {current.replace("_", " ")}
-                    </span>
+                    </DashStatusChip>
                   </div>
 
                   {locked ? (

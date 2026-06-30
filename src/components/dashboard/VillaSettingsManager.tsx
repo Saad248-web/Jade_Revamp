@@ -14,6 +14,7 @@ import {
   Plus,
   Search,
   Sparkles,
+  Trash2,
   Users,
 } from "lucide-react";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
@@ -23,10 +24,12 @@ import { DashboardPanel } from "./DashboardPanel";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
 import { DashboardFilterBar } from "./ui/DashboardFilterBar";
 import { DashboardTabBar } from "./ui/DashboardTabBar";
-import { DashboardStatusBadge } from "./ui/DashboardStatusBadge";
+import { DashStatusChip } from "./form";
 import { EmptyState } from "./EmptyState";
 import { VillaEditModal } from "./VillaEditModal";
 import { PropertyWizard } from "./PropertyWizard";
+import { VillaDeleteConfirmDialog } from "./villa/VillaDeleteConfirmDialog";
+import { villaDeleteConfirmLabel } from "@/lib/villas/villaDeletionConfirm";
 
 type DisplayStats = {
   stay: string | null;
@@ -51,6 +54,8 @@ type VillaRow = {
   portfolioSource: string;
   hideFromVillasDirectory: boolean;
   directoryListingVisible: boolean;
+  deletable: boolean;
+  deleteBlockedReason: string | null;
   basePriceRupees: number;
   dayOutBasePriceRupees: number;
   stayBasePax: number;
@@ -65,6 +70,7 @@ const SOURCE_LABEL: Record<string, string> = {
   canonical: "Portfolio",
   legacy: "Legacy listing",
   coming_soon: "Coming soon",
+  custom: "Custom",
 };
 
 function fmtRupees(n: number): string {
@@ -83,11 +89,15 @@ function VillaPortfolioCard({
   canWrite,
   onEdit,
   onFullEdit,
+  onDelete,
+  deleteBusy,
 }: {
   villa: VillaRow;
   canWrite: boolean;
   onEdit: () => void;
   onFullEdit: () => void;
+  onDelete?: () => void;
+  deleteBusy?: boolean;
 }) {
   const specs = [
     v.displayStats.bhk && { icon: <BedDouble className="h-3 w-3" />, label: v.displayStats.bhk },
@@ -127,17 +137,17 @@ function VillaPortfolioCard({
         <div className="villa-portfolio-card__body">
           <div className="villa-portfolio-card__identity">
             <div className="villa-portfolio-card__meta-row">
-              <DashboardStatusBadge tone={statusTone(v.status)}>
+              <DashStatusChip variant={statusTone(v.status) === "success" ? "success" : statusTone(v.status) === "warning" ? "warning" : "neutral"}>
                 {v.status}
-              </DashboardStatusBadge>
+              </DashStatusChip>
               {v.weddingVenue && (
-                <DashboardStatusBadge tone="accent">Wedding</DashboardStatusBadge>
+                <DashStatusChip variant="accent">Wedding</DashStatusChip>
               )}
               {!v.bookable && v.status !== "hidden" && (
-                <DashboardStatusBadge tone="warning">Not bookable</DashboardStatusBadge>
+                <DashStatusChip variant="warning">Not bookable</DashStatusChip>
               )}
               {v.status !== "hidden" && v.hideFromVillasDirectory && (
-                <DashboardStatusBadge tone="warning">Not on /villas</DashboardStatusBadge>
+                <DashStatusChip variant="warning">Not on /villas</DashStatusChip>
               )}
               <span className="ml-auto text-[0.625rem] font-semibold uppercase tracking-wider text-white/35">
                 {SOURCE_LABEL[v.portfolioSource] ?? v.portfolioSource}
@@ -211,6 +221,17 @@ function VillaPortfolioCard({
                   Full editor
                 </button>
               )}
+              {canWrite && v.deletable && onDelete ? (
+                <button
+                  type="button"
+                  onClick={onDelete}
+                  disabled={deleteBusy}
+                  className={`${dash.btn} ${dash.btnText} ${dash.btnDense} w-full border-red-400/30 text-red-300 hover:border-red-400/50 hover:bg-red-500/10`}
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  {deleteBusy ? "Deleting…" : "Delete property"}
+                </button>
+              ) : null}
             </div>
           </aside>
         </div>
@@ -233,6 +254,9 @@ export function VillaSettingsManager() {
   >(null);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<FilterKey>("all");
+  const [deleteTarget, setDeleteTarget] = useState<VillaRow | null>(null);
+  const [deleteBusy, setDeleteBusy] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -282,6 +306,36 @@ export function VillaSettingsManager() {
       );
     });
   }, [villas, query, filter]);
+
+  const confirmDelete = useCallback(
+    async (confirmedName: string) => {
+      if (!deleteTarget) return;
+      setDeleteBusy(true);
+      setError(null);
+      setDeleteError(null);
+      try {
+        const res = await dashboardFetch(
+          `/api/dashboard/villas/${deleteTarget.slug}`,
+          {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ confirmName: confirmedName }),
+          },
+        );
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        if (!res.ok) throw new Error(data.error ?? "Delete failed");
+        setDeleteTarget(null);
+        await load();
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "Delete failed";
+        setDeleteError(msg);
+        setError(msg);
+      } finally {
+        setDeleteBusy(false);
+      }
+    },
+    [deleteTarget, load],
+  );
 
   const filterTabs = [
     { id: "all", label: "All", count: stats.total },
@@ -335,6 +389,8 @@ export function VillaSettingsManager() {
       >
         <DashboardFilterBar
           split
+          compact
+          className="mb-4"
           meta={
             <>
               <strong className="text-[var(--dash-accent)]">{filtered.length}</strong> of{" "}
@@ -374,6 +430,11 @@ export function VillaSettingsManager() {
                 canWrite={canWrite}
                 onEdit={() => setEditSlug(v.slug)}
                 onFullEdit={() => setWizard({ mode: "edit", slug: v.slug })}
+                onDelete={v.deletable ? () => {
+                  setDeleteError(null);
+                  setDeleteTarget(v);
+                } : undefined}
+                deleteBusy={deleteBusy && deleteTarget?.slug === v.slug}
               />
             ))}
           </div>
@@ -386,6 +447,7 @@ export function VillaSettingsManager() {
           canWrite={canWrite}
           onClose={() => setEditSlug(null)}
           onSaved={load}
+          onDeleted={load}
           onOpenFullEditor={() => {
             const s = editSlug;
             setEditSlug(null);
@@ -403,6 +465,28 @@ export function VillaSettingsManager() {
           onSaved={load}
         />
       )}
+
+      <VillaDeleteConfirmDialog
+        open={Boolean(deleteTarget)}
+        propertyName={
+          deleteTarget
+            ? villaDeleteConfirmLabel({
+                name: deleteTarget.name,
+                shortName: deleteTarget.shortName,
+              })
+            : ""
+        }
+        slug={deleteTarget?.slug ?? ""}
+        busy={deleteBusy}
+        error={deleteError}
+        onConfirm={(confirmedName) => void confirmDelete(confirmedName)}
+        onCancel={() => {
+          if (!deleteBusy) {
+            setDeleteTarget(null);
+            setDeleteError(null);
+          }
+        }}
+      />
     </div>
   );
 }

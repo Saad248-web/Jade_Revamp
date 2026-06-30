@@ -170,6 +170,8 @@ export function AuditLogsViewer({
         rowKey={(r) => r.id}
         emptyMessage={emptyMessage}
         caption="Audit logs"
+        mono
+        dense
       />
     </DashboardModuleFrame>
   );

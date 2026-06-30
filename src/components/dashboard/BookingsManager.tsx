@@ -5,11 +5,13 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { formatBookingSource } from "@/lib/bookings/sourceLabels";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
-import { dash } from "@/lib/dashboard/dashboardClasses";
 import { formatPaise } from "@/lib/money";
 import { DataTable, type DataTableColumn } from "./DataTable";
+import { DashStatusChip } from "./form";
+import { DashboardFilterBar } from "./ui/DashboardFilterBar";
 import { DashboardListToolbar } from "./ui/DashboardListToolbar";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
+import { DashboardTabBar } from "./ui/DashboardTabBar";
 
 export type BookingListRow = {
   id: string;
@@ -29,13 +31,13 @@ export type BookingListRow = {
   updatedAt: string | null;
 };
 
-const STATUS_STYLE: Record<string, string> = {
-  confirmed: "text-emerald-300",
-  on_hold: "text-violet-300",
-  pending: "text-amber-300",
-  conflict: "text-red-300",
-  cancelled: "text-white/40",
-  expired: "text-white/40",
+const STATUS_STYLE: Record<string, "success" | "warning" | "danger" | "accent" | "neutral"> = {
+  confirmed: "success",
+  on_hold: "accent",
+  pending: "warning",
+  conflict: "danger",
+  cancelled: "neutral",
+  expired: "neutral",
 };
 
 const STATUS_FILTERS = [
@@ -138,11 +140,9 @@ export function BookingsManager() {
         key: "status",
         header: "Status",
         cell: (r) => (
-          <span
-            className={`text-xs font-bold uppercase tracking-widest ${STATUS_STYLE[r.status] ?? "text-white/50"}`}
-          >
+          <DashStatusChip variant={STATUS_STYLE[r.status] ?? "neutral"}>
             {r.status.replace(/_/g, " ")}
-          </span>
+          </DashStatusChip>
         ),
       },
       {
@@ -189,40 +189,24 @@ export function BookingsManager() {
       loading={loading}
       loadingLabel="Loading booking records…"
     >
-      <div className={`${dash.stack} mb-4`}>
-        <div className="flex flex-wrap gap-2">
-          {STATUS_FILTERS.map((f) => (
-            <button
-              key={f.value || "all-status"}
-              type="button"
-              onClick={() => setStatusFilter(f.value)}
-              className={`min-h-[36px] border px-3 py-1.5 font-manrope text-xs font-bold uppercase tracking-widest transition-colors ${
-                statusFilter === f.value
-                  ? "border-[var(--dash-accent-border)] bg-[var(--dash-accent-muted)] text-[var(--dash-accent)]"
-                  : "border-white/15 text-white/50 hover:border-white/30 hover:text-white/80"
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {SOURCE_FILTERS.map((f) => (
-            <button
-              key={f.value || "all-source"}
-              type="button"
-              onClick={() => setSourceFilter(f.value)}
-              className={`min-h-[36px] border px-3 py-1.5 font-manrope text-xs font-bold uppercase tracking-widest transition-colors ${
-                sourceFilter === f.value
-                  ? "border-[var(--dash-accent-border)] bg-[var(--dash-accent-muted)] text-[var(--dash-accent)]"
-                  : "border-white/15 text-white/50 hover:border-white/30 hover:text-white/80"
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <DashboardFilterBar compact className="mb-4">
+        <DashboardTabBar
+          tabs={STATUS_FILTERS.map((f) => ({
+            id: f.value || "all",
+            label: f.label,
+          }))}
+          active={statusFilter || "all"}
+          onChange={(id) => setStatusFilter(id === "all" ? "" : id)}
+        />
+        <DashboardTabBar
+          tabs={SOURCE_FILTERS.map((f) => ({
+            id: f.value || "all",
+            label: f.label,
+          }))}
+          active={sourceFilter || "all"}
+          onChange={(id) => setSourceFilter(id === "all" ? "" : id)}
+        />
+      </DashboardFilterBar>
 
       <DataTable
         columns={columns}

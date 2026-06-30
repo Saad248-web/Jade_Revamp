@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Loader2 } from "lucide-react";
 import {
@@ -8,37 +8,46 @@ import {
   GLASS_INNER_SURFACE,
 } from "@/lib/glassChrome";
 import { dash } from "@/lib/dashboard/dashboardClasses";
+import { useDashboardForm } from "@/lib/dashboard/dashboardFormValidation";
 import { DashboardModalHeader } from "./ui/DashboardModalHeader";
-import { ADD_ON_CATALOG } from "@/lib/bookings/addOnCatalog";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
+import { VillaOperationalFields } from "./villa/VillaOperationalFields";
+import { VillaDeletePanel } from "./villa/VillaDeletePanel";
 import type { AdminVillaDetail, AdminWeddingTier } from "@/lib/villas/adminVilla";
 import { villaHideFromDirectoryFlag } from "@/lib/villas/villaVisibility";
+import { validateQuickEdit } from "@/lib/villas/villaEditorValidation";
+import { QUICK_EDIT_SECTIONS, fieldLabel } from "@/lib/villas/villaEditorLabels";
 import { ImageUploadField } from "./ImageUploadField";
 import {
-  VillaFormField,
-  VillaFormGrid,
-  VillaFormNotice,
-  VillaFormSection,
-  VillaFormSelect,
-  VillaFormToggle,
-  villaFormInputClass,
-  villaFormTextareaClass,
-} from "./villa/VillaFormPrimitives";
+  DashFormShell,
+  DashFormActionBar,
+  DashSectionCard,
+  DashFloatingField,
+  DashFloatingTextarea,
+  DashFloatingSelect,
+  DashToggle,
+  DashFormNotice,
+} from "@/components/dashboard/form";
 
-const inputClass = villaFormInputClass;
-const labelClass = dash.label;
 const hintClass = "villa-form-field__hint";
 
-const ADD_ON_OPTIONS = Object.values(ADD_ON_CATALOG).map((a) => ({
-  id: a.id,
-  label: a.label,
-}));
+const STATUS_OPTIONS = ["active", "maintenance", "hidden"] as const;
+
+const DISPLAY_STAT_KEYS = [
+  ["stay", "Stay capacity"],
+  ["events", "Event capacity"],
+  ["bhk", "Bedrooms / layout"],
+  ["lawn", "Lawn / outdoor"],
+  ["villaArea", "Built-up / estate"],
+  ["pool", "Pool (if any)"],
+] as const;
 
 type VillaEditModalProps = {
   slug: string;
   canWrite: boolean;
   onClose: () => void;
   onSaved: () => void;
+  onDeleted?: () => void;
   onOpenFullEditor?: () => void;
 };
 
@@ -47,12 +56,35 @@ export function VillaEditModal({
   canWrite,
   onClose,
   onSaved,
+  onDeleted,
   onOpenFullEditor,
 }: VillaEditModalProps) {
   const [villa, setVilla] = useState<AdminVillaDetail | null>(null);
+  const [deletion, setDeletion] = useState<{
+    allowed: boolean;
+    reason?: string;
+  } | null>(null);
+  const [baselineJson, setBaselineJson] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const form = useDashboardForm<AdminVillaDetail>({
+    validate: (values) => validateQuickEdit(values),
+  });
+
+  const dirty = useMemo(() => {
+    if (!villa || !baselineJson) return false;
+    return JSON.stringify(villa) !== baselineJson;
+  }, [villa, baselineJson]);
+
+  const fp = (key: string) => ({
+    id: key,
+    invalid: Boolean(form.fieldErrors[key]),
+    showError: form.showFieldError(key),
+    errorMessage: form.fieldErrors[key],
+    onBlur: () => form.touch(key),
+  });
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -72,14 +104,22 @@ export function VillaEditModal({
     (async () => {
       setLoading(true);
       setError(null);
+      form.resetValidation();
       try {
         const res = await dashboardFetch(`/api/dashboard/villas/${slug}`);
         if (!res.ok) {
           const d = (await res.json().catch(() => ({}))) as { error?: string };
           throw new Error(d.error ?? "Failed to load villa");
         }
-        const data = (await res.json()) as { villa: AdminVillaDetail };
-        if (!cancelled) setVilla(data.villa);
+        const data = (await res.json()) as {
+          villa: AdminVillaDetail;
+          deletion?: { allowed: boolean; reason?: string };
+        };
+        if (!cancelled) {
+          setVilla(data.villa);
+          setDeletion(data.deletion ?? { allowed: false });
+          setBaselineJson(JSON.stringify(data.villa));
+        }
       } catch (e) {
         if (!cancelled) {
           setError(e instanceof Error ? e.message : "Failed to load villa");
@@ -91,48 +131,81 @@ export function VillaEditModal({
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- reset when slug changes only
   }, [slug]);
+
+  const patchVilla = (patch: Partial<AdminVillaDetail>) => {
+    if (!villa) return;
+    const next = { ...villa, ...patch };
+    setVilla(next);
+    for (const key of Object.keys(patch)) {
+      form.validateField(key, next);
+    }
+  };
 
   const setNum = (key: keyof AdminVillaDetail, value: string) => {
     if (!villa) return;
-    setVilla({ ...villa, [key]: Number(value) });
+    const next = { ...villa, [key]: Number(value) };
+    setVilla(next);
+    form.validateField(String(key), next);
   };
 
   const setStat = (key: string, value: string) => {
     if (!villa) return;
-    setVilla({
+    const next = {
       ...villa,
       displayStats: { ...villa.displayStats, [key]: value },
-    });
+    };
+    setVilla(next);
+    form.validateField(`displayStats.${key}`, next);
   };
 
-  const updateTier = (
-    tierId: string,
-    patch: Partial<AdminWeddingTier>,
-  ) => {
+  const updateTier = (tierId: string, patch: Partial<AdminWeddingTier>) => {
     if (!villa) return;
-    setVilla({
+    const tierIndex = villa.weddingTiers.findIndex((t) => t.id === tierId);
+    const next = {
       ...villa,
       weddingTiers: villa.weddingTiers.map((t) =>
         t.id === tierId ? { ...t, ...patch } : t,
       ),
-    });
+    };
+    setVilla(next);
+    if (tierIndex >= 0) {
+      for (const key of Object.keys(patch)) {
+        form.validateField(`weddingTiers.${tierIndex}.${key}`, next);
+      }
+    }
   };
 
   const toggleAddOn = (id: string) => {
     if (!villa) return;
     const has = villa.addOnAvailability.includes(id);
-    setVilla({
+    const next = {
       ...villa,
       addOnAvailability: has
         ? villa.addOnAvailability.filter((x) => x !== id)
         : [...villa.addOnAvailability, id],
-    });
+    };
+    setVilla(next);
+    form.validateField("addOnAvailability", next);
+  };
+
+  const patchAxisRooms = (key: "propertyId" | "roomTypeId" | "ratePlanId", value: string) => {
+    if (!villa) return;
+    const axis = villa.axisRooms ?? { propertyId: "", roomTypeId: "", ratePlanId: "" };
+    const next = {
+      ...villa,
+      axisRooms: { ...axis, [key]: value },
+    };
+    setVilla(next);
+    form.validateField(`axisRooms.${key}`, next);
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!villa || !canWrite) return;
+    if (!form.runSubmit(villa)) return;
+
     setSaving(true);
     setError(null);
     try {
@@ -182,8 +255,17 @@ export function VillaEditModal({
             : {}),
         }),
       });
-      const data = (await res.json().catch(() => ({}))) as { error?: string };
-      if (!res.ok) throw new Error(data.error ?? "Save failed");
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        fieldErrors?: Record<string, string>;
+      };
+      if (!res.ok) {
+        if (res.status === 400 && data.fieldErrors) {
+          form.applyApiFieldErrors(data.fieldErrors);
+        }
+        throw new Error(data.error ?? "Save failed");
+      }
+      setBaselineJson(JSON.stringify(villa));
       onSaved();
       onClose();
     } catch (err) {
@@ -192,6 +274,8 @@ export function VillaEditModal({
       setSaving(false);
     }
   };
+
+  const axis = villa?.axisRooms ?? { propertyId: "", roomTypeId: "", ratePlanId: "" };
 
   return (
     <div className="fixed inset-0 z-[60] flex justify-end overflow-y-auto overscroll-behavior-contain bg-black/75">
@@ -211,7 +295,6 @@ export function VillaEditModal({
           className={`pointer-events-none absolute inset-px block ${GLASS_INNER_SURFACE}`}
         />
 
-        {/* Header — sticky */}
         <DashboardModalHeader
           section={`Villa settings${!canWrite ? " · read-only" : ""}`}
           title={villa?.shortName ?? villa?.name ?? slug}
@@ -232,83 +315,71 @@ export function VillaEditModal({
           }
         />
 
-        {/* Body — scrolls inside panel */}
-        <div className="relative z-[1] min-h-0 flex-1 overflow-y-auto overscroll-contain">
-          <div className="p-5">
-            {loading ? (
-              <div className="flex justify-center py-24">
-                <Loader2 className="h-8 w-8 animate-spin text-[var(--dash-accent)]" />
-              </div>
-            ) : !villa ? (
-              <p className="text-red-400">{error ?? "Villa not found"}</p>
-            ) : (
-              <form
-                id="villa-edit-form"
-                onSubmit={handleSubmit}
-                className="flex flex-col gap-6"
-              >
-                <fieldset disabled={!canWrite} className="contents">
-                  <VillaFormSection
-                    title="Identity & listing"
+        <div className="relative z-[1] flex min-h-0 flex-1 flex-col">
+          {loading ? (
+            <div className="flex flex-1 justify-center py-24">
+              <Loader2 className="h-8 w-8 animate-spin text-[var(--dash-accent)]" />
+            </div>
+          ) : !villa ? (
+            <p className="p-5 text-red-400">{error ?? "Villa not found"}</p>
+          ) : (
+            <form
+              id="villa-edit-form"
+              onSubmit={handleSubmit}
+              className="flex min-h-0 flex-1 flex-col"
+            >
+              <fieldset disabled={!canWrite} className="contents">
+                <DashFormShell drawer>
+                  <DashSectionCard
+                    title={QUICK_EDIT_SECTIONS.identity.title}
                     description="How this property appears on /villas and in the dashboard."
-                    badge="Basics"
+                    badge={QUICK_EDIT_SECTIONS.identity.badge}
                   >
-                    <VillaFormGrid>
-                      <VillaFormField label="Full legal name" className="sm:col-span-2">
-                        <input
-                          className={inputClass}
-                          value={villa.name}
-                          onChange={(e) =>
-                            setVilla({ ...villa, name: e.target.value })
-                          }
-                          required
-                        />
-                      </VillaFormField>
-                      <VillaFormField label="Short display name">
-                        <input
-                          className={inputClass}
-                          value={villa.shortName}
-                          onChange={(e) =>
-                            setVilla({ ...villa, shortName: e.target.value })
-                          }
-                        />
-                      </VillaFormField>
-                      <VillaFormField
-                        label="Property type"
-                        hint="Shown as the gold tag on villa cards"
-                      >
-                        <input
-                          className={inputClass}
-                          value={villa.type}
-                          onChange={(e) =>
-                            setVilla({ ...villa, type: e.target.value })
-                          }
-                          placeholder="e.g. Private nature retreat"
-                        />
-                      </VillaFormField>
-                      <VillaFormField label="Location line" className="sm:col-span-2">
-                        <input
-                          className={inputClass}
-                          value={villa.location}
-                          onChange={(e) =>
-                            setVilla({ ...villa, location: e.target.value })
-                          }
-                          placeholder="Area, city"
-                        />
-                      </VillaFormField>
-                      <div className="sm:col-span-2">
+                    <div className={dash.formGrid2}>
+                      <DashFloatingField
+                        className="sm:col-span-2"
+                        label={fieldLabel("name").label}
+                        value={villa.name}
+                        required
+                        onChange={(name) => patchVilla({ name })}
+                        {...fp("name")}
+                      />
+                      <DashFloatingField
+                        label={fieldLabel("shortName").label}
+                        value={villa.shortName}
+                        onChange={(shortName) => patchVilla({ shortName })}
+                        {...fp("shortName")}
+                      />
+                      <DashFloatingField
+                        label={fieldLabel("type").label}
+                        value={villa.type}
+                        onChange={(type) => patchVilla({ type })}
+                        {...fp("type")}
+                      />
+                      <DashFloatingField
+                        className="sm:col-span-2"
+                        label={fieldLabel("location").label}
+                        value={villa.location}
+                        onChange={(location) => patchVilla({ location })}
+                        {...fp("location")}
+                      />
+                      <div className="sm:col-span-2" data-field="thumbnail">
                         <ImageUploadField
-                          label="Hero thumbnail"
-                          hint="Used on villa cards and social previews."
+                          label={fieldLabel("thumbnail").label}
+                          hint={fieldLabel("thumbnail").hint}
                           value={villa.thumbnail}
-                          onChange={(url) =>
-                            setVilla({ ...villa, thumbnail: url })
-                          }
+                          onChange={(url) => {
+                            patchVilla({ thumbnail: url });
+                            form.touch("thumbnail");
+                          }}
                           villaSlug={slug}
                           disabled={!canWrite}
                         />
+                        {form.showFieldError("thumbnail") && form.fieldErrors.thumbnail ? (
+                          <p className={dash.fieldError}>{form.fieldErrors.thumbnail}</p>
+                        ) : null}
                       </div>
-                      {onOpenFullEditor && canWrite && (
+                      {onOpenFullEditor && canWrite ? (
                         <div className="sm:col-span-2">
                           <button
                             type="button"
@@ -323,231 +394,45 @@ export function VillaEditModal({
                             </span>
                           </button>
                         </div>
-                      )}
-                    </VillaFormGrid>
-                  </VillaFormSection>
-
-                  <VillaFormSection
-                    title="Pricing & capacity"
-                    description="Stay and day-out base rates (+ GST at checkout)."
-                    badge="Rates"
-                  >
-                    <VillaFormGrid cols={3}>
-                      <div>
-                        <label className={labelClass}>Stay base (₹)</label>
-                        <input
-                          type="number"
-                          min={0}
-                          className={inputClass}
-                          value={villa.basePriceRupees}
-                          onChange={(e) =>
-                            setNum("basePriceRupees", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Day-out base (₹)</label>
-                        <input
-                          type="number"
-                          min={0}
-                          className={inputClass}
-                          value={villa.dayOutBasePriceRupees}
-                          onChange={(e) =>
-                            setNum("dayOutBasePriceRupees", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Stay base pax</label>
-                        <input
-                          type="number"
-                          min={1}
-                          className={inputClass}
-                          value={villa.stayBasePax}
-                          onChange={(e) =>
-                            setNum("stayBasePax", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Day-out base pax</label>
-                        <input
-                          type="number"
-                          min={1}
-                          className={inputClass}
-                          value={villa.dayOutBasePax}
-                          onChange={(e) =>
-                            setNum("dayOutBasePax", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Stay max pax</label>
-                        <input
-                          type="number"
-                          min={1}
-                          className={inputClass}
-                          value={villa.stayMaxPax}
-                          onChange={(e) =>
-                            setNum("stayMaxPax", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Extra pax stay (₹)</label>
-                        <input
-                          type="number"
-                          min={0}
-                          className={inputClass}
-                          value={villa.extraPaxStayRupees}
-                          onChange={(e) =>
-                            setNum("extraPaxStayRupees", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Extra pax day-out (₹)</label>
-                        <input
-                          type="number"
-                          min={0}
-                          className={inputClass}
-                          value={villa.extraPaxDayOutRupees}
-                          onChange={(e) =>
-                            setNum("extraPaxDayOutRupees", e.target.value)
-                          }
-                        />
-                      </div>
-                    </VillaFormGrid>
-                  </VillaFormSection>
-
-                  <VillaFormSection
-                    title="Fees, tax & policies"
-                    description="Applied at quote and on the booking folio."
-                  >
-                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                      <div>
-                        <label className={labelClass}>GST %</label>
-                        <input
-                          type="number"
-                          min={0}
-                          max={28}
-                          step={0.01}
-                          className={inputClass}
-                          value={villa.taxPercent}
-                          onChange={(e) =>
-                            setNum("taxPercent", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Deposit %</label>
-                        <input
-                          type="number"
-                          min={0}
-                          max={100}
-                          className={inputClass}
-                          value={villa.depositPercent}
-                          onChange={(e) =>
-                            setNum("depositPercent", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Fixed deposit (₹)</label>
-                        <input
-                          type="number"
-                          min={0}
-                          className={inputClass}
-                          value={villa.depositPaiseRupees}
-                          onChange={(e) =>
-                            setNum("depositPaiseRupees", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Cleaning fee (₹)</label>
-                        <input
-                          type="number"
-                          min={0}
-                          className={inputClass}
-                          value={villa.cleaningFeeRupees}
-                          onChange={(e) =>
-                            setNum("cleaningFeeRupees", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Security deposit (₹)</label>
-                        <input
-                          type="number"
-                          min={0}
-                          className={inputClass}
-                          value={villa.securityDepositRupees}
-                          onChange={(e) =>
-                            setNum("securityDepositRupees", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Check-in</label>
-                        <input
-                          type="time"
-                          className={inputClass}
-                          value={villa.checkInTime}
-                          onChange={(e) =>
-                            setVilla({ ...villa, checkInTime: e.target.value })
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Check-out</label>
-                        <input
-                          type="time"
-                          className={inputClass}
-                          value={villa.checkOutTime}
-                          onChange={(e) =>
-                            setVilla({ ...villa, checkOutTime: e.target.value })
-                          }
-                        />
-                      </div>
-                      <div className="sm:col-span-2 lg:col-span-3">
-                        <label className={labelClass}>Cancellation policy</label>
-                        <textarea
-                          className={villaFormTextareaClass}
-                          value={villa.cancellationPolicy}
-                          onChange={(e) =>
-                            setVilla({
-                              ...villa,
-                              cancellationPolicy: e.target.value,
-                            })
-                          }
-                          rows={4}
-                        />
-                      </div>
+                      ) : null}
                     </div>
-                  </VillaFormSection>
+                  </DashSectionCard>
 
-                  <VillaFormSection
-                    title="Visibility & booking"
-                    description="Control whether guests see this villa on the website and can book online."
-                    badge="Go live"
+                  <DashSectionCard
+                    title={QUICK_EDIT_SECTIONS.pricing.title}
+                    description="Rates, policies, wedding tiers, and add-ons — same fields as Full Editor step 13."
+                    badge={QUICK_EDIT_SECTIONS.pricing.badge}
                   >
-                    {villa.status !== "hidden" &&
-                      villaHideFromDirectoryFlag(villa) && (
-                        <VillaFormNotice tone="warning">
-                          This villa is <strong>not listed on /villas</strong> yet.
-                          Set visibility to <strong>Live</strong> and save — it will
-                          appear on the public directory automatically.
-                        </VillaFormNotice>
-                      )}
-                    <VillaFormGrid cols={1}>
-                      <VillaFormSelect
+                    <VillaOperationalFields
+                      villa={villa}
+                      canWrite={canWrite}
+                      fp={fp}
+                      onPatch={patchVilla}
+                      onSetNum={setNum}
+                      onUpdateTier={updateTier}
+                      onToggleAddOn={toggleAddOn}
+                    />
+                  </DashSectionCard>
+
+                  <DashSectionCard
+                    title={QUICK_EDIT_SECTIONS.visibility.title}
+                    description="Control whether guests see this villa on the website and can book online."
+                    badge={QUICK_EDIT_SECTIONS.visibility.badge}
+                  >
+                    {villa.status !== "hidden" && villaHideFromDirectoryFlag(villa) ? (
+                      <DashFormNotice variant="warning">
+                        This villa is <strong>not listed on /villas</strong> yet. Set
+                        visibility to <strong>Live</strong> and save — it will appear on
+                        the public directory automatically.
+                      </DashFormNotice>
+                    ) : null}
+                    <div className={dash.stack}>
+                      <DashFloatingSelect
                         label="Public visibility"
-                        hint="Live = shows on /villas. Hidden = removed from the entire public site."
                         value={villa.status}
+                        options={STATUS_OPTIONS}
                         onChange={(status) => {
-                          setVilla({
-                            ...villa,
+                          patchVilla({
                             status,
                             ...(status === "hidden" ? { bookable: false } : {}),
                             ...(status === "active" || status === "maintenance"
@@ -560,304 +445,135 @@ export function VillaEditModal({
                               : {}),
                           });
                         }}
-                        options={[
-                          { value: "active", label: "Live — visible on /villas" },
-                          {
-                            value: "maintenance",
-                            label: "Maintenance — visible, booking may be limited",
-                          },
-                          { value: "hidden", label: "Hidden — removed from public site" },
-                        ]}
+                        {...fp("status")}
                       />
-                      <VillaFormToggle
+                      <DashToggle
                         label="Allow online booking"
                         description="Guests see Book Villa. When off, they see Enquire + View Villa only."
                         checked={villa.bookable}
                         disabled={villa.status === "hidden"}
-                        onChange={(bookable) =>
-                          setVilla({ ...villa, bookable })
-                        }
+                        onChange={(bookable) => patchVilla({ bookable })}
                       />
-                      <VillaFormToggle
+                      <DashToggle
                         label="Wedding / event venue"
                         description="Shows the Wedding badge in Villa Settings and wedding filters."
                         checked={villa.weddingVenue}
-                        onChange={(weddingVenue) =>
-                          setVilla({ ...villa, weddingVenue })
-                        }
+                        onChange={(weddingVenue) => patchVilla({ weddingVenue })}
                       />
-                    </VillaFormGrid>
-                  </VillaFormSection>
+                    </div>
+                  </DashSectionCard>
 
-                  <VillaFormSection
-                    title="Public card stats"
+                  <DashSectionCard
+                    title={QUICK_EDIT_SECTIONS.stats.title}
                     description="Shown on villa directory cards (/villas)."
+                    badge={QUICK_EDIT_SECTIONS.stats.badge}
                   >
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      {(
-                        [
-                          ["stay", "Stay capacity"],
-                          ["events", "Event capacity"],
-                          ["bhk", "Bedrooms / layout"],
-                          ["lawn", "Lawn / outdoor"],
-                          ["villaArea", "Built-up / estate"],
-                          ["pool", "Pool (if any)"],
-                        ] as const
-                      ).map(([key, label]) => (
-                        <div key={key}>
-                          <label className={labelClass}>{label}</label>
-                          <input
-                            className={inputClass}
-                            value={villa.displayStats[key] ?? ""}
-                            onChange={(e) => setStat(key, e.target.value)}
-                          />
-                        </div>
+                    <div className={dash.formGrid2}>
+                      {DISPLAY_STAT_KEYS.map(([key, label]) => (
+                        <DashFloatingField
+                          key={key}
+                          label={label}
+                          value={villa.displayStats[key] ?? ""}
+                          onChange={(v) => setStat(key, v)}
+                          {...fp(`displayStats.${key}`)}
+                        />
                       ))}
                     </div>
-                  </VillaFormSection>
+                  </DashSectionCard>
 
-                  {villa.weddingVenue && villa.weddingTiers.length > 0 && (
-                    <VillaFormSection
-                      title="Wedding & event tiers"
-                      description="Half-day and full-day packages (+ GST). Catering billed separately."
-                    >
-                      <div className={dash.stack}>
-                        {villa.weddingTiers.map((tier) => (
-                          <div
-                            key={tier.id}
-                            className="border border-white/10 bg-white/[0.02] p-4"
-                          >
-                            <p className="mb-3 font-manrope text-xs font-bold uppercase tracking-widest text-white/40">
-                              {tier.id}
-                            </p>
-                            <div className="grid gap-3 sm:grid-cols-2">
-                              <div className="sm:col-span-2">
-                                <label className={labelClass}>Label</label>
-                                <input
-                                  className={inputClass}
-                                  value={tier.label}
-                                  onChange={(e) =>
-                                    updateTier(tier.id, {
-                                      label: e.target.value,
-                                    })
-                                  }
-                                />
-                              </div>
-                              <div>
-                                <label className={labelClass}>Price (₹)</label>
-                                <input
-                                  type="number"
-                                  min={0}
-                                  className={inputClass}
-                                  value={tier.priceRupees}
-                                  onChange={(e) =>
-                                    updateTier(tier.id, {
-                                      priceRupees: Number(e.target.value),
-                                    })
-                                  }
-                                />
-                              </div>
-                              <div>
-                                <label className={labelClass}>Max guests</label>
-                                <input
-                                  type="number"
-                                  min={1}
-                                  className={inputClass}
-                                  value={tier.maxGuests}
-                                  onChange={(e) =>
-                                    updateTier(tier.id, {
-                                      maxGuests: Number(e.target.value),
-                                    })
-                                  }
-                                />
-                              </div>
-                              <div>
-                                <label className={labelClass}>Mode</label>
-                                <select
-                                  className={inputClass}
-                                  value={tier.mode}
-                                  onChange={(e) =>
-                                    updateTier(tier.id, { mode: e.target.value })
-                                  }
-                                >
-                                  <option
-                                    value="half_day"
-                                    className="bg-[#1A1C1E]"
-                                  >
-                                    Half day
-                                  </option>
-                                  <option
-                                    value="full_day"
-                                    className="bg-[#1A1C1E]"
-                                  >
-                                    Full day
-                                  </option>
-                                </select>
-                              </div>
-                              <div>
-                                <label className={labelClass}>
-                                  Stay included pax
-                                </label>
-                                <input
-                                  type="number"
-                                  min={0}
-                                  className={inputClass}
-                                  value={tier.stayIncludedPax}
-                                  onChange={(e) =>
-                                    updateTier(tier.id, {
-                                      stayIncludedPax: Number(e.target.value),
-                                    })
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </VillaFormSection>
-                  )}
-
-                  <VillaFormSection
-                    title="Paid add-ons"
-                    description="Which catalog add-ons guests can select for this villa."
-                  >
-                    <div className="grid gap-2 sm:grid-cols-2">
-                      {ADD_ON_OPTIONS.map((opt) => (
-                        <label
-                          key={opt.id}
-                          className="flex cursor-pointer items-center gap-2 border border-white/10 bg-white/[0.02] px-3 py-2.5 font-manrope text-sm text-white/70"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={villa.addOnAvailability.includes(opt.id)}
-                            onChange={() => toggleAddOn(opt.id)}
-                            className="h-4 w-4 shrink-0 accent-[var(--dash-accent)]"
-                          />
-                          <span>{opt.label}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </VillaFormSection>
-
-                  <VillaFormSection
+                  <DashSectionCard
                     title="Axis Rooms"
                     description="Channel manager mapping — API sync when credentials are provided."
                   >
-                    <div className="grid gap-4 sm:grid-cols-3">
-                      <div>
-                        <label className={labelClass}>Property ID</label>
-                        <input
-                          className={inputClass}
-                          value={
-                            (villa.axisRooms ?? { propertyId: "", roomTypeId: "", ratePlanId: "" }).propertyId
-                          }
-                          onChange={(e) =>
-                            setVilla({
-                              ...villa,
-                              axisRooms: {
-                                ...(villa.axisRooms ?? { propertyId: "", roomTypeId: "", ratePlanId: "" }),
-                                propertyId: e.target.value,
-                              },
-                            })
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Room type ID</label>
-                        <input
-                          className={inputClass}
-                          value={(villa.axisRooms ?? { propertyId: "", roomTypeId: "", ratePlanId: "" }).roomTypeId}
-                          onChange={(e) =>
-                            setVilla({
-                              ...villa,
-                              axisRooms: {
-                                ...(villa.axisRooms ?? { propertyId: "", roomTypeId: "", ratePlanId: "" }),
-                                roomTypeId: e.target.value,
-                              },
-                            })
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Rate plan ID</label>
-                        <input
-                          className={inputClass}
-                          value={(villa.axisRooms ?? { propertyId: "", roomTypeId: "", ratePlanId: "" }).ratePlanId}
-                          onChange={(e) =>
-                            setVilla({
-                              ...villa,
-                              axisRooms: {
-                                ...(villa.axisRooms ?? { propertyId: "", roomTypeId: "", ratePlanId: "" }),
-                                ratePlanId: e.target.value,
-                              },
-                            })
-                          }
-                        />
-                      </div>
+                    <div className={dash.formGrid2}>
+                      <DashFloatingField
+                        label="Property ID"
+                        value={axis.propertyId}
+                        onChange={(v) => patchAxisRooms("propertyId", v)}
+                        {...fp("axisRooms.propertyId")}
+                      />
+                      <DashFloatingField
+                        label="Room type ID"
+                        value={axis.roomTypeId}
+                        onChange={(v) => patchAxisRooms("roomTypeId", v)}
+                        {...fp("axisRooms.roomTypeId")}
+                      />
+                      <DashFloatingField
+                        label="Rate plan ID"
+                        value={axis.ratePlanId}
+                        onChange={(v) => patchAxisRooms("ratePlanId", v)}
+                        {...fp("axisRooms.ratePlanId")}
+                      />
                     </div>
-                  </VillaFormSection>
+                  </DashSectionCard>
 
-                  <VillaFormSection
+                  <DashSectionCard
                     title="Internal notes"
                     description="Staff-only — not shown on the public site."
                   >
-                    <textarea
-                      className={`${inputClass} min-h-[120px] resize-y`}
+                    <DashFloatingTextarea
+                      label="Notes"
                       value={villa.notes}
-                      onChange={(e) =>
-                        setVilla({ ...villa, notes: e.target.value })
-                      }
-                      placeholder="Ops reminders, property quirks, contact on site…"
                       rows={5}
+                      onChange={(notes) => patchVilla({ notes })}
+                      {...fp("notes")}
                     />
-                    {villa.updatedAt && (
+                    {villa.updatedAt ? (
                       <p className={hintClass}>
                         Last saved {new Date(villa.updatedAt).toLocaleString("en-IN")}
                       </p>
+                    ) : null}
+                  </DashSectionCard>
+
+                  {canWrite && deletion ? (
+                    <VillaDeletePanel
+                      slug={villa.slug}
+                      name={villa.name}
+                      shortName={villa.shortName}
+                      allowed={deletion.allowed}
+                      blockedReason={deletion.reason}
+                      onDeleted={() => {
+                        onDeleted?.();
+                        onClose();
+                      }}
+                    />
+                  ) : null}
+                </DashFormShell>
+              </fieldset>
+
+              {error ? (
+                <p className="px-5 pb-2 font-manrope text-red-400">{error}</p>
+              ) : null}
+
+              {canWrite ? (
+                <DashFormActionBar dirty={dirty}>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="min-h-[48px] flex-1 border border-white/20 font-manrope text-sm font-bold uppercase tracking-widest text-white/60 hover:border-white/40 hover:text-white"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    className={`min-h-[48px] flex-[2] font-manrope text-sm font-bold uppercase tracking-widest ${
+                      saving
+                        ? "cursor-not-allowed bg-white/10 text-white/30"
+                        : `${dash.btn} ${dash.btnAccent}`
+                    }`}
+                  >
+                    {saving ? (
+                      <Loader2 className="mx-auto h-5 w-5 animate-spin" />
+                    ) : (
+                      "Save all changes"
                     )}
-                  </VillaFormSection>
-                </fieldset>
-
-                {error && (
-                  <p className="font-manrope text-red-400">{error}</p>
-                )}
-              </form>
-            )}
-          </div>
+                  </button>
+                </DashFormActionBar>
+              ) : null}
+            </form>
+          )}
         </div>
-
-        {/* Footer — sticky save */}
-        {canWrite && villa && !loading && (
-          <div
-            className="relative z-10 shrink-0 border-t border-white/10 bg-[#1A1C1E]/95 p-4 backdrop-blur-sm"
-          >
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={onClose}
-                className="min-h-[48px] flex-1 border border-white/20 font-manrope text-sm font-bold uppercase tracking-widest text-white/60 hover:border-white/40 hover:text-white"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                form="villa-edit-form"
-                disabled={saving}
-                className={`min-h-[48px] flex-[2] font-manrope text-sm font-bold uppercase tracking-widest ${
-                  saving
-                    ? "cursor-not-allowed bg-white/10 text-white/30"
-                    : `${dash.btn} ${dash.btnAccent}`
-                }`}
-              >
-                {saving ? (
-                  <Loader2 className="mx-auto h-5 w-5 animate-spin" />
-                ) : (
-                  "Save all changes"
-                )}
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

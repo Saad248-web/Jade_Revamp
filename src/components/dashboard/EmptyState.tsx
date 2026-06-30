@@ -15,6 +15,12 @@ type EmptyStateProps = {
   compact?: boolean;
 };
 
+const TONE_CLASS: Record<Exclude<EmptyTone, "neutral">, string> = {
+  info: "dash-empty-hint--info",
+  success: "dash-empty-hint--success",
+  warning: "dash-empty-hint--warning",
+};
+
 export function EmptyState({
   icon,
   title,
@@ -23,15 +29,15 @@ export function EmptyState({
   tone = "neutral",
   compact = false,
 }: EmptyStateProps) {
-  const toneClass = tone !== "neutral" ? `dashboard-empty-state--${tone}` : "";
-  const compactClass = compact ? "dashboard-empty-state--compact" : "";
+  const toneClass = tone !== "neutral" ? TONE_CLASS[tone] : "";
+  const compactClass = compact ? "dash-empty-hint--compact" : "";
 
   return (
     <DashboardPanel pad className="w-full">
-      <div className={`${dash.emptyState} ${toneClass} ${compactClass}`.trim()}>
-        {icon && <div className={dash.emptyStateIcon}>{icon}</div>}
-        <h2 className={dash.emptyStateTitle}>{title}</h2>
-        {description && <p className={dash.emptyStateDesc}>{description}</p>}
+      <div className={`${dash.emptyHint} ${toneClass} ${compactClass}`.trim()}>
+        {icon ? <div className="dash-empty-hint__icon" aria-hidden>{icon}</div> : null}
+        <p className="dash-empty-hint__title">{title}</p>
+        {description ? <p className="dash-empty-hint__desc">{description}</p> : null}
         {action}
       </div>
     </DashboardPanel>

@@ -7,12 +7,16 @@ import {
   GLASS_INNER_SURFACE,
 } from "@/lib/glassChrome";
 import { dash } from "@/lib/dashboard/dashboardClasses";
+import {
+  useDashboardForm,
+  validatePasswordReset,
+} from "@/lib/dashboard/dashboardFormValidation";
+import {
+  DashFloatingField,
+  DashFormActionBar,
+  DashFormShell,
+} from "@/components/dashboard/form";
 import { DashboardModalHeader } from "./ui/DashboardModalHeader";
-
-const inputClass =
-  "w-full border border-white/15 bg-black/20 px-4 py-3 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[var(--dash-accent-border)] focus:outline-none";
-const labelClass =
-  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[var(--dash-accent)]";
 
 type PasswordResetModalProps = {
   userName: string;
@@ -28,9 +32,26 @@ export function PasswordResetModal({
   onSubmit,
 }: PasswordResetModalProps) {
   const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+
+  const {
+    fieldErrors,
+    showFieldError,
+    touch,
+    validateField,
+    runSubmit,
+  } = useDashboardForm({
+    validate: validatePasswordReset,
+  });
+
+  const getValues = () => ({ password, confirmPassword });
+
+  const blur = (key: "password" | "confirmPassword") => {
+    touch(key);
+    validateField(key, getValues());
+  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -40,15 +61,11 @@ export function PasswordResetModal({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!runSubmit(getValues())) {
+      setError(null);
+      return;
+    }
     setError(null);
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters");
-      return;
-    }
-    if (password !== confirm) {
-      setError("Passwords do not match");
-      return;
-    }
     setSaving(true);
     const err = await onSubmit(password);
     setSaving(false);
@@ -66,58 +83,64 @@ export function PasswordResetModal({
           aria-hidden
           className={`pointer-events-none absolute inset-px block ${GLASS_INNER_SURFACE}`}
         />
-        <form onSubmit={handleSubmit} className={`${dash.modalFrame} flex min-h-0 flex-col`}>
+        <form
+          onSubmit={handleSubmit}
+          className={`${dash.modalFrame} flex min-h-0 flex-col`}
+          noValidate
+        >
           <DashboardModalHeader
             section="Staff"
             title="Reset password"
             description={`Set a new password for ${userName} (${userEmail})`}
             onClose={onClose}
           />
-          <div className={`${dash.modalBody} ${dash.stack}`}>          <div>
-            <label className={labelClass} htmlFor="pr-password">
-              New password
-            </label>
-            <input
-              id="pr-password"
+          <DashFormShell>
+            <DashFloatingField
+              id="password"
+              label="New password"
               type="password"
-              className={inputClass}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={setPassword}
+              onBlur={() => blur("password")}
+              invalid={Boolean(fieldErrors.password)}
+              showError={showFieldError("password")}
+              errorMessage={fieldErrors.password}
               required
-              minLength={8}
               autoComplete="new-password"
             />
-          </div>
-          <div>
-            <label className={labelClass} htmlFor="pr-confirm">
-              Confirm password
-            </label>
-            <input
-              id="pr-confirm"
+            <DashFloatingField
+              id="confirmPassword"
+              label="Confirm password"
               type="password"
-              className={inputClass}
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
+              value={confirmPassword}
+              onChange={setConfirmPassword}
+              onBlur={() => blur("confirmPassword")}
+              invalid={Boolean(fieldErrors.confirmPassword)}
+              showError={showFieldError("confirmPassword")}
+              errorMessage={fieldErrors.confirmPassword}
               required
-              minLength={8}
               autoComplete="new-password"
             />
-          </div>
-          {error && (
-            <p className="font-manrope text-sm text-red-400">{error}</p>
-          )}
-          <button
-            type="submit"
-            disabled={saving}
-            className={`${dash.btn} ${dash.btnAccent} w-full`}
-          >
-            {saving ? (
-              <Loader2 className="mx-auto h-5 w-5 animate-spin" />
-            ) : (
-              "Update password"
+            {error && (
+              <p className={dash.errorText} role="alert">
+                {error}
+              </p>
             )}
-          </button>
-          </div>
+          </DashFormShell>
+
+          <DashFormActionBar>
+            <button
+              type="submit"
+              disabled={saving}
+              className={`${dash.btn} ${dash.btnAccent}`}
+            >
+              {saving ? (
+                <Loader2 className="h-5 w-5 animate-spin" aria-label="Saving" />
+              ) : (
+                "Update password"
+              )}
+            </button>
+          </DashFormActionBar>
         </form>
       </div>
     </div>

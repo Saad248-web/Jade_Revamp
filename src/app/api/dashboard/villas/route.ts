@@ -7,6 +7,7 @@ import { paiseToRupees, rupeesToPaise } from "@/lib/money";
 import { createVillaSchema } from "@/lib/villas/adminVilla";
 import { revalidateVillaPublicPaths } from "@/lib/villas/revalidateVillaPaths";
 import { villaHideFromDirectoryFlag } from "@/lib/villas/villaVisibility";
+import { assessVillaDeletion } from "@/lib/villas/villaDeletion";
 import { assertPlainObject } from "@/lib/security/validateInput";
 
 export const dynamic = "force-dynamic";
@@ -17,6 +18,7 @@ const noStore = { "Cache-Control": "no-store" } as const;
 function serializeListVilla(v: {
   _id: unknown;
   slug: string;
+  retreatId?: string;
   name: string;
   shortName?: string;
   type?: string;
@@ -43,6 +45,11 @@ function serializeListVilla(v: {
 }) {
   const stats = v.displayStats ?? {};
   const hideFromVillasDirectory = villaHideFromDirectoryFlag(v);
+  const deletion = assessVillaDeletion({
+    slug: v.slug,
+    retreatId: v.retreatId,
+    portfolioSource: v.portfolioSource,
+  });
   return {
     id: String(v._id),
     slug: v.slug,
@@ -56,6 +63,8 @@ function serializeListVilla(v: {
     weddingVenue: v.weddingVenue ?? false,
     portfolioSource: v.portfolioSource ?? "canonical",
     hideFromVillasDirectory,
+    deletable: deletion.allowed,
+    deleteBlockedReason: deletion.reason ?? null,
     directoryListingVisible:
       v.status !== "hidden" && !hideFromVillasDirectory,
     basePriceRupees: paiseToRupees(v.basePricePaise ?? 0),
@@ -162,7 +171,7 @@ export async function POST(req: NextRequest) {
       weddingVenue: false,
       weddingTiers: [],
       addOnAvailability: [],
-      portfolioSource: "canonical",
+      portfolioSource: "custom",
       settings: {
         taxPercent: 18,
         cleaningFeePaise: 0,

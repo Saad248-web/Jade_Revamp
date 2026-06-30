@@ -1,12 +1,18 @@
-import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
-import { getHeroOverrideForId } from "@/lib/heroOverrides";
 import { prettyMediaLabel } from "@/lib/mediaLabels";
+import {
+  isDashboardAuthoredVilla,
+  hasExplicitHeroGallery,
+  resolveVillaMedia,
+} from "@/lib/villas/villaMediaResolution";
+
 export type VillaGalleryItem = { name: string; image: string };
 
 export type VillaListingImagesInput = {
   id: string;
   name?: string;
   image?: string;
+  images?: string[];
+  portfolioSource?: string;
 };
 
 type CategorizedSpace = {
@@ -22,60 +28,52 @@ export type VillaListingServerMedia = {
 
 const validImage = (img: string | undefined) => Boolean(img && img.length > 0);
 
-export function getVillaManifestEntry(villa: { name?: string; image?: string }) {
-  const byName = villa.name
-    ? (MEDIA_MANIFEST as { villasByFolder?: Record<string, unknown> }).villasByFolder?.[
-        villa.name
-      ]
-    : null;
-  if (byName) return byName as {
-    hero?: string[];
-    spaces?: string[];
-    categorizedSpaces?: CategorizedSpace[];
-  };
-  const m = (villa.image || "").match(/^\/Villa_Retreats\/([^/]+)\//);
-  if (!m?.[1]) return null;
-  const folder = (MEDIA_MANIFEST as { villasByFolder?: Record<string, unknown> })
-    .villasByFolder;
-  try {
-    return (folder?.[decodeURIComponent(m[1])] ?? folder?.[m[1]]) as {
-      hero?: string[];
-      spaces?: string[];
-      categorizedSpaces?: CategorizedSpace[];
-    } | null;
-  } catch {
-    return (folder?.[m[1]] ?? null) as {
-      hero?: string[];
-      spaces?: string[];
-      categorizedSpaces?: CategorizedSpace[];
-    } | null;
-  }
-}
-
-/** Same carousel sources as `/villas` VillaCard (manifest + optional API media). */
+/** Same carousel sources as `/villas` VillaCard — respects custom villa explicit media. */
 export function buildVillaListingImages(
   villa: VillaListingImagesInput | null | undefined,
   serverMedia?: VillaListingServerMedia | null,
 ): VillaGalleryItem[] {
   if (!villa?.id) return [{ name: "Main", image: "" }];
 
+  const source = {
+    id: villa.id,
+    name: villa.name,
+    image: villa.image,
+    images: villa.images,
+    portfolioSource: villa.portfolioSource,
+  };
+
+  if (isDashboardAuthoredVilla(source) || hasExplicitHeroGallery(source)) {
+    const heroes =
+      serverMedia?.hero && serverMedia.hero.length > 0
+        ? serverMedia.hero
+        : resolveVillaMedia(source).hero;
+
+    if (heroes.length > 0) {
+      return heroes.map((image, i) => ({
+        name: i === 0 ? "Main" : `Slide ${i + 1}`,
+        image,
+      }));
+    }
+    if (validImage(villa.image)) {
+      return [{ name: "Main", image: villa.image as string }];
+    }
+    return [{ name: "Main", image: "" }];
+  }
+
+  const resolved = resolveVillaMedia(source);
+  const heroes =
+    serverMedia?.hero && serverMedia.hero.length > 0
+      ? serverMedia.hero
+      : resolved.hero;
+
   const list: VillaGalleryItem[] = [];
-  const manifestEntry = getVillaManifestEntry(villa);
-  const heroFromApi = serverMedia?.hero?.[0];
-  const manifestHero = manifestEntry?.hero?.[0];
-  const overrideHero = getHeroOverrideForId(villa.id)?.[0];
-  const hero = validImage(heroFromApi)
-    ? heroFromApi
-    : validImage(overrideHero)
-      ? overrideHero
-      : validImage(manifestHero)
-        ? manifestHero
-        : villa.image;
+  const hero = heroes.find(validImage) ?? villa.image;
   if (validImage(hero)) list.push({ name: "Main", image: hero as string });
 
   const cat = (
     serverMedia?.categorizedSpaces ||
-    manifestEntry?.categorizedSpaces ||
+    resolved.categorizedSpaces ||
     []
   )
     .map((g) => {
@@ -100,7 +98,7 @@ export function buildVillaListingImages(
     ];
   }
 
-  const manifestSpaces = (manifestEntry?.spaces || [])
+  const spaceSlides = resolved.spaces
     .filter((img) => validImage(img))
     .slice(0, 6)
     .map((img, i) => ({
@@ -111,7 +109,8 @@ export function buildVillaListingImages(
       }),
       image: img,
     }));
-  if (manifestSpaces.length > 0) return list.concat(manifestSpaces);
+
+  if (spaceSlides.length > 0) return list.concat(spaceSlides);
   if (list.length > 0) return list;
   return [{ name: "Main", image: villa.image || "" }];
 }

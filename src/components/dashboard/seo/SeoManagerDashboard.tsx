@@ -16,6 +16,8 @@ import { roleCanWrite, type Role } from "@/lib/auth/permissions";
 
 import { DashboardListToolbar } from "../ui/DashboardListToolbar";
 
+import { DashboardFilterBar } from "../ui/DashboardFilterBar";
+
 import { DashboardModuleFrame } from "../ui/DashboardModuleFrame";
 
 import { DashboardTabBar } from "../ui/DashboardTabBar";
@@ -243,45 +245,47 @@ export function SeoManagerDashboard() {
 
           refreshing={loading}
 
-        >
+        />
 
-          <div className={dash.toolbarSegment}>
+      }
 
-            <DashboardTabBar
+      note={
 
-              tabs={[
+        <DashboardFilterBar compact className="seo-manager__tabs">
 
-                { id: "overview", label: "Overview" },
+          <DashboardTabBar
 
-                {
+            tabs={[
 
-                  id: "issues",
+              { id: "overview", label: "Overview" },
 
-                  label: "Issues",
+              {
 
-                  count:
+                id: "issues",
 
-                    report && report.summary.openIssues > 0
+                label: "Issues",
 
-                      ? report.summary.openIssues
+                count:
 
-                      : undefined,
+                  report && report.summary.openIssues > 0
 
-                },
+                    ? report.summary.openIssues
 
-                { id: "robots", label: "Robots" },
+                    : undefined,
 
-              ]}
+              },
 
-              active={tab}
+              { id: "robots", label: "Robots" },
 
-              onChange={(id) => setTab(id as "overview" | "issues" | "robots")}
+            ]}
 
-            />
+            active={tab}
 
-          </div>
+            onChange={(id) => setTab(id as "overview" | "issues" | "robots")}
 
-        </DashboardListToolbar>
+          />
+
+        </DashboardFilterBar>
 
       }
 

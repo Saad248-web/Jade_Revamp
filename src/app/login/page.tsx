@@ -4,11 +4,7 @@ import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { signIn, getSession, useSession } from "next-auth/react";
 import { AlertTriangle, Loader2 } from "lucide-react";
-import {
-  GLASS_CHROME_FRAME_CLASS,
-  GLASS_INNER_SURFACE,
-} from "@/lib/glassChrome";
-import { dash } from "@/lib/dashboard/dashboardClasses";
+import { DashFloatingField } from "@/components/dashboard/form";
 import {
   ROLE_LOGIN_CONFIG,
 } from "@/lib/auth/roleConfig";
@@ -16,6 +12,10 @@ import type { Role } from "@/lib/auth/permissions";
 import { resolvePostLoginPath } from "@/lib/auth/permissions";
 import type { LoginFailureCode } from "@/lib/auth/loginMessages";
 import { LOGIN_FAILURE_MESSAGES } from "@/lib/auth/loginMessages";
+import {
+  useDashboardForm,
+  validateLogin,
+} from "@/lib/dashboard/dashboardFormValidation";
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -26,6 +26,26 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [errorCode, setErrorCode] = useState<LoginFailureCode | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const {
+    fieldErrors,
+    showFieldError,
+    touch,
+    validateField,
+    runSubmit,
+  } = useDashboardForm({
+    validate: validateLogin,
+  });
+
+  const getValues = () => ({
+    email: email.trim().toLowerCase(),
+    password,
+  });
+
+  const blur = (key: "email" | "password") => {
+    touch(key);
+    validateField(key, getValues());
+  };
 
   useEffect(() => {
     const err = searchParams.get("error");
@@ -71,11 +91,18 @@ function LoginForm() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const values = getValues();
+    if (!runSubmit(values)) {
+      setError("");
+      setErrorCode(null);
+      return;
+    }
+
     setLoading(true);
     setError("");
     setErrorCode(null);
 
-    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedEmail = values.email;
 
     try {
       const checkRes = await fetch("/api/auth/login-check", {
@@ -83,7 +110,7 @@ function LoginForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: normalizedEmail,
-          password,
+          password: values.password,
           role: selectedRole,
         }),
       });
@@ -103,7 +130,7 @@ function LoginForm() {
 
       const result = await signIn("credentials", {
         email: normalizedEmail,
-        password,
+        password: values.password,
         role: selectedRole,
         redirect: false,
       });
@@ -127,11 +154,8 @@ function LoginForm() {
   const activeConfig = ROLE_LOGIN_CONFIG.find((r) => r.role === selectedRole);
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={`dashboard-root w-full max-w-lg ${dash.stack}`}
-    >
-      <div className="text-center">
+    <form onSubmit={handleSubmit} className="login-form">
+      <div className="w-full text-center">
         <h1 className="font-philosopher text-[length:var(--fs-h1)] text-white">
           Jade Host
         </h1>
@@ -145,11 +169,11 @@ function LoginForm() {
         )}
       </div>
 
-      <div>
+      <div className="w-full">
         <p className="mb-2 font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[#EFCD62]">
           Select role
         </p>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+        <div className="login-role-grid">
           {ROLE_LOGIN_CONFIG.map((item) => {
             const active = selectedRole === item.role;
             return (
@@ -157,7 +181,7 @@ function LoginForm() {
                 key={item.role}
                 type="button"
                 onClick={() => handleRoleSelect(item.role)}
-                className={`min-h-[44px] border px-2 py-2 font-manrope text-xs font-bold uppercase tracking-wider transition-colors ${
+                className={`min-h-[44px] w-full border px-2 py-2 font-manrope text-xs font-bold uppercase tracking-wider transition-colors ${
                   active
                     ? "border-[#EFCD62] bg-[#EFCD62]/15 text-[#EFCD62]"
                     : "border-white/15 bg-black/20 text-white/55 hover:border-white/30 hover:text-white"
@@ -176,49 +200,40 @@ function LoginForm() {
         )}
       </div>
 
-      <div className={`${GLASS_CHROME_FRAME_CLASS} w-full`}>
-        <span
-          aria-hidden
-          className={`pointer-events-none absolute inset-px block ${GLASS_INNER_SURFACE}`}
-        />
-        <div className={`relative z-10 w-full ${dash.stack} p-5`}>
+      <div className="dash-login-card w-full">
+        <div className="space-y-4">
           <div>
-            <label
-              htmlFor="staff-email"
-              className="mb-2 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[#EFCD62]"
-            >
-              Email ID
-            </label>
-            <input
-              id="staff-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="username"
-              required
-              placeholder="you@jadehospitainment.com"
-              className="w-full border border-white/15 bg-black/20 px-4 py-3.5 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[#EFCD62]/60 focus:outline-none"
-            />
+            <p className="dash-login-card__title">Credentials</p>
+            <p className="dash-login-card__subtitle">
+              Sign in with your staff email and password
+            </p>
           </div>
-
-          <div>
-            <label
-              htmlFor="staff-password"
-              className="mb-2 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[#EFCD62]"
-            >
-              Password
-            </label>
-            <input
-              id="staff-password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              required
-              placeholder="Enter your password"
-              className="w-full border border-white/15 bg-black/20 px-4 py-3.5 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[#EFCD62]/60 focus:outline-none"
-            />
-          </div>
+          <DashFloatingField
+            id="email"
+            label="Email ID"
+            type="email"
+            value={email}
+            onChange={setEmail}
+            onBlur={() => blur("email")}
+            autoComplete="username"
+            invalid={Boolean(fieldErrors.email)}
+            showError={showFieldError("email")}
+            errorMessage={fieldErrors.email}
+            required
+          />
+          <DashFloatingField
+            id="password"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={setPassword}
+            onBlur={() => blur("password")}
+            autoComplete="current-password"
+            invalid={Boolean(fieldErrors.password)}
+            showError={showFieldError("password")}
+            errorMessage={fieldErrors.password}
+            required
+          />
         </div>
       </div>
 
@@ -238,9 +253,9 @@ function LoginForm() {
 
       <button
         type="submit"
-        disabled={loading || !email || !password}
-        className={`min-h-[48px] font-manrope text-sm font-bold uppercase tracking-widest transition-colors ${
-          loading || !email || !password
+        disabled={loading}
+        className={`w-full min-h-[48px] font-manrope text-sm font-bold uppercase tracking-widest transition-colors ${
+          loading
             ? "cursor-not-allowed bg-white/10 text-white/30"
             : "bg-[#EFCD62] text-[#1A1C1E] hover:bg-white"
         }`}
@@ -256,7 +271,7 @@ function LoginForm() {
       </button>
 
       {process.env.NODE_ENV === "development" && (
-        <div className="rounded-none border border-white/10 bg-white/5 px-4 py-3 text-left">
+        <div className="w-full rounded-none border border-white/10 bg-white/5 px-4 py-3 text-left">
           <p className="font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-white/50">
             Dev setup
           </p>
@@ -276,7 +291,7 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <div
-      className="flex min-h-[100dvh] items-center justify-center bg-[#1A1C1E] px-4"
+      className="login-page flex min-h-[100dvh] items-center justify-center px-4"
       style={{
         paddingTop: "max(env(safe-area-inset-top, 0px), 1rem)",
         paddingBottom: "max(env(safe-area-inset-bottom, 0px), 1rem)",

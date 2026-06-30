@@ -7,7 +7,8 @@ export type JadeFormTheme =
   | "overlayGreen"
   | "book"
   | "footerCharcoal"
-  | "experienceCharcoal";
+  | "experienceCharcoal"
+  | "dashboardCharcoal";
 
 export type JadeFormVariant = "standard" | "footer";
 
@@ -15,8 +16,9 @@ export function getFieldShellClass(options: {
   invalid: boolean;
   showError: boolean;
   variant?: JadeFormVariant;
+  theme?: JadeFormTheme;
 }): string {
-  const { invalid, showError, variant = "standard" } = options;
+  const { invalid, showError, variant = "standard", theme } = options;
   const indicating = invalid && showError;
   const shape = variant === "footer" ? "rounded-none" : "rounded-sm";
 
@@ -27,7 +29,9 @@ export function getFieldShellClass(options: {
   const defaultBorder =
     variant === "footer"
       ? "border border-white/15 focus-within:border-[#EFCD62]/55"
-      : "border border-white/20 focus-within:border-[#EFCD62]";
+      : theme === "dashboardCharcoal"
+        ? "border border-white/12 focus-within:border-[#EFCD62]/60 focus-within:shadow-[0_0_0_1px_rgba(239,205,98,0.15)]"
+        : "border border-white/20 focus-within:border-[#EFCD62]";
 
   return `group relative ${defaultBorder} transition-colors ${shape}`;
 }
@@ -60,6 +64,17 @@ const LABEL_BOOK =
 const LABEL_FOOTER =
   "absolute left-4 top-1/2 -translate-y-1/2 text-gh-label text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/75 peer-focus:bg-[#2E3034] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/75 peer-[:not(:placeholder-shown)]:bg-[#2E3034]";
 
+const DASH_LABEL_BASE =
+  "text-[0.6875rem] leading-tight tracking-wide max-w-[calc(100%-1.5rem)] truncate";
+
+const LABEL_DASHBOARD =
+  `absolute left-4 top-1/2 -translate-y-1/2 ${DASH_LABEL_BASE} text-white/45 transition-all duration-300 pointer-events-none px-2 peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:text-white/80 peer-focus:bg-[#222528] peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white/80 peer-[:not(:placeholder-shown)]:bg-[#222528]`;
+
+export const JADE_FORM_INPUT_DASHBOARD_CLASS =
+  "peer w-full bg-white/[0.03] px-4 py-3.5 text-white text-gh-body placeholder-transparent focus:outline-none transition-all duration-300 rounded-sm h-[var(--dash-form-float-h,2.75rem)] font-manrope";
+
+export const JADE_FORM_SELECT_DASHBOARD_CLASS = `${JADE_FORM_INPUT_DASHBOARD_CLASS} ${JADE_FORM_TRAILING_ICON_INSET} appearance-none cursor-pointer`;
+
 const LABEL_EXPERIENCE =
   "absolute left-4 top-1/2 z-10 -translate-y-1/2 text-gh-label text-white/60 transition-all duration-300 pointer-events-none px-2 font-manrope peer-focus:-top-3 peer-focus:translate-y-0 peer-focus:text-white peer-focus:bg-jade-charcoal peer-[:not(:placeholder-shown)]:-top-3 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-white peer-[:not(:placeholder-shown)]:bg-jade-charcoal";
 
@@ -69,6 +84,8 @@ export function getFloatingLabelClass(theme: JadeFormTheme): string {
       return LABEL_BOOK;
     case "footerCharcoal":
       return LABEL_FOOTER;
+    case "dashboardCharcoal":
+      return LABEL_DASHBOARD;
     case "experienceCharcoal":
       return LABEL_EXPERIENCE;
     default:
@@ -99,7 +116,7 @@ export function getFieldTrailingIconClass(active = false): string {
 /** Date/custom triggers: float label when open or filled (no `peer-valid` on buttons). */
 export function getFloatingLabelFloatedOverrides(theme: JadeFormTheme): string {
   const bg = getSelectOptionBg(theme);
-  if (theme === "footerCharcoal") {
+  if (theme === "footerCharcoal" || theme === "dashboardCharcoal") {
     return `!-top-2.5 !translate-y-0 text-white/75 ${bg}`;
   }
   return `!-top-3 !translate-y-0 text-white ${bg}`;
@@ -111,19 +128,36 @@ export function getFloatingLabelFloatedOverrides(theme: JadeFormTheme): string {
  */
 export function getFloatingLabelIdleClass(theme: JadeFormTheme): string {
   const muted =
-    theme === "footerCharcoal" ? "text-white/45" : "text-white/60";
-  const px = theme === "footerCharcoal" ? "px-2" : "px-1";
-  return `absolute left-4 top-1/2 -translate-y-1/2 text-gh-label ${muted} transition-all duration-300 pointer-events-none font-manrope ${px}`;
+    theme === "footerCharcoal" || theme === "dashboardCharcoal"
+      ? "text-white/45"
+      : "text-white/60";
+  const px =
+    theme === "footerCharcoal" || theme === "dashboardCharcoal"
+      ? "px-2"
+      : "px-1";
+  const size =
+    theme === "dashboardCharcoal"
+      ? DASH_LABEL_BASE
+      : "text-gh-label";
+  return `absolute left-4 top-1/2 -translate-y-1/2 ${size} ${muted} transition-all duration-300 pointer-events-none font-manrope ${px}`;
 }
 
 /** Label chip on the top border (focus, open, or filled). */
 export function getFloatingLabelFloatedClass(theme: JadeFormTheme): string {
   const bg = getSelectOptionBg(theme);
   const muted =
-    theme === "footerCharcoal" ? "text-white/75" : "text-white";
-  const top = theme === "footerCharcoal" ? "-top-2.5" : "-top-3";
-  const px = theme === "footerCharcoal" ? "px-2" : "px-1";
-  return `absolute left-4 ${top} translate-y-0 text-gh-label ${muted} ${bg} transition-all duration-300 pointer-events-none font-manrope z-10 ${px}`;
+    theme === "footerCharcoal" || theme === "dashboardCharcoal"
+      ? "text-white/75"
+      : "text-white";
+  const top =
+    theme === "footerCharcoal" || theme === "dashboardCharcoal"
+      ? "-top-2.5"
+      : "-top-3";
+  const px =
+    theme === "footerCharcoal" || theme === "dashboardCharcoal"
+      ? "px-2"
+      : "px-1";
+  return `absolute left-4 ${top} translate-y-0 ${DASH_LABEL_BASE} ${muted} ${bg} transition-all duration-300 pointer-events-none font-manrope z-10 ${px}`;
 }
 
 /** Vertical rhythm for overlay enquiry forms (room for -top-3 labels). */
@@ -142,14 +176,17 @@ export function getStaticChipLabelClass(theme: JadeFormTheme): string {
       ? EXPERIENCE_OVERLAY_FLOATING_LABEL_CLASS
       : theme === "footerCharcoal"
         ? "bg-[#2E3034]"
-        : theme === "book"
-          ? "bg-[#0B2C23]"
-          : "bg-[#123A2D]";
+        : theme === "dashboardCharcoal"
+          ? "bg-[#222528]"
+          : theme === "book"
+            ? "bg-[#0B2C23]"
+            : "bg-[#123A2D]";
   return `absolute -top-3 left-4 ${chip} px-2 text-white/40 text-gh-label uppercase font-bold tracking-widest z-10 font-manrope`;
 }
 
 export function getSelectOptionBg(theme: JadeFormTheme): string {
   if (theme === "footerCharcoal") return "bg-[#2E3034]";
+  if (theme === "dashboardCharcoal") return "bg-[#222528]";
   if (theme === "book") return "bg-[#0B2C23]";
   if (theme === "experienceCharcoal") return "bg-jade-charcoal";
   return "bg-[#123A2D]";
@@ -157,4 +194,20 @@ export function getSelectOptionBg(theme: JadeFormTheme): string {
 
 export function themeToVariant(theme: JadeFormTheme): JadeFormVariant {
   return theme === "footerCharcoal" ? "footer" : "standard";
+}
+
+export function getDashboardInputClass(theme: JadeFormTheme): string {
+  return theme === "dashboardCharcoal"
+    ? JADE_FORM_INPUT_DASHBOARD_CLASS
+    : themeToVariant(theme) === "footer"
+      ? JADE_FORM_INPUT_FOOTER_CLASS
+      : JADE_FORM_INPUT_CLASS;
+}
+
+export function getDashboardSelectClass(theme: JadeFormTheme): string {
+  return theme === "dashboardCharcoal"
+    ? JADE_FORM_SELECT_DASHBOARD_CLASS
+    : themeToVariant(theme) === "footer"
+      ? JADE_FORM_SELECT_FOOTER_CLASS
+      : JADE_FORM_SELECT_CLASS;
 }

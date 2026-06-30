@@ -2,6 +2,7 @@
 
 import type { InputHTMLAttributes } from "react";
 import {
+  getDashboardInputClass,
   getFieldShellClass,
   getFloatingLabelClass,
   JADE_FORM_INPUT_CLASS,
@@ -18,11 +19,12 @@ export type JadeFloatingFieldProps = {
   value: string;
   onChange: (value: string) => void;
   onBlur?: () => void;
-  type?: "text" | "tel" | "email";
+  type?: "text" | "tel" | "email" | "password";
   inputMode?: InputHTMLAttributes<HTMLInputElement>["inputMode"];
   autoComplete?: string;
   name?: string;
   required?: boolean;
+  disabled?: boolean;
   invalid?: boolean;
   showError?: boolean;
   errorMessage?: string;
@@ -41,6 +43,7 @@ export default function JadeFloatingField({
   autoComplete,
   name,
   required,
+  disabled,
   invalid = false,
   showError = false,
   errorMessage,
@@ -51,15 +54,20 @@ export default function JadeFloatingField({
   const indicating = invalid && showError;
   const errId = `${id}-err`;
   const inputClass =
-    variant === "footer" ? JADE_FORM_INPUT_FOOTER_CLASS : JADE_FORM_INPUT_CLASS;
+    theme === "dashboardCharcoal"
+      ? getDashboardInputClass(theme)
+      : variant === "footer"
+        ? JADE_FORM_INPUT_FOOTER_CLASS
+        : JADE_FORM_INPUT_CLASS;
 
   return (
-    <div className={className}>
+    <div className={className ? `w-full min-w-0 ${className}` : "w-full min-w-0"}>
       <div
         className={getFieldShellClass({
           invalid,
           showError,
           variant,
+          theme,
         })}
       >
         <input
@@ -69,6 +77,7 @@ export default function JadeFloatingField({
           inputMode={inputMode}
           autoComplete={autoComplete}
           required={required}
+          disabled={disabled}
           value={value}
           onBlur={onBlur}
           onChange={(e) => onChange(e.target.value)}

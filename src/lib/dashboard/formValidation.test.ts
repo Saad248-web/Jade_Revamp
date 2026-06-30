@@ -1,4 +1,9 @@
 import { describe, expect, it } from "vitest";
+import {
+  validateLogin,
+  validateUserForm,
+  validatePasswordReset,
+} from "./dashboardFormValidation";
 import { validateManualBooking, validateManualBlock } from "./formValidation";
 
 describe("validateManualBooking", () => {
@@ -44,5 +49,35 @@ describe("validateManualBlock", () => {
       reason: "Owner hold",
     });
     expect(errors.checkOut).toBeDefined();
+  });
+});
+
+describe("validateLogin", () => {
+  it("requires email and password", () => {
+    const errors = validateLogin({ email: "", password: "" });
+    expect(errors.email).toBeDefined();
+    expect(errors.password).toBeDefined();
+  });
+});
+
+describe("validateUserForm", () => {
+  it("requires matching passwords on create", () => {
+    const errors = validateUserForm({
+      email: "a@b.com",
+      password: "password1",
+      confirmPassword: "password2",
+      isCreate: true,
+    });
+    expect(errors.confirmPassword).toBeDefined();
+  });
+});
+
+describe("validatePasswordReset", () => {
+  it("rejects mismatched passwords", () => {
+    const errors = validatePasswordReset({
+      password: "password1",
+      confirmPassword: "password2",
+    });
+    expect(errors.confirmPassword).toBeDefined();
   });
 });

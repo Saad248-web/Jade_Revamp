@@ -30,6 +30,7 @@ type MongoVilla = {
   status?: string;
   displayStats?: Record<string, string | undefined>;
   content?: Record<string, unknown>;
+  portfolioSource?: string;
   updatedAt?: Date;
 };
 
@@ -110,6 +111,7 @@ function shellFromMongo(doc: MongoVilla): Villa {
     socialProof: content.socialProof,
     brochureUrl: content.brochureUrl as string | undefined,
     brochureFilename: content.brochureFilename as string | undefined,
+    portfolioSource: doc.portfolioSource ?? "custom",
   } as Villa;
 }
 
@@ -190,6 +192,7 @@ function mergeStaticWithMongo(staticVilla: Villa, doc: MongoVilla): Villa {
     brochureFilename:
       (content.brochureFilename as string | undefined) ||
       staticVilla.brochureFilename,
+    portfolioSource: doc.portfolioSource ?? staticVilla.portfolioSource ?? "canonical",
   };
 }
 

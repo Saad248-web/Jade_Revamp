@@ -16,6 +16,7 @@ import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import { dash } from "@/lib/dashboard/dashboardClasses";
 import { ROLE_LABELS, type Role } from "@/lib/auth/permissions";
 import { DataTable, type DataTableColumn } from "./DataTable";
+import { DashStatusChip } from "./form";
 import { DashboardPanel } from "./DashboardPanel";
 import { DashboardListToolbar } from "./ui/DashboardListToolbar";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
@@ -39,12 +40,12 @@ function apiErrorMessage(
   return data.error ?? fallback;
 }
 
-const ROLE_BADGE: Record<Role, string> = {
-  admin: "border-[var(--dash-accent-border)] bg-[var(--dash-accent-muted)] text-[var(--dash-accent)]",
-  dev: "border-sky-400/40 bg-sky-400/10 text-sky-300",
-  staff: "border-emerald-400/40 bg-emerald-400/10 text-emerald-300",
-  team: "border-violet-400/40 bg-violet-400/10 text-violet-300",
-  seo: "border-pink-400/40 bg-pink-400/10 text-pink-300",
+const ROLE_VARIANT: Record<Role, "accent" | "info" | "success" | "warning" | "danger"> = {
+  admin: "accent",
+  dev: "info",
+  staff: "success",
+  team: "warning",
+  seo: "danger",
 };
 
 function fmtDate(value: string | null): string {
@@ -283,29 +284,18 @@ export function UserManagement() {
       key: "role",
       header: "Role",
       cell: (u) => (
-        <span
-          className={`inline-flex rounded-none border px-2 py-1 text-xs font-bold uppercase tracking-widest ${ROLE_BADGE[u.role]}`}
-        >
+        <DashStatusChip variant={ROLE_VARIANT[u.role]}>
           {ROLE_LABELS[u.role]}
-        </span>
+        </DashStatusChip>
       ),
     },
     {
       key: "status",
       header: "Status",
       cell: (u) => (
-        <span
-          className={`inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest ${
-            u.status === "active" ? "text-emerald-300" : "text-amber-300"
-          }`}
-        >
-          <span
-            className={`h-1.5 w-1.5 rounded-full ${
-              u.status === "active" ? "bg-emerald-400" : "bg-amber-400"
-            }`}
-          />
+        <DashStatusChip variant={u.status === "active" ? "success" : "warning"}>
           {u.status}
-        </span>
+        </DashStatusChip>
       ),
     },
     {

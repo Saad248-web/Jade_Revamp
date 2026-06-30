@@ -72,6 +72,19 @@
   --dash-header-z: 30;
   --dash-sidebar-z: 40;
 
+  /* ── Surface + motion (design system v2) ── */
+  --dash-radius-sm: 2px;
+  --dash-radius-md: 6px;
+  --dash-radius-lg: 8px;
+  --dash-elevation-1: var(--dash-glass-inset);
+  --dash-elevation-2: var(--dash-glass-inset), 0 4px 24px -8px rgba(0, 0, 0, 0.35);
+  --dash-elevation-3: var(--dash-glass-inset), var(--dash-glass-shadow);
+  --dash-focus-ring: 0 0 0 2px var(--dash-bg), 0 0 0 4px rgba(239, 205, 98, 0.45);
+  --dash-motion-fast: 150ms ease;
+  --dash-motion-normal: 250ms ease;
+  --dash-popover-z: 80;
+  --dash-form-float-h: var(--dash-control-h);
+
   /*
    * Spacing rhythm (8pt):
    * --dash-gutter     page horizontal inset
@@ -180,7 +193,7 @@ html.jade-dashboard .dashboard-content {
 
 @media (min-width: 1280px) {
   .dashboard-content {
-    padding-inline: clamp(1.5rem, 3vw, 2.5rem);
+    padding-inline: var(--dash-gutter);
   }
 }
 
@@ -193,6 +206,10 @@ html.jade-dashboard .dashboard-content {
   width: 100%;
   max-width: var(--dash-content-max);
   margin-inline: auto;
+}
+
+.dashboard-page--fluid {
+  max-width: none;
 }
 
 /* ── Glass surfaces ── */
@@ -330,7 +347,7 @@ html.jade-dashboard .dashboard-content {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-family: var(--dash-font-display);
-  font-size: var(--dash-fs-title);
+  font-size: var(--dash-fs-page-title, var(--dash-fs-title));
   line-height: 1.12;
   color: var(--dash-text);
 }
@@ -574,6 +591,18 @@ html.jade-dashboard .dashboard-content {
   background: var(--dash-accent);
   transform: translateY(-50%);
   box-shadow: 0 0 10px rgba(239, 205, 98, 0.45);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    height 0.15s ease;
+}
+
+.dashboard-sidebar--mobile .dashboard-sidebar__link {
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.12s ease;
 }
 
 .dashboard-sidebar__link-icon {
@@ -1646,7 +1675,7 @@ html.jade-dashboard .dashboard-content {
 
 .dashboard-form-grid {
   display: grid;
-  gap: var(--dash-space-3, 0.75rem);
+  gap: var(--dash-form-field-gap, 1.125rem);
   grid-template-columns: 1fr;
 }
 

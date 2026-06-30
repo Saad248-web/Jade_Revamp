@@ -47,6 +47,31 @@
   padding: var(--dash-space-1) var(--dash-space-2);
 }
 
+.dashboard-data-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--dash-bg-elevated);
+}
+
+.dashboard-data-table--sticky-first thead th:first-child {
+  z-index: 3;
+}
+
+.dashboard-data-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.dashboard-data-table--mono tbody td {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+}
+
+.dashboard-data-table--mono tbody td .font-mono,
+.dashboard-data-table--mono tbody td [class*="font-mono"] {
+  font-family: inherit;
+}
+
 /* ── Tab bar (segmented) ── */
 .dash-tab-bar {
   display: inline-flex;

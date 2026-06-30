@@ -128,6 +128,16 @@
   max-width: 26rem;
 }
 
+.dash-delete-confirm {
+  max-width: 32rem;
+}
+
+.dash-delete-confirm .dash-form-notice--danger {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+}
+
 .dash-confirm-dialog__title {
   margin: 0;
   font-family: var(--dash-font-display);

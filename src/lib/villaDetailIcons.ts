@@ -1,67 +1,29 @@
 import type { LucideIcon } from "lucide-react";
+import * as LucideIcons from "lucide-react";
+import { Info } from "lucide-react";
 import {
   Bath,
   Bell,
-  Car,
   ChefHat,
   Coffee,
-  Dribbble,
   HandPlatter,
   Heart,
-  Home,
-  Info,
-  LayoutGrid,
-  Leaf,
-  Mic,
-  Music,
-  Mountain,
-  PartyPopper,
-  Phone,
-  Presentation,
-  Search,
   ShieldCheck,
   Sparkles,
-  SprayCan,
-  Sun,
-  Trees,
-  User,
-  Waves,
-  Wind,
-  Zap,
-  Check,
 } from "lucide-react";
+import { VILLA_ICON_REGISTRY } from "@/lib/villas/amenityIconOptions";
 
-const ICONS: Record<string, LucideIcon> = {
-  Wifi: Wind,
-  Car,
-  Wind,
-  Waves,
-  Dribbble,
-  Presentation,
-  Trees,
-  Mountain,
-  PartyPopper,
-  Bath,
-  Home,
-  Sun,
-  ChefHat,
-  SprayCan,
-  User,
-  Phone,
-  Check,
-  Zap,
-  LayoutGrid,
-  Leaf,
-  HandPlatter,
-  Bell,
-  Sparkles,
-  ShieldCheck,
-  Heart,
-  Coffee,
-  Search,
-  Mic,
-  Music,
-};
+const ICONS: Record<string, LucideIcon> = {};
+
+for (const { name } of VILLA_ICON_REGISTRY) {
+  const Icon = (LucideIcons as unknown as Record<string, LucideIcon | undefined>)[
+    name
+  ];
+  if (Icon) ICONS[name] = Icon;
+}
+
+/** Wifi maps to Wind in legacy data */
+ICONS.Wifi = LucideIcons.Wifi ?? LucideIcons.Wind;
 
 export function getVillaDetailIcon(iconName?: string, title?: string) {
   const name = iconName?.toLowerCase() || "";
@@ -107,4 +69,12 @@ export function splitAmenityLabel(label: string) {
     line1: words.slice(0, mid).join(" "),
     line2: words.slice(mid).join(" "),
   };
+}
+
+/** Test helper — every registry name should resolve */
+export function registryIconCoverage(): { missing: string[] } {
+  const missing = VILLA_ICON_REGISTRY.filter((i) => !ICONS[i.name]).map(
+    (i) => i.name,
+  );
+  return { missing };
 }

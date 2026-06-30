@@ -160,6 +160,7 @@ export function WebhookLogsManager() {
         caption="Webhook events"
         stickyFirstColumn
         dense
+        mono
       />
     </DashboardModuleFrame>
   );

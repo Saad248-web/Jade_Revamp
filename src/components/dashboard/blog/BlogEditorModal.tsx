@@ -23,6 +23,11 @@ import {
 import { STATUS_LABELS } from "@/lib/cms/blogWorkflow";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import { dash } from "@/lib/dashboard/dashboardClasses";
+import {
+  useDashboardForm,
+  validateBlogEditor,
+} from "@/lib/dashboard/dashboardFormValidation";
+import { DashFloatingField } from "@/components/dashboard/form";
 import { DashboardModalHeader } from "@/components/dashboard/ui/DashboardModalHeader";
 import {
   GLASS_CHROME_FRAME_CLASS,
@@ -105,6 +110,26 @@ export function BlogEditorModal({
   } | null>(null);
   const originalSlug = page?.meta?.slug ?? page?.pageKey.replace(/^blog\//, "") ?? "";
 
+  const {
+    fieldErrors,
+    showFieldError,
+    touch,
+    validateField,
+    runSubmit,
+  } = useDashboardForm({
+    validate: validateBlogEditor,
+  });
+
+  const getEditorValues = () => ({
+    title: meta.title,
+    slug: meta.slug.trim() || slugifyTitle(meta.title),
+  });
+
+  const blurEditorField = (key: "title" | "slug") => {
+    touch(key);
+    validateField(key, getEditorValues());
+  };
+
   const continueBuilding = !isNew && hasBuiltSections(page?.sections);
   const stepIndex = STEPS.indexOf(step);
   const uploadSlug = `blog/${meta.slug || slugifyTitle(meta.title) || "draft"}`;
@@ -159,11 +184,9 @@ export function BlogEditorModal({
     });
   };
 
-  const validateDetails = (): string | null => {
-    if (!meta.title.trim()) return "Title is required";
-    const slug = meta.slug.trim() || slugifyTitle(meta.title);
-    if (!slug) return "Slug is required";
+  const validateDetailsExtras = (): string | null => {
     if (!meta.category.trim()) return "Category is required";
+    const slug = getEditorValues().slug;
     if (
       existingSlugs.has(slug.toLowerCase()) &&
       currentPageKey !== `blog/${slug}`
@@ -173,15 +196,21 @@ export function BlogEditorModal({
     return null;
   };
 
+  const validateDetails = (): boolean => {
+    if (!runSubmit(getEditorValues())) return false;
+    const extra = validateDetailsExtras();
+    if (extra) {
+      setError(extra);
+      return false;
+    }
+    return true;
+  };
+
   const goNext = () => {
     setError(null);
     setWarn(null);
     if (step === "details") {
-      const err = validateDetails();
-      if (err) {
-        setError(err);
-        return;
-      }
+      if (!validateDetails()) return;
       if (!meta.image.trim()) {
         setWarn("Featured image is recommended for blog cards and social sharing.");
       }
@@ -198,9 +227,7 @@ export function BlogEditorModal({
 
   const finish = async (e?: FormEvent) => {
     e?.preventDefault();
-    const err = validateDetails();
-    if (err) {
-      setError(err);
+    if (!validateDetails()) {
       setStep("details");
       return;
     }
@@ -310,27 +337,33 @@ export function BlogEditorModal({
           <div className={`${dash.modalBody} ${dash.stack}`}>
           {step === "details" && (
             <div className={dash.stack}>
-              <div>
-                <label className={dash.label}>Blog title *</label>
-                <input
-                  className={`${dash.input} w-full`}
-                  value={meta.title}
-                  onChange={(e) => updateMeta("title", e.target.value)}
-                  required
-                />
-              </div>
+              <DashFloatingField
+                id="title"
+                label="Blog title"
+                value={meta.title}
+                onChange={(value) => updateMeta("title", value)}
+                onBlur={() => blurEditorField("title")}
+                invalid={Boolean(fieldErrors.title)}
+                showError={showFieldError("title")}
+                errorMessage={fieldErrors.title}
+                required
+              />
               <div className={dash.formGrid2}>
-                <div>
-                  <label className={dash.label}>Slug *</label>
-                  <input
-                    className={`${dash.input} w-full font-mono`}
-                    value={meta.slug}
-                    onChange={(e) => {
-                      setSlugTouched(true);
-                      updateMeta("slug", slugifyTitle(e.target.value));
-                    }}
-                  />
-                </div>
+                <DashFloatingField
+                  id="slug"
+                  label="Slug"
+                  value={meta.slug}
+                  onChange={(value) => {
+                    setSlugTouched(true);
+                    updateMeta("slug", slugifyTitle(value));
+                  }}
+                  onBlur={() => blurEditorField("slug")}
+                  invalid={Boolean(fieldErrors.slug)}
+                  showError={showFieldError("slug")}
+                  errorMessage={fieldErrors.slug}
+                  required
+                  className="font-mono"
+                />
                 <div>
                   <label className={dash.label}>Category *</label>
                   <input

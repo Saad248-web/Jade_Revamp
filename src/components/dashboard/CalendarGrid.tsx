@@ -37,14 +37,18 @@ import {
 } from "./CalendarToolbar";
 import { EmptyState } from "./EmptyState";
 import { DashboardPanel } from "./DashboardPanel";
+import { DashStatusChip } from "./form";
 
-const STATUS_LEGEND: Record<BookingStatus, { className: string; label: string }> = {
-  confirmed: { className: "dashboard-cal-booking--confirmed", label: "Confirmed" },
-  on_hold: { className: "dashboard-cal-booking--on-hold", label: "On hold" },
-  pending: { className: "dashboard-cal-booking--pending", label: "Pending" },
-  conflict: { className: "dashboard-cal-booking--conflict", label: "Conflict" },
-  cancelled: { className: "dashboard-cal-booking--cancelled", label: "Cancelled" },
-  expired: { className: "dashboard-cal-booking--expired", label: "Expired" },
+const STATUS_LEGEND: Record<
+  BookingStatus,
+  { className: string; label: string; variant: "success" | "warning" | "danger" | "info" | "accent" | "neutral" }
+> = {
+  confirmed: { className: "dashboard-cal-booking--confirmed", label: "Confirmed", variant: "success" },
+  on_hold: { className: "dashboard-cal-booking--on-hold", label: "On hold", variant: "accent" },
+  pending: { className: "dashboard-cal-booking--pending", label: "Pending", variant: "warning" },
+  conflict: { className: "dashboard-cal-booking--conflict", label: "Conflict", variant: "danger" },
+  cancelled: { className: "dashboard-cal-booking--cancelled", label: "Cancelled", variant: "neutral" },
+  expired: { className: "dashboard-cal-booking--expired", label: "Expired", variant: "neutral" },
 };
 
 const STAY_STRIPE: Record<StayStatus, string> = {
@@ -431,35 +435,39 @@ export function CalendarGrid({
 
           <div className="calendar-legend" role="list" aria-label="Booking status legend">
             {Object.entries(STATUS_LEGEND).map(([status, style]) => (
-              <span key={status} className="calendar-legend__item" role="listitem">
+              <DashStatusChip
+                key={status}
+                variant={style.variant}
+                className="calendar-legend__chip calendar-legend__item"
+              >
                 <span
                   className={`calendar-legend__swatch ${style.className}`}
                   aria-hidden
                 />
                 {style.label}
-              </span>
+              </DashStatusChip>
             ))}
-            <span className="calendar-legend__item" role="listitem">
+            <DashStatusChip variant="neutral" className="calendar-legend__chip calendar-legend__item">
               <span
                 className="calendar-legend__swatch border border-[var(--dash-border-strong)] bg-zinc-500/50"
                 aria-hidden
               />
               Blocked
-            </span>
-            <span className="calendar-legend__item" role="listitem">
+            </DashStatusChip>
+            <DashStatusChip variant="neutral" className="calendar-legend__chip calendar-legend__item">
               <span
                 className="calendar-legend__swatch border border-dashed border-white/20 bg-white/5"
                 aria-hidden
               />
               Offline
-            </span>
-            <span className="calendar-legend__item" role="listitem">
+            </DashStatusChip>
+            <DashStatusChip variant="accent" className="calendar-legend__chip calendar-legend__item">
               <span
                 className="calendar-legend__swatch border border-l-[3px] border-l-[var(--dash-accent)] bg-white/10"
                 aria-hidden
               />
               Check-in
-            </span>
+            </DashStatusChip>
           </div>
 
           {filteredVillas.length === 0 ? (

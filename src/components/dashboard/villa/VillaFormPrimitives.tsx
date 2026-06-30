@@ -1,6 +1,15 @@
 "use client";
 
 import type { ReactNode } from "react";
+import {
+  DashSectionCard,
+  DashFormNotice,
+  DashToggle,
+  DashFloatingSelect,
+  DashFloatingField,
+  DashFloatingTextarea,
+  DashFloatingNumber,
+} from "@/components/dashboard/form";
 import { dash } from "@/lib/dashboard/dashboardClasses";
 
 type VillaFormSectionProps = {
@@ -8,29 +17,12 @@ type VillaFormSectionProps = {
   description?: string;
   children: ReactNode;
   badge?: string;
+  compact?: boolean;
 };
 
-/** Grouped card section for villa Quick Edit / Full Editor fields. */
-export function VillaFormSection({
-  title,
-  description,
-  children,
-  badge,
-}: VillaFormSectionProps) {
-  return (
-    <section className="villa-form-section">
-      <div className="villa-form-section__head">
-        <div>
-          <h3 className="villa-form-section__title">{title}</h3>
-          {description && (
-            <p className="villa-form-section__desc">{description}</p>
-          )}
-        </div>
-        {badge && <span className="villa-form-section__badge">{badge}</span>}
-      </div>
-      <div className="villa-form-section__body">{children}</div>
-    </section>
-  );
+/** Grouped card section — delegates to DashSectionCard. */
+export function VillaFormSection(props: VillaFormSectionProps) {
+  return <DashSectionCard {...props} />;
 }
 
 type VillaFormFieldProps = {
@@ -82,32 +74,8 @@ type VillaFormToggleProps = {
   onChange: (checked: boolean) => void;
 };
 
-export function VillaFormToggle({
-  label,
-  description,
-  checked,
-  disabled,
-  onChange,
-}: VillaFormToggleProps) {
-  return (
-    <label
-      className={`villa-form-toggle${disabled ? " villa-form-toggle--disabled" : ""}`}
-    >
-      <input
-        type="checkbox"
-        checked={checked}
-        disabled={disabled}
-        onChange={(e) => onChange(e.target.checked)}
-        className="villa-form-toggle__input"
-      />
-      <span className="villa-form-toggle__copy">
-        <span className="villa-form-toggle__label">{label}</span>
-        {description && (
-          <span className="villa-form-toggle__desc">{description}</span>
-        )}
-      </span>
-    </label>
-  );
+export function VillaFormToggle(props: VillaFormToggleProps) {
+  return <DashToggle {...props} />;
 }
 
 type VillaFormSelectProps = {
@@ -116,6 +84,11 @@ type VillaFormSelectProps = {
   onChange: (value: string) => void;
   options: { value: string; label: string; hint?: string }[];
   hint?: string;
+  id?: string;
+  invalid?: boolean;
+  showError?: boolean;
+  errorMessage?: string;
+  onBlur?: () => void;
 };
 
 export function VillaFormSelect({
@@ -123,27 +96,29 @@ export function VillaFormSelect({
   value,
   onChange,
   options,
-  hint,
+  id = "villa-form-select",
+  invalid,
+  showError,
+  errorMessage,
+  onBlur,
 }: VillaFormSelectProps) {
   return (
-    <VillaFormField label={label} hint={hint}>
-      <select
-        className={dash.input}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      >
-        {options.map((opt) => (
-          <option key={opt.value} value={opt.value} className="bg-[#1A1C1E]">
-            {opt.label}
-          </option>
-        ))}
-      </select>
-    </VillaFormField>
+    <DashFloatingSelect
+      id={id}
+      label={label}
+      value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+      invalid={invalid}
+      showError={showError}
+      errorMessage={errorMessage}
+      optionItems={options.map((o) => ({ value: o.value, label: o.label }))}
+    />
   );
 }
 
 type VillaFormNoticeProps = {
-  tone?: "info" | "warning" | "success";
+  tone?: "info" | "warning" | "success" | "danger";
   children: ReactNode;
 };
 
@@ -151,12 +126,22 @@ export function VillaFormNotice({
   tone = "info",
   children,
 }: VillaFormNoticeProps) {
-  return (
-    <div className={`villa-form-notice villa-form-notice--${tone}`}>
-      {children}
-    </div>
-  );
+  const variant =
+    tone === "success"
+      ? "success"
+      : tone === "warning"
+        ? "warning"
+        : tone === "danger"
+          ? "danger"
+          : "info";
+  return <DashFormNotice variant={variant}>{children}</DashFormNotice>;
 }
 
-export const villaFormInputClass = dash.input;
-export const villaFormTextareaClass = `${dash.input} min-h-[100px] resize-y`;
+export {
+  DashFloatingField as VillaFormTextInput,
+  DashFloatingNumber as VillaFormNumberInput,
+  DashFloatingTextarea as VillaFormTextarea,
+};
+
+export const villaFormInputClass = dash.inputUnified;
+export const villaFormTextareaClass = `${dash.inputUnified} min-h-[100px] resize-y`;

@@ -8,6 +8,7 @@ import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import { formatPaise } from "@/lib/money";
 import { roleCanWrite, type Role } from "@/lib/auth/permissions";
 import { DataTable, type DataTableColumn } from "./DataTable";
+import { DashStatusChip } from "./form";
 import { EmptyState } from "./EmptyState";
 import { DashboardListToolbar } from "./ui/DashboardListToolbar";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
@@ -44,6 +45,14 @@ function fmtSource(source: string): string {
     .replace(/^staah_/, "Axis Rooms · ")
     .replace(/_/g, " ");
 }
+
+const PAYMENT_VARIANT: Record<string, "success" | "warning" | "danger" | "info" | "neutral"> = {
+  paid: "success",
+  deposit_paid: "info",
+  refunded: "warning",
+  partially_refunded: "warning",
+  failed: "danger",
+};
 
 export function ConflictsManager() {
   const { data: session } = useSession();
@@ -140,9 +149,9 @@ export function ConflictsManager() {
       cell: (row) => (
         <div className="text-[length:var(--fs-desc)] text-white/60">
           <p>{formatPaise(row.totalPaise)}</p>
-          <p className="text-xs uppercase tracking-wide text-white/35">
-            {row.paymentStatus}
-          </p>
+          <DashStatusChip variant={PAYMENT_VARIANT[row.paymentStatus] ?? "neutral"}>
+            {row.paymentStatus.replace(/_/g, " ")}
+          </DashStatusChip>
         </div>
       ),
     },

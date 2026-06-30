@@ -2,6 +2,7 @@ import { z } from "zod";
 import { paiseToRupees, rupeesToPaise } from "@/lib/money";
 import { syncVillaVisibilityFlags } from "@/lib/villas/villaVisibility";
 import { normalizeVillaSlug } from "@/lib/villas/villaIds";
+import { mergeStaticRetreatContent } from "@/lib/villas/mergeStaticRetreatContent";
 
 export const villaStatusSchema = z.enum(["active", "maintenance", "hidden"]);
 
@@ -312,9 +313,17 @@ type VillaDocLike = {
   updatedAt?: Date;
 };
 
-export function toAdminVilla(doc: VillaDocLike): AdminVillaDetail {
+export function toAdminVilla(
+  doc: VillaDocLike,
+  options?: { mergeStaticContent?: boolean },
+): AdminVillaDetail {
   const s = doc.settings ?? {};
   const axis = doc.axisRooms ?? (doc as { staah?: typeof doc.axisRooms }).staah ?? {};
+  const rawContent = (doc.content as Record<string, unknown>) ?? {};
+  const content =
+    options?.mergeStaticContent === false
+      ? rawContent
+      : mergeStaticRetreatContent(doc.retreatId ?? doc.slug, rawContent);
   return {
     id: String(doc._id),
     slug: doc.slug,
@@ -368,7 +377,7 @@ export function toAdminVilla(doc: VillaDocLike): AdminVillaDetail {
       roomTypeId: axis.roomTypeId ?? "",
       ratePlanId: axis.ratePlanId ?? "",
     },
-    content: (doc.content as Record<string, unknown>) ?? {},
+    content,
     updatedAt: doc.updatedAt?.toISOString() ?? null,
   };
 }

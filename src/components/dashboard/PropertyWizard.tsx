@@ -1,26 +1,38 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  ExternalLink,
-  Loader2,
-  X,
-} from "lucide-react";
+import { Check, ExternalLink, Loader2, X } from "lucide-react";
 import {
   GLASS_CHROME_FRAME_CLASS,
   GLASS_INNER_SURFACE,
 } from "@/lib/glassChrome";
 import { dash } from "@/lib/dashboard/dashboardClasses";
+import type { FieldErrors } from "@/lib/dashboard/dashboardFormValidation";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
-import type { AdminVillaDetail } from "@/lib/villas/adminVilla";
+import type { AdminVillaDetail, AdminWeddingTier } from "@/lib/villas/adminVilla";
+import { validateQuickEdit } from "@/lib/villas/villaEditorValidation";
+import { VillaOperationalFields } from "./villa/VillaOperationalFields";
+import { VillaDeletePanel } from "./villa/VillaDeletePanel";
 import {
   formatZodValidationError,
   normalizeVillaSlug,
 } from "@/lib/villas/villaIds";
+import { WIZARD_STEPS, WIZARD_FINAL_STEP, FIELD_LABELS, DISPLAY_STAT_FIELD_LABELS } from "@/lib/villas/villaEditorLabels";
+import {
+  validateWizardStep,
+  validateCreateVilla,
+} from "@/lib/villas/villaEditorValidation";
+import {
+  DashWizardStepper,
+  DashFormShell,
+  DashFormActionBar,
+  DashSectionCard,
+  DashFloatingField,
+  DashFloatingTextarea,
+  DashFormNotice,
+  type WizardStepState,
+} from "@/components/dashboard/form";
 import { ImageUploadField } from "./ImageUploadField";
 import { AmenityEditorRows } from "./wizard/AmenityEditorRows";
 import { BrochureUploadField } from "./wizard/BrochureUploadField";
@@ -36,7 +48,7 @@ import {
   wizardLabelClass,
   wizardSectionClass,
 } from "./wizard/wizardFieldStyles";
-import { VILLA_AMENITY_ICON_OPTIONS } from "@/lib/villas/amenityIconOptions";
+import { VillaIconPicker } from "./villa/VillaIconPicker";
 import {
   VillaFormGrid,
   VillaFormSection,
@@ -79,6 +91,7 @@ type ContentDraft = {
   images: string;
   youtubeUrl: string;
   videoThumbnail: string;
+  videoDuration: string;
   address: string;
   distance: string;
   googleMapsUrl: string;
@@ -104,15 +117,75 @@ type BasicsDraft = {
   bookable: boolean;
 };
 
-const STEPS = [
-  "Identity",
-  "Intro section",
-  "Amenity grid",
-  "Spaces",
-  "Experiences & video",
-  "Location",
-  "More & publish",
-] as const;
+type OperationalDraft = {
+  basePriceRupees: number;
+  dayOutBasePriceRupees: number;
+  stayBasePax: number;
+  dayOutBasePax: number;
+  stayMaxPax: number;
+  extraPaxStayRupees: number;
+  extraPaxDayOutRupees: number;
+  taxPercent: number;
+  cleaningFeeRupees: number;
+  securityDepositRupees: number;
+  depositPaiseRupees: number;
+  checkInTime: string;
+  checkOutTime: string;
+  cancellationPolicy: string;
+  depositPercent: number;
+  weddingVenue: boolean;
+  weddingTiers: AdminWeddingTier[];
+  addOnAvailability: string[];
+  displayStats: Record<string, string>;
+};
+
+function emptyOperational(): OperationalDraft {
+  return {
+    basePriceRupees: 0,
+    dayOutBasePriceRupees: 0,
+    stayBasePax: 4,
+    dayOutBasePax: 8,
+    stayMaxPax: 8,
+    extraPaxStayRupees: 2000,
+    extraPaxDayOutRupees: 1000,
+    taxPercent: 18,
+    cleaningFeeRupees: 0,
+    securityDepositRupees: 0,
+    depositPaiseRupees: 0,
+    checkInTime: "14:00",
+    checkOutTime: "11:00",
+    cancellationPolicy: "",
+    depositPercent: 0,
+    weddingVenue: false,
+    weddingTiers: [],
+    addOnAvailability: [],
+    displayStats: {},
+  };
+}
+
+function operationalFromAdmin(v: AdminVillaDetail): OperationalDraft {
+  return {
+    basePriceRupees: v.basePriceRupees,
+    dayOutBasePriceRupees: v.dayOutBasePriceRupees,
+    stayBasePax: v.stayBasePax,
+    dayOutBasePax: v.dayOutBasePax,
+    stayMaxPax: v.stayMaxPax,
+    extraPaxStayRupees: v.extraPaxStayRupees,
+    extraPaxDayOutRupees: v.extraPaxDayOutRupees,
+    taxPercent: v.taxPercent,
+    cleaningFeeRupees: v.cleaningFeeRupees,
+    securityDepositRupees: v.securityDepositRupees,
+    depositPaiseRupees: v.depositPaiseRupees,
+    checkInTime: v.checkInTime,
+    checkOutTime: v.checkOutTime,
+    cancellationPolicy: v.cancellationPolicy,
+    depositPercent: v.depositPercent,
+    weddingVenue: v.weddingVenue,
+    weddingTiers: v.weddingTiers,
+    addOnAvailability: v.addOnAvailability,
+    displayStats: { ...v.displayStats },
+  };
+}
 
 function slugify(s: string) {
   return s
@@ -148,6 +221,7 @@ function emptyContent(): ContentDraft {
     images: "",
     youtubeUrl: "",
     videoThumbnail: "",
+    videoDuration: "",
     address: "",
     distance: "",
     googleMapsUrl: "",
@@ -190,7 +264,7 @@ function contentFromAdmin(
     };
     services?: Array<ServiceRow & { footer?: string }>;
     propertyDetails?: PropertyDetailRow[];
-    video?: { youtubeUrl?: string; thumbnail?: string };
+    video?: { youtubeUrl?: string; thumbnail?: string; duration?: string };
     faq?: FaqRow[];
     hideFromVillasDirectory?: boolean;
     brochureUrl?: string;
@@ -246,6 +320,7 @@ function contentFromAdmin(
     images: listToLines(c.images),
     youtubeUrl: c.video?.youtubeUrl ?? "",
     videoThumbnail: c.video?.thumbnail ?? "",
+    videoDuration: c.video?.duration ?? "",
     address: c.locationDetails?.address ?? "",
     distance: c.locationDetails?.distance ?? "",
     googleMapsUrl: c.locationDetails?.googleMapsUrl ?? "",
@@ -345,10 +420,12 @@ function buildContentPayload(draft: ContentDraft) {
     video: (() => {
       const youtubeUrl = draft.youtubeUrl.trim();
       const thumbnail = draft.videoThumbnail.trim();
-      if (!youtubeUrl && !thumbnail) return undefined;
+      const duration = draft.videoDuration.trim();
+      if (!youtubeUrl && !thumbnail && !duration) return undefined;
       return {
         ...(youtubeUrl ? { youtubeUrl } : {}),
         ...(thumbnail ? { thumbnail } : {}),
+        ...(duration ? { duration } : {}),
       };
     })(),
     faq: draft.faq
@@ -364,6 +441,70 @@ function buildContentPayload(draft: ContentDraft) {
     brochureUrl: draft.brochureUrl.trim() || undefined,
     brochureFilename: draft.brochureFilename.trim() || undefined,
   };
+}
+
+function buildWizardDraft(
+  basics: BasicsDraft,
+  content: ContentDraft,
+  operational: OperationalDraft,
+) {
+  return {
+    slug: basics.slug,
+    retreatId: basics.retreatId.trim() || basics.slug,
+    name: basics.name,
+    shortName: basics.shortName,
+    type: basics.type,
+    location: basics.location,
+    thumbnail: basics.thumbnail,
+    status: basics.status,
+    bookable: basics.bookable,
+    content: buildContentPayload(content),
+    basePriceRupees: operational.basePriceRupees,
+    dayOutBasePriceRupees: operational.dayOutBasePriceRupees,
+    stayBasePax: operational.stayBasePax,
+    dayOutBasePax: operational.dayOutBasePax,
+    stayMaxPax: operational.stayMaxPax,
+    extraPaxStayRupees: operational.extraPaxStayRupees,
+    extraPaxDayOutRupees: operational.extraPaxDayOutRupees,
+    taxPercent: operational.taxPercent,
+    cleaningFeeRupees: operational.cleaningFeeRupees,
+    securityDepositRupees: operational.securityDepositRupees,
+    depositPaiseRupees: operational.depositPaiseRupees,
+    checkInTime: operational.checkInTime,
+    checkOutTime: operational.checkOutTime,
+    cancellationPolicy: operational.cancellationPolicy,
+    depositPercent: operational.depositPercent,
+    weddingVenue: operational.weddingVenue,
+    weddingTiers: operational.weddingTiers,
+    addOnAvailability: operational.addOnAvailability,
+    displayStats: operational.displayStats,
+  };
+}
+
+function scrollToFirstFieldError(errors: FieldErrors) {
+  const firstKey = Object.keys(errors)[0];
+  if (!firstKey) return;
+  const el =
+    document.getElementById(firstKey) ??
+    document.querySelector(`[data-field="${firstKey}"]`);
+  el?.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function wizardStepState(
+  index: number,
+  currentStep: number,
+  draft: ReturnType<typeof buildWizardDraft>,
+  attemptedSteps: Set<number>,
+): WizardStepState {
+  if (index === currentStep) return "active";
+  if (
+    attemptedSteps.has(index) &&
+    Object.keys(validateWizardStep(index, draft)).length > 0
+  ) {
+    return "error";
+  }
+  if (index < currentStep) return "done";
+  return "pending";
 }
 
 type PropertyWizardProps = {
@@ -385,6 +526,11 @@ export function PropertyWizard({
   const [loading, setLoading] = useState(mode === "edit");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [attemptedSteps, setAttemptedSteps] = useState<Set<number>>(
+    () => new Set(),
+  );
   const [basics, setBasics] = useState<BasicsDraft>({
     slug: "",
     retreatId: "",
@@ -397,6 +543,11 @@ export function PropertyWizard({
     bookable: false,
   });
   const [content, setContent] = useState<ContentDraft>(emptyContent());
+  const [operational, setOperational] = useState<OperationalDraft>(emptyOperational());
+  const [deletion, setDeletion] = useState<{
+    allowed: boolean;
+    reason?: string;
+  } | null>(null);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -413,9 +564,13 @@ export function PropertyWizard({
       try {
         const res = await dashboardFetch(`/api/dashboard/villas/${editSlug}`);
         if (!res.ok) throw new Error("Failed to load villa");
-        const data = (await res.json()) as { villa: AdminVillaDetail };
+        const data = (await res.json()) as {
+          villa: AdminVillaDetail;
+          deletion?: { allowed: boolean; reason?: string };
+        };
         if (cancelled) return;
         const v = data.villa;
+        setDeletion(data.deletion ?? { allowed: false });
         setBasics({
           slug: v.slug,
           retreatId: v.retreatId ?? "",
@@ -428,6 +583,7 @@ export function PropertyWizard({
           bookable: v.bookable,
         });
         setContent(contentFromAdmin(v.content));
+        setOperational(operationalFromAdmin(v));
       } catch (e) {
         if (!cancelled) {
           setError(e instanceof Error ? e.message : "Load failed");
@@ -444,23 +600,87 @@ export function PropertyWizard({
   const previewId = basics.retreatId || basics.slug;
   const slugForUpload = basics.slug || "new-property";
 
-  const canAdvance = useMemo(() => {
-    if (step === 0) {
-      if (mode === "create") {
-        return (
-          basics.slug.trim().length >= 2 &&
-          basics.name.trim().length >= 2 &&
-          basics.shortName.trim().length >= 1
-        );
+  const wizardDraft = useMemo(
+    () => buildWizardDraft(basics, content, operational),
+    [basics, content, operational],
+  );
+
+  const stepperItems = useMemo(
+    () =>
+      WIZARD_STEPS.map((s, i) => ({
+        id: s.id,
+        label: s.label,
+        shortLabel: s.shortLabel,
+        state: wizardStepState(i, step, wizardDraft, attemptedSteps),
+      })),
+    [step, wizardDraft, attemptedSteps],
+  );
+
+  const showFieldError = useCallback(
+    (key: string) => attemptedSteps.has(step) || Boolean(touched[key]),
+    [attemptedSteps, step, touched],
+  );
+
+  const fieldProps = useCallback(
+    (key: string) => ({
+      invalid: Boolean(fieldErrors[key]),
+      showError: showFieldError(key) && Boolean(fieldErrors[key]),
+      errorMessage: fieldErrors[key],
+      onBlur: () => setTouched((t) => ({ ...t, [key]: true })),
+    }),
+    [fieldErrors, showFieldError],
+  );
+
+  const operationalFieldProps = useCallback(
+    (key: string) => ({
+      id: key,
+      invalid: Boolean(fieldErrors[key]),
+      showError: showFieldError(key) && Boolean(fieldErrors[key]),
+      errorMessage: fieldErrors[key],
+      onBlur: () => setTouched((t) => ({ ...t, [key]: true })),
+    }),
+    [fieldErrors, showFieldError],
+  );
+
+  const runStepValidation = useCallback(
+    (stepIndex: number) => {
+      const errors = validateWizardStep(stepIndex, wizardDraft);
+      setAttemptedSteps((prev) => new Set(prev).add(stepIndex));
+      setFieldErrors(errors);
+      if (Object.keys(errors).length > 0) {
+        scrollToFirstFieldError(errors);
+        return false;
       }
       return true;
-    }
-    return true;
-  }, [step, mode, basics]);
+    },
+    [wizardDraft],
+  );
+
+  const handleNext = () => {
+    if (!runStepValidation(step)) return;
+    setStep((s) => Math.min(s + 1, WIZARD_STEPS.length - 1));
+  };
+
+  const handleStepClick = (index: number) => {
+    if (index > step && !runStepValidation(step)) return;
+    setStep(index);
+  };
 
   const handleSave = async (e?: FormEvent) => {
     e?.preventDefault();
     if (!canWrite) return;
+
+    const finalErrors =
+      mode === "create"
+        ? validateCreateVilla(wizardDraft)
+        : validateWizardStep(WIZARD_FINAL_STEP, wizardDraft);
+    setAttemptedSteps((prev) => new Set(prev).add(WIZARD_FINAL_STEP));
+    if (Object.keys(finalErrors).length > 0) {
+      setFieldErrors(finalErrors);
+      scrollToFirstFieldError(finalErrors);
+      return;
+    }
+
     setSaving(true);
     setError(null);
     try {
@@ -510,6 +730,32 @@ export function PropertyWizard({
             status: basics.status,
             bookable: basics.bookable,
             content: contentPayload,
+            basePriceRupees: operational.basePriceRupees,
+            dayOutBasePriceRupees: operational.dayOutBasePriceRupees,
+            stayBasePax: operational.stayBasePax,
+            dayOutBasePax: operational.dayOutBasePax,
+            stayMaxPax: operational.stayMaxPax,
+            extraPaxStayRupees: operational.extraPaxStayRupees,
+            extraPaxDayOutRupees: operational.extraPaxDayOutRupees,
+            taxPercent: operational.taxPercent,
+            cleaningFeeRupees: operational.cleaningFeeRupees,
+            securityDepositRupees: operational.securityDepositRupees,
+            depositPaiseRupees: operational.depositPaiseRupees,
+            checkInTime: operational.checkInTime,
+            checkOutTime: operational.checkOutTime,
+            cancellationPolicy: operational.cancellationPolicy,
+            depositPercent: operational.depositPercent,
+            weddingVenue: operational.weddingVenue,
+            weddingTiers: operational.weddingTiers.map((t) => ({
+              id: t.id,
+              label: t.label,
+              mode: t.mode,
+              maxGuests: t.maxGuests,
+              priceRupees: t.priceRupees,
+              stayIncludedPax: t.stayIncludedPax,
+            })),
+            addOnAvailability: operational.addOnAvailability,
+            displayStats: operational.displayStats,
           }),
         });
         const data = (await res.json().catch(() => ({}))) as {
@@ -565,143 +811,207 @@ export function PropertyWizard({
             </button>
           </div>
 
-          <div className="property-wizard__rail mt-6 flex flex-wrap gap-2">
-            {STEPS.map((label, i) => (
-              <button
-                key={label}
-                type="button"
-                onClick={() => setStep(i)}
-                className={`min-h-[var(--dash-control-h)] border px-3 font-manrope text-[11px] font-bold uppercase tracking-wider transition-colors ${
-                  step === i
-                    ? "border-[var(--dash-accent-border)] bg-[var(--dash-accent-muted)] text-[var(--dash-accent)]"
-                    : i < step
-                      ? "border-emerald-500/40 text-emerald-300/80"
-                      : "border-white/15 text-white/40"
-                }`}
-              >
-                {i < step ? <Check className="mr-1 inline h-3 w-3" /> : null}
-                {i + 1}. {label}
-              </button>
-            ))}
+          <div className="mt-6">
+            <DashWizardStepper
+              steps={stepperItems}
+              onStepClick={loading ? undefined : handleStepClick}
+            />
           </div>
         </div>
 
         <form
-          className="relative z-10 min-h-0 flex-1 overflow-y-auto"
+          className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden"
           onSubmit={handleSave}
+          noValidate
         >
-          <div className="p-5">
+          <div className="min-h-0 flex-1 overflow-y-auto p-5">
             {loading ? (
               <div className="flex items-center justify-center gap-3 py-16 text-white/50">
                 <Loader2 className="h-6 w-6 animate-spin text-[var(--dash-accent)]" />
                 Loading property…
               </div>
             ) : (
-              <>
+              <DashSectionCard
+                title={WIZARD_STEPS[step].label}
+                badge={WIZARD_STEPS[step].publicSection}
+              >
+                <DashFormShell fluid twoColumn={step === 0}>
                 {step === 0 && (
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <>
                     {mode === "create" && (
                       <>
-                        <div>
-                          <label className={labelClass}>URL slug</label>
-                          <input
-                            className={inputClass}
-                            value={basics.slug}
-                            onChange={(e) => {
-                              const v = normalizeVillaSlug(e.target.value);
-                              setBasics({
-                                ...basics,
-                                slug: v,
-                                retreatId: basics.retreatId || v,
-                              });
-                            }}
-                            placeholder="my-new-villa"
-                            required
-                          />
-                          <p className={hintClass}>
-                            Public URL: /villas/{basics.slug || "slug"}
-                          </p>
-                        </div>
-                        <div>
-                          <label className={labelClass}>Retreat ID</label>
-                          <input
-                            className={inputClass}
-                            value={basics.retreatId}
-                            onChange={(e) =>
-                              setBasics({
-                                ...basics,
-                                retreatId: normalizeVillaSlug(e.target.value),
-                              })
-                            }
-                            placeholder="saad-villa (hyphens, no underscores)"
-                          />
-                          <p className={hintClass}>
-                            Used in booking URLs — underscores are converted to
-                            hyphens automatically.
-                          </p>
-                        </div>
+                        <DashFloatingField
+                          id="slug"
+                          label={FIELD_LABELS.slug.label}
+                          value={basics.slug}
+                          required
+                          onChange={(v) => {
+                            setBasics({
+                              ...basics,
+                              slug: v,
+                              retreatId: basics.retreatId || v,
+                            });
+                          }}
+                          {...fieldProps("slug")}
+                          onBlur={() => {
+                            const v = normalizeVillaSlug(basics.slug);
+                            setBasics({
+                              ...basics,
+                              slug: v,
+                              retreatId: basics.retreatId || v,
+                            });
+                            setTouched((t) => ({ ...t, slug: true }));
+                          }}
+                        />
+                        <p className="col-span-full -mt-2 font-manrope text-xs text-white/45">
+                          {FIELD_LABELS.slug.hint}: /villas/{basics.slug || "slug"}
+                        </p>
+                        <DashFloatingField
+                          id="retreatId"
+                          label={FIELD_LABELS.retreatId.label}
+                          value={basics.retreatId}
+                          onChange={(v) =>
+                            setBasics({
+                              ...basics,
+                              retreatId: normalizeVillaSlug(v),
+                            })
+                          }
+                          {...fieldProps("retreatId")}
+                        />
+                        <p className="col-span-full -mt-2 font-manrope text-xs text-white/45">
+                          {FIELD_LABELS.retreatId.hint} — underscores become hyphens.
+                        </p>
                       </>
                     )}
-                    <div>
-                      <label className={labelClass}>Full name</label>
-                      <input
-                        className={inputClass}
-                        value={basics.name}
-                        onChange={(e) => {
-                          const name = e.target.value;
-                          setBasics({
-                            ...basics,
-                            name,
-                            shortName:
-                              mode === "create" && !basics.shortName
-                                ? name
-                                : basics.shortName,
-                            slug:
-                              mode === "create" && !basics.slug
-                                ? slugify(name)
-                                : basics.slug,
-                          });
-                        }}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className={labelClass}>Card title</label>
-                      <input
-                        className={inputClass}
-                        value={basics.shortName}
-                        onChange={(e) =>
-                          setBasics({ ...basics, shortName: e.target.value })
-                        }
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className={labelClass}>Property type</label>
-                      <input
-                        className={inputClass}
-                        value={basics.type}
-                        onChange={(e) =>
-                          setBasics({ ...basics, type: e.target.value })
-                        }
-                        placeholder="Private nature retreat"
-                      />
-                    </div>
-                    <div>
-                      <label className={labelClass}>Location</label>
-                      <input
-                        className={inputClass}
-                        value={basics.location}
-                        onChange={(e) =>
-                          setBasics({ ...basics, location: e.target.value })
-                        }
-                        placeholder="Harohalli · Bangalore"
-                      />
-                    </div>
-                    <div className="sm:col-span-2">
+                    <DashFloatingField
+                      id="name"
+                      label={FIELD_LABELS.name.label}
+                      value={basics.name}
+                      required
+                      onChange={(name) => {
+                        setBasics({
+                          ...basics,
+                          name,
+                          shortName:
+                            mode === "create" && !basics.shortName
+                              ? name
+                              : basics.shortName,
+                          slug:
+                            mode === "create" && !basics.slug
+                              ? slugify(name)
+                              : basics.slug,
+                        });
+                      }}
+                      {...fieldProps("name")}
+                    />
+                    <DashFloatingField
+                      id="shortName"
+                      label={FIELD_LABELS.shortName.label}
+                      value={basics.shortName}
+                      required
+                      onChange={(shortName) =>
+                        setBasics({ ...basics, shortName })
+                      }
+                      {...fieldProps("shortName")}
+                    />
+                    <DashFloatingTextarea
+                      id="categories"
+                      label="Listing filter categories"
+                      value={content.categories}
+                      rows={3}
+                      onChange={(categories) =>
+                        setContent({ ...content, categories })
+                      }
+                    />
+                    <VillaFormSection
+                      title="Publish settings"
+                      description="Maps to villa card visibility on /villas."
+                      badge="Go live"
+                    >
+                      <VillaFormGrid cols={1}>
+                        <VillaFormSelect
+                          label="Public visibility"
+                          value={basics.status}
+                          onChange={(status) => {
+                            setBasics({
+                              ...basics,
+                              status,
+                              ...(status === "hidden" ? { bookable: false } : {}),
+                            });
+                            if (status === "active" || status === "maintenance") {
+                              setContent({
+                                ...content,
+                                hideFromVillasDirectory: false,
+                              });
+                            }
+                            if (status === "hidden") {
+                              setContent({
+                                ...content,
+                                hideFromVillasDirectory: true,
+                              });
+                            }
+                          }}
+                          options={[
+                            { value: "active", label: "Live — visible on /villas" },
+                            { value: "maintenance", label: "Maintenance" },
+                            {
+                              value: "hidden",
+                              label: "Hidden — removed from public site",
+                            },
+                          ]}
+                        />
+                        <VillaFormToggle
+                          label="Allow online booking"
+                          description="Guests can book from the villa card and detail page."
+                          checked={basics.bookable}
+                          disabled={basics.status === "hidden"}
+                          onChange={(bookable) =>
+                            setBasics({ ...basics, bookable })
+                          }
+                        />
+                        <VillaFormToggle
+                          label="Hide from /villas only"
+                          description="Detail page URL still works — useful for direct-link launches."
+                          checked={content.hideFromVillasDirectory}
+                          disabled={basics.status === "hidden"}
+                          onChange={(hide) =>
+                            setContent({
+                              ...content,
+                              hideFromVillasDirectory: hide,
+                            })
+                          }
+                        />
+                      </VillaFormGrid>
+                    </VillaFormSection>
+                    {mode === "edit" && canWrite && deletion ? (
+                      <div className="col-span-full mt-4">
+                        <VillaDeletePanel
+                          slug={basics.slug}
+                          name={basics.name}
+                          shortName={basics.shortName}
+                          allowed={deletion.allowed}
+                          blockedReason={deletion.reason}
+                          onDeleted={() => {
+                            onSaved();
+                            onClose();
+                          }}
+                        />
+                      </div>
+                    ) : null}
+                  </>
+                )}
+
+                {step === 1 && (
+                  <div className="space-y-5">
+                    <DashFormNotice>
+                      Maps to the hero carousel at the top of /villas/
+                      {basics.slug || "your-slug"}. Custom properties show only
+                      images you set here — not the media library folder.
+                    </DashFormNotice>
+                    <div className="col-span-full">
                       <ImageUploadField
-                        label="Hero thumbnail"
-                        hint="Shown on /villas cards and detail hero fallback."
+                        label={FIELD_LABELS.thumbnail.label}
+                        hint={FIELD_LABELS.thumbnail.hint}
                         value={basics.thumbnail}
                         onChange={(url) =>
                           setBasics({ ...basics, thumbnail: url })
@@ -710,108 +1020,23 @@ export function PropertyWizard({
                         disabled={!canWrite}
                       />
                     </div>
-                  </div>
-                )}
-
-                {step === 1 && (
-                  <div className="space-y-5">
-                    <p className={hintClass}>
-                      Section 1 on the public villa page — headline copy, tags, and
-                      brochure download.
-                    </p>
-                    <div>
-                      <label className={labelClass}>Description</label>
-                      <textarea
-                        className={`${inputClass} min-h-[140px] resize-y`}
-                        value={content.description}
-                        onChange={(e) =>
-                          setContent({ ...content, description: e.target.value })
-                        }
-                        rows={6}
-                        placeholder="Main paragraph under the amenity grid…"
-                      />
-                    </div>
-                    <div>
-                      <label className={labelClass}>Social proof line</label>
-                      <input
-                        className={inputClass}
-                        value={content.socialProof}
-                        onChange={(e) =>
-                          setContent({ ...content, socialProof: e.target.value })
-                        }
-                        placeholder="Optional trust line under the villa name"
-                      />
-                    </div>
-                    <div>
-                      <label className={labelClass}>Perfect for tags</label>
-                      <textarea
-                        className={`${inputClass} min-h-[100px]`}
-                        value={content.perfectForTags}
-                        onChange={(e) =>
-                          setContent({
-                            ...content,
-                            perfectForTags: e.target.value,
-                          })
-                        }
-                        placeholder="Boutique Stays&#10;Family Gatherings"
-                      />
-                      <p className={hintClass}>One per line — chips below description.</p>
-                    </div>
-                    <BrochureUploadField
-                      url={content.brochureUrl}
-                      filename={content.brochureFilename}
-                      onChange={(url, filename) =>
-                        setContent({
-                          ...content,
-                          brochureUrl: url,
-                          brochureFilename: filename,
-                        })
-                      }
-                      villaSlug={slugForUpload}
-                      disabled={!canWrite}
-                    />
-                    <div>
-                      <label className={labelClass}>Listing filter categories</label>
-                      <textarea
-                        className={`${inputClass} min-h-[80px]`}
-                        value={content.categories}
-                        onChange={(e) =>
-                          setContent({ ...content, categories: e.target.value })
-                        }
-                        placeholder="Pet Friendly&#10;Weekend Getaways"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {step === 2 && (
-                  <AmenityEditorRows
-                    rows={content.amenities}
-                    onChange={(amenities) => setContent({ ...content, amenities })}
-                    disabled={!canWrite}
-                  />
-                )}
-
-                {step === 3 && (
-                  <div className="space-y-6">
-                    <p className={hintClass}>
-                      Spaces carousel on villa detail — gallery paths plus per-space
-                      images.
-                    </p>
                     <div className={wizardSectionClass}>
-                      <label className={labelClass}>Hero gallery paths</label>
+                      <label className={labelClass}>
+                        {FIELD_LABELS.heroGallery.label}
+                      </label>
+                      <p className={hintClass}>{FIELD_LABELS.heroGallery.hint}</p>
                       <textarea
-                        className={`${inputClass} min-h-[80px] font-mono text-sm`}
+                        className={`${inputClass} mt-2 min-h-[80px] font-mono text-sm`}
                         value={content.images}
                         onChange={(e) =>
                           setContent({ ...content, images: e.target.value })
                         }
-                        placeholder="/Villa_Retreats/.../Hero 1.webp"
+                        placeholder="/api/cms/media/... or /Villa_Retreats/.../Hero.webp"
                       />
                       <div className="mt-3">
                         <ImageUploadField
-                          label="Add gallery image"
-                          hint="Upload or pick from library — appends to the list above."
+                          label="Add hero slide"
+                          hint="Upload or pick — appends to the list above."
                           value=""
                           compact
                           onChange={(url) => {
@@ -827,6 +1052,110 @@ export function PropertyWizard({
                         />
                       </div>
                     </div>
+                    <DashFloatingField
+                      id="socialProof"
+                      label={FIELD_LABELS.socialProof.label}
+                      value={content.socialProof}
+                      onChange={(socialProof) =>
+                        setContent({ ...content, socialProof })
+                      }
+                    />
+                  </div>
+                )}
+
+                {step === 2 && (
+                  <div className="space-y-5">
+                    <DashFormNotice>
+                      Maps to #overview on the public villa detail page — type,
+                      location, stats row, description, and tags.
+                    </DashFormNotice>
+                    <DashFloatingField
+                      id="type"
+                      label={FIELD_LABELS.type.label}
+                      value={basics.type}
+                      onChange={(type) => setBasics({ ...basics, type })}
+                      {...fieldProps("type")}
+                    />
+                    <DashFloatingField
+                      id="location"
+                      label={FIELD_LABELS.location.label}
+                      value={basics.location}
+                      onChange={(location) =>
+                        setBasics({ ...basics, location })
+                      }
+                      {...fieldProps("location")}
+                    />
+                    <div className={dash.formGrid2}>
+                      {Object.entries(DISPLAY_STAT_FIELD_LABELS).map(
+                        ([key, label]) => (
+                          <DashFloatingField
+                            key={key}
+                            id={`displayStats.${key}`}
+                            label={label}
+                            value={operational.displayStats[key] ?? ""}
+                            onChange={(v) =>
+                              setOperational({
+                                ...operational,
+                                displayStats: {
+                                  ...operational.displayStats,
+                                  [key]: v,
+                                },
+                              })
+                            }
+                          />
+                        ),
+                      )}
+                    </div>
+                    <DashFloatingTextarea
+                      id="description"
+                      label={FIELD_LABELS.description.label}
+                      value={content.description}
+                      rows={6}
+                      onChange={(description) =>
+                        setContent({ ...content, description })
+                      }
+                      {...fieldProps("content.description")}
+                    />
+                    <DashFloatingTextarea
+                      id="perfectForTags"
+                      label="Perfect for tags"
+                      value={content.perfectForTags}
+                      rows={4}
+                      onChange={(perfectForTags) =>
+                        setContent({ ...content, perfectForTags })
+                      }
+                    />
+                    <p className={hintClass}>One per line — chips below description.</p>
+                    <BrochureUploadField
+                      url={content.brochureUrl}
+                      filename={content.brochureFilename}
+                      onChange={(url, filename) =>
+                        setContent({
+                          ...content,
+                          brochureUrl: url,
+                          brochureFilename: filename,
+                        })
+                      }
+                      villaSlug={slugForUpload}
+                      disabled={!canWrite}
+                    />
+                  </div>
+                )}
+
+                {step === 8 && (
+                  <AmenityEditorRows
+                    rows={content.amenities}
+                    onChange={(amenities) => setContent({ ...content, amenities })}
+                    disabled={!canWrite}
+                  />
+                )}
+
+                {step === 3 && (
+                  <div className="space-y-6">
+                    <DashFormNotice>
+                      Maps to #spaces on the villa detail page — categorized space
+                      galleries only.
+                    </DashFormNotice>
                     {content.categorizedSpaces.map((row, i) => (
                       <div key={row.id} className={`${wizardSectionClass} space-y-3`}>
                         <div className="grid gap-3 sm:grid-cols-2">
@@ -928,9 +1257,9 @@ export function PropertyWizard({
 
                 {step === 4 && (
                   <div className="space-y-6">
-                    <p className={hintClass}>
-                      Experiences carousel + video walkthrough section.
-                    </p>
+                    <DashFormNotice>
+                      Maps to #experiences on the villa detail page.
+                    </DashFormNotice>
                     {content.activities.map((row, i) => (
                       <div key={i} className={`${wizardSectionClass} space-y-3`}>
                         <div>
@@ -985,71 +1314,41 @@ export function PropertyWizard({
                     >
                       + Add experience
                     </button>
-                    <div className={`${wizardSectionClass} space-y-4`}>
-                      <div>
-                        <label className={labelClass}>YouTube walkthrough URL</label>
-                        <input
-                          className={inputClass}
-                          value={content.youtubeUrl}
-                          onChange={(e) =>
-                            setContent({ ...content, youtubeUrl: e.target.value })
-                          }
-                          placeholder="https://www.youtube.com/watch?v=..."
-                        />
-                      </div>
-                      <ImageUploadField
-                        label="Video thumbnail"
-                        hint="Poster before play — path, media library, or upload (WebP)."
-                        value={content.videoThumbnail}
-                        onChange={(url) =>
-                          setContent({ ...content, videoThumbnail: url })
-                        }
-                        villaSlug={slugForUpload}
-                        disabled={!canWrite}
-                        placeholder="/Villa_Retreats/.../walkthrough.webp"
-                      />
-                    </div>
                   </div>
                 )}
 
-                {step === 5 && (
+                {step === 10 && (
                   <div className="space-y-5">
-                    <p className={hintClass}>Location section on villa detail.</p>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div className="sm:col-span-2">
-                        <label className={labelClass}>Street address</label>
-                        <input
-                          className={inputClass}
-                          value={content.address}
-                          onChange={(e) =>
-                            setContent({ ...content, address: e.target.value })
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Distance summary</label>
-                        <input
-                          className={inputClass}
-                          value={content.distance}
-                          onChange={(e) =>
-                            setContent({ ...content, distance: e.target.value })
-                          }
-                          placeholder="45 min from Bangalore"
-                        />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Google Maps URL</label>
-                        <input
-                          className={inputClass}
-                          value={content.googleMapsUrl}
-                          onChange={(e) =>
-                            setContent({
-                              ...content,
-                              googleMapsUrl: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
+                    <DashFormNotice>
+                      Maps to #location on the villa detail page.
+                    </DashFormNotice>
+                    <div className={dash.formGrid2}>
+                      <DashFloatingField
+                        id="address"
+                        label="Street address"
+                        value={content.address}
+                        onChange={(address) =>
+                          setContent({ ...content, address })
+                        }
+                        className="col-span-full"
+                      />
+                      <DashFloatingField
+                        id="distance"
+                        label="Distance summary"
+                        value={content.distance}
+                        onChange={(distance) =>
+                          setContent({ ...content, distance })
+                        }
+                      />
+                      <DashFloatingField
+                        id="googleMapsUrl"
+                        label="Google Maps URL"
+                        type="url"
+                        value={content.googleMapsUrl}
+                        onChange={(googleMapsUrl) =>
+                          setContent({ ...content, googleMapsUrl })
+                        }
+                      />
                     </div>
                     <ImageUploadField
                       label="Map preview image"
@@ -1071,45 +1370,52 @@ export function PropertyWizard({
                   </div>
                 )}
 
-                {step === 6 && (
+                {step === 5 && (
                   <div className="space-y-6">
-                    <p className={hintClass}>
-                      Services, property highlights, perfect-for gallery, FAQ, and
-                      publish flags.
-                    </p>
+                    <DashFormNotice>
+                      Maps to #details on the villa detail page.
+                    </DashFormNotice>
                     <div>
-                      <label className={labelClass}>Perfect-for image cards</label>
+                      <label className={labelClass}>Property details</label>
                       <p className={hintClass}>
-                        Gallery section lower on the villa detail page.
+                        Highlight tiles on villa detail (title + description).
                       </p>
-                      <div className="mt-3 space-y-4">
-                        {content.perfectForCards.map((row, i) => (
+                      <div className="mt-3 space-y-3">
+                        {content.propertyDetails.map((row, i) => (
                           <div
                             key={i}
                             className={`${wizardSectionClass} grid gap-3 sm:grid-cols-2`}
                           >
-                            <div>
-                              <label className={labelClass}>Card title</label>
-                              <input
-                                className={inputClass}
-                                value={row.title}
-                                onChange={(e) => {
-                                  const next = [...content.perfectForCards];
-                                  next[i] = { ...row, title: e.target.value };
-                                  setContent({ ...content, perfectForCards: next });
-                                }}
-                              />
-                            </div>
-                            <ImageUploadField
-                              label="Card image"
-                              value={row.image}
-                              onChange={(url) => {
-                                const next = [...content.perfectForCards];
-                                next[i] = { ...row, image: url };
-                                setContent({ ...content, perfectForCards: next });
+                            <input
+                              className={inputClass}
+                              placeholder="Title"
+                              value={row.title}
+                              onChange={(e) => {
+                                const next = [...content.propertyDetails];
+                                next[i] = { ...row, title: e.target.value };
+                                setContent({ ...content, propertyDetails: next });
                               }}
-                              villaSlug={slugForUpload}
+                            />
+                            <VillaIconPicker
+                              id={`property-detail-icon-${i}`}
+                              label="Icon"
+                              value={row.icon}
                               disabled={!canWrite}
+                              onChange={(icon) => {
+                                const next = [...content.propertyDetails];
+                                next[i] = { ...row, icon };
+                                setContent({ ...content, propertyDetails: next });
+                              }}
+                            />
+                            <input
+                              className={`${inputClass} sm:col-span-2`}
+                              placeholder="Description"
+                              value={row.description}
+                              onChange={(e) => {
+                                const next = [...content.propertyDetails];
+                                next[i] = { ...row, description: e.target.value };
+                                setContent({ ...content, propertyDetails: next });
+                              }}
                             />
                           </div>
                         ))}
@@ -1119,18 +1425,60 @@ export function PropertyWizard({
                           onClick={() =>
                             setContent({
                               ...content,
-                              perfectForCards: [
-                                ...content.perfectForCards,
-                                { title: "", image: "" },
+                              propertyDetails: [
+                                ...content.propertyDetails,
+                                { title: "", description: "", icon: "Home" },
                               ],
                             })
                           }
                         >
-                          + Add perfect-for card
+                          + Add property detail
                         </button>
                       </div>
                     </div>
+                  </div>
+                )}
 
+                {step === 6 && (
+                  <div className={`${wizardSectionClass} space-y-4`}>
+                    <DashFormNotice>
+                      Maps to #video-walkthrough on the villa detail page.
+                    </DashFormNotice>
+                    <DashFloatingField
+                      id="content.video.youtubeUrl"
+                      label={FIELD_LABELS.youtubeUrl.label}
+                      value={content.youtubeUrl}
+                      onChange={(youtubeUrl) =>
+                        setContent({ ...content, youtubeUrl })
+                      }
+                      {...fieldProps("content.video.youtubeUrl")}
+                    />
+                    <ImageUploadField
+                      label="Video thumbnail"
+                      hint="Poster before play — path, media library, or upload."
+                      value={content.videoThumbnail}
+                      onChange={(url) =>
+                        setContent({ ...content, videoThumbnail: url })
+                      }
+                      villaSlug={slugForUpload}
+                      disabled={!canWrite}
+                    />
+                    <DashFloatingField
+                      id="videoDuration"
+                      label={FIELD_LABELS.videoDuration.label}
+                      value={content.videoDuration}
+                      onChange={(videoDuration) =>
+                        setContent({ ...content, videoDuration })
+                      }
+                    />
+                  </div>
+                )}
+
+                {step === 7 && (
+                  <div className="space-y-6">
+                    <DashFormNotice>
+                      Maps to #services on the villa detail page.
+                    </DashFormNotice>
                     <div>
                       <label className={labelClass}>Services</label>
                       <div className="mt-3 space-y-3">
@@ -1149,28 +1497,17 @@ export function PropertyWizard({
                                   }}
                                 />
                               </div>
-                              <div>
-                                <label className={labelClass}>Icon</label>
-                                <select
-                                  className={inputClass}
-                                  value={row.icon}
-                                  onChange={(e) => {
-                                    const next = [...content.services];
-                                    next[i] = { ...row, icon: e.target.value };
-                                    setContent({ ...content, services: next });
-                                  }}
-                                >
-                                  {VILLA_AMENITY_ICON_OPTIONS.map((name) => (
-                                    <option
-                                      key={name}
-                                      value={name}
-                                      className="bg-[#1A1C1E]"
-                                    >
-                                      {name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
+                              <VillaIconPicker
+                                id={`service-icon-${i}`}
+                                label="Icon"
+                                value={row.icon}
+                                disabled={!canWrite}
+                                onChange={(icon) => {
+                                  const next = [...content.services];
+                                  next[i] = { ...row, icon };
+                                  setContent({ ...content, services: next });
+                                }}
+                              />
                             </div>
                             <div>
                               <label className={labelClass}>Description</label>
@@ -1221,68 +1558,69 @@ export function PropertyWizard({
                         </button>
                       </div>
                     </div>
+                  </div>
+                )}
 
-                    <div>
-                      <label className={labelClass}>Property details</label>
-                      <p className={hintClass}>
-                        Highlight tiles on villa detail (title + description).
-                      </p>
-                      <div className="mt-3 space-y-3">
-                        {content.propertyDetails.map((row, i) => (
-                          <div
-                            key={i}
-                            className="grid gap-3 border border-white/10 p-4 sm:grid-cols-3"
-                          >
+                {step === 9 && (
+                  <div className="space-y-6">
+                    <DashFormNotice>
+                      Maps to #perfect-for on the villa detail page.
+                    </DashFormNotice>
+                    <div className="space-y-4">
+                      {content.perfectForCards.map((row, i) => (
+                        <div
+                          key={i}
+                          className={`${wizardSectionClass} grid gap-3 sm:grid-cols-2`}
+                        >
+                          <div>
+                            <label className={labelClass}>Card title</label>
                             <input
                               className={inputClass}
-                              placeholder="Title"
                               value={row.title}
                               onChange={(e) => {
-                                const next = [...content.propertyDetails];
+                                const next = [...content.perfectForCards];
                                 next[i] = { ...row, title: e.target.value };
-                                setContent({ ...content, propertyDetails: next });
-                              }}
-                            />
-                            <input
-                              className={inputClass}
-                              placeholder="Icon name"
-                              value={row.icon}
-                              onChange={(e) => {
-                                const next = [...content.propertyDetails];
-                                next[i] = { ...row, icon: e.target.value };
-                                setContent({ ...content, propertyDetails: next });
-                              }}
-                            />
-                            <input
-                              className={inputClass}
-                              placeholder="Description"
-                              value={row.description}
-                              onChange={(e) => {
-                                const next = [...content.propertyDetails];
-                                next[i] = { ...row, description: e.target.value };
-                                setContent({ ...content, propertyDetails: next });
+                                setContent({ ...content, perfectForCards: next });
                               }}
                             />
                           </div>
-                        ))}
-                        <button
-                          type="button"
-                          className="font-manrope text-sm text-[var(--dash-accent)] hover:underline"
-                          onClick={() =>
-                            setContent({
-                              ...content,
-                              propertyDetails: [
-                                ...content.propertyDetails,
-                                { title: "", description: "", icon: "Home" },
-                              ],
-                            })
-                          }
-                        >
-                          + Add property detail
-                        </button>
-                      </div>
+                          <ImageUploadField
+                            label="Card image"
+                            value={row.image}
+                            onChange={(url) => {
+                              const next = [...content.perfectForCards];
+                              next[i] = { ...row, image: url };
+                              setContent({ ...content, perfectForCards: next });
+                            }}
+                            villaSlug={slugForUpload}
+                            disabled={!canWrite}
+                          />
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        className="font-manrope text-sm text-[var(--dash-accent)] hover:underline"
+                        onClick={() =>
+                          setContent({
+                            ...content,
+                            perfectForCards: [
+                              ...content.perfectForCards,
+                              { title: "", image: "" },
+                            ],
+                          })
+                        }
+                      >
+                        + Add perfect-for card
+                      </button>
                     </div>
+                  </div>
+                )}
 
+                {step === 11 && (
+                  <div className="space-y-6">
+                    <DashFormNotice>
+                      Maps to #faq on the villa detail page.
+                    </DashFormNotice>
                     {content.faq.map((row, i) => (
                       <div key={i} className="grid gap-3 sm:grid-cols-2">
                         <input
@@ -1319,101 +1657,98 @@ export function PropertyWizard({
                     >
                       + Add FAQ
                     </button>
+                  </div>
+                )}
 
-                    <VillaFormSection
-                      title="Publish settings"
-                      description="Choose when this property appears on the public website."
-                      badge="Go live"
-                    >
-                      <VillaFormGrid cols={1}>
-                        <VillaFormSelect
-                          label="Public visibility"
-                          value={basics.status}
-                          onChange={(status) => {
-                            setBasics({
-                              ...basics,
-                              status,
-                              ...(status === "hidden" ? { bookable: false } : {}),
-                            });
-                            if (status === "active" || status === "maintenance") {
-                              setContent({
-                                ...content,
-                                hideFromVillasDirectory: false,
-                              });
-                            }
-                            if (status === "hidden") {
-                              setContent({
-                                ...content,
-                                hideFromVillasDirectory: true,
-                              });
-                            }
-                          }}
-                          options={[
-                            { value: "active", label: "Live — visible on /villas" },
-                            { value: "maintenance", label: "Maintenance" },
-                            {
-                              value: "hidden",
-                              label: "Hidden — removed from public site",
-                            },
-                          ]}
-                        />
-                        <VillaFormToggle
-                          label="Allow online booking"
-                          description="Guests can book from the villa card and detail page."
-                          checked={basics.bookable}
-                          disabled={basics.status === "hidden"}
-                          onChange={(bookable) =>
-                            setBasics({ ...basics, bookable })
-                          }
-                        />
-                        <VillaFormToggle
-                          label="Hide from /villas only"
-                          description="Detail page URL still works — useful for direct-link launches."
-                          checked={content.hideFromVillasDirectory}
-                          disabled={basics.status === "hidden"}
-                          onChange={(hide) =>
-                            setContent({
-                              ...content,
-                              hideFromVillasDirectory: hide,
-                            })
-                          }
-                        />
-                      </VillaFormGrid>
-                      <p className={hintClass}>
-                        <strong className="text-white/50">Tip:</strong> use{" "}
-                        <strong className="text-white/50">Not bookable</strong> (uncheck
-                        booking) to show Enquire only while keeping the villa visible.
-                      </p>
-                    </VillaFormSection>
-
+                {step === WIZARD_FINAL_STEP && (
+                  <div className="space-y-6">
+                    <DashFormNotice>
+                      Maps to #pricing on the villa detail page. Same fields as Quick
+                      Edit — changes here update the same MongoDB record.
+                    </DashFormNotice>
+                    <VillaOperationalFields
+                      villa={{
+                        ...operational,
+                        name: basics.name,
+                        shortName: basics.shortName,
+                        slug: basics.slug,
+                        retreatId: basics.retreatId,
+                        type: basics.type,
+                        location: basics.location,
+                        thumbnail: basics.thumbnail,
+                        status: basics.status,
+                        bookable: basics.bookable,
+                        content: buildContentPayload(content),
+                        id: basics.slug,
+                        portfolioSource: null,
+                        notes: "",
+                        axisRooms: {
+                          propertyId: "",
+                          roomTypeId: "",
+                          ratePlanId: "",
+                        },
+                        updatedAt: null,
+                      }}
+                      canWrite={canWrite}
+                      fp={operationalFieldProps}
+                      onPatch={(patch) =>
+                        setOperational((prev) => ({
+                          ...prev,
+                          ...patch,
+                          displayStats: patch.displayStats ?? prev.displayStats,
+                          weddingTiers: patch.weddingTiers ?? prev.weddingTiers,
+                          addOnAvailability:
+                            patch.addOnAvailability ?? prev.addOnAvailability,
+                        }))
+                      }
+                      onSetNum={(key, value) =>
+                        setOperational((prev) => ({
+                          ...prev,
+                          [key]: Number(value),
+                        }))
+                      }
+                      onUpdateTier={(tierId, patch) =>
+                        setOperational((prev) => ({
+                          ...prev,
+                          weddingTiers: prev.weddingTiers.map((t) =>
+                            t.id === tierId ? { ...t, ...patch } : t,
+                          ),
+                        }))
+                      }
+                      onToggleAddOn={(id) =>
+                        setOperational((prev) => ({
+                          ...prev,
+                          addOnAvailability: prev.addOnAvailability.includes(id)
+                            ? prev.addOnAvailability.filter((x) => x !== id)
+                            : [...prev.addOnAvailability, id],
+                        }))
+                      }
+                    />
                     <div className="border border-[var(--dash-accent-border)]/40 bg-[var(--dash-accent-muted)]/30 p-4">
                       <p className={labelClass}>Go-live checklist</p>
                       <ul className="mt-2 space-y-2 font-manrope text-sm text-white/75">
                         <li>
-                          {basics.status === "active"
-                            ? "✓"
-                            : "○"}{" "}
-                          Set visibility to <strong className="text-white">Live</strong> for /villas listing
+                          {basics.status === "active" ? "✓" : "○"} Set visibility to{" "}
+                          <strong className="text-white">Live</strong> for /villas listing
                         </li>
                         <li>
-                          {basics.bookable ? "✓" : "○"} Enable online booking if guests should use /book
+                          {basics.bookable ? "✓" : "○"} Enable online booking if guests
+                          should use /book
                         </li>
                         <li>
-                          ○ Add Axis Rooms property / room / rate IDs in{" "}
+                          ○ Add Axis Rooms IDs in{" "}
                           <Link
                             href="/dashboard/settings/staah"
                             className="text-[var(--dash-accent)] hover:underline"
                           >
                             Axis Rooms settings
-                          </Link>{" "}
-                          (CSV export for onboarding team)
+                          </Link>
                         </li>
                         <li>
                           {previewId ? "✓" : "○"} Preview public page before sharing links
                         </li>
                       </ul>
                     </div>
-
                     {previewId && (
                       <a
                         href={`/villas/${previewId}`}
@@ -1428,32 +1763,30 @@ export function PropertyWizard({
                   </div>
                 )}
 
-                {error && (
-                  <p className="mt-4 font-manrope text-sm text-red-400">{error}</p>
-                )}
-              </>
+                {error ? (
+                  <DashFormNotice variant="danger">{error}</DashFormNotice>
+                ) : null}
+                </DashFormShell>
+              </DashSectionCard>
             )}
           </div>
 
-          <div className="property-wizard__footer sticky bottom-0 z-10 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 bg-[#1A1C1E]/95 p-5 backdrop-blur-sm">
+          <DashFormActionBar>
             <button
               type="button"
               onClick={() => (step > 0 ? setStep(step - 1) : onClose())}
-              className="inline-flex min-h-[44px] items-center gap-2 border border-white/20 px-4 font-manrope text-xs font-bold uppercase tracking-wider text-white/70 hover:border-white/40"
+              className={`${dash.btn} ${dash.btnText}`}
             >
-              <ArrowLeft className="h-4 w-4" />
               {step > 0 ? "Back" : "Cancel"}
             </button>
             <div className="flex gap-2">
-              {step < STEPS.length - 1 ? (
+              {step < WIZARD_STEPS.length - 1 ? (
                 <button
                   type="button"
-                  disabled={!canAdvance}
-                  onClick={() => setStep(step + 1)}
+                  onClick={handleNext}
                   className={`${dash.btn} ${dash.btnAccent}`}
                 >
                   Next
-                  <ArrowRight className="h-4 w-4" />
                 </button>
               ) : (
                 canWrite && (
@@ -1472,7 +1805,7 @@ export function PropertyWizard({
                 )
               )}
             </div>
-          </div>
+          </DashFormActionBar>
         </form>
       </div>
     </div>

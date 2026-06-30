@@ -7,6 +7,16 @@ import {
   GLASS_INNER_SURFACE,
 } from "@/lib/glassChrome";
 import { dash } from "@/lib/dashboard/dashboardClasses";
+import {
+  useDashboardForm,
+  validateUserForm,
+} from "@/lib/dashboard/dashboardFormValidation";
+import {
+  DashFloatingField,
+  DashFloatingSelect,
+  DashFormActionBar,
+  DashFormShell,
+} from "@/components/dashboard/form";
 import { DashboardModalHeader } from "./ui/DashboardModalHeader";
 import { ALL_ROLES, ROLE_LABELS, type Role } from "@/lib/auth/permissions";
 
@@ -32,10 +42,11 @@ type UserFormModalProps = {
   onSubmit: (values: UserFormValues) => Promise<string | null>;
 };
 
-const inputClass =
-  "w-full border border-white/15 bg-black/20 px-4 py-3 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:border-[var(--dash-accent-border)] focus:outline-none";
-const labelClass =
-  "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[var(--dash-accent)]";
+type UserFormValidation = {
+  email: string;
+  password: string;
+  confirmPassword?: string;
+};
 
 export function UserFormModal({
   mode,
@@ -51,6 +62,33 @@ export function UserFormModal({
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
+  const {
+    fieldErrors,
+    showFieldError,
+    touch,
+    validateField,
+    runSubmit,
+  } = useDashboardForm<UserFormValidation>({
+    validate: (values) =>
+      validateUserForm({
+        email: values.email,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+        isCreate: mode === "create",
+      }),
+  });
+
+  const getValues = (): UserFormValidation => ({
+    email,
+    password,
+    confirmPassword: mode === "edit" && password ? confirmPassword : undefined,
+  });
+
+  const blur = (key: "email" | "password" | "confirmPassword") => {
+    touch(key);
+    validateField(key, getValues());
+  };
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
@@ -59,27 +97,26 @@ export function UserFormModal({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError(null);
-    if (mode === "create" && password.length < 8) {
-      setError("Password must be at least 8 characters");
+    if (!runSubmit(getValues())) {
+      setError(null);
       return;
     }
-    if (mode === "edit" && password) {
-      if (password.length < 8) {
-        setError("Password must be at least 8 characters");
-        return;
-      }
-      if (password !== confirmPassword) {
-        setError("Passwords do not match");
-        return;
-      }
+    if (name.trim().length < 2) {
+      setError("Enter the user's full name (at least 2 characters)");
+      return;
     }
+    setError(null);
     setSaving(true);
     const err = await onSubmit({ name, email, password, role });
     setSaving(false);
     if (err) setError(err);
     else onClose();
   };
+
+  const roleOptions = ALL_ROLES.map((r) => ({
+    value: r,
+    label: ROLE_LABELS[r],
+  }));
 
   return (
     <div className={dash.modalOverlay} onClick={onClose}>
@@ -91,122 +128,106 @@ export function UserFormModal({
           aria-hidden
           className={`pointer-events-none absolute inset-px block ${GLASS_INNER_SURFACE}`}
         />
-        <form onSubmit={handleSubmit} className={`${dash.modalFrame} flex min-h-0 flex-col`}>
+        <form
+          onSubmit={handleSubmit}
+          className={`${dash.modalFrame} flex min-h-0 flex-col`}
+          noValidate
+        >
           <DashboardModalHeader
             section="Staff"
             title={mode === "create" ? "Create user" : "Edit user"}
             onClose={onClose}
           />
-          <div className={`${dash.modalBody} ${dash.stack}`}>
-          <div>
-            <label className={labelClass} htmlFor="uf-name">
-              Full name
-            </label>
-            <input
-              id="uf-name"
-              className={inputClass}
+          <DashFormShell>
+            <DashFloatingField
+              id="name"
+              label="Full name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={setName}
               required
-              minLength={2}
-              placeholder="Jane Doe"
             />
-          </div>
 
-          <div>
-            <label className={labelClass} htmlFor="uf-email">
-              Email ID
-            </label>
-            <input
-              id="uf-email"
+            <DashFloatingField
+              id="email"
+              label="Email ID"
               type="email"
-              className={inputClass}
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={setEmail}
+              onBlur={() => blur("email")}
+              invalid={Boolean(fieldErrors.email)}
+              showError={showFieldError("email")}
+              errorMessage={fieldErrors.email}
               required
               disabled={mode === "edit"}
-              placeholder="jane@jadehospitainment.com"
+              autoComplete="email"
             />
             {mode === "edit" && (
-              <p className="mt-1 font-manrope text-[length:var(--fs-desc)] text-white/35">
+              <p className="font-manrope text-[length:var(--fs-desc)] text-white/35">
                 Email cannot be changed after creation.
               </p>
             )}
-          </div>
 
-          <div>
-            <label className={labelClass} htmlFor="uf-password">
-              {mode === "create" ? "Password" : "New password (optional)"}
-            </label>
-            <input
-              id="uf-password"
+            <DashFloatingField
+              id="password"
+              label={mode === "create" ? "Password" : "New password (optional)"}
               type="password"
-              className={inputClass}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={setPassword}
+              onBlur={() => blur("password")}
+              invalid={Boolean(fieldErrors.password)}
+              showError={showFieldError("password")}
+              errorMessage={fieldErrors.password}
               required={mode === "create"}
-              minLength={mode === "create" ? 8 : undefined}
               autoComplete={mode === "create" ? "new-password" : "off"}
-              placeholder={mode === "create" ? "Min 8 characters" : "Leave blank to keep current"}
             />
-          </div>
 
-          {mode === "edit" && password.length > 0 && (
-            <div>
-              <label className={labelClass} htmlFor="uf-confirm">
-                Confirm new password
-              </label>
-              <input
-                id="uf-confirm"
+            {mode === "edit" && password.length > 0 && (
+              <DashFloatingField
+                id="confirmPassword"
+                label="Confirm new password"
                 type="password"
-                className={inputClass}
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={setConfirmPassword}
+                onBlur={() => blur("confirmPassword")}
+                invalid={Boolean(fieldErrors.confirmPassword)}
+                showError={showFieldError("confirmPassword")}
+                errorMessage={fieldErrors.confirmPassword}
                 required
-                minLength={8}
                 autoComplete="new-password"
               />
-            </div>
-          )}
-
-          <div>
-            <label className={labelClass} htmlFor="uf-role">
-              Role
-            </label>
-            <select
-              id="uf-role"
-              className={inputClass}
-              value={role}
-              onChange={(e) => setRole(e.target.value as Role)}
-            >
-              {ALL_ROLES.map((r) => (
-                <option key={r} value={r} className="bg-[#1A1C1E]">
-                  {ROLE_LABELS[r]}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {error && (
-            <p className="font-manrope text-[length:var(--fs-body)] text-red-400">
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={saving}
-            className={`${dash.btn} ${dash.btnAccent} w-full`}
-          >
-            {saving ? (
-              <Loader2 className="mx-auto h-5 w-5 animate-spin" />
-            ) : mode === "create" ? (
-              "Create user"
-            ) : (
-              "Save changes"
             )}
-          </button>
-          </div>
+
+            <DashFloatingSelect
+              id="role"
+              label="Role"
+              value={role}
+              optionItems={roleOptions}
+              onChange={(value) => setRole(value as Role)}
+              required
+            />
+
+            {error && (
+              <p className={dash.errorText} role="alert">
+                {error}
+              </p>
+            )}
+          </DashFormShell>
+
+          <DashFormActionBar>
+            <button
+              type="submit"
+              disabled={saving}
+              className={`${dash.btn} ${dash.btnAccent}`}
+            >
+              {saving ? (
+                <Loader2 className="h-5 w-5 animate-spin" aria-label="Saving" />
+              ) : mode === "create" ? (
+                "Create user"
+              ) : (
+                "Save changes"
+              )}
+            </button>
+          </DashFormActionBar>
         </form>
       </div>
     </div>

@@ -27,6 +27,7 @@ type DataTableProps<T> = {
   renderAfterRow?: (row: T) => ReactNode | null;
   stickyFirstColumn?: boolean;
   dense?: boolean;
+  mono?: boolean;
 };
 
 export function DataTable<T>({
@@ -38,11 +39,13 @@ export function DataTable<T>({
   renderAfterRow,
   stickyFirstColumn = false,
   dense = false,
+  mono = false,
 }: DataTableProps<T>) {
   const tableClass = [
     dash.dataTable,
     stickyFirstColumn ? "dashboard-data-table--sticky-first" : "",
     dense ? "dashboard-data-table--dense" : "",
+    mono ? "dashboard-data-table--mono" : "",
   ]
     .filter(Boolean)
     .join(" ");

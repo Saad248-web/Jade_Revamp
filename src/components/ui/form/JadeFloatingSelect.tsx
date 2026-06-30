@@ -4,6 +4,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import { ChevronDown } from "lucide-react";
 import {
+  getDashboardSelectClass,
   getFieldShellClass,
   getFieldTrailingIconClass,
   getFloatingLabelFloatedClass,
@@ -23,7 +24,8 @@ export type JadeFloatingSelectProps = {
   value: string;
   onChange: (value: string) => void;
   onBlur?: () => void;
-  options: readonly string[];
+  options?: readonly string[];
+  optionItems?: readonly { value: string; label: string }[];
   required?: boolean;
   invalid?: boolean;
   showError?: boolean;
@@ -38,7 +40,8 @@ export default function JadeFloatingSelect({
   value,
   onChange,
   onBlur,
-  options,
+  options = [],
+  optionItems,
   required,
   invalid = false,
   showError = false,
@@ -57,7 +60,11 @@ export default function JadeFloatingSelect({
   const labelFloated = hasValue || focused;
 
   const inputClass = clsx(
-    variant === "footer" ? JADE_FORM_SELECT_FOOTER_CLASS : JADE_FORM_SELECT_CLASS,
+    theme === "dashboardCharcoal"
+      ? getDashboardSelectClass(theme)
+      : variant === "footer"
+        ? JADE_FORM_SELECT_FOOTER_CLASS
+        : JADE_FORM_SELECT_CLASS,
     hasValue
       ? variant === "footer"
         ? "text-white/80"
@@ -72,6 +79,7 @@ export default function JadeFloatingSelect({
           invalid,
           showError,
           variant,
+          theme,
         })}
       >
         <select
@@ -91,11 +99,17 @@ export default function JadeFloatingSelect({
           <option value="" disabled hidden>
             {"\u200b"}
           </option>
-          {options.map((opt) => (
-            <option key={opt} value={opt} className={`${optionBg} text-white`}>
-              {opt}
-            </option>
-          ))}
+          {(optionItems ?? options.map((opt) => ({ value: opt, label: opt }))).map(
+            (opt) => (
+              <option
+                key={opt.value}
+                value={opt.value}
+                className={`${optionBg} text-white`}
+              >
+                {opt.label}
+              </option>
+            ),
+          )}
         </select>
         <ChevronDown
           aria-hidden

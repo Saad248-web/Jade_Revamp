@@ -9,6 +9,12 @@ import {
   toAdminVilla,
   updateVillaSchema,
 } from "@/lib/villas/adminVilla";
+import {
+  assessVillaDeletion,
+  countActiveBookingsForVilla,
+  softDeleteVillaRecord,
+} from "@/lib/villas/villaDeletion";
+import { villaDeleteNameMatches } from "@/lib/villas/villaDeletionConfirm";
 import { revalidateVillaPublicPaths } from "@/lib/villas/revalidateVillaPaths";
 import { assertPlainObject } from "@/lib/security/validateInput";
 
@@ -38,7 +44,14 @@ export async function GET(
       );
     }
     return NextResponse.json(
-      { villa: toAdminVilla(villa as never) },
+      {
+        villa: toAdminVilla(villa as never),
+        deletion: assessVillaDeletion({
+          slug: villa.slug,
+          retreatId: villa.retreatId,
+          portfolioSource: villa.portfolioSource,
+        }),
+      },
       { headers: noStore },
     );
   } catch (e) {
@@ -124,6 +137,109 @@ export async function PATCH(
     return NextResponse.json(
       { error: msg },
       { status: 400, headers: noStore },
+    );
+  }
+}
+
+/** Permanently remove a custom/dashboard property (soft delete). */
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { slug: string } },
+) {
+  const auth = await requireRole(req, "/dashboard/settings/villas", "write");
+  if (!auth.ok) return auth.response;
+
+  let body: unknown = {};
+  try {
+    body = await req.json();
+    assertPlainObject(body);
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid payload" },
+      { status: 400, headers: noStore },
+    );
+  }
+
+  const confirmName =
+    typeof (body as { confirmName?: unknown }).confirmName === "string"
+      ? (body as { confirmName: string }).confirmName
+      : "";
+
+  try {
+    await connectDB();
+    const villa = await VillaModel.findOne({
+      slug: params.slug,
+      isDeleted: false,
+    });
+    if (!villa) {
+      return NextResponse.json(
+        { error: "Villa not found" },
+        { status: 404, headers: noStore },
+      );
+    }
+
+    const eligibility = assessVillaDeletion({
+      slug: villa.slug,
+      retreatId: villa.retreatId,
+      portfolioSource: villa.portfolioSource,
+    });
+    if (!eligibility.allowed) {
+      return NextResponse.json(
+        { error: eligibility.reason ?? "This property cannot be deleted" },
+        { status: 409, headers: noStore },
+      );
+    }
+
+    if (!villaDeleteNameMatches(confirmName, villa as never)) {
+      return NextResponse.json(
+        {
+          error:
+            "Property name does not match. Type the exact property name to confirm deletion.",
+        },
+        { status: 400, headers: noStore },
+      );
+    }
+
+    const activeBookings = await countActiveBookingsForVilla(villa._id);
+    if (activeBookings > 0) {
+      return NextResponse.json(
+        {
+          error: `${
+            activeBookings === 1
+              ? "Cannot delete while 1 active booking exists."
+              : `Cannot delete while ${activeBookings} active bookings exist.`
+          } Cancel or complete them first.`,
+        },
+        { status: 409, headers: noStore },
+      );
+    }
+
+    const retreatId = villa.retreatId ?? villa.slug;
+    const snapshot = {
+      name: villa.name,
+      slug: villa.slug,
+      retreatId,
+      portfolioSource: villa.portfolioSource,
+    };
+
+    await softDeleteVillaRecord(villa as never, auth.userId);
+
+    await auditLog({
+      action: "villa.delete",
+      targetType: "villa",
+      targetId: String(villa._id),
+      userId: auth.userId,
+      metadata: snapshot,
+    });
+
+    revalidateVillaPublicPaths({ slug: villa.slug, retreatId });
+
+    return NextResponse.json({ ok: true }, { headers: noStore });
+  } catch (e) {
+    console.error("[DELETE /api/dashboard/villas/[slug]]", e);
+    return NextResponse.json(
+      { error: "Failed to delete villa" },
+      { status: 500, headers: noStore },
     );
   }
 }

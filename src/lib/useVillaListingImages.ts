@@ -11,7 +11,6 @@ import {
 export type { VillaListingImagesInput, VillaListingServerMedia } from "@/lib/villaListingImagesCore";
 export {
   buildVillaListingImages,
-  getVillaManifestEntry,
   primaryVillaListingImage,
 } from "@/lib/villaListingImagesCore";
 

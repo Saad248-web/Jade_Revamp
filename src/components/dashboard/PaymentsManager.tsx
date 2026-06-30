@@ -6,6 +6,7 @@ import { ExternalLink } from "lucide-react";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import { formatPaise } from "@/lib/money";
 import { DataTable, type DataTableColumn } from "./DataTable";
+import { DashStatusChip } from "./form";
 import { DashboardListToolbar } from "./ui/DashboardListToolbar";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
 
@@ -32,12 +33,12 @@ function fmtWhen(iso: string | null) {
   });
 }
 
-const STATUS_STYLE: Record<string, string> = {
-  paid: "text-emerald-300",
-  deposit_paid: "text-sky-300",
-  refunded: "text-amber-300",
-  partially_refunded: "text-amber-300",
-  failed: "text-red-400",
+const STATUS_VARIANT: Record<string, "success" | "warning" | "danger" | "info" | "neutral"> = {
+  paid: "success",
+  deposit_paid: "info",
+  refunded: "warning",
+  partially_refunded: "warning",
+  failed: "danger",
 };
 
 export function PaymentsManager() {
@@ -88,11 +89,9 @@ export function PaymentsManager() {
       key: "status",
       header: "Status",
       cell: (r) => (
-        <span
-          className={`text-xs font-bold uppercase tracking-widest ${STATUS_STYLE[r.paymentStatus] ?? "text-white/50"}`}
-        >
+        <DashStatusChip variant={STATUS_VARIANT[r.paymentStatus] ?? "neutral"}>
           {r.paymentStatus.replace(/_/g, " ")}
-        </span>
+        </DashStatusChip>
       ),
     },
     {

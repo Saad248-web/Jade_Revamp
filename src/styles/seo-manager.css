@@ -1,5 +1,9 @@
 /* ── Overview ─────────────────────────────────────────────── */
 
+.seo-manager__tabs {
+  margin-bottom: 0;
+}
+
 .seo-overview {
   display: flex;
   flex-direction: column;

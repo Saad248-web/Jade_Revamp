@@ -14,6 +14,19 @@ import {
   dashboardTitleForPath,
 } from "./navConfig";
 
+const FLUID_PAGE_PREFIXES = [
+  "/dashboard/bookings",
+  "/dashboard/media",
+] as const;
+
+function isFluidDashboardPage(pathname: string): boolean {
+  const normalized = pathname.replace(/\/+$/, "") || "/dashboard";
+  if (normalized === "/dashboard") return true;
+  return FLUID_PAGE_PREFIXES.some(
+    (p) => normalized === p || normalized.startsWith(`${p}/`),
+  );
+}
+
 type DashboardShellProps = {
   children: ReactNode;
   title?: string;
@@ -149,7 +162,13 @@ export function DashboardShell({
 
         <main className={dash.content} data-page-scroll-root>
           <DashboardSessionNotice />
-          <div className={dash.page}>{children}</div>
+          <div
+            className={
+              isFluidDashboardPage(pathname) ? dash.pageFluid : dash.page
+            }
+          >
+            {children}
+          </div>
         </main>
       </div>
     </div>

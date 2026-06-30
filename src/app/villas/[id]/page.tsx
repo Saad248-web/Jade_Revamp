@@ -71,8 +71,8 @@ import {
   isDomeEstateId,
 } from "@/lib/domeVillaIds";
 import { useAnimation } from "@/context/AnimationContext";
-import { MEDIA_MANIFEST } from "@/generated/mediaManifest";
-import { getHeroOverrideForId } from "@/lib/heroOverrides";
+import { resolveVillaMedia } from "@/lib/villas/villaMediaResolution";
+import { getVillaSocialProof } from "@/lib/villaSocialProof";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 import VillaPricingBlocks, {
   buildDetailPagePricingBlocks,
@@ -104,18 +104,6 @@ import { getVillaRetreatLogoSrc } from "@/lib/villaRetreatLogos";
 import VillaRetreatHeroLogo from "@/components/villa/VillaRetreatHeroLogo";
 
 const vd = VILLA_DETAIL_SPACING;
-
-const getManifestEntry = (villa: { name?: string; image?: string }) => {
-  const byName = villa.name ? (MEDIA_MANIFEST as any).villasByFolder?.[villa.name] : null;
-  if (byName) return byName;
-  const m = (villa.image || "").match(/^\/Villa_Retreats\/([^/]+)\//);
-  if (!m?.[1]) return null;
-  try {
-    return (MEDIA_MANIFEST as any).villasByFolder?.[decodeURIComponent(m[1])] ?? null;
-  } catch {
-    return (MEDIA_MANIFEST as any).villasByFolder?.[m[1]] ?? null;
-  }
-};
 
 // Icon mapping helper
 const getIcon = (iconName?: string, title?: string) => {
@@ -308,17 +296,32 @@ export default function VillaDetailsPage() {
     };
   }, [id]);
 
-  const manifestHero = villa ? getManifestEntry(villa)?.hero || [] : [];
-  const overrideHero = villa ? getHeroOverrideForId(villa.id) : undefined;
-  const heroImages = overrideHero
-    ? overrideHero
-    : media?.hero?.length
-      ? media.hero
-      : manifestHero?.length
-        ? manifestHero
-        : [];
-  const spaceImages = media?.spaces?.length ? media.spaces : [];
-  const experienceImages = media?.experiences?.length ? media.experiences : [];
+  const resolvedMedia = useMemo(() => {
+    if (!villa) return null;
+    return resolveVillaMedia(
+      {
+        id: villa.id,
+        name: villa.name,
+        image: villa.image,
+        images: villa.images,
+        spaces: villa.spaces,
+        activities: villa.activities,
+        categorizedSpaces: villa.categorizedSpaces,
+        perfectForCards: villa.perfectForCards,
+        portfolioSource: villa.portfolioSource,
+      },
+      villa.id,
+    );
+  }, [villa]);
+
+  const heroImages =
+    media?.hero?.length ? media.hero : resolvedMedia?.hero ?? [];
+  const spaceImages =
+    media?.spaces?.length ? media.spaces : resolvedMedia?.spaces ?? [];
+  const experienceImages =
+    media?.experiences?.length
+      ? media.experiences
+      : resolvedMedia?.experiences ?? [];
 
   const domeColor = villa ? getDomeColorFromVillaId(villa.id) : null;
   const isDomeEstate = villa ? isDomeEstateId(villa.id) : false;
@@ -343,7 +346,11 @@ export default function VillaDetailsPage() {
     if (!list.length && villa?.categorizedSpaces?.length) {
       list = villa.categorizedSpaces.flatMap((g) => g.images ?? []).filter(Boolean);
     }
-    if (!list.length && villa?.images?.length) {
+    if (
+      !list.length &&
+      villa?.images?.length &&
+      !resolvedMedia?.dashboardAuthored
+    ) {
       list = villa.images.filter(Boolean);
     }
     if (domeSpaceFilter) {
@@ -359,6 +366,7 @@ export default function VillaDetailsPage() {
     villa?.categorizedSpaces,
     villa?.images,
     domeSpaceFilter,
+    resolvedMedia?.dashboardAuthored,
   ]);
 
   useEffect(() => {
@@ -811,6 +819,11 @@ export default function VillaDetailsPage() {
             />
           }
         >
+        {getVillaSocialProof(villa) ? (
+          <p className="mb-4 font-manrope text-sm tracking-wide text-[#EFCD62]/90">
+            {getVillaSocialProof(villa)}
+          </p>
+        ) : null}
         <p className={vd.introDescription}>{villa.description}</p>
 
         {villa.perfectForTags.length > 0 && (

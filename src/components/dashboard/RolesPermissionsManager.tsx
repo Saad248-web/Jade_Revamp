@@ -10,12 +10,13 @@ import {
 } from "@/lib/auth/permissions";
 import { dash } from "@/lib/dashboard/dashboardClasses";
 import { DashboardPanel } from "@/components/dashboard/DashboardPanel";
+import { DashStatusChip } from "./form";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
 
-const LEVEL_STYLE: Record<AccessLevel, string> = {
-  write: "border-emerald-400/40 bg-emerald-400/10 text-emerald-300",
-  read: "border-sky-400/40 bg-sky-400/10 text-sky-300",
-  none: "border-white/10 bg-white/[0.02] text-white/30",
+const LEVEL_VARIANT: Record<AccessLevel, "success" | "info" | "neutral"> = {
+  write: "success",
+  read: "info",
+  none: "neutral",
 };
 
 const LEVEL_LABEL: Record<AccessLevel, string> = {
@@ -57,11 +58,9 @@ export function RolesPermissionsManager() {
                     const level: AccessLevel = entry.perms[r] ?? "none";
                     return (
                       <td key={r} className="text-center">
-                        <span
-                          className={`inline-flex min-w-[58px] justify-center border px-2 py-1 text-xs font-bold uppercase tracking-widest ${LEVEL_STYLE[level]}`}
-                        >
+                        <DashStatusChip variant={LEVEL_VARIANT[level]}>
                           {LEVEL_LABEL[level]}
-                        </span>
+                        </DashStatusChip>
                       </td>
                     );
                   })}

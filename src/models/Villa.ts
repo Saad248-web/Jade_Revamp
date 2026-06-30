@@ -35,7 +35,7 @@ const VillaSchema = new Schema(
     thumbnail: { type: String },
     portfolioSource: {
       type: String,
-      enum: ["canonical", "legacy", "coming_soon"],
+      enum: ["canonical", "legacy", "coming_soon", "custom"],
     },
     displayStats: {
       stay: String,

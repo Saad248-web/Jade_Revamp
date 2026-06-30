@@ -40,6 +40,20 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+.calendar-toolbar-compact {
+  align-items: flex-start;
+  gap: var(--dash-space-3);
+}
+
+.calendar-toolbar-compact__actions {
+  align-items: center;
+  align-content: center;
+}
+
+.calendar-legend__chip {
+  gap: 0.35rem;
+}
+
 .calendar-toolbar-compact .dashboard-toolbar__meta {
   min-width: 0;
 }

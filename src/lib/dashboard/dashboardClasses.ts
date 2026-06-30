@@ -9,6 +9,7 @@ export const dash = {
   main: "dashboard-main",
   content: "dashboard-content",
   page: "dashboard-page",
+  pageFluid: "dashboard-page dashboard-page--fluid",
 
   panel: "dashboard-panel",
   panelBody: "dashboard-panel__body",
@@ -62,9 +63,10 @@ export const dash = {
 
   inputWrap: "dashboard-input-wrap",
   inputIcon: "dashboard-input-wrap__icon",
-  inputIconLeft: "dashboard-input dashboard-input--icon-left",
-  input: "dashboard-input",
-  inputCompact: "dashboard-input dashboard-input--compact",
+  inputIconLeft: "dashboard-input dashboard-input--unified dashboard-input--icon-left",
+  input: "dashboard-input dashboard-input--unified",
+  inputUnified: "dashboard-input dashboard-input--unified",
+  inputCompact: "dashboard-input dashboard-input--unified dashboard-input--compact",
   intro: "dashboard-intro",
   chip: "dashboard-chip",
   label: "dashboard-label",
@@ -143,7 +145,7 @@ export const dash = {
   modalPicker: "dashboard-modal dashboard-modal--picker",
   stack: "dashboard-stack",
   formGrid: "dashboard-form-grid",
-  formGrid2: "dashboard-form-grid dashboard-form-grid--2",
+  formGrid2: "dash-form-grid dash-form-grid--2",
   fieldError: "dashboard-field-error",
   logDetail: "dashboard-log-detail",
 
@@ -162,7 +164,45 @@ export const dash = {
   modalHeader: "dash-modal-header",
   badge: "dash-badge",
   dropdownMenu: "dash-dropdown-menu",
+
+  /* Form design system v2 */
+  formShell: "dash-form-shell",
+  formActionBar: "dash-form-action-bar",
+  formActionBarInner: "dash-form-action-bar__inner",
+  formActionBarDirty: "dash-form-action-bar__dirty",
+  sectionCard: "dash-section-card",
+  sectionCardHead: "dash-section-card__head",
+  sectionCardTitle: "dash-section-card__title",
+  sectionCardDesc: "dash-section-card__desc",
+  sectionCardBadge: "dash-section-card__badge",
+  sectionCardBody: "dash-section-card__body",
+  rowEditor: "dash-row-editor",
+  rowEditorHead: "dash-row-editor__head",
+  rowEditorBody: "dash-row-editor__body",
+  rowEditorActions: "dash-row-editor__actions",
+  emptyHint: "dash-empty-hint",
+  formNotice: "dash-form-notice",
+  formNoticeWarning: "dash-form-notice dash-form-notice--warning",
+  formNoticeInfo: "dash-form-notice dash-form-notice--info",
+  formNoticeSuccess: "dash-form-notice dash-form-notice--success",
+  formNoticeDanger: "dash-form-notice dash-form-notice--danger",
+  wizardStepper: "dash-wizard-stepper",
+  wizardStep: "dash-wizard-step",
+  wizardStepActive: "dash-wizard-step dash-wizard-step--active",
+  wizardStepDone: "dash-wizard-step dash-wizard-step--done",
+  wizardStepError: "dash-wizard-step dash-wizard-step--error",
+  togglePill: "dash-toggle-pill",
+  togglePillOn: "dash-toggle-pill dash-toggle-pill--on",
+  statusChip: "dash-status-chip",
+  statusChipSuccess: "dash-status-chip dash-status-chip--success",
+  statusChipWarning: "dash-status-chip dash-status-chip--warning",
+  statusChipDanger: "dash-status-chip dash-status-chip--danger",
+  statusChipInfo: "dash-status-chip dash-status-chip--info",
+  statusChipAccent: "dash-status-chip dash-status-chip--accent",
 } as const;
+
+/** Dashboard floating form theme — always `dashboardCharcoal` */
+export const DASH_FORM_THEME = "dashboardCharcoal" as const;
 
 /** Accent color classes for stat icons */
 export const dashAccent = {

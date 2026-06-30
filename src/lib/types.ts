@@ -161,6 +161,8 @@ export interface Villa {
   /** Public download — villa brochure PDF/DOC/PPT */
   brochureUrl?: string;
   brochureFilename?: string;
+  /** Mongo portfolio source — `custom` = dashboard-authored, no manifest bleed */
+  portfolioSource?: string;
 }
 
 // ─── Blog ─────────────────────────────────────────────────

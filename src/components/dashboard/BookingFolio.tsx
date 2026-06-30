@@ -24,6 +24,7 @@ import { formatPaise } from "@/lib/money";
 import { BookingFolioHistory } from "./BookingFolioHistory";
 import { DashboardPanel } from "./DashboardPanel";
 import { EmptyState } from "./EmptyState";
+import { DashSectionCard, DashStatusChip } from "./form";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
 
 type FolioBooking = BookingRecord & {
@@ -32,41 +33,32 @@ type FolioBooking = BookingRecord & {
   axisRoomsReservationId?: string;
 };
 
-const CHANNEL_BADGE: Record<string, string> = {
-  direct: "border-sky-500/30 bg-sky-500/10 text-sky-200",
-  staff: "border-violet-500/30 bg-violet-500/10 text-violet-200",
-  ota: "border-amber-500/30 bg-amber-500/10 text-amber-200",
+const CHANNEL_VARIANT: Record<string, "info" | "accent" | "warning"> = {
+  direct: "info",
+  staff: "accent",
+  ota: "warning",
 };
 
-const STATUS_BADGE: Record<string, string> = {
-  confirmed: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
-  on_hold: "border-violet-500/30 bg-violet-500/10 text-violet-300",
-  pending: "border-amber-500/30 bg-amber-500/10 text-amber-300",
-  conflict: "border-red-500/30 bg-red-500/10 text-red-300",
-  cancelled: "border-white/20 bg-white/5 text-white/50",
-  expired: "border-white/20 bg-white/5 text-white/50",
+const STATUS_VARIANT: Record<string, "success" | "accent" | "warning" | "danger" | "neutral"> = {
+  confirmed: "success",
+  on_hold: "accent",
+  pending: "warning",
+  conflict: "danger",
+  cancelled: "neutral",
+  expired: "neutral",
 };
 
-function axisSyncLabel(booking: BookingRecord): {
+function axisSyncVariant(booking: BookingRecord): {
   text: string;
-  className: string;
+  variant: "success" | "danger" | "warning";
 } {
   if (booking.axisRoomsSynced) {
-    return {
-      text: "Axis Rooms · synced",
-      className: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
-    };
+    return { text: "Axis Rooms · synced", variant: "success" };
   }
   if (booking.axisRoomsLastError) {
-    return {
-      text: "Axis Rooms · sync failed",
-      className: "border-red-500/30 bg-red-500/10 text-red-300",
-    };
+    return { text: "Axis Rooms · sync failed", variant: "danger" };
   }
-  return {
-    text: "Axis Rooms · pending",
-    className: "border-amber-500/30 bg-amber-500/10 text-amber-300",
-  };
+  return { text: "Axis Rooms · pending", variant: "warning" };
 }
 
 function fmtDate(dateStr: string): string {
@@ -91,10 +83,9 @@ function FolioSection({
   children: ReactNode;
 }) {
   return (
-    <DashboardPanel pad className="h-full w-full">
-      <h2 className={`${dash.label} mb-4`}>{title}</h2>
+    <DashSectionCard title={title} compact className="h-full w-full">
       {children}
-    </DashboardPanel>
+    </DashSectionCard>
   );
 }
 
@@ -202,14 +193,11 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
   }
 
   const nights = nightCount(booking.checkIn, booking.checkOut);
-  const badge =
-    STATUS_BADGE[booking.status] ??
-    "border-white/20 bg-white/5 text-white/60";
-  const axisSync = axisSyncLabel(booking);
+  const axisSync = axisSyncVariant(booking);
   const hasRazorpayPayment = Boolean(booking.payment.paymentId);
   const sourceInfo = formatBookingSource(booking.source);
-  const channelBadge =
-    CHANNEL_BADGE[sourceInfo.channel] ?? CHANNEL_BADGE.direct;
+  const channelVariant = CHANNEL_VARIANT[sourceInfo.channel] ?? "info";
+  const statusVariant = STATUS_VARIANT[booking.status] ?? "neutral";
 
   return (
     <DashboardModuleFrame error={error}>
@@ -223,21 +211,16 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
           Calendar
         </Link>
         <div className="flex flex-wrap items-center gap-2">
-          <span
-            className={`inline-flex items-center rounded-none border px-3 py-1 font-manrope text-xs font-bold uppercase tracking-widest ${channelBadge}`}
-          >
+          <DashStatusChip variant={channelVariant}>
             {sourceInfo.shortLabel}
-          </span>
-          <span
-            className={`inline-flex items-center rounded-none border px-3 py-1 font-manrope text-xs font-bold uppercase tracking-widest ${badge}`}
-          >
+          </DashStatusChip>
+          <DashStatusChip variant={statusVariant}>
             {booking.status.replace("_", " ")}
-          </span>
-          <span
-            className={`inline-flex items-center rounded-none border px-3 py-1 font-manrope text-xs font-bold uppercase tracking-widest ${axisSync.className}`}
-            title={booking.axisRoomsLastError ?? undefined}
-          >
-            {axisSync.text}
+          </DashStatusChip>
+          <span title={booking.axisRoomsLastError ?? undefined}>
+            <DashStatusChip variant={axisSync.variant}>
+              {axisSync.text}
+            </DashStatusChip>
           </span>
         </div>
       </div>

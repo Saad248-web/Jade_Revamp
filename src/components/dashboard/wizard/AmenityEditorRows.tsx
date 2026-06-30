@@ -1,7 +1,7 @@
 "use client";
 
 import { getVillaDetailIcon } from "@/lib/villaDetailIcons";
-import { VILLA_AMENITY_ICON_OPTIONS } from "@/lib/villas/amenityIconOptions";
+import { VillaIconPicker } from "@/components/dashboard/villa/VillaIconPicker";
 import {
   wizardHintClass,
   wizardInputClass,
@@ -66,24 +66,13 @@ export function AmenityEditorRows({
                   onChange={(e) => update(i, { label: e.target.value })}
                 />
               </div>
-              <div>
-                <label className={wizardLabelClass}>Icon</label>
-                <select
-                  className={wizardInputClass}
-                  value={row.icon}
-                  disabled={disabled}
-                  onChange={(e) => update(i, { icon: e.target.value })}
-                >
-                  <option value="" className="bg-[#1A1C1E]">
-                    Select icon…
-                  </option>
-                  {VILLA_AMENITY_ICON_OPTIONS.map((name) => (
-                    <option key={name} value={name} className="bg-[#1A1C1E]">
-                      {name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <VillaIconPicker
+                id={`amenity-icon-${i}`}
+                label="Icon"
+                value={row.icon}
+                disabled={disabled}
+                onChange={(icon) => update(i, { icon })}
+              />
               <div>
                 <label className={wizardLabelClass}>Detail blurb (optional)</label>
                 <input
