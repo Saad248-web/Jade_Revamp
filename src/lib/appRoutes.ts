@@ -37,7 +37,6 @@ const ACTIVE_PATH_PREFIXES = [
   "/privacy-policy",
   "/terms-conditions",
   "/refund-policy",
-  "/admin",
 ] as const;
 
 const FORBIDDEN_PATH_PREFIXES = ["/villa-retreats", "/party-villa-retreats"] as const;

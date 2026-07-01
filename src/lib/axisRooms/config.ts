@@ -11,8 +11,13 @@ export function getAxisRoomsChannelId(): string | null {
 export function getAxisRoomsBaseUrl(): string {
   const raw =
     process.env.AXIS_ROOMS_API_BASE_URL?.trim() ||
-    "https://sandbox1.axisrooms.com";
+    "https://sandbox2.axisrooms.com";
   return raw.replace(/\/$/, "");
+}
+
+/** Display name registered with Axis Rooms channel manager (reply to Axis onboarding). */
+export function getAxisRoomsPmsName(): string {
+  return process.env.AXIS_ROOMS_PMS_NAME?.trim() || "Jade Host PMS";
 }
 
 export function isAxisRoomsConfigured(): boolean {

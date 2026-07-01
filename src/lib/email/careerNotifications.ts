@@ -1,4 +1,5 @@
 import { sendTransactionalEmail } from "@/lib/email/resendOutbound";
+import { parseRecipients } from "@/lib/email/parseRecipients";
 
 export async function notifyCareerApplication(params: {
   jobId: string;
@@ -9,11 +10,11 @@ export async function notifyCareerApplication(params: {
   applicantEmail: string;
   applicationId: string;
 }): Promise<void> {
-  const to = process.env.CAREERS_NOTIFY_EMAIL?.trim();
-  if (!to) return;
+  const to = parseRecipients(process.env.CAREERS_NOTIFY_EMAIL);
+  if (to.length === 0) return;
 
   const r = await sendTransactionalEmail({
-    to: [to],
+    to,
     subject: `[Jade careers] ${params.jobTitle} — ${params.jobId}`,
     text: [
       `New application submitted via the website.`,
@@ -25,8 +26,7 @@ export async function notifyCareerApplication(params: {
       `Name: ${params.applicantName}`,
       `Email: ${params.applicantEmail}`,
       ``,
-      `Download résumé from admin or database (resume_bytes on career_applications).`,
-      `Filter: SELECT * FROM career_applications WHERE job_id = '${params.jobId}' ORDER BY created_at DESC;`,
+      `Download résumé from Dashboard → Careers.`,
     ].join("\n"),
     replyTo: params.applicantEmail,
   });

@@ -36,7 +36,20 @@ export async function GET(req: NextRequest) {
       RAZORPAY_WEBHOOK_SECRET: flag("RAZORPAY_WEBHOOK_SECRET"),
       CRON_SECRET: flag("CRON_SECRET"),
       AXIS_ROOMS_API_KEY: flag("AXIS_ROOMS_API_KEY"),
+      AXIS_ROOMS_CHANNEL_ID: flag("AXIS_ROOMS_CHANNEL_ID"),
+      AXIS_ROOMS_API_BASE_URL: flag("AXIS_ROOMS_API_BASE_URL"),
       AXIS_ROOMS_WEBHOOK_SECRET: flag("AXIS_ROOMS_WEBHOOK_SECRET"),
+    },
+    axisRooms: {
+      pmsName: process.env.AXIS_ROOMS_PMS_NAME?.trim() || "Jade Host PMS",
+      baseUrl:
+        process.env.AXIS_ROOMS_API_BASE_URL?.trim() ||
+        "https://sandbox2.axisrooms.com",
+      configured: Boolean(
+        process.env.AXIS_ROOMS_API_KEY?.trim() &&
+          process.env.AXIS_ROOMS_CHANNEL_ID?.trim(),
+      ),
+      inboundWebhookPath: "/api/webhooks/axisrooms",
     },
     features: {
       bookingsStoreFallback: process.env.BOOKINGS_STORE_FALLBACK === "true",

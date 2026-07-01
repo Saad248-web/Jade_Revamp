@@ -9,6 +9,7 @@ import { BookingModel } from "@/models/Booking";
 import { VillaModel } from "@/models/Villa";
 import { WebhookEventModel } from "@/models/WebhookEvent";
 import { auditLog } from "@/lib/audit/auditLog";
+import { notifyBookingConflict } from "@/lib/email/bookingNotifications";
 import type { AxisRoomsInboundEvent } from "./types";
 import type { Types } from "mongoose";
 
@@ -223,6 +224,20 @@ export async function upsertAxisRoomsInbound(
           conflict: hasDirectConflict,
         },
       });
+
+      if (hasDirectConflict || doc.status === "conflict") {
+        await notifyBookingConflict({
+          bookingId: String(doc._id),
+          villaName: villa.name ?? villa.slug ?? "Villa",
+          checkIn: parsed.checkIn!,
+          checkOut: parsed.checkOut!,
+          guestName: parsed.guestName ?? "OTA Guest",
+          source: sourceFromChannel(parsed.channel),
+          reason: hasDirectConflict
+            ? "Overlaps with existing direct/staff booking"
+            : "Night lock could not be acquired",
+        });
+      }
 
       return {
         ok: true,

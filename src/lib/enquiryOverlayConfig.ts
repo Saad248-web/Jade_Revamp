@@ -55,7 +55,7 @@ const VARIANTS: Record<EnquiryOverlayVariantId, EnquiryOverlayVariant> = {
   },
   weddings: {
     id: "weddings",
-    leadSource: "weddings_enquiry",
+    leadSource: "wedding_enquiry",
     defaultOccasionType: "Wedding",
     title: "Plan Your Wedding",
     description:

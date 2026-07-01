@@ -12,8 +12,11 @@ export function villaAxisRoomsMapping(
 }
 
 export function isAxisRoomsMapped(villa: {
+  channelMode?: string | null;
   axisRooms?: AxisRoomsMapping | null;
 }): boolean {
+  const mode = villa.channelMode ?? "website_only";
+  if (mode !== "channel_managed") return false;
   const m = villaAxisRoomsMapping(villa);
   return Boolean(m.propertyId && m.roomTypeId);
 }

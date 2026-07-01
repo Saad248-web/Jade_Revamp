@@ -162,19 +162,20 @@
 
 <h1>Jade Host PMS — Client Dashboard Audit &amp; Status Report</h1>
 <p class="meta">
-  Prepared for Jade Hospitainment · Generated 2026-06-30 · Project: <strong>Jade_ReVamp</strong> ·
-  Stack: Next.js 14 · MongoDB Atlas · Razorpay · Axis Rooms
+  Prepared for Jade Hospitainment · Generated 2026-07-01 · Project: <strong>Jade_ReVamp</strong> ·
+  Stack: Next.js 14 · MongoDB Atlas · Razorpay · Resend · Axis Rooms ·
+  Latest commit: <code>f91b8bf</code>
 </p>
 
 <div class="callout callout-green">
-  <strong>Executive summary:</strong> The <strong>Jade Host staff dashboard</strong> is built and feature-complete for daily villa operations — calendar, bookings, folio, housekeeping, manual blocks, conflict resolution, payments view, villa portfolio management, SEO CMS, media library, and role-based staff access. The public website supports villa browsing and a full <code>/book</code> flow with Razorpay. <strong>149 automated unit tests pass.</strong> Production go-live depends on environment credentials (MongoDB, NextAuth, Razorpay test/live keys) and Axis Rooms sandbox certification — not missing application code.
+  <strong>Executive summary:</strong> The <strong>Jade Host staff dashboard</strong> is built and feature-complete for daily villa operations — calendar, bookings, folio, housekeeping, manual blocks, conflict resolution, payments view, villa portfolio management, SEO CMS, media library, <strong>leads &amp; careers CMS</strong>, and role-based staff access. The public website supports villa browsing, page-tagged enquiry forms, careers applications, and a full <code>/book</code> flow with Razorpay. <strong>Staff email alerts</strong> (Resend) fire on bookings, enquiries, careers applications, and OTA conflicts when configured. <strong>Dashboard edits (Quick Edit or Full Property Editor) sync to the live public site</strong> — pricing, descriptions, images, and content for portfolio and custom villas. Axis Rooms integration is <strong>12 of 15 APIs in code</strong> with per-villa <strong>channel mode</strong> (<code>website_only</code> vs <code>channel_managed</code>). <strong>187 automated unit tests pass.</strong> Production go-live depends on environment credentials (MongoDB, NextAuth, Razorpay, Resend, Axis sandbox UAT) — not missing application code.
 </div>
 
 <div class="score-row">
   <div class="score"><div class="num">26+</div><div class="lbl">Dashboard screens</div></div>
   <div class="score"><div class="num">45+</div><div class="lbl">Staff API routes</div></div>
   <div class="score"><div class="num">5</div><div class="lbl">Staff roles</div></div>
-  <div class="score"><div class="num">149</div><div class="lbl">Unit tests passing</div></div>
+  <div class="score"><div class="num">187</div><div class="lbl">Unit tests passing</div></div>
   <div class="score"><div class="num">13</div><div class="lbl">Villa editor steps</div></div>
 </div>
 
@@ -198,6 +199,8 @@
       <li><strong>Manual Blocks</strong> — owner holds / walk-in date blocks on calendar</li>
       <li><strong>Housekeeping</strong> — stay status board (arrival, in-house, departed)</li>
       <li><strong>Conflicts</strong> — queue when OTA and direct bookings overlap; resolve with refund / manual confirm / cancel</li>
+      <li><strong>Leads &amp; Enquiries</strong> — page-tagged enquiry forms (Wedding, Party villas, Corporate, etc.) + partner leads; staff notes and status</li>
+      <li><strong>Careers</strong> — job applications with résumé download and hiring pipeline status</li>
       <li><strong>Payments</strong> — Razorpay order and deposit activity from bookings</li>
     </ul>
   </div>
@@ -205,13 +208,13 @@
     <h3><span class="badge b-ready">Done</span> Settings &amp; content</h3>
     <ul>
       <li><strong>Villa Settings</strong> — portfolio cards, filters (bookable, wedding, offline)</li>
-      <li><strong>Quick Edit</strong> — pricing, pax, policies, visibility, stats, thumbnail</li>
-      <li><strong>Full Property Editor</strong> — 13-step wizard aligned to public villa page sections</li>
+      <li><strong>Quick Edit</strong> — pricing, pax, policies, visibility, stats, thumbnail → <strong>live on public site</strong></li>
+      <li><strong>Full Property Editor</strong> — 13-step wizard aligned to public villa page sections → <strong>live on public site</strong></li>
       <li><strong>Delete property</strong> — type-to-confirm dialog; custom villas only; active-booking guard</li>
       <li><strong>Media Library</strong> — upload, folders, picker for villa images &amp; brochures</li>
       <li><strong>User Management</strong> — create staff, suspend, password reset, villa scoping</li>
       <li><strong>Roles &amp; Permissions</strong> — admin, staff, team, SEO, dev matrix viewer</li>
-      <li><strong>Axis Rooms mapping</strong> — property / room / rate IDs + CSV export</li>
+      <li><strong>Axis Rooms</strong> — mapping, connected OTAs, verify, pause/resume, sync log, channel mode per villa</li>
     </ul>
   </div>
 </div>
@@ -279,7 +282,40 @@
   <td><span class="badge b-ready">Done</span></td>
   <td>Trust line under villa name on public page</td>
 </tr>
+<tr>
+  <td><strong>Dashboard → public site sync</strong> — Quick Edit &amp; Full Editor share one <code>PATCH</code> API; Mongo overrides static portfolio</td>
+  <td><span class="badge b-ready">Done</span></td>
+  <td>Change Diamond/Magnolia/Jade 735 rates or copy in dashboard → reflects on <code>/villas</code>, detail page, and <code>/book</code> (~1 min cache)</td>
+</tr>
+<tr>
+  <td><strong>Portfolio description restore</strong> — empty Mongo content no longer wipes coded descriptions</td>
+  <td><span class="badge b-ready">Done</span></td>
+  <td>Jade 735, Royalty, and other catalogue villas show marketing copy again when dashboard saved blank fields</td>
+</tr>
+<tr>
+  <td><strong>Mongo pricing on listing cards</strong> — dashboard rates win when set; static canonical fallback when not</td>
+  <td><span class="badge b-ready">Done</span></td>
+  <td>Villa card “₹… onwards” matches what staff saved in Quick Edit or wizard step 13</td>
+</tr>
+<tr>
+  <td><strong>Listing card footer layout</strong> — price + VIEW VILLA + BOOK/ENQUIRE pinned to card bottom (desktop)</td>
+  <td><span class="badge b-ready">Done</span></td>
+  <td>Consistent CTA row alignment across short and long descriptions on <code>/villas</code></td>
+</tr>
 </table>
+
+<h2>2b. How dashboard edits reach the public site</h2>
+<div class="callout">
+  <strong>One save path for both editors.</strong> Quick Edit and the 13-step Full Property Editor both call <code>PATCH /api/dashboard/villas/[slug]</code>. Data is stored in MongoDB. The public API (<code>GET /api/public/villas</code>) merges Mongo with the coded portfolio catalogue — <strong>dashboard values win</strong> when staff have set them; coded JSON fills gaps (descriptions, amenities) when Mongo fields are empty.
+</div>
+<table>
+<tr><th>You edit in dashboard</th><th>Quick Edit</th><th>Full Editor</th><th>Public surfaces updated</th></tr>
+<tr><td>Name, location, thumbnail, stats</td><td>✓</td><td>✓</td><td><code>/villas</code> cards, detail hero, SEO</td></tr>
+<tr><td>Pricing, pax, tax, wedding tiers</td><td>✓</td><td>✓ (step 13)</td><td>Cards, detail pricing, <code>/book</code> quotes</td></tr>
+<tr><td>Description, amenities, spaces, FAQ, video</td><td>—</td><td>✓</td><td>Villa detail page sections</td></tr>
+<tr><td>Visibility / bookable</td><td>✓</td><td>✓</td><td>Directory listing, Book vs Enquire CTA</td></tr>
+</table>
+<p>After save, <code>revalidatePath</code> busts Next.js cache for <code>/villas</code>, <code>/villas/[id]</code>, and <code>/book</code>. Portfolio catalogue villas (Diamond, Magnolia, …) <strong>cannot be deleted</strong> — use Hidden visibility instead.</p>
 
 <h2>3. Module-by-module audit</h2>
 <table>
@@ -289,10 +325,12 @@
 <tr><td>Booking Folio</td><td><code>/dashboard/bookings/[id]</code></td><td><span class="badge b-ready">Done</span></td><td>Status, notes, refund hooks</td></tr>
 <tr><td>Housekeeping</td><td><code>/dashboard/housekeeping</code></td><td><span class="badge b-ready">Done</span></td><td>Stay status workflow</td></tr>
 <tr><td>Manual Blocks</td><td><code>/dashboard/blocks</code></td><td><span class="badge b-ready">Done</span></td><td>Syncs inventory to Axis when configured</td></tr>
-<tr><td>Conflicts</td><td><code>/dashboard/conflicts</code></td><td><span class="badge b-ready">Done</span></td><td>OTA vs direct overlap resolution</td></tr>
+<tr><td>Conflicts</td><td><code>/dashboard/conflicts</code></td><td><span class="badge b-ready">Done</span></td><td>OTA vs direct overlap resolution + email alert</td></tr>
+<tr><td>Leads &amp; Enquiries</td><td><code>/dashboard/leads</code></td><td><span class="badge b-ready">Done</span></td><td>Enquiry + partner lead CMS; page-source tags; staff email</td></tr>
+<tr><td>Careers</td><td><code>/dashboard/careers</code></td><td><span class="badge b-ready">Done</span></td><td>Applications, résumé download, status workflow</td></tr>
 <tr><td>Payments</td><td><code>/dashboard/payments</code></td><td><span class="badge b-ready">Done</span></td><td>Read-only Razorpay activity</td></tr>
 <tr><td>Villa Settings</td><td><code>/dashboard/settings/villas</code></td><td><span class="badge b-ready">Done</span></td><td>Quick edit + wizard + delete</td></tr>
-<tr><td>Axis Rooms</td><td><code>/dashboard/settings/axis-rooms</code></td><td><span class="badge b-partial">Partial</span></td><td>UI done; needs live API key + mapping UAT</td></tr>
+<tr><td>Axis Rooms</td><td><code>/dashboard/settings/axis-rooms</code></td><td><span class="badge b-partial">Partial</span></td><td>12/15 APIs integrated; sandbox keys + channel_managed UAT + API 9 registration</td></tr>
 <tr><td>Staff / RBAC</td><td><code>/dashboard/staff</code></td><td><span class="badge b-ready">Done</span></td><td>5 roles, bcrypt passwords, audit on mutations</td></tr>
 <tr><td>Media Library</td><td><code>/dashboard/media</code></td><td><span class="badge b-ready">Done</span></td><td>GridFS uploads + static catalog</td></tr>
 <tr><td>SEO suite</td><td><code>/dashboard/seo/*</code></td><td><span class="badge b-ready">Done</span></td><td>Manager, redirects, blogs, sitemap, analytics</td></tr>
@@ -303,12 +341,12 @@
 <h2>4. Public website &amp; guest booking</h2>
 <table>
 <tr><th>Surface</th><th>Status</th><th>Notes</th></tr>
-<tr><td>Villa directory <code>/villas</code></td><td><span class="badge b-ready">Done</span></td><td>Mongo + static portfolio merge; JSON-LD; category filters</td></tr>
-<tr><td>Villa detail <code>/villas/[id]</code></td><td><span class="badge b-ready">Done</span></td><td>Hero, spaces, experiences, pricing, FAQ, book CTA</td></tr>
+<tr><td>Villa directory <code>/villas</code></td><td><span class="badge b-ready">Done</span></td><td>Mongo + static merge; descriptions restored; card footer pinned; JSON-LD; category filters</td></tr>
+<tr><td>Villa detail <code>/villas/[id]</code></td><td><span class="badge b-ready">Done</span></td><td>Hero, spaces, experiences, pricing from dashboard Mongo, FAQ, book CTA</td></tr>
 <tr><td>Spaces gallery <code>/villas/[id]/spaces</code></td><td><span class="badge b-ready">Done</span></td><td>Uses shared media resolver API</td></tr>
 <tr><td>Booking flow <code>/book</code></td><td><span class="badge b-partial">Partial</span></td><td>4-step wizard built; needs Mongo + Razorpay E2E on production URL</td></tr>
 <tr><td>Availability API</td><td><span class="badge b-ready">Done</span></td><td>Booked + blocked dates per villa</td></tr>
-<tr><td>Leads / careers / partner forms</td><td><span class="badge b-ready">Done</span></td><td>Rate-limited public APIs</td></tr>
+<tr><td>Leads / careers / partner forms</td><td><span class="badge b-ready">Done</span></td><td>Rate-limited public APIs + dashboard CMS + Resend staff email</td></tr>
 <tr><td>SEO / llms.txt / sitemap</td><td><span class="badge b-ready">Done</span></td><td>IndexNow hook; production needs <code>INDEXNOW_KEY</code></td></tr>
 </table>
 
@@ -330,7 +368,7 @@
 <tr>
   <td><strong>Axis Rooms</strong></td>
   <td><span class="badge b-partial">Partial</span></td>
-  <td>Inbound OTA webhook; outbound inventory + price push; mapping UI; retry cron</td>
+  <td>12/15 APIs: inventory, price, restrictions, inbound webhook, pull cron, connected OTAs, verify, per-OTA pause/resume; <strong>channel_managed</strong> gates outbound sync</td>
   <td>API key, channel ID, sandbox URL, property CSV, webhook registration — see <code>jade-axisrooms-status.html</code></td>
 </tr>
 <tr>
@@ -361,14 +399,16 @@
     <ul>
       <li><strong>Rotate seed password</strong> — default <code>JadeHost2026!</code> must not be used in production</li>
       <li><strong>No MFA</strong> — consider for admin accounts (planned enhancement)</li>
-      <li><strong>Cron jobs</strong> — expire-pending bookings &amp; Axis retry need <code>CRON_SECRET</code> + scheduler (Vercel Pro or external)</li>
+      <li><strong>Cron jobs</strong> — <code>CRON_SECRET</code> + scheduler; sub-daily expire/retry need Vercel Pro or external cron; daily pull/blogs in <code>vercel.json</code></li>
+      <li><strong>Resend</strong> — verify sending domain; set notify emails for bookings, leads, careers, conflicts</li>
       <li><strong>Full booking E2E</strong> — book → pay → webhook → confirmed not yet run on production URL</li>
-      <li><strong>Axis certification</strong> — inbound webhook samples from Axis for final parser hardening</li>
+      <li><strong>Axis certification</strong> — sandbox UAT, API 9 registration, real inbound JSON samples from Axis</li>
+      <li><strong>Channel mode</strong> — flip portfolio villas to <code>channel_managed</code> only after mapping UAT</li>
     </ul>
   </div>
 </div>
 
-<p><strong>Automated test suite (2026-06-30):</strong> <span class="badge b-ready">24 files · 149 tests · all passing</span> — includes villa media resolver, editor validation, deletion guards, RBAC registry, booking forms, payment service.</p>
+<p><strong>Automated test suite (2026-07-01):</strong> <span class="badge b-ready">31 files · 187 tests · all passing</span> — includes leads source validation, email recipient parsing, Axis channel state, connected OTAs, villa media resolver, merge/public text, pricing display, editor validation, deletion guards, RBAC registry, booking forms, payment service.</p>
 
 <h2>7. Staff roles at a glance</h2>
 <table>
@@ -387,11 +427,13 @@
 <tr><td>2</td><td>Run <code>npm run db:seed:users</code> and <code>npm run db:seed</code> against Atlas; <strong>rotate all passwords</strong></td><td><span class="badge b-blocked">Blocker</span></td><td>Jade / dev</td></tr>
 <tr><td>3</td><td>Add Razorpay <strong>test</strong> keys; register webhook → <code>/api/webhooks/razorpay</code></td><td><span class="badge b-blocked">Blocker</span></td><td>Jade finance</td></tr>
 <tr><td>4</td><td>Complete test booking: <code>/book</code> → pay → confirmed in dashboard</td><td><span class="badge b-blocked">Blocker</span></td><td>Jade + dev UAT</td></tr>
-<tr><td>5</td><td>Set <code>CRON_SECRET</code>; schedule expire-pending + axis-retry crons</td><td><span class="badge b-partial">High</span></td><td>Dev</td></tr>
-<tr><td>6</td><td>Axis Rooms sandbox key + map villas in <code>/dashboard/settings/axis-rooms</code></td><td><span class="badge b-partial">High</span></td><td>Jade + Axis</td></tr>
-<tr><td>7</td><td>Register Axis inbound webhook → <code>/api/webhooks/axisrooms</code></td><td><span class="badge b-partial">High</span></td><td>Axis</td></tr>
-<tr><td>8</td><td>Production Razorpay keys at cutover; <code>INDEXNOW_KEY</code> for SEO pings</td><td><span class="badge b-todo">Cutover</span></td><td>Jade</td></tr>
-<tr><td>9</td><td>UAT custom villas (hero images, editor steps, delete flow)</td><td><span class="badge b-ready">Ready</span></td><td>Jade ops</td></tr>
+<tr><td>5</td><td>Set <code>CRON_SECRET</code>; schedule expire-pending + axis-retry (Pro/external) + daily pull/blogs (<code>vercel.json</code>)</td><td><span class="badge b-partial">High</span></td><td>Dev</td></tr>
+<tr><td>6</td><td>Resend: verify domain, <code>RESEND_API_KEY</code>, booking/leads/careers/conflict notify emails</td><td><span class="badge b-partial">High</span></td><td>Jade marketing</td></tr>
+<tr><td>7</td><td>Axis sandbox keys → <code>npm run axis:test</code>; map villas; flip to <code>channel_managed</code></td><td><span class="badge b-partial">High</span></td><td>Jade + Axis</td></tr>
+<tr><td>8</td><td>Register Axis inbound webhook → <code>/api/webhooks/axisrooms</code></td><td><span class="badge b-partial">High</span></td><td>Axis</td></tr>
+<tr><td>9</td><td>UAT enquiry forms → <code>/dashboard/leads</code>; careers → <code>/dashboard/careers</code></td><td><span class="badge b-ready">Ready</span></td><td>Jade ops</td></tr>
+<tr><td>10</td><td>Production Razorpay keys at cutover; <code>INDEXNOW_KEY</code> for SEO pings</td><td><span class="badge b-todo">Cutover</span></td><td>Jade</td></tr>
+<tr><td>11</td><td>UAT portfolio + custom villas — Quick Edit pricing, Full Editor content, delete flow</td><td><span class="badge b-ready">Ready</span></td><td>Jade ops</td></tr>
 </table>
 
 <h2>9. Villa editor — step map (Full Property Editor)</h2>
@@ -423,7 +465,7 @@
 
 <h2>11. Related documents</h2>
 <ul>
-  <li><code>jade-axisrooms-status.html</code> — Axis Rooms integration summary (4 of 15 APIs integrated)</li>
+  <li><code>jade-axisrooms-status.html</code> — Axis Rooms integration summary (12 of 15 APIs integrated; channel mode, pull cron, verify)</li>
   <li><code>NEEDS_FROM_USER.md</code> — environment variables and credentials checklist</li>
   <li><code>SECURITY-AUDIT.md</code> — technical security review (June 2026)</li>
   <li><code>docs/axisrooms-api-reference.md</code> — Axis Rooms API contract</li>
@@ -431,7 +473,7 @@
 </ul>
 
 <div class="callout">
-  <strong>Bottom line for Jade:</strong> The dashboard and booking platform are <strong>ready for internal operations and UAT</strong> once MongoDB and staff login are configured on Vercel. Guest payments need Razorpay test verification. OTA channel sync needs Axis Rooms credentials and property mapping. No major dashboard modules are missing from the build — remaining work is <strong>credentials, UAT, and cutover</strong>.
+  <strong>Bottom line for Jade:</strong> The dashboard and booking platform are <strong>ready for internal operations and UAT</strong> once MongoDB and staff login are configured on Vercel. Staff can manage enquiries and careers in-dashboard, receive email alerts when Resend is configured, and edit villas that sync to the public site without redeploying code. Guest payments need Razorpay test verification. OTA channel sync needs Axis sandbox UAT, <code>channel_managed</code> flip per villa, and API 9 webhook registration. Remaining work is <strong>credentials, UAT, and cutover</strong>.
 </div>
 
 <p class="meta" style="margin-top:2.5rem;">

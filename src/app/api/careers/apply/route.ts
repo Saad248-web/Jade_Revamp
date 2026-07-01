@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 /**
  * POST /api/careers/apply — multipart form application.
  *
- * Indexing fields (see schema_migration_career_applications_indexing.sql):
+ * Indexing fields (MongoDB Career model):
  * - job_id / job_title — role slug + display title for HR filters
  * - source_page — site section (e.g. /careers)
  * - apply_context — careers:role:{jobId} | careers:open-application

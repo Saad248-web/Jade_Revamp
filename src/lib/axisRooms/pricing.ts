@@ -1,9 +1,5 @@
 import { auditLog } from "@/lib/audit/auditLog";
-import {
-  axisRoomsApiUrl,
-  getAxisRoomsAccessKey,
-  getAxisRoomsChannelId,
-} from "./config";
+import { postAxisRoomsApi } from "./http";
 import type { AxisRoomsPushResult } from "./types";
 
 type PricePushParams = {
@@ -20,18 +16,11 @@ type PricePushParams = {
 export async function pushDaywisePrice(
   params: PricePushParams,
 ): Promise<AxisRoomsPushResult> {
-  const accessKey = getAxisRoomsAccessKey();
-  const channelId = getAxisRoomsChannelId();
-  if (!accessKey || !channelId) {
-    return { ok: false, error: "Axis Rooms not configured" };
-  }
   if (params.dates.length === 0 || params.doublePriceRupees <= 0) {
     return { ok: true };
   }
 
-  const body = {
-    accessKey,
-    channelId,
+  const result = await postAxisRoomsApi("/api/daywisePrice", {
     hotels: [
       {
         hotelId: params.hotelId,
@@ -51,40 +40,74 @@ export async function pushDaywisePrice(
         ],
       },
     ],
-  };
+  });
 
-  try {
-    const res = await fetch(axisRoomsApiUrl("/api/daywisePrice"), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(25_000),
-    });
+  await auditLog({
+    action: "axisrooms.price.daywise",
+    targetType: "villa",
+    targetId: params.auditTargetId,
+    metadata: {
+      hotelId: params.hotelId,
+      dates: params.dates.length,
+      api: 6,
+      ok: result.ok,
+    },
+  });
 
-    if (!res.ok) {
-      return { ok: false, error: `Price push failed (${res.status})` };
-    }
+  return result.ok ? { ok: true } : { ok: false, error: result.error };
+}
 
-    const data = (await res.json().catch(() => ({}))) as {
-      status?: string;
-      message?: string;
-    };
-    if (data.status?.toLowerCase() === "failure" || data.status === "Error") {
-      return { ok: false, error: data.message ?? "Price push failed" };
-    }
-
-    await auditLog({
-      action: "axisrooms.price.push",
-      targetType: "villa",
-      targetId: params.auditTargetId,
-      metadata: { hotelId: params.hotelId, dates: params.dates.length },
-    });
-
+/** API 7 — bulk price update for a date range. */
+export async function pushBulkPriceForRange(params: {
+  hotelId: string;
+  roomId: string;
+  ratePlanId: string;
+  startDate: string;
+  endDate: string;
+  doublePriceRupees: number;
+  auditTargetId?: string;
+}): Promise<AxisRoomsPushResult> {
+  if (params.doublePriceRupees <= 0) {
     return { ok: true };
-  } catch (e) {
-    return {
-      ok: false,
-      error: e instanceof Error ? e.message : "Price push failed",
-    };
   }
+
+  const result = await postAxisRoomsApi("/api/bulkPriceUpdate", {
+    hotels: [
+      {
+        hotelId: params.hotelId,
+        rooms: [
+          {
+            roomId: params.roomId,
+            rateplans: [
+              {
+                rateplanId: params.ratePlanId,
+                priceDetails: [
+                  {
+                    startDate: params.startDate,
+                    endDate: params.endDate,
+                    price: { Double: params.doublePriceRupees },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+
+  await auditLog({
+    action: "axisrooms.price.bulk",
+    targetType: "villa",
+    targetId: params.auditTargetId,
+    metadata: {
+      hotelId: params.hotelId,
+      startDate: params.startDate,
+      endDate: params.endDate,
+      api: 7,
+      ok: result.ok,
+    },
+  });
+
+  return result.ok ? { ok: true } : { ok: false, error: result.error };
 }

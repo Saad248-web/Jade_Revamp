@@ -249,6 +249,7 @@ export function VillaEditModal({
           addOnAvailability: villa.addOnAvailability,
           displayStats: villa.displayStats,
           notes: villa.notes,
+          channelMode: villa.channelMode,
           axisRooms: villa.axisRooms,
           ...(publishOnDirectory
             ? { content: { hideFromVillasDirectory: false } }
@@ -483,9 +484,26 @@ export function VillaEditModal({
 
                   <DashSectionCard
                     title="Axis Rooms"
-                    description="Channel manager mapping — API sync when credentials are provided."
+                    description="Channel manager mapping — OTA sync only when mode is channel-managed and IDs are set."
                   >
                     <div className={dash.formGrid2}>
+                      <DashFloatingSelect
+                        label="Channel mode"
+                        value={villa.channelMode ?? "website_only"}
+                        onChange={(v) =>
+                          patchVilla({
+                            channelMode: v as "website_only" | "channel_managed",
+                          })
+                        }
+                        options={[
+                          { value: "website_only", label: "Website only (no OTA sync)" },
+                          {
+                            value: "channel_managed",
+                            label: "Channel managed (sync to OTAs)",
+                          },
+                        ]}
+                        disabled={!canWrite}
+                      />
                       <DashFloatingField
                         label="Property ID"
                         value={axis.propertyId}

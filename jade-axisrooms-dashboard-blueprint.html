@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Jade Host × Axis Rooms — Dashboard Integration Blueprint</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1c1e;
+    --muted: #5c5c5c;
+    --border: #e0e0e0;
+    --accent: #0d5c4b;
+    --gold: #b8860b;
+    --ready: #166534;
+    --ready-bg: #dcfce7;
+    --partial: #1d4ed8;
+    --partial-bg: #dbeafe;
+    --blocked: #b45309;
+    --blocked-bg: #fef3c7;
+    --todo: #6b7280;
+    --todo-bg: #f3f4f6;
+    --na: #9ca3af;
+    --na-bg: #fafafa;
+    --danger: #b91c1c;
+    --danger-bg: #fee2e2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink);
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  h1 {
+    font-family: Georgia, serif;
+    font-size: 1.95rem;
+    color: var(--accent);
+    border-bottom: 3px solid var(--gold);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+  .meta { color: var(--muted); font-size: 0.875rem; margin-bottom: 1.5rem; }
+  h2 {
+    font-size: 1.25rem;
+    color: var(--accent);
+    margin: 2.5rem 0 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+  h2:first-of-type { border-top: none; margin-top: 1rem; }
+  h3 { font-size: 1.02rem; margin: 1.4rem 0 0.5rem; color: var(--ink); }
+  p, li { margin: 0.4rem 0; }
+  ul, ol { padding-left: 1.25rem; }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 0.5rem 1rem;
+    margin: 1rem 0 1.5rem; font-size: 0.8rem;
+  }
+  .badge {
+    display: inline-block; padding: 0.15rem 0.55rem; border-radius: 4px;
+    font-weight: 600; font-size: 0.72rem; text-transform: uppercase;
+    letter-spacing: 0.03em; white-space: nowrap;
+  }
+  .b-ready { background: var(--ready-bg); color: var(--ready); }
+  .b-partial { background: var(--partial-bg); color: var(--partial); }
+  .b-blocked { background: var(--blocked-bg); color: var(--blocked); }
+  .b-todo { background: var(--todo-bg); color: var(--todo); }
+  .b-na { background: var(--na-bg); color: var(--na); border: 1px dashed #ccc; }
+  .b-danger { background: var(--danger-bg); color: var(--danger); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.86rem; margin: 0.75rem 0 1rem; }
+  th, td { border: 1px solid var(--border); padding: 0.55rem 0.65rem; text-align: left; vertical-align: top; }
+  th { background: #f5f5f4; font-weight: 600; }
+  tr:nth-child(even) td { background: #fafaf9; }
+  code { font-size: 0.82em; background: #f0f0f0; padding: 0.1em 0.35em; border-radius: 3px; }
+  .callout {
+    border-left: 4px solid var(--gold); background: #fffbeb;
+    padding: 0.85rem 1rem; margin: 1rem 0; font-size: 0.9rem;
+  }
+  .callout strong { color: var(--accent); }
+  .callout-green { border-left-color: var(--ready); background: var(--ready-bg); }
+  .callout-red { border-left-color: var(--danger); background: var(--danger-bg); }
+  .callout-blue { border-left-color: var(--partial); background: var(--partial-bg); }
+  .grid-2 { display: grid; gap: 1rem; margin: 1rem 0; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 760px) { .grid-2 { grid-template-columns: 1fr; } }
+  .card { border: 1px solid var(--border); padding: 1rem; border-radius: 6px; background: #fff; }
+  .card h3 { margin-top: 0; font-size: 0.95rem; }
+  .card ul { margin: 0; padding-left: 1.1rem; font-size: 0.86rem; }
+  .diagram {
+    border: 1px solid var(--border); border-radius: 8px; background: #fff;
+    padding: 1rem; margin: 1rem 0; overflow-x: auto; text-align: center;
+  }
+  .diagram figcaption { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.5rem; height: 1.5rem; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 0.8rem; font-weight: 700;
+    margin-right: 0.4rem;
+  }
+  .toc { columns: 2; font-size: 0.88rem; }
+  @media (max-width: 640px) { .toc { columns: 1; } }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  @media print {
+    body { max-width: none; font-size: 10.5pt; }
+    .legend, .grid-2, .diagram { break-inside: avoid; }
+    script { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Jade Host × Axis Rooms — Dashboard Integration Blueprint</h1>
+<p class="meta">
+  Prepared for Jade Hospitainment · 2026-07-01 · Analysis only (no code changed) ·
+  Sources: <code>pms.api.axisrooms.com</code>, <code>docs/axisrooms-api-reference.md</code>, live Jade codebase
+</p>
+
+<div class="callout callout-green">
+  <strong>Purpose:</strong> A single clear picture of what the Jade dashboard can do with Axis Rooms — which of the 15 APIs we use and for what, how bookings block dates two-ways, what Axis <em>cannot</em> do, the fate of the Housekeeping page, how custom properties behave, and exactly how we prevent the "two people book the same dates at once" problem. Use this to approve a phased plan.
+</div>
+
+<h2>Contents</h2>
+<div class="toc">
+  <p><a href="#s1">1. The two-way sync in one paragraph</a></p>
+  <p><a href="#s2">2. Flow diagram — how a date gets blocked</a></p>
+  <p><a href="#s3">3. All 15 Axis APIs — status &amp; dashboard use</a></p>
+  <p><a href="#s4">4. Blocking dates (manual + public) → OTA</a></p>
+  <p><a href="#s5">5. Editing a registered property → push to OTA</a></p>
+  <p><a href="#s6">6. Pulling OTA data into the dashboard</a></p>
+  <p><a href="#s7">7. Housekeeping page — keep or remove?</a></p>
+  <p><a href="#s8">8. Custom new property behaviour</a></p>
+  <p><a href="#s9">9. Edge cases &amp; double-booking prevention</a></p>
+  <p><a href="#s10">10. CRONs &amp; WebhookEvent explained</a></p>
+  <p><a href="#s11">11. Recommendations &amp; phased plan</a></p>
+</div>
+
+<div class="legend">
+  <span><span class="badge b-ready">Live</span> Working in code</span>
+  <span><span class="badge b-partial">Ready</span> Coded, needs Axis keys/UAT</span>
+  <span><span class="badge b-blocked">Dormant</span> Coded, needs OTA id list</span>
+  <span><span class="badge b-todo">Proposed</span> Recommended, not built</span>
+  <span><span class="badge b-na">No API</span> Axis provides nothing</span>
+</div>
+
+<h2 id="s1">1. The two-way sync in one paragraph</h2>
+<p>
+  Axis Rooms is a <strong>channel manager</strong> that sits between Jade and the OTAs (Airbnb, Booking.com). Jade never talks to OTAs directly. There are two directions that matter:
+</p>
+<ul>
+  <li><strong>OUTBOUND (Jade → Axis):</strong> whenever a date becomes unavailable in Jade (a booking or a manual block), Jade calls Axis to <strong>close inventory</strong> so OTAs stop selling that night. Whenever a villa price/visibility changes, Jade pushes price and open/close restrictions.</li>
+  <li><strong>INBOUND (Axis → Jade):</strong> when a guest books on an OTA, Axis POSTs that booking to the one endpoint Jade hosts (<code>/api/webhooks/axisrooms</code>), and Jade writes it into the same calendar as direct bookings.</li>
+</ul>
+<p>Both directions already exist in the code. The only missing pieces for go-live are Axis <strong>credentials + per-villa mapping</strong> (sandbox keys just arrived) and a few <em>optional</em> read APIs we can add for a richer dashboard.</p>
+
+<h2 id="s2">2. Flow diagram — how a date gets blocked (both ways)</h2>
+<figure class="diagram">
+<pre class="mermaid">
+flowchart TD
+  subgraph JADE["Jade dashboard / website"]
+    A1["Staff reserves dates<br/>(Manual Booking)"]
+    A2["Staff blocks dates<br/>(Manual Blocks)"]
+    A3["Guest books on jaderetreats.com<br/>+ Razorpay pays"]
+  end
+
+  A1 --> NL["Acquire Night Locks<br/>(unique villaId+date)"]
+  A2 --> NL
+  A3 --> RZ["Razorpay webhook<br/>confirmPayment()"]
+  RZ --> NL
+
+  NL -->|locked OK| Q["queueBookingInventorySync / syncBlockInventory"]
+  NL -->|already locked| CF["Mark CONFLICT<br/>(staff resolve)"]
+
+  Q --> API1["API 1 daywiseInventory<br/>free: 0 (close)"]
+  API1 --> AXIS["Axis Rooms CM"]
+  AXIS --> OTA["Airbnb / Booking.com<br/>dates closed"]
+
+  API1 -->|push failed| RETRY["axisrooms-retry cron<br/>(every 15m)"]
+  RETRY --> API1
+</pre>
+<figcaption>Outbound: any Jade-side reservation or block closes the same nights on the OTAs (API 1). Failed pushes are retried by cron.</figcaption>
+</figure>
+
+<figure class="diagram">
+<pre class="mermaid">
+flowchart TD
+  G["Guest books on Airbnb / Booking.com"] --> AX["Axis Rooms CM"]
+  AX -->|POST API 9| WH["/api/webhooks/axisrooms"]
+  WH --> KEY{"accessKey valid?"}
+  KEY -->|no| R401["401 (Axis retries)"]
+  KEY -->|yes| DUP{"WebhookEvent<br/>already seen?"}
+  DUP -->|yes| OK1["Return success<br/>(idempotent, do nothing)"]
+  DUP -->|no| TX["withTransaction()"]
+  TX --> OVL{"Overlaps a direct<br/>booking?"}
+  OVL -->|yes| CON["status = CONFLICT<br/>→ Conflicts page"]
+  OVL -->|no| LK{"Night locks free?"}
+  LK -->|no| CON
+  LK -->|yes| CONF["status = CONFIRMED<br/>shows in Calendar + Housekeeping"]
+  CON --> RESP["Reply: Booking Update Received"]
+  CONF --> RESP
+</pre>
+<figcaption>Inbound: an OTA booking lands in the same calendar as direct bookings, with idempotency and conflict protection.</figcaption>
+</figure>
+
+<h2 id="s3">3. All 15 Axis APIs — status &amp; how the dashboard uses each</h2>
+<table>
+<tr><th>#</th><th>API</th><th>Dir</th><th>Status</th><th>Dashboard use / where</th></tr>
+<tr><td>1</td><td>Daywise Inventory</td><td>OUT</td><td><span class="badge b-partial">Ready</span></td><td>Close/open nights on booking confirm, cancel, manual block/release. <code>axisRooms/inventory.ts</code></td></tr>
+<tr><td>2</td><td>Bulk Inventory</td><td>OUT</td><td><span class="badge b-partial">Ready</span></td><td>Open a 90-day availability window when a mapped villa is saved/published. <code>inventory.ts</code></td></tr>
+<tr><td>3</td><td>Block Channel (per OTA)</td><td>OUT</td><td><span class="badge b-blocked">Dormant</span></td><td>Close a specific OTA only (e.g. pause Airbnb, keep Booking.com). <code>channels.ts</code> — needs OTA id list</td></tr>
+<tr><td>4</td><td>Unblock Channel</td><td>OUT</td><td><span class="badge b-blocked">Dormant</span></td><td>Re-open a specific OTA. <code>channels.ts</code></td></tr>
+<tr><td>5</td><td>Fetch OTA Availability</td><td>READ</td><td><span class="badge b-todo">Proposed</span></td><td>"Verify on OTA" button — confirm Axis holds the same free/blocked state we pushed</td></tr>
+<tr><td>6</td><td>Daywise Price</td><td>OUT</td><td><span class="badge b-partial">Ready</span></td><td>Fallback price push per date. <code>pricing.ts</code></td></tr>
+<tr><td>7</td><td>Bulk Price Update</td><td>OUT</td><td><span class="badge b-partial">Ready</span></td><td>Primary price push (90-day) on villa save. <code>pricing.ts</code></td></tr>
+<tr><td>8</td><td>Fetch OTA Rates</td><td>READ</td><td><span class="badge b-todo">Proposed</span></td><td>"Verify price" — show what OTAs currently display vs Jade rate</td></tr>
+<tr><td>9</td><td>Bookings → Client</td><td>IN</td><td><span class="badge b-ready">Live</span></td><td><strong>The endpoint Jade hosts.</strong> OTA bookings → calendar. <code>webhooks/axisrooms</code></td></tr>
+<tr><td>10</td><td>No-Show Enable</td><td>OUT</td><td><span class="badge b-todo">Optional</span></td><td>Mark a Booking.com no-show from the folio. Low priority</td></tr>
+<tr><td>11</td><td>Update MLOS</td><td>OUT</td><td><span class="badge b-todo">Optional</span></td><td>Min-length-of-stay rules per OTA. Add if Jade uses MLOS</td></tr>
+<tr><td>12</td><td>Pull Booking</td><td>READ</td><td><span class="badge b-todo">Proposed</span></td><td><strong>Safety net</strong> — nightly reconcile to catch any webhook Jade missed (10-day windows)</td></tr>
+<tr><td>13</td><td>Get Connected OTAs</td><td>READ</td><td><span class="badge b-todo">Proposed</span></td><td>Setup helper — <em>returns the OTA id list</em> needed to enable APIs 3/4</td></tr>
+<tr><td>14</td><td>Update OTA Credentials</td><td>OUT</td><td><span class="badge b-na">Skip</span></td><td>Push OTA logins via API — rarely needed; manage in Axis portal</td></tr>
+<tr><td>15</td><td>CM Restrictions (open/close)</td><td>OUT</td><td><span class="badge b-partial">Ready</span></td><td>Stop-sale when villa is Hidden / Not bookable. <strong>Testable in production only</strong> (per Axis)</td></tr>
+</table>
+<p><strong>Today:</strong> APIs 1, 2, 6, 7, 9, 15 wired · 3, 4 dormant (need OTA ids) · <strong>proposed for a richer dashboard:</strong> 5, 8, 12, 13.</p>
+
+<h2 id="s4">4. Blocking dates (manual + public) → OTA — confirmed</h2>
+<p>Your understanding is exactly right. Every path that consumes a date in Jade also closes it on the OTAs:</p>
+<table>
+<tr><th>Trigger in Jade</th><th>Code path</th><th>Axis call</th></tr>
+<tr><td>Staff <strong>manual booking</strong></td><td><code>POST /api/dashboard/bookings</code> → <code>queueBookingInventorySync("close")</code></td><td>API 1 <code>free:0</code></td></tr>
+<tr><td>Guest <strong>direct booking</strong> (Razorpay confirmed)</td><td>Razorpay webhook → <code>confirmPayment()</code> → <code>queueBookingInventorySync("close")</code></td><td>API 1 <code>free:0</code></td></tr>
+<tr><td>Staff <strong>manual block</strong> (owner hold)</td><td><code>POST /api/dashboard/blocks</code> → <code>syncBlockInventory(0)</code></td><td>API 1 <code>free:0</code></td></tr>
+<tr><td>Booking <strong>cancelled</strong></td><td><code>PATCH /api/dashboard/bookings/[id]</code> → <code>queueBookingInventorySync("open")</code></td><td>API 1 <code>free:1</code></td></tr>
+<tr><td>Block <strong>removed</strong></td><td><code>DELETE /api/dashboard/blocks/[id]</code> → <code>syncBlockInventory(1)</code></td><td>API 1 <code>free:1</code></td></tr>
+</table>
+<div class="callout">
+  <strong>So yes:</strong> manual reserve, public booking, <em>and</em> date-blocking all push a close to the OTAs — for any villa that is mapped to Axis. If a villa isn't mapped (or Axis keys aren't set), Jade skips the push cleanly (no error, website still works).
+</div>
+
+<h2 id="s5">5. Editing a registered property → push changes to OTA</h2>
+<p>When staff edit a <strong>mapped</strong> villa (Quick Edit or Full Editor) and save, <code>syncVillaChannelState()</code> fires automatically:</p>
+<table>
+<tr><th>What you edit</th><th>Axis API used</th><th>Effect on OTA</th></tr>
+<tr><td>Price / rates</td><td>API 7 (bulk) → falls back to API 6</td><td>90-day price window pushed to OTAs</td></tr>
+<tr><td>Set villa <strong>Live + bookable</strong></td><td>API 2 + API 15 (open)</td><td>Inventory opened, stop-sale lifted</td></tr>
+<tr><td>Set villa <strong>Hidden / Not bookable</strong></td><td>API 15 (close)</td><td>Stop-sale on OTAs</td></tr>
+</table>
+<div class="callout callout-blue">
+  <strong>Important limit (by Axis design):</strong> editing <em>descriptive content</em> — villa name, photos, amenities, description — does <strong>not</strong> push to OTAs. Axis has <strong>no API to edit an OTA listing's content</strong>. Only availability, price, and open/close sync. Listing text/photos on Airbnb/Booking.com are always maintained in those OTA portals by the Jade team. Jade content edits still update <code>jaderetreats.com</code> instantly.
+</div>
+
+<h2 id="s6">6. Pulling OTA data into the dashboard (better clarity)</h2>
+<p>These read APIs would make the dashboard far more transparent. None are built yet — they're my recommendations:</p>
+<div class="grid-2">
+  <div class="card">
+    <h3><span class="badge b-todo">Proposed</span> API 12 — Pull Booking (safety net)</h3>
+    <ul>
+      <li>Nightly cron pulls OTA bookings in 10-day windows</li>
+      <li>Funnels through the <em>same</em> parser + idempotency as the webhook</li>
+      <li>Catches any push Axis retried and we missed → <strong>zero lost OTA bookings</strong></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3><span class="badge b-todo">Proposed</span> API 13 — Connected OTAs</h3>
+    <ul>
+      <li>Lists which OTAs are connected + their integer ids</li>
+      <li><strong>Unlocks APIs 3/4</strong> (per-OTA block) which need those ids</li>
+      <li>Shows "Airbnb ✓ · Booking.com ✓" per property in the dashboard</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3><span class="badge b-todo">Proposed</span> API 5 / 8 — Verify state</h3>
+    <ul>
+      <li>"Verify on OTA" button per villa/date</li>
+      <li>Compares Jade's pushed inventory/price vs what Axis holds</li>
+      <li>Great for debugging "why is this date still showing?"</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Dashboard clarity add-ons</h3>
+    <ul>
+      <li>Per-villa <strong>channel status</strong> badge (Website-only / Mapped / Live)</li>
+      <li><strong>Axis sync log</strong> panel (audit log already records every push)</li>
+      <li>Booking Records already tags channel (Airbnb OTA, Booking.com OTA, Direct, Staff)</li>
+    </ul>
+  </div>
+</div>
+
+<h2 id="s7">7. Housekeeping page — keep it (it does NOT need Axis)</h2>
+<div class="callout callout-green">
+  <strong>Verdict: KEEP.</strong> Axis has <strong>no housekeeping/stay-status API</strong> — that's correct. But the Housekeeping page never needed one. It reads <em>Jade's own bookings</em> and shows arrival / in-house / departed / turnover / ready. Because OTA bookings land in Jade via API 9, the Housekeeping board <strong>already covers every channel</strong> (direct + Airbnb + Booking.com) automatically.
+</div>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Can we fetch stay status from Axis?</td><td>No — Axis has no such endpoint (<span class="badge b-na">No API</span>)</td></tr>
+<tr><td>Does Housekeeping need Axis?</td><td>No — it derives status from booking check-in/out dates</td></tr>
+<tr><td>Does it include OTA stays?</td><td>Yes — OTA bookings arrive via API 9 and appear here</td></tr>
+<tr><td>What is the page for?</td><td>On-ground ops: who arrives today, who's in-house, cleaning/turnover after departure</td></tr>
+</table>
+<p><strong>Suggested enhancement:</strong> add a channel tag on each housekeeping card (Direct / Airbnb / Booking.com) so on-site staff know the guest's origin. Purely a Jade-side display change; no Axis dependency.</p>
+
+<h2 id="s8">8. Custom new property behaviour — keep website-instant, OTA manual</h2>
+<p>A new villa created in the dashboard goes live on <code>jaderetreats.com</code> <strong>immediately</strong>. It will <strong>not</strong> auto-appear on OTAs — Axis has <span class="badge b-na">no create-property API</span>. This is normal for every channel manager.</p>
+<ol>
+  <li><span class="step-num">1</span> Create the villa in Jade → live on the public site right away.</li>
+  <li><span class="step-num">2</span> Jade team creates the listing on each OTA portal (Airbnb, Booking.com).</li>
+  <li><span class="step-num">3</span> Jade sends property/room/rate to Axis (CSV onboarding) → gets <code>hotelId / roomId / ratePlanId</code>.</li>
+  <li><span class="step-num">4</span> Paste those IDs into the villa's Axis mapping → sync (inventory/price/restrictions) turns on.</li>
+</ol>
+<div class="callout">
+  <strong>Recommended UX (Option A + B from prior discussion):</strong> give each villa a <em>channel mode</em> — <strong>Website-only</strong> (default for new villas, skips Axis cleanly) vs <strong>Channel-managed</strong> (requires IDs, sync active) — plus a status badge and a short onboarding checklist shown when a custom property is added. Turns the manual OTA step into a guided flow.
+</div>
+
+<h2 id="s9">9. Edge cases &amp; double-booking prevention</h2>
+
+<h3>The classic race: direct booking + Airbnb booking at the same moment</h3>
+<figure class="diagram">
+<pre class="mermaid">
+sequenceDiagram
+  participant W as Website guest
+  participant J as Jade DB (Night Locks)
+  participant AX as Axis Rooms
+  participant AB as Airbnb guest
+  W->>J: Confirm 30 Jun–5 Jul (Razorpay)
+  J->>J: acquireNightLocks() OK → CONFIRMED
+  J->>AX: API 1 close 30 Jun–5 Jul
+  AB->>AX: Books 2 Jul–4 Jul (before close lands)
+  AX->>J: API 9 inbound booking
+  J->>J: overlaps a CONFIRMED direct booking?
+  J->>J: YES → status = CONFLICT (not dropped)
+  J-->>AX: "Booking Update Received"
+  Note over J: Staff resolve in Conflicts page<br/>(refund OTA / move / cancel)
+</pre>
+<figcaption>Channel managers are near-real-time, not instant — a tiny overlap window always exists. Jade never silently drops it; it flags a CONFLICT for staff.</figcaption>
+</figure>
+
+<table>
+<tr><th>Edge case</th><th>How Jade prevents / handles it</th><th>Mechanism</th></tr>
+<tr>
+  <td>Two direct bookings, same villa &amp; night, at once</td>
+  <td>Only one succeeds; the other gets <code>409</code></td>
+  <td><strong>Night Locks</strong> — unique index on <code>{villaId, date}</code>; second insert fails atomically</td>
+</tr>
+<tr>
+  <td>Direct + OTA booking overlap (the race above)</td>
+  <td>OTA booking saved as <span class="badge b-danger">CONFLICT</span>, surfaced to staff — never lost</td>
+  <td>Overlap check inside <code>withTransaction()</code> + night-lock check on inbound</td>
+</tr>
+<tr>
+  <td>Axis retries the same booking push</td>
+  <td>Processed once; retries return success and do nothing</td>
+  <td><strong>WebhookEvent</strong> unique <code>{eventId, source}</code> (idempotency)</td>
+</tr>
+<tr>
+  <td>OTA cancels a booking</td>
+  <td>Booking → cancelled, nights released, OTA can resell</td>
+  <td>API 9 cancel branch → <code>releaseNightLocks()</code></td>
+</tr>
+<tr>
+  <td>Inventory push to Axis fails (network/500)</td>
+  <td>Auto-retried until success (max 10 attempts)</td>
+  <td><code>axisrooms-retry</code> cron (every 15 min)</td>
+</tr>
+<tr>
+  <td>Guest starts booking but never pays</td>
+  <td>Pending booking expires, nights freed</td>
+  <td><code>expire-pending-bookings</code> cron + night-lock release</td>
+</tr>
+<tr>
+  <td>Loopback (OTA booking pushed back to the OTA)</td>
+  <td>Prevented — inbound bookings are pre-marked synced</td>
+  <td><code>axisRoomsSynced = true</code> on API 9 records</td>
+</tr>
+<tr>
+  <td>Forged webhook call</td>
+  <td>Rejected with 401</td>
+  <td>Timing-safe <code>accessKey</code> compare in the body</td>
+</tr>
+</table>
+
+<div class="callout callout-red">
+  <strong>The honest limitation:</strong> no channel manager can make a same-second direct+OTA collision <em>impossible</em> — the OTA may accept a booking milliseconds before our close reaches it. The correct industry pattern (which Jade implements) is: <strong>detect the overlap, mark it CONFLICT, and let staff resolve</strong> rather than double-host a guest. To shrink the window: keep pushes fast (done) and add API 12 nightly pull as a backstop (proposed).
+</div>
+
+<h2 id="s10">10. CRONs &amp; WebhookEvent — plain-English</h2>
+<table>
+<tr><th>Mechanism</th><th>What it is</th><th>Why it matters</th></tr>
+<tr>
+  <td><strong>WebhookEvent</strong></td>
+  <td>A tiny record written the first time we see an OTA event (<code>{eventId, source}</code>, unique)</td>
+  <td>Axis retries pushes until it gets "success". This makes retries safe — the same booking is never created twice.</td>
+</tr>
+<tr>
+  <td><strong>Night Locks</strong></td>
+  <td>One row per villa per booked date, with a unique constraint</td>
+  <td>The database itself guarantees a date can be held by only one booking — the core anti-double-booking guard.</td>
+</tr>
+<tr>
+  <td><code>axisrooms-retry</code> cron</td>
+  <td>Runs every 15 min; re-pushes any inventory sync that failed</td>
+  <td>If Axis was briefly down, the close/open still lands. Max 10 attempts, then flagged for staff.</td>
+</tr>
+<tr>
+  <td><code>expire-pending-bookings</code> cron</td>
+  <td>Runs every 5 min; expires unpaid pending bookings</td>
+  <td>Frees dates a guest reserved but abandoned, so inventory isn't stuck.</td>
+</tr>
+<tr>
+  <td><span class="badge b-ready">Done</span> <code>axisrooms-pull</code> cron (daily)</td>
+  <td>Nightly reconcile via API 12</td>
+  <td>Backstop that guarantees no OTA booking is ever missed, even if a webhook failed.</td>
+</tr>
+</table>
+<p class="meta">Cron scheduling note: Vercel Hobby allows only once-daily crons; the 5-/15-min jobs need Vercel Pro or an external scheduler hitting the URLs with <code>CRON_SECRET</code>.</p>
+
+<h2 id="s11">11. Recommendations &amp; phased plan</h2>
+<table>
+<tr><th>Phase</th><th>Scope</th><th>APIs</th><th>Outcome</th></tr>
+<tr>
+  <td><strong>P1 — Sandbox certification</strong></td>
+  <td>Configure sandbox keys, map 1 villa, run outbound tests, share API 9 URL</td>
+  <td>1, 2, 6, 7, 9</td>
+  <td>Axis signs off; live credentials issued</td>
+</tr>
+<tr>
+  <td><strong>P2 — Go-live core</strong></td>
+  <td>Production keys, map all bookable villas, enable restrictions</td>
+  <td>+ 15</td>
+  <td>Two-way sync live for direct + OTA</td>
+</tr>
+<tr>
+  <td><strong>P3 — Dashboard clarity</strong></td>
+  <td>Channel-mode flag, status badges, onboarding checklist, Axis sync-log panel</td>
+  <td>+ 13</td>
+  <td>Staff see channel state at a glance; per-OTA control unlocked</td>
+</tr>
+<tr>
+  <td><strong>P4 — Resilience &amp; polish</strong></td>
+  <td><span class="badge b-ready">Done</span> — channelMode + badges + sync log + verify + pause/resume</td>
+  <td>+ 12, 5, 8, 3, 4</td>
+  <td>Zero-miss bookings, self-service debugging, granular OTA pausing</td>
+</tr>
+</table>
+
+<h3>What I recommend you approve</h3>
+<ul>
+  <li><strong>Keep</strong> the Housekeeping page (works for all channels, no Axis needed) — add channel tags.</li>
+  <li><strong>Keep</strong> custom-property → website-instant behaviour; add the <em>channel-mode flag + checklist</em> for OTA onboarding.</li>
+  <li><strong>Keep</strong> the full API reference doc (including "what Axis can't do") — it's documentation, nothing to delete.</li>
+  <li><strong>Add</strong> API 13 (connected OTAs) early — it unlocks per-OTA control and shows connection health.</li>
+  <li><strong>Add</strong> API 12 (nightly pull) as the safety net before heavy OTA volume.</li>
+  <li>Treat content edits (name/photos/amenities) as <strong>website-only</strong>; OTA listing content stays in OTA portals (Axis has no API for it).</li>
+</ul>
+
+<div class="callout callout-green">
+  <strong>Bottom line:</strong> The two-way engine (block dates ↔ receive OTA bookings) is already built and safe against double-booking via night locks + idempotency + conflict flagging. Housekeeping and custom-property flows are correct as-is. The upgrade path is <em>read APIs for clarity</em> (12, 13, 5, 8) and <em>dashboard UX</em> (channel mode, status, sync log) — all additive, no rework. Approve the phases and we'll plan the build.
+</div>
+
+<p class="meta" style="margin-top:2.5rem;">
+  Companion docs: <code>jade-axisrooms-status.html</code> (integration summary) ·
+  <code>jade-dashboard-client-audit.html</code> (dashboard audit) ·
+  <code>docs/axisrooms-api-reference.md</code> (API contract). Analysis only — no code modified.
+</p>
+
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: "base", themeVariables: {
+    primaryColor: "#dcfce7", primaryTextColor: "#1a1c1e", primaryBorderColor: "#0d5c4b",
+    lineColor: "#b8860b", fontSize: "13px"
+  }});
+</script>
+</body>
+</html>

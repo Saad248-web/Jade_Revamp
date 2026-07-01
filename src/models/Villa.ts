@@ -62,6 +62,12 @@ const VillaSchema = new Schema(
     depositPaise: { type: Number },
     /** Axis Rooms channel manager mapping. */
     axisRooms: { type: AxisRoomsSchema, default: undefined },
+    /** OTA sync mode — website_only skips Axis outbound; channel_managed requires mapping. */
+    channelMode: {
+      type: String,
+      enum: ["website_only", "channel_managed"],
+      default: "website_only",
+    },
     /** Marketing + detail-page content (drives public /villas/[id]). */
     content: { type: VillaContentSchema, default: () => ({}) },
     status: {

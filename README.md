@@ -60,16 +60,13 @@ Jade_ReVamp/
 │   ├── context/                # Animation, booking, wishlist
 │   └── generated/              # mediaManifest.ts (prebuild; gitignored output pattern)
 ├── public/                     # Large WebP/image tree + llms.txt + og-default.jpg
-├── scripts/                    # Media manifest, favicons, OG, DB reset, setup checks
+├── scripts/                    # Media manifest, favicons, OG, seeds, setup checks
 ├── e2e/                        # Playwright smoke + lead-surface specs
-├── schema.sql                  # Base Postgres schema (Docker first boot)
-├── schema_migration_leads_rathaa_partner_payments.sql
-├── docker-compose.db.yml
 ├── next.config.mjs             # Security headers, images, Sentry wrapper
 ├── src/middleware.ts           # Edge guard for /api/*
-├── AGENTS.md / NEXUS_v4_APEX/  # AI agent orchestration (optional for humans)
-├── audit-report.md             # Stakeholder audit (status + backlog)
-└── WEBDEV-Audit.md             # Engineering audit (APIs, limits, evidence)
+├── NEEDS_FROM_USER.md          # Credentials + UAT checklist
+├── SECURITY-AUDIT.md           # Security review
+└── jade-dashboard-client-audit.html  # Client dashboard status report
 ```
 
 ---
@@ -108,15 +105,15 @@ Booking UI uses `/book` and `ReservationOverlay` on the villas carousel — not 
 ### Prerequisites
 
 - **Node.js 20** LTS (CI uses 20)
-- **Docker Desktop** for local PostgreSQL (`npm run db:up`)
+- **MongoDB** — Atlas or local replica set (`MONGODB_URI` in `.env.local`)
 - Copy **`.env.example`** → **`.env.local`** (never commit `.env.local`)
 
 ### Install and run
 
 ```bash
 npm install
-npm run db:up          # Postgres; first start applies schema.sql via compose mount
-npm run db:migrate     # Phase 2: idempotent migrations on existing DB
+npm run db:seed:users  # Staff accounts (rotate passwords before production)
+npm run db:seed        # Villa catalogue
 npm run dev            # http://localhost:3000
 ```
 
@@ -149,8 +146,7 @@ Full template: [`.env.example`](.env.example).
 | Variable | Required | Purpose |
 |----------|----------|---------|
 | `MONGODB_URI` | Bookings + leads + CMS | Single MongoDB via `connectDB()` in `src/lib/db.ts` |
-| `ADMIN_PASSWORD` | Staff login | Legacy `/login` + `x-admin-password` on admin APIs |
-| `NEXTAUTH_SECRET` | Dashboard RBAC | NextAuth JWT (Phase 2b) |
+| `NEXTAUTH_SECRET` | Dashboard RBAC | NextAuth JWT — staff login at `/login` |
 | `CRON_SECRET` | Cron routes | `Authorization: Bearer` on `/api/cron/*` |
 | `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` | Payments | `POST /api/payments/razorpay-order` |
 | `RAZORPAY_WEBHOOK_SECRET` | Webhook | HMAC verify on `POST /api/webhooks/razorpay` |
@@ -176,10 +172,8 @@ Full template: [`.env.example`](.env.example).
 | `test` | Vitest — `bookingDetailsValidation`, `paymentService` |
 | `test:e2e` | Playwright vs dev server |
 | `test:e2e:ci` | `build` + production server + Playwright (`CI=true`) |
-| `db:up` / `db:down` / `db:reset` | **Legacy** Docker Compose PostgreSQL (deprecated — use Atlas/local Mongo) |
-| `db:seed` | `node scripts/seed-villas.mjs` — seed confirmed villas |
-| `db:migrate` | Apply SQL migrations (weekend source, careers indexing, etc.) |
-| `db:reset:schema` | `scripts/reset-local-db.mjs` |
+| `db:seed` / `db:seed:users` | Seed villas + staff users (MongoDB) |
+| `db:test` | `scripts/test-mongo.mjs` — connectivity smoke |
 | `api:smoke` | Phase 2 smoke: POST leads + careers apply (dev server running) |
 | `setup:check` / `setup:guide` | Local environment verification |
 | `optimize-images` / `optimize-images:dry-run` | `scripts/optimize_public_images.mjs` |
@@ -201,7 +195,8 @@ Full template: [`.env.example`](.env.example).
 | `/menu` | Full-screen villa/experience directory |
 | `/about`, `/contact`, `/careers` | Brand, contact, hiring |
 | `/wishlist` | Saved villas (`noindex`) |
-| `/admin` | Booking admin UI (`noindex`) |
+| `/login` | Staff sign-in (NextAuth) |
+| `/dashboard` | Jade Host PMS (`noindex`) |
 | `/privacy-policy`, `/terms-conditions`, `/refund-policy` | Legal |
 
 Metadata routes: `robots.ts`, `sitemap.ts`, `manifest.ts`.
@@ -213,7 +208,7 @@ Metadata routes: `robots.ts`, `sitemap.ts`, `manifest.ts`.
 | Method | Route | Purpose |
 |--------|-------|---------|
 | `POST` | `/api/bookings` | Create booking + overlap check |
-| `GET` | `/api/bookings` | Admin list (`x-admin-password`) |
+| `GET` | `/api/bookings` | Dashboard list (NextAuth) |
 | `GET` / `PATCH` / `DELETE` | `/api/bookings/[id]` | Admin CRUD |
 | `GET` | `/api/bookings/availability` | Monthly occupancy by villa |
 | `POST` | `/api/leads` | `general_enquiry`, `rathaa_enquiry`, `wedding_enquiry` |

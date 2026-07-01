@@ -33,7 +33,20 @@ There is exactly **one endpoint Jade hosts**: the inbound booking receiver (API 
 { "accessKey": "clientAPIKey" }
 ```
 
-### Sandbox base URL pattern
+### Sandbox (Jade UAT — Axis email 2026-07-01)
+
+```
+Base URL:  https://sandbox2.axisrooms.com
+channelId: 227
+PMS name:  Jade Host PMS
+hotelId:   12123
+roomId:    1 or 2
+ratePlanId: 1 or 2
+```
+
+Set in `.env.local` — see `NEEDS_FROM_USER.md`. Smoke test: `npm run axis:test`. Map a villa: `npm run axis:seed`.
+
+### Sandbox base URL pattern (generic)
 
 All AxisRooms-hosted endpoints look like:
 

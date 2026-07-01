@@ -3,7 +3,6 @@
  *   npm run setup:check
  */
 import fs from "node:fs";
-import net from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
@@ -31,20 +30,6 @@ function hasCommand(cmd) {
   } catch {
     return false;
   }
-}
-
-function portOpen(port, host = "127.0.0.1") {
-  return new Promise((resolve) => {
-    const socket = net.createConnection({ port, host }, () => {
-      socket.end();
-      resolve(true);
-    });
-    socket.on("error", () => resolve(false));
-    socket.setTimeout(2000, () => {
-      socket.destroy();
-      resolve(false);
-    });
-  });
 }
 
 function loadEnvLocal() {
@@ -105,7 +90,7 @@ async function main() {
     } else {
       fail(
         "Live enquiry API",
-        "Phase 2: set NEXT_PUBLIC_ENQUIRY_DEMO_MODE=false after db:migrate",
+        "Set NEXT_PUBLIC_ENQUIRY_DEMO_MODE=false in .env.local",
       );
     }
     if (
@@ -129,24 +114,6 @@ async function main() {
     fail(".env.local exists", "Copy .env.example → .env.local (or use repo template)");
   }
 
-  if (hasCommand("docker")) {
-    try {
-      execSync("docker info", { stdio: "ignore" });
-      pass("Docker Desktop running");
-    } catch {
-      fail("Docker Desktop running", "Install Docker Desktop and start it");
-    }
-  } else {
-    fail("Docker installed", "Recommended: https://www.docker.com/products/docker-desktop/");
-  }
-
-  const pgOpen = await portOpen(5432);
-  if (pgOpen) {
-    pass("PostgreSQL port 5432", "Something is listening (DB likely up)");
-  } else {
-    fail("PostgreSQL port 5432", "Run: npm run db:up  (after Docker is installed)");
-  }
-
   console.log("");
   for (const c of checks) {
     const icon = c.ok ? "✓" : "✗";
@@ -159,7 +126,7 @@ async function main() {
   console.log(
     failed
       ? `\n  ${failed} item(s) need attention — open docs/local-dev-setup-guide.html\n`
-      : "\n  All checks passed. Run: npm run dev → http://localhost:3000/admin\n",
+      : "\n  All checks passed. Run: npm run dev → http://localhost:3000/dashboard\n",
   );
   process.exit(failed ? 1 : 0);
 }

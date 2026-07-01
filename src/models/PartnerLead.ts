@@ -13,12 +13,21 @@ const PartnerLeadSchema = new Schema(
         gridFsId: String,
       },
     ],
+    status: {
+      type: String,
+      enum: ["new", "contacted", "closed"],
+      default: "new",
+    },
+    staffNotes: { type: String, default: "" },
+    handledBy: { type: Schema.Types.ObjectId, ref: "User" },
     isDeleted: { type: Boolean, default: false },
     deletedAt: Date,
     deletedBy: { type: Schema.Types.ObjectId, ref: "User" },
   },
-  { timestamps: { createdAt: true, updatedAt: false } },
+  { timestamps: { createdAt: true, updatedAt: true } },
 );
+
+PartnerLeadSchema.index({ status: 1, createdAt: -1 });
 
 export const PartnerLeadModel =
   models.PartnerLead ?? model("PartnerLead", PartnerLeadSchema);

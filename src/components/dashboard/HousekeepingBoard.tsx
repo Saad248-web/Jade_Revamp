@@ -6,6 +6,7 @@ import type { BookingRecord } from "@/lib/bookings/store";
 import type { StayStatus } from "@/lib/bookings/types";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import { todayIST } from "@/lib/bookingDates";
+import { formatBookingSource } from "@/lib/bookings/sourceLabels";
 import { DashboardPanel } from "./DashboardPanel";
 import { EmptyState } from "./EmptyState";
 import { DashStatusChip } from "./form";
@@ -134,6 +135,9 @@ export function HousekeepingBoard() {
                       </p>
                       <p className="font-manrope text-[length:var(--fs-desc)] text-white/50">
                         {fmt(b.checkIn)} → {fmt(b.checkOut)}
+                      </p>
+                      <p className="mt-1 font-manrope text-[0.65rem] font-bold uppercase tracking-widest text-white/40">
+                        {formatBookingSource(b.source).shortLabel}
                       </p>
                     </div>
                     <DashStatusChip variant={STATUS_VARIANT[current]}>

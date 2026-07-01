@@ -94,6 +94,18 @@ export function resolveApiPermission(
     return { permPath: "/dashboard/payments", min };
   }
 
+  if (pathname.startsWith("/api/dashboard/settings/axis-rooms")) {
+    return { permPath: "/dashboard/settings/axis-rooms", min };
+  }
+
+  if (pathname.startsWith("/api/dashboard/leads")) {
+    return { permPath: "/dashboard/leads", min };
+  }
+
+  if (pathname.startsWith("/api/dashboard/careers")) {
+    return { permPath: "/dashboard/careers", min };
+  }
+
   if (pathname.startsWith("/api/dashboard/seo/")) {
     const dashPath = pathname.replace(/^\/api/, "");
     return { permPath: resolvePermissionPath(dashPath), min };
@@ -244,6 +256,27 @@ export const API_ROUTE_CASES: ApiRouteCase[] = [
     min: "read",
   },
   {
+    label: "leads list",
+    pathname: "/api/dashboard/leads",
+    method: "GET",
+    permPath: "/dashboard/leads",
+    min: "read",
+  },
+  {
+    label: "careers list",
+    pathname: "/api/dashboard/careers",
+    method: "GET",
+    permPath: "/dashboard/careers",
+    min: "read",
+  },
+  {
+    label: "career resume download",
+    pathname: "/api/dashboard/careers/6a3a23682bc8769215b6eb53/resume",
+    method: "GET",
+    permPath: "/dashboard/careers",
+    min: "read",
+  },
+  {
     label: "content cms",
     pathname: "/api/dashboard/content",
     method: "GET",
@@ -256,6 +289,27 @@ export const API_ROUTE_CASES: ApiRouteCase[] = [
     method: "GET",
     permPath: "/dashboard/payments",
     min: "read",
+  },
+  {
+    label: "axis rooms sync log",
+    pathname: "/api/dashboard/settings/axis-rooms/log",
+    method: "GET",
+    permPath: "/dashboard/settings/axis-rooms",
+    min: "read",
+  },
+  {
+    label: "axis rooms connected otas",
+    pathname: "/api/dashboard/settings/axis-rooms/connected-otas",
+    method: "GET",
+    permPath: "/dashboard/settings/axis-rooms",
+    min: "read",
+  },
+  {
+    label: "axis rooms verify",
+    pathname: "/api/dashboard/settings/axis-rooms/verify",
+    method: "POST",
+    permPath: "/dashboard/settings/axis-rooms",
+    min: "write",
   },
   {
     label: "seo analytics",

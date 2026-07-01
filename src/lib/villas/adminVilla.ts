@@ -3,8 +3,14 @@ import { paiseToRupees, rupeesToPaise } from "@/lib/money";
 import { syncVillaVisibilityFlags } from "@/lib/villas/villaVisibility";
 import { normalizeVillaSlug } from "@/lib/villas/villaIds";
 import { mergeStaticRetreatContent } from "@/lib/villas/mergeStaticRetreatContent";
+import { deriveChannelState } from "@/lib/axisRooms/channelState";
 
 export const villaStatusSchema = z.enum(["active", "maintenance", "hidden"]);
+
+export const villaChannelModeSchema = z.enum([
+  "website_only",
+  "channel_managed",
+]);
 
 const villaIdSchema = z
   .string()
@@ -192,6 +198,7 @@ export const updateVillaSchema = z
     addOnAvailability: z.array(z.string().max(80)).optional(),
     displayStats: displayStatsSchema.optional(),
     notes: z.string().max(4000).optional(),
+    channelMode: villaChannelModeSchema.optional(),
     axisRooms: axisRoomsSchema.optional(),
     content: villaContentUpdateSchema.optional(),
   })
@@ -249,6 +256,8 @@ export type AdminVillaDetail = {
   status: string;
   bookable: boolean;
   notes: string;
+  channelMode: "website_only" | "channel_managed";
+  channelState: "website_only" | "awaiting_mapping" | "live";
   axisRooms: {
     propertyId: string;
     roomTypeId: string;
@@ -299,6 +308,7 @@ type VillaDocLike = {
   status?: string;
   bookable?: boolean;
   notes?: string;
+  channelMode?: string;
   staah?: {
     propertyId?: string;
     roomTypeId?: string;
@@ -372,6 +382,10 @@ export function toAdminVilla(
     status: doc.status ?? "active",
     bookable: doc.bookable ?? true,
     notes: doc.notes ?? "",
+    channelMode: (doc.channelMode ?? "website_only") as
+      | "website_only"
+      | "channel_managed",
+    channelState: deriveChannelState(doc),
     axisRooms: {
       propertyId: axis.propertyId ?? "",
       roomTypeId: axis.roomTypeId ?? "",
@@ -420,6 +434,7 @@ export function applyVillaUpdate(
     status: string;
     bookable: boolean;
     notes?: string;
+    channelMode?: string;
     axisRooms?: {
       propertyId?: string;
       roomTypeId?: string;
@@ -560,6 +575,10 @@ export function applyVillaUpdate(
   if (input.notes !== undefined) {
     villa.notes = input.notes;
     applied.notes = true;
+  }
+  if (input.channelMode !== undefined) {
+    villa.channelMode = input.channelMode;
+    applied.channelMode = input.channelMode;
   }
   if (input.axisRooms !== undefined) {
     villa.axisRooms = { ...(villa.axisRooms ?? {}), ...input.axisRooms };

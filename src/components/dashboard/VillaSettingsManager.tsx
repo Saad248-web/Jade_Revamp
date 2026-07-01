@@ -30,6 +30,10 @@ import { VillaEditModal } from "./VillaEditModal";
 import { PropertyWizard } from "./PropertyWizard";
 import { VillaDeleteConfirmDialog } from "./villa/VillaDeleteConfirmDialog";
 import { villaDeleteConfirmLabel } from "@/lib/villas/villaDeletionConfirm";
+import {
+  CHANNEL_STATE_LABELS,
+  type VillaChannelState,
+} from "@/lib/axisRooms/channelState";
 
 type DisplayStats = {
   stay: string | null;
@@ -62,6 +66,8 @@ type VillaRow = {
   dayOutBasePax: number;
   stayMaxPax: number;
   displayStats: DisplayStats;
+  channelMode?: string;
+  channelState?: VillaChannelState;
 };
 
 type FilterKey = "all" | "bookable" | "wedding" | "offline" | "coming_soon";
@@ -82,6 +88,15 @@ function statusTone(status: string): "success" | "warning" | "neutral" {
   if (status === "active") return "success";
   if (status === "maintenance") return "warning";
   return "neutral";
+}
+
+function channelStateTone(
+  state: VillaChannelState | undefined,
+): "success" | "warning" | "neutral" | "info" {
+  if (state === "live") return "success";
+  if (state === "awaiting_mapping") return "warning";
+  if (state === "website_only") return "neutral";
+  return "info";
 }
 
 function VillaPortfolioCard({
@@ -148,6 +163,11 @@ function VillaPortfolioCard({
               )}
               {v.status !== "hidden" && v.hideFromVillasDirectory && (
                 <DashStatusChip variant="warning">Not on /villas</DashStatusChip>
+              )}
+              {v.channelState && (
+                <DashStatusChip variant={channelStateTone(v.channelState)}>
+                  {CHANNEL_STATE_LABELS[v.channelState]}
+                </DashStatusChip>
               )}
               <span className="ml-auto text-[0.625rem] font-semibold uppercase tracking-wider text-white/35">
                 {SOURCE_LABEL[v.portfolioSource] ?? v.portfolioSource}
@@ -365,6 +385,20 @@ export function VillaSettingsManager() {
           <span className="dash-kpi__value">{stats.offline}</span>
         </div>
       </div>
+
+      {villas.some((v) => v.channelState === "website_only") ? (
+        <DashboardPanel className="mb-4" pad>
+          <p className="font-manrope text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)]">
+            OTA onboarding (website-only properties)
+          </p>
+          <ol className="mt-3 list-decimal space-y-2 pl-5 font-manrope text-sm text-white/70">
+            <li>Create the property listing on each OTA (Airbnb, Booking.com, etc.) manually.</li>
+            <li>Share property details with Axis Rooms — use Export CSV below in Axis Rooms settings.</li>
+            <li>Paste Axis property / room / rate plan IDs in Quick Edit for each villa.</li>
+            <li>Switch channel mode to <strong className="text-white">Channel managed</strong> to enable live OTA sync.</li>
+          </ol>
+        </DashboardPanel>
+      ) : null}
 
       <DashboardModuleFrame
         toolbar={

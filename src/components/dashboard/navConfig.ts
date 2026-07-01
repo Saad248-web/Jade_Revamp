@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   BedDouble,
   Blocks,
+  Briefcase,
   CalendarDays,
   ClipboardList,
   CreditCard,
@@ -10,6 +11,7 @@ import {
   FileText,
   Globe,
   ImageIcon,
+  Inbox,
   LineChart,
   Map,
   ScrollText,
@@ -67,6 +69,21 @@ export const DASHBOARD_NAV: NavItem[] = [
     icon: AlertTriangle,
     section: "Operations",
     description: "Axis Rooms sync conflicts that need staff resolution.",
+  },
+  {
+    href: "/dashboard/leads",
+    label: "Leads & Enquiries",
+    icon: Inbox,
+    section: "Operations",
+    description:
+      "Website enquiry forms — tagged by page (Wedding, Party villas, Corporate, etc.).",
+  },
+  {
+    href: "/dashboard/careers",
+    label: "Careers",
+    icon: Briefcase,
+    section: "Operations",
+    description: "Job applications with résumé download and hiring status.",
   },
   {
     href: "/dashboard/payments",

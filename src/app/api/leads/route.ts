@@ -2,36 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { getClientIpFromHeaders, rateLimit } from "@/lib/rateLimit";
 import { readJsonBody, SafeJsonError } from "@/lib/security/safeJson";
 import { notifyNewLead } from "@/lib/email/leadsNotifications";
+import { validateAndPreviewLead } from "@/lib/leads/buildLeadPreview";
 
 export const dynamic = "force-dynamic";
 
 const MAX_JSON = 56 * 1024;
-
-const SOURCES_GENERAL_LIKE = new Set([
-  "general_enquiry",
-  "weekend_getaways_enquiry",
-  "rathaa_enquiry",
-] as const);
-
-function normalizeEmail(s: unknown): string | null {
-  if (typeof s !== "string") return null;
-  const v = s.trim().toLowerCase();
-  if (!v || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return null;
-  return v;
-}
-
-function phoneDigits(s: unknown): string {
-  if (typeof s !== "string") return "";
-  return s.replace(/\D/g, "");
-}
-
-function hasContactName(s: unknown): boolean {
-  return typeof s === "string" && s.trim().length >= 2;
-}
-
-function hasValidPhone(s: unknown): boolean {
-  return phoneDigits(s).length >= 10;
-}
 
 export async function POST(req: NextRequest) {
   try {
@@ -76,111 +51,12 @@ export async function POST(req: NextRequest) {
     }
 
     const b = body as Record<string, unknown>;
-    const source = b.source;
-
-    if (
-      source !== "general_enquiry" &&
-      source !== "weekend_getaways_enquiry" &&
-      source !== "rathaa_enquiry" &&
-      source !== "wedding_enquiry"
-    ) {
+    const parsed = validateAndPreviewLead(b);
+    if (!parsed.ok) {
       return NextResponse.json(
-        { error: "Invalid source" },
-        { status: 400, headers: { "Cache-Control": "no-store" } },
+        { error: parsed.error },
+        { status: parsed.status, headers: { "Cache-Control": "no-store" } },
       );
-    }
-
-    let email: string | null = null;
-    let preview = "";
-
-    if (
-      SOURCES_GENERAL_LIKE.has(
-        source as
-          | "general_enquiry"
-          | "weekend_getaways_enquiry"
-          | "rathaa_enquiry",
-      )
-    ) {
-      const p = b.payload;
-      if (p === null || typeof p !== "object") {
-        return NextResponse.json(
-          { error: "payload required" },
-          { status: 400, headers: { "Cache-Control": "no-store" } },
-        );
-      }
-      const o = p as Record<string, unknown>;
-      email = normalizeEmail(o.email);
-
-      if (source === "rathaa_enquiry") {
-        if (!email) {
-          return NextResponse.json(
-            { error: "Valid email required" },
-            { status: 400, headers: { "Cache-Control": "no-store" } },
-          );
-        }
-      } else {
-        const phoneOk = hasValidPhone(o.phoneNumber);
-        const nameOk = hasContactName(o.fullName);
-        if (!email && !(phoneOk && nameOk)) {
-          const partialEmail =
-            typeof o.email === "string" && o.email.trim().length > 0;
-          return NextResponse.json(
-            {
-              error: partialEmail
-                ? "Valid email required"
-                : "Name and a valid phone number are required",
-            },
-            { status: 400, headers: { "Cache-Control": "no-store" } },
-          );
-        }
-      }
-
-      const sourceLabel =
-        source === "rathaa_enquiry"
-          ? "Rathaa / caravan overlay"
-          : source === "weekend_getaways_enquiry"
-            ? "Weekend getaways page"
-            : "General enquiry (site overlay)";
-
-      preview = [
-        `Source: ${source} (${sourceLabel})`,
-        `Name: ${String(o.fullName ?? "").slice(0, 200)}`,
-        `Email: ${email ?? "(not provided)"}`,
-        `Phone: ${String(o.phoneNumber ?? "").slice(0, 40)}`,
-        `Guests: ${String(o.guests ?? "").slice(0, 80)}`,
-        `Preferred date: ${String(o.preferredDate ?? "").slice(0, 120)}`,
-        `Interests: ${JSON.stringify(o.travelFormat ?? {})}`,
-        `Occasion: ${String(o.occasionType ?? o.occasion ?? "").slice(0, 200)}`,
-        `Special requests: ${String(o.specialRequests ?? "").slice(0, 2000)}`,
-      ].join("\n");
-    } else {
-      const p = b.payload;
-      if (p === null || typeof p !== "object") {
-        return NextResponse.json(
-          { error: "payload required" },
-          { status: 400, headers: { "Cache-Control": "no-store" } },
-        );
-      }
-      const o = p as Record<string, unknown>;
-      email = normalizeEmail(o.email);
-      if (!email) {
-        return NextResponse.json(
-          { error: "Valid email required" },
-          { status: 400, headers: { "Cache-Control": "no-store" } },
-        );
-      }
-
-      preview = [
-        `Source: wedding_enquiry`,
-        `Name: ${String(o.fullName ?? "").slice(0, 200)}`,
-        `Email: ${email}`,
-        `Phone: ${String(o.phone ?? "").slice(0, 40)}`,
-        `Event date: ${String(o.eventDate ?? "").slice(0, 40)}`,
-        `Services: ${JSON.stringify(o.services ?? [])}`,
-        `Events: ${JSON.stringify(o.events ?? [])}`,
-        `Setting: ${JSON.stringify(o.setting ?? [])}`,
-        `Notes: ${String(o.notes ?? "").slice(0, 2000)}`,
-      ].join("\n");
     }
 
     const { connectDB } = await import("@/lib/db");
@@ -189,9 +65,9 @@ export async function POST(req: NextRequest) {
 
     await connectDB();
     const doc = await LeadModel.create({
-      source,
+      source: b.source,
       payload: b.payload ?? {},
-      email,
+      email: parsed.email,
     });
 
     await auditLog({
@@ -203,8 +79,8 @@ export async function POST(req: NextRequest) {
 
     const id = String(doc._id);
     await notifyNewLead({
-      source,
-      preview: `${preview}\n\nLead row id: ${id ?? "(unknown)"}`,
+      source: String(b.source),
+      preview: `${parsed.preview}\n\nLead row id: ${id}`,
     });
 
     return NextResponse.json(

@@ -68,4 +68,10 @@ describe("applyVillaUpdate", () => {
     expect(villa.content?.amenities).toEqual([{ label: "Pool", icon: "Waves" }]);
     expect(villa.basePricePaise).toBe(9_900_000);
   });
+
+  it("persists channelMode for OTA gating", () => {
+    const villa = { ...villaFixture(), channelMode: "website_only" as const };
+    applyVillaUpdate(villa, { channelMode: "channel_managed" });
+    expect(villa.channelMode).toBe("channel_managed");
+  });
 });

@@ -48,6 +48,16 @@ export const ROUTE_MATRIX: RouteMatrixEntry[] = [
     perms: { admin: "write", staff: "read", team: "none", seo: "none", dev: "read" },
   },
   {
+    path: "/dashboard/leads",
+    label: "Leads & Enquiries",
+    perms: { admin: "write", staff: "write", team: "read", seo: "none", dev: "read" },
+  },
+  {
+    path: "/dashboard/careers",
+    label: "Careers",
+    perms: { admin: "write", staff: "write", team: "read", seo: "none", dev: "read" },
+  },
+  {
     path: "/dashboard/payments",
     label: "Payments",
     perms: { admin: "write", staff: "none", team: "none", seo: "none", dev: "write" },
@@ -208,6 +218,8 @@ const DASHBOARD_HOME_CANDIDATES = [
   "/dashboard/housekeeping",
   "/dashboard/blocks",
   "/dashboard/conflicts",
+  "/dashboard/leads",
+  "/dashboard/careers",
   "/dashboard/payments",
   "/dashboard/settings/villas",
   "/dashboard/settings/axis-rooms",

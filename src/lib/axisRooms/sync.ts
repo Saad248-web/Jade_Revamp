@@ -3,7 +3,8 @@ import { BookingModel } from "@/models/Booking";
 import { VillaModel } from "@/models/Villa";
 import { villaAxisRoomsMapping, isAxisRoomsMapped } from "./mapBooking";
 import { pushInventoryForRange } from "./inventory";
-import { pushDaywisePrice } from "./pricing";
+import { pushDaywisePrice, pushBulkPriceForRange } from "./pricing";
+import { pushBulkInventoryForRange } from "./inventory";
 import { pushCmRestrictions } from "./restrictions";
 import type { AxisRoomsPushResult } from "./types";
 import { addDays, todayIST } from "@/lib/bookingDates";
@@ -126,19 +127,44 @@ export async function syncVillaChannelState(villa: {
     restrictions?: AxisRoomsPushResult;
   } = {};
 
+  const hidden = villa.status === "hidden";
+  const notBookable = villa.bookable === false;
+
   if (villa.basePricePaise && villa.basePricePaise > 0 && mapping.ratePlanId) {
-    results.price = await pushDaywisePrice({
+    const doublePriceRupees = Math.round(villa.basePricePaise / 100);
+    results.price = await pushBulkPriceForRange({
       hotelId: mapping.propertyId!,
       roomId: mapping.roomTypeId!,
       ratePlanId: mapping.ratePlanId,
-      doublePriceRupees: Math.round(villa.basePricePaise / 100),
-      dates,
+      startDate: start,
+      endDate: end,
+      doublePriceRupees,
       auditTargetId: String(villa._id),
+    });
+    if (!results.price.ok) {
+      results.price = await pushDaywisePrice({
+        hotelId: mapping.propertyId!,
+        roomId: mapping.roomTypeId!,
+        ratePlanId: mapping.ratePlanId,
+        doublePriceRupees,
+        dates,
+        auditTargetId: String(villa._id),
+      });
+    }
+  }
+
+  if (!hidden && !notBookable) {
+    await pushBulkInventoryForRange({
+      hotelId: mapping.propertyId!,
+      roomId: mapping.roomTypeId!,
+      startDate: start,
+      endDate: end,
+      availability: 1,
+      auditTargetId: String(villa._id),
+      auditTargetType: "villa",
     });
   }
 
-  const hidden = villa.status === "hidden";
-  const notBookable = villa.bookable === false;
   if ((hidden || notBookable) && mapping.ratePlanId) {
     results.restrictions = await pushCmRestrictions({
       hotelId: mapping.propertyId!,

@@ -1,10 +1,6 @@
 import { expandNightDates } from "@/lib/bookingDates";
 import { auditLog } from "@/lib/audit/auditLog";
-import {
-  axisRoomsApiUrl,
-  getAxisRoomsAccessKey,
-  getAxisRoomsChannelId,
-} from "./config";
+import { postAxisRoomsApi } from "./http";
 import type { AxisRoomsPushResult } from "./types";
 
 type InventoryPushParams = {
@@ -18,55 +14,7 @@ type InventoryPushParams = {
   auditTargetType?: string;
 };
 
-async function postDaywiseInventory(body: Record<string, unknown>): Promise<{
-  ok: boolean;
-  error?: string;
-  status?: number;
-}> {
-  const accessKey = getAxisRoomsAccessKey();
-  const channelId = getAxisRoomsChannelId();
-  if (!accessKey || !channelId) {
-    return { ok: false, error: "Axis Rooms not configured" };
-  }
-
-  try {
-    const res = await fetch(axisRoomsApiUrl("/api/daywiseInventory"), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ accessKey, channelId, ...body }),
-      signal: AbortSignal.timeout(25_000),
-    });
-
-    if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      return {
-        ok: false,
-        error: `Inventory push failed (${res.status})`,
-        status: res.status,
-      };
-    }
-
-    const data = (await res.json().catch(() => ({}))) as {
-      status?: string;
-      message?: string;
-      errorCode?: string;
-    };
-    if (data.status?.toLowerCase() === "failure" || data.status === "Error") {
-      return {
-        ok: false,
-        error: data.message || `errorCode ${data.errorCode ?? "unknown"}`,
-      };
-    }
-    return { ok: true };
-  } catch (e) {
-    return {
-      ok: false,
-      error: e instanceof Error ? e.message : "Inventory push failed",
-    };
-  }
-}
-
-/** Push day-wise inventory for a date range (check-out exclusive). */
+/** API 1 — push day-wise inventory for a date range (check-out exclusive). */
 export async function pushInventoryForRange(
   params: InventoryPushParams,
 ): Promise<AxisRoomsPushResult> {
@@ -75,7 +23,7 @@ export async function pushInventoryForRange(
     return { ok: true };
   }
 
-  const result = await postDaywiseInventory({
+  const result = await postAxisRoomsApi("/api/daywiseInventory", {
     hotels: [
       {
         hotelId: params.hotelId,
@@ -93,7 +41,10 @@ export async function pushInventoryForRange(
   });
 
   await auditLog({
-    action: params.free === 0 ? "axisrooms.inventory.close" : "axisrooms.inventory.open",
+    action:
+      params.free === 0
+        ? "axisrooms.inventory.close"
+        : "axisrooms.inventory.open",
     targetType: params.auditTargetType ?? "booking",
     targetId: params.auditTargetId,
     metadata: {
@@ -101,6 +52,7 @@ export async function pushInventoryForRange(
       roomId: params.roomId,
       nights: nights.length,
       free: params.free,
+      api: 1,
       ok: result.ok,
       error: result.error,
     },
@@ -110,4 +62,50 @@ export async function pushInventoryForRange(
     return { ok: false, error: result.error };
   }
   return { ok: true };
+}
+
+/** API 2 — bulk inventory for a date range (whole-unit villa: availability 1 = open). */
+export async function pushBulkInventoryForRange(params: {
+  hotelId: string;
+  roomId: string;
+  startDate: string;
+  endDate: string;
+  /** Units available per night across the range (1 for single-villa inventory) */
+  availability: number;
+  auditTargetId?: string;
+  auditTargetType?: string;
+}): Promise<AxisRoomsPushResult> {
+  const result = await postAxisRoomsApi("/api/inventory", {
+    hotels: [
+      {
+        hotelId: params.hotelId,
+        rooms: [
+          {
+            roomId: params.roomId,
+            startDate: params.startDate,
+            endDate: params.endDate,
+            availability: params.availability,
+          },
+        ],
+      },
+    ],
+  });
+
+  await auditLog({
+    action: "axisrooms.inventory.bulk",
+    targetType: params.auditTargetType ?? "villa",
+    targetId: params.auditTargetId,
+    metadata: {
+      hotelId: params.hotelId,
+      roomId: params.roomId,
+      startDate: params.startDate,
+      endDate: params.endDate,
+      availability: params.availability,
+      api: 2,
+      ok: result.ok,
+      error: result.error,
+    },
+  });
+
+  return result.ok ? { ok: true } : { ok: false, error: result.error };
 }

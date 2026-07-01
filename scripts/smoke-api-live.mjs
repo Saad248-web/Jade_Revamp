@@ -121,7 +121,7 @@ async function main() {
 
   if (process.exitCode) {
     console.log(
-      "\nFix: npm run db:up → npm run db:migrate → demo flags false → npm run dev",
+      "\nFix: set MONGODB_URI + demo flags false → npm run dev",
     );
     process.exit(1);
   }

@@ -10,7 +10,7 @@ export const runtime = "nodejs";
 
 /** Export villa rows for Axis Rooms team CSV onboarding. */
 export async function GET(req: NextRequest) {
-  const auth = await requireRole(req, "/dashboard/settings/staah", "read");
+  const auth = await requireRole(req, "/dashboard/settings/axis-rooms", "read");
   if (!auth.ok) return auth.response;
 
   try {

@@ -9,6 +9,7 @@ import { revalidateVillaPublicPaths } from "@/lib/villas/revalidateVillaPaths";
 import { villaHideFromDirectoryFlag } from "@/lib/villas/villaVisibility";
 import { assessVillaDeletion } from "@/lib/villas/villaDeletion";
 import { assertPlainObject } from "@/lib/security/validateInput";
+import { deriveChannelState } from "@/lib/axisRooms/channelState";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -40,6 +41,12 @@ function serializeListVilla(v: {
     lawn?: string;
     villaArea?: string;
     pool?: string;
+  };
+  channelMode?: string;
+  axisRooms?: {
+    propertyId?: string;
+    roomTypeId?: string;
+    ratePlanId?: string;
   };
   content?: Record<string, unknown>;
 }) {
@@ -80,6 +87,8 @@ function serializeListVilla(v: {
       villaArea: stats.villaArea ?? null,
       pool: stats.pool ?? null,
     },
+    channelMode: v.channelMode ?? "website_only",
+    channelState: deriveChannelState(v),
   };
 }
 
@@ -172,6 +181,7 @@ export async function POST(req: NextRequest) {
       weddingTiers: [],
       addOnAvailability: [],
       portfolioSource: "custom",
+      channelMode: "website_only",
       settings: {
         taxPercent: 18,
         cleaningFeePaise: 0,
