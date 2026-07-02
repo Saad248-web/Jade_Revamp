@@ -73,6 +73,7 @@ export function DashFloatingSelect(
     options?: readonly string[];
     optionItems?: readonly { value: string; label: string }[];
     required?: boolean;
+    disabled?: boolean;
   },
 ) {
   const { id, className, ...rest } = props;

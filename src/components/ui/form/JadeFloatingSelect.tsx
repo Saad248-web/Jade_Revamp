@@ -27,6 +27,7 @@ export type JadeFloatingSelectProps = {
   options?: readonly string[];
   optionItems?: readonly { value: string; label: string }[];
   required?: boolean;
+  disabled?: boolean;
   invalid?: boolean;
   showError?: boolean;
   errorMessage?: string;
@@ -43,6 +44,7 @@ export default function JadeFloatingSelect({
   options = [],
   optionItems,
   required,
+  disabled,
   invalid = false,
   showError = false,
   errorMessage,
@@ -85,6 +87,7 @@ export default function JadeFloatingSelect({
         <select
           id={id}
           required={isRequired}
+          disabled={disabled}
           value={value}
           onFocus={() => setFocused(true)}
           onBlur={() => {

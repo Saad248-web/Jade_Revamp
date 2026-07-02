@@ -488,6 +488,7 @@ export function VillaEditModal({
                   >
                     <div className={dash.formGrid2}>
                       <DashFloatingSelect
+                        id="channelMode"
                         label="Channel mode"
                         value={villa.channelMode ?? "website_only"}
                         onChange={(v) =>
@@ -495,7 +496,7 @@ export function VillaEditModal({
                             channelMode: v as "website_only" | "channel_managed",
                           })
                         }
-                        options={[
+                        optionItems={[
                           { value: "website_only", label: "Website only (no OTA sync)" },
                           {
                             value: "channel_managed",

@@ -139,6 +139,27 @@ type OperationalDraft = {
   displayStats: Record<string, string>;
 };
 
+type ChannelMetaDraft = Pick<
+  AdminVillaDetail,
+  "channelMode" | "channelState" | "axisRooms"
+>;
+
+function emptyChannelMeta(): ChannelMetaDraft {
+  return {
+    channelMode: "website_only",
+    channelState: "website_only",
+    axisRooms: { propertyId: "", roomTypeId: "", ratePlanId: "" },
+  };
+}
+
+function channelMetaFromAdmin(v: AdminVillaDetail): ChannelMetaDraft {
+  return {
+    channelMode: v.channelMode,
+    channelState: v.channelState,
+    axisRooms: v.axisRooms,
+  };
+}
+
 function emptyOperational(): OperationalDraft {
   return {
     basePriceRupees: 0,
@@ -544,6 +565,7 @@ export function PropertyWizard({
   });
   const [content, setContent] = useState<ContentDraft>(emptyContent());
   const [operational, setOperational] = useState<OperationalDraft>(emptyOperational());
+  const [channelMeta, setChannelMeta] = useState<ChannelMetaDraft>(emptyChannelMeta());
   const [deletion, setDeletion] = useState<{
     allowed: boolean;
     reason?: string;
@@ -584,6 +606,7 @@ export function PropertyWizard({
         });
         setContent(contentFromAdmin(v.content));
         setOperational(operationalFromAdmin(v));
+        setChannelMeta(channelMetaFromAdmin(v));
       } catch (e) {
         if (!cancelled) {
           setError(e instanceof Error ? e.message : "Load failed");
@@ -1682,11 +1705,9 @@ export function PropertyWizard({
                         id: basics.slug,
                         portfolioSource: null,
                         notes: "",
-                        axisRooms: {
-                          propertyId: "",
-                          roomTypeId: "",
-                          ratePlanId: "",
-                        },
+                        axisRooms: channelMeta.axisRooms,
+                        channelMode: channelMeta.channelMode,
+                        channelState: channelMeta.channelState,
                         updatedAt: null,
                       }}
                       canWrite={canWrite}
