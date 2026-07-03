@@ -81,6 +81,7 @@ export async function POST(req: NextRequest) {
     await notifyNewLead({
       source: String(b.source),
       preview: `${parsed.preview}\n\nLead row id: ${id}`,
+      replyToEmail: parsed.email,
     });
 
     return NextResponse.json(

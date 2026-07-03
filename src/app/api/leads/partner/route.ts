@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIpFromHeaders, rateLimit } from "@/lib/rateLimit";
-import { notifyNewLead } from "@/lib/email/leadsNotifications";
+import { notifyPartnerLead } from "@/lib/email/partnerNotifications";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -198,22 +198,23 @@ export async function POST(req: NextRequest) {
       ip,
     });
 
-    const preview = [
-      `Source: Partner programme (multipart)`,
-      `Partner lead row: ${leadId}`,
-      `Name: ${fullName}`,
-      `Email: ${email}`,
-      `Phone: ${String(o.phoneNumber ?? "").slice(0, 40)}`,
-      `Company: ${String(o.company ?? "").slice(0, 200)}`,
+    const detailsText = [
       `Partnership selections: ${JSON.stringify(o.partnershipType ?? {})}`,
       `Property types: ${JSON.stringify(o.propertyType ?? {})}`,
       `Details: ${JSON.stringify(o.propertyDetails ?? {})}`,
-      `Photo files stored: ${files.length}`,
     ].join("\n");
 
-    await notifyNewLead({
-      source: "partner_programme",
-      preview,
+    await notifyPartnerLead({
+      partnerLeadId: leadId,
+      name: fullName,
+      email,
+      phone: String(o.phoneNumber ?? "").slice(0, 40),
+      company: String(o.company ?? "").slice(0, 200),
+      details: detailsText,
+      photos: photos.map((p) => ({
+        gridFsId: p.gridFsId,
+        filename: p.filename,
+      })),
     });
 
     return NextResponse.json(
@@ -231,7 +232,7 @@ export async function POST(req: NextRequest) {
         : "";
     const devDbHint =
       process.env.NODE_ENV !== "production" && code === "ECONNREFUSED"
-        ? "Database is not running. Start Postgres (npm run db:up) or set NEXT_PUBLIC_ENQUIRY_DEMO_MODE=true for demo submit."
+        ? "Database is not running. Set MONGODB_URI in .env.local — see NEEDS_FROM_USER.md."
         : null;
     return NextResponse.json(
       {

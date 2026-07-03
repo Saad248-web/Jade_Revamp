@@ -230,7 +230,7 @@ export function ManualBookingModal({
             <div className={dash.formGrid2}>
               <DashFloatingField
                 id="email"
-                label="Email"
+                label="Email (for booking confirmation)"
                 type="email"
                 value={email}
                 onChange={setEmail}

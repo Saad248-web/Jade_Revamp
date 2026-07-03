@@ -18,6 +18,7 @@ import {
   partnerFieldErrors,
   type PartnerFormValues,
 } from "@/lib/leadFormValidation";
+import { formatSubmitError } from "@/lib/submitErrorMessage";
 import {
   JadeFloatingField,
   JadeFloatingTextarea,
@@ -25,11 +26,6 @@ import {
 } from "@/components/ui/form";
 import PartnerImageUpload from "@/components/partner/PartnerImageUpload";
 import { JADE_FORM_WARN } from "@/lib/jadeFormTokens";
-import {
-  isPartnerDemoMode,
-  simulateEnquirySubmit,
-} from "@/lib/enquiryDemoMode";
-
 export default function PartnerOverlay() {
   const { isPartnerOverlayOpen, setPartnerOverlayOpen } = useAnimation();
   const [view, setView] = useState<"form" | "success">("form");
@@ -124,15 +120,6 @@ export default function PartnerOverlay() {
 
     setSubmitting(true);
     try {
-      if (isPartnerDemoMode()) {
-        await simulateEnquirySubmit();
-        selectedImages.forEach((img) => URL.revokeObjectURL(img.preview));
-        setSelectedImages([]);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-        setView("success");
-        return;
-      }
-
       const fd = new FormData();
       fd.append("meta", JSON.stringify(formData));
       for (const row of selectedImages) {
@@ -155,7 +142,7 @@ export default function PartnerOverlay() {
       setView("success");
     } catch (e) {
       setSubmitError(
-        e instanceof Error ? e.message : "Something went wrong. Try again.",
+        formatSubmitError(e, "Something went wrong. Try again."),
       );
     } finally {
       setSubmitting(false);

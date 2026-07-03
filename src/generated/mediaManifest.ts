@@ -3,7 +3,7 @@
 // Do not edit manually.
 
 export const MEDIA_MANIFEST = {
-  "generatedAt": "2026-07-02T05:43:31.732Z",
+  "generatedAt": "2026-07-02T15:05:02.568Z",
   "villasByFolder": {
     "Diamond": {
       "hero": [

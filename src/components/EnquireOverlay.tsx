@@ -11,7 +11,7 @@ import EnquiryDateRangePicker from "@/components/enquiry/EnquiryDateRangePicker"
 import { useAnimation } from "@/context/AnimationContext";
 import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
 import { formatPreferredDateRange } from "@/lib/enquiryDateRange";
-import { isEnquiryDemoMode, simulateEnquirySubmit } from "@/lib/enquiryDemoMode";
+import { formatSubmitError } from "@/lib/submitErrorMessage";
 import { getEnquiryOverlayVariant } from "@/lib/enquiryOverlayConfig";
 import { resolveEnquiryOkayReturnPath } from "@/lib/enquiryReturnPath";
 import { sanitizeGuestCountInput } from "@/lib/guestCountInput";
@@ -137,12 +137,6 @@ export default function EnquireOverlay() {
     setSubmitting(true);
     setSubmitError(null);
     try {
-      if (isEnquiryDemoMode()) {
-        await simulateEnquirySubmit();
-        setView("success");
-        return;
-      }
-
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -162,7 +156,7 @@ export default function EnquireOverlay() {
       setView("success");
     } catch (err) {
       setSubmitError(
-        err instanceof Error ? err.message : "Unable to send inquiry.",
+        formatSubmitError(err, "Unable to send inquiry."),
       );
     } finally {
       setSubmitting(false);
@@ -216,16 +210,6 @@ export default function EnquireOverlay() {
                     <p className="text-white/80 text-gh-body mb-6">
                       {enquiryVariant.description}
                     </p>
-                    {isEnquiryDemoMode() ? (
-                      <p className="text-white/45 text-xs mb-4 -mt-4">
-                        Demo mode: submission is not saved. Connect Postgres and
-                        set{" "}
-                        <span className="text-white/60">
-                          NEXT_PUBLIC_ENQUIRY_DEMO_MODE=false
-                        </span>{" "}
-                        to enable live leads.
-                      </p>
-                    ) : null}
 
                     <div className={JADE_OVERLAY_FORM_STACK_CLASS}>
                       <JadeFloatingField

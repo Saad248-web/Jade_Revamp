@@ -82,7 +82,7 @@ export default function BookingDetailsFormFields({
       <JadeFloatingField
         id={`${idPrefix}-email`}
         name="email"
-        label="Email"
+        label="Email (for booking confirmation)"
         type="email"
         autoComplete="email"
         value={details.email}

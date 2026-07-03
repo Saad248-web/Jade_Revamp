@@ -24,11 +24,8 @@ import {
   validateCareerResumeRequired,
 } from "@/lib/careerResumeValidation";
 import CareersApplyFormFields from "@/components/careers/CareersApplyFormFields";
-import {
-  isCareersDemoMode,
-  simulateCareersApplySubmit,
-} from "@/lib/careersDemoMode";
 import { isCareersApplyFormValid } from "@/lib/leadFormValidation";
+import { formatSubmitError } from "@/lib/submitErrorMessage";
 import {
   buildCareersApplyContext,
   type CareersApplyEntryPoint,
@@ -150,12 +147,6 @@ export default function CareersPage() {
     setApplySubmitting(true);
     setApplyError(null);
     try {
-      if (isCareersDemoMode()) {
-        await simulateCareersApplySubmit();
-        setIsSuccess(true);
-        return;
-      }
-
       const fd = new FormData();
       fd.append("jobId", applyContext.jobId);
       fd.append("jobTitle", applyContext.jobTitle);
@@ -180,7 +171,7 @@ export default function CareersPage() {
       setIsSuccess(true);
     } catch (err) {
       setApplyError(
-        err instanceof Error ? err.message : "Unable to submit application.",
+        formatSubmitError(err, "Unable to submit application."),
       );
     } finally {
       setApplySubmitting(false);
@@ -450,16 +441,6 @@ export default function CareersPage() {
                         shortly
                       </p>
 
-                      {isCareersDemoMode() ? (
-                        <p className="text-white/45 text-xs mb-4 -mt-2">
-                          Demo mode: application is not saved. Set{" "}
-                          <span className="text-white/60">
-                            NEXT_PUBLIC_CAREERS_DEMO_MODE=false
-                          </span>{" "}
-                          when Postgres is live.
-                        </p>
-                      ) : null}
-
                       <CareersApplyFormFields
                         idPrefix="apply-mobile"
                         fullName={apFullName}
@@ -533,16 +514,6 @@ export default function CareersPage() {
                         Share a few details. Our team will get back to you
                         shortly
                       </p>
-
-                      {isCareersDemoMode() ? (
-                        <p className="text-white/45 text-xs mb-6 -mt-4">
-                          Demo mode: application is not saved. Set{" "}
-                          <span className="text-white/60">
-                            NEXT_PUBLIC_CAREERS_DEMO_MODE=false
-                          </span>{" "}
-                          when Postgres is live.
-                        </p>
-                      ) : null}
 
                       <CareersApplyFormFields
                         idPrefix="apply-desktop"

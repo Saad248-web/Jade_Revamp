@@ -14,7 +14,7 @@ import type {
 import type { StayStatus } from "@/lib/bookings/types";
 import { connectDB } from "@/lib/db";
 import { queueBookingInventorySync } from "@/lib/axisRooms/sync";
-import { notifyBookingCreated } from "@/lib/email/bookingNotifications";
+import { notifyBookingConfirmed } from "@/lib/email/bookingNotifications";
 import { BookingModel } from "@/models/Booking";
 import { VillaBlockModel } from "@/models/VillaBlock";
 import { VillaModel } from "@/models/Villa";
@@ -292,7 +292,7 @@ export class MongoBookingStore implements BookingStore {
         .session(session)
         .lean();
       const guest = doc.guestDetails ?? {};
-      void notifyBookingCreated({
+      void notifyBookingConfirmed({
         bookingId: params.bookingId,
         villaName: villa?.name ?? "Villa",
         checkIn: doc.checkIn,
@@ -300,7 +300,10 @@ export class MongoBookingStore implements BookingStore {
         guestName: guest.name ?? "Guest",
         guestEmail: guest.email ?? "",
         guestPhone: guest.phone ?? "",
-        totalPrice: Math.round((doc.pricing?.totalPaise ?? 0) / 100),
+        guests: doc.guests,
+        totalPaise: doc.pricing?.totalPaise ?? 0,
+        paymentStatus: doc.payment?.status ?? "paid",
+        source: doc.source,
       });
 
       void queueBookingInventorySync(params.bookingId, "close");
@@ -395,6 +398,22 @@ export class MongoBookingStore implements BookingStore {
       doc.payment.status = waivePayment ? "not_applicable" : "external";
     }
     await doc.save();
+
+    const villa = await VillaModel.findById(doc.villaId).select("name").lean();
+    const guest = doc.guestDetails ?? {};
+    void notifyBookingConfirmed({
+      bookingId: id,
+      villaName: villa?.name ?? "Villa",
+      checkIn: doc.checkIn,
+      checkOut: doc.checkOut,
+      guestName: guest.name ?? "Guest",
+      guestEmail: guest.email ?? "",
+      guestPhone: guest.phone ?? "",
+      guests: doc.guests,
+      totalPaise: doc.pricing?.totalPaise ?? 0,
+      paymentStatus: doc.payment?.status ?? "external",
+      source: doc.source,
+    });
 
     await auditLog({
       action: "booking.confirm_hold",

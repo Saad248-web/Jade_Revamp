@@ -61,13 +61,6 @@ async function postMultipart(url, form) {
 async function main() {
   loadEnvLocal();
 
-  const enquiryDemo = process.env.NEXT_PUBLIC_ENQUIRY_DEMO_MODE?.trim().toLowerCase();
-  if (enquiryDemo !== "false" && enquiryDemo !== "0" && enquiryDemo !== "off") {
-    console.warn(
-      "Warning: NEXT_PUBLIC_ENQUIRY_DEMO_MODE is not false — UI may skip API; smoke still hits routes directly.\n",
-    );
-  }
-
   console.log(`Smoke tests → ${base}\n`);
 
   const leads = await postJson(`${base}/api/leads`, {

@@ -165,6 +165,10 @@ export async function POST(req: NextRequest) {
       applicantName: fullName,
       applicantEmail: email,
       applicationId: row.id,
+      phone,
+      company,
+      resumeGridFsId: gridFsId,
+      resumeFilename,
     });
 
     return NextResponse.json(

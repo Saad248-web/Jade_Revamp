@@ -68,23 +68,64 @@ Without `MONGODB_URI` on Vercel, dashboard APIs return **503** (blogs, SEO, book
 2. Seed users: `npm run db:seed:users` (rotate `SEED_USER_PASSWORD` before production).
 3. Seed villas: `node scripts/seed-villas.mjs`.
 4. Run migration once if upgrading: `node scripts/migrate-staah-to-axisrooms.mjs`.
-5. Book → pay → confirm via Razorpay test webhook.
+5. Book → pay → confirm (see **Payment gateway modes** below).
 
 ---
 
-## Transactional email (Resend) — bookings, leads, careers, conflicts
+## Payment gateway modes (temporary test → production)
+
+Three modes controlled by `PAYMENT_GATEWAY_MODE` and `NEXT_PUBLIC_PAYMENT_GATEWAY_MODE` (keep both in sync):
+
+| Mode | Env value | Pay button behaviour |
+|------|-----------|----------------------|
+| **Simulated test** | `test` | Instant confirm — no Razorpay keys needed. Updates dashboard bookings, calendar, payments, emails. **Local/dev only** (disabled on production deploy). |
+| **Razorpay sandbox** | `razorpay_test` | Opens Razorpay Checkout with **test** keys. Webhook confirms booking. |
+| **Production** | `production` | Live Razorpay keys + webhook. Use at go-live only. |
+
+### Local UAT (no Razorpay yet)
+
+```env
+PAYMENT_GATEWAY_MODE=test
+NEXT_PUBLIC_PAYMENT_GATEWAY_MODE=test
+```
+
+1. Book a villa → click **PAY … (TEST)** on the confirmation screen.
+2. Check `/dashboard/bookings`, `/dashboard/payments`, and calendar — status should be **confirmed**.
+
+### Switch to Razorpay sandbox
+
+```env
+PAYMENT_GATEWAY_MODE=razorpay_test
+NEXT_PUBLIC_PAYMENT_GATEWAY_MODE=razorpay_test
+RAZORPAY_KEY_ID=rzp_test_...
+RAZORPAY_KEY_SECRET=...
+NEXT_PUBLIC_PAYMENT_GATEWAY_KEY=rzp_test_...
+RAZORPAY_WEBHOOK_SECRET=...   # optional but needed for auto-confirm without manual step
+```
+
+### Revert to production (go-live)
+
+```env
+PAYMENT_GATEWAY_MODE=production
+NEXT_PUBLIC_PAYMENT_GATEWAY_MODE=production
+# Replace with live Razorpay keys + webhook secret on Vercel
+```
+
+**Smoke:** `npm run email:test` (email) · Book → Pay (test or Razorpay) · verify dashboard.
+
+---
+
+## Transactional email (Resend) — bookings, leads, careers, partner, conflicts
 
 Staff notifications use [Resend](https://resend.com). **SMS/WhatsApp is not wired** — email only.
 
 | Variable | Purpose |
 |----------|---------|
-| `RESEND_API_KEY` | Resend API key |
+| `RESEND_API_KEY` | Resend API key — **rotate immediately** if pasted in chat or committed; store only in `.env.local` / Vercel |
 | `RESEND_FROM` | Verified sender, e.g. `Jade Retreats <bookings@jaderetreats.com>` |
-| `BOOKING_NOTIFY_EMAIL` | Staff alert on new website booking (comma- or semicolon-separated, 2–3 addresses OK) |
-| `LEADS_NOTIFY_EMAIL` | Staff alert on enquiry form submit |
-| `CAREERS_NOTIFY_EMAIL` | Staff alert on careers application |
-| `CONFLICT_NOTIFY_EMAIL` | Booking conflict alert (falls back to `BOOKING_NOTIFY_EMAIL` if unset) |
-| `BOOKING_GUEST_CONFIRM_EMAIL` | Set `false` to skip guest confirmation email |
+| `STAFF_NOTIFY_EMAIL` | **Single staff inbox** — always `Enquiry@jaderetreats.com` (bookings, leads, careers, partner, conflicts) |
+
+Legacy `BOOKING_NOTIFY_EMAIL`, `LEADS_NOTIFY_EMAIL`, etc. are **ignored** — staff mail goes only to `STAFF_NOTIFY_EMAIL` / `Enquiry@jaderetreats.com`.
 
 **Dashboard CMS:** `/dashboard/leads` (enquiries + partner leads) · `/dashboard/careers` (applications + résumé download).
 
@@ -93,30 +134,44 @@ Without `RESEND_API_KEY`, forms still save to MongoDB; emails are skipped (logge
 ### Resend setup (one-time)
 
 1. Create account at [resend.com](https://resend.com).
-2. **Domains** → add `jaderetreats.com` (or your sending domain) → add DNS records → wait for verified.
-3. **API Keys** → create key → paste into `RESEND_API_KEY`.
-4. Set `RESEND_FROM` to an address on the verified domain.
-5. Set notify recipients (ops/concierge/HR as needed).
+2. **Domains** → `jaderetreats.com` — **verified** (DNS on Hostinger, Jul 2026).
+3. **API Keys** → create key → paste into `RESEND_API_KEY` on Vercel and local `.env.local` only.
+4. Set `RESEND_FROM=Jade Retreats <bookings@jaderetreats.com>` (verified domain).
+5. Set `STAFF_NOTIFY_EMAIL=Enquiry@jaderetreats.com` on Vercel production.
+
+### Temporary testing (before domain verified) — done
+
+`jaderetreats.com` is verified. Use production inboxes below (not `jade735pics@gmail.com` / `onboarding@resend.dev`).
 
 ### Example `.env.local` block (email)
 
 ```env
 RESEND_API_KEY=re_xxxxxxxx
 RESEND_FROM=Jade Retreats <bookings@jaderetreats.com>
-BOOKING_NOTIFY_EMAIL=bookings@jaderetreats.com,ops@jaderetreats.com
-LEADS_NOTIFY_EMAIL=concierge@jaderetreats.com,ops@jaderetreats.com
-CAREERS_NOTIFY_EMAIL=careers@jaderetreats.com,hr@jaderetreats.com
-CONFLICT_NOTIFY_EMAIL=bookings@jaderetreats.com,ops@jaderetreats.com
+STAFF_NOTIFY_EMAIL=Enquiry@jaderetreats.com
 # BOOKING_GUEST_CONFIRM_EMAIL=false
 ```
 
+### Smoke test
+
+```bash
+npm run email:test
+```
+
+Sends a simple HTML message to `STAFF_NOTIFY_EMAIL` (requires `RESEND_API_KEY` + verified domain).
+
 ### UAT checklist (email)
 
-- [ ] Submit enquiry from Weddings page → appears in `/dashboard/leads` with source **Wedding enquiry**
-- [ ] Submit Party Villas / Corporate enquiry → correct source tag (not generic)
-- [ ] Apply on Careers page → `/dashboard/careers` + staff email to `CAREERS_NOTIFY_EMAIL`
-- [ ] Create test booking → staff email to `BOOKING_NOTIFY_EMAIL`
-- [ ] Trigger OTA conflict (or simulate) → `CONFLICT_NOTIFY_EMAIL` receives alert
+- [ ] Rotate `RESEND_API_KEY` if it was ever exposed; set `STAFF_NOTIFY_EMAIL=Enquiry@jaderetreats.com` on Vercel
+- [ ] `npm run email:test` → message arrives at `Enquiry@jaderetreats.com`
+- [ ] Submit enquiry from Weddings page → `/dashboard/leads` + staff email to `Enquiry@jaderetreats.com`
+- [ ] Submit Party Villas / Corporate enquiry → correct source tag + staff inbox
+- [ ] Apply on Careers page → `/dashboard/careers` + staff email with résumé attachment
+- [ ] Partner programme submit → staff email with photo attachments
+- [ ] `/book` → pay → **one** staff email + **one** guest confirmation (not on pending create)
+- [ ] Manual hold → confirm in dashboard → staff + guest emails
+- [ ] OTA sandbox booking (confirmed) → staff email at `Enquiry@jaderetreats.com`
+- [ ] OTA conflict → staff conflict alert at `Enquiry@jaderetreats.com`
 
 ---
 
@@ -127,7 +182,7 @@ CONFLICT_NOTIFY_EMAIL=bookings@jaderetreats.com,ops@jaderetreats.com
 | Production `MONGODB_URI` | Cutover |
 | Production Razorpay keys + webhook secret | Cutover |
 | `CRON_SECRET` | Vercel/host cron (`vercel.json` ships daily schedules) |
-| `RESEND_API_KEY` + `RESEND_FROM` + notify emails | Before staff rely on alerts |
+| `RESEND_API_KEY` + `RESEND_FROM` + `STAFF_NOTIFY_EMAIL` | Before staff rely on alerts |
 | `AXIS_ROOMS_API_KEY` + villa mapping | Channel manager push (sandbox first) |
 | `AXIS_ROOMS_WEBHOOK_SECRET` | Inbound OTA webhooks (if Axis requires) |
 | `INDEXNOW_KEY` | Required in production (no default) |

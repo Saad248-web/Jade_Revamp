@@ -32,6 +32,11 @@ import type { BookingPricing } from "@/lib/bookings/types";
 import { villaListingPath } from "@/lib/appRoutes";
 import { useSafeBack } from "@/lib/safeBackNavigation";
 import { openRazorpayCheckout } from "@/lib/payments/razorpayCheckout";
+import { confirmTestPayment } from "@/lib/payments/confirmTestPayment";
+import {
+  getClientPaymentGatewayMode,
+  paymentModeLabel,
+} from "@/lib/payments/paymentGatewayMode";
 import { isVillaBookable, isVillaRecordBookable } from "@/lib/villaBooking";
 import {
   estimateAddOnPaise,
@@ -765,6 +770,7 @@ function SummaryBlock({
 ───────────────────────────────────────────────────────────────────── */
 function SuccessScreen({
   bookingId,
+  bookingToken,
   villaName,
   checkIn,
   checkOut,
@@ -775,6 +781,7 @@ function SuccessScreen({
   onClose,
 }: {
   bookingId: string;
+  bookingToken: string;
   villaName: string;
   checkIn: { month: number; day: number } | null;
   checkOut: { month: number; day: number } | null;
@@ -784,11 +791,34 @@ function SuccessScreen({
   guestPhone: string;
   onClose: () => void;
 }) {
+  const paymentMode = getClientPaymentGatewayMode();
+  const isTestPay = paymentMode === "test";
   const [payBusy, setPayBusy] = useState(false);
   const [payError, setPayError] = useState<string | null>(null);
   const [paidNote, setPaidNote] = useState<string | null>(null);
 
   const shortRef = bookingId.slice(0, 8).toUpperCase();
+
+  const handleTestPay = async () => {
+    setPayError(null);
+    setPayBusy(true);
+    try {
+      const result = await confirmTestPayment({ bookingId, bookingToken });
+      if (!result.ok) {
+        setPayError(result.error ?? "Test payment could not be confirmed.");
+        return;
+      }
+      setPaidNote(
+        result.alreadyConfirmed
+          ? "This booking is already confirmed. It should appear in the dashboard."
+          : "Payment confirmed (test mode). Your booking is live in the dashboard, calendar, and payments.",
+      );
+    } catch {
+      setPayError("Network error. Try again.");
+    } finally {
+      setPayBusy(false);
+    }
+  };
 
   const handleRazorpay = async () => {
     setPayError(null);
@@ -842,6 +872,8 @@ function SuccessScreen({
     }
   };
 
+  const handlePay = isTestPay ? handleTestPay : handleRazorpay;
+
   return (
     <div className="h-[100svh] bg-[#0B2C23] flex flex-col items-center justify-center px-6 text-center overflow-y-auto py-8" data-lenis-prevent>
       <motion.div
@@ -878,6 +910,15 @@ function SuccessScreen({
           </p>
         </div>
 
+        {paymentMode !== "production" && (
+          <p className="text-amber-200/80 text-[11px] font-manrope mb-3 px-2 py-2 border border-amber-400/25 bg-amber-400/5 w-full">
+            Payment gateway: <strong>{paymentModeLabel(paymentMode)}</strong>
+            {isTestPay
+              ? " — Pay confirms instantly (no Razorpay). Set PAYMENT_GATEWAY_MODE=production at go-live."
+              : " — Use Razorpay test card details. Switch to production before launch."}
+          </p>
+        )}
+
         {paidNote ? (
           <p className="text-emerald-300/90 text-gh-label font-manrope mb-5">
             {paidNote}
@@ -885,8 +926,9 @@ function SuccessScreen({
         ) : (
           <>
             <p className="text-white/50 text-gh-label font-manrope mb-2.5">
-              Pay {formatPaise(payPaise)} now with Razorpay, or we'll
-              follow up on the phone or email you provided.
+              {isTestPay
+                ? `Pay ${formatPaise(payPaise)} (test mode) to confirm this booking in the dashboard.`
+                : `Pay ${formatPaise(payPaise)} now with Razorpay, or we'll follow up on the phone or email you provided.`}
             </p>
             {payError && (
               <p className="text-amber-200/90 text-gh-label font-manrope mb-3 px-1">
@@ -898,11 +940,17 @@ function SuccessScreen({
               width="form"
               withArrow={false}
               disabled={payBusy}
-              onClick={handleRazorpay}
+              onClick={handlePay}
               className="mb-2.5"
             >
               {payBusy && <Loader2 className="w-4 h-4 animate-spin" />}
-              {payBusy ? "OPENING…" : `PAY ${formatPaise(payPaise)}`}
+              {payBusy
+                ? isTestPay
+                  ? "CONFIRMING…"
+                  : "OPENING…"
+                : isTestPay
+                  ? `PAY ${formatPaise(payPaise)} (TEST)`
+                  : `PAY ${formatPaise(payPaise)}`}
             </PrimaryButton>
           </>
         )}
@@ -966,6 +1014,7 @@ function BookPageContent() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [bookingResult, setBookingResult] = useState<{
     id: string;
+    bookingToken: string;
     depositPaise: number;
     totalPaise: number;
   } | null>(null);
@@ -1196,8 +1245,14 @@ function BookPageContent() {
         return;
       }
 
+      if (!data.bookingId || !data.bookingToken) {
+        setSubmitError(data.error ?? "Something went wrong. Please try again.");
+        return;
+      }
+
       setBookingResult({
         id: data.bookingId,
+        bookingToken: data.bookingToken,
         depositPaise: data.payment?.depositPaise ?? data.pricing?.totalPaise ?? 0,
         totalPaise: data.pricing?.totalPaise ?? 0,
       });
@@ -1225,6 +1280,7 @@ function BookPageContent() {
     return (
       <SuccessScreen
         bookingId={bookingResult.id}
+        bookingToken={bookingResult.bookingToken}
         villaName={selectedVilla?.name ?? "Jade Villa"}
         checkIn={dateRange.checkIn}
         checkOut={dateRange.checkOut}

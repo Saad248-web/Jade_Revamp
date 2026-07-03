@@ -89,7 +89,7 @@ function BookingSuccessContent() {
           </div>
 
           <p className="text-white/30 font-manrope text-gh-label">
-            A confirmation will be sent to your registered email & phone.
+            A confirmation email will be sent to the address you provided once payment is complete.
           </p>
 
           {/* CTAs */}

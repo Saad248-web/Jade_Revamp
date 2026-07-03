@@ -1,0 +1,79 @@
+/**
+ * Payment gateway mode — switch between simulated test, Razorpay sandbox, and production.
+ *
+ * | Mode            | Env value       | Use when |
+ * |-----------------|-----------------|----------|
+ * | Simulated test  | `test`          | Local UAT without Razorpay keys — Pay confirms instantly |
+ * | Razorpay sandbox| `razorpay_test` | Razorpay test keys + optional webhook |
+ * | Production      | `production`    | Live Razorpay keys at go-live |
+ *
+ * Revert to production: set both vars to `production` and use live Razorpay keys.
+ * See NEEDS_FROM_USER.md → "Payment gateway modes".
+ */
+
+export type PaymentGatewayMode = "test" | "razorpay_test" | "production";
+
+const MODE_ALIASES: Record<string, PaymentGatewayMode> = {
+  test: "test",
+  simulate: "test",
+  simulated: "test",
+  mock: "test",
+  razorpay_test: "razorpay_test",
+  razorpay: "razorpay_test",
+  sandbox: "razorpay_test",
+  staging: "razorpay_test",
+  production: "production",
+  prod: "production",
+  live: "production",
+};
+
+function parseMode(raw: string | undefined): PaymentGatewayMode | null {
+  if (!raw) return null;
+  return MODE_ALIASES[raw.trim().toLowerCase()] ?? null;
+}
+
+function razorpayKeysConfigured(): boolean {
+  return !!(
+    process.env.RAZORPAY_KEY_ID?.trim() &&
+    process.env.RAZORPAY_KEY_SECRET?.trim()
+  );
+}
+
+/** Server-side effective mode (defaults to `test` when Razorpay keys are missing). */
+export function getPaymentGatewayMode(): PaymentGatewayMode {
+  const explicit = parseMode(process.env.PAYMENT_GATEWAY_MODE);
+  if (explicit) return explicit;
+  if (razorpayKeysConfigured()) {
+    return process.env.NODE_ENV === "production" ? "production" : "razorpay_test";
+  }
+  return "test";
+}
+
+/** Simulated Pay — never enabled on production deploys. */
+export function isSimulatedPaymentEnabled(): boolean {
+  if (getPaymentGatewayMode() !== "test") return false;
+  if (process.env.NODE_ENV === "production") return false;
+  return true;
+}
+
+/** Client-visible mode (NEXT_PUBLIC_PAYMENT_GATEWAY_MODE mirrors PAYMENT_GATEWAY_MODE). */
+export function getClientPaymentGatewayMode(): PaymentGatewayMode {
+  const explicit =
+    parseMode(process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_MODE) ??
+    parseMode(process.env.PAYMENT_GATEWAY_MODE);
+  if (explicit) return explicit;
+  const publicKey = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_KEY?.trim();
+  if (publicKey) return "razorpay_test";
+  return "test";
+}
+
+export function paymentModeLabel(mode: PaymentGatewayMode): string {
+  switch (mode) {
+    case "test":
+      return "Simulated test";
+    case "razorpay_test":
+      return "Razorpay sandbox";
+    case "production":
+      return "Production";
+  }
+}

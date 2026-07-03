@@ -19,8 +19,8 @@ import clsx from "clsx";
 import EnquiryDateRangePicker from "@/components/enquiry/EnquiryDateRangePicker";
 import { STICKY_BOOKING_BAR_FOOTER_PAD_CLASS } from "@/lib/layoutSpacing";
 import { formatPreferredDateRange } from "@/lib/enquiryDateRange";
+import { formatSubmitError } from "@/lib/submitErrorMessage";
 import { OCCASION_OPTIONS } from "@/lib/enquiryFormOptions";
-import { isEnquiryDemoMode, simulateEnquirySubmit } from "@/lib/enquiryDemoMode";
 import { sanitizeGuestCountInput } from "@/lib/guestCountInput";
 import { sanitizePhoneDigitsInput } from "@/lib/phoneNumberInput";
 import {
@@ -104,22 +104,6 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
     setSubmitting(true);
     setSubmitError(null);
     try {
-      if (isEnquiryDemoMode()) {
-        await simulateEnquirySubmit();
-        setIsSuccess(true);
-        setFormData({
-          fullName: "",
-          phoneNumber: "",
-          noOfGuests: "",
-          occasionType: "",
-          queries: "",
-        });
-        setCheckIn(null);
-        setCheckOut(null);
-        setConsent(false);
-        return;
-      }
-
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -153,7 +137,7 @@ export default function Footer({ stickyBottomBar = false }: FooterProps) {
       setConsent(false);
     } catch (err) {
       setSubmitError(
-        err instanceof Error ? err.message : "Unable to send inquiry.",
+        formatSubmitError(err, "Unable to send inquiry."),
       );
     } finally {
       setSubmitting(false);

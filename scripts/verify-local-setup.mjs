@@ -79,37 +79,8 @@ async function main() {
         "Add MongoDB Atlas or local replica-set URI — see NEEDS_FROM_USER.md",
       );
     }
-    const enquiryDemo = env.NEXT_PUBLIC_ENQUIRY_DEMO_MODE?.toLowerCase();
-    const careersDemo = env.NEXT_PUBLIC_CAREERS_DEMO_MODE?.toLowerCase();
-    if (
-      enquiryDemo === "false" ||
-      enquiryDemo === "0" ||
-      enquiryDemo === "off"
-    ) {
-      pass("Live enquiry API", "NEXT_PUBLIC_ENQUIRY_DEMO_MODE=false");
-    } else {
-      fail(
-        "Live enquiry API",
-        "Set NEXT_PUBLIC_ENQUIRY_DEMO_MODE=false in .env.local",
-      );
-    }
-    if (
-      careersDemo === "false" ||
-      careersDemo === "0" ||
-      careersDemo === "off" ||
-      enquiryDemo === "false" ||
-      enquiryDemo === "0" ||
-      enquiryDemo === "off"
-    ) {
-      pass("Live careers API", "demo off (explicit or follows enquiry)");
-    } else if (careersDemo === "true" || careersDemo === "1" || careersDemo === "on") {
-      fail("Live careers API", "Set NEXT_PUBLIC_CAREERS_DEMO_MODE=false for Phase 2");
-    } else {
-      fail(
-        "Live careers API",
-        "Defaults to demo; set NEXT_PUBLIC_CAREERS_DEMO_MODE=false or enquiry false",
-      );
-    }
+    pass("Live enquiry API", "Forms POST /api/leads");
+    pass("Live careers API", "Forms POST /api/careers/apply");
   } else {
     fail(".env.local exists", "Copy .env.example → .env.local (or use repo template)");
   }

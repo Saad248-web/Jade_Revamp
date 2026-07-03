@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBookingStore } from "@/lib/bookings/mongoStore";
 import { isBookingRef } from "@/lib/bookings/ids";
+import { getPaymentGatewayMode } from "@/lib/payments/paymentGatewayMode";
 import { getClientIpFromHeaders } from "@/lib/rateLimit";
 import { persistentRateLimit } from "@/lib/rateLimit/persistentRateLimit";
 import { readJsonBody, SafeJsonError } from "@/lib/security/safeJson";
@@ -20,6 +21,17 @@ export async function POST(req: NextRequest) {
     });
     if (!rl.ok) {
       return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
+    if (getPaymentGatewayMode() === "test") {
+      return NextResponse.json(
+        {
+          configured: false,
+          error:
+            "Simulated test mode — use Pay (TEST) on the booking screen or set PAYMENT_GATEWAY_MODE=razorpay_test",
+        },
+        { status: 501 },
+      );
     }
 
     const keyId = process.env.RAZORPAY_KEY_ID?.trim();

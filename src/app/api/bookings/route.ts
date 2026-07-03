@@ -6,7 +6,6 @@ import { generateBookingToken } from "@/lib/bookings/ids";
 import { computeBookingPricing } from "@/lib/bookings/pricing";
 import { findVillaBySlug, getBookingStore } from "@/lib/bookings/mongoStore";
 import { isMongoConfigured } from "@/lib/db";
-import { notifyBookingCreated } from "@/lib/email/bookingNotifications";
 import { getClientIpFromHeaders } from "@/lib/rateLimit";
 import { persistentRateLimit } from "@/lib/rateLimit/persistentRateLimit";
 import { readJsonBody, SafeJsonError } from "@/lib/security/safeJson";
@@ -179,17 +178,6 @@ export async function POST(req: NextRequest) {
       bookingToken,
       expiresAt,
       ip,
-    });
-
-    void notifyBookingCreated({
-      bookingId: record.id,
-      villaName: villa.name,
-      checkIn: input.checkIn,
-      checkOut,
-      guestName: input.fullName,
-      guestEmail: input.email,
-      guestPhone: input.phone,
-      totalPrice: Math.round(pricing.totalPaise / 100),
     });
 
     return NextResponse.json(

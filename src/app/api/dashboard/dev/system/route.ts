@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { requireRole } from "@/lib/auth/requireRole";
+import { getPaymentGatewayMode } from "@/lib/payments/paymentGatewayMode";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -53,6 +54,7 @@ export async function GET(req: NextRequest) {
     },
     features: {
       bookingsStoreFallback: process.env.BOOKINGS_STORE_FALLBACK === "true",
+      paymentGatewayMode: getPaymentGatewayMode(),
     },
   });
 }

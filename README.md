@@ -117,7 +117,7 @@ npm run db:seed        # Villa catalogue
 npm run dev            # http://localhost:3000
 ```
 
-**Phase 2 (live leads + careers):** set `NEXT_PUBLIC_ENQUIRY_DEMO_MODE=false` and `NEXT_PUBLIC_CAREERS_DEMO_MODE=false` in `.env.local`, restart dev, then:
+**API smoke test** (requires `MONGODB_URI` in `.env.local`):
 
 ```bash
 npm run api:smoke      # Expect 201 from /api/leads and /api/careers/apply
@@ -126,7 +126,7 @@ npm run api:smoke      # Expect 201 from /api/leads and /api/careers/apply
 Verify local setup:
 
 ```bash
-npm run setup:check    # Node, deps, .env.local, DB port, demo flags
+npm run setup:check    # Node, deps, .env.local, DB port
 npm run setup:guide    # Opens docs/local-dev-setup-guide.html
 ```
 
@@ -151,14 +151,12 @@ Full template: [`.env.example`](.env.example).
 | `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` | Payments | `POST /api/payments/razorpay-order` |
 | `RAZORPAY_WEBHOOK_SECRET` | Webhook | HMAC verify on `POST /api/webhooks/razorpay` |
 | `NEXT_PUBLIC_PAYMENT_GATEWAY_KEY` | Checkout UI | Razorpay Checkout on `/book/success` |
-| `RESEND_API_KEY` + `RESEND_FROM` | Optional email | Lead/career/booking notifications |
-| `LEADS_NOTIFY_EMAIL` / `CAREERS_NOTIFY_EMAIL` / `BOOKING_NOTIFY_EMAIL` | Optional | Inbox routing |
+| `RESEND_API_KEY` + `RESEND_FROM` + `STAFF_NOTIFY_EMAIL` | Optional email | Lead/career/booking notifications |
+| `PAYMENT_GATEWAY_MODE` | Payments | `test` = simulated Pay local; `razorpay_test` / `production` for Razorpay |
 | `NEXT_PUBLIC_GA_ID` | Optional | `GoogleAnalytics` in providers |
 | `NEXT_PUBLIC_SENTRY_DSN` | Optional | Sentry client + server |
 | `INDEXNOW_KEY` / `INDEXNOW_HOST` / `INDEXNOW_API_SECRET` | IndexNow | Production Bearer on `POST /api/indexnow` |
 | `NEXT_PUBLIC_API_BASE_URL` | Future | Reserved in `lib/api.ts` for external API switch |
-| `NEXT_PUBLIC_ENQUIRY_DEMO_MODE` | Phase 2 | `false` = Enquire + Footer POST `/api/leads` |
-| `NEXT_PUBLIC_CAREERS_DEMO_MODE` | Phase 2 | `false` = Careers Apply POST `/api/careers/apply` |
 
 ---
 
