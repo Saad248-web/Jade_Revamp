@@ -4,14 +4,8 @@ import { MAX_RESUME_ATTACHMENT_BYTES } from "@/lib/email/attachmentLimits";
 import { renderEmail } from "@/lib/email/renderEmail";
 import { sendTransactionalEmail } from "@/lib/email/resendOutbound";
 import { getStaffNotifyRecipients } from "@/lib/email/staffRecipients";
+import { getSiteBaseUrl } from "@/lib/siteUrl";
 import { readFromGridFS } from "@/lib/storage/gridfs";
-
-function siteBase(): string {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    "https://jaderetreats.com"
-  );
-}
 
 export async function notifyCareerApplication(params: {
   jobId: string;
@@ -52,7 +46,7 @@ export async function notifyCareerApplication(params: {
       applicantEmail: params.applicantEmail,
       phone: params.phone ?? "",
       company: params.company,
-      dashboardUrl: `${siteBase()}/dashboard/careers`,
+      dashboardUrl: `${getSiteBaseUrl()}/dashboard/careers`,
       resumeAttached,
     }),
   );

@@ -9,6 +9,7 @@ import {
   firstStaffRecipient,
   getStaffNotifyRecipients,
 } from "@/lib/email/staffRecipients";
+import { getSiteBaseUrl } from "@/lib/siteUrl";
 
 export type BookingConfirmedEmailParams = {
   bookingId: string;
@@ -23,13 +24,6 @@ export type BookingConfirmedEmailParams = {
   paymentStatus: string;
   source?: string;
 };
-
-function siteBase(): string {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    "https://jaderetreats.com"
-  );
-}
 
 function formatInrFromPaise(paise: number): string {
   const rupees = Math.round(paise / 100);
@@ -63,7 +57,7 @@ export async function notifyBookingConfirmed(
   const sourceLabel = formatBookingSource(params.source).label;
   const totalInr = formatInrFromPaise(params.totalPaise);
   const payLabel = paymentStatusLabel(params.paymentStatus);
-  const dashboardUrl = `${siteBase()}/dashboard/bookings/${params.bookingId}`;
+  const dashboardUrl = `${getSiteBaseUrl()}/dashboard/bookings/${params.bookingId}`;
   const guestEmail = params.guestEmail?.trim().toLowerCase() ?? "";
 
   if (staffTo.length > 0) {
@@ -131,7 +125,7 @@ export async function notifyBookingConflict(params: {
   const to = getStaffNotifyRecipients();
   if (to.length === 0) return;
 
-  const conflictsUrl = `${siteBase()}/dashboard/conflicts`;
+  const conflictsUrl = `${getSiteBaseUrl()}/dashboard/conflicts`;
   const rendered = await renderEmail(
     createElement(BookingConflictNotificationEmail, {
       ...params,

@@ -4,13 +4,7 @@ import { leadSourceLabel } from "@/lib/leads/sourceLabels";
 import { renderEmail } from "@/lib/email/renderEmail";
 import { sendTransactionalEmail } from "@/lib/email/resendOutbound";
 import { getStaffNotifyRecipients } from "@/lib/email/staffRecipients";
-
-function siteBase(): string {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    "https://jaderetreats.com"
-  );
-}
+import { getSiteBaseUrl } from "@/lib/siteUrl";
 
 function parseLeadPreview(preview: string): {
   name: string;
@@ -57,7 +51,7 @@ export async function notifyNewLead(params: {
       phone: parsed.phone,
       preferredDate: parsed.preferredDate || undefined,
       message: parsed.message,
-      dashboardUrl: `${siteBase()}/dashboard/leads`,
+      dashboardUrl: `${getSiteBaseUrl()}/dashboard/leads`,
     }),
   );
 

@@ -7,14 +7,8 @@ import {
 import { renderEmail } from "@/lib/email/renderEmail";
 import { sendTransactionalEmail } from "@/lib/email/resendOutbound";
 import { getStaffNotifyRecipients } from "@/lib/email/staffRecipients";
+import { getSiteBaseUrl } from "@/lib/siteUrl";
 import { readFromGridFS } from "@/lib/storage/gridfs";
-
-function siteBase(): string {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    "https://jaderetreats.com"
-  );
-}
 
 type PartnerPhotoRef = {
   gridFsId: string;
@@ -53,7 +47,7 @@ export async function notifyPartnerLead(params: {
       details: params.details,
       photoCount: params.photos.length,
       photosAttached: attachments.length,
-      dashboardUrl: `${siteBase()}/dashboard/leads`,
+      dashboardUrl: `${getSiteBaseUrl()}/dashboard/leads`,
     }),
   );
 
