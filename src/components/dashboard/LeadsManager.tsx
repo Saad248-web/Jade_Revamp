@@ -2,18 +2,19 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
-import { Inbox, Loader2 } from "lucide-react";
+import { Inbox } from "lucide-react";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import { dash } from "@/lib/dashboard/dashboardClasses";
 import { roleCanWrite, type Role } from "@/lib/auth/permissions";
+import { summarizeLeadPayload } from "@/lib/leads/presentation";
 import { LEAD_SOURCE_LABELS } from "@/lib/leads/sourceLabels";
 import { DataTable, type DataTableColumn } from "./DataTable";
 import { DashStatusChip } from "./form";
 import { EmptyState } from "./EmptyState";
+import { LeadDetailView } from "./leads/LeadDetailView";
 import { DashboardListToolbar } from "./ui/DashboardListToolbar";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
 import { DashboardTabBar } from "./ui/DashboardTabBar";
-import { DashboardPanel } from "./DashboardPanel";
 
 export type LeadRow = {
   id: string;
@@ -45,6 +46,8 @@ export function LeadsManager() {
 
   const [tab, setTab] = useState<TabKind>("enquiry");
   const [sourceFilter, setSourceFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [query, setQuery] = useState("");
   const [rows, setRows] = useState<LeadRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -123,6 +126,22 @@ export function LeadsManager() {
     [],
   );
 
+  const displayRows = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    return rows.filter((row) => {
+      if (statusFilter !== "all" && row.status !== statusFilter) return false;
+      if (!needle) return true;
+      const summary = summarizeLeadPayload(row.payload, row.kind).join(" ");
+      return (
+        row.name.toLowerCase().includes(needle) ||
+        row.sourceLabel.toLowerCase().includes(needle) ||
+        (row.email?.toLowerCase().includes(needle) ?? false) ||
+        (row.phone?.toLowerCase().includes(needle) ?? false) ||
+        summary.toLowerCase().includes(needle)
+      );
+    });
+  }, [query, rows, statusFilter]);
+
   const columns: DataTableColumn<LeadRow>[] = [
     {
       key: "when",
@@ -160,6 +179,24 @@ export function LeadsManager() {
       ),
     },
     {
+      key: "details",
+      header: "Details",
+      cell: (r) => {
+        const summary = summarizeLeadPayload(r.payload, r.kind);
+        return summary.length ? (
+          <div className="space-y-1">
+            {summary.map((item) => (
+              <p key={item} className="text-xs leading-5 text-white/70">
+                {item}
+              </p>
+            ))}
+          </div>
+        ) : (
+          <span className="text-xs text-white/35">Open lead to view details</span>
+        );
+      },
+    },
+    {
       key: "status",
       header: "Status",
       cell: (r) => (
@@ -187,10 +224,31 @@ export function LeadsManager() {
     <DashboardModuleFrame
       toolbar={
         <DashboardListToolbar
-          meta={`${rows.length} lead${rows.length === 1 ? "" : "s"}`}
+          meta={`${displayRows.length} of ${rows.length} lead${rows.length === 1 ? "" : "s"}`}
           onRefresh={load}
           refreshing={loading}
-        />
+        >
+          <div className={dash.toolbarSegment}>
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search name, source, date, guests…"
+              className={`${dash.inputCompact} min-w-[220px]`}
+            />
+          </div>
+          <div className={dash.toolbarSegment}>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className={`${dash.inputCompact} min-w-[140px]`}
+            >
+              <option value="all">All statuses</option>
+              <option value="new">New</option>
+              <option value="contacted">Contacted</option>
+              <option value="closed">Closed</option>
+            </select>
+          </div>
+        </DashboardListToolbar>
       }
       error={error}
       loading={loading}
@@ -218,16 +276,20 @@ export function LeadsManager() {
         />
       ) : null}
 
-      {rows.length === 0 ? (
+      {displayRows.length === 0 ? (
         <EmptyState
           icon={<Inbox />}
-          title="No leads yet"
-          description="Enquiry form submissions from the public site appear here with their page tag (Wedding, Party villas, etc.)."
+          title={rows.length === 0 ? "No leads yet" : "No matching leads"}
+          description={
+            rows.length === 0
+              ? "Enquiry form submissions from the public site appear here with their page tag (Wedding, Party villas, etc.)."
+              : "Try a different search term or reset the status filter."
+          }
         />
       ) : (
         <DataTable
           columns={columns}
-          rows={rows}
+          rows={displayRows}
           rowKey={(r) => `${r.kind}-${r.id}`}
           caption="Leads and enquiries"
           dense
@@ -235,67 +297,17 @@ export function LeadsManager() {
       )}
 
       {selected ? (
-        <div className="fixed inset-0 z-[var(--dash-z-modal)] flex items-end justify-center bg-black/70 p-4 sm:items-center">
-          <DashboardPanel pad className="max-h-[85dvh] w-full max-w-lg overflow-y-auto">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)]">
-                  {selected.sourceLabel}
-                </p>
-                <h3 className="font-philosopher text-xl text-white">{selected.name}</h3>
-                <p className="text-sm text-white/55">
-                  {selected.email ?? selected.phone ?? "No contact"}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelected(null)}
-                className={`${dash.btn} ${dash.btnGhost} ${dash.btnDense}`}
-              >
-                Close
-              </button>
-            </div>
-
-            <pre className="mt-4 max-h-40 overflow-auto rounded-sm bg-black/40 p-3 font-mono text-xs text-white/70">
-              {JSON.stringify(selected.payload, null, 2)}
-            </pre>
-
-            {canWrite ? (
-              <div className="mt-4 space-y-3">
-                <label className="block text-xs font-bold uppercase tracking-widest text-white/40">
-                  Status
-                  <select
-                    value={statusDraft}
-                    onChange={(e) => setStatusDraft(e.target.value)}
-                    className={`${dash.inputCompact} mt-1 w-full`}
-                  >
-                    <option value="new">New</option>
-                    <option value="contacted">Contacted</option>
-                    <option value="closed">Closed</option>
-                  </select>
-                </label>
-                <label className="block text-xs font-bold uppercase tracking-widest text-white/40">
-                  Staff notes
-                  <textarea
-                    value={notesDraft}
-                    onChange={(e) => setNotesDraft(e.target.value)}
-                    rows={4}
-                    className={`${dash.inputCompact} mt-1 w-full`}
-                  />
-                </label>
-                <button
-                  type="button"
-                  disabled={saving}
-                  onClick={() => void saveLead()}
-                  className={`${dash.btn} ${dash.btnAccent} w-full`}
-                >
-                  {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                  Save
-                </button>
-              </div>
-            ) : null}
-          </DashboardPanel>
-        </div>
+        <LeadDetailView
+          lead={selected}
+          notesDraft={notesDraft}
+          statusDraft={statusDraft}
+          canWrite={canWrite}
+          saving={saving}
+          onNotesChange={setNotesDraft}
+          onStatusChange={setStatusDraft}
+          onSave={() => void saveLead()}
+          onClose={() => setSelected(null)}
+        />
       ) : null}
     </DashboardModuleFrame>
   );

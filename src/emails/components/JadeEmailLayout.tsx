@@ -1,4 +1,5 @@
 import {
+  Link,
   Body,
   Container,
   Head,
@@ -10,6 +11,7 @@ import {
   Text,
 } from "@react-email/components";
 import type { ReactNode } from "react";
+import { getSiteBaseUrl } from "@/lib/siteUrl";
 import { emailColors, emailFonts } from "./emailTokens";
 
 type JadeEmailLayoutProps = {
@@ -26,6 +28,8 @@ export function JadeEmailLayout({
   eyebrow = "Jade Retreats",
   children,
 }: JadeEmailLayoutProps) {
+  const siteBaseUrl = getSiteBaseUrl();
+
   return (
     <Html>
       <Head />
@@ -41,9 +45,22 @@ export function JadeEmailLayout({
             <Heading style={heading}>{title}</Heading>
             <Section style={content}>{children}</Section>
             <Hr style={hr} />
+            <Text style={policyLinks}>
+              <Link href={`${siteBaseUrl}/privacy-policy`} style={footerLink}>
+                Privacy Policy
+              </Link>{" "}
+              ·{" "}
+              <Link href={`${siteBaseUrl}/terms-conditions`} style={footerLink}>
+                Terms &amp; Conditions
+              </Link>{" "}
+              ·{" "}
+              <Link href={`${siteBaseUrl}/refund-policy`} style={footerLink}>
+                Refund Policy
+              </Link>
+            </Text>
             <Text style={footer}>
               Jade Hospitainment ·{" "}
-              <a href="https://jaderetreats.com" style={footerLink}>
+              <a href={siteBaseUrl} style={footerLink}>
                 jaderetreats.com
               </a>
             </Text>
@@ -135,6 +152,13 @@ const footer = {
   color: emailColors.textMuted,
   fontSize: "13px",
   margin: "0 0 6px",
+};
+
+const policyLinks = {
+  color: emailColors.textMuted,
+  fontSize: "12px",
+  lineHeight: "1.6",
+  margin: "0 0 10px",
 };
 
 const footerLink = {

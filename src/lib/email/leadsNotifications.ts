@@ -39,7 +39,9 @@ function parseLeadPreview(preview: string): {
     preferredDate: pick("Preferred date:"),
     occasion,
     enquiryPage: pick("Enquiry page:"),
-    interests: normalizeBlob(pick("Interests:")),
+    interests: normalizeBlob(
+      pick("Travel preferences:") || pick("Interests:"),
+    ),
     message: messageParts.length ? messageParts.join("\n") : preview,
   };
 }

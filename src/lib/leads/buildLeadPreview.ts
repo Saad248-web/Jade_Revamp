@@ -4,6 +4,7 @@ import {
   leadSourceLabel,
   type LeadSource,
 } from "./sourceLabels";
+import { formatTravelPreferences } from "./presentation";
 
 function normalizeEmail(s: unknown): string | null {
   if (typeof s !== "string") return null;
@@ -43,6 +44,7 @@ export function validateAndPreviewLead(body: Record<string, unknown>): LeadCaptu
 
   if (isGeneralLikeLeadSource(source)) {
     const email = normalizeEmail(o.email);
+    const travelPreferences = formatTravelPreferences(o.travelFormat).join(", ");
 
     if (source === "rathaa_enquiry") {
       if (!email) {
@@ -71,7 +73,7 @@ export function validateAndPreviewLead(body: Record<string, unknown>): LeadCaptu
       `Phone: ${String(o.phoneNumber ?? "").slice(0, 40)}`,
       `Guests: ${String(o.guests ?? "").slice(0, 80)}`,
       `Preferred date: ${String(o.preferredDate ?? "").slice(0, 120)}`,
-      `Interests: ${JSON.stringify(o.travelFormat ?? {})}`,
+      ...(travelPreferences ? [`Travel preferences: ${travelPreferences}`] : []),
       `Occasion: ${String(o.occasionType ?? o.occasion ?? "").slice(0, 200)}`,
       `Special requests: ${String(o.specialRequests ?? o.queries ?? o.notes ?? "").slice(0, 2000)}`,
       `Enquiry page: ${String(o.enquiryPage ?? "").slice(0, 200)}`,
