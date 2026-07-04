@@ -73,7 +73,8 @@ export function validateAndPreviewLead(body: Record<string, unknown>): LeadCaptu
       `Preferred date: ${String(o.preferredDate ?? "").slice(0, 120)}`,
       `Interests: ${JSON.stringify(o.travelFormat ?? {})}`,
       `Occasion: ${String(o.occasionType ?? o.occasion ?? "").slice(0, 200)}`,
-      `Special requests: ${String(o.specialRequests ?? "").slice(0, 2000)}`,
+      `Special requests: ${String(o.specialRequests ?? o.queries ?? o.notes ?? "").slice(0, 2000)}`,
+      `Enquiry page: ${String(o.enquiryPage ?? "").slice(0, 200)}`,
     ].join("\n");
 
     return { ok: true, email, preview };
@@ -94,6 +95,7 @@ export function validateAndPreviewLead(body: Record<string, unknown>): LeadCaptu
     `Events: ${JSON.stringify(o.events ?? [])}`,
     `Setting: ${JSON.stringify(o.setting ?? [])}`,
     `Notes: ${String(o.notes ?? o.specialRequests ?? "").slice(0, 2000)}`,
+    `Enquiry page: ${String(o.enquiryPage ?? "").slice(0, 200)}`,
   ].join("\n");
 
   return { ok: true, email, preview };

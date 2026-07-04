@@ -10,7 +10,11 @@ function parseLeadPreview(preview: string): {
   name: string;
   email: string;
   phone: string;
+  guests: string;
   preferredDate: string;
+  occasion: string;
+  enquiryPage: string;
+  interests: string;
   message: string;
 } {
   const lines = preview.split("\n");
@@ -18,14 +22,24 @@ function parseLeadPreview(preview: string): {
     const line = lines.find((l) => l.startsWith(prefix));
     return line ? line.slice(prefix.length).trim() : "";
   };
+  const normalizeBlob = (value: string) =>
+    value && value !== "{}" && value !== "[]" ? value : "";
   const special = pick("Special requests:");
   const occasion = pick("Occasion:");
-  const messageParts = [occasion, special].filter(Boolean);
+  const notes = pick("Notes:");
+  const services = pick("Services:");
+  const events = pick("Events:");
+  const setting = pick("Setting:");
+  const messageParts = [special || notes, services, events, setting].filter(Boolean);
   return {
     name: pick("Name:"),
     email: pick("Email:").replace("(not provided)", "").trim(),
     phone: pick("Phone:"),
+    guests: pick("Guests:"),
     preferredDate: pick("Preferred date:"),
+    occasion,
+    enquiryPage: pick("Enquiry page:"),
+    interests: normalizeBlob(pick("Interests:")),
     message: messageParts.length ? messageParts.join("\n") : preview,
   };
 }
@@ -49,7 +63,11 @@ export async function notifyNewLead(params: {
       name: parsed.name,
       email: parsed.email,
       phone: parsed.phone,
+      guests: parsed.guests || undefined,
       preferredDate: parsed.preferredDate || undefined,
+      occasion: parsed.occasion || undefined,
+      enquiryPage: parsed.enquiryPage || undefined,
+      interests: parsed.interests || undefined,
       message: parsed.message,
       dashboardUrl: `${getSiteBaseUrl()}/dashboard/leads`,
     }),

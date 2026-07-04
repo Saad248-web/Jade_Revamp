@@ -240,7 +240,9 @@ export class MongoBookingStore implements BookingStore {
       throw e;
     }
 
-    return withTransaction(async (session) => {
+    let emailPayload: Parameters<typeof notifyBookingConfirmed>[0] | null = null;
+
+    const result = await withTransaction(async (session) => {
       const existingBefore = await BookingModel.findById(params.bookingId).session(
         session,
       );
@@ -292,7 +294,7 @@ export class MongoBookingStore implements BookingStore {
         .session(session)
         .lean();
       const guest = doc.guestDetails ?? {};
-      void notifyBookingConfirmed({
+      emailPayload = {
         bookingId: params.bookingId,
         villaName: villa?.name ?? "Villa",
         checkIn: doc.checkIn,
@@ -301,15 +303,38 @@ export class MongoBookingStore implements BookingStore {
         guestEmail: guest.email ?? "",
         guestPhone: guest.phone ?? "",
         guests: doc.guests,
+        adults: doc.adults,
+        children: doc.children,
+        pets: doc.pets,
+        bookingType: doc.bookingType,
+        paymentPlan: doc.payment?.paymentPlan,
+        notes: doc.notes,
+        addOns: doc.addOns,
+        basePaise: doc.pricing?.basePaise,
+        extraPaxPaise: doc.pricing?.extraPaxPaise,
+        eventPaise: doc.pricing?.eventPaise,
+        addOnPaise: doc.pricing?.addOnPaise,
+        taxPaise: doc.pricing?.taxPaise,
+        quoteOnlyAddOnIds: doc.pricing?.quoteOnlyAddOns,
         totalPaise: doc.pricing?.totalPaise ?? 0,
         paymentStatus: doc.payment?.status ?? "paid",
         source: doc.source,
-      });
+      };
 
       void queueBookingInventorySync(params.bookingId, "close");
 
       return { ok: true };
     });
+
+    if (result.ok && !result.alreadyConfirmed && emailPayload) {
+      try {
+        await notifyBookingConfirmed(emailPayload);
+      } catch (err) {
+        console.error("[booking confirm email]", err);
+      }
+    }
+
+    return result;
   }
 
   async expirePending(now: Date): Promise<number> {
@@ -401,19 +426,36 @@ export class MongoBookingStore implements BookingStore {
 
     const villa = await VillaModel.findById(doc.villaId).select("name").lean();
     const guest = doc.guestDetails ?? {};
-    void notifyBookingConfirmed({
-      bookingId: id,
-      villaName: villa?.name ?? "Villa",
-      checkIn: doc.checkIn,
-      checkOut: doc.checkOut,
-      guestName: guest.name ?? "Guest",
-      guestEmail: guest.email ?? "",
-      guestPhone: guest.phone ?? "",
-      guests: doc.guests,
-      totalPaise: doc.pricing?.totalPaise ?? 0,
-      paymentStatus: doc.payment?.status ?? "external",
-      source: doc.source,
-    });
+    try {
+      await notifyBookingConfirmed({
+        bookingId: id,
+        villaName: villa?.name ?? "Villa",
+        checkIn: doc.checkIn,
+        checkOut: doc.checkOut,
+        guestName: guest.name ?? "Guest",
+        guestEmail: guest.email ?? "",
+        guestPhone: guest.phone ?? "",
+        guests: doc.guests,
+        adults: doc.adults,
+        children: doc.children,
+        pets: doc.pets,
+        bookingType: doc.bookingType,
+        paymentPlan: doc.payment?.paymentPlan,
+        notes: doc.notes,
+        addOns: doc.addOns,
+        basePaise: doc.pricing?.basePaise,
+        extraPaxPaise: doc.pricing?.extraPaxPaise,
+        eventPaise: doc.pricing?.eventPaise,
+        addOnPaise: doc.pricing?.addOnPaise,
+        taxPaise: doc.pricing?.taxPaise,
+        quoteOnlyAddOnIds: doc.pricing?.quoteOnlyAddOns,
+        totalPaise: doc.pricing?.totalPaise ?? 0,
+        paymentStatus: doc.payment?.status ?? "external",
+        source: doc.source,
+      });
+    } catch (err) {
+      console.error("[booking hold confirm email]", err);
+    }
 
     await auditLog({
       action: "booking.confirm_hold",

@@ -1,6 +1,7 @@
 import { Text } from "@react-email/components";
 import { EmailButton } from "./components/EmailButton";
 import { EmailDetailTable } from "./components/EmailDetailTable";
+import { EmailMessageBox } from "./components/EmailMessageBox";
 import { JadeEmailLayout } from "./components/JadeEmailLayout";
 import { emailColors } from "./components/emailTokens";
 
@@ -13,9 +14,15 @@ export type StaffBookingNotificationProps = {
   guestEmail: string;
   guestPhone: string;
   guests?: number;
+  guestMix?: string;
   totalInr: string;
   paymentStatus: string;
+  paymentPlan?: string;
   sourceLabel: string;
+  bookingType?: "stay" | "day_out" | "event";
+  notes?: string;
+  addOnsText?: string;
+  pricingText?: string;
   dashboardUrl?: string;
 };
 
@@ -35,8 +42,11 @@ export function StaffBookingNotificationEmail(
     rows.push({ label: "Guests", value: String(props.guests) });
   }
   rows.push(
+    ...(props.guestMix ? [{ label: "Guest mix", value: props.guestMix }] : []),
+    ...(props.bookingType ? [{ label: "Booking type", value: props.bookingType.replace(/_/g, " ") }] : []),
     { label: "Total", value: props.totalInr },
     { label: "Payment", value: props.paymentStatus },
+    ...(props.paymentPlan ? [{ label: "Payment plan", value: props.paymentPlan }] : []),
     { label: "Source", value: props.sourceLabel },
   );
 
@@ -51,6 +61,15 @@ export function StaffBookingNotificationEmail(
         reach the guest.
       </Text>
       <EmailDetailTable rows={rows} />
+      {props.addOnsText ? (
+        <EmailMessageBox label="Selected add-ons" children={props.addOnsText} />
+      ) : null}
+      {props.pricingText ? (
+        <EmailMessageBox label="Pricing breakdown" children={props.pricingText} />
+      ) : null}
+      {props.notes ? (
+        <EmailMessageBox label="Guest notes" children={props.notes} />
+      ) : null}
       {props.dashboardUrl ? (
         <>
           <Text style={ctaHint}>Full folio, payments, and notes in dashboard.</Text>

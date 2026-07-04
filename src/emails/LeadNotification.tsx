@@ -10,6 +10,10 @@ export type LeadNotificationProps = {
   name: string;
   email: string;
   phone: string;
+  guests?: string;
+  occasion?: string;
+  enquiryPage?: string;
+  interests?: string;
   message: string;
   preferredDate?: string;
   dashboardUrl?: string;
@@ -21,8 +25,17 @@ export function LeadNotificationEmail(props: LeadNotificationProps) {
     { label: "Email", value: props.email },
     { label: "Phone", value: props.phone },
   ];
+  if (props.guests) {
+    rows.push({ label: "Guest count", value: props.guests });
+  }
   if (props.preferredDate) {
     rows.push({ label: "Preferred dates", value: props.preferredDate });
+  }
+  if (props.occasion) {
+    rows.push({ label: "Occasion", value: props.occasion });
+  }
+  if (props.enquiryPage) {
+    rows.push({ label: "Enquiry page", value: props.enquiryPage });
   }
 
   return (
@@ -36,6 +49,9 @@ export function LeadNotificationEmail(props: LeadNotificationProps) {
         email address from your inbox.
       </Text>
       <EmailDetailTable rows={rows} />
+      {props.interests ? (
+        <EmailMessageBox label="Travel preferences" children={props.interests} />
+      ) : null}
       <EmailMessageBox label="Message & details" children={props.message} />
       {props.dashboardUrl ? (
         <>

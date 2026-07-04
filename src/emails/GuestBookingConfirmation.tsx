@@ -1,5 +1,6 @@
 import { Text } from "@react-email/components";
 import { EmailDetailTable } from "./components/EmailDetailTable";
+import { EmailMessageBox } from "./components/EmailMessageBox";
 import { JadeEmailLayout } from "./components/JadeEmailLayout";
 import { emailColors } from "./components/emailTokens";
 
@@ -10,7 +11,12 @@ export type GuestBookingConfirmationProps = {
   checkIn: string;
   checkOut: string;
   paymentStatus: string;
+  paymentPlan?: string;
   totalInr: string;
+  guestMix?: string;
+  notes?: string;
+  addOnsText?: string;
+  pricingText?: string;
   contactPhone?: string;
   mapsUrl?: string;
   cancellationNote?: string;
@@ -38,10 +44,21 @@ export function GuestBookingConfirmationEmail(
           { label: "Property", value: props.villaName },
           { label: "Check-in", value: props.checkIn },
           { label: "Check-out", value: props.checkOut },
+          ...(props.guestMix ? [{ label: "Guest mix", value: props.guestMix }] : []),
           { label: "Payment", value: props.paymentStatus },
+          ...(props.paymentPlan ? [{ label: "Payment plan", value: props.paymentPlan }] : []),
           { label: "Total", value: props.totalInr },
         ]}
       />
+      {props.addOnsText ? (
+        <EmailMessageBox label="Selected add-ons" children={props.addOnsText} />
+      ) : null}
+      {props.pricingText ? (
+        <EmailMessageBox label="Pricing breakdown" children={props.pricingText} />
+      ) : null}
+      {props.notes ? (
+        <EmailMessageBox label="Special notes" children={props.notes} />
+      ) : null}
       {props.mapsUrl ? (
         <Text style={linkLine}>
           <strong>Directions:</strong>{" "}

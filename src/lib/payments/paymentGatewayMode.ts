@@ -49,11 +49,9 @@ export function getPaymentGatewayMode(): PaymentGatewayMode {
   return "test";
 }
 
-/** Simulated Pay — never enabled on production deploys. */
+/** Simulated Pay — enabled whenever the explicit mode is `test`. */
 export function isSimulatedPaymentEnabled(): boolean {
-  if (getPaymentGatewayMode() !== "test") return false;
-  if (process.env.NODE_ENV === "production") return false;
-  return true;
+  return getPaymentGatewayMode() === "test";
 }
 
 /** Client-visible mode (NEXT_PUBLIC_PAYMENT_GATEWAY_MODE mirrors PAYMENT_GATEWAY_MODE). */

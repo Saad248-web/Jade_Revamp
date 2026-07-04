@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Jade PMS + Axis Rooms — Status Summary</title>
+<title>Jade PMS + Axis Rooms — Status & Dashboard Audit</title>
 <style>
   :root {
     --ink: #1a1c1e;
@@ -68,6 +68,7 @@
     white-space: nowrap;
   }
   .b-ready { background: var(--ready-bg); color: var(--ready); }
+  .b-partial { background: #dbeafe; color: #1d4ed8; }
   .b-blocked { background: var(--blocked-bg); color: var(--blocked); }
   .b-todo { background: var(--todo-bg); color: var(--todo); }
   .b-na { background: var(--na-bg); color: var(--na); border: 1px dashed #ccc; }
@@ -122,256 +123,125 @@
 </head>
 <body>
 
-<h1>Jade PMS + Axis Rooms — Status Summary</h1>
-<p class="meta">Generated 2026-07-01 · Jade_ReVamp · Simplified overview (not a code audit)</p>
+<h1>Jade PMS + Axis Rooms — Status &amp; Dashboard Audit</h1>
+<p class="meta">Updated 2026-07-04 · Based on dashboard audit, security audit, and current Axis Rooms code paths</p>
 
 <div class="callout">
-  <strong>Bottom line:</strong> Jade PMS is <strong>ready for daily operations</strong> without Axis Rooms (direct bookings, staff holds, calendar, folio, booking records).
-  Axis Rooms integration is <strong>built in code</strong> but <strong>not live</strong> until Axis provides credentials, property CSV onboarding, and registers your inbound webhook URL.
-  <strong>Dashboard villa saves</strong> (Quick Edit or Full Editor) already update the <strong>public website</strong> immediately; when Axis keys are configured, the same save also triggers <strong>API 6 daywise price push</strong> and <strong>API 15 restrictions</strong> for mapped properties.
+  <strong>Executive summary:</strong> The Axis Rooms surface inside the Jade dashboard is <strong>functionally built but still in partial rollout</strong>.
+  The audit confirms that <strong>12 of 15 Axis APIs are implemented in Jade</strong>, including outbound inventory/price sync, inbound webhook intake, pull reconciliation, connected OTAs, verify tools, and per-OTA pause/resume.
+  The dashboard itself is operational; the remaining work is <strong>Axis-side mapping, webhook registration, scheduler setup, and sandbox / production UAT</strong>.
 </div>
 
 <div class="legend">
-  <span><span class="badge b-ready">Ready</span> Built &amp; works (or works without Axis)</span>
-  <span><span class="badge b-blocked">Blocked</span> Code ready — needs Axis credentials / UAT</span>
-  <span><span class="badge b-todo">Not integrated</span> Optional or future Jade work</span>
-  <span><span class="badge b-na">N/A</span> Axis does not provide this API</span>
+  <span><span class="badge b-ready">Ready</span> Implemented and working in Jade</span>
+  <span><span class="badge b-partial">Partial</span> Implemented in Jade but still needs UAT / rollout inputs</span>
+  <span><span class="badge b-blocked">Blocked</span> Waiting on Axis-side action or deployment setup</span>
+  <span><span class="badge b-todo">Pending</span> Optional / not yet integrated</span>
+  <span><span class="badge b-na">N/A</span> Not supported by Axis API design</span>
 </div>
 
-<h2>1. Jade PMS — what is done</h2>
+<h2>1. Axis-related dashboard surfaces audited</h2>
+<table>
+<tr><th>Dashboard / route</th><th>Status</th><th>Audit note</th></tr>
+<tr><td><strong>Axis Rooms settings</strong><br/><code>/dashboard/settings/axis-rooms</code></td><td><span class="badge b-partial">Partial</span></td><td>UI exists for mapping, CSV export, connected OTAs, verify tools, per-OTA pause/resume, sync log, and API 9 webhook copy. Still needs live sandbox / production validation.</td></tr>
+<tr><td><strong>Villa settings + Quick Edit</strong><br/><code>/dashboard/settings/villas</code></td><td><span class="badge b-ready">Ready</span></td><td>Per-villa <code>channelState</code> and Axis IDs control whether outbound sync is skipped (<code>website_only</code>) or active (<code>channel_managed</code>).</td></tr>
+<tr><td><strong>Bookings, blocks, holds</strong><br/><code>/dashboard</code> · <code>/dashboard/bookings</code> · <code>/dashboard/blocks</code></td><td><span class="badge b-ready">Ready</span></td><td>Direct bookings, manual blocks, and releases trigger Axis inventory close/open for mapped villas.</td></tr>
+<tr><td><strong>Conflicts queue</strong><br/><code>/dashboard/conflicts</code></td><td><span class="badge b-ready">Ready</span></td><td>OTA-vs-direct overlaps are surfaced to staff, marked as conflict, and can trigger conflict emails.</td></tr>
+<tr><td><strong>Webhook intake</strong><br/><code>POST /api/webhooks/axisrooms</code></td><td><span class="badge b-ready">Ready</span></td><td>POST-only endpoint validates <code>accessKey</code>, parses payloads, upserts bookings, and logs outcomes.</td></tr>
+<tr><td><strong>Retry + pull reconciliation</strong><br/><code>/api/cron/axisrooms-retry</code> · <code>/api/cron/axisrooms-pull</code></td><td><span class="badge b-partial">Partial</span></td><td>Code is present, but live reliability depends on <code>CRON_SECRET</code> and a real scheduler.</td></tr>
+</table>
+
+<h2>2. Axis API coverage — audited status</h2>
+<table>
+<tr><th>API</th><th>Purpose</th><th>Status</th><th>Current note</th></tr>
+<tr><td>1</td><td>Daywise Inventory</td><td><span class="badge b-partial">Implemented</span></td><td>Used for confirmed bookings, holds, blocks, and releases. Needs mapped property UAT in Axis sandbox.</td></tr>
+<tr><td>2</td><td>Bulk Inventory</td><td><span class="badge b-partial">Implemented</span></td><td>Opens a 90-day window for mapped, channel-managed villas.</td></tr>
+<tr><td>3</td><td>Block Channel</td><td><span class="badge b-ready">Implemented</span></td><td>Available from dashboard channel control once OTA IDs are known.</td></tr>
+<tr><td>4</td><td>Unblock Channel</td><td><span class="badge b-ready">Implemented</span></td><td>Resumes selected OTAs through dashboard control.</td></tr>
+<tr><td>5</td><td>Fetch OTA Availability</td><td><span class="badge b-ready">Implemented</span></td><td>Used in the verify panel to compare OTA inventory.</td></tr>
+<tr><td>6</td><td>Daywise Price</td><td><span class="badge b-partial">Implemented</span></td><td>Fallback price push when bulk price update fails.</td></tr>
+<tr><td>7</td><td>Bulk Price Update</td><td><span class="badge b-partial">Implemented</span></td><td>Primary 90-day price sync on mapped villa save.</td></tr>
+<tr><td>8</td><td>Fetch OTA Rates</td><td><span class="badge b-ready">Implemented</span></td><td>Used in the verify panel to compare OTA prices.</td></tr>
+<tr><td>9</td><td>Bookings to Client (Webhook)</td><td><span class="badge b-partial">Implemented</span></td><td>Endpoint is live, but registration and live sample validation are still pending.</td></tr>
+<tr><td>10</td><td>No-Show Enable</td><td><span class="badge b-todo">Pending</span></td><td>Optional. Not integrated in the current Jade rollout.</td></tr>
+<tr><td>11</td><td>Update MLOS</td><td><span class="badge b-todo">Pending</span></td><td>Optional. Not integrated in the current Jade rollout.</td></tr>
+<tr><td>12</td><td>Pull Booking</td><td><span class="badge b-ready">Implemented</span></td><td>Nightly reconcile route exists as a backstop for missed webhooks.</td></tr>
+<tr><td>13</td><td>Get Connected OTAs</td><td><span class="badge b-ready">Implemented</span></td><td>Displayed in Axis Rooms settings.</td></tr>
+<tr><td>14</td><td>Update OTA Credentials</td><td><span class="badge b-todo">Pending</span></td><td>Not part of the current Jade flow.</td></tr>
+<tr><td>15</td><td>CM Restrictions</td><td><span class="badge b-partial">Implemented</span></td><td>Open/close restrictions are wired; final validation is production-only per Axis guidance.</td></tr>
+</table>
+
+<h2>3. Current sandbox setup and UAT result</h2>
+<table>
+<tr><th>Item</th><th>Value / status</th></tr>
+<tr><td>PMS name</td><td><code>Jade Host PMS</code></td></tr>
+<tr><td>Website under test</td><td><code>https://jade-revamp.vercel.app</code></td></tr>
+<tr><td>Sandbox base URL</td><td><code>https://sandbox2.axisrooms.com</code></td></tr>
+<tr><td>channelId / pmsId</td><td><code>227</code></td></tr>
+<tr><td>Sandbox property</td><td><code>hotelId 12123</code></td></tr>
+<tr><td>Test room / rate plan</td><td><code>1 / 1</code> or <code>2 / 2</code> (needs Axis confirmation)</td></tr>
+<tr><td>API 9 webhook URL</td><td><code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code><br/><small>POST-only endpoint. Browser GET returns 405 by design.</small></td></tr>
+<tr><td>Current UAT blocker</td><td><span class="badge b-blocked">Blocked</span> Sandbox returned <code>hotelId 12123 not mapped in Channel Manager</code>.</td></tr>
+</table>
+
 <div class="grid-2">
   <div class="card">
-    <h3><span class="badge b-ready">Ready</span> Operations (no Axis required)</h3>
+    <h3><span class="badge b-ready">Confirmed working in Jade</span></h3>
     <ul>
-      <li>Calendar + occupancy grid</li>
-      <li>Staff manual booking → <strong>on hold</strong> (external payment)</li>
-      <li>Booking Records list + filters</li>
-      <li>Booking folio + full activity history</li>
-      <li>Manual blocks (owner holds)</li>
-      <li>Housekeeping stay status</li>
-      <li>Conflict queue UI</li>
-      <li>Public <code>/book</code> + Razorpay direct bookings</li>
-      <li>Villa wizard, Quick Edit, visibility, pricing</li>
-      <li><strong>Dashboard → public site</strong> — Mongo merge; descriptions, rates, content on <code>/villas</code></li>
+      <li>Axis settings panel loads mappings, connection metadata, connected OTAs, verify tools, and sync logs.</li>
+      <li>Outbound sync code exists for inventory, price, and restrictions on mapped villas.</li>
+      <li>Inbound webhook route accepts POST payloads, validates <code>accessKey</code>, and writes booking changes into Jade.</li>
+      <li>Conflict handling, audit logging, and staff email notifications are wired for OTA overlaps.</li>
     </ul>
   </div>
   <div class="card">
-    <h3><span class="badge b-blocked">Blocked on Axis</span> Channel manager sync</h3>
+    <h3><span class="badge b-blocked">What still blocks full rollout</span></h3>
     <ul>
-      <li>OTA inventory close/open (API 1) — code wired, needs keys</li>
-      <li>OTA inbound bookings (API 9) — receiver built, needs registration</li>
-      <li>Price push on villa save (API 6) — fires on <code>PATCH /api/dashboard/villas/[slug]</code> when price/status/bookable changes</li>
-      <li>Hidden / not bookable → OTA restrictions (API 15)</li>
-      <li>Retry cron <code>/api/cron/axisrooms-retry</code></li>
-      <li>Axis Rooms settings + CSV export for onboarding</li>
-      <li>Per-villa mapping in Quick Edit (property / room / rate IDs)</li>
+      <li>Sandbox hotel mapping in Axis Channel Manager is not active for the test property.</li>
+      <li>API 9 still needs registration from Axis and live confirmed / cancelled sample payloads.</li>
+      <li>Scheduled retry / pull protection requires <code>CRON_SECRET</code> plus Vercel Pro or an external cron for sub-daily jobs.</li>
+      <li>Portfolio villas should stay <code>website_only</code> until each mapping passes UAT and is intentionally flipped to <code>channel_managed</code>.</li>
     </ul>
   </div>
 </div>
 
-<h2>2. Villa save → website + Axis (what happens today)</h2>
+<h2>4. Resolved from older audit gaps</h2>
 <table>
-<tr><th>Trigger</th><th>Public website (no Axis keys needed)</th><th>Axis Rooms (needs keys + mapping)</th></tr>
-<tr>
-  <td>Staff saves villa in <strong>Quick Edit</strong> or <strong>Full Editor</strong></td>
-  <td><span class="badge b-ready">Live</span> — Mongo updated; <code>/villas</code>, detail page, <code>/book</code> revalidated (~1 min API cache)</td>
-  <td><span class="badge b-blocked">Blocked</span> until <code>AXIS_ROOMS_*</code> env + <code>Villa.axisRooms</code> IDs set</td>
-</tr>
-<tr>
-  <td>Price / status / bookable change</td>
-  <td>Listing card “₹… onwards” and Book vs Enquire CTA update</td>
-  <td>API 6 price push + API 15 restriction sync via <code>syncVillaChannelState</code></td>
-</tr>
-<tr>
-  <td>Razorpay booking confirmed</td>
-  <td>Booking folio + night locks</td>
-  <td>API 1 inventory close on booked nights</td>
-</tr>
-<tr>
-  <td>Manual block / staff hold</td>
-  <td>Calendar + availability API</td>
-  <td>API 1 <code>free: 0</code> on blocked dates</td>
-</tr>
-</table>
-<p>Portfolio catalogue villas (Diamond, Magnolia, Jade 735, …) are edited in dashboard but <strong>not deletable</strong> — use Hidden visibility. See <code>jade-dashboard-client-audit.html</code> for the full editor map.</p>
-
-<h2>3. What still needs to be done (Jade)</h2>
-<table>
-<tr><th>Item</th><th>Priority</th><th>Notes</th></tr>
-<tr><td>Live UAT with Axis sandbox</td><td><span class="badge b-blocked">Blocked</span></td><td>Cannot test real OTA push until credentials + mapped property</td></tr>
-<tr><td>API 12 Pull Booking reconciliation cron</td><td><span class="badge b-ready">Done</span></td><td><code>/api/cron/axisrooms-pull</code> daily · needs <code>CRON_SECRET</code></td></tr>
-<tr><td>API 3/4 per-OTA blockChannel</td><td><span class="badge b-ready">Done</span></td><td>Dashboard pause/resume in Axis Rooms settings</td></tr>
-<tr><td>channelMode (website_only vs channel_managed)</td><td><span class="badge b-ready">Done</span></td><td>Quick Edit · gates all outbound sync</td></tr>
-<tr><td>API 5 / 8 read-back (verify OTA state)</td><td><span class="badge b-ready">Done</span></td><td>Verify panel in Axis Rooms settings</td></tr>
-<tr><td>API 13 connected OTAs list</td><td><span class="badge b-ready">Done</span></td><td>Shown in Axis Rooms settings</td></tr>
-<tr><td>API 2 / 7 bulk inventory &amp; price</td><td><span class="badge b-ready">Done</span></td><td>Sandbox smoke: <code>npm run axis:test</code></td></tr>
-<tr><td>Real API 9 payload hardening</td><td><span class="badge b-blocked">Blocked</span></td><td>Need confirmed + cancelled samples from Axis</td></tr>
-<tr><td>Extra-pax price convention with Axis</td><td><span class="badge b-blocked">Blocked</span></td><td>Confirm Double vs Extra-person fields (doc §8)</td></tr>
+<tr><th>Earlier concern</th><th>Current status</th></tr>
+<tr><td>Inbound webhook auth and method handling</td><td><span class="badge b-ready">Resolved</span> Access key check is timing-safe and the route is intentionally POST-only.</td></tr>
+<tr><td>Inbound create / modify / cancel booking flow</td><td><span class="badge b-ready">Resolved</span> Webhook events now upsert bookings, update modified stays, and cancel / release nights when needed.</td></tr>
+<tr><td>Villa lookup for inbound OTA bookings</td><td><span class="badge b-ready">Resolved</span> Inbound processing looks up villas by <code>axisRooms.propertyId</code>.</td></tr>
+<tr><td>Webhook idempotency</td><td><span class="badge b-ready">Resolved</span> Axis events are recorded in <code>WebhookEvent</code> using an event key before processing duplicates.</td></tr>
+<tr><td>Direct-vs-OTA collision handling</td><td><span class="badge b-ready">Resolved</span> Night locks and conflict status prevent silent double-hosting; staff see conflicts in queue.</td></tr>
 </table>
 
-<h2>4. What we need from Axis Rooms</h2>
-<p>From <code>NEEDS_FROM_USER.md</code> and <code>docs/axisrooms-api-reference.md</code> §11:</p>
+<h2>5. Remaining blockers and caveats</h2>
 <table>
-<tr><th>#</th><th>Item</th><th>Maps to env / Jade</th></tr>
-<tr><td>1</td><td><strong>accessKey</strong> (sandbox)</td><td><code>AXIS_ROOMS_API_KEY</code></td></tr>
-<tr><td>2</td><td>Sandbox environment number (<code>E</code> in <code>sandboxE.axisrooms.com</code>)</td><td><code>AXIS_ROOMS_API_BASE_URL</code></td></tr>
-<tr><td>3</td><td><strong>channelId</strong> / pmsId</td><td><code>AXIS_ROOMS_CHANNEL_ID</code></td></tr>
-<tr><td>4</td><td>OTA id list (which integer = Airbnb, Booking.com, …)</td><td>Parser / future API 3/4</td></tr>
-<tr><td>5</td><td>Property setup <strong>CSV template</strong> + onboard one test property</td><td><code>Villa.axisRooms</code> mapping in dashboard</td></tr>
-<tr><td>6</td><td>Real API 9 JSON — one <strong>confirmed</strong> + one <strong>cancelled</strong></td><td>Validate inbound parser</td></tr>
-<tr><td>7</td><td>Register inbound URL</td><td><code>https://&lt;your-domain&gt;/api/webhooks/axisrooms</code></td></tr>
-<tr><td>8</td><td>Production base URL + production key</td><td>Go-live cutover</td></tr>
+<tr><th>Item</th><th>Status</th><th>Why it matters</th></tr>
+<tr><td>Axis sandbox mapping for <code>hotelId 12123</code></td><td><span class="badge b-blocked">Blocker</span></td><td>Outbound UAT for APIs 1, 2, 6, and 7 cannot finish until Axis activates the mapped test property.</td></tr>
+<tr><td>API 9 registration + live samples</td><td><span class="badge b-blocked">High</span></td><td>The endpoint is live, but Axis still needs to register it and share real confirmed / cancelled payload samples.</td></tr>
+<tr><td><code>channel_managed</code> rollout per villa</td><td><span class="badge b-partial">High</span></td><td>Each villa must have valid property / room / rate IDs before staff switch it from <code>website_only</code>.</td></tr>
+<tr><td>Scheduler setup for retry / pull</td><td><span class="badge b-partial">High</span></td><td>Protection exists in code, but without cron scheduling it is not fully operational in production.</td></tr>
+<tr><td>API 15 production-only validation</td><td><span class="badge b-partial">Constraint</span></td><td>Restrictions are wired, but Axis has already stated this part is not testable in sandbox.</td></tr>
+<tr><td>OTA listing content sync</td><td><span class="badge b-na">N/A</span></td><td>Axis does not offer APIs for villa text, photos, or descriptive listing content; Jade only syncs rates / inventory / restrictions.</td></tr>
+<tr><td>Same-second direct + OTA race</td><td><span class="badge b-na">Industry caveat</span></td><td>No channel manager can guarantee zero overlap; Jade handles this by marking conflicts instead of silently overbooking.</td></tr>
 </table>
 
-<h2>5. All 15 Axis Rooms APIs — status</h2>
+<h2>6. Action needed next</h2>
 <table>
-<tr>
-  <th>#</th><th>API</th><th>Direction</th>
-  <th>Jade status</th><th>Axis provides?</th>
-</tr>
-<tr>
-  <td>1</td><td>Daywise Inventory</td><td>OUTBOUND</td>
-  <td><span class="badge b-ready">Integrated</span> — hold, cancel, blocks, Razorpay confirm</td>
-  <td>Yes</td>
-</tr>
-<tr>
-  <td>2</td><td>Bulk Inventory</td><td>OUTBOUND</td>
-  <td><span class="badge b-ready">Integrated</span> — bulk open inventory on villa channel sync</td>
-  <td>Yes</td>
-</tr>
-<tr>
-  <td>3</td><td>Block Channel (per OTA)</td><td>OUTBOUND</td>
-  <td><span class="badge b-ready">Integrated</span> — dashboard pause/resume</td>
-  <td>Yes (optional)</td>
-</tr>
-<tr>
-  <td>4</td><td>Unblock Channel</td><td>OUTBOUND</td>
-  <td><span class="badge b-ready">Integrated</span> — dashboard resume</td>
-  <td>Yes (optional)</td>
-</tr>
-<tr>
-  <td>5</td><td>Fetch OTA Availability</td><td>READ</td>
-  <td><span class="badge b-ready">Integrated</span> — verify panel</td>
-  <td>Yes (verify)</td>
-</tr>
-<tr>
-  <td>6</td><td>Daywise Price</td><td>OUTBOUND</td>
-  <td><span class="badge b-ready">Integrated</span> — villa save, channel sync, 90-day window</td>
-  <td>Yes</td>
-</tr>
-<tr>
-  <td>7</td><td>Bulk Price Update</td><td>OUTBOUND</td>
-  <td><span class="badge b-ready">Integrated</span> — villa save; falls back to API 6</td>
-  <td>Yes</td>
-</tr>
-<tr>
-  <td>8</td><td>Fetch OTA Rates</td><td>READ</td>
-  <td><span class="badge b-ready">Integrated</span> — verify panel</td>
-  <td>Yes (verify)</td>
-</tr>
-<tr>
-  <td>9</td><td>Bookings → Client (webhook)</td><td>INBOUND</td>
-  <td><span class="badge b-ready">Integrated</span> — <code>POST /api/webhooks/axisrooms</code></td>
-  <td>Yes — <strong>you host</strong></td>
-</tr>
-<tr>
-  <td>10</td><td>No-Show Enable (Booking.com)</td><td>OUTBOUND</td>
-  <td><span class="badge b-todo">Not integrated</span></td>
-  <td>Yes (optional)</td>
-</tr>
-<tr>
-  <td>11</td><td>Update MLOS</td><td>OUTBOUND</td>
-  <td><span class="badge b-todo">Not integrated</span></td>
-  <td>Yes (optional)</td>
-</tr>
-<tr>
-  <td>12</td><td>Pull Booking</td><td>READ</td>
-  <td><span class="badge b-ready">Integrated</span> — nightly cron <code>axisrooms-pull</code></td>
-  <td>Yes (backup)</td>
-</tr>
-<tr>
-  <td>13</td><td>Get Connected OTAs</td><td>READ</td>
-  <td><span class="badge b-ready">Integrated</span> — Axis Rooms settings panel</td>
-  <td>Yes (setup)</td>
-</tr>
-<tr>
-  <td>14</td><td>Update OTA Credentials</td><td>OUTBOUND</td>
-  <td><span class="badge b-todo">Not integrated</span></td>
-  <td>Yes (config)</td>
-</tr>
-<tr>
-  <td>15</td><td>CM Restrictions (open/close)</td><td>OUTBOUND</td>
-  <td><span class="badge b-ready">Integrated</span> — hidden / not bookable villas</td>
-  <td>Yes</td>
-</tr>
-</table>
-<p><strong>Integrated today:</strong> APIs 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 15 (12 of 15). <strong>Not integrated:</strong> 10, 11, 14 (optional/config).</p>
-
-<h2>6. What Axis Rooms does NOT provide</h2>
-<p>These are <strong>not missing Jade work</strong> — Axis has no REST API for them. Jade uses workarounds:</p>
-<table>
-<tr><th>Business need</th><th>Axis API?</th><th>Jade approach</th></tr>
-<tr>
-  <td>Push a <strong>reservation</strong> to OTAs (create booking on Airbnb/Booking.com)</td>
-  <td><span class="badge b-na">No API</span></td>
-  <td>API 1 — set <code>free: 0</code> on nights (blocks inventory, not a reservation record)</td>
-</tr>
-<tr>
-  <td><strong>On-hold</strong> / partial payment on channel manager</td>
-  <td><span class="badge b-na">No API</span></td>
-  <td>Staff hold → API 1 close immediately (Option B); confirm in folio only</td>
-</tr>
-<tr>
-  <td><strong>Create property</strong> on Axis via REST</td>
-  <td><span class="badge b-na">No API</span></td>
-  <td>CSV to Axis team → map IDs in Jade dashboard</td>
-</tr>
-<tr>
-  <td><strong>Refund</strong> OTA or direct guest via Axis</td>
-  <td><span class="badge b-na">No API</span></td>
-  <td>Razorpay refunds in Jade for website bookings; OTA refunds handled by OTA/Axis</td>
-</tr>
-<tr>
-  <td><strong>Housekeeping</strong> / stay operations</td>
-  <td><span class="badge b-na">No API</span></td>
-  <td>Jade PMS only — <code>stayStatus</code> on booking</td>
-</tr>
-<tr>
-  <td>Cancel OTA booking from Jade (outbound cancel reservation)</td>
-  <td><span class="badge b-na">No API</span></td>
-  <td>API 1 <code>free: 1</code> releases inventory; OTA cancel arrives via API 9 inbound</td>
-</tr>
-</table>
-
-<h2>7. Environment checklist</h2>
-<table>
-<tr><th>Variable</th><th>Required for</th><th>Status</th></tr>
-<tr><td><code>AXIS_ROOMS_API_KEY</code></td><td>Outbound + inbound body auth</td><td><span class="badge b-blocked">From Axis</span></td></tr>
-<tr><td><code>AXIS_ROOMS_CHANNEL_ID</code></td><td>All outbound POSTs</td><td><span class="badge b-blocked">From Axis</span></td></tr>
-<tr><td><code>AXIS_ROOMS_API_BASE_URL</code></td><td>Sandbox / prod host</td><td><span class="badge b-blocked">From Axis</span></td></tr>
-<tr><td><code>CRON_SECRET</code></td><td>axisrooms-retry cron</td><td><span class="badge b-todo">You set</span></td></tr>
-<tr><td><code>MONGODB_URI</code></td><td>All PMS data</td><td><span class="badge b-ready">Required</span></td></tr>
-<tr><td>Razorpay keys</td><td>Direct website pay</td><td><span class="badge b-ready">Separate from Axis</span></td></tr>
-</table>
-
-<h2>8. Key Jade routes (quick reference)</h2>
-<table>
-<tr><th>Page / endpoint</th><th>Purpose</th></tr>
-<tr><td><code>/dashboard/settings/villas</code></td><td>Portfolio cards — Quick Edit + Full Editor</td></tr>
-<tr><td><code>PATCH /api/dashboard/villas/[slug]</code></td><td>Save villa → public site + Axis API 6/15 when configured</td></tr>
-<tr><td><code>/dashboard/bookings</code></td><td>Booking Records — all channels</td></tr>
-<tr><td><code>/dashboard/bookings/[id]</code></td><td>Folio + activity history</td></tr>
-<tr><td><code>/dashboard/settings/axis-rooms</code></td><td>Mapping + CSV export</td></tr>
-<tr><td><code>GET /api/public/villas</code></td><td>Public directory — Mongo + static merge</td></tr>
-<tr><td><code>POST /api/webhooks/axisrooms</code></td><td>API 9 — OTA bookings in</td></tr>
-<tr><td><code>GET /api/cron/axisrooms-retry</code></td><td>Retry failed inventory sync</td></tr>
+<tr><th>Owner</th><th>Next action</th></tr>
+<tr><td>Axis Rooms</td><td>Activate / confirm mapping for <code>hotelId 12123</code> and confirm the correct <code>roomId / ratePlanId</code> pair for UAT.</td></tr>
+<tr><td>Axis Rooms</td><td>Register <code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code> as API 9 webhook after outbound UAT approval.</td></tr>
+<tr><td>Axis Rooms</td><td>Share one confirmed and one cancelled real API 9 payload for final parser validation.</td></tr>
+<tr><td>Jade / dev</td><td>Set <code>CRON_SECRET</code> and ensure retry / pull crons are scheduled in the deployed environment.</td></tr>
+<tr><td>Jade ops</td><td>Flip only mapped, tested villas to <code>channel_managed</code>; leave others in <code>website_only</code>.</td></tr>
 </table>
 
 <p class="meta" style="margin-top:2.5rem;">
-  Dashboard client audit: <code>jade-dashboard-client-audit.html</code> ·
-  Full technical audit: <code>jade-axisrooms-integration-surface.html</code> ·
-  API contract: <code>docs/axisrooms-api-reference.md</code> ·
-  Regenerate: <code>npm run generate:axisrooms-status</code>
+  Sources reviewed for this status: <code>jade-dashboard-client-audit.html</code> ·
+  <code>SECURITY-AUDIT.md</code> ·
+  <code>docs/axisrooms-api-reference.md</code> ·
+  current Axis Rooms dashboard and webhook implementation under <code>src/lib/axisRooms</code> and <code>src/components/dashboard/AxisRoomsSettings.tsx</code>
 </p>
 
 </body>

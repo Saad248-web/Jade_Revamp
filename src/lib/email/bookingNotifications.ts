@@ -2,7 +2,9 @@ import { createElement } from "react";
 import { BookingConflictNotificationEmail } from "@/emails/BookingConflictNotification";
 import { GuestBookingConfirmationEmail } from "@/emails/GuestBookingConfirmation";
 import { StaffBookingNotificationEmail } from "@/emails/StaffBookingNotification";
+import { getAddOn } from "@/lib/bookings/addOnCatalog";
 import { formatBookingSource } from "@/lib/bookings/sourceLabels";
+import type { AddOnLine, PaymentPlan } from "@/lib/bookings/types";
 import { renderEmail } from "@/lib/email/renderEmail";
 import { sendTransactionalEmail } from "@/lib/email/resendOutbound";
 import {
@@ -20,6 +22,19 @@ export type BookingConfirmedEmailParams = {
   guestEmail: string;
   guestPhone: string;
   guests?: number;
+  adults?: number;
+  children?: number;
+  pets?: number;
+  bookingType?: "stay" | "day_out" | "event";
+  paymentPlan?: PaymentPlan;
+  notes?: string;
+  addOns?: AddOnLine[];
+  basePaise?: number;
+  extraPaxPaise?: number;
+  eventPaise?: number;
+  addOnPaise?: number;
+  taxPaise?: number;
+  quoteOnlyAddOnIds?: string[];
   totalPaise: number;
   paymentStatus: string;
   source?: string;
@@ -47,6 +62,82 @@ function paymentStatusLabel(status: string): string {
   }
 }
 
+function paymentPlanLabel(plan?: PaymentPlan): string | undefined {
+  if (!plan) return undefined;
+  return plan === "deposit" ? "Deposit" : "Full payment";
+}
+
+function guestSummary(params: BookingConfirmedEmailParams): string | undefined {
+  const parts = [];
+  if (params.guests != null) parts.push(`${params.guests} total`);
+  if (params.adults != null) parts.push(`${params.adults} adults`);
+  if (params.children) parts.push(`${params.children} children`);
+  if (params.pets) parts.push(`${params.pets} pets`);
+  return parts.length ? parts.join(" · ") : undefined;
+}
+
+function addOnSummary(
+  addOns: AddOnLine[] | undefined,
+  guestCount: number,
+  quoteOnlyIds: string[] | undefined,
+): string | undefined {
+  const lines: string[] = [];
+  for (const line of addOns ?? []) {
+    const entry = getAddOn(line.id);
+    if (!entry) {
+      lines.push(`${line.id} × ${Math.max(1, line.quantity)}`);
+      continue;
+    }
+    if (entry.mode === "flat") {
+      const subtotal = entry.pricePaise * Math.max(1, line.quantity);
+      lines.push(
+        `${entry.label} × ${Math.max(1, line.quantity)} — ${formatInrFromPaise(subtotal)}`,
+      );
+      continue;
+    }
+    if (entry.mode === "perPerson") {
+      const pax = Math.max(Math.max(1, line.quantity), guestCount, entry.minPax);
+      const subtotal = entry.pricePerPersonPaise * pax;
+      lines.push(
+        `${entry.label} — ${formatInrFromPaise(
+          entry.pricePerPersonPaise,
+        )} per person × ${pax} = ${formatInrFromPaise(subtotal)}`,
+      );
+      continue;
+    }
+    lines.push(`${entry.label} — Quote on request`);
+  }
+  for (const id of quoteOnlyIds ?? []) {
+    if ((addOns ?? []).some((line) => line.id === id)) continue;
+    const entry = getAddOn(id);
+    lines.push(`${entry?.label ?? id} — Quote on request`);
+  }
+  return lines.length ? lines.join("\n") : undefined;
+}
+
+function pricingSummary(params: BookingConfirmedEmailParams): string | undefined {
+  const lines: string[] = [];
+  if ((params.basePaise ?? 0) > 0) {
+    lines.push(`Stay / package — ${formatInrFromPaise(params.basePaise ?? 0)}`);
+  }
+  if ((params.extraPaxPaise ?? 0) > 0) {
+    lines.push(
+      `Extra guest charges — ${formatInrFromPaise(params.extraPaxPaise ?? 0)}`,
+    );
+  }
+  if ((params.eventPaise ?? 0) > 0) {
+    lines.push(`Event package — ${formatInrFromPaise(params.eventPaise ?? 0)}`);
+  }
+  if ((params.addOnPaise ?? 0) > 0) {
+    lines.push(`Add-ons — ${formatInrFromPaise(params.addOnPaise ?? 0)}`);
+  }
+  if ((params.taxPaise ?? 0) > 0) {
+    lines.push(`Taxes — ${formatInrFromPaise(params.taxPaise ?? 0)}`);
+  }
+  lines.push(`Total — ${formatInrFromPaise(params.totalPaise)}`);
+  return lines.join("\n");
+}
+
 /** Staff + guest emails when a booking reaches confirmed status. */
 export async function notifyBookingConfirmed(
   params: BookingConfirmedEmailParams,
@@ -57,8 +148,16 @@ export async function notifyBookingConfirmed(
   const sourceLabel = formatBookingSource(params.source).label;
   const totalInr = formatInrFromPaise(params.totalPaise);
   const payLabel = paymentStatusLabel(params.paymentStatus);
+  const payPlanLabel = paymentPlanLabel(params.paymentPlan);
   const dashboardUrl = `${getSiteBaseUrl()}/dashboard/bookings/${params.bookingId}`;
   const guestEmail = params.guestEmail?.trim().toLowerCase() ?? "";
+  const guestMix = guestSummary(params);
+  const addOnsText = addOnSummary(
+    params.addOns,
+    params.guests ?? params.adults ?? 1,
+    params.quoteOnlyAddOnIds,
+  );
+  const pricingText = pricingSummary(params);
 
   if (staffTo.length > 0) {
     const staffRendered = await renderEmail(
@@ -71,9 +170,15 @@ export async function notifyBookingConfirmed(
         guestEmail,
         guestPhone: params.guestPhone,
         guests: params.guests,
+        guestMix,
         totalInr,
         paymentStatus: payLabel,
+        paymentPlan: payPlanLabel,
         sourceLabel,
+        bookingType: params.bookingType,
+        notes: params.notes,
+        addOnsText,
+        pricingText,
         dashboardUrl,
       }),
     );
@@ -96,7 +201,12 @@ export async function notifyBookingConfirmed(
         checkIn: params.checkIn,
         checkOut: params.checkOut,
         paymentStatus: payLabel,
+        paymentPlan: payPlanLabel,
         totalInr,
+        guestMix,
+        notes: params.notes,
+        addOnsText,
+        pricingText,
         contactPhone: "+91 80 1234 5678",
         cancellationNote:
           "Cancellation terms apply as per your booking agreement. Contact us for changes.",
