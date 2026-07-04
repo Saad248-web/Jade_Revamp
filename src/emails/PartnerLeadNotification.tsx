@@ -1,5 +1,9 @@
 import { Text } from "@react-email/components";
+import { EmailButton } from "./components/EmailButton";
+import { EmailDetailTable } from "./components/EmailDetailTable";
+import { EmailMessageBox } from "./components/EmailMessageBox";
 import { JadeEmailLayout } from "./components/JadeEmailLayout";
+import { emailColors } from "./components/emailTokens";
 
 export type PartnerLeadNotificationProps = {
   partnerLeadId: string;
@@ -17,34 +21,42 @@ export function PartnerLeadNotificationEmail(props: PartnerLeadNotificationProps
   return (
     <JadeEmailLayout
       preview="New partner programme enquiry"
-      title="Partner with us — new submission"
+      eyebrow="Partner programme"
+      title="New partnership enquiry"
     >
-      <Text>A new partner programme enquiry was submitted.</Text>
-      <Text>
-        <strong>Lead ID:</strong> {props.partnerLeadId}
-        <br />
-        <strong>Name:</strong> {props.name}
-        <br />
-        <strong>Email:</strong> {props.email}
-        <br />
-        <strong>Phone:</strong> {props.phone || "—"}
-        <br />
-        <strong>Company:</strong> {props.company || "—"}
+      <Text style={intro}>
+        Someone submitted the Partner with us form, including property photos.
       </Text>
-      <Text>
-        <strong>Details:</strong>
-        <br />
-        {props.details}
-      </Text>
-      <Text>
-        Photos uploaded: {props.photoCount}
-        {props.photosAttached > 0
-          ? ` (${props.photosAttached} attached to this email)`
-          : " (view all in dashboard)"}
-      </Text>
+      <EmailDetailTable
+        rows={[
+          { label: "Lead ID", value: props.partnerLeadId },
+          { label: "Name", value: props.name },
+          { label: "Email", value: props.email },
+          { label: "Phone", value: props.phone },
+          { label: "Company", value: props.company },
+          {
+            label: "Photos",
+            value:
+              props.photoCount > 0
+                ? `${props.photoCount} uploaded${
+                    props.photosAttached > 0
+                      ? ` · ${props.photosAttached} attached here`
+                      : ""
+                  }`
+                : "—",
+          },
+        ]}
+      />
+      <EmailMessageBox label="Partnership details" children={props.details} />
       {props.dashboardUrl ? (
-        <Text>View in dashboard: {props.dashboardUrl}</Text>
+        <EmailButton href={props.dashboardUrl} label="View partner lead" />
       ) : null}
     </JadeEmailLayout>
   );
 }
+
+const intro = {
+  color: emailColors.text,
+  fontSize: "15px",
+  margin: "0 0 4px",
+};

@@ -10,16 +10,20 @@ import {
   Text,
 } from "@react-email/components";
 import type { ReactNode } from "react";
+import { emailColors, emailFonts } from "./emailTokens";
 
 type JadeEmailLayoutProps = {
   preview: string;
   title: string;
+  /** Small caps label above title, e.g. "Staff alert" */
+  eyebrow?: string;
   children: ReactNode;
 };
 
 export function JadeEmailLayout({
   preview,
   title,
+  eyebrow = "Jade Retreats",
   children,
 }: JadeEmailLayoutProps) {
   return (
@@ -27,11 +31,26 @@ export function JadeEmailLayout({
       <Head />
       <Preview>{preview}</Preview>
       <Body style={body}>
-        <Container style={container}>
-          <Heading style={heading}>{title}</Heading>
-          <Section style={section}>{children}</Section>
-          <Hr style={hr} />
-          <Text style={footer}>Jade Hospitainment · jaderetreats.com</Text>
+        <Container style={outer}>
+          <Section style={header}>
+            <Text style={brand}>JADE RETREATS</Text>
+            <Text style={brandSub}>Hospitainment</Text>
+          </Section>
+          <Container style={card}>
+            {eyebrow ? <Text style={eyebrowStyle}>{eyebrow}</Text> : null}
+            <Heading style={heading}>{title}</Heading>
+            <Section style={content}>{children}</Section>
+            <Hr style={hr} />
+            <Text style={footer}>
+              Jade Hospitainment ·{" "}
+              <a href="https://jaderetreats.com" style={footerLink}>
+                jaderetreats.com
+              </a>
+            </Text>
+            <Text style={footerMuted}>
+              This is an automated message from Jade Host PMS.
+            </Text>
+          </Container>
         </Container>
       </Body>
     </Html>
@@ -39,39 +58,92 @@ export function JadeEmailLayout({
 }
 
 const body = {
-  backgroundColor: "#f4f4f0",
-  fontFamily:
-    'system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+  backgroundColor: emailColors.surface,
+  margin: 0,
+  padding: "24px 12px",
+  fontFamily: emailFonts.ui,
 };
 
-const container = {
-  backgroundColor: "#ffffff",
-  margin: "24px auto",
-  padding: "32px 28px",
-  maxWidth: "560px",
-  borderRadius: "4px",
+const outer = {
+  maxWidth: "600px",
+  margin: "0 auto",
+};
+
+const header = {
+  backgroundColor: emailColors.jadeDeep,
+  padding: "28px 32px 24px",
+  borderRadius: "4px 4px 0 0",
+  borderBottom: `3px solid ${emailColors.jadeGold}`,
+};
+
+const brand = {
+  color: emailColors.jadeGold,
+  fontFamily: emailFonts.sans,
+  fontSize: "22px",
+  fontWeight: "400" as const,
+  letterSpacing: "0.2em",
+  margin: "0 0 4px",
+};
+
+const brandSub = {
+  color: "rgba(255,255,255,0.75)",
+  fontFamily: emailFonts.ui,
+  fontSize: "12px",
+  letterSpacing: "0.14em",
+  textTransform: "uppercase" as const,
+  margin: 0,
+};
+
+const card = {
+  backgroundColor: emailColors.white,
+  padding: "32px 28px 24px",
+  borderRadius: "0 0 4px 4px",
+  border: `1px solid ${emailColors.border}`,
+  borderTop: "none",
+};
+
+const eyebrowStyle = {
+  color: emailColors.jadeGreen,
+  fontSize: "11px",
+  fontWeight: "700" as const,
+  letterSpacing: "0.12em",
+  textTransform: "uppercase" as const,
+  margin: "0 0 8px",
 };
 
 const heading = {
-  color: "#0d5c4b",
-  fontSize: "22px",
-  fontWeight: "600" as const,
-  margin: "0 0 20px",
+  color: emailColors.jadeDeep,
+  fontFamily: emailFonts.sans,
+  fontSize: "26px",
+  fontWeight: "400" as const,
+  lineHeight: "1.25",
+  margin: "0 0 16px",
 };
 
-const section = {
-  color: "#1a1c1e",
+const content = {
+  color: emailColors.text,
   fontSize: "15px",
-  lineHeight: "1.55",
+  lineHeight: "1.6",
 };
 
 const hr = {
-  borderColor: "#e0e0e0",
+  borderColor: emailColors.border,
   margin: "28px 0 16px",
 };
 
 const footer = {
-  color: "#5c5c5c",
-  fontSize: "12px",
+  color: emailColors.textMuted,
+  fontSize: "13px",
+  margin: "0 0 6px",
+};
+
+const footerLink = {
+  color: emailColors.jadeGreen,
+  textDecoration: "underline",
+};
+
+const footerMuted = {
+  color: "#9a9a9a",
+  fontSize: "11px",
   margin: 0,
 };

@@ -1,5 +1,9 @@
 import { Text } from "@react-email/components";
+import { EmailButton } from "./components/EmailButton";
+import { EmailDetailTable } from "./components/EmailDetailTable";
+import { EmailMessageBox } from "./components/EmailMessageBox";
 import { JadeEmailLayout } from "./components/JadeEmailLayout";
+import { emailColors } from "./components/emailTokens";
 
 export type LeadNotificationProps = {
   sourceLabel: string;
@@ -12,33 +16,46 @@ export type LeadNotificationProps = {
 };
 
 export function LeadNotificationEmail(props: LeadNotificationProps) {
+  const rows = [
+    { label: "Name", value: props.name },
+    { label: "Email", value: props.email },
+    { label: "Phone", value: props.phone },
+  ];
+  if (props.preferredDate) {
+    rows.push({ label: "Preferred dates", value: props.preferredDate });
+  }
+
   return (
     <JadeEmailLayout
       preview={`New enquiry — ${props.sourceLabel}`}
-      title={`New enquiry — ${props.sourceLabel}`}
+      eyebrow="New enquiry"
+      title={props.sourceLabel}
     >
-      <Text>A new enquiry was submitted on the website.</Text>
-      <Text>
-        <strong>Name:</strong> {props.name || "—"}
-        <br />
-        <strong>Email:</strong> {props.email || "—"}
-        <br />
-        <strong>Phone:</strong> {props.phone || "—"}
-        {props.preferredDate ? (
-          <>
-            <br />
-            <strong>Preferred date:</strong> {props.preferredDate}
-          </>
-        ) : null}
+      <Text style={intro}>
+        A guest submitted an enquiry on the website. Reply directly to their
+        email address from your inbox.
       </Text>
-      <Text>
-        <strong>Message / details:</strong>
-        <br />
-        {props.message || "(none)"}
-      </Text>
+      <EmailDetailTable rows={rows} />
+      <EmailMessageBox label="Message & details" children={props.message} />
       {props.dashboardUrl ? (
-        <Text>View in dashboard: {props.dashboardUrl}</Text>
+        <>
+          <Text style={ctaHint}>Open the lead in Jade Host to follow up.</Text>
+          <EmailButton href={props.dashboardUrl} label="View in dashboard" />
+        </>
       ) : null}
     </JadeEmailLayout>
   );
 }
+
+const intro = {
+  color: emailColors.text,
+  fontSize: "15px",
+  lineHeight: "1.6",
+  margin: "0 0 4px",
+};
+
+const ctaHint = {
+  color: emailColors.textMuted,
+  fontSize: "14px",
+  margin: "24px 0 0",
+};

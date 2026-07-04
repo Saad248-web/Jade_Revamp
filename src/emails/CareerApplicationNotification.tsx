@@ -1,5 +1,8 @@
 import { Text } from "@react-email/components";
+import { EmailButton } from "./components/EmailButton";
+import { EmailDetailTable } from "./components/EmailDetailTable";
 import { JadeEmailLayout } from "./components/JadeEmailLayout";
+import { emailColors } from "./components/emailTokens";
 
 export type CareerApplicationNotificationProps = {
   applicationId: string;
@@ -16,37 +19,45 @@ export type CareerApplicationNotificationProps = {
 export function CareerApplicationNotificationEmail(
   props: CareerApplicationNotificationProps,
 ) {
+  const rows = [
+    { label: "Application ID", value: props.applicationId },
+    { label: "Role", value: `${props.jobTitle} (${props.jobId})` },
+    { label: "Name", value: props.applicantName },
+    { label: "Email", value: props.applicantEmail },
+    { label: "Phone", value: props.phone },
+  ];
+  if (props.company) {
+    rows.push({ label: "Company", value: props.company });
+  }
+
   return (
     <JadeEmailLayout
       preview={`Careers application — ${props.jobTitle}`}
-      title={`Careers application — ${props.jobTitle}`}
+      eyebrow="Careers"
+      title={props.jobTitle}
     >
-      <Text>A new careers application was submitted.</Text>
-      <Text>
-        <strong>Application ID:</strong> {props.applicationId}
-        <br />
-        <strong>Role:</strong> {props.jobTitle} ({props.jobId})
-        <br />
-        <strong>Name:</strong> {props.applicantName}
-        <br />
-        <strong>Email:</strong> {props.applicantEmail}
-        <br />
-        <strong>Phone:</strong> {props.phone || "—"}
-        {props.company ? (
-          <>
-            <br />
-            <strong>Company:</strong> {props.company}
-          </>
-        ) : null}
-      </Text>
-      <Text>
+      <Text style={intro}>A new job application was submitted on the careers page.</Text>
+      <EmailDetailTable rows={rows} />
+      <Text style={attachNote}>
         {props.resumeAttached
-          ? "Résumé is attached to this email."
-          : "Résumé is available in the dashboard."}
+          ? "The candidate's résumé is attached to this email."
+          : "Download the résumé from the dashboard."}
       </Text>
       {props.dashboardUrl ? (
-        <Text>Download résumé: {props.dashboardUrl}</Text>
+        <EmailButton href={props.dashboardUrl} label="View application" />
       ) : null}
     </JadeEmailLayout>
   );
 }
+
+const intro = {
+  color: emailColors.text,
+  fontSize: "15px",
+  margin: "0 0 4px",
+};
+
+const attachNote = {
+  color: emailColors.textMuted,
+  fontSize: "14px",
+  margin: "16px 0 8px",
+};

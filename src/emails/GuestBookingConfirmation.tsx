@@ -1,5 +1,7 @@
 import { Text } from "@react-email/components";
+import { EmailDetailTable } from "./components/EmailDetailTable";
 import { JadeEmailLayout } from "./components/JadeEmailLayout";
+import { emailColors } from "./components/emailTokens";
 
 export type GuestBookingConfirmationProps = {
   guestName: string;
@@ -17,46 +19,97 @@ export type GuestBookingConfirmationProps = {
 export function GuestBookingConfirmationEmail(
   props: GuestBookingConfirmationProps,
 ) {
+  const shortRef = props.bookingId.slice(0, 8).toUpperCase();
+
   return (
     <JadeEmailLayout
-      preview={`Your booking at ${props.villaName} is confirmed`}
-      title="Your booking is confirmed"
+      preview={`Your stay at ${props.villaName} is confirmed`}
+      eyebrow="Booking confirmed"
+      title={`See you at ${props.villaName}`}
     >
-      <Text>Dear {props.guestName},</Text>
-      <Text>
-        Thank you for choosing Jade Hospitainment. Your reservation is
-        confirmed.
+      <Text style={greeting}>Dear {props.guestName},</Text>
+      <Text style={intro}>
+        Thank you for choosing Jade Retreats. Your private villa reservation is
+        confirmed — we look forward to hosting you.
       </Text>
-      <Text>
-        <strong>Reference:</strong> {props.bookingId}
-        <br />
-        <strong>Property:</strong> {props.villaName}
-        <br />
-        <strong>Check-in:</strong> {props.checkIn}
-        <br />
-        <strong>Check-out:</strong> {props.checkOut}
-        <br />
-        <strong>Payment status:</strong> {props.paymentStatus}
-        <br />
-        <strong>Total:</strong> {props.totalInr}
-      </Text>
+      <EmailDetailTable
+        rows={[
+          { label: "Reference", value: shortRef },
+          { label: "Property", value: props.villaName },
+          { label: "Check-in", value: props.checkIn },
+          { label: "Check-out", value: props.checkOut },
+          { label: "Payment", value: props.paymentStatus },
+          { label: "Total", value: props.totalInr },
+        ]}
+      />
       {props.mapsUrl ? (
-        <Text>
-          <strong>Location:</strong> {props.mapsUrl}
+        <Text style={linkLine}>
+          <strong>Directions:</strong>{" "}
+          <a href={props.mapsUrl} style={link}>
+            View on Google Maps
+          </a>
         </Text>
       ) : null}
       {props.contactPhone ? (
-        <Text>
-          Questions? Call us at {props.contactPhone}.
+        <Text style={contact}>
+          Questions before you arrive? Call us at{" "}
+          <a href={`tel:${props.contactPhone.replace(/\s/g, "")}`} style={link}>
+            {props.contactPhone}
+          </a>
+          .
         </Text>
       ) : null}
       {props.cancellationNote ? (
-        <Text style={{ fontSize: "13px", color: "#5c5c5c" }}>
-          {props.cancellationNote}
-        </Text>
+        <Text style={finePrint}>{props.cancellationNote}</Text>
       ) : null}
-      <Text>We look forward to hosting you.</Text>
-      <Text>— Jade Hospitainment</Text>
+      <Text style={signoff}>Warm regards,</Text>
+      <Text style={signoffName}>The Jade Retreats team</Text>
     </JadeEmailLayout>
   );
 }
+
+const greeting = {
+  color: emailColors.text,
+  fontSize: "16px",
+  margin: "0 0 12px",
+};
+
+const intro = {
+  color: emailColors.text,
+  fontSize: "15px",
+  lineHeight: "1.65",
+  margin: "0 0 8px",
+};
+
+const linkLine = {
+  fontSize: "14px",
+  margin: "16px 0 0",
+};
+
+const link = {
+  color: emailColors.jadeGreen,
+};
+
+const contact = {
+  fontSize: "15px",
+  margin: "16px 0 0",
+};
+
+const finePrint = {
+  fontSize: "13px",
+  color: emailColors.textMuted,
+  lineHeight: "1.5",
+  margin: "20px 0 0",
+};
+
+const signoff = {
+  fontSize: "15px",
+  margin: "28px 0 4px",
+};
+
+const signoffName = {
+  fontSize: "15px",
+  color: emailColors.jadeDeep,
+  fontWeight: "600" as const,
+  margin: 0,
+};

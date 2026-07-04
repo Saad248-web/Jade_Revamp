@@ -1,5 +1,8 @@
-import { Text } from "@react-email/components";
+import { Section, Text } from "@react-email/components";
+import { EmailButton } from "./components/EmailButton";
+import { EmailDetailTable } from "./components/EmailDetailTable";
 import { JadeEmailLayout } from "./components/JadeEmailLayout";
+import { emailColors } from "./components/emailTokens";
 
 export type BookingConflictNotificationProps = {
   bookingId: string;
@@ -18,33 +21,53 @@ export function BookingConflictNotificationEmail(
   return (
     <JadeEmailLayout
       preview={`Booking conflict — ${props.villaName}`}
-      title={`Booking conflict — ${props.villaName}`}
+      eyebrow="Action required"
+      title={`Conflict at ${props.villaName}`}
     >
-      <Text>
-        A booking conflict needs staff attention. Please resolve in Jade Host.
-      </Text>
-      <Text>
-        <strong>Booking ID:</strong> {props.bookingId}
-        <br />
-        <strong>Villa:</strong> {props.villaName}
-        <br />
-        <strong>Dates:</strong> {props.checkIn} → {props.checkOut}
-        <br />
-        <strong>Guest:</strong> {props.guestName}
-        <br />
-        <strong>Source:</strong> {props.source}
-        {props.reason ? (
-          <>
-            <br />
-            <strong>Reason:</strong> {props.reason}
-          </>
-        ) : null}
-      </Text>
+      <Section style={alertBanner}>
+        <Text style={alertText}>
+          Two bookings overlap for the same villa dates. Resolve in Jade Host
+          before guests are affected.
+        </Text>
+      </Section>
+      <EmailDetailTable
+        rows={[
+          { label: "Booking ID", value: props.bookingId },
+          { label: "Villa", value: props.villaName },
+          { label: "Dates", value: `${props.checkIn} → ${props.checkOut}` },
+          { label: "Guest", value: props.guestName },
+          { label: "Source", value: props.source },
+          ...(props.reason
+            ? [{ label: "Reason", value: props.reason }]
+            : []),
+        ]}
+      />
       {props.conflictsUrl ? (
-        <Text>Open conflicts: {props.conflictsUrl}</Text>
+        <EmailButton href={props.conflictsUrl} label="Resolve conflict" />
       ) : (
-        <Text>Open Dashboard → Conflicts to resolve.</Text>
+        <Text style={fallback}>Open Dashboard → Conflicts to resolve.</Text>
       )}
     </JadeEmailLayout>
   );
 }
+
+const alertBanner = {
+  backgroundColor: emailColors.alertBg,
+  border: `1px solid #e8c4c4`,
+  borderRadius: "4px",
+  padding: "14px 18px",
+  margin: "0 0 8px",
+};
+
+const alertText = {
+  color: emailColors.alert,
+  fontSize: "14px",
+  lineHeight: "1.5",
+  margin: 0,
+};
+
+const fallback = {
+  color: emailColors.textMuted,
+  fontSize: "14px",
+  margin: "16px 0 0",
+};

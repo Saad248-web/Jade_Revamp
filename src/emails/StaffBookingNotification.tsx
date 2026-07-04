@@ -1,5 +1,8 @@
 import { Text } from "@react-email/components";
+import { EmailButton } from "./components/EmailButton";
+import { EmailDetailTable } from "./components/EmailDetailTable";
 import { JadeEmailLayout } from "./components/JadeEmailLayout";
+import { emailColors } from "./components/emailTokens";
 
 export type StaffBookingNotificationProps = {
   bookingId: string;
@@ -19,46 +22,61 @@ export type StaffBookingNotificationProps = {
 export function StaffBookingNotificationEmail(
   props: StaffBookingNotificationProps,
 ) {
-  const shortId = props.bookingId.slice(0, 8);
+  const shortId = props.bookingId.slice(0, 8).toUpperCase();
+  const rows = [
+    { label: "Reference", value: shortId },
+    { label: "Villa", value: props.villaName },
+    { label: "Stay", value: `${props.checkIn} → ${props.checkOut}` },
+    { label: "Guest", value: props.guestName },
+    { label: "Email", value: props.guestEmail || "(not provided)" },
+    { label: "Phone", value: props.guestPhone || "(not provided)" },
+  ];
+  if (props.guests != null) {
+    rows.push({ label: "Guests", value: String(props.guests) });
+  }
+  rows.push(
+    { label: "Total", value: props.totalInr },
+    { label: "Payment", value: props.paymentStatus },
+    { label: "Source", value: props.sourceLabel },
+  );
+
   return (
     <JadeEmailLayout
       preview={`Booking confirmed — ${props.villaName}`}
-      title={`Booking confirmed — ${props.villaName}`}
+      eyebrow="Booking confirmed"
+      title={props.villaName}
     >
-      <Text>A new booking is confirmed in Jade Host.</Text>
-      <Text>
-        <strong>Reference:</strong> {props.bookingId}
-        <br />
-        <strong>Villa:</strong> {props.villaName}
-        <br />
-        <strong>Check-in → check-out:</strong> {props.checkIn} → {props.checkOut}
-        <br />
-        <strong>Guest:</strong> {props.guestName}
-        <br />
-        <strong>Email:</strong> {props.guestEmail || "(not provided)"}
-        <br />
-        <strong>Phone:</strong> {props.guestPhone || "(not provided)"}
-        {props.guests != null ? (
-          <>
-            <br />
-            <strong>Guests:</strong> {props.guests}
-          </>
-        ) : null}
-        <br />
-        <strong>Total:</strong> {props.totalInr}
-        <br />
-        <strong>Payment:</strong> {props.paymentStatus}
-        <br />
-        <strong>Source:</strong> {props.sourceLabel}
+      <Text style={intro}>
+        A new stay is confirmed in Jade Host. Use reply-to on this thread to
+        reach the guest.
       </Text>
+      <EmailDetailTable rows={rows} />
       {props.dashboardUrl ? (
-        <Text>
-          Open folio: {props.dashboardUrl}
-        </Text>
+        <>
+          <Text style={ctaHint}>Full folio, payments, and notes in dashboard.</Text>
+          <EmailButton href={props.dashboardUrl} label="Open booking folio" />
+        </>
       ) : null}
-      <Text style={{ color: "#5c5c5c", fontSize: "13px" }}>
-        Ref {shortId} · Reply to reach the guest directly.
-      </Text>
+      <Text style={finePrint}>Booking ID {props.bookingId}</Text>
     </JadeEmailLayout>
   );
 }
+
+const intro = {
+  color: emailColors.text,
+  fontSize: "15px",
+  lineHeight: "1.6",
+  margin: "0 0 4px",
+};
+
+const ctaHint = {
+  color: emailColors.textMuted,
+  fontSize: "14px",
+  margin: "24px 0 0",
+};
+
+const finePrint = {
+  color: emailColors.textMuted,
+  fontSize: "12px",
+  margin: "20px 0 0",
+};
