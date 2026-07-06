@@ -1,8 +1,10 @@
 import crypto from "node:crypto";
 
 import { NextRequest, NextResponse } from "next/server";
+import { connectDB } from "@/lib/db";
 import { getBookingStore } from "@/lib/bookings/mongoStore";
 import { verifyRazorpayWebhookSignature } from "@/lib/payments/razorpayWebhookVerify";
+import { WebhookEventModel } from "@/models/WebhookEvent";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -17,6 +19,7 @@ function extractWebhookFields(parsed: unknown): {
   bookingId: string | null;
   payId: string | null;
   eventId: string | null;
+  orderId: string | null;
 } {
   const root = asRecord(parsed);
   const payload = asRecord(root?.payload);
@@ -26,6 +29,10 @@ function extractWebhookFields(parsed: unknown): {
   const rawId = entity?.id;
   const payId =
     typeof rawId === "string" && rawId.startsWith("pay_") ? rawId : null;
+  const orderId =
+    typeof entity?.order_id === "string" && entity.order_id.startsWith("order_")
+      ? entity.order_id
+      : null;
   const bookingId =
     typeof notes?.booking_id === "string"
       ? notes.booking_id
@@ -37,7 +44,7 @@ function extractWebhookFields(parsed: unknown): {
       ? root.id
       : crypto.createHash("sha256").update(JSON.stringify(parsed)).digest("hex");
 
-  return { bookingId, payId, eventId };
+  return { bookingId, payId, eventId, orderId };
 }
 
 export async function POST(req: NextRequest) {
@@ -72,23 +79,83 @@ export async function POST(req: NextRequest) {
   const evt = typeof root?.event === "string" ? root.event : "";
 
   try {
+    const { bookingId, payId, eventId, orderId } = extractWebhookFields(parsed);
+    await connectDB();
+    if (eventId) {
+      const existing = await WebhookEventModel.findOne({
+        eventId,
+        source: "razorpay",
+      }).lean();
+      if (existing?.status === "processed") {
+        return NextResponse.json({ ok: true, duplicate: true });
+      }
+      await WebhookEventModel.updateOne(
+        { eventId, source: "razorpay" },
+        {
+          $setOnInsert: {
+            payload: parsed,
+            bookingId: bookingId ?? undefined,
+            paymentId: payId ?? undefined,
+            orderId: orderId ?? undefined,
+          },
+          $set: {
+            status: evt === "payment.captured" ? "received" : "ignored",
+            error: undefined,
+          },
+        },
+        { upsert: true },
+      );
+    }
+
     if (evt === "payment.captured") {
-      const { bookingId, payId, eventId } = extractWebhookFields(parsed);
-      if (bookingId && payId && eventId) {
+      if (bookingId && payId && eventId && orderId) {
         const store = getBookingStore();
-        const booking = await store.findById(bookingId);
-        if (booking?.payment.orderId) {
-          await store.confirmPayment({
-            bookingId,
-            orderId: booking.payment.orderId,
-            paymentId: payId,
-            eventId,
-          });
+        const result = await store.confirmPayment({
+          bookingId,
+          orderId,
+          paymentId: payId,
+          eventId,
+        });
+        if (!result.ok) {
+          await WebhookEventModel.updateOne(
+            { eventId, source: "razorpay" },
+            { $set: { status: "failed", error: "Booking confirmation failed" } },
+          );
+          return NextResponse.json(
+            { error: "Booking confirmation failed" },
+            { status: 409 },
+          );
         }
+        await WebhookEventModel.updateOne(
+          { eventId, source: "razorpay" },
+          { $set: { status: "processed", error: undefined } },
+        );
+      } else if (eventId) {
+        await WebhookEventModel.updateOne(
+          { eventId, source: "razorpay" },
+          { $set: { status: "failed", error: "Missing booking/order/payment ids" } },
+        );
+        return NextResponse.json(
+          { error: "Missing Razorpay booking metadata" },
+          { status: 422 },
+        );
       }
     }
   } catch (e) {
     console.error("[webhooks/razorpay]", e);
+    const parsedError = e instanceof Error ? e.message : "Unhandled error";
+    try {
+      const { eventId } = extractWebhookFields(parsed);
+      if (eventId) {
+        await WebhookEventModel.updateOne(
+          { eventId, source: "razorpay" },
+          { $set: { status: "failed", error: parsedError } },
+        );
+      }
+    } catch {
+      /* ignore secondary logging failure */
+    }
+    return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });

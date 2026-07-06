@@ -23,7 +23,7 @@ import {
 import { VILLAS } from "@/lib/mockData";
 import { getVillaGoogleMapsUrl } from "@/lib/googleMapsLinks";
 import { isBookingDetailsValid } from "@/lib/bookingDetailsValidation";
-import type { UserDetails } from "@/lib/types";
+import type { UserDetails, Villa } from "@/lib/types";
 import { useBooking, DateRange, Guests } from "@/context/BookingContext";
 import BookingDetailsFormFields from "@/components/booking/BookingDetailsFormFields";
 import { initiatePayment } from "@/lib/paymentService";
@@ -34,6 +34,13 @@ import { useSafeBack } from "@/lib/safeBackNavigation";
 import { openRazorpayCheckout } from "@/lib/payments/razorpayCheckout";
 import { confirmTestPayment } from "@/lib/payments/confirmTestPayment";
 import {
+  compareBookingCalendarDates,
+  formatBookingCalendarDate,
+  isBookingCalendarDateInRange,
+  toBookingCalendarDate,
+  type BookingCalendarDate,
+} from "@/lib/bookingUiDates";
+import {
   getClientPaymentGatewayMode,
   paymentModeLabel,
 } from "@/lib/payments/paymentGatewayMode";
@@ -43,6 +50,7 @@ import {
   formatBookAddOnPrice,
   getBookPageAddOns,
 } from "@/lib/bookings/bookPageAddOns";
+import { slugForPublicVillaId } from "@/lib/villas/identity";
 
 /* ─────────────────────────────────────────────────────────────────────
    Types
@@ -95,23 +103,8 @@ function toISO(year: number, month: number, day: number) {
   return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
 
-function formatDate(d: { month: number; day: number } | null): string {
-  if (!d) return "---";
-  const SHORT = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  return `${d.day} ${SHORT[d.month]}`;
+function formatDate(d: BookingCalendarDate | null): string {
+  return formatBookingCalendarDate(d);
 }
 
 function formatRupees(n: number) {
@@ -186,7 +179,7 @@ function StepDates({
       setLoadingMonths((prev) => new Set(prev).add(key));
       try {
         const res = await fetch(
-          `/api/bookings/availability?villaId=${villaId}&year=${year}&month=${month}`,
+          `/api/bookings/availability?publicVillaId=${villaId}&year=${year}&month=${month}`,
         );
         if (!res.ok) return;
         const data: { bookedDates: string[]; blockedDates?: string[] } =
@@ -228,33 +221,62 @@ function StepDates({
     )
       return;
 
-    const clicked = { month, day };
+    const clicked = toBookingCalendarDate(year, month, day);
     const { checkIn, checkOut } = dateRange;
 
     if (!checkIn || (checkIn && checkOut)) {
       setDateRange({ checkIn: clicked, checkOut: null });
     } else {
-      const ci = checkIn.month * 31 + checkIn.day;
-      const cl = month * 31 + day;
-      if (cl <= ci) setDateRange({ checkIn: clicked, checkOut: null });
-      else setDateRange({ checkIn, checkOut: clicked });
+      if (compareBookingCalendarDates(clicked, checkIn) <= 0) {
+        setDateRange({ checkIn: clicked, checkOut: null });
+        return;
+      }
+      let cursor = checkIn.iso;
+      let blockedInSpan = false;
+      while (cursor < clicked.iso) {
+        if (
+          cursor !== checkIn.iso &&
+          (bookedDates.has(cursor) || blockedDates.has(cursor))
+        ) {
+          blockedInSpan = true;
+          break;
+        }
+        const next = new Date(`${cursor}T00:00:00.000Z`);
+        next.setUTCDate(next.getUTCDate() + 1);
+        cursor = next.toISOString().slice(0, 10);
+      }
+      if (blockedInSpan) {
+        setDateRange({ checkIn: clicked, checkOut: null });
+        return;
+      }
+      setDateRange({ checkIn, checkOut: clicked });
     }
   };
 
   const isInRange = (year: number, month: number, day: number) => {
     const { checkIn, checkOut } = dateRange;
     if (!checkIn || !checkOut) return false;
-    const d = month * 31 + day;
-    return (
-      d > checkIn.month * 31 + checkIn.day &&
-      d < checkOut.month * 31 + checkOut.day
+    return isBookingCalendarDateInRange(
+      toBookingCalendarDate(year, month, day),
+      checkIn,
+      checkOut,
     );
   };
 
-  const isSelected = (month: number, day: number) => {
+  const isSelected = (year: number, month: number, day: number) => {
     const { checkIn, checkOut } = dateRange;
-    if (checkIn?.month === month && checkIn?.day === day) return "start";
-    if (checkOut?.month === month && checkOut?.day === day) return "end";
+    if (
+      checkIn?.year === year &&
+      checkIn.month === month &&
+      checkIn.day === day
+    )
+      return "start";
+    if (
+      checkOut?.year === year &&
+      checkOut.month === month &&
+      checkOut.day === day
+    )
+      return "end";
     return false;
   };
 
@@ -350,7 +372,7 @@ function StepDates({
                   todayRef.d,
                 );
                 const unavail = bookingDisabled || booked || blocked || past;
-                const sel = isSelected(month, day);
+                const sel = isSelected(year, month, day);
                 const inRange = isInRange(year, month, day);
 
                 return (
@@ -521,6 +543,7 @@ function StepReview({
   guests,
   details,
   selectedVilla,
+  bookingVillaSlug,
   goToStep,
   selectedAddOns,
   setSelectedAddOns,
@@ -530,7 +553,8 @@ function StepReview({
   dateRange: DateRange;
   guests: Guests;
   details: UserDetails;
-  selectedVilla: (typeof VILLAS)[0] | undefined;
+  selectedVilla: Villa | null;
+  bookingVillaSlug: string | null;
   goToStep: (s: Step) => void;
   selectedAddOns: string[];
   setSelectedAddOns: React.Dispatch<React.SetStateAction<string[]>>;
@@ -542,7 +566,10 @@ function StepReview({
       prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id],
     );
 
-  const bookAddOns = getBookPageAddOns(selectedVilla?.id);
+  const bookAddOns = getBookPageAddOns(
+    bookingVillaSlug ?? selectedVilla?.id,
+    selectedVilla?.addOnAvailability,
+  );
   const addOnTotal = serverPreview?.pricing.addOnPaise ?? 0;
   const displayTotal = serverPreview?.pricing.totalPaise ?? 0;
   const displayTax = serverPreview?.pricing.taxPaise ?? 0;
@@ -783,8 +810,8 @@ function SuccessScreen({
   bookingId: string;
   bookingToken: string;
   villaName: string;
-  checkIn: { month: number; day: number } | null;
-  checkOut: { month: number; day: number } | null;
+  checkIn: BookingCalendarDate | null;
+  checkOut: BookingCalendarDate | null;
   payPaise: number;
   guestName: string;
   guestEmail: string;
@@ -796,8 +823,55 @@ function SuccessScreen({
   const [payBusy, setPayBusy] = useState(false);
   const [payError, setPayError] = useState<string | null>(null);
   const [paidNote, setPaidNote] = useState<string | null>(null);
+  const [bookingStatus, setBookingStatus] = useState<string>("pending");
+  const [paymentStatus, setPaymentStatus] = useState<string>("pending");
 
   const shortRef = bookingId.slice(0, 8).toUpperCase();
+
+  useEffect(() => {
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    const pollStatus = async () => {
+      try {
+        const res = await fetch(
+          `/api/bookings/lookup?token=${encodeURIComponent(bookingToken)}`,
+          { cache: "no-store" },
+        );
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          booking?: {
+            status?: string;
+            payment?: { status?: string };
+          };
+        };
+        if (cancelled || !data.booking) return;
+        setBookingStatus(data.booking.status ?? "pending");
+        setPaymentStatus(data.booking.payment?.status ?? "pending");
+        if (data.booking.status === "confirmed") {
+          setPaidNote((current) =>
+            current ??
+            "Payment verified. Your booking is confirmed and has been synced for staff follow-up.",
+          );
+          return;
+        }
+        if (
+          data.booking.status === "pending" ||
+          data.booking.status === "on_hold"
+        ) {
+          timer = setTimeout(pollStatus, 4000);
+        }
+      } catch {
+        timer = setTimeout(pollStatus, 5000);
+      }
+    };
+
+    void pollStatus();
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
+  }, [bookingToken]);
 
   const handleTestPay = async () => {
     setPayError(null);
@@ -841,7 +915,7 @@ function SuccessScreen({
         return;
       }
 
-      await openRazorpayCheckout({
+      const paymentResult = await openRazorpayCheckout({
         keyId: session.razorpayKeyId,
         amountPaise: session.amountSubunits,
         currency: "INR",
@@ -854,9 +928,29 @@ function SuccessScreen({
           contact: guestPhone.replace(/\s/g, ""),
         },
       });
-
+      const verifyRes = await fetch("/api/payments/razorpay-verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bookingId,
+          bookingToken,
+          ...paymentResult,
+        }),
+      });
+      if (!verifyRes.ok) {
+        const data = (await verifyRes.json().catch(() => ({}))) as {
+          error?: string;
+        };
+        setPaidNote(
+          "Payment submitted. We are verifying it now and will confirm your booking shortly.",
+        );
+        if (data.error) {
+          setPayError(data.error);
+        }
+        return;
+      }
       setPaidNote(
-        "Payment submitted. You'll receive confirmation shortly once it is verified.",
+        "Payment received. We are confirming your booking now.",
       );
     } catch (e) {
       const msg = e instanceof Error ? e.message : "";
@@ -873,6 +967,11 @@ function SuccessScreen({
   };
 
   const handlePay = isTestPay ? handleTestPay : handleRazorpay;
+  const isConfirmed = bookingStatus === "confirmed";
+  const title = isConfirmed ? "Booking Confirmed" : "Reservation Received";
+  const subtitle = isConfirmed
+    ? `Your stay at ${villaName} is confirmed.`
+    : `Your dates at ${villaName} are on hold while payment is verified.`;
 
   return (
     <div className="h-[100svh] bg-[#0B2C23] flex flex-col items-center justify-center px-6 text-center overflow-y-auto py-8" data-lenis-prevent>
@@ -886,11 +985,10 @@ function SuccessScreen({
           <CheckCircle2 className="w-10 h-10 text-[#EFCD62]" />
         </div>
         <h1 className="font-philosopher text-white text-gh-h1 mb-2.5">
-          Booking Confirmed
+          {title}
         </h1>
         <p className="text-white/60 font-manrope text-gh-body mb-2">
-          Your stay at <span className="text-white font-bold">{villaName}</span>{" "}
-          is confirmed.
+          <span className="text-white font-bold">{subtitle}</span>
         </p>
         <p className="text-white/60 font-manrope text-gh-body mb-6">
           {formatDate(checkIn)} → {formatDate(checkOut)}
@@ -907,6 +1005,16 @@ function SuccessScreen({
           </p>
           <p className="text-white/35 text-[10px] font-manrope break-all mt-2 text-left">
             {bookingId}
+          </p>
+        </div>
+
+        <div className="mb-4 w-full border border-white/10 bg-white/5 px-4 py-3 text-left">
+          <p className="text-white/40 text-gh-label font-manrope uppercase tracking-widest mb-1">
+            Current status
+          </p>
+          <p className="text-white text-gh-desc font-manrope">
+            Booking: <span className="font-bold uppercase">{bookingStatus}</span>
+            {" · "}Payment: <span className="font-bold uppercase">{paymentStatus}</span>
           </p>
         </div>
 
@@ -928,7 +1036,7 @@ function SuccessScreen({
             <p className="text-white/50 text-gh-label font-manrope mb-2.5">
               {isTestPay
                 ? `Pay ${formatPaise(payPaise)} (test mode) to confirm this booking in the dashboard.`
-                : `Pay ${formatPaise(payPaise)} now with Razorpay, or we'll follow up on the phone or email you provided.`}
+                : `Pay ${formatPaise(payPaise)} now with Razorpay to move this reservation from pending to confirmed.`}
             </p>
             {payError && (
               <p className="text-amber-200/90 text-gh-label font-manrope mb-3 px-1">
@@ -1023,26 +1131,35 @@ function BookPageContent() {
   );
   const [previewLoading, setPreviewLoading] = useState(false);
   const [detailsForceErrors, setDetailsForceErrors] = useState(false);
+  const [selectedVillaLive, setSelectedVillaLive] = useState<Villa | null>(null);
   const [liveBookable, setLiveBookable] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (!selectedVillaId) {
+      setSelectedVillaLive(null);
       setLiveBookable(null);
       return;
     }
     let cancelled = false;
     fetch(`/api/public/villas/${encodeURIComponent(selectedVillaId)}`)
       .then((r) => (r.ok ? r.json() : null))
-      .then((data: { villa?: { bookable?: boolean } } | null) => {
+      .then((data: { villa?: Villa } | null) => {
         if (cancelled) return;
         if (data?.villa) {
-          setLiveBookable(isVillaRecordBookable(data.villa as { id: string; bookable?: boolean }));
+          setSelectedVillaLive(data.villa);
+          setLiveBookable(
+            isVillaRecordBookable(data.villa as { id: string; bookable?: boolean }),
+          );
         } else {
+          setSelectedVillaLive(null);
           setLiveBookable(false);
         }
       })
       .catch(() => {
-        if (!cancelled) setLiveBookable(null);
+        if (!cancelled) {
+          setSelectedVillaLive(null);
+          setLiveBookable(null);
+        }
       });
     return () => {
       cancelled = true;
@@ -1089,7 +1206,12 @@ function BookPageContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const selectedVilla = VILLAS.find((v) => v.id === selectedVillaId);
+  const selectedVillaFallback =
+    VILLAS.find((v) => v.id === selectedVillaId) ?? null;
+  const selectedVilla = selectedVillaLive ?? selectedVillaFallback;
+  const bookingVillaSlug =
+    selectedVilla?.slug ??
+    (selectedVillaId ? slugForPublicVillaId(selectedVillaId) : null);
 
   const basePrice = selectedVilla
     ? parseInt(
@@ -1138,18 +1260,14 @@ function BookPageContent() {
   };
 
   const buildPreviewPayload = useCallback(() => {
-    if (!selectedVillaId || !dateRange.checkIn || !dateRange.checkOut) {
+    if (!bookingVillaSlug || !dateRange.checkIn || !dateRange.checkOut) {
       return null;
     }
-    const thisYear = new Date().getFullYear();
-    const pad = (n: number) => String(n).padStart(2, "0");
-    const checkInISO = `${thisYear}-${pad(dateRange.checkIn.month + 1)}-${pad(dateRange.checkIn.day)}`;
-    const checkOutISO = `${thisYear}-${pad(dateRange.checkOut.month + 1)}-${pad(dateRange.checkOut.day)}`;
     return {
-      villaSlug: selectedVillaId,
+      villaSlug: bookingVillaSlug,
       bookingType: "stay" as const,
-      checkIn: checkInISO,
-      checkOut: checkOutISO,
+      checkIn: dateRange.checkIn.iso,
+      checkOut: dateRange.checkOut.iso,
       guests: guests.adults + guests.children,
       adults: guests.adults,
       children: guests.children,
@@ -1157,7 +1275,7 @@ function BookPageContent() {
       addOns: selectedAddOns.map((id) => ({ id, quantity: 1 })),
       paymentPlan: "full" as const,
     };
-  }, [selectedVillaId, dateRange, guests, selectedAddOns]);
+  }, [bookingVillaSlug, dateRange, guests, selectedAddOns]);
 
   useEffect(() => {
     if (step !== "review") return;
@@ -1191,7 +1309,7 @@ function BookPageContent() {
 
   /* ── Submit booking to API ── */
   const handlePayNow = useCallback(async () => {
-    if (!selectedVilla || !dateRange.checkIn || !dateRange.checkOut) return;
+    if (!selectedVilla || !bookingVillaSlug || !dateRange.checkIn || !dateRange.checkOut) return;
     if (villaBookingDisabled) {
       setSubmitError(
         "Online booking is not available for this villa. Please enquire instead.",
@@ -1208,17 +1326,11 @@ function BookPageContent() {
     setIsSubmitting(true);
     setSubmitError(null);
 
-    // Build YYYY-MM-DD strings directly (avoids UTC shift from toISOString)
-    const thisYear = new Date().getFullYear();
-    const pad = (n: number) => String(n).padStart(2, "0");
-    const checkInISO = `${thisYear}-${pad(dateRange.checkIn.month + 1)}-${pad(dateRange.checkIn.day)}`;
-    const checkOutISO = `${thisYear}-${pad(dateRange.checkOut.month + 1)}-${pad(dateRange.checkOut.day)}`;
-
     const payload = {
-      villaSlug: selectedVillaId,
+      villaSlug: bookingVillaSlug,
       bookingType: "stay" as const,
-      checkIn: checkInISO,
-      checkOut: checkOutISO,
+      checkIn: dateRange.checkIn.iso,
+      checkOut: dateRange.checkOut.iso,
       guests: guests.adults + guests.children,
       adults: guests.adults,
       children: guests.children,
@@ -1264,7 +1376,7 @@ function BookPageContent() {
       setIsSubmitting(false);
     }
   }, [
-    selectedVillaId,
+    bookingVillaSlug,
     guests,
     details,
     selectedAddOns,
@@ -1532,7 +1644,7 @@ function BookPageContent() {
               <StepDates
                 dateRange={dateRange}
                 setDateRange={setDateRange}
-                villaId={selectedVillaId}
+                villaId={bookingVillaSlug}
                 bookingDisabled={villaBookingDisabled}
               />
             </motion.div>
@@ -1579,6 +1691,7 @@ function BookPageContent() {
                 guests={guests}
                 details={details}
                 selectedVilla={selectedVilla}
+                bookingVillaSlug={bookingVillaSlug}
                 goToStep={setStep}
                 selectedAddOns={selectedAddOns}
                 setSelectedAddOns={setSelectedAddOns}

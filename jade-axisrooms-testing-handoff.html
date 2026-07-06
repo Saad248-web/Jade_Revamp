@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Jade Host PMS — Axis Rooms Integration Reference</title>
+<style>
+  :root {
+    --ink: #1a1c1e;
+    --muted: #5c5c5c;
+    --border: #e0e0e0;
+    --accent: #0d5c4b;
+    --gold: #b8860b;
+    --ready: #166534;
+    --ready-bg: #dcfce7;
+    --partial: #1d4ed8;
+    --partial-bg: #dbeafe;
+    --blocked: #b45309;
+    --blocked-bg: #fef3c7;
+    --na: #6b7280;
+    --na-bg: #f3f4f6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink);
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 3rem;
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  h1 {
+    font-family: Georgia, serif;
+    font-size: 1.85rem;
+    color: var(--accent);
+    border-bottom: 3px solid var(--gold);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+  .meta { color: var(--muted); font-size: 0.875rem; margin-bottom: 1.5rem; }
+  h2 {
+    font-size: 1.15rem;
+    color: var(--accent);
+    margin: 2rem 0 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+  h2:first-of-type { border-top: none; margin-top: 1rem; }
+  h3 { font-size: 1rem; margin: 1.25rem 0 0.5rem; }
+  p, li { margin: 0.4rem 0; }
+  ul { padding-left: 1.25rem; }
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .b-ready { background: var(--ready-bg); color: var(--ready); }
+  .b-partial { background: var(--partial-bg); color: var(--partial); }
+  .b-blocked { background: var(--blocked-bg); color: var(--blocked); }
+  .b-na { background: var(--na-bg); color: var(--na); border: 1px dashed #ccc; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    margin: 0.75rem 0 1rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 0.55rem 0.65rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: #f5f5f4; font-weight: 600; }
+  tr:nth-child(even) td { background: #fafaf9; }
+  code {
+    font-size: 0.8em;
+    background: #f0f0f0;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    word-break: break-all;
+  }
+  .summary {
+    border-left: 4px solid var(--gold);
+    background: #fffbeb;
+    padding: 0.85rem 1rem;
+    margin: 1rem 0;
+    font-size: 0.92rem;
+  }
+  .flow {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.1rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin: 1rem 0 1.5rem;
+    font-size: 0.8rem;
+  }
+  @media print {
+    body { max-width: none; font-size: 11pt; }
+    .summary, table { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Jade Host PMS — Axis Rooms Integration Reference</h1>
+<p class="meta">
+  PMS: <strong>Jade Host PMS</strong> ·
+  UAT environment: <code>https://jade-revamp.vercel.app</code> ·
+  Document date: 6 July 2026
+</p>
+
+<div class="summary">
+  <strong>Integration scope:</strong>
+  Jade Host PMS is a whole-villa booking system. Each bookable villa is <strong>one inventory unit</strong>
+  (availability <code>0</code> or <code>1</code> per night — not multiple rooms inside a property).
+  Outbound inventory, price, and restriction sync uses Axis APIs 1, 2, 6, 7, and 15.
+  Inbound OTA bookings are received on API 9. Confirm, cancel, and staff date-modification flows
+  are implemented; live sandbox UAT is pending mapped-property activation.
+</div>
+
+<div class="legend">
+  <span><span class="badge b-ready">Implemented</span> Wired in PMS</span>
+  <span><span class="badge b-partial">UAT pending</span> Built — needs sandbox proof</span>
+  <span><span class="badge b-blocked">Blocked</span> Waiting on CM mapping / registration</span>
+  <span><span class="badge b-na">Not used</span> Out of current rollout scope</span>
+</div>
+
+<h2>1. Inventory model — villa as the unit</h2>
+<p>
+  Jade sells <strong>entire villas</strong>, not individual rooms within a villa.
+  Axis field names use <code>roomId</code> / <code>roomTypeId</code>; in Jade each mapped villa corresponds to
+  <strong>one</strong> such ID with per-night availability of <code>0</code> (booked) or <code>1</code> (available).
+</p>
+<table>
+<tr><th>Business event</th><th>Jade calendar</th><th>API 1 value sent</th></tr>
+<tr>
+  <td>Villa booked (confirm / hold)</td>
+  <td>Night locks acquired on stay nights</td>
+  <td><code>free: 0</code> per night</td>
+</tr>
+<tr>
+  <td>Booking cancelled</td>
+  <td>Night locks released</td>
+  <td><code>free: 1</code> on current date range</td>
+</tr>
+<tr>
+  <td>Booking dates changed (staff)</td>
+  <td>Old locks released, new locks acquired</td>
+  <td><code>free: 1</code> on old range, then <code>free: 0</code> on new range</td>
+</tr>
+<tr>
+  <td>OTA booking modify (API 9 inbound)</td>
+  <td>Local night-lock swap only</td>
+  <td>No outbound push (CM owns OTA inventory)</td>
+</tr>
+</table>
+<div class="flow">
+  <strong>Night model:</strong> check-out is <em>exclusive</em> (same-day turnover allowed).<br/>
+  Example: stay <code>21 Oct → 22 Oct</code> blocks the night of <strong>21 Oct</strong> only; 22 Oct is checkout day.
+</div>
+
+<h2>2. Environment &amp; credentials (stored in Jade)</h2>
+<table>
+<tr><th>Setting</th><th>Value / usage</th></tr>
+<tr><td>PMS name</td><td><code>Jade Host PMS</code></td></tr>
+<tr><td>API base URL (sandbox)</td><td><code>https://sandbox2.axisrooms.com</code></td></tr>
+<tr><td><code>channelId</code> / <code>pmsId</code></td><td><code>227</code> (same value; field name varies by API)</td></tr>
+<tr><td><code>accessKey</code></td><td>Stored server-side; sent in JSON body of every outbound call and validated on inbound API 9</td></tr>
+<tr><td>Test <code>hotelId</code></td><td><code>12123</code></td></tr>
+<tr><td>Test <code>roomId</code> / <code>ratePlanId</code></td><td><code>1 / 1</code> or <code>2 / 2</code> — to be confirmed with Axis</td></tr>
+<tr><td>UAT site</td><td><code>https://jade-revamp.vercel.app</code></td></tr>
+</table>
+
+<h2>3. Per-villa mapping (stored in Jade dashboard)</h2>
+<p>Each villa record stores Axis identifiers and a channel state:</p>
+<table>
+<tr><th>Field</th><th>Description</th></tr>
+<tr><td><code>axisRooms.propertyId</code></td><td>Axis <code>hotelId</code> for this villa</td></tr>
+<tr><td><code>axisRooms.roomTypeId</code></td><td>Axis <code>roomId</code> — <strong>whole villa</strong> as one inventory unit</td></tr>
+<tr><td><code>axisRooms.ratePlanId</code></td><td>Axis rate plan for price sync</td></tr>
+<tr><td><code>channelMode</code></td><td><code>website_only</code> (no outbound sync) or <code>channel_managed</code> (sync active when IDs are valid)</td></tr>
+</table>
+<p>
+  Property mappings are viewable and exportable from the Axis Rooms settings screen in the Jade dashboard.
+  CSV export is available for property onboarding.
+</p>
+
+<h2>4. Axis API reference — all 15 APIs</h2>
+<p>Base path: <code>{AXIS_ROOMS_API_BASE_URL}</code> (sandbox: <code>https://sandbox2.axisrooms.com</code>).</p>
+<table>
+<tr>
+  <th>#</th>
+  <th>Name</th>
+  <th>Method &amp; path</th>
+  <th>Direction</th>
+  <th>Jade status</th>
+  <th>Dashboard / trigger</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td>Daywise Inventory</td>
+  <td><code>POST /api/daywiseInventory</code></td>
+  <td>Outbound</td>
+  <td><span class="badge b-partial">UAT pending</span></td>
+  <td>Booking confirm, hold, cancel, staff date change, calendar blocks. Payload: <code>free: 0|1</code> per night.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>Bulk Inventory</td>
+  <td><code>POST /api/inventory</code></td>
+  <td>Outbound</td>
+  <td><span class="badge b-partial">UAT pending</span></td>
+  <td>Opens 90-day availability window when villa becomes channel-managed.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>Block Channel</td>
+  <td><code>POST /api/blockChannel</code></td>
+  <td>Outbound</td>
+  <td><span class="badge b-ready">Implemented</span></td>
+  <td>Dashboard: per-OTA pause on a mapped villa (uses <code>pmsId</code>).</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>Unblock Channel</td>
+  <td><code>POST /api/unblockChannel</code></td>
+  <td>Outbound</td>
+  <td><span class="badge b-ready">Implemented</span></td>
+  <td>Dashboard: per-OTA resume.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>Fetch OTA Availability</td>
+  <td><code>POST /api/otaAvailability</code></td>
+  <td>Read</td>
+  <td><span class="badge b-ready">Implemented</span></td>
+  <td>Dashboard verify panel — compare OTA inventory vs Jade.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td>Daywise Price</td>
+  <td><code>POST /api/daywisePrice</code></td>
+  <td>Outbound</td>
+  <td><span class="badge b-partial">UAT pending</span></td>
+  <td>Fallback price push when bulk price update fails.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td>Bulk Price Update</td>
+  <td><code>POST /api/bulkPriceUpdate</code></td>
+  <td>Outbound</td>
+  <td><span class="badge b-partial">UAT pending</span></td>
+  <td>Primary 90-day price sync on villa save / channel activation.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td>Fetch OTA Rates</td>
+  <td><code>POST /api/otaRates</code></td>
+  <td>Read</td>
+  <td><span class="badge b-ready">Implemented</span></td>
+  <td>Dashboard verify panel — compare OTA rates vs Jade.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td>Bookings to Client (Webhook)</td>
+  <td><code>POST</code> (Jade-hosted — see §5)</td>
+  <td>Inbound</td>
+  <td><span class="badge b-partial">UAT pending</span></td>
+  <td>OTA create · modify · cancel events. Idempotent via event store.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td>No-Show Enable</td>
+  <td><code>POST /api/bookingNoShowEnable</code></td>
+  <td>Outbound</td>
+  <td><span class="badge b-na">Not used</span></td>
+  <td>Not in current Jade rollout.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td>Update MLOS</td>
+  <td><code>POST /api/updateMlos</code></td>
+  <td>Outbound</td>
+  <td><span class="badge b-na">Not used</span></td>
+  <td>Not in current Jade rollout.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td>Pull Booking</td>
+  <td><code>POST /api/pullBooking</code></td>
+  <td>Read</td>
+  <td><span class="badge b-ready">Implemented</span></td>
+  <td>Scheduled reconcile backstop for missed API 9 webhooks.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td>Get Connected OTAs</td>
+  <td><code>GET /api/getConnectedChannel?pmsId=…</code></td>
+  <td>Read</td>
+  <td><span class="badge b-ready">Implemented</span></td>
+  <td>Dashboard: connected OTA list (uses <code>pmsId</code>).</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td>Update OTA Credentials</td>
+  <td><code>POST /api/updateOTACredentials</code></td>
+  <td>Outbound</td>
+  <td><span class="badge b-na">Not used</span></td>
+  <td>Not in current Jade rollout.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td>CM Restrictions</td>
+  <td><code>POST /api/cm-restrictions</code></td>
+  <td>Outbound</td>
+  <td><span class="badge b-partial">UAT pending</span></td>
+  <td>Open/close restrictions when villa hidden or not bookable. Production validation per Axis guidance.</td>
+</tr>
+</table>
+<p><em>Auth on all calls:</em> <code>accessKey</code> and <code>channelId</code> (or <code>pmsId</code> where applicable) in the JSON request body.</p>
+
+<h2>5. API 9 — inbound booking webhook (Jade-hosted)</h2>
+<table>
+<tr><th>Item</th><th>Value</th></tr>
+<tr>
+  <td>Webhook URL</td>
+  <td><code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code></td>
+</tr>
+<tr><td>Method</td><td><code>POST</code> only</td></tr>
+<tr><td>Authentication</td><td><code>accessKey</code> in JSON body, validated server-side</td></tr>
+<tr><td>Events handled</td><td><code>create</code> · <code>modify</code> · <code>cancel</code></td></tr>
+<tr><td>Idempotency</td><td>Duplicate events deduplicated before processing</td></tr>
+<tr><td>Modify handling</td><td>Updates booking dates and swaps local night locks; no outbound inventory push</td></tr>
+</table>
+
+<h2>6. Inventory scenarios — CM expectations vs Jade</h2>
+<table>
+<tr>
+  <th>Scenario</th>
+  <th>CM expectation</th>
+  <th>Jade status</th>
+  <th>PMS behaviour</th>
+</tr>
+<tr>
+  <td><strong>1. Booking confirmed</strong><br/>e.g. Villa A · 21/10 → 22/10</td>
+  <td>Reduce inventory on stay nights</td>
+  <td><span class="badge b-partial">UAT pending</span></td>
+  <td>API 1 <code>free: 0</code> on each stay night when status becomes <code>confirmed</code> or <code>on_hold</code> on a <code>channel_managed</code> villa.</td>
+</tr>
+<tr>
+  <td><strong>1b. Booking cancelled</strong><br/>same dates</td>
+  <td>Restore inventory</td>
+  <td><span class="badge b-partial">UAT pending</span></td>
+  <td>API 1 <code>free: 1</code> on booking’s current <code>checkIn</code> / <code>checkOut</code> range. Failed pushes retried automatically.</td>
+</tr>
+<tr>
+  <td><strong>2. Booking modified</strong><br/>21/10–22/10 → 24/10–26/10</td>
+  <td>Open old dates, close new dates</td>
+  <td><span class="badge b-partial">UAT pending</span></td>
+  <td>Staff <strong>Change dates</strong> on booking folio: API 1 <code>free: 1</code> on old range, then <code>free: 0</code> on new range. Pricing recomputed with staff preview.</td>
+</tr>
+<tr>
+  <td><strong>2b. Modified booking cancelled</strong><br/>24/10–26/10</td>
+  <td>Restore inventory on current dates</td>
+  <td><span class="badge b-partial">UAT pending</span></td>
+  <td>Cancel opens inventory on the booking’s <strong>current</strong> (post-modify) date range.</td>
+</tr>
+</table>
+
+<h3>API 1 triggers summary</h3>
+<ul>
+  <li><strong>Close (<code>free: 0</code>):</strong> payment confirmed, staff hold placed, staff date change (new range), calendar block created</li>
+  <li><strong>Open (<code>free: 1</code>):</strong> staff cancel, calendar block released, staff date change (old range)</li>
+  <li><strong>Modify sequence:</strong> open old nights → close new nights (direct / staff / website bookings only)</li>
+</ul>
+
+<h2>7. Jade dashboard — Axis Rooms settings screen</h2>
+<p>The following capabilities are available in the PMS dashboard under Axis Rooms settings:</p>
+<table>
+<tr><th>Feature</th><th>APIs used</th></tr>
+<tr><td>Villa property mapping table (<code>hotelId</code>, <code>roomId</code>, <code>ratePlanId</code>)</td><td>—</td></tr>
+<tr><td>CSV export for property onboarding</td><td>—</td></tr>
+<tr><td>Connected OTAs list</td><td>13</td></tr>
+<tr><td>Verify OTA availability and rates (date range + OTA id)</td><td>5, 8</td></tr>
+<tr><td>Per-OTA pause / resume by villa and date range</td><td>3, 4</td></tr>
+<tr><td>Inbound webhook URL (API 9) with copy action</td><td>9</td></tr>
+<tr><td>Sync audit log (<code>inventory.close</code>, <code>inventory.open</code>, price, restrictions)</td><td>1–8, 15</td></tr>
+<tr><td>Booking folio — staff date modification with pricing preview</td><td>1 (on save)</td></tr>
+</table>
+
+<h2>8. UAT test plan</h2>
+<table>
+<tr><th>#</th><th>Test</th><th>Expected result</th></tr>
+<tr>
+  <td>1</td>
+  <td>Activate CM mapping for <code>hotelId 12123</code></td>
+  <td>Outbound API 1 / 2 calls succeed (no “hotel not mapped” error)</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>Confirm direct booking on mapped test villa (21/10 → 22/10)</td>
+  <td>API 1 <code>free: 0</code> for stay night(s); OTA inventory reduced</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>Cancel same booking in PMS</td>
+  <td>API 1 <code>free: 1</code>; OTA inventory restored</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>Staff reschedule booking (e.g. 21/10–22/10 → 24/10–26/10)</td>
+  <td>API 1 open old nights, close new nights; local calendar updated</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>Register API 9 webhook URL; send confirmed OTA payload</td>
+  <td>Booking appears in PMS; conflict flagged if dates overlap direct booking</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td>Send cancelled OTA payload for same reservation</td>
+  <td>Booking <code>cancelled</code>; local night locks released</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td>Send modify OTA payload</td>
+  <td>Dates updated in PMS; night locks swapped locally</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td>Review sync log in Axis Rooms settings</td>
+  <td><code>inventory.close</code> / <code>open</code> entries with hotel, room, and dates</td>
+</tr>
+</table>
+
+<h2>9. Prerequisites for UAT</h2>
+<ul>
+  <li>Activate sandbox mapping for <code>hotelId 12123</code> and confirm correct <code>roomId</code> / <code>ratePlanId</code> pair</li>
+  <li>Register API 9 webhook URL: <code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code></li>
+  <li>Provide sample confirmed, modified, and cancelled API 9 payloads for parser validation</li>
+  <li>Confirm OTA id list (<code>otaId</code>) for verify and channel-control features</li>
+</ul>
+
+</body>
+</html>

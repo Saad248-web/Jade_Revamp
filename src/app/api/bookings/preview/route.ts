@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addDays } from "@/lib/bookingDates";
-import { computeBookingPricing } from "@/lib/bookings/pricing";
-import { findVillaBySlug } from "@/lib/bookings/mongoStore";
+import { getBookingStore, findVillaBySlug } from "@/lib/bookings/mongoStore";
+import { computeBookingPricing, lockDatesForBooking } from "@/lib/bookings/pricing";
 import { isMongoConfigured } from "@/lib/db";
 import { readJsonBody, SafeJsonError } from "@/lib/security/safeJson";
 import {
@@ -77,12 +77,40 @@ export async function POST(req: NextRequest) {
       eventStartDate: input.eventStartDate,
       eventEndDate: input.eventEndDate,
       addOns: input.addOns,
+      allowedAddOnIds: villa.addOnAvailability,
     });
 
     if (errors.length) {
       return NextResponse.json(
         { error: errors[0].message, code: errors[0].code },
         { status: 400 },
+      );
+    }
+
+    const villaId = "_id" in villa ? String(villa._id) : villa.slug;
+    const store = getBookingStore();
+    const lockDates = lockDatesForBooking({
+      bookingType: input.bookingType,
+      checkIn: input.checkIn,
+      checkOut,
+      eventStartDate: input.eventStartDate,
+      eventEndDate: input.eventEndDate,
+    });
+    const { bookedDates, blockedDates } = await store.getAvailability(
+      villaId,
+      input.checkIn,
+      checkOut,
+    );
+    const blocked = new Set([...bookedDates, ...blockedDates]);
+    const conflictingDate = lockDates.find((date) => blocked.has(date));
+    if (conflictingDate) {
+      return NextResponse.json(
+        {
+          error:
+            "Selected dates are no longer available. Please choose different dates.",
+          conflictingDate,
+        },
+        { status: 409 },
       );
     }
 

@@ -1,4 +1,5 @@
 import { connectDB } from "@/lib/db";
+import { rangesOverlap } from "@/lib/bookingDates";
 import {
   acquireNightLocks,
   releaseNightLocks,
@@ -43,26 +44,48 @@ export async function upsertAxisRoomsInbound(
 
   await connectDB();
 
-  try {
-    await WebhookEventModel.create({
-      eventId,
-      source: "axisrooms",
-      status: "processed",
-    });
-  } catch (e: unknown) {
-    if ((e as { code?: number }).code === 11000) {
-      return { ok: true, duplicate: true };
-    }
-    throw e;
+  const existingEvent = await WebhookEventModel.findOne({
+    eventId,
+    source: "axisrooms",
+  }).lean();
+  if (existingEvent?.status === "processed") {
+    return { ok: true, duplicate: true };
   }
+  await WebhookEventModel.updateOne(
+    { eventId, source: "axisrooms" },
+    {
+      $setOnInsert: {
+        payload: parsed.raw,
+      },
+      $set: {
+        bookingId: bookingNo,
+        status: "received",
+        error: undefined,
+      },
+    },
+    { upsert: true },
+  );
 
-  const villa = await VillaModel.findOne({
-    "axisRooms.propertyId": parsed.propertyId,
+  const mappingQuery: Record<string, unknown> = {
     isDeleted: false,
-  });
-  if (!villa) {
-    return { ok: false, error: `Unknown hotelId: ${parsed.propertyId}` };
+    "axisRooms.propertyId": parsed.propertyId,
+  };
+  if (parsed.roomTypeId) {
+    mappingQuery["axisRooms.roomTypeId"] = parsed.roomTypeId;
   }
+  const villas = await VillaModel.find(mappingQuery).limit(2);
+  if (villas.length !== 1) {
+    const error =
+      villas.length === 0
+        ? `Unknown hotelId: ${parsed.propertyId}`
+        : `Ambiguous Axis mapping for property ${parsed.propertyId}`;
+    await WebhookEventModel.updateOne(
+      { eventId, source: "axisrooms" },
+      { $set: { status: "failed", error } },
+    );
+    return { ok: false, error };
+  }
+  const [villa] = villas;
 
   if (parsed.eventType === "cancel" || parsed.bookingStatus === "cancelled") {
     const existing = await BookingModel.findOne({
@@ -70,6 +93,10 @@ export async function upsertAxisRoomsInbound(
       isDeleted: false,
     });
     if (!existing) {
+      await WebhookEventModel.updateOne(
+        { eventId, source: "axisrooms" },
+        { $set: { status: "processed" } },
+      );
       return { ok: true };
     }
     const previousStatus = existing.status;
@@ -90,6 +117,10 @@ export async function upsertAxisRoomsInbound(
         channel: parsed.channel,
       },
     });
+    await WebhookEventModel.updateOne(
+      { eventId, source: "axisrooms" },
+      { $set: { status: "processed" } },
+    );
     return { ok: true, bookingId: String(existing._id) };
   }
 
@@ -99,30 +130,99 @@ export async function upsertAxisRoomsInbound(
   });
 
   if (existing && parsed.eventType === "modify") {
-    existing.checkIn = parsed.checkIn;
-    existing.checkOut = parsed.checkOut;
-    existing.guestDetails = {
-      name: parsed.guestName ?? existing.guestDetails?.name ?? "",
-      email: parsed.guestEmail ?? existing.guestDetails?.email ?? "",
-      phone: parsed.guestPhone ?? existing.guestDetails?.phone ?? "",
-    };
-    await existing.save();
-    await auditLog({
-      action: "booking.update",
-      targetType: "booking",
-      targetId: String(existing._id),
-      metadata: {
-        source: "axisrooms_inbound",
-        eventType: "modify",
-        bookingNo,
-        checkIn: parsed.checkIn,
-        checkOut: parsed.checkOut,
-      },
+    const oldCheckIn = existing.checkIn;
+    const oldCheckOut = existing.checkOut;
+    const lockDates = lockDatesForBooking({
+      bookingType: existing.bookingType ?? "stay",
+      checkIn: parsed.checkIn,
+      checkOut: parsed.checkOut,
     });
+
+    try {
+      await withTransaction(async (session) => {
+        const now = new Date();
+        const overlaps = await BookingModel.find({
+          villaId: villa._id,
+          _id: { $ne: existing._id },
+          isDeleted: false,
+          $or: [
+            { status: "confirmed" },
+            { status: "on_hold" },
+            { status: "conflict" },
+            { status: "pending", expiresAt: { $gt: now } },
+          ],
+          checkIn: { $lt: parsed.checkOut },
+          checkOut: { $gt: parsed.checkIn },
+        }).session(session);
+
+        for (const b of overlaps) {
+          if (
+            rangesOverlap(
+              parsed.checkIn!,
+              parsed.checkOut!,
+              b.checkIn,
+              b.checkOut,
+            )
+          ) {
+            throw new Error("DATE_CONFLICT");
+          }
+        }
+
+        await releaseNightLocks(existing._id, session);
+
+        const lock = await acquireNightLocks({
+          villaId: villa._id as Types.ObjectId,
+          bookingId: existing._id,
+          dates: lockDates,
+          session,
+        });
+        if (!lock.ok) throw new Error("LOCK_CONFLICT");
+
+        existing.checkIn = parsed.checkIn;
+        existing.checkOut = parsed.checkOut;
+        existing.guestDetails = {
+          name: parsed.guestName ?? existing.guestDetails?.name ?? "",
+          email: parsed.guestEmail ?? existing.guestDetails?.email ?? "",
+          phone: parsed.guestPhone ?? existing.guestDetails?.phone ?? "",
+        };
+        await existing.save({ session });
+
+        await auditLog({
+          action: "booking.update",
+          targetType: "booking",
+          targetId: String(existing._id),
+          metadata: {
+            source: "axisrooms_inbound",
+            eventType: "modify",
+            bookingNo,
+            oldCheckIn,
+            oldCheckOut,
+            checkIn: parsed.checkIn,
+            checkOut: parsed.checkOut,
+          },
+        });
+      });
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Modify failed";
+      await WebhookEventModel.updateOne(
+        { eventId, source: "axisrooms" },
+        { $set: { status: "failed", error: message } },
+      );
+      return { ok: false, error: message };
+    }
+
+    await WebhookEventModel.updateOne(
+      { eventId, source: "axisrooms" },
+      { $set: { status: "processed" } },
+    );
     return { ok: true, bookingId: String(existing._id) };
   }
 
   if (existing) {
+    await WebhookEventModel.updateOne(
+      { eventId, source: "axisrooms" },
+      { $set: { status: "processed" } },
+    );
     return { ok: true, bookingId: String(existing._id), duplicate: true };
   }
 
@@ -133,7 +233,7 @@ export async function upsertAxisRoomsInbound(
   });
 
   try {
-    return await withTransaction(async (session) => {
+    const result = await withTransaction(async (session) => {
       const now = new Date();
       const overlaps = await BookingModel.find({
         villaId: villa._id,
@@ -259,7 +359,21 @@ export async function upsertAxisRoomsInbound(
         conflict: hasDirectConflict,
       };
     });
+    await WebhookEventModel.updateOne(
+      { eventId, source: "axisrooms" },
+      { $set: { status: "processed", error: undefined } },
+    );
+    return result;
   } catch (e) {
+    await WebhookEventModel.updateOne(
+      { eventId, source: "axisrooms" },
+      {
+        $set: {
+          status: "failed",
+          error: e instanceof Error ? e.message : "Inbound upsert failed",
+        },
+      },
+    );
     return {
       ok: false,
       error: e instanceof Error ? e.message : "Inbound upsert failed",

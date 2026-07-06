@@ -65,10 +65,25 @@ function describeAuditEntry(
       };
     case "booking.update": {
       if (metadata.source === "axisrooms_inbound" && metadata.eventType === "modify") {
+        const oldRange =
+          metadata.oldCheckIn && metadata.oldCheckOut
+            ? `${metadata.oldCheckIn} → ${metadata.oldCheckOut} updated to `
+            : "";
         return {
           title: "OTA reservation modified",
-          detail: `Dates updated — ${metadata.checkIn ?? "?"} to ${metadata.checkOut ?? "?"}`,
+          detail: `${oldRange}${metadata.checkIn ?? "?"} to ${metadata.checkOut ?? "?"}`,
           actorType: "ota",
+        };
+      }
+      if (metadata.action === "modify_dates") {
+        const delta =
+          typeof metadata.pricingDeltaPaise === "number"
+            ? ` · ${metadata.pricingDeltaPaise >= 0 ? "+" : ""}₹${(Math.abs(metadata.pricingDeltaPaise) / 100).toLocaleString("en-IN")}`
+            : "";
+        return {
+          title: "Staff rescheduled stay",
+          detail: `${metadata.oldCheckIn ?? "?"} → ${metadata.oldCheckOut ?? "?"} changed to ${metadata.newCheckIn ?? "?"} → ${metadata.newCheckOut ?? "?"}${delta}`,
+          actorType: "staff",
         };
       }
       if (metadata.stayStatus) {

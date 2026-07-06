@@ -11,6 +11,7 @@ import VillaCard from "./VillaCard";
 import BookingBanner from "./BookingBanner";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useBooking } from "@/context/BookingContext";
+import { compareBookingCalendarDates } from "@/lib/bookingUiDates";
 import { scrollToElement } from "@/lib/lenis";
 import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
 import HorizontalScrollRail from "@/components/ui/HorizontalScrollRail";
@@ -118,13 +119,15 @@ export default function VillasCarousel() {
   const hasDateConflict = (() => {
     const { checkIn, checkOut } = dateRange;
     if (!checkIn || !checkOut) return false;
-    const from = checkIn.month * 31 + checkIn.day;
-    const to = checkOut.month * 31 + checkOut.day;
+    const from = checkIn.iso;
+    const to = checkOut.iso;
     for (const month of VILLA_MONTHS) {
       const days = VILLA_UNAVAILABLE[month.name] ?? [];
       for (const d of days) {
-        const val = month.month * 31 + d;
-        if (val >= from && val <= to) return true;
+        const date = new Date();
+        const candidateYear = date.getFullYear();
+        const val = `${candidateYear}-${String(month.month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+        if (val >= from && val < to) return true;
       }
     }
     return false;

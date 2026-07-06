@@ -22,6 +22,7 @@ import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
 import { dash } from "@/lib/dashboard/dashboardClasses";
 import { formatPaise } from "@/lib/money";
 import { BookingFolioHistory } from "./BookingFolioHistory";
+import { RescheduleBookingModal } from "./RescheduleBookingModal";
 import { DashboardPanel } from "./DashboardPanel";
 import { EmptyState } from "./EmptyState";
 import { DashSectionCard, DashStatusChip } from "./form";
@@ -113,6 +114,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [notesDraft, setNotesDraft] = useState("");
+  const [rescheduleOpen, setRescheduleOpen] = useState(false);
 
   const fetchBooking = useCallback(async () => {
     setLoading(true);
@@ -275,10 +277,18 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
         </DashboardPanel>
       )}
 
-      {canWrite &&
-        booking.status !== "cancelled" &&
-        booking.status !== "on_hold" && (
+      {canWrite && booking.status !== "cancelled" && (
         <div className="booking-folio__actions flex flex-wrap gap-2">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => setRescheduleOpen(true)}
+            className="min-h-[44px] border border-[var(--dash-accent-border)] px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)] hover:bg-[var(--dash-accent-muted)] disabled:opacity-50"
+          >
+            Change dates
+          </button>
+          {booking.status !== "on_hold" && (
+            <>
           <button
             type="button"
             disabled={busy}
@@ -309,7 +319,17 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
               Refund
             </button>
           )}
+            </>
+          )}
         </div>
+      )}
+
+      {rescheduleOpen && (
+        <RescheduleBookingModal
+          booking={booking}
+          onClose={() => setRescheduleOpen(false)}
+          onSuccess={() => void fetchBooking()}
+        />
       )}
 
       {canWrite && (

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getMergedPublishedPosts } from "@/lib/cms/blogStore";
-import { VILLAS } from "@/lib/mockData";
+import { resolvePublicVillaList } from "@/lib/villas/resolvePublicVilla";
 
 const BASE = "https://jadehospitainment.com";
 
@@ -99,7 +99,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  const villaRoutes: MetadataRoute.Sitemap = VILLAS.flatMap((v) => [
+  const villas = await resolvePublicVillaList();
+  const villaRoutes: MetadataRoute.Sitemap = villas.flatMap((v) => [
     {
       url: `${BASE}/villas/${v.id}`,
       lastModified: new Date(),

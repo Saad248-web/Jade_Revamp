@@ -2,8 +2,6 @@
  * YYYY-MM-DD date utilities — exclusive-end overlap, IST day boundaries.
  */
 
-const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000;
-
 export function parseDateOnly(s: string): Date {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) {
     throw new Error(`Invalid date string: ${s}`);
@@ -54,11 +52,17 @@ export function expandDateRangeInclusive(start: string, end: string): string[] {
 }
 
 export function nowIST(): Date {
-  return new Date(Date.now() + IST_OFFSET_MS);
+  return new Date();
 }
 
 export function todayIST(): string {
-  return nowIST().toISOString().slice(0, 10);
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  return formatter.format(new Date());
 }
 
 export function isoFromBoundary(d: Date): string {

@@ -50,6 +50,10 @@ export function slugForRetreatId(retreatId: string): string | undefined {
   return CANONICAL_BY_RETREAT_ID.get(retreatId)?.slug;
 }
 
+export function retreatIdForSlug(slug: string): string | undefined {
+  return CANONICAL_BY_SLUG.get(slug)?.retreatId;
+}
+
 export function seedDocFromCanonical(v: CanonicalVilla) {
   const hasPricing = v.basePriceRupees > 0;
   return {

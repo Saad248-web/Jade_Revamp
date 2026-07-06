@@ -116,7 +116,10 @@ export async function POST(req: NextRequest) {
       await connectDB();
       await BookingModel.updateOne(
         { _id: booking.id },
-        { $set: { "payment.orderId": orderId } },
+        {
+          $set: { "payment.orderId": orderId },
+          $addToSet: { "payment.orderIds": orderId },
+        },
       );
     }
 

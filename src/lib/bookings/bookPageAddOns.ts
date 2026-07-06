@@ -15,9 +15,17 @@ export type BookPageAddOn = {
 };
 
 /** Paid + quote add-ons for /book UI — ids match server ADD_ON_CATALOG. */
-export function getBookPageAddOns(villaSlug?: string): BookPageAddOn[] {
+export function getBookPageAddOns(
+  villaSlug?: string,
+  allowedAddOnIds?: string[],
+): BookPageAddOn[] {
+  const hasConfiguredAllowlist =
+    Array.isArray(allowedAddOnIds) && allowedAddOnIds.length > 0;
   return Object.values(ADD_ON_CATALOG)
     .filter((entry) => {
+      if (hasConfiguredAllowlist) {
+        return allowedAddOnIds.includes(entry.id);
+      }
       if (COMPLIMENTARY_ADDON_IDS.has(entry.id)) return false;
       if (entry.villaIds?.length && villaSlug) {
         return entry.villaIds.includes(villaSlug);

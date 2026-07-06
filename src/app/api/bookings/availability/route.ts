@@ -7,7 +7,10 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const villaSlug = searchParams.get("villaId") ?? searchParams.get("villaSlug");
+  const villaKey =
+    searchParams.get("publicVillaId") ??
+    searchParams.get("villaSlug") ??
+    searchParams.get("villaId");
   const year = Number(searchParams.get("year"));
   const month = Number(searchParams.get("month"));
 
@@ -24,9 +27,9 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  if (!villaSlug || isNaN(year) || isNaN(month) || month < 0 || month > 11) {
+  if (!villaKey || isNaN(year) || isNaN(month) || month < 0 || month > 11) {
     return NextResponse.json(
-      { error: "Valid villaId/villaSlug, year, and month are required" },
+      { error: "Valid publicVillaId/villaSlug, year, and month are required" },
       { status: 400 },
     );
   }
@@ -39,7 +42,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const villa = await findVillaBySlug(villaSlug);
+    const villa = await findVillaBySlug(villaKey);
     if (!villa) {
       return NextResponse.json({ bookedDates: [], blockedDates: [] });
     }

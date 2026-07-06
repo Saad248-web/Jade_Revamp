@@ -51,6 +51,25 @@ export interface BookingRecord {
   updatedAt: Date;
 }
 
+export interface ModifyBookingPreview {
+  current: { checkIn: string; checkOut: string; pricing: BookingPricing };
+  proposed: { checkIn: string; checkOut: string; pricing: BookingPricing };
+  deltaPaise: number;
+  paymentPreview: BookingPayment;
+  paymentWarning?: string;
+  available: boolean;
+  conflictingDate?: string;
+  axisWillSync: boolean;
+  unchanged: boolean;
+}
+
+export interface ModifyBookingDatesResult {
+  booking: BookingRecord;
+  oldCheckIn: string;
+  oldCheckOut: string;
+  paymentWarning?: string;
+}
+
 export interface BookingStore {
   createPending(params: CreateBookingParams): Promise<BookingRecord>;
   findById(id: string): Promise<BookingRecord | null>;
@@ -74,8 +93,21 @@ export interface BookingStore {
   updateNotes(id: string, notes: string): Promise<BookingRecord | null>;
   createManual(params: CreateBookingParams & { source?: string; status?: BookingStatus }): Promise<BookingRecord>;
   softDelete(id: string, userId?: string): Promise<boolean>;
-  getAvailability(villaId: string, from: string, to: string): Promise<{
+  getAvailability(
+    villaId: string,
+    from: string,
+    to: string,
+    excludeBookingId?: string,
+  ): Promise<{
     bookedDates: string[];
     blockedDates: string[];
   }>;
+  previewModifyBookingDates(
+    id: string,
+    params: { checkIn: string; checkOut: string },
+  ): Promise<ModifyBookingPreview | null>;
+  modifyBookingDates(
+    id: string,
+    params: { checkIn: string; checkOut: string; userId?: string },
+  ): Promise<ModifyBookingDatesResult | null>;
 }

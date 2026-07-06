@@ -51,6 +51,7 @@ export interface ComputePricingInput {
   eventStartDate?: string;
   eventEndDate?: string;
   addOns?: AddOnLine[];
+  allowedAddOnIds?: string[];
 }
 
 export interface PricingError {
@@ -74,6 +75,7 @@ function computeAddOns(
   lines: AddOnLine[] | undefined,
   guestPax: number,
   villaSlug: string,
+  allowedAddOnIds: string[] | undefined,
 ): {
   addOnPaise: number;
   quoteOnlyAddOns: string[];
@@ -82,6 +84,8 @@ function computeAddOns(
   let addOnPaise = 0;
   const quoteOnlyAddOns: string[] = [];
   const errors: PricingError[] = [];
+  const hasConfiguredAllowlist =
+    Array.isArray(allowedAddOnIds) && allowedAddOnIds.length > 0;
 
   for (const line of lines ?? []) {
     if (COMPLIMENTARY_ADDON_IDS.has(line.id)) continue;
@@ -90,7 +94,14 @@ function computeAddOns(
       errors.push({ code: "INVALID_ADDON", message: `Unknown add-on: ${line.id}` });
       continue;
     }
-    if (entry.villaIds && !entry.villaIds.includes(villaSlug)) {
+    if (hasConfiguredAllowlist && !allowedAddOnIds.includes(line.id)) {
+      errors.push({
+        code: "ADDON_NOT_AVAILABLE",
+        message: `${line.id} not available for this villa`,
+      });
+      continue;
+    }
+    if (!hasConfiguredAllowlist && entry.villaIds && !entry.villaIds.includes(villaSlug)) {
       errors.push({ code: "ADDON_NOT_AVAILABLE", message: `${line.id} not at this villa` });
       continue;
     }
@@ -181,6 +192,7 @@ export function computeBookingPricing(
     input.addOns,
     heads,
     v.slug,
+    input.allowedAddOnIds,
   );
   errors.push(...addOnErrors);
 

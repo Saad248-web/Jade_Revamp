@@ -1,17 +1,9 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import type { DateRange, Guests } from "@/lib/types";
 
-export interface DateRange {
-  checkIn: { month: number; day: number } | null;
-  checkOut: { month: number; day: number } | null;
-}
-
-export interface Guests {
-  adults: number;
-  children: number;
-  pets: number;
-}
+export type { DateRange, Guests } from "@/lib/types";
 
 interface BookingContextProps {
   dateRange: DateRange;

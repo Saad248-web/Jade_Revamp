@@ -5,9 +5,9 @@ import { getBookingStore } from "@/lib/bookings/mongoStore";
 import { isBookingRef } from "@/lib/bookings/ids";
 import { issueRazorpayRefund } from "@/lib/payments/refund";
 import { requireRole } from "@/lib/auth/requireRole";
-import { queueBookingInventorySync } from "@/lib/axisRooms/sync";
+import { queueBookingInventorySync, queueBookingInventoryModify } from "@/lib/axisRooms/sync";
 import { readJsonBody, SafeJsonError } from "@/lib/security/safeJson";
-import { assertPlainObject } from "@/lib/security/validateInput";
+import { assertPlainObject, isoDateSchema } from "@/lib/security/validateInput";
 import { z } from "zod";
 
 export const dynamic = "force-dynamic";
@@ -30,6 +30,11 @@ const patchSchema = z.discriminatedUnion("action", [
   z.object({
     action: z.literal("notes"),
     notes: z.string().max(2000),
+  }),
+  z.object({
+    action: z.literal("modify_dates"),
+    checkIn: isoDateSchema,
+    checkOut: isoDateSchema,
   }),
 ]);
 
@@ -131,6 +136,55 @@ export async function PATCH(
       return NextResponse.json({
         booking: refreshed ?? updated,
         axisSync: sync,
+      });
+    }
+
+    if (parsed.data.action === "modify_dates") {
+      let result;
+      try {
+        result = await store.modifyBookingDates(params.id, {
+          checkIn: parsed.data.checkIn,
+          checkOut: parsed.data.checkOut,
+          userId: auth.userId,
+        });
+      } catch (e) {
+        if (e instanceof Error) {
+          const code = e.message;
+          if (code === "DATE_CONFLICT" || code === "BLOCK_CONFLICT" || code === "LOCK_CONFLICT") {
+            return NextResponse.json(
+              { error: "Selected dates are no longer available", code },
+              { status: 409 },
+            );
+          }
+          if (code === "INVALID_DATES") {
+            return NextResponse.json(
+              { error: "Check-out must be after check-in" },
+              { status: 422 },
+            );
+          }
+          return NextResponse.json({ error: e.message }, { status: 400 });
+        }
+        throw e;
+      }
+
+      if (!result) {
+        return NextResponse.json({ error: "Not found" }, { status: 404 });
+      }
+
+      const axisSync =
+        result.oldCheckIn !== result.booking.checkIn ||
+        result.oldCheckOut !== result.booking.checkOut
+          ? await queueBookingInventoryModify(params.id, {
+              checkIn: result.oldCheckIn,
+              checkOut: result.oldCheckOut,
+            })
+          : { ok: true as const };
+
+      const refreshed = await store.findById(params.id);
+      return NextResponse.json({
+        booking: refreshed ?? result.booking,
+        axisSync,
+        paymentWarning: result.paymentWarning,
       });
     }
 

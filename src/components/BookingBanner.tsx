@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { useBooking } from "@/context/BookingContext";
+import { formatBookingCalendarDate } from "@/lib/bookingUiDates";
 
 export default function BookingBanner({ onSearch }: { onSearch?: () => void }) {
   const { dateRange, guests } = useBooking();
@@ -18,27 +19,8 @@ export default function BookingBanner({ onSearch }: { onSearch?: () => void }) {
     if (!mounted) return "Add Dates"; // Render consistently on server
     if (!dateRange.checkIn && !dateRange.checkOut) return "Add Dates";
 
-    const formatDayMonth = (date: { month: number; day: number } | null) => {
-      if (!date) return "";
-      const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      return `${date.day} ${months[date.month]}`;
-    };
-
-    const inStr = formatDayMonth(dateRange.checkIn);
-    const outStr = formatDayMonth(dateRange.checkOut);
+    const inStr = formatBookingCalendarDate(dateRange.checkIn);
+    const outStr = formatBookingCalendarDate(dateRange.checkOut);
 
     if (inStr && outStr) return `${inStr} - ${outStr}`;
     if (inStr) return `${inStr} - Add Checkout`;

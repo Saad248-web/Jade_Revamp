@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
 
     const { connectDB } = await import("@/lib/db");
     const { CareerModel } = await import("@/models/Career");
-    const { uploadToGridFS } = await import("@/lib/storage/gridfs");
+    const { deleteFromGridFS, uploadToGridFS } = await import("@/lib/storage/gridfs");
     const { auditLog } = await import("@/lib/audit/auditLog");
 
     await connectDB();
@@ -124,55 +124,68 @@ export async function POST(req: NextRequest) {
       bucketName: "resumes",
     });
 
-    const doc = await CareerModel.create({
-      jobId,
-      jobTitle,
-      sourcePage: sourcePage || "/careers",
-      applyContext: resolvedContext,
-      clientPath,
-      fullName,
-      email,
-      phone,
-      company,
-      resume: {
-        filename: resumeFilename,
-        mime: resumeMime,
-        size,
-        gridFsId,
-      },
-    });
+    let rowId: string | null = null;
+    try {
+      const doc = await CareerModel.create({
+        jobId,
+        jobTitle,
+        sourcePage: sourcePage || "/careers",
+        applyContext: resolvedContext,
+        clientPath,
+        fullName,
+        email,
+        phone,
+        company,
+        resume: {
+          filename: resumeFilename,
+          mime: resumeMime,
+          size,
+          gridFsId,
+        },
+      });
 
-    await auditLog({
-      action: "career.apply",
-      targetType: "career",
-      targetId: String(doc._id),
-      ip,
-    });
+      await auditLog({
+        action: "career.apply",
+        targetType: "career",
+        targetId: String(doc._id),
+        ip,
+      });
 
-    const row = { id: String(doc._id) };
-    if (!row?.id) {
+      rowId = String(doc._id);
+      if (!rowId) {
+        return NextResponse.json(
+          { error: "Unable to save application" },
+          { status: 500, headers: { "Cache-Control": "no-store" } },
+        );
+      }
+
+      await notifyCareerApplication({
+        jobId,
+        jobTitle,
+        applyContext: resolvedContext,
+        sourcePage: sourcePage || "/careers",
+        applicantName: fullName,
+        applicantEmail: email,
+        applicationId: rowId,
+        phone,
+        company,
+        resumeGridFsId: gridFsId,
+        resumeFilename,
+      });
+    } catch (error) {
+      await deleteFromGridFS(gridFsId, "resumes").catch(() => undefined);
+      throw error;
+    }
+
+    if (!rowId) {
       return NextResponse.json(
         { error: "Unable to save application" },
         { status: 500, headers: { "Cache-Control": "no-store" } },
       );
     }
 
-    await notifyCareerApplication({
-      jobId,
-      jobTitle,
-      applyContext: resolvedContext,
-      sourcePage: sourcePage || "/careers",
-      applicantName: fullName,
-      applicantEmail: email,
-      applicationId: row.id,
-      phone,
-      company,
-      resumeGridFsId: gridFsId,
-      resumeFilename,
-    });
-
     return NextResponse.json(
-      { ok: true, applicationId: row.id },
+      { ok: true, applicationId: rowId },
       { status: 201, headers: { "Cache-Control": "no-store" } },
     );
   } catch (err) {

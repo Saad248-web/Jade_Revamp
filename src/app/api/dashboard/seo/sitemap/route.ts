@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth/requireRole";
-import { withMongo } from "@/lib/api/mongoRoute";
-import { VillaModel } from "@/models/Villa";
 import { getMergedPublishedPosts } from "@/lib/cms/blogStore";
+import { resolvePublicVillaList } from "@/lib/villas/resolvePublicVilla";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -29,42 +28,34 @@ export async function GET(req: NextRequest) {
       "/about",
       "/contact",
       "/careers",
-      "/privacy",
+      "/privacy-policy",
+      "/terms-conditions",
+      "/refund-policy",
     ];
 
-    const result = await withMongo(async () => {
-      const villas = await VillaModel.find({
-        isDeleted: false,
-        status: { $ne: "hidden" },
-        "content.hideFromVillasDirectory": { $ne: true },
-      })
-        .select("slug")
-        .lean();
+    const [villas, blogPosts] = await Promise.all([
+      resolvePublicVillaList(),
+      getMergedPublishedPosts(),
+    ]);
+    const urls = [
+      ...staticPaths.map((path) => ({
+        loc: `${BASE}${path === "/" ? "" : path}`,
+        type: "static" as const,
+        priority: path === "/" ? 1 : 0.8,
+      })),
+      ...villas.map((villa) => ({
+        loc: `${BASE}/villas/${villa.id}`,
+        type: "villa" as const,
+        priority: 0.85,
+      })),
+      ...blogPosts.map((p) => ({
+        loc: `${BASE}/blogs/${p.slug}`,
+        type: "blog" as const,
+        priority: 0.7,
+      })),
+    ];
 
-      const blogPosts = await getMergedPublishedPosts();
-      const urls = [
-        ...staticPaths.map((path) => ({
-          loc: `${BASE}${path === "/" ? "" : path}`,
-          type: "static" as const,
-          priority: path === "/" ? 1 : 0.8,
-        })),
-        ...villas.map((v) => ({
-          loc: `${BASE}/villas/${v.slug}`,
-          type: "villa" as const,
-          priority: 0.85,
-        })),
-        ...blogPosts.map((p) => ({
-          loc: `${BASE}/blogs/${p.slug}`,
-          type: "blog" as const,
-          priority: 0.7,
-        })),
-      ];
-
-      return { urls, total: urls.length, base: BASE };
-    });
-
-    if (result instanceof NextResponse) return result;
-    return NextResponse.json(result);
+    return NextResponse.json({ urls, total: urls.length, base: BASE });
   } catch (e) {
     console.error("[GET /api/dashboard/seo/sitemap] unhandled", e);
     const detail = e instanceof Error ? e.message : "Unexpected error";

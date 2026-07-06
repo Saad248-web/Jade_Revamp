@@ -226,3 +226,79 @@ export async function queueBookingInventorySync(
   await markBookingSyncResult(bookingId, result, mode);
   return result;
 }
+
+function shouldPushAxisOnModify(booking: BookingDoc): boolean {
+  if (booking.source?.startsWith("axisrooms_")) return false;
+  if (booking.status === "on_hold" || booking.status === "confirmed") return true;
+  return Boolean(booking.axisRoomsSynced);
+}
+
+/** Reschedule inventory: open old date range, then close new range (API 1). */
+export async function syncBookingInventoryModify(
+  booking: BookingDoc,
+  oldCheckIn: string,
+  oldCheckOut: string,
+): Promise<AxisRoomsPushResult> {
+  if (booking.source?.startsWith("axisrooms_")) {
+    return { ok: true };
+  }
+  if (!booking.checkIn || !booking.checkOut) {
+    return { ok: false, error: "Missing dates" };
+  }
+  if (oldCheckIn === booking.checkIn && oldCheckOut === booking.checkOut) {
+    return { ok: true };
+  }
+
+  const ctx = await loadVillaForBooking(booking);
+  if (!ctx) return { ok: false, error: "Villa not mapped to Axis Rooms" };
+
+  const push = shouldPushAxisOnModify(booking);
+  if (!push) return { ok: true };
+
+  const auditTargetId = String(booking._id);
+  const { propertyId, roomTypeId } = ctx.mapping;
+  if (!propertyId || !roomTypeId) {
+    return { ok: false, error: "Incomplete Axis mapping" };
+  }
+
+  const openResult = await pushInventoryForRange({
+    hotelId: propertyId,
+    roomId: roomTypeId,
+    checkIn: oldCheckIn,
+    checkOut: oldCheckOut,
+    free: 1,
+    auditTargetId,
+    auditTargetType: "booking",
+  });
+  if (!openResult.ok) return openResult;
+
+  const closeResult = await pushInventoryForRange({
+    hotelId: propertyId,
+    roomId: roomTypeId,
+    checkIn: booking.checkIn,
+    checkOut: booking.checkOut,
+    free: 0,
+    auditTargetId,
+    auditTargetType: "booking",
+  });
+  if (!closeResult.ok) return closeResult;
+
+  return { ok: true };
+}
+
+export async function queueBookingInventoryModify(
+  bookingId: string,
+  oldDates: { checkIn: string; checkOut: string },
+): Promise<AxisRoomsPushResult> {
+  await connectDB();
+  const doc = await BookingModel.findById(bookingId);
+  if (!doc) return { ok: false, error: "Booking not found" };
+
+  const result = await syncBookingInventoryModify(
+    doc,
+    oldDates.checkIn,
+    oldDates.checkOut,
+  );
+  await markBookingSyncResult(bookingId, result, "close");
+  return result;
+}

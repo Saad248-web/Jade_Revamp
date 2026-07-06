@@ -10,6 +10,11 @@ import {
   isVillaPubliclyHidden,
   repairStaleDirectoryHideFlag,
 } from "@/lib/villas/villaVisibility";
+import {
+  publicVillaIdForSlug,
+  slugForPublicVillaId,
+  villaIdentityCandidates,
+} from "@/lib/villas/identity";
 
 type MongoVilla = {
   _id?: unknown;
@@ -31,6 +36,7 @@ type MongoVilla = {
   content?: Record<string, unknown>;
   portfolioSource?: string;
   updatedAt?: Date;
+  addOnAvailability?: string[];
   extraPaxStayPaise?: number;
   extraPaxDayOutPaise?: number;
   weddingVenue?: boolean;
@@ -77,6 +83,8 @@ function shellFromMongo(doc: MongoVilla): Villa {
   const thumb = doc.thumbnail || content.images?.[0] || "";
   return {
     id: retreatId,
+    slug: doc.slug,
+    retreatId,
     name: doc.shortName ?? doc.name,
     type: doc.type ?? "",
     location: doc.location ?? "",
@@ -95,6 +103,7 @@ function shellFromMongo(doc: MongoVilla): Villa {
     activities: content.activities,
     categorizedSpaces: content.categorizedSpaces,
     pricing: operationalPricing(doc) as Villa["pricing"],
+    addOnAvailability: doc.addOnAvailability ?? [],
     locationDetails: content.locationDetails,
     video: content.video,
     faq: content.faq,
@@ -118,6 +127,8 @@ function mergeStaticWithMongo(staticVilla: Villa, doc: MongoVilla): Villa {
 
   return {
     ...staticVilla,
+    slug: doc.slug,
+    retreatId,
     name: doc.shortName ?? doc.name ?? staticVilla.name,
     type: mergePublicText(doc.type, staticVilla.type),
     location: mergePublicText(doc.location, staticVilla.location),
@@ -165,6 +176,7 @@ function mergeStaticWithMongo(staticVilla: Villa, doc: MongoVilla): Villa {
         ? content.spaces
         : staticVilla.spaces,
     pricing: operationalPricing(doc, staticVilla) as Villa["pricing"],
+    addOnAvailability: doc.addOnAvailability ?? staticVilla.addOnAvailability,
     locationDetails: content.locationDetails ?? staticVilla.locationDetails,
     video:
       content.video &&
@@ -199,13 +211,19 @@ function mergeStaticWithMongo(staticVilla: Villa, doc: MongoVilla): Villa {
 export async function resolvePublicVilla(
   retreatId: string,
 ): Promise<Villa | null> {
+  const publicId = publicVillaIdForSlug(retreatId);
+  const slug = slugForPublicVillaId(retreatId);
   const staticVilla = STATIC_VILLAS.find(
-    (v) => v.id === retreatId,
+    (v) => v.id === publicId,
   ) as Villa | undefined;
+  const candidates = villaIdentityCandidates(retreatId);
 
   await connectDB();
   const doc = (await VillaModel.findOne({
-    $or: [{ retreatId }, { slug: retreatId }],
+    $or: candidates.flatMap((candidate) => [
+      { retreatId: candidate },
+      { slug: candidate },
+    ]),
     isDeleted: false,
   }).lean()) as MongoVilla | null;
 
@@ -219,7 +237,15 @@ export async function resolvePublicVilla(
     }
   }
   if (!doc && !staticVilla) return null;
-  if (!doc) return staticVilla ?? null;
+  if (!doc) {
+    return staticVilla
+      ? {
+          ...staticVilla,
+          slug,
+          retreatId: publicId,
+        }
+      : null;
+  }
   if (!staticVilla) return shellFromMongo(doc);
   return mergeStaticWithMongo(staticVilla, doc);
 }

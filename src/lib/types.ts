@@ -3,10 +3,12 @@
  * Shared booking/enquiry types for /book, BookingContext, and overlays.
  */
 
+import type { BookingCalendarDate } from "@/lib/bookingUiDates";
+
 // ─── Date & Booking Core ──────────────────────────────────
 export interface DateRange {
-  checkIn: { month: number; day: number } | null;
-  checkOut: { month: number; day: number } | null;
+  checkIn: BookingCalendarDate | null;
+  checkOut: BookingCalendarDate | null;
 }
 
 export interface Guests {
@@ -107,10 +109,13 @@ export interface VillaFAQ {
 
 export interface Villa {
   id: string;
+  slug?: string;
+  retreatId?: string;
   /** When true, excluded from `/villas` listing only (deep links unchanged). */
   hideFromVillasDirectory?: boolean;
   /** When false, hide book flow and show enquire-only (default: bookable). */
   bookable?: boolean;
+  addOnAvailability?: string[];
   name: string;
   /** One-line trust signal shown under villa name on detail page */
   socialProof?: string;

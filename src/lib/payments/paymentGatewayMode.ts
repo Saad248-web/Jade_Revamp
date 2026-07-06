@@ -39,6 +39,13 @@ function razorpayKeysConfigured(): boolean {
   );
 }
 
+function allowSimulatedPaymentsOnProduction(): boolean {
+  return (
+    process.env.ALLOW_SIMULATED_PAYMENTS_IN_PRODUCTION === "1" ||
+    process.env.NEXT_PUBLIC_ALLOW_SIMULATED_PAYMENTS_IN_PRODUCTION === "1"
+  );
+}
+
 /** Server-side effective mode (defaults to `test` when Razorpay keys are missing). */
 export function getPaymentGatewayMode(): PaymentGatewayMode {
   const explicit = parseMode(process.env.PAYMENT_GATEWAY_MODE);
@@ -51,7 +58,11 @@ export function getPaymentGatewayMode(): PaymentGatewayMode {
 
 /** Simulated Pay — enabled whenever the explicit mode is `test`. */
 export function isSimulatedPaymentEnabled(): boolean {
-  return getPaymentGatewayMode() === "test";
+  if (getPaymentGatewayMode() !== "test") return false;
+  if (process.env.NODE_ENV === "production" && !allowSimulatedPaymentsOnProduction()) {
+    return false;
+  }
+  return true;
 }
 
 /** Client-visible mode (NEXT_PUBLIC_PAYMENT_GATEWAY_MODE mirrors PAYMENT_GATEWAY_MODE). */
@@ -59,6 +70,13 @@ export function getClientPaymentGatewayMode(): PaymentGatewayMode {
   const explicit =
     parseMode(process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_MODE) ??
     parseMode(process.env.PAYMENT_GATEWAY_MODE);
+  if (
+    explicit === "test" &&
+    process.env.NODE_ENV === "production" &&
+    !allowSimulatedPaymentsOnProduction()
+  ) {
+    return "production";
+  }
   if (explicit) return explicit;
   const publicKey = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_KEY?.trim();
   if (publicKey) return "razorpay_test";

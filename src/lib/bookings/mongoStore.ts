@@ -5,20 +5,27 @@ import {
   releaseNightLocks,
   withTransaction,
 } from "@/lib/bookings/nightLocks";
-import { lockDatesForBooking } from "@/lib/bookings/pricing";
+import { lockDatesForBooking, computeBookingPricing } from "@/lib/bookings/pricing";
+import {
+  axisWillSyncOnModify,
+  normalizeModifyCheckOut,
+  recalcPaymentAfterModify,
+} from "@/lib/bookings/modifyDates";
 import type {
   BookingRecord,
   BookingStore,
   CreateBookingParams,
+  ModifyBookingDatesResult,
+  ModifyBookingPreview,
 } from "@/lib/bookings/store";
 import type { StayStatus } from "@/lib/bookings/types";
 import { connectDB } from "@/lib/db";
 import { queueBookingInventorySync } from "@/lib/axisRooms/sync";
 import { notifyBookingConfirmed } from "@/lib/email/bookingNotifications";
+import { slugForPublicVillaId, villaIdentityCandidates } from "@/lib/villas/identity";
 import { BookingModel } from "@/models/Booking";
 import { VillaBlockModel } from "@/models/VillaBlock";
 import { VillaModel } from "@/models/Villa";
-import { WebhookEventModel } from "@/models/WebhookEvent";
 import type { Types } from "mongoose";
 
 function toRecord(doc: {
@@ -194,7 +201,7 @@ export class MongoBookingStore implements BookingStore {
   async findByOrderId(orderId: string): Promise<BookingRecord | null> {
     await connectDB();
     const doc = await BookingModel.findOne({
-      "payment.orderId": orderId,
+      $or: [{ "payment.orderId": orderId }, { "payment.orderIds": orderId }],
       isDeleted: false,
     });
     return doc ? toRecord(doc) : null;
@@ -226,20 +233,6 @@ export class MongoBookingStore implements BookingStore {
   }): Promise<{ ok: boolean; alreadyConfirmed?: boolean }> {
     await connectDB();
 
-    try {
-      await WebhookEventModel.create({
-        eventId: params.eventId,
-        source: "razorpay",
-        status: "processed",
-      });
-    } catch (e: unknown) {
-      const err = e as { code?: number };
-      if (err.code === 11000) {
-        return { ok: true, alreadyConfirmed: true };
-      }
-      throw e;
-    }
-
     let emailPayload: Parameters<typeof notifyBookingConfirmed>[0] | null = null;
 
     const result = await withTransaction(async (session) => {
@@ -259,7 +252,10 @@ export class MongoBookingStore implements BookingStore {
         {
           _id: params.bookingId,
           status: { $ne: "confirmed" },
-          "payment.orderId": params.orderId,
+          $or: [
+            { "payment.orderId": params.orderId },
+            { "payment.orderIds": params.orderId },
+          ],
         },
         {
           $set: {
@@ -270,9 +266,13 @@ export class MongoBookingStore implements BookingStore {
                 : "paid",
             "payment.paymentId": params.paymentId,
             "payment.processedPaymentId": params.paymentId,
+            "payment.orderId": params.orderId,
             "payment.depositPaidPaise": depositPaid,
             expiresAt: null,
             axisRoomsSynced: false,
+          },
+          $addToSet: {
+            "payment.orderIds": params.orderId,
           },
         },
         { new: true, session },
@@ -602,6 +602,7 @@ export class MongoBookingStore implements BookingStore {
     villaId: string,
     from: string,
     to: string,
+    excludeBookingId?: string,
   ): Promise<{ bookedDates: string[]; blockedDates: string[] }> {
     await connectDB();
     const now = new Date();
@@ -620,6 +621,7 @@ export class MongoBookingStore implements BookingStore {
 
     const bookedDates = new Set<string>();
     for (const b of bookings) {
+      if (excludeBookingId && String(b._id) === excludeBookingId) continue;
       let cur = b.checkIn;
       while (cur < b.checkOut && cur < to) {
         if (cur >= from) bookedDates.add(cur);
@@ -643,6 +645,247 @@ export class MongoBookingStore implements BookingStore {
     return {
       bookedDates: Array.from(bookedDates),
       blockedDates: Array.from(blockedDates),
+    };
+  }
+
+  async previewModifyBookingDates(
+    id: string,
+    params: { checkIn: string; checkOut: string },
+  ): Promise<ModifyBookingPreview | null> {
+    await connectDB();
+    const doc = await BookingModel.findOne({ _id: id, isDeleted: false });
+    if (!doc || doc.status === "cancelled") return null;
+
+    const villa = await VillaModel.findById(doc.villaId);
+    if (!villa) return null;
+
+    let checkOut: string;
+    try {
+      checkOut = normalizeModifyCheckOut(
+        doc.bookingType as import("./types").BookingType,
+        params.checkIn,
+        params.checkOut,
+      );
+    } catch {
+      throw new Error("INVALID_DATES");
+    }
+
+    const unchanged =
+      doc.checkIn === params.checkIn && doc.checkOut === checkOut;
+
+    const { pricing: newPricing, depositPaise, errors } = computeBookingPricing({
+      villa: villa.toObject(),
+      bookingType: doc.bookingType as import("./types").BookingType,
+      checkIn: params.checkIn,
+      checkOut,
+      guests: doc.guests,
+      adults: doc.adults,
+      children: doc.children,
+      addOns: doc.addOns,
+      eventTierId: doc.eventTierId,
+      eventGuests: doc.eventGuests,
+      eventStartDate: doc.eventStartDate,
+      eventEndDate: doc.eventEndDate,
+      allowedAddOnIds: villa.addOnAvailability,
+    });
+
+    if (errors.length > 0) {
+      throw new Error(errors[0].message);
+    }
+
+    const oldPricing = doc.pricing as BookingRecord["pricing"];
+    const { payment: paymentPreview, warning: paymentWarning } =
+      recalcPaymentAfterModify({
+        payment: doc.payment as BookingRecord["payment"],
+        oldPricing,
+        newPricing,
+        newDepositPaise: depositPaise,
+      });
+
+    const lockDates = lockDatesForBooking({
+      bookingType: doc.bookingType as import("./types").BookingType,
+      checkIn: params.checkIn,
+      checkOut,
+      eventStartDate: doc.eventStartDate,
+      eventEndDate: doc.eventEndDate,
+    });
+
+    const { bookedDates, blockedDates } = await this.getAvailability(
+      String(doc.villaId),
+      params.checkIn,
+      checkOut,
+      id,
+    );
+    const blocked = new Set([...bookedDates, ...blockedDates]);
+    const conflictingDate = lockDates.find((date) => blocked.has(date));
+
+    return {
+      current: {
+        checkIn: doc.checkIn,
+        checkOut: doc.checkOut,
+        pricing: oldPricing,
+      },
+      proposed: {
+        checkIn: params.checkIn,
+        checkOut,
+        pricing: newPricing,
+      },
+      deltaPaise: newPricing.totalPaise - (oldPricing?.totalPaise ?? 0),
+      paymentPreview,
+      paymentWarning,
+      available: !conflictingDate,
+      conflictingDate,
+      axisWillSync: axisWillSyncOnModify(
+        doc.source,
+        doc.status,
+        doc.axisRoomsSynced,
+      ),
+      unchanged,
+    };
+  }
+
+  async modifyBookingDates(
+    id: string,
+    params: { checkIn: string; checkOut: string; userId?: string },
+  ): Promise<ModifyBookingDatesResult | null> {
+    await connectDB();
+    const doc = await BookingModel.findOne({ _id: id, isDeleted: false });
+    if (!doc || doc.status === "cancelled") return null;
+
+    const villa = await VillaModel.findById(doc.villaId);
+    if (!villa) return null;
+
+    let checkOut: string;
+    try {
+      checkOut = normalizeModifyCheckOut(
+        doc.bookingType as import("./types").BookingType,
+        params.checkIn,
+        params.checkOut,
+      );
+    } catch {
+      throw new Error("INVALID_DATES");
+    }
+
+    const oldCheckIn = doc.checkIn;
+    const oldCheckOut = doc.checkOut;
+
+    if (oldCheckIn === params.checkIn && oldCheckOut === checkOut) {
+      return {
+        booking: toRecord(doc),
+        oldCheckIn,
+        oldCheckOut,
+      };
+    }
+
+    const { pricing: newPricing, depositPaise, errors } = computeBookingPricing({
+      villa: villa.toObject(),
+      bookingType: doc.bookingType as import("./types").BookingType,
+      checkIn: params.checkIn,
+      checkOut,
+      guests: doc.guests,
+      adults: doc.adults,
+      children: doc.children,
+      addOns: doc.addOns,
+      eventTierId: doc.eventTierId,
+      eventGuests: doc.eventGuests,
+      eventStartDate: doc.eventStartDate,
+      eventEndDate: doc.eventEndDate,
+      allowedAddOnIds: villa.addOnAvailability,
+    });
+
+    if (errors.length > 0) {
+      throw new Error(errors[0].message);
+    }
+
+    const oldPricing = doc.pricing as BookingRecord["pricing"];
+    const { payment: newPayment, warning: paymentWarning } =
+      recalcPaymentAfterModify({
+        payment: doc.payment as BookingRecord["payment"],
+        oldPricing,
+        newPricing,
+        newDepositPaise: depositPaise,
+      });
+
+    const lockDates = lockDatesForBooking({
+      bookingType: doc.bookingType as import("./types").BookingType,
+      checkIn: params.checkIn,
+      checkOut,
+      eventStartDate: doc.eventStartDate,
+      eventEndDate: doc.eventEndDate,
+    });
+
+    const villaOid = doc.villaId as Types.ObjectId;
+
+    const updated = await withTransaction(async (session) => {
+      const now = new Date();
+      const overlapBookings = await BookingModel.find({
+        villaId: villaOid,
+        _id: { $ne: doc._id },
+        ...(await activeBookingFilter(now)),
+      }).session(session);
+
+      for (const b of overlapBookings) {
+        if (
+          rangesOverlap(params.checkIn, checkOut, b.checkIn, b.checkOut)
+        ) {
+          throw new Error("DATE_CONFLICT");
+        }
+      }
+
+      const blocks = await VillaBlockModel.find({
+        villaId: villaOid,
+        isDeleted: false,
+      }).session(session);
+      for (const bl of blocks) {
+        if (
+          rangesOverlap(params.checkIn, checkOut, bl.checkIn, bl.checkOut)
+        ) {
+          throw new Error("BLOCK_CONFLICT");
+        }
+      }
+
+      await releaseNightLocks(doc._id, session);
+
+      const lock = await acquireNightLocks({
+        villaId: villaOid,
+        bookingId: doc._id,
+        dates: lockDates,
+        session,
+      });
+      if (!lock.ok) throw new Error("LOCK_CONFLICT");
+
+      doc.checkIn = params.checkIn;
+      doc.checkOut = checkOut;
+      doc.pricing = newPricing;
+      doc.payment = newPayment;
+      if (doc.status === "on_hold" || doc.status === "confirmed") {
+        doc.axisRoomsSynced = false;
+      }
+      await doc.save({ session });
+
+      await auditLog({
+        action: "booking.update",
+        targetType: "booking",
+        targetId: id,
+        userId: params.userId,
+        metadata: {
+          action: "modify_dates",
+          oldCheckIn,
+          oldCheckOut,
+          newCheckIn: params.checkIn,
+          newCheckOut: checkOut,
+          pricingDeltaPaise: newPricing.totalPaise - (oldPricing?.totalPaise ?? 0),
+        },
+      });
+
+      return doc;
+    });
+
+    return {
+      booking: toRecord(updated),
+      oldCheckIn,
+      oldCheckOut,
+      paymentWarning,
     };
   }
 }
@@ -707,10 +950,20 @@ function stubVilla(
 }
 
 export async function findVillaBySlug(slug: string) {
+  const candidates = villaIdentityCandidates(slug);
+  const fallbackSlug = slugForPublicVillaId(slug);
   try {
     await connectDB();
-    return VillaModel.findOne({ slug, isDeleted: false, bookable: true });
+    return VillaModel.findOne({
+      isDeleted: false,
+      bookable: true,
+      status: { $ne: "hidden" },
+      $or: candidates.flatMap((candidate) => [
+        { slug: candidate },
+        { retreatId: candidate },
+      ]),
+    });
   } catch {
-    return getStubVillaBySlug(slug);
+    return getStubVillaBySlug(fallbackSlug);
   }
 }

@@ -50,6 +50,7 @@ const PaymentSchema = new Schema(
     gateway: { type: String, enum: ["razorpay", "external"], default: "razorpay" },
     paymentPlan: { type: String, enum: ["full", "deposit"], default: "full" },
     orderId: String,
+    orderIds: [String],
     paymentId: String,
     processedPaymentId: String,
     amountDuePaise: Number,

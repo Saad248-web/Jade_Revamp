@@ -67,6 +67,7 @@ export interface BookingPayment {
   gateway: "razorpay" | "external";
   paymentPlan: PaymentPlan;
   orderId?: string;
+  orderIds?: string[];
   paymentId?: string;
   processedPaymentId?: string;
   amountDuePaise: number;

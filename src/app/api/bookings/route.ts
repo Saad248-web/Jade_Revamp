@@ -123,6 +123,7 @@ export async function POST(req: NextRequest) {
       eventStartDate: input.eventStartDate,
       eventEndDate: input.eventEndDate,
       addOns: input.addOns,
+      allowedAddOnIds: villa.addOnAvailability,
     });
 
     if (errors.length) {

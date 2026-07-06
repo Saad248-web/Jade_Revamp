@@ -151,7 +151,7 @@ export async function POST(req: NextRequest) {
 
     const { connectDB } = await import("@/lib/db");
     const { PartnerLeadModel } = await import("@/models/PartnerLead");
-    const { uploadToGridFS } = await import("@/lib/storage/gridfs");
+    const { deleteFromGridFS, uploadToGridFS } = await import("@/lib/storage/gridfs");
     const { auditLog } = await import("@/lib/audit/auditLog");
 
     await connectDB();
@@ -164,66 +164,75 @@ export async function POST(req: NextRequest) {
       gridFsId: string;
     }> = [];
 
-    for (let i = 0; i < files.length; i++) {
-      const f = files[i]!;
-      const buf = Buffer.from(await f.arrayBuffer());
-      const mime = f.type.slice(0, 120) || "application/octet-stream";
-      const { gridFsId, size } = await uploadToGridFS({
-        filename: f.name.slice(0, 260),
-        mime,
-        buffer: buf,
-        bucketName: "partner_photos",
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const f = files[i]!;
+        const buf = Buffer.from(await f.arrayBuffer());
+        const mime = f.type.slice(0, 120) || "application/octet-stream";
+        const { gridFsId, size } = await uploadToGridFS({
+          filename: f.name.slice(0, 260),
+          mime,
+          buffer: buf,
+          bucketName: "partner_photos",
+        });
+        photos.push({
+          ordinal: i,
+          filename: f.name.slice(0, 260),
+          mime,
+          size,
+          gridFsId,
+        });
+      }
+
+      const doc = await PartnerLeadModel.create({
+        email,
+        payload: meta,
+        photos,
       });
-      photos.push({
-        ordinal: i,
-        filename: f.name.slice(0, 260),
-        mime,
-        size,
-        gridFsId,
+
+      const leadId = String(doc._id);
+
+      await auditLog({
+        action: "partner.create",
+        targetType: "partner_lead",
+        targetId: leadId,
+        ip,
       });
+
+      const detailsText = [
+        `Partnership selections: ${JSON.stringify(o.partnershipType ?? {})}`,
+        `Property types: ${JSON.stringify(o.propertyType ?? {})}`,
+        `Details: ${JSON.stringify(o.propertyDetails ?? {})}`,
+      ].join("\n");
+
+      await notifyPartnerLead({
+        partnerLeadId: leadId,
+        name: fullName,
+        email,
+        phone: String(o.phoneNumber ?? "").slice(0, 40),
+        company: String(o.company ?? "").slice(0, 200),
+        details: detailsText,
+        photos: photos.map((p) => ({
+          gridFsId: p.gridFsId,
+          filename: p.filename,
+        })),
+      });
+
+      return NextResponse.json(
+        { ok: true, partnerLeadId: leadId, photosSaved: files.length },
+        {
+          status: 201,
+          headers: { "Cache-Control": "no-store" },
+        },
+      );
+    } catch (error) {
+      await Promise.all(
+        photos.map((photo) =>
+          deleteFromGridFS(photo.gridFsId, "partner_photos").catch(() => undefined),
+        ),
+      );
+      throw error;
     }
-
-    const doc = await PartnerLeadModel.create({
-      email,
-      payload: meta,
-      photos,
-    });
-
-    const leadId = String(doc._id);
-
-    await auditLog({
-      action: "partner.create",
-      targetType: "partner_lead",
-      targetId: leadId,
-      ip,
-    });
-
-    const detailsText = [
-      `Partnership selections: ${JSON.stringify(o.partnershipType ?? {})}`,
-      `Property types: ${JSON.stringify(o.propertyType ?? {})}`,
-      `Details: ${JSON.stringify(o.propertyDetails ?? {})}`,
-    ].join("\n");
-
-    await notifyPartnerLead({
-      partnerLeadId: leadId,
-      name: fullName,
-      email,
-      phone: String(o.phoneNumber ?? "").slice(0, 40),
-      company: String(o.company ?? "").slice(0, 200),
-      details: detailsText,
-      photos: photos.map((p) => ({
-        gridFsId: p.gridFsId,
-        filename: p.filename,
-      })),
-    });
-
-    return NextResponse.json(
-      { ok: true, partnerLeadId: leadId, photosSaved: files.length },
-      {
-        status: 201,
-        headers: { "Cache-Control": "no-store" },
-      },
-    );
   } catch (err) {
     console.error("[POST /api/leads/partner]", err);
     const code =

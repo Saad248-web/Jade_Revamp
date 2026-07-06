@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     const events = await WebhookEventModel.find()
       .sort({ createdAt: -1 })
       .limit(100)
-      .select("eventId source status createdAt payload")
+      .select("eventId source status createdAt bookingId paymentId orderId error payload")
       .lean();
     const summarized = events.map((e) => ({
       ...e,

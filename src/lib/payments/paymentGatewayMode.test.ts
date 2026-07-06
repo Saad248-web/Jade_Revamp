@@ -43,6 +43,13 @@ describe("isSimulatedPaymentEnabled", () => {
     expect(isSimulatedPaymentEnabled()).toBe(false);
   });
 
+  it("can be explicitly re-enabled in production for controlled UAT", () => {
+    process.env.NODE_ENV = "production";
+    process.env.PAYMENT_GATEWAY_MODE = "test";
+    process.env.ALLOW_SIMULATED_PAYMENTS_IN_PRODUCTION = "1";
+    expect(isSimulatedPaymentEnabled()).toBe(true);
+  });
+
   it("is off when mode is razorpay_test", () => {
     process.env.NODE_ENV = "development";
     process.env.PAYMENT_GATEWAY_MODE = "razorpay_test";
@@ -54,5 +61,11 @@ describe("getClientPaymentGatewayMode", () => {
   it("reads NEXT_PUBLIC_PAYMENT_GATEWAY_MODE", () => {
     process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_MODE = "razorpay_test";
     expect(getClientPaymentGatewayMode()).toBe("razorpay_test");
+  });
+
+  it("hides simulated mode on production clients without an explicit override", () => {
+    process.env.NODE_ENV = "production";
+    process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_MODE = "test";
+    expect(getClientPaymentGatewayMode()).toBe("production");
   });
 });
