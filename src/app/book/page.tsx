@@ -909,8 +909,21 @@ function SuccessScreen({
         !session.razorpayKeyId ||
         session.amountSubunits == null
       ) {
+        // Server may be in simulated test mode (501) while checkout tried Razorpay —
+        // fall back to instant test confirm so Pay does not soft-fail.
+        if (paymentMode === "test") {
+          const result = await confirmTestPayment({ bookingId, bookingToken });
+          if (result.ok) {
+            setPaidNote(
+              result.alreadyConfirmed
+                ? "This booking is already confirmed. It should appear in the dashboard."
+                : "Payment confirmed (test mode). Your booking is live in the dashboard, calendar, and payments.",
+            );
+            return;
+          }
+        }
         setPayError(
-          "Online payment is not available right now. We'll contact you to complete payment.",
+          "Online payment is not available right now. Set PAYMENT_GATEWAY_MODE=razorpay_test with Razorpay keys, or use simulated test mode.",
         );
         return;
       }

@@ -39,6 +39,10 @@ function razorpayKeysConfigured(): boolean {
   );
 }
 
+function publicRazorpayKeyConfigured(): boolean {
+  return !!process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_KEY?.trim();
+}
+
 function allowSimulatedPaymentsOnProduction(): boolean {
   return (
     process.env.ALLOW_SIMULATED_PAYMENTS_IN_PRODUCTION === "1" ||
@@ -56,30 +60,43 @@ export function getPaymentGatewayMode(): PaymentGatewayMode {
   return "test";
 }
 
-/** Simulated Pay — enabled whenever the explicit mode is `test`. */
+/**
+ * Simulated Pay — enabled when mode is `test`.
+ * On production builds: allowed when explicitly opted in, or when Razorpay keys
+ * are not configured (UAT / Vercel without gateway — otherwise Pay is a dead button).
+ */
 export function isSimulatedPaymentEnabled(): boolean {
   if (getPaymentGatewayMode() !== "test") return false;
-  if (process.env.NODE_ENV === "production" && !allowSimulatedPaymentsOnProduction()) {
-    return false;
-  }
-  return true;
+  if (process.env.NODE_ENV !== "production") return true;
+  if (allowSimulatedPaymentsOnProduction()) return true;
+  // No Razorpay secrets → cannot charge; allow simulated confirm so UAT Pay works.
+  return !razorpayKeysConfigured();
 }
 
-/** Client-visible mode (NEXT_PUBLIC_PAYMENT_GATEWAY_MODE mirrors PAYMENT_GATEWAY_MODE). */
+/**
+ * Client-visible mode (NEXT_PUBLIC_PAYMENT_GATEWAY_MODE mirrors PAYMENT_GATEWAY_MODE).
+ * Never remaps `test` → `production` when there is no public Razorpay key — that left
+ * the UI calling /razorpay-order while the server returned 501 in simulated mode.
+ */
 export function getClientPaymentGatewayMode(): PaymentGatewayMode {
   const explicit =
     parseMode(process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_MODE) ??
     parseMode(process.env.PAYMENT_GATEWAY_MODE);
-  if (
-    explicit === "test" &&
-    process.env.NODE_ENV === "production" &&
-    !allowSimulatedPaymentsOnProduction()
-  ) {
-    return "production";
+
+  if (explicit === "test") {
+    if (
+      process.env.NODE_ENV === "production" &&
+      !allowSimulatedPaymentsOnProduction() &&
+      publicRazorpayKeyConfigured()
+    ) {
+      // Production site with Razorpay key published — hide simulated UI.
+      return "production";
+    }
+    return "test";
   }
+
   if (explicit) return explicit;
-  const publicKey = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_KEY?.trim();
-  if (publicKey) return "razorpay_test";
+  if (publicRazorpayKeyConfigured()) return "razorpay_test";
   return "test";
 }
 

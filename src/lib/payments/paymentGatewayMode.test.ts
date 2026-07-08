@@ -37,15 +37,30 @@ describe("isSimulatedPaymentEnabled", () => {
     expect(isSimulatedPaymentEnabled()).toBe(true);
   });
 
-  it("is off in production even when mode is test", () => {
+  it("is off in production when Razorpay keys exist and override is unset", () => {
     process.env.NODE_ENV = "production";
     process.env.PAYMENT_GATEWAY_MODE = "test";
+    process.env.RAZORPAY_KEY_ID = "rzp_test_x";
+    process.env.RAZORPAY_KEY_SECRET = "secret";
+    delete process.env.ALLOW_SIMULATED_PAYMENTS_IN_PRODUCTION;
+    delete process.env.NEXT_PUBLIC_ALLOW_SIMULATED_PAYMENTS_IN_PRODUCTION;
     expect(isSimulatedPaymentEnabled()).toBe(false);
+  });
+
+  it("is on in production for UAT when mode is test and Razorpay keys are missing", () => {
+    process.env.NODE_ENV = "production";
+    process.env.PAYMENT_GATEWAY_MODE = "test";
+    delete process.env.RAZORPAY_KEY_ID;
+    delete process.env.RAZORPAY_KEY_SECRET;
+    delete process.env.ALLOW_SIMULATED_PAYMENTS_IN_PRODUCTION;
+    expect(isSimulatedPaymentEnabled()).toBe(true);
   });
 
   it("can be explicitly re-enabled in production for controlled UAT", () => {
     process.env.NODE_ENV = "production";
     process.env.PAYMENT_GATEWAY_MODE = "test";
+    process.env.RAZORPAY_KEY_ID = "rzp_test_x";
+    process.env.RAZORPAY_KEY_SECRET = "secret";
     process.env.ALLOW_SIMULATED_PAYMENTS_IN_PRODUCTION = "1";
     expect(isSimulatedPaymentEnabled()).toBe(true);
   });
@@ -63,9 +78,19 @@ describe("getClientPaymentGatewayMode", () => {
     expect(getClientPaymentGatewayMode()).toBe("razorpay_test");
   });
 
-  it("hides simulated mode on production clients without an explicit override", () => {
+  it("keeps simulated mode on production UAT when no public Razorpay key is set", () => {
     process.env.NODE_ENV = "production";
     process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_MODE = "test";
+    delete process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_KEY;
+    delete process.env.NEXT_PUBLIC_ALLOW_SIMULATED_PAYMENTS_IN_PRODUCTION;
+    expect(getClientPaymentGatewayMode()).toBe("test");
+  });
+
+  it("hides simulated mode on production when a public Razorpay key is published", () => {
+    process.env.NODE_ENV = "production";
+    process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_MODE = "test";
+    process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_KEY = "rzp_test_key";
+    delete process.env.NEXT_PUBLIC_ALLOW_SIMULATED_PAYMENTS_IN_PRODUCTION;
     expect(getClientPaymentGatewayMode()).toBe("production");
   });
 });
