@@ -20,8 +20,14 @@ import type {
 } from "@/lib/bookings/store";
 import type { StayStatus } from "@/lib/bookings/types";
 import { connectDB } from "@/lib/db";
+import {
+  applyExternalPaymentToBooking,
+  externalPaymentChannelLabel,
+  resolveExternalPaymentAmounts,
+  type ExternalPaymentChannel,
+} from "@/lib/bookings/confirmExternalPayment";
 import { queueBookingInventorySync } from "@/lib/axisRooms/sync";
-import { notifyBookingConfirmed } from "@/lib/email/bookingNotifications";
+import { notifyBookingConfirmed, notifyBookingDatesModified } from "@/lib/email/bookingNotifications";
 import { slugForPublicVillaId, villaIdentityCandidates } from "@/lib/villas/identity";
 import { BookingModel } from "@/models/Booking";
 import { VillaBlockModel } from "@/models/VillaBlock";
@@ -472,6 +478,114 @@ export class MongoBookingStore implements BookingStore {
     return toRecord(doc);
   }
 
+  async confirmExternalPayment(
+    id: string,
+    userId?: string,
+    options?: {
+      externalPaymentRef?: string;
+      paymentChannel?: ExternalPaymentChannel;
+      fullAmountReceived?: boolean;
+      receivedPaise?: number;
+    },
+  ): Promise<BookingRecord | null> {
+    await connectDB();
+    const doc = await BookingModel.findOne({
+      _id: id,
+      isDeleted: false,
+      status: "pending",
+    });
+    if (!doc || doc.payment?.status !== "pending") return null;
+
+    let resolved;
+    try {
+      resolved = resolveExternalPaymentAmounts({
+        paymentPlan: doc.payment?.paymentPlan ?? "full",
+        totalPaise: doc.pricing?.totalPaise ?? 0,
+        depositPaise: doc.payment?.depositPaise ?? 0,
+        fullAmountReceived: options?.fullAmountReceived,
+        receivedPaise: options?.receivedPaise,
+      });
+    } catch (e) {
+      throw e instanceof Error ? e : new Error("INVALID_PAYMENT");
+    }
+
+    const channelLabel = externalPaymentChannelLabel(options?.paymentChannel);
+    const refParts = [
+      channelLabel,
+      options?.externalPaymentRef?.trim(),
+    ].filter(Boolean);
+    const externalRef = refParts.length ? refParts.join(" — ") : undefined;
+
+    doc.status = "confirmed";
+    doc.expiresAt = null;
+    doc.axisRoomsSynced = false;
+    doc.payment = applyExternalPaymentToBooking(
+      doc.payment ?? {
+        gateway: "external",
+        paymentPlan: "full",
+        amountDuePaise: doc.pricing?.totalPaise ?? 0,
+        depositPaise: 0,
+        depositPaidPaise: 0,
+        balancePaise: 0,
+        status: "pending",
+      },
+      resolved,
+      externalRef,
+    );
+    await doc.save();
+
+    const villa = await VillaModel.findById(doc.villaId).select("name").lean();
+    const guest = doc.guestDetails ?? {};
+    try {
+      await notifyBookingConfirmed({
+        bookingId: id,
+        villaName: villa?.name ?? "Villa",
+        checkIn: doc.checkIn,
+        checkOut: doc.checkOut,
+        guestName: guest.name ?? "Guest",
+        guestEmail: guest.email ?? "",
+        guestPhone: guest.phone ?? "",
+        guests: doc.guests,
+        adults: doc.adults,
+        children: doc.children,
+        pets: doc.pets,
+        bookingType: doc.bookingType,
+        paymentPlan: doc.payment?.paymentPlan,
+        notes: doc.notes,
+        addOns: doc.addOns,
+        basePaise: doc.pricing?.basePaise,
+        extraPaxPaise: doc.pricing?.extraPaxPaise,
+        eventPaise: doc.pricing?.eventPaise,
+        addOnPaise: doc.pricing?.addOnPaise,
+        taxPaise: doc.pricing?.taxPaise,
+        quoteOnlyAddOnIds: doc.pricing?.quoteOnlyAddOns,
+        totalPaise: doc.pricing?.totalPaise ?? 0,
+        paymentStatus: doc.payment?.status ?? "external",
+        source: doc.source,
+      });
+    } catch (err) {
+      console.error("[booking external payment confirm email]", err);
+    }
+
+    await auditLog({
+      action: "booking.confirm_external_payment",
+      targetType: "booking",
+      targetId: id,
+      userId,
+      metadata: {
+        previousStatus: "pending",
+        newStatus: "confirmed",
+        paymentStatus: doc.payment?.status,
+        receivedPaise: resolved.receivedPaise,
+        externalPaymentRef: options?.externalPaymentRef?.trim() || undefined,
+        paymentChannel: options?.paymentChannel,
+        fullAmountReceived: options?.fullAmountReceived,
+      },
+    });
+
+    return toRecord(doc);
+  }
+
   async updateNotes(
     id: string,
     notes: string,
@@ -880,6 +994,45 @@ export class MongoBookingStore implements BookingStore {
 
       return doc;
     });
+
+    const guest = updated.guestDetails ?? {};
+    try {
+      await notifyBookingDatesModified({
+        bookingId: id,
+        villaName: villa.name ?? "Villa",
+        oldCheckIn,
+        oldCheckOut,
+        newCheckIn: params.checkIn,
+        newCheckOut: checkOut,
+        guestName: guest.name ?? "Guest",
+        guestEmail: guest.email ?? "",
+        guestPhone: guest.phone ?? "",
+        guests: updated.guests,
+        adults: updated.adults,
+        children: updated.children,
+        pets: updated.pets,
+        bookingType: updated.bookingType as
+          | "stay"
+          | "day_out"
+          | "event"
+          | undefined,
+        paymentPlan: updated.payment?.paymentPlan,
+        notes: updated.notes,
+        addOns: updated.addOns,
+        basePaise: updated.pricing?.basePaise,
+        extraPaxPaise: updated.pricing?.extraPaxPaise,
+        eventPaise: updated.pricing?.eventPaise,
+        addOnPaise: updated.pricing?.addOnPaise,
+        taxPaise: updated.pricing?.taxPaise,
+        quoteOnlyAddOnIds: updated.pricing?.quoteOnlyAddOns,
+        oldTotalPaise: oldPricing?.totalPaise ?? 0,
+        newTotalPaise: updated.pricing?.totalPaise ?? 0,
+        paymentStatus: updated.payment?.status ?? "pending",
+        source: updated.source,
+      });
+    } catch (err) {
+      console.error("[booking modify dates email]", err);
+    }
 
     return {
       booking: toRecord(updated),

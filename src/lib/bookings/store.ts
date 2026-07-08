@@ -90,6 +90,16 @@ export interface BookingStore {
     options?: { reason?: string },
   ): Promise<BookingRecord | null>;
   confirmHold(id: string, userId?: string, waivePayment?: boolean): Promise<BookingRecord | null>;
+  confirmExternalPayment(
+    id: string,
+    userId?: string,
+    options?: {
+      externalPaymentRef?: string;
+      paymentChannel?: import("./confirmExternalPayment").ExternalPaymentChannel;
+      fullAmountReceived?: boolean;
+      receivedPaise?: number;
+    },
+  ): Promise<BookingRecord | null>;
   updateNotes(id: string, notes: string): Promise<BookingRecord | null>;
   createManual(params: CreateBookingParams & { source?: string; status?: BookingStatus }): Promise<BookingRecord>;
   softDelete(id: string, userId?: string): Promise<boolean>;

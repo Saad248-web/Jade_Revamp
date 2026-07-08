@@ -1,10 +1,16 @@
 import { createElement } from "react";
 import { BookingConflictNotificationEmail } from "@/emails/BookingConflictNotification";
 import { GuestBookingConfirmationEmail } from "@/emails/GuestBookingConfirmation";
+import { GuestBookingModifiedEmail } from "@/emails/GuestBookingModified";
+import { StaffBookingModifiedEmail } from "@/emails/StaffBookingModified";
 import { StaffBookingNotificationEmail } from "@/emails/StaffBookingNotification";
 import { getAddOn } from "@/lib/bookings/addOnCatalog";
 import { formatBookingSource } from "@/lib/bookings/sourceLabels";
 import type { AddOnLine, PaymentPlan } from "@/lib/bookings/types";
+import {
+  formatInrFromPaise,
+  formatPricingDeltaLabel,
+} from "@/lib/email/dateChangeEmail";
 import { renderEmail } from "@/lib/email/renderEmail";
 import { sendTransactionalEmail } from "@/lib/email/resendOutbound";
 import {
@@ -40,11 +46,6 @@ export type BookingConfirmedEmailParams = {
   source?: string;
 };
 
-function formatInrFromPaise(paise: number): string {
-  const rupees = Math.round(paise / 100);
-  return `₹${rupees.toLocaleString("en-IN")}`;
-}
-
 function paymentStatusLabel(status: string): string {
   switch (status) {
     case "paid":
@@ -67,7 +68,12 @@ function paymentPlanLabel(plan?: PaymentPlan): string | undefined {
   return plan === "deposit" ? "Deposit" : "Full payment";
 }
 
-function guestSummary(params: BookingConfirmedEmailParams): string | undefined {
+function guestSummary(params: {
+  guests?: number;
+  adults?: number;
+  children?: number;
+  pets?: number;
+}): string | undefined {
   const parts = [];
   if (params.guests != null) parts.push(`${params.guests} total`);
   if (params.adults != null) parts.push(`${params.adults} adults`);
@@ -220,6 +226,137 @@ export async function notifyBookingConfirmed(
       replyTo: firstStaffRecipient(),
     });
     if (!r.sent) console.warn("[booking email guest]", r.reason);
+  }
+}
+
+export type BookingDatesModifiedEmailParams = {
+  bookingId: string;
+  villaName: string;
+  oldCheckIn: string;
+  oldCheckOut: string;
+  newCheckIn: string;
+  newCheckOut: string;
+  guestName: string;
+  guestEmail: string;
+  guestPhone: string;
+  guests?: number;
+  adults?: number;
+  children?: number;
+  pets?: number;
+  bookingType?: "stay" | "day_out" | "event";
+  paymentPlan?: PaymentPlan;
+  notes?: string;
+  addOns?: AddOnLine[];
+  basePaise?: number;
+  extraPaxPaise?: number;
+  eventPaise?: number;
+  addOnPaise?: number;
+  taxPaise?: number;
+  quoteOnlyAddOnIds?: string[];
+  oldTotalPaise: number;
+  newTotalPaise: number;
+  paymentStatus: string;
+  source?: string;
+};
+
+/** Staff + guest emails when staff changes stay dates. */
+export async function notifyBookingDatesModified(
+  params: BookingDatesModifiedEmailParams,
+): Promise<void> {
+  const staffTo = getStaffNotifyRecipients();
+  const skipGuestEmail =
+    process.env.BOOKING_GUEST_CONFIRM_EMAIL === "false";
+  const sourceLabel = formatBookingSource(params.source).label;
+  const previousTotalInr = formatInrFromPaise(params.oldTotalPaise);
+  const newTotalInr = formatInrFromPaise(params.newTotalPaise);
+  const pricingDeltaLabel = formatPricingDeltaLabel(
+    params.oldTotalPaise,
+    params.newTotalPaise,
+  );
+  const payLabel = paymentStatusLabel(params.paymentStatus);
+  const payPlanLabel = paymentPlanLabel(params.paymentPlan);
+  const dashboardUrl = `${getSiteBaseUrl()}/dashboard/bookings/${params.bookingId}`;
+  const guestEmail = params.guestEmail?.trim().toLowerCase() ?? "";
+  const guestMix = guestSummary(params);
+  const addOnsText = addOnSummary(
+    params.addOns,
+    params.guests ?? params.adults ?? 1,
+    params.quoteOnlyAddOnIds,
+  );
+  const pricingText = pricingSummary({
+    ...params,
+    totalPaise: params.newTotalPaise,
+  });
+
+  if (staffTo.length > 0) {
+    const staffRendered = await renderEmail(
+      createElement(StaffBookingModifiedEmail, {
+        bookingId: params.bookingId,
+        villaName: params.villaName,
+        previousCheckIn: params.oldCheckIn,
+        previousCheckOut: params.oldCheckOut,
+        newCheckIn: params.newCheckIn,
+        newCheckOut: params.newCheckOut,
+        guestName: params.guestName,
+        guestEmail,
+        guestPhone: params.guestPhone,
+        guests: params.guests,
+        guestMix,
+        previousTotalInr,
+        newTotalInr,
+        pricingDeltaLabel,
+        paymentStatus: payLabel,
+        paymentPlan: payPlanLabel,
+        sourceLabel,
+        bookingType: params.bookingType,
+        notes: params.notes,
+        addOnsText,
+        pricingText,
+        dashboardUrl,
+      }),
+    );
+    const r = await sendTransactionalEmail({
+      to: staffTo,
+      subject: `[Jade] Booking dates modified — ${params.villaName}`,
+      text: staffRendered.text,
+      html: staffRendered.html,
+      replyTo: guestEmail || undefined,
+    });
+    if (!r.sent) console.warn("[booking modify email staff]", r.reason);
+  }
+
+  if (!skipGuestEmail && guestEmail) {
+    const guestRendered = await renderEmail(
+      createElement(GuestBookingModifiedEmail, {
+        guestName: params.guestName,
+        bookingId: params.bookingId,
+        villaName: params.villaName,
+        previousCheckIn: params.oldCheckIn,
+        previousCheckOut: params.oldCheckOut,
+        newCheckIn: params.newCheckIn,
+        newCheckOut: params.newCheckOut,
+        paymentStatus: payLabel,
+        paymentPlan: payPlanLabel,
+        previousTotalInr,
+        newTotalInr,
+        pricingDeltaLabel,
+        guestMix,
+        notes: params.notes,
+        addOnsText,
+        pricingText,
+        contactPhone: "+91 80 1234 5678",
+        cancellationNote:
+          "Cancellation terms continue to apply as per your booking agreement. Contact us if you did not request this change.",
+      }),
+    );
+    const r = await sendTransactionalEmail({
+      to: [guestEmail],
+      subject: `Your stay dates were updated — ${params.villaName}`,
+      text: guestRendered.text,
+      html: guestRendered.html,
+      replyTo: firstStaffRecipient(),
+    });
+    if (!r.sent) console.warn("[booking modify email guest]", r.reason);
   }
 }
 

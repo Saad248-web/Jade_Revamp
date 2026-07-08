@@ -6,6 +6,7 @@ export type AuditAction =
   | "booking.update"
   | "booking.cancel"
   | "booking.confirm_hold"
+  | "booking.confirm_external_payment"
   | "booking.expire"
   | "block.create"
   | "block.delete"

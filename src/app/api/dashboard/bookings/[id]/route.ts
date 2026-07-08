@@ -23,6 +23,15 @@ const patchSchema = z.discriminatedUnion("action", [
     reason: z.string().max(500).optional(),
   }),
   z.object({
+    action: z.literal("confirm_payment"),
+    externalPaymentRef: z.string().max(200).optional(),
+    paymentChannel: z
+      .enum(["gpay", "phonepe", "upi", "bank_transfer", "cash", "other"])
+      .optional(),
+    fullAmountReceived: z.boolean().optional(),
+    receivedPaise: z.number().int().min(1).optional(),
+  }),
+  z.object({
     action: z.literal("refund"),
     reason: z.string().max(500).optional(),
     refundPaise: z.number().int().min(1).optional(),
@@ -119,6 +128,42 @@ export async function PATCH(
         );
       }
       return NextResponse.json({ booking: updated });
+    }
+
+    if (parsed.data.action === "confirm_payment") {
+      let updated;
+      try {
+        updated = await store.confirmExternalPayment(params.id, auth.userId, {
+          externalPaymentRef: parsed.data.externalPaymentRef,
+          paymentChannel: parsed.data.paymentChannel,
+          fullAmountReceived: parsed.data.fullAmountReceived,
+          receivedPaise: parsed.data.receivedPaise,
+        });
+      } catch (e) {
+        if (e instanceof Error) {
+          const code = e.message;
+          if (
+            code === "FULL_PAYMENT_REQUIRED" ||
+            code === "DEPOSIT_MINIMUM_NOT_MET" ||
+            code === "AMOUNT_EXCEEDS_TOTAL" ||
+            code === "INVALID_AMOUNT"
+          ) {
+            return NextResponse.json(
+              { error: "Invalid payment amount for this booking", code },
+              { status: 422 },
+            );
+          }
+        }
+        throw e;
+      }
+      if (!updated) {
+        return NextResponse.json(
+          { error: "Not found or payment is not pending" },
+          { status: 404 },
+        );
+      }
+      const refreshed = await store.findById(params.id);
+      return NextResponse.json({ booking: refreshed ?? updated });
     }
 
     if (parsed.data.action === "cancel") {

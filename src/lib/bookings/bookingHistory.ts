@@ -63,6 +63,31 @@ function describeAuditEntry(
         detail: "Status changed from on hold to confirmed",
         actorType: "staff",
       };
+    case "booking.confirm_external_payment": {
+      const channel = metadata.paymentChannel
+        ? String(metadata.paymentChannel).replace(/_/g, " ")
+        : undefined;
+      const ref = metadata.externalPaymentRef
+        ? String(metadata.externalPaymentRef)
+        : undefined;
+      const amount =
+        typeof metadata.receivedPaise === "number"
+          ? `₹${(metadata.receivedPaise / 100).toLocaleString("en-IN")}`
+          : undefined;
+      const parts = [
+        channel ? `via ${channel}` : undefined,
+        amount,
+        ref ? `ref ${ref}` : undefined,
+      ].filter(Boolean);
+      return {
+        title: "Offline payment confirmed — booking confirmed",
+        detail:
+          parts.length > 0
+            ? parts.join(" · ")
+            : "Guest confirmation email sent",
+        actorType: "staff",
+      };
+    }
     case "booking.update": {
       if (metadata.source === "axisrooms_inbound" && metadata.eventType === "modify") {
         const oldRange =

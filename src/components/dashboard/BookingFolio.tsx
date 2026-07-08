@@ -23,6 +23,7 @@ import { dash } from "@/lib/dashboard/dashboardClasses";
 import { formatPaise } from "@/lib/money";
 import { BookingFolioHistory } from "./BookingFolioHistory";
 import { RescheduleBookingModal } from "./RescheduleBookingModal";
+import { ConfirmExternalPaymentModal } from "./ConfirmExternalPaymentModal";
 import { DashboardPanel } from "./DashboardPanel";
 import { EmptyState } from "./EmptyState";
 import { DashSectionCard, DashStatusChip } from "./form";
@@ -115,6 +116,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
   const [busy, setBusy] = useState(false);
   const [notesDraft, setNotesDraft] = useState("");
   const [rescheduleOpen, setRescheduleOpen] = useState(false);
+  const [confirmPaymentOpen, setConfirmPaymentOpen] = useState(false);
 
   const fetchBooking = useCallback(async () => {
     setLoading(true);
@@ -197,6 +199,10 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
   const nights = nightCount(booking.checkIn, booking.checkOut);
   const axisSync = axisSyncVariant(booking);
   const hasRazorpayPayment = Boolean(booking.payment.paymentId);
+  const canConfirmOfflinePayment =
+    canWrite &&
+    booking.status === "pending" &&
+    booking.payment.status === "pending";
   const sourceInfo = formatBookingSource(booking.source);
   const channelVariant = CHANNEL_VARIANT[sourceInfo.channel] ?? "info";
   const statusVariant = STATUS_VARIANT[booking.status] ?? "neutral";
@@ -277,6 +283,25 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
         </DashboardPanel>
       )}
 
+      {canConfirmOfflinePayment && (
+        <DashboardPanel pad>
+          <p className="mb-3 font-manrope text-sm text-white/70">
+            Payment is pending. If the guest paid offline via UPI, GPay, PhonePe,
+            bank transfer, or cash, confirm here so the booking is marked
+            confirmed, OTAs are blocked, and the guest receives confirmation
+            email.
+          </p>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => setConfirmPaymentOpen(true)}
+            className="min-h-[44px] border border-emerald-400/40 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-emerald-300 hover:bg-emerald-500/10 disabled:opacity-50"
+          >
+            Confirm payment received
+          </button>
+        </DashboardPanel>
+      )}
+
       {canWrite && booking.status !== "cancelled" && (
         <div className="booking-folio__actions flex flex-wrap gap-2">
           <button
@@ -328,6 +353,14 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
         <RescheduleBookingModal
           booking={booking}
           onClose={() => setRescheduleOpen(false)}
+          onSuccess={() => void fetchBooking()}
+        />
+      )}
+
+      {confirmPaymentOpen && (
+        <ConfirmExternalPaymentModal
+          booking={booking}
+          onClose={() => setConfirmPaymentOpen(false)}
           onSuccess={() => void fetchBooking()}
         />
       )}
