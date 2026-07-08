@@ -49,3 +49,7 @@ NEXUS_v4_APEX
 AGENTS.md
 Gemini.md
 Claude.md
+
+# Postman local workspace
+.postman/
+postman/

@@ -11,7 +11,7 @@ import {
   Text,
 } from "@react-email/components";
 import type { ReactNode } from "react";
-import { getSiteBaseUrl } from "@/lib/siteUrl";
+import { getEmailSiteBaseUrl } from "@/lib/siteUrl";
 import { emailColors, emailFonts } from "./emailTokens";
 
 type JadeEmailLayoutProps = {
@@ -28,7 +28,8 @@ export function JadeEmailLayout({
   eyebrow = "Jade Retreats",
   children,
 }: JadeEmailLayoutProps) {
-  const siteBaseUrl = getSiteBaseUrl();
+  /** Guest-facing links must match Resend sending domain — never localhost. */
+  const siteBaseUrl = getEmailSiteBaseUrl();
 
   return (
     <Html>
