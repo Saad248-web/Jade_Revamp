@@ -18,6 +18,9 @@ export type AxisRoomsInboundEvent = {
   reservationId?: string;
   propertyId?: string;
   roomTypeId?: string;
+  ratePlanId?: string;
+  noOfRooms?: number;
+  otaRefId?: string;
   checkIn?: string;
   checkOut?: string;
   guestName?: string;

@@ -26,6 +26,7 @@
     "generate:axisrooms-status": "node scripts/generate-axisrooms-status-html.mjs",
     "axis:seed": "node scripts/seed-axis-sandbox.mjs",
     "axis:test": "node scripts/test-axisrooms-sandbox.mjs",
+    "axis:inbound-test": "node scripts/test-inbound-webhook.mjs",
     "email:test": "node scripts/test-resend-email.mjs"
   },
   "dependencies": {

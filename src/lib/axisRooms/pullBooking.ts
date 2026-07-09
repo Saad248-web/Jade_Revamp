@@ -1,10 +1,11 @@
 import { auditLog } from "@/lib/audit/auditLog";
 import { connectDB } from "@/lib/db";
 import { VillaModel } from "@/models/Villa";
-import { isAxisRoomsMapped } from "./mapBooking";
+import { isAxisRoomsMapped, villaAxisRoomsMapping } from "./mapBooking";
 import { parseAxisRoomsInbound } from "./parseInbound";
 import { postAxisRoomsApi } from "./http";
 import { upsertAxisRoomsInbound } from "./upsertInboundBooking";
+import { validateAxisRoomsInbound } from "./validateInbound";
 import type { AxisRoomsInboundEvent } from "./types";
 
 const MS_PER_DAY = 86_400_000;
@@ -115,6 +116,29 @@ export function parsePullBookingPayload(
   return events;
 }
 
+/** Fill missing Rates fields from villa mapping (API 12 pull rows). */
+export async function enrichInboundFromVillaMapping(
+  event: AxisRoomsInboundEvent,
+): Promise<AxisRoomsInboundEvent> {
+  if (event.roomTypeId && event.ratePlanId) return event;
+  if (!event.propertyId) return event;
+
+  await connectDB();
+  const villa = await VillaModel.findOne({
+    isDeleted: false,
+    "axisRooms.propertyId": event.propertyId,
+  }).lean();
+  if (!villa) return event;
+
+  const mapping = villaAxisRoomsMapping(villa);
+  return {
+    ...event,
+    roomTypeId: event.roomTypeId ?? mapping.roomTypeId,
+    ratePlanId: event.ratePlanId ?? mapping.ratePlanId,
+    noOfRooms: event.noOfRooms ?? 1,
+  };
+}
+
 /** API 12 — pull bookings for one hotel in a max-10-day window. */
 export async function pullBookingsForHotel(params: {
   hotelId: string;
@@ -183,7 +207,13 @@ export async function reconcileAxisRoomsPull(): Promise<PullReconcileSummary> {
 
     for (const event of pull.events) {
       try {
-        const result = await upsertAxisRoomsInbound(event);
+        const enriched = await enrichInboundFromVillaMapping(event);
+        const validation = await validateAxisRoomsInbound(enriched);
+        if (!validation.ok) {
+          summary.errors.push(validation.error);
+          continue;
+        }
+        const result = await upsertAxisRoomsInbound(enriched, validation);
         if (result.duplicate) summary.duplicates += 1;
         else if (result.conflict) summary.conflicts += 1;
         else if (result.ok) summary.upserted += 1;

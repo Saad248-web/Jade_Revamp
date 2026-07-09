@@ -18,6 +18,31 @@ function mapOtaSource(ota: string): AxisRoomsInboundEvent["channel"] {
   return "other";
 }
 
+function parseRates(p: Record<string, unknown>): {
+  roomTypeId?: string;
+  ratePlanId?: string;
+  noOfRooms?: number;
+} {
+  const rates = (p.Rates ?? p.rates) as Record<string, unknown> | undefined;
+  if (!rates) return {};
+
+  const roomTypes = rates.roomType ?? rates.room_type;
+  if (!Array.isArray(roomTypes) || roomTypes.length === 0) return {};
+
+  const rt = roomTypes[0];
+  if (!rt || typeof rt !== "object") return {};
+
+  const row = rt as Record<string, unknown>;
+  const noOfRoomsRaw = row.noOfRooms ?? row.no_of_rooms;
+  const noOfRooms = Number(noOfRoomsRaw);
+
+  return {
+    roomTypeId: asString(row.id),
+    ratePlanId: asString(row.ratePlanId) ?? asString(row.rateplanId),
+    noOfRooms: Number.isFinite(noOfRooms) ? noOfRooms : undefined,
+  };
+}
+
 function mapBookingStatus(
   raw: string,
 ): "confirmed" | "modified" | "cancelled" | "unknown" {
@@ -56,7 +81,10 @@ export function parseAxisRoomsInbound(
     asString(details.bookingStatus) ?? asString(details.booking_status) ?? "",
   );
   const hotelId = asString(details.hotelId) ?? asString(details.hotel_id);
+  const otaRefId =
+    asString(details.otaRefId) ?? asString(details.ota_ref_id);
   const ota = asString(details.ota) ?? "AxisRooms";
+  const rates = parseRates(p);
 
   let eventType: AxisRoomsInboundEvent["eventType"] = "unknown";
   if (bookingStatus === "cancelled") eventType = "cancel";
@@ -81,6 +109,10 @@ export function parseAxisRoomsInbound(
     bookingStatus,
     reservationId: bookingNo,
     propertyId: hotelId,
+    roomTypeId: rates.roomTypeId,
+    ratePlanId: rates.ratePlanId,
+    noOfRooms: rates.noOfRooms,
+    otaRefId,
     checkIn,
     checkOut,
     guestName: asString(guest?.guestName) ?? asString(guest?.guest_name),

@@ -119,7 +119,7 @@
 <p class="meta">
   PMS: <strong>Jade Host PMS</strong> ·
   UAT environment: <code>https://jade-revamp.vercel.app</code> ·
-  Document date: 6 July 2026
+  Document date: 9 July 2026 (UAT session — inbound validation &amp; inventory flows verified locally)
 </p>
 
 <div class="summary">
@@ -278,8 +278,8 @@
   <td>Bookings to Client (Webhook)</td>
   <td><code>POST</code> (Jade-hosted — see §5)</td>
   <td>Inbound</td>
-  <td><span class="badge b-partial">UAT pending</span></td>
-  <td>OTA create · modify · cancel events. Idempotent via event store.</td>
+  <td><span class="badge b-partial">UAT partial</span></td>
+  <td>OTA create · modify · cancel events. Strict <code>Rates</code> validation; invalid payloads return HTTP 422. Local UAT passed 9 Jul 2026.</td>
 </tr>
 <tr>
   <td>10</td>
@@ -343,7 +343,18 @@
 <tr><td>Authentication</td><td><code>accessKey</code> in JSON body, validated server-side</td></tr>
 <tr><td>Events handled</td><td><code>create</code> · <code>modify</code> · <code>cancel</code></td></tr>
 <tr><td>Idempotency</td><td>Duplicate events deduplicated before processing</td></tr>
-<tr><td>Modify handling</td><td>Updates booking dates and swaps local night locks; no outbound inventory push</td></tr>
+<tr><td>Modify handling</td><td>Updates booking dates and swaps local night locks; no outbound inventory push (CM owns OTA inventory)</td></tr>
+<tr><td>Cancel handling</td><td>Booking status → <code>cancelled</code>; local night locks released</td></tr>
+<tr><td>Validation (before processing)</td><td>
+  <code>hotelId</code> + <code>Rates.roomType[0].id</code> must match a mapped villa;
+  <code>ratePlanId</code> must match villa mapping;
+  <code>noOfRooms</code> must be <code>1</code> (whole-unit villa);
+  optional API 5 verify when outbound <code>accessKey</code> is valid
+</td></tr>
+<tr><td>Success response</td><td><code>{"status":"success","message":"Booking Update Received"}</code></td></tr>
+<tr><td>Failure response</td><td><code>{"status":"failure","message":"…"}</code> with HTTP 401 / 422 / 500 as appropriate</td></tr>
+<tr><td>Logging</td><td>Audit log in dashboard; local dev: <code>logs/axisrooms-inbound.jsonl</code>; phases include <code>api2_pushed</code> / <code>api2_failed</code></td></tr>
+<tr><td>API 2 ack after API 9</td><td>Per Axis request — bulk inventory pushed back after create/modify/cancel</td></tr>
 </table>
 
 <h2>6. Inventory scenarios — CM expectations vs Jade</h2>
@@ -353,6 +364,16 @@
   <th>CM expectation</th>
   <th>Jade status</th>
   <th>PMS behaviour</th>
+</tr>
+<tr>
+  <td><strong>3. OTA booking (API 9 inbound)</strong><br/>confirmed / modified / cancelled</td>
+  <td>CM pushes booking to PMS</td>
+  <td><span class="badge b-partial">UAT partial</span></td>
+  <td>
+    <strong>Create:</strong> booking saved in PMS; night locks acquired; <strong>API 2</strong> <code>availability: 0</code> pushed back to CM.<br/>
+    <strong>Modify:</strong> dates updated; night locks swapped; <strong>API 2</strong> open old + close new.<br/>
+    <strong>Cancel:</strong> status cancelled; night locks released; <strong>API 2</strong> <code>availability: 1</code> pushed back.
+  </td>
 </tr>
 <tr>
   <td><strong>1. Booking confirmed</strong><br/>e.g. Villa A · 21/10 → 22/10</td>
@@ -397,7 +418,7 @@
 <tr><td>Verify OTA availability and rates (date range + OTA id)</td><td>5, 8</td></tr>
 <tr><td>Per-OTA pause / resume by villa and date range</td><td>3, 4</td></tr>
 <tr><td>Inbound webhook URL (API 9) with copy action</td><td>9</td></tr>
-<tr><td>Sync audit log (<code>inventory.close</code>, <code>inventory.open</code>, price, restrictions)</td><td>1–8, 15</td></tr>
+<tr><td>Sync audit log (<code>inventory.close</code>, <code>inventory.open</code>, price, restrictions, <code>inbound</code>)</td><td>1–9, 15</td></tr>
 <tr><td>Booking folio — staff date modification with pricing preview</td><td>1 (on save)</td></tr>
 </table>
 
@@ -444,15 +465,56 @@
   <td>Review sync log in Axis Rooms settings</td>
   <td><code>inventory.close</code> / <code>open</code> entries with hotel, room, and dates</td>
 </tr>
+<tr>
+  <td>9</td>
+  <td>Send API 9 payload with invalid <code>roomId</code> or <code>noOfRooms</code></td>
+  <td>HTTP 422 with <code>status: failure</code> — booking not created</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td>Review inbound log</td>
+  <td>Phases: <code>received</code> → <code>validated</code> → <code>processed</code> or <code>rejected</code></td>
+</tr>
 </table>
 
 <h2>9. Prerequisites for UAT</h2>
 <ul>
-  <li>Activate sandbox mapping for <code>hotelId 12123</code> and confirm correct <code>roomId</code> / <code>ratePlanId</code> pair</li>
+  <li>Activate sandbox mapping for <code>hotelId 12123</code> and confirm correct <code>roomId</code> / <code>ratePlanId</code> pair (<code>1/1</code> or <code>2/2</code>)</li>
   <li>Register API 9 webhook URL: <code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code></li>
+  <li><strong>Action required from Axis:</strong> refresh sandbox <code>accessKey</code> — current key returns <code>Authorization Failed.Invalid accessKey</code> on outbound APIs 1, 2, 5, 6, 7</li>
   <li>Provide sample confirmed, modified, and cancelled API 9 payloads for parser validation</li>
   <li>Confirm OTA id list (<code>otaId</code>) for verify and channel-control features</li>
 </ul>
+
+<h2>10. UAT session log — 9 July 2026</h2>
+<table>
+<tr><th>Test</th><th>Result</th><th>Notes</th></tr>
+<tr>
+  <td>API 9 — valid booking (<code>ARKSAADD8CGSE</code>)</td>
+  <td><span class="badge b-ready">Pass</span></td>
+  <td>
+    <code>hotelId 12123</code>, <code>roomId 2</code>, <code>ratePlanId 2</code>, <code>noOfRooms 1</code>;
+    guest <code>saad@helloerrors.in</code>; dates 15–17 Aug 2026;
+    saved as confirmed booking in PMS
+  </td>
+</tr>
+<tr>
+  <td>API 9 — invalid <code>noOfRooms: 5</code> + bad room/rate ids</td>
+  <td><span class="badge b-ready">Pass</span></td>
+  <td>HTTP 422 — <code>noOfRooms must be 1 for whole-unit villa</code></td>
+</tr>
+<tr>
+  <td>Outbound APIs 1, 2, 6, 7 (<code>npm run axis:test</code>)</td>
+  <td><span class="badge b-blocked">Blocked</span></td>
+  <td>All return HTTP 401 — sandbox <code>accessKey</code> rejected by Axis</td>
+</tr>
+<tr>
+  <td>Inbound log file</td>
+  <td><span class="badge b-ready">Pass</span></td>
+  <td><code>logs/axisrooms-inbound.jsonl</code> — full request lifecycle recorded</td>
+</tr>
+</table>
+<p>Smoke test command: <code>npm run axis:inbound-test</code> (valid + invalid payloads).</p>
 
 </body>
 </html>
