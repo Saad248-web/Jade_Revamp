@@ -121,7 +121,16 @@ function addOnSummary(
   return lines.length ? lines.join("\n") : undefined;
 }
 
-function pricingSummary(params: BookingConfirmedEmailParams): string | undefined {
+type PricingSummaryParams = {
+  basePaise?: number;
+  extraPaxPaise?: number;
+  eventPaise?: number;
+  addOnPaise?: number;
+  taxPaise?: number;
+  totalPaise: number;
+};
+
+function pricingSummary(params: PricingSummaryParams): string | undefined {
   const lines: string[] = [];
   if ((params.basePaise ?? 0) > 0) {
     lines.push(`Stay / package — ${formatInrFromPaise(params.basePaise ?? 0)}`);
