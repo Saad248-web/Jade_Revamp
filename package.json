@@ -31,6 +31,8 @@
     "generate:axisrooms-surface": "node scripts/generate-axisrooms-surface-html.mjs",
     "generate:axisrooms-status": "node scripts/generate-axisrooms-status-html.mjs",
     "axis:seed": "node scripts/seed-axis-sandbox.mjs",
+    "axis:seed-all": "node scripts/seed-axis-all-properties.mjs",
+    "axis:export-csv": "node scripts/export-axisrooms-csv.mjs",
     "axis:test": "node scripts/test-axisrooms-sandbox.mjs",
     "axis:inbound-test": "node scripts/test-inbound-webhook.mjs",
     "email:test": "node scripts/test-resend-email.mjs"

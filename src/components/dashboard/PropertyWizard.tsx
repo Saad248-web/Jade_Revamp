@@ -148,7 +148,7 @@ function emptyChannelMeta(): ChannelMetaDraft {
   return {
     channelMode: "website_only",
     channelState: "website_only",
-    axisRooms: { propertyId: "", roomTypeId: "", ratePlanId: "" },
+    axisRooms: { propertyId: "", roomTypeId: "", ratePlanId: "", ratePlanName: "" },
   };
 }
 

@@ -190,9 +190,17 @@ export function VillaEditModal({
     form.validateField("addOnAvailability", next);
   };
 
-  const patchAxisRooms = (key: "propertyId" | "roomTypeId" | "ratePlanId", value: string) => {
+  const patchAxisRooms = (
+    key: "propertyId" | "roomTypeId" | "ratePlanId" | "ratePlanName",
+    value: string,
+  ) => {
     if (!villa) return;
-    const axis = villa.axisRooms ?? { propertyId: "", roomTypeId: "", ratePlanId: "" };
+    const axis = villa.axisRooms ?? {
+      propertyId: "",
+      roomTypeId: "",
+      ratePlanId: "",
+      ratePlanName: "",
+    };
     const next = {
       ...villa,
       axisRooms: { ...axis, [key]: value },
@@ -276,7 +284,12 @@ export function VillaEditModal({
     }
   };
 
-  const axis = villa?.axisRooms ?? { propertyId: "", roomTypeId: "", ratePlanId: "" };
+  const axis = villa?.axisRooms ?? {
+    propertyId: "",
+    roomTypeId: "",
+    ratePlanId: "",
+    ratePlanName: "",
+  };
 
   return (
     <div className="fixed inset-0 z-[60] flex justify-end overflow-y-auto overscroll-behavior-contain bg-black/75">
@@ -522,6 +535,12 @@ export function VillaEditModal({
                         value={axis.ratePlanId}
                         onChange={(v) => patchAxisRooms("ratePlanId", v)}
                         {...fp("axisRooms.ratePlanId")}
+                      />
+                      <DashFloatingField
+                        label="Rate plan name"
+                        value={axis.ratePlanName}
+                        onChange={(v) => patchAxisRooms("ratePlanName", v)}
+                        {...fp("axisRooms.ratePlanName")}
                       />
                     </div>
                   </DashSectionCard>

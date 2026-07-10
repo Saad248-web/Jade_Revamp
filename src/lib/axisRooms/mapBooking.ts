@@ -8,6 +8,7 @@ export function villaAxisRoomsMapping(
     propertyId: m.propertyId?.trim() || undefined,
     roomTypeId: m.roomTypeId?.trim() || undefined,
     ratePlanId: m.ratePlanId?.trim() || undefined,
+    ratePlanName: m.ratePlanName?.trim() || undefined,
   };
 }
 

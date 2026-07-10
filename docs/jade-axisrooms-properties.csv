@@ -1,0 +1,17 @@
+hotelId,hotelName,roomId,roomName,ratePlanId,ratePlanName,channelMode,villaSlug
+1301,Diamond Pavilion by Jade,1,Diamond Pavilion,1,Best Available Rate,channel_managed,diamond
+1302,Dome Villas by Jade — Blue Dome,1,Blue Dome,1,Best Available Rate,channel_managed,blue-dome
+1303,Dome Villas by Jade — Red Dome,1,Red Dome,1,Best Available Rate,channel_managed,red-dome
+1304,Dome Villas by Jade — Yellow Dome,1,Yellow Dome,1,Best Available Rate,channel_managed,yellow-dome
+1305,Emerald by Jade,1,Emerald,1,Best Available Rate,channel_managed,emerald
+1306,Haven by Jade,1,Haven,1,Best Available Rate,channel_managed,haven
+1307,Jade 735 by Jade,1,Jade 735,1,Best Available Rate,channel_managed,jade-735
+1308,Lemon Tree by Jade,1,Lemon Tree,1,Best Available Rate,channel_managed,lemon-tree
+1309,Lounge Fly by Jade,1,Lounge Fly,1,Best Available Rate,channel_managed,lounge-fly
+1310,Magnolia by Jade,1,Magnolia,1,Best Available Rate,channel_managed,magnolia
+1311,Palatio by Jade,1,Palatio,1,Best Available Rate,website_only,palatio
+1312,Retreat on the Ridge by Jade,1,Retreat on the Ridge,1,Best Available Rate,channel_managed,retreat-on-the-ridge
+1313,Royalty by Jade,1,Royalty,1,Best Available Rate,website_only,royalty
+1314,Tranquil Woods by Jade,1,Tranquil Woods,1,Best Available Rate,channel_managed,tranquil
+1315,Vannani by Jade,1,Vannani,1,Best Available Rate,website_only,vannani
+1316,Wonderland by Jade,1,Wonderland,1,Best Available Rate,channel_managed,wonderland

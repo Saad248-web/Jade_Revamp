@@ -86,16 +86,77 @@ Night model: check-out is **exclusive** (stay 15–17 Aug blocks nights of 15 an
 
 ---
 
-## Sandbox test property
+## Sandbox property IDs (1301–1316, seeded 10 Jul 2026)
+
+Whole-villa model: `roomId: 1`, `ratePlanId: 1`, `ratePlanName: Best Available Rate`.  
+Assigned alphabetically by villa name. Full CSV: `docs/jade-axisrooms-properties.csv`.
+
+| hotelId | Villa slug | Property |
+|---------|------------|----------|
+| 1301 | diamond | Diamond Pavilion by Jade |
+| 1302 | blue-dome | Dome Villas — Blue Dome |
+| 1303 | red-dome | Dome Villas — Red Dome |
+| 1304 | yellow-dome | Dome Villas — Yellow Dome |
+| 1305 | emerald | Emerald by Jade |
+| 1306 | haven | Haven by Jade |
+| 1307 | jade-735 | Jade 735 by Jade |
+| 1308 | lemon-tree | Lemon Tree by Jade |
+| 1309 | lounge-fly | Lounge Fly by Jade |
+| 1310 | magnolia | Magnolia by Jade |
+| 1311 | palatio | Palatio by Jade *(website_only)* |
+| 1312 | retreat-on-the-ridge | Retreat on the Ridge |
+| 1313 | royalty | Royalty by Jade *(website_only)* |
+| 1314 | tranquil | Tranquil Woods by Jade |
+| 1315 | vannani | Vannani by Jade *(website_only)* |
+| 1316 | wonderland | Wonderland by Jade |
+
+**Rohit test curl:** `hotelId: 1303` → **red-dome** (not emerald).
+
+---
+
+## Critical validation gate (API 9)
+
+| Step | Check | On fail |
+|------|-------|---------|
+| 1 | `accessKey` matches `AXIS_ROOMS_API_KEY` | 401 |
+| 2 | Valid JSON + API 9 structure | 422 |
+| 3–7 | bookingNo, hotelId, dates, roomId, noOfRooms=1 | 422 |
+| 8 | hotelId + roomId match registered villa | 422 |
+| 9 | ratePlanId matches villa mapping | 422 |
+| 10 | Villa `channel_managed` | 422 |
+| 11 | API 5 verify *(optional; disabled via `AXIS_ROOMS_INBOUND_VERIFY_AXIS=false` until key active)* | 422 |
+| 12 | Duplicate event | 200 idempotent |
+| 13 | Save booking + API 2 | 200 |
+
+---
+
+## Sandbox test property (legacy UAT row)
 
 | Field | Value |
 |-------|-------|
 | `channelId` / `pmsId` | `227` |
-| `hotelId` | `12123` |
-| `roomId` | `1` or `2` |
-| `ratePlanId` | `1` or `2` |
+| `hotelId` | `1303` (red-dome) |
+| `roomId` | `1` |
+| `ratePlanId` | `1` |
 | `noOfRooms` | `1` |
-| Mapped villa (UAT) | `diamond` — room `2`, rate `2` |
+
+---
+
+## Test results — 10 July 2026
+
+### VPS seed + production webhook
+
+| # | Test | Result |
+|---|------|--------|
+| 1 | `npm run axis:seed-all` on VPS MongoDB (`200.97.161.24`) | 16 villas mapped 1301–1316 |
+| 2 | `npm run axis:export-csv` | `docs/jade-axisrooms-properties.csv` |
+| 3 | API 9 valid `hotelId 1303` on Vercel | 422 — API 5 verify fails (`Invalid accessKey`) until `AXIS_ROOMS_INBOUND_VERIFY_AXIS=false` on Vercel |
+| 4 | API 9 `hotelId 9999` on Vercel | 422 — `Unknown hotelId/roomId` ✓ |
+| 5 | API 9 invalid `noOfRooms: 5` on Vercel | 422 ✓ |
+| 6 | `npm run axis:test` (hotelId 1303) | 401 on API 1/2/6/7 — Axis must activate sandbox key |
+| 7 | Unit tests (`validateInbound`, `inboundInventoryPush`) | 13/13 pass |
+
+**Next:** Set Vercel env per `docs/vercel-axis-sandbox-env.md`, redeploy, then re-run inbound test for `api2_pushed` once Axis activates outbound key.
 
 ---
 
@@ -133,8 +194,11 @@ Night model: check-out is **exclusive** (stay 15–17 Aug blocks nights of 15 an
 ## Commands
 
 ```bash
-npm run axis:seed -- --slug=diamond --room=2 --rate=2
-npm run axis:inbound-test
+# Seed all villas (use VPS MONGODB_URI for production — see docs/vercel-axis-sandbox-env.md)
+npm run axis:seed-all
+npm run axis:export-csv
+npm run axis:inbound-test -- --hotel=1303 --room=1 --rate=1
+npm run axis:inbound-test -- --bad-hotel=9999
 npm run axis:test
 ```
 

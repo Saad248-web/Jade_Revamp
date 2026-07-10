@@ -99,6 +99,7 @@ export const AxisRoomsSchema = new Schema(
     propertyId: String,
     roomTypeId: String,
     ratePlanId: String,
+    ratePlanName: String,
     apiKeyConfigured: { type: Boolean, default: false },
   },
   { _id: false },

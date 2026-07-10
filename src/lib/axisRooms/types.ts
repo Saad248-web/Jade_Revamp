@@ -2,6 +2,7 @@ export type AxisRoomsMapping = {
   propertyId?: string;
   roomTypeId?: string;
   ratePlanId?: string;
+  ratePlanName?: string;
 };
 
 export type AxisRoomsPushResult = {

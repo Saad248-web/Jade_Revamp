@@ -12,6 +12,9 @@ export async function persistentRateLimit(params: {
   now?: number;
 }): Promise<RateLimitResult> {
   const now = params.now ?? Date.now();
+  const nowDate = new Date(now);
+  const resetAt = new Date(now + params.windowMs);
+
   try {
     await connectDB();
   } catch {
@@ -19,27 +22,43 @@ export async function persistentRateLimit(params: {
     return { ok: true, remaining: params.limit };
   }
 
-  const resetAt = new Date(now + params.windowMs);
-  const existing = await RateLimitBucketModel.findOne({ key: params.key });
+  // Active window, under limit — atomic increment (avoids stale doc save races)
+  const incremented = await RateLimitBucketModel.findOneAndUpdate(
+    {
+      key: params.key,
+      resetAt: { $gt: nowDate },
+      count: { $lt: params.limit },
+    },
+    { $inc: { count: 1 } },
+    { new: true },
+  );
 
-  if (!existing || existing.resetAt.getTime() <= now) {
-    await RateLimitBucketModel.findOneAndUpdate(
-      { key: params.key },
-      { resetAt, count: 1 },
-      { upsert: true },
-    );
-    return { ok: true, remaining: Math.max(0, params.limit - 1) };
+  if (incremented) {
+    return {
+      ok: true,
+      remaining: Math.max(0, params.limit - incremented.count),
+    };
   }
 
-  if (existing.count >= params.limit) {
+  const current = await RateLimitBucketModel.findOne({ key: params.key }).lean();
+  if (
+    current &&
+    current.resetAt.getTime() > now &&
+    current.count >= params.limit
+  ) {
     const retryAfterSeconds = Math.max(
       1,
-      Math.ceil((existing.resetAt.getTime() - now) / 1000),
+      Math.ceil((current.resetAt.getTime() - now) / 1000),
     );
     return { ok: false, retryAfterSeconds, remaining: 0 };
   }
 
-  existing.count += 1;
-  await existing.save();
-  return { ok: true, remaining: Math.max(0, params.limit - existing.count) };
+  // Expired or missing bucket — reset window atomically
+  await RateLimitBucketModel.findOneAndUpdate(
+    { key: params.key },
+    { $set: { resetAt, count: 1 } },
+    { upsert: true },
+  );
+
+  return { ok: true, remaining: Math.max(0, params.limit - 1) };
 }

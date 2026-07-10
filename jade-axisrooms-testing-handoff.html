@@ -179,8 +179,8 @@
 <tr><td>API base URL (sandbox)</td><td><code>https://sandbox2.axisrooms.com</code></td></tr>
 <tr><td><code>channelId</code> / <code>pmsId</code></td><td><code>227</code> (same value; field name varies by API)</td></tr>
 <tr><td><code>accessKey</code></td><td>Stored server-side; sent in JSON body of every outbound call and validated on inbound API 9</td></tr>
-<tr><td>Test <code>hotelId</code></td><td><code>12123</code></td></tr>
-<tr><td>Test <code>roomId</code> / <code>ratePlanId</code></td><td><code>1 / 1</code> or <code>2 / 2</code> — to be confirmed with Axis</td></tr>
+<tr><td>Test <code>hotelId</code></td><td><code>1303</code> (Red Dome — Rohit curl)</td></tr>
+<tr><td>Test <code>roomId</code> / <code>ratePlanId</code></td><td><code>1 / 1</code> — whole-villa model; full list in <code>docs/jade-axisrooms-properties.csv</code> (1301–1316)</td></tr>
 <tr><td>UAT site</td><td><code>https://jade-revamp.vercel.app</code></td></tr>
 </table>
 
@@ -191,6 +191,7 @@
 <tr><td><code>axisRooms.propertyId</code></td><td>Axis <code>hotelId</code> for this villa</td></tr>
 <tr><td><code>axisRooms.roomTypeId</code></td><td>Axis <code>roomId</code> — <strong>whole villa</strong> as one inventory unit</td></tr>
 <tr><td><code>axisRooms.ratePlanId</code></td><td>Axis rate plan for price sync</td></tr>
+<tr><td><code>axisRooms.ratePlanName</code></td><td>Axis rate plan display name (CSV export)</td></tr>
 <tr><td><code>channelMode</code></td><td><code>website_only</code> (no outbound sync) or <code>channel_managed</code> (sync active when IDs are valid)</td></tr>
 </table>
 <p>
@@ -427,7 +428,7 @@
 <tr><th>#</th><th>Test</th><th>Expected result</th></tr>
 <tr>
   <td>1</td>
-  <td>Activate CM mapping for <code>hotelId 12123</code></td>
+  <td>Activate CM mapping for <code>hotelId 1303</code> (and full CSV 1301–1316)</td>
   <td>Outbound API 1 / 2 calls succeed (no “hotel not mapped” error)</td>
 </tr>
 <tr>
@@ -479,7 +480,7 @@
 
 <h2>9. Prerequisites for UAT</h2>
 <ul>
-  <li>Activate sandbox mapping for <code>hotelId 12123</code> and confirm correct <code>roomId</code> / <code>ratePlanId</code> pair (<code>1/1</code> or <code>2/2</code>)</li>
+  <li>Activate sandbox mapping for hotelIds <code>1301–1316</code> (CSV attached) — UAT sample <code>hotelId 1303</code>, <code>roomId 1</code>, <code>ratePlanId 1</code></li>
   <li>Register API 9 webhook URL: <code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code></li>
   <li><strong>Action required from Axis:</strong> refresh sandbox <code>accessKey</code> — current key returns <code>Authorization Failed.Invalid accessKey</code> on outbound APIs 1, 2, 5, 6, 7</li>
   <li>Provide sample confirmed, modified, and cancelled API 9 payloads for parser validation</li>
@@ -493,7 +494,7 @@
   <td>API 9 — valid booking (<code>ARKSAADD8CGSE</code>)</td>
   <td><span class="badge b-ready">Pass</span></td>
   <td>
-    <code>hotelId 12123</code>, <code>roomId 2</code>, <code>ratePlanId 2</code>, <code>noOfRooms 1</code>;
+    <code>hotelId 1303</code>, <code>roomId 1</code>, <code>ratePlanId 1</code>, <code>noOfRooms 1</code>;
     guest <code>saad@helloerrors.in</code>; dates 15–17 Aug 2026;
     saved as confirmed booking in PMS
   </td>

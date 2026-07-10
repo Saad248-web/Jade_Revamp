@@ -113,6 +113,15 @@ export async function validateAxisRoomsInbound(
   const [villa] = villas;
   const mapping = villaAxisRoomsMapping(villa);
 
+  const channelMode = villa.channelMode ?? "website_only";
+  if (channelMode !== "channel_managed") {
+    return {
+      ok: false,
+      code: "NOT_CHANNEL_MANAGED",
+      error: `Property ${parsed.propertyId} is not channel-managed in Jade PMS`,
+    };
+  }
+
   const effectiveRatePlanId = parsed.ratePlanId ?? mapping.ratePlanId;
   if (!effectiveRatePlanId) {
     return {

@@ -46,6 +46,7 @@ const axisRoomsSchema = z
     propertyId: z.string().max(120).optional(),
     roomTypeId: z.string().max(120).optional(),
     ratePlanId: z.string().max(120).optional(),
+    ratePlanName: z.string().max(200).optional(),
   })
   .partial();
 
@@ -262,6 +263,7 @@ export type AdminVillaDetail = {
     propertyId: string;
     roomTypeId: string;
     ratePlanId: string;
+    ratePlanName: string;
   };
   content: Record<string, unknown>;
   updatedAt: string | null;
@@ -318,6 +320,7 @@ type VillaDocLike = {
     propertyId?: string;
     roomTypeId?: string;
     ratePlanId?: string;
+    ratePlanName?: string;
   };
   content?: Record<string, unknown>;
   updatedAt?: Date;
@@ -390,6 +393,7 @@ export function toAdminVilla(
       propertyId: axis.propertyId ?? "",
       roomTypeId: axis.roomTypeId ?? "",
       ratePlanId: axis.ratePlanId ?? "",
+      ratePlanName: axis.ratePlanName ?? "",
     },
     content,
     updatedAt: doc.updatedAt?.toISOString() ?? null,

@@ -25,7 +25,7 @@ export async function listVillasForAxisCsv(): Promise<AxisRoomsCsvRow[]> {
       roomId: m.roomTypeId ?? "",
       roomName: v.shortName ?? v.name ?? v.slug,
       ratePlanId: m.ratePlanId ?? "BAR",
-      ratePlanName: "Best Available Rate",
+      ratePlanName: m.ratePlanName ?? "Best Available Rate",
     };
   });
 }

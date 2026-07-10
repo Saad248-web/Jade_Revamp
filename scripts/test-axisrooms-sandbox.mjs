@@ -15,7 +15,7 @@ const base = (process.env.AXIS_ROOMS_API_BASE_URL ?? "https://sandbox2.axisrooms
 );
 const accessKey = process.env.AXIS_ROOMS_API_KEY?.trim();
 const channelId = process.env.AXIS_ROOMS_CHANNEL_ID?.trim() ?? "227";
-const hotelId = process.env.AXIS_TEST_HOTEL_ID?.trim() ?? "12123";
+const hotelId = process.env.AXIS_TEST_HOTEL_ID?.trim() ?? "1303";
 const roomId = process.env.AXIS_TEST_ROOM_ID?.trim() ?? "1";
 const ratePlanId = process.env.AXIS_TEST_RATE_PLAN_ID?.trim() ?? "1";
 
