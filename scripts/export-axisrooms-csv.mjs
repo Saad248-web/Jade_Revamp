@@ -35,21 +35,25 @@ async function main() {
       new mongoose.Schema({}, { strict: false, timestamps: true }),
     );
 
-  const villas = await Villa.find({ isDeleted: false }).sort({ name: 1 }).lean();
+  const villas = await Villa.find({ isDeleted: false }).lean();
 
-  const header =
-    "hotelId,hotelName,roomId,roomName,ratePlanId,ratePlanName,channelMode,villaSlug";
-  const lines = villas.map((v) => {
-    const axis = v.axisRooms ?? {};
+  const sorted = villas
+    .map((v) => {
+      const axis = v.axisRooms ?? {};
+      const hotelId = axis.propertyId ?? "";
+      return { v, axis, hotelIdNum: Number(hotelId) || 0 };
+    })
+    .sort((a, b) => a.hotelIdNum - b.hotelIdNum || (a.v.name ?? "").localeCompare(b.v.name ?? ""));
+
+  const header = "hotelId,hotelName,roomId,ratePlanId,ratePlanName,noOfRooms";
+  const lines = sorted.map(({ v, axis }) => {
     return [
       csvEsc(axis.propertyId ?? ""),
       csvEsc(v.name ?? v.slug ?? ""),
-      csvEsc(axis.roomTypeId ?? ""),
-      csvEsc(v.shortName ?? v.name ?? v.slug ?? ""),
-      csvEsc(axis.ratePlanId ?? ""),
+      csvEsc(axis.roomTypeId ?? "1"),
+      csvEsc(axis.ratePlanId ?? "1"),
       csvEsc(axis.ratePlanName ?? "Best Available Rate"),
-      csvEsc(v.channelMode ?? "website_only"),
-      csvEsc(v.slug ?? ""),
+      "1",
     ].join(",");
   });
 
