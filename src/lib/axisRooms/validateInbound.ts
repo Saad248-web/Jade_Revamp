@@ -78,14 +78,6 @@ export async function validateAxisRoomsInbound(
     };
   }
 
-  if (!parsed.ratePlanId) {
-    return {
-      ok: false,
-      code: "MISSING_RATE_PLAN",
-      error: "Missing Rates.roomType[0].ratePlanId",
-    };
-  }
-
   if (parsed.noOfRooms !== undefined && parsed.noOfRooms !== 1) {
     return {
       ok: false,
@@ -121,7 +113,16 @@ export async function validateAxisRoomsInbound(
   const [villa] = villas;
   const mapping = villaAxisRoomsMapping(villa);
 
-  if (mapping.ratePlanId && mapping.ratePlanId !== parsed.ratePlanId) {
+  const effectiveRatePlanId = parsed.ratePlanId ?? mapping.ratePlanId;
+  if (!effectiveRatePlanId) {
+    return {
+      ok: false,
+      code: "MISSING_RATE_PLAN",
+      error: "Missing Rates.roomType[0].ratePlanId and no villa ratePlanId configured",
+    };
+  }
+
+  if (mapping.ratePlanId && parsed.ratePlanId && mapping.ratePlanId !== parsed.ratePlanId) {
     return {
       ok: false,
       code: "INVALID_RATE_PLAN",
@@ -139,7 +140,7 @@ export async function validateAxisRoomsInbound(
     mapping: {
       propertyId: mapping.propertyId!,
       roomTypeId: mapping.roomTypeId!,
-      ratePlanId: mapping.ratePlanId,
+      ratePlanId: effectiveRatePlanId,
     },
   };
 }
