@@ -19,7 +19,7 @@
 
 **Settings → Environment Variables → `MONGODB_URI`**
 
-Production, Preview, and Development (as needed):
+Enable for **Production**, **Preview**, and **Development** (build reads env at compile time):
 
 ```
 mongodb://jadeapp_user:Stack%402026@200.97.161.24:27017/jadeapp?authSource=jadeapp
@@ -27,7 +27,9 @@ mongodb://jadeapp_user:Stack%402026@200.97.161.24:27017/jadeapp?authSource=jadea
 
 **Do not use** `127.0.0.1` on Vercel — that only works on the VPS itself.
 
-Then: **Deployments → ⋮ → Redeploy** (production).
+If build fails with `ECONNREFUSED 127.0.0.1:27017`, Vercel still has the local URI. Replace it with the VPS IP above, save, then redeploy.
+
+Then: **Deployments → ⋮ → Redeploy** (production) — a git push alone is not enough if env vars changed.
 
 Smoke-test after redeploy:
 

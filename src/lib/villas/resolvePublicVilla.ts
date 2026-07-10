@@ -207,6 +207,18 @@ function mergeStaticWithMongo(staticVilla: Villa, doc: MongoVilla): Villa {
   };
 }
 
+function staticVillaFallback(
+  retreatId: string,
+  staticVilla: Villa | undefined,
+): Villa | null {
+  if (!staticVilla) return null;
+  return {
+    ...staticVilla,
+    slug: slugForPublicVillaId(retreatId),
+    retreatId: publicVillaIdForSlug(retreatId),
+  };
+}
+
 /** Resolve public villa: MongoDB overrides + static retreats fallback. */
 export async function resolvePublicVilla(
   retreatId: string,
@@ -218,14 +230,20 @@ export async function resolvePublicVilla(
   ) as Villa | undefined;
   const candidates = villaIdentityCandidates(retreatId);
 
-  await connectDB();
-  const doc = (await VillaModel.findOne({
+  let doc: MongoVilla | null = null;
+  try {
+    await connectDB();
+    doc = (await VillaModel.findOne({
     $or: candidates.flatMap((candidate) => [
       { retreatId: candidate },
       { slug: candidate },
     ]),
     isDeleted: false,
   }).lean()) as MongoVilla | null;
+  } catch (e) {
+    console.error("[resolvePublicVilla] Mongo unavailable, using static fallback", e);
+    return staticVillaFallback(retreatId, staticVilla);
+  }
 
   if (doc && isVillaPubliclyHidden(doc)) return null;
   if (doc) {
@@ -250,37 +268,46 @@ export async function resolvePublicVilla(
   return mergeStaticWithMongo(staticVilla, doc);
 }
 
+function staticVillaListFallback(): Villa[] {
+  return (STATIC_VILLAS as Villa[]).filter((v) => !v.hideFromVillasDirectory);
+}
+
 /** Directory list — merges all Mongo villas + static not yet in DB. */
 export async function resolvePublicVillaList(): Promise<Villa[]> {
-  await connectDB();
-  const docs = (await VillaModel.find({ isDeleted: false }).lean()) as MongoVilla[];
-  const byRetreatId = new Map<string, Villa>();
-  const mongoRetreatIds = new Set<string>();
+  try {
+    await connectDB();
+    const docs = (await VillaModel.find({ isDeleted: false }).lean()) as MongoVilla[];
+    const byRetreatId = new Map<string, Villa>();
+    const mongoRetreatIds = new Set<string>();
 
-  for (const doc of docs) {
-    const id = doc.retreatId ?? doc.slug;
-    mongoRetreatIds.add(id);
-    if (repairStaleDirectoryHideFlag(doc) && doc._id) {
-      void VillaModel.updateOne(
-        { _id: doc._id },
-        { $set: { "content.hideFromVillasDirectory": false } },
+    for (const doc of docs) {
+      const id = doc.retreatId ?? doc.slug;
+      mongoRetreatIds.add(id);
+      if (repairStaleDirectoryHideFlag(doc) && doc._id) {
+        void VillaModel.updateOne(
+          { _id: doc._id },
+          { $set: { "content.hideFromVillasDirectory": false } },
+        );
+      }
+      if (isHiddenFromVillasDirectory(doc)) continue;
+      const staticV = STATIC_VILLAS.find((v) => v.id === id) as Villa | undefined;
+      byRetreatId.set(
+        id,
+        staticV ? mergeStaticWithMongo(staticV, doc) : shellFromMongo(doc),
       );
     }
-    if (isHiddenFromVillasDirectory(doc)) continue;
-    const staticV = STATIC_VILLAS.find((v) => v.id === id) as Villa | undefined;
-    byRetreatId.set(
-      id,
-      staticV ? mergeStaticWithMongo(staticV, doc) : shellFromMongo(doc),
+
+    for (const staticV of STATIC_VILLAS as Villa[]) {
+      if (mongoRetreatIds.has(staticV.id)) continue;
+      if (staticV.hideFromVillasDirectory) continue;
+      byRetreatId.set(staticV.id, staticV);
+    }
+
+    return Array.from(byRetreatId.values()).filter(
+      (v) => !v.hideFromVillasDirectory,
     );
+  } catch (e) {
+    console.error("[resolvePublicVillaList] Mongo unavailable, using static villas", e);
+    return staticVillaListFallback();
   }
-
-  for (const staticV of STATIC_VILLAS as Villa[]) {
-    if (mongoRetreatIds.has(staticV.id)) continue;
-    if (staticV.hideFromVillasDirectory) continue;
-    byRetreatId.set(staticV.id, staticV);
-  }
-
-  return Array.from(byRetreatId.values()).filter(
-    (v) => !v.hideFromVillasDirectory,
-  );
 }
