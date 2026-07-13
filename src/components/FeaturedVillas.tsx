@@ -10,6 +10,7 @@ import NavbarThemeTrigger from "./NavbarThemeTrigger";
 import SectionWrapper from "./SectionWrapper";
 import LuxuryPattern from "./LuxuryPattern";
 import { shouldDeferParallaxPatternToStickyStage } from "@/lib/backgroundAttachmentSupport";
+import { useScrollLinkedMobileCardScale } from "@/lib/scrollLinkedMobileCardScale";
 import { useScrollLinkedPanelOffset } from "@/lib/useScrollLinkedPanelOffset";
 import {
   useScrollLinkedAxisMotion,
@@ -125,12 +126,12 @@ const FEATURED_PATTERN = {
 } as const;
 
 /** Mobile: card snaps use snapVh; only exitVh of vertical scroll after CTA before next section */
-const FEATURED_MOBILE_SNAP_VH = 200;
+const FEATURED_MOBILE_SNAP_VH = 280;
 const FEATURED_MOBILE_EXIT_VH = 12;
-/** 40% less scroll→progress than gain=1 — one light flick ≈ one card */
-const FEATURED_MOBILE_SNAP_SCROLL_GAIN = 0.6;
+/** Reserved — scroll distance is governed by SNAP_ZONE_VH + one-step gesture lock */
+const FEATURED_MOBILE_SNAP_SCROLL_GAIN = 0.55;
 /** Longer dwell per card so the track sticks before advancing */
-const FEATURED_MOBILE_SNAP_DWELL = 0.3;
+const FEATURED_MOBILE_SNAP_DWELL = 0.34;
 const FEATURED_MOBILE_HEIGHT_VH =
   FEATURED_MOBILE_SNAP_VH + FEATURED_MOBILE_EXIT_VH;
 const FEATURED_MOBILE_SNAP_PORTION =
@@ -161,7 +162,7 @@ export default function FeaturedVillas() {
     <SectionWrapper
       ref={targetRef}
       bg={JADE_GREEN}
-      className="max-lg:h-[212vh] lg:h-[720vh]"
+      className="max-lg:h-[292vh] lg:h-[720vh]"
       pattern={deferPattern ? false : FEATURED_PATTERN}
     >
       <NavbarThemeTrigger theme="white" sectionRef={targetRef} />
@@ -364,6 +365,11 @@ function VillaSlide({
     index,
     innerRef,
   );
+  const scale = useScrollLinkedMobileCardScale(
+    globalProgress,
+    index,
+    totalSteps,
+  );
 
   return (
     <motion.div
@@ -376,6 +382,10 @@ function VillaSlide({
           ref={innerRef}
           className={`${scrollLinkedPanelStackWrapFeaturedClass} relative z-10 w-full`}
         >
+          <motion.div
+            style={{ scale }}
+            className="w-full origin-center will-change-transform"
+          >
           <div className={scrollLinkedPanelStackFeaturedClass}>
           <div
             className={`${scrollLinkedFeaturedVillaImageFrameClass} relative z-20 pointer-events-auto`}
@@ -426,6 +436,7 @@ function VillaSlide({
             </motion.div>
           </Link>
           </div>
+          </motion.div>
         </div>
         </div>
       </div>
@@ -471,6 +482,11 @@ function CtaSlide({
     index,
     innerRef,
   );
+  const scale = useScrollLinkedMobileCardScale(
+    globalProgress,
+    index,
+    totalSteps,
+  );
 
   return (
     <motion.div
@@ -483,6 +499,10 @@ function CtaSlide({
           ref={innerRef}
           className={`${scrollLinkedPanelStackWrapFeaturedClass} relative z-10 pointer-events-auto w-full rounded-sm`}
         >
+          <motion.div
+            style={{ scale }}
+            className="w-full origin-center will-change-transform"
+          >
           <div className={scrollLinkedPanelStackFeaturedClass}>
           <div className={`${scrollLinkedFeaturedVillaImageFrameClass} bg-[#0f2a1f]`}>
             <VillaHeroGridImages />
@@ -508,6 +528,7 @@ function CtaSlide({
             </PrimaryButton>
           </div>
           </div>
+          </motion.div>
         </div>
         </div>
       </div>

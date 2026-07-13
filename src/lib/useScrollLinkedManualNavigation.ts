@@ -14,6 +14,10 @@ import {
   computeMobileSnappedProgress,
   isInMobileSnapEntryZone,
   isInMobileSnapExitZone,
+  mobileSnapIndexFromProgress,
+  mobileSnapMaxCardIndex,
+  mobileSnapScrollYForIndex,
+  resolveMobileSnapGestureTargetIndex,
   type MobileSnapProgressOptions,
 } from "@/lib/scrollLinkedMobileSnap";
 
@@ -145,6 +149,41 @@ function snapSectionToNearestStep(
   scrollByDelta(dy);
 }
 
+function scrollToYImmediate(y: number): void {
+  const lenis = getLenis();
+  const isCoarse =
+    typeof window !== "undefined" &&
+    window.matchMedia("(pointer: coarse)").matches;
+  if (isCoarse || !lenis) {
+    window.scrollTo({ top: y, behavior: "auto" });
+    return;
+  }
+  lenis.scrollTo(y, { immediate: true });
+}
+
+/** Hold scroll inside ±1 card of the gesture anchor while the finger is down / settling. */
+function clampScrollToAdjacentCards(
+  section: HTMLElement,
+  anchorIndex: number,
+  snapBoundary: ScrollLinkedSnapBoundary,
+): void {
+  if (
+    isInMobileSnapEntryZone(readSectionProgress(section), snapBoundary) ||
+    isInMobileSnapExitZone(readSectionProgress(section), snapBoundary)
+  ) {
+    return;
+  }
+
+  const maxCard = mobileSnapMaxCardIndex(snapBoundary);
+  const minIndex = Math.max(0, anchorIndex - 1);
+  const maxIndex = Math.min(maxCard, anchorIndex + 1);
+  const minY = mobileSnapScrollYForIndex(section, minIndex, snapBoundary);
+  const maxY = mobileSnapScrollYForIndex(section, maxIndex, snapBoundary);
+  const y = window.scrollY;
+  if (y < minY - 1) scrollToYImmediate(minY);
+  else if (y > maxY + 1) scrollToYImmediate(maxY);
+}
+
 export function useScrollLinkedManualNavigation({
   enabled,
   showHint: showHintOption = true,
@@ -206,6 +245,127 @@ export function useScrollLinkedManualNavigation({
       unsub();
     };
   }, [enabled, showVerticalHint, sectionRef, dismissVerticalHint]);
+
+  /**
+   * Mobile / tablet vertical snap — one finger gesture advances at most one card,
+   * whether the drag is short or long. Clamps mid-gesture and settles on release.
+   */
+  useEffect(() => {
+    if (!enabled || !verticalCarouselMobile || !snapBoundary) return;
+
+    let touching = false;
+    let anchorIndex = 0;
+    let settleUntil = 0;
+    let settleTargetIndex: number | null = null;
+    let settleRaf = 0;
+
+    const activeSection = () => {
+      const section = resolveSectionEl(sectionRef, stageRef.current);
+      if (!section || !isSectionInActiveScrollRange(section)) return null;
+      return section;
+    };
+
+    const onTouchStart = (event: TouchEvent) => {
+      if (event.touches.length !== 1) return;
+      const section = activeSection();
+      if (!section) return;
+      const progress = readSectionProgress(section);
+      if (
+        isInMobileSnapEntryZone(progress, snapBoundary) ||
+        isInMobileSnapExitZone(progress, snapBoundary)
+      ) {
+        return;
+      }
+      touching = true;
+      settleTargetIndex = null;
+      anchorIndex = mobileSnapIndexFromProgress(progress, snapBoundary);
+      dismissHint();
+    };
+
+    const onScrollClamp = () => {
+      const section = activeSection();
+      if (!section) return;
+
+      if (touching) {
+        clampScrollToAdjacentCards(section, anchorIndex, snapBoundary);
+        return;
+      }
+
+      if (settleTargetIndex == null || performance.now() > settleUntil) {
+        settleTargetIndex = null;
+        return;
+      }
+
+      const targetY = mobileSnapScrollYForIndex(
+        section,
+        settleTargetIndex,
+        snapBoundary,
+      );
+      if (Math.abs(window.scrollY - targetY) > 2) {
+        scrollToYImmediate(targetY);
+      }
+    };
+
+    const finishGesture = () => {
+      if (!touching) return;
+      touching = false;
+      const section = activeSection();
+      if (!section) return;
+
+      const progress = readSectionProgress(section);
+      if (
+        isInMobileSnapEntryZone(progress, snapBoundary) ||
+        isInMobileSnapExitZone(progress, snapBoundary)
+      ) {
+        return;
+      }
+
+      const targetIndex = resolveMobileSnapGestureTargetIndex(
+        anchorIndex,
+        progress,
+        snapBoundary,
+      );
+      settleTargetIndex = targetIndex;
+      settleUntil = performance.now() + 420;
+      scrollToYImmediate(
+        mobileSnapScrollYForIndex(section, targetIndex, snapBoundary),
+      );
+
+      if (settleRaf) cancelAnimationFrame(settleRaf);
+      const tick = () => {
+        if (settleTargetIndex == null || performance.now() > settleUntil) {
+          settleTargetIndex = null;
+          settleRaf = 0;
+          return;
+        }
+        onScrollClamp();
+        settleRaf = requestAnimationFrame(tick);
+      };
+      settleRaf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("touchstart", onTouchStart, {
+      passive: true,
+      capture: true,
+    });
+    window.addEventListener("touchend", finishGesture, {
+      passive: true,
+      capture: true,
+    });
+    window.addEventListener("touchcancel", finishGesture, {
+      passive: true,
+      capture: true,
+    });
+    window.addEventListener("scroll", onScrollClamp, { passive: true });
+
+    return () => {
+      window.removeEventListener("touchstart", onTouchStart, true);
+      window.removeEventListener("touchend", finishGesture, true);
+      window.removeEventListener("touchcancel", finishGesture, true);
+      window.removeEventListener("scroll", onScrollClamp);
+      if (settleRaf) cancelAnimationFrame(settleRaf);
+    };
+  }, [enabled, verticalCarouselMobile, snapBoundary, sectionRef, dismissHint]);
 
   useEffect(() => {
     if (!enabled || verticalCarouselMobile) return;

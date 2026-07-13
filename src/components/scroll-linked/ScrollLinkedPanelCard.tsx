@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import NavbarThemeTrigger from "@/components/NavbarThemeTrigger";
 import { experiencePanelTextOpacity } from "@/lib/experiencePanelMotion";
+import { useScrollLinkedMobileCardScale } from "@/lib/scrollLinkedMobileCardScale";
 import { useMediaMinLg } from "@/lib/useMediaMinLg";
 import { useScrollLinkedPanelOffset } from "@/lib/useScrollLinkedPanelOffset";
 import {
@@ -78,6 +79,11 @@ export default function ScrollLinkedPanelCard({
     (p: number) => (index - p * totalSteps) * offsetPx,
   );
   const { x, y } = useScrollLinkedAxisMotion(slideOffset, axis);
+  const scale = useScrollLinkedMobileCardScale(
+    panelProgress,
+    index,
+    totalSteps,
+  );
 
   const zIndex = useTransform(panelProgress, (p: number) => {
     const centered = Math.min(Math.round(p * totalSteps), panelCount - 1);
@@ -97,41 +103,46 @@ export default function ScrollLinkedPanelCard({
         <NavbarThemeTrigger theme="white" sectionRef={panelRef} />
         <div className={scrollLinkedPanelOuterClass}>
           <div ref={stackWrapRef} className={scrollLinkedPanelStackWrapClass}>
-            <div className={scrollLinkedPanelStackClass}>
-              <div className={imageFrameClassName}>
-                <div className="w-full h-full relative">
-                  <JadeImage
-                    src={panelImageSrc}
-                    alt={data.title}
-                    fill
-                    className="object-cover"
-                    sizes={
-                      data.mobileImage
-                        ? isLg
-                          ? "600px"
+            <motion.div
+              style={{ scale }}
+              className="w-full origin-center will-change-transform"
+            >
+              <div className={scrollLinkedPanelStackClass}>
+                <div className={imageFrameClassName}>
+                  <div className="w-full h-full relative">
+                    <JadeImage
+                      src={panelImageSrc}
+                      alt={data.title}
+                      fill
+                      className="object-cover"
+                      sizes={
+                        data.mobileImage
+                          ? isLg
+                            ? "600px"
+                            : "(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
                           : "(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
-                        : "(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
-                    }
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      }
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  </div>
                 </div>
-              </div>
 
-              <motion.div
-                style={{ opacity: textOpacity }}
-                className={scrollLinkedPanelTextBlockClass}
-              >
-                <h2 className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-2.5">
-                  {data.title}
-                </h2>
-                <p className={scrollLinkedPanelBodyClass}>{data.subtext}</p>
-                <div className="w-full">
-                  <Link href={data.href} className={scrollLinkedPanelCtaClass}>
-                    {data.cta} <ArrowRight className="w-5 h-5" />
-                  </Link>
-                </div>
-              </motion.div>
-            </div>
+                <motion.div
+                  style={{ opacity: textOpacity }}
+                  className={scrollLinkedPanelTextBlockClass}
+                >
+                  <h2 className="font-philosopher text-gh-h2 text-white leading-none mb-2 lg:mb-2.5">
+                    {data.title}
+                  </h2>
+                  <p className={scrollLinkedPanelBodyClass}>{data.subtext}</p>
+                  <div className="w-full">
+                    <Link href={data.href} className={scrollLinkedPanelCtaClass}>
+                      {data.cta} <ArrowRight className="w-5 h-5" />
+                    </Link>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>

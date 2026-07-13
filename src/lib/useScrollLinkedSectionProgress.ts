@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import {
   useScroll,
   useSpring,
@@ -75,13 +75,17 @@ export function useScrollLinkedSectionProgress(
    * scroll runway exits to the next section.
    */
   const snapMaxProgress = mobileSnapMaxProgress ?? 1;
-  const snapBoundary: ScrollLinkedSnapBoundary | undefined = mobileSnapActive
-    ? {
-        stepCount,
-        snapZoneRatio: mobileSnapZoneRatio,
-        snapMaxProgress,
-      }
-    : undefined;
+  const snapBoundary: ScrollLinkedSnapBoundary | undefined = useMemo(
+    () =>
+      mobileSnapActive
+        ? {
+            stepCount,
+            snapZoneRatio: mobileSnapZoneRatio,
+            snapMaxProgress,
+          }
+        : undefined,
+    [mobileSnapActive, stepCount, mobileSnapZoneRatio, snapMaxProgress],
+  );
 
   const roundedSnapInput = useTransform(scrollYProgress, (p) => {
     if (snapBoundary) {
@@ -95,10 +99,10 @@ export function useScrollLinkedSectionProgress(
   });
 
   const snappedProgress = useSpring(roundedSnapInput, {
-    stiffness: 200,
-    damping: 30,
-    mass: 0.42,
-    restDelta: 0.0006,
+    stiffness: 115,
+    damping: 36,
+    mass: 0.58,
+    restDelta: 0.0005,
   });
 
   /**

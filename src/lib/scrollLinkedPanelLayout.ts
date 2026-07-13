@@ -90,7 +90,7 @@ export const scrollLinkedPanelImageFrameTallHeaderClass =
   `relative w-full shrink-0 overflow-hidden rounded-none bg-black shadow-2xl aspect-[343/420] max-lg:h-[var(--jade-scroll-card-max-h-tall-header)] max-lg:max-h-[var(--jade-scroll-card-max-h-tall-header)] max-lg:min-h-[min(140px,30svh)] max-lg:aspect-auto max-lg:w-full sm:aspect-[4/3] md:aspect-[16/9] md:max-h-[clamp(240px,55dvh,600px)]`;
 
 export const scrollLinkedFeaturedVillaImageFrameClass =
-  `relative w-full shrink-0 overflow-hidden rounded-none bg-black shadow-2xl aspect-[343/420] ${scrollLinkedFeaturedImageFrameMobileClass} sm:aspect-[4/3] md:aspect-[21/10] lg:h-[48vh]`;
+  `relative w-full shrink-0 overflow-hidden rounded-none bg-black shadow-2xl aspect-[343/420] ${scrollLinkedFeaturedImageFrameMobileClass} sm:aspect-[4/3] md:aspect-[21/10] lg:h-[52.8vh]`;
 
 export const scrollLinkedPanelStackClass =
   "relative flex w-full flex-col items-stretch max-lg:shrink-0 max-lg:gap-[var(--jade-scroll-panel-gap,0.5rem)] gap-2 lg:max-h-full lg:min-h-0 lg:flex-1 lg:justify-center lg:gap-4";

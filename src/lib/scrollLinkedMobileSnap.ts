@@ -5,8 +5,11 @@
 
 /** Featured §6 baseline — 6 steps (intro + cards + CTA). */
 const SNAP_BASELINE_STEP_COUNT = 6;
-const SNAP_ZONE_VH = 200;
+/** Vertical scroll budget for card snaps — higher = slower / more travel per card. */
+const SNAP_ZONE_VH = 280;
 const SNAP_EXIT_VH = 12;
+/** Commit to adjacent card once drag crosses this fraction of a step. */
+export const MOBILE_SNAP_COMMIT_THRESHOLD = 0.28;
 
 /** Featured-parity hook step count — aligns snap positions with card `index / cardStepCount`. */
 export function scrollLinkedMobileSnapHookStepCount(
@@ -54,6 +57,73 @@ export type MobileSnapProgressOptions = {
   snapZoneRatio: number;
   snapMaxProgress: number;
 };
+
+export function mobileSnapMaxIndex(options: MobileSnapProgressOptions): number {
+  return Math.max(1, options.stepCount - 1);
+}
+
+/** Highest snap index that still lands on a carousel card (respects CTA cap). */
+export function mobileSnapMaxCardIndex(
+  options: MobileSnapProgressOptions,
+): number {
+  const maxIndex = mobileSnapMaxIndex(options);
+  return Math.min(
+    maxIndex,
+    Math.round(options.snapMaxProgress * maxIndex + 1e-6),
+  );
+}
+
+/** Continuous (unrounded) card index from raw section scroll progress. */
+export function mobileSnapContinuousIndex(
+  progress: number,
+  options: MobileSnapProgressOptions,
+): number {
+  const maxIndex = mobileSnapMaxIndex(options);
+  const { snapZoneRatio: zone, snapMaxProgress } = options;
+  if (progress >= zone) {
+    return snapMaxProgress * maxIndex;
+  }
+  const carouselP = Math.min(1, Math.max(0, progress / zone));
+  return carouselP * maxIndex;
+}
+
+export function mobileSnapIndexFromProgress(
+  progress: number,
+  options: MobileSnapProgressOptions,
+): number {
+  return Math.round(mobileSnapContinuousIndex(progress, options));
+}
+
+/** Page scrollY that centres snap index `index` (matches snap-on-release write path). */
+export function mobileSnapScrollYForIndex(
+  section: HTMLElement,
+  index: number,
+  options: MobileSnapProgressOptions,
+): number {
+  const scrollable = Math.max(1, section.offsetHeight - window.innerHeight);
+  const maxIndex = mobileSnapMaxIndex(options);
+  const snappedProgress = Math.min(index / maxIndex, options.snapMaxProgress);
+  return section.offsetTop + snappedProgress * scrollable;
+}
+
+/**
+ * One gesture → at most one adjacent card.
+ * Slight drag past {@link MOBILE_SNAP_COMMIT_THRESHOLD} commits; long drag still caps at ±1.
+ */
+export function resolveMobileSnapGestureTargetIndex(
+  anchorIndex: number,
+  progress: number,
+  options: MobileSnapProgressOptions,
+  commitThreshold = MOBILE_SNAP_COMMIT_THRESHOLD,
+): number {
+  const maxCard = mobileSnapMaxCardIndex(options);
+  const continuous = mobileSnapContinuousIndex(progress, options);
+  const delta = continuous - anchorIndex;
+  let target = anchorIndex;
+  if (delta > commitThreshold) target = anchorIndex + 1;
+  else if (delta < -commitThreshold) target = anchorIndex - 1;
+  return Math.max(0, Math.min(maxCard, target));
+}
 
 /** First card snap threshold in scroll progress — below half of this, exit scroll-up is free. */
 export function mobileSnapEntryThreshold(options: MobileSnapProgressOptions): number {

@@ -205,10 +205,16 @@ function setCardMaxHeights(
     198,
     Math.max(158, Math.round(featuredStackBudget * 0.35) + stackGaps),
   );
-  const featuredCardMax = Math.min(
+  const featuredCardMaxBase = Math.min(
     600,
     Math.round(featuredStackBudget * 0.61),
     Math.max(150, featuredStackBudget - featuredTextReserve),
+  );
+  /** Featured §6 — +10% image height vs base card budget */
+  const featuredCardMax = Math.min(
+    660,
+    Math.round(featuredCardMaxBase * 1.1),
+    Math.max(150, featuredStackBudget - Math.round(featuredTextReserve * 0.9)),
   );
   root.style.setProperty(
     "--jade-scroll-card-max-h-featured",

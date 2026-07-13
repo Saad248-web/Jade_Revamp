@@ -140,7 +140,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={isSplashComplete ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-              className="text-gh-body font-light text-[#FAFAFA] max-w-xl font-manrope leading-relaxed"
+              className="text-gh-body font-semibold text-white max-w-xl font-manrope leading-relaxed [text-shadow:0_1px_8px_rgba(0,0,0,0.8),0_2px_18px_rgba(0,0,0,0.5)]"
             >
               Private themed farmhouse villa retreats in serene locations of Bangalore,
               curated for gatherings and getaways.

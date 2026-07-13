@@ -15,7 +15,7 @@ $vars = @{
   AXIS_TEST_HOTEL_ID       = "1303"
   AXIS_TEST_ROOM_ID        = "1"
   AXIS_TEST_RATE_PLAN_ID   = "1"
-  AXIS_ROOMS_INBOUND_VERIFY_AXIS = "false"
+  AXIS_ROOMS_INBOUND_VERIFY_AXIS = "true"
 }
 
 foreach ($key in $vars.Keys) {

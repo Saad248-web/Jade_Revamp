@@ -8,9 +8,7 @@ Set these on **Vercel → Project → Settings → Environment Variables → Pro
 | `AXIS_ROOMS_CHANNEL_ID` | `227` |
 | `AXIS_ROOMS_API_BASE_URL` | `https://sandbox2.axisrooms.com` |
 | `AXIS_ROOMS_PMS_NAME` | `Jade Host PMS` |
-| `AXIS_ROOMS_INBOUND_VERIFY_AXIS` | `false` *(until Axis activates outbound key on sandbox)* |
-
-After Rohit confirms the sandbox `accessKey` works on API 1/2/5, set `AXIS_ROOMS_INBOUND_VERIFY_AXIS` to `true` (or remove the var).
+| `AXIS_ROOMS_INBOUND_VERIFY_AXIS` | `true` | API 5 verify on inbound API 9 (set `false` only if sandbox key not active) |
 
 ## CLI (after `npx vercel login`)
 
