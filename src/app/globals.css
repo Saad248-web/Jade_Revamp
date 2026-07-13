@@ -1249,27 +1249,49 @@ body {
     position: relative;
     width: 100%;
     min-width: 0;
-    overflow: hidden;
+    /* Clip X only — Y must stay visible so rail tiles keep full height */
+    overflow-x: hidden;
+    overflow-y: visible;
+    min-height: 10rem;
   }
 
-  /* Clip track to shell width so overflow-x scroll engages (not expand layout) */
   .menu-mobile-hscroll-shell .menu-hscroll-fade {
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
+    min-height: 10rem;
   }
 
   .menu-mobile-hscroll-shell .jade-hscroll-track,
   .menu-mobile-hscroll-shell .menu-mobile-hscroll-track {
     touch-action: pan-x pan-y;
     overflow-x: auto;
+    overflow-y: visible;
     overscroll-behavior-x: contain;
     overscroll-behavior-y: auto;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: none;
     scroll-behavior: auto;
+    align-items: stretch;
+    min-height: 10rem;
+  }
+
+  /* view(inline) timeline can collapse tiles inside nested vertical scrollers */
+  .menu-mobile-hscroll-shell .jade-hscroll-view-item,
+  .menu-mobile-hscroll-shell .menu-mobile-hscroll-item {
+    animation: none !important;
+    animation-timeline: auto !important;
+    animation-range: normal !important;
+    opacity: 1 !important;
+    transform: none !important;
+    flex: 0 0 auto;
+    height: 10rem !important;
+    min-height: 10rem !important;
+    max-height: 10rem;
   }
 
   .menu-mobile-vscroll {
-    overflow-x: clip;
+    /* `clip` was collapsing nested horizontal rail heights on iOS/WebKit */
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
   }
 

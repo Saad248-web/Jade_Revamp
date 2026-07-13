@@ -17,7 +17,7 @@ import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
 import Navbar from "@/components/Navbar";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { MenuDesktopCarouselSection } from "@/components/menu/MenuDesktopCarouselSection";
-import { MenuMobileImageRail } from "@/components/menu/MenuMobileImageRail";
+import { MenuMobileImageRail, MENU_MOBILE_RAIL_ITEM_CLASS } from "@/components/menu/MenuMobileImageRail";
 import {
   MENU_PREVIEW_GUTTER_CLASS,
   MENU_MOBILE_NAV_LABEL_CLASS,
@@ -231,7 +231,7 @@ function MenuExperienceImages({
         {exp.images.map((src, imgIdx) => (
           <div
             key={`${exp.href}-mobile-${imgIdx}`}
-            className="jade-hscroll-view-item relative h-40 w-[min(58vw,220px)] shrink-0 overflow-hidden"
+            className={MENU_MOBILE_RAIL_ITEM_CLASS}
           >
             <Image
               src={safeMenuImage(src)}
@@ -527,7 +527,7 @@ export default function MenuPage() {
                         {getMenuVillaCarouselImages(villa).map((src, imgIdx) => (
                           <div
                             key={`${villa.id}-${imgIdx}`}
-                            className="jade-hscroll-view-item relative h-40 w-[min(58vw,220px)] shrink-0 overflow-hidden"
+                            className={MENU_MOBILE_RAIL_ITEM_CLASS}
                           >
                             <Image
                               src={src}
