@@ -38,17 +38,17 @@ export function resolveScrollLinkedVisibleGap(
 }
 
 export const scrollLinkedStickyStageClass =
-  "jade-scroll-linked-stage sticky overflow-hidden min-h-0 top-0 h-screen max-lg:h-[var(--jade-scroll-stage-mobile-height)] lg:top-0 lg:h-screen";
+  "jade-scroll-linked-stage sticky overflow-hidden max-lg:overflow-visible min-h-0 top-0 h-screen max-lg:h-[var(--jade-scroll-stage-mobile-height)] lg:top-0 lg:h-screen";
 
 export const scrollLinkedStickyStageInnerClass =
-  "flex h-full min-h-0 flex-col overflow-hidden isolation isolate";
+  "flex h-full min-h-0 flex-col overflow-hidden max-lg:overflow-visible isolation isolate";
 
 export const scrollLinkedPanelAreaClass =
-  "relative z-10 w-full min-h-0 flex-1 max-lg:h-[var(--jade-scroll-panel-row-height,100%)] max-lg:max-h-[var(--jade-scroll-panel-row-height,100%)] max-lg:shrink-0";
+  "relative z-10 w-full min-h-0 flex-1 overflow-visible max-lg:h-[var(--jade-scroll-panel-row-height,100%)] max-lg:max-h-[var(--jade-scroll-panel-row-height,100%)] max-lg:shrink-0";
 
 /** Featured §6 — no section header; use full sticky stage height on mobile/tablet. */
 export const scrollLinkedPanelAreaFeaturedClass =
-  "relative z-10 w-full min-h-0 flex-1 max-lg:max-h-[var(--jade-scroll-stage-mobile-height,100%)]";
+  "relative z-10 w-full min-h-0 flex-1 overflow-visible max-lg:max-h-[var(--jade-scroll-stage-mobile-height,100%)]";
 
 export const scrollLinkedSectionHeaderClass =
   "relative z-50 flex w-full shrink-0 flex-col items-center justify-end pointer-events-none max-lg:h-[var(--jade-scroll-section-header-block)] max-lg:box-border max-lg:pt-[clamp(1.375rem,3.75svh,1.875rem)] max-lg:pb-[clamp(0.625rem,1.5svh,0.875rem)] lg:py-[clamp(32px,4vh,51.2px)]";
@@ -65,16 +65,16 @@ const scrollLinkedPanelGridRowsClass =
 
 /** Standard horizontal sections — fixed symmetric edge pad (computed once at boot). */
 export const scrollLinkedPanelOuterClass =
-  "relative mx-auto w-full max-w-[1920px] max-lg:flex max-lg:h-full max-lg:min-h-0 max-lg:max-h-[var(--jade-scroll-panel-row-height,100%)] max-lg:flex-col max-lg:items-center max-lg:justify-center max-lg:box-border max-lg:px-4 max-lg:py-[var(--jade-scroll-panel-edge-pad-standard,0.875rem)] sm:px-8 md:px-16 xl:px-24 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:items-center lg:justify-center lg:pb-8";
+  "relative mx-auto w-full max-w-[1920px] max-lg:flex max-lg:h-full max-lg:min-h-0 max-lg:max-h-[var(--jade-scroll-panel-row-height,100%)] max-lg:flex-col max-lg:items-center max-lg:justify-center max-lg:overflow-visible max-lg:box-border max-lg:px-4 max-lg:py-[var(--jade-scroll-panel-edge-pad-standard,0.875rem)] sm:px-8 md:px-16 xl:px-24 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:items-center lg:justify-center lg:pb-8";
 
 export const scrollLinkedPanelStackWrapClass =
-  "relative w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto max-lg:shrink-0 max-lg:max-h-full";
+  "relative w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto max-lg:shrink-0 max-lg:max-h-none max-lg:overflow-visible";
 
 export const scrollLinkedPanelOuterFeaturedClass =
-  `relative mx-auto grid h-full min-h-0 w-full max-w-[1920px] max-lg:max-h-[var(--jade-scroll-stage-mobile-height,100%)] ${scrollLinkedPanelGridRowsClass} max-lg:items-center max-lg:justify-items-center max-lg:box-border max-lg:px-6 max-lg:pt-[var(--jade-mobile-chrome-top,3.5rem)] max-lg:pb-8 md:px-20 lg:px-32 xl:px-48 lg:flex lg:flex-col lg:items-center lg:justify-center lg:py-0`;
+  `relative mx-auto grid h-full min-h-0 w-full max-w-[1920px] max-lg:max-h-[var(--jade-scroll-stage-mobile-height,100%)] max-lg:overflow-visible ${scrollLinkedPanelGridRowsClass} max-lg:items-center max-lg:justify-items-center max-lg:box-border max-lg:px-6 max-lg:pt-[var(--jade-mobile-chrome-top,3.5rem)] max-lg:pb-8 md:px-20 lg:px-32 xl:px-48 lg:flex lg:flex-col lg:items-center lg:justify-center lg:py-0`;
 
 export const scrollLinkedPanelStackWrapFeaturedClass =
-  "relative col-start-1 row-start-2 w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto self-center max-lg:max-h-full";
+  "relative col-start-1 row-start-2 w-full max-w-md sm:max-w-lg md:max-w-2xl xl:max-w-4xl mx-auto self-center max-lg:max-h-none max-lg:overflow-visible";
 
 /** Mobile: height-first image; desktop keeps aspect ratio caps. */
 const scrollLinkedPanelImageFrameMobileClass =

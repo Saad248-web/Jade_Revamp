@@ -1020,7 +1020,9 @@ body {
     max-height: var(--jade-scroll-stage-mobile-height);
     transform: translateZ(0);
     backface-visibility: hidden;
-    contain: layout style paint;
+    /* No paint containment — vertical snap cards must remain visible while dragging */
+    contain: layout style;
+    overflow: visible;
     /* Instant clamp — navbar hide/show must not resize this frame */
     transition: none;
   }
