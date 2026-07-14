@@ -43,9 +43,23 @@ const FORBIDDEN_PATH_PREFIXES = ["/villa-retreats", "/party-villa-retreats"] as 
 
 export const LISTING_RETURN_STORAGE_KEY = "jade:listingReturn";
 
+/** Query flag — scroll `/villas` to the filter + results carousel (skip hero). */
+export const VILLA_LISTING_FOCUS_PARAM = "focus";
+export const VILLA_LISTING_FOCUS_RESULTS = "listing";
+
 export function villaListingPath(query?: { category?: string }): string {
   if (!query?.category?.trim()) return "/villas";
   return `/villas?category=${encodeURIComponent(query.category.trim())}`;
+}
+
+/** Villa directory results (filters + cards) — used after booking date/guest selection. */
+export function villaListingResultsPath(query?: { category?: string }): string {
+  const params = new URLSearchParams();
+  if (query?.category?.trim()) {
+    params.set("category", query.category.trim());
+  }
+  params.set(VILLA_LISTING_FOCUS_PARAM, VILLA_LISTING_FOCUS_RESULTS);
+  return `/villas?${params.toString()}`;
 }
 
 export function villaDetailPath(id: string): string {

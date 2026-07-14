@@ -16,6 +16,10 @@ import { scrollToElement } from "@/lib/lenis";
 import { sortVillasForDirectory } from "@/lib/villasDirectoryOrder";
 import HorizontalScrollRail from "@/components/ui/HorizontalScrollRail";
 import { STICKY_BELOW_GLOBAL_NAV_CLASS } from "@/lib/scrollChromeLayout";
+import {
+  VILLA_LISTING_FOCUS_PARAM,
+  VILLA_LISTING_FOCUS_RESULTS,
+} from "@/lib/appRoutes";
 
 // Navbar height to offset the sticky filter bar
 const NAVBAR_HEIGHT = 72;
@@ -46,26 +50,38 @@ export default function VillasCarousel() {
   const [activeCategory, setActiveCategory] = useState("All");
   const searchParams = useSearchParams();
 
-  // Cold load / external deep link only — sync ?category= once; never on tab clicks.
+  // Cold load / external deep link — sync ?category= and scroll to results when
+  // ?focus=listing (post book dates/guests) or category deep-link. Navbar /villas
+  // stays on the hero (no focus param).
   useEffect(() => {
     const categoryParam = searchParams?.get("category");
-    if (!categoryParam) return;
+    const focusListing =
+      searchParams?.get(VILLA_LISTING_FOCUS_PARAM) ===
+      VILLA_LISTING_FOCUS_RESULTS;
 
-    const validCategory = CATEGORIES.find(
-      (c) => c.toLowerCase() === categoryParam.toLowerCase(),
-    );
-    if (!validCategory) return;
+    if (categoryParam) {
+      const validCategory = CATEGORIES.find(
+        (c) => c.toLowerCase() === categoryParam.toLowerCase(),
+      );
+      if (validCategory) setActiveCategory(validCategory);
+    }
 
-    setActiveCategory(validCategory);
+    if (!categoryParam && !focusListing) return;
 
-    const timer = window.setTimeout(() => {
+    const scrollToResults = () => {
       const el = document.getElementById("VILLAS-carousel");
       if (el) {
         scrollToElement(el, { offset: -(NAVBAR_HEIGHT + 20) });
       }
-    }, 500);
+    };
 
-    return () => window.clearTimeout(timer);
+    const timers = [100, 350, 600].map((delay) =>
+      window.setTimeout(scrollToResults, delay),
+    );
+
+    return () => {
+      timers.forEach((id) => window.clearTimeout(id));
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- mount / full navigation only
   }, []);
 

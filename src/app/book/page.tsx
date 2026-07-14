@@ -29,7 +29,7 @@ import BookingDetailsFormFields from "@/components/booking/BookingDetailsFormFie
 import { initiatePayment } from "@/lib/paymentService";
 import { formatPaise } from "@/lib/money";
 import type { BookingPricing } from "@/lib/bookings/types";
-import { villaListingPath } from "@/lib/appRoutes";
+import { villaListingPath, villaListingResultsPath } from "@/lib/appRoutes";
 import { useSafeBack } from "@/lib/safeBackNavigation";
 import { openRazorpayCheckout } from "@/lib/payments/razorpayCheckout";
 import { confirmTestPayment } from "@/lib/payments/confirmTestPayment";
@@ -1257,9 +1257,8 @@ function BookPageContent() {
     if (isVillaPreSelected) {
       setStep("details");
     } else {
-      // No villa pre-selected — send to villa listing so user can pick one.
-      // VillaCard will detect the filled context and link to step=details.
-      router.push("/villas");
+      // No villa pre-selected — send to listing results (skip hero).
+      router.push(villaListingResultsPath());
     }
   };
 
@@ -1267,8 +1266,7 @@ function BookPageContent() {
     if (isVillaPreSelected) {
       setStep("guests");
     } else {
-      // Came from VILLAS listing — go back there
-      router.push("/villas");
+      router.push(villaListingResultsPath());
     }
   };
 
