@@ -74,13 +74,13 @@ export function AnalyticsDashboard() {
               },
             ].map((card) => (
               <DashboardPanel key={card.label} pad>
-                <p className="text-xs font-bold uppercase tracking-widest text-white/40">
+                <p className="text-xs font-bold uppercase tracking-widest text-[color:var(--dash-text-muted)]">
                   {card.label}
                 </p>
                 <p className="mt-2 font-philosopher text-3xl text-white">
                   {card.value}
                 </p>
-                <p className="mt-1 text-sm text-white/45">{card.hint}</p>
+                <p className="mt-1 text-sm text-[color:var(--dash-text-secondary)]">{card.hint}</p>
               </DashboardPanel>
             ))}
           </div>
@@ -93,10 +93,10 @@ export function AnalyticsDashboard() {
                 <p className="mt-1 font-philosopher text-2xl text-[var(--dash-accent)]">
                   {formatPaise(data.paidRevenuePaise)}
                 </p>
-                <p className="mt-3 text-sm text-white/45">
+                <p className="mt-3 text-sm text-[color:var(--dash-text-secondary)]">
                   Google Analytics:{" "}
                   {data.googleAnalyticsId ? (
-                    <code className="text-white/60">
+                    <code className="text-[color:var(--dash-text-muted)]">
                       {data.googleAnalyticsId}
                     </code>
                   ) : (

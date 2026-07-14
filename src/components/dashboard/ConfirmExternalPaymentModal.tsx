@@ -76,17 +76,17 @@ export function ConfirmExternalPaymentModal({
 
   return (
     <div
-      className="fixed inset-0 z-[var(--z-modal)] flex items-end justify-center bg-black/70 p-4 sm:items-center"
+      className={dash.modalOverlay}
       role="dialog"
       aria-modal="true"
       aria-labelledby="confirm-payment-title"
     >
       <div
-        className={`${GLASS_CHROME_FRAME_CLASS} w-full max-w-lg`}
+        className={`${GLASS_CHROME_FRAME_CLASS} ${dash.modal}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className={GLASS_INNER_SURFACE}>
-          <form onSubmit={handleSubmit} noValidate>
+        <div className={`${GLASS_INNER_SURFACE} ${dash.modalFrame} flex min-h-0 flex-1 flex-col`}>
+          <form onSubmit={handleSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
             <DashboardModalHeader
               titleId="confirm-payment-title"
               title="Confirm offline payment"
@@ -167,14 +167,14 @@ export function ConfirmExternalPaymentModal({
                   type="button"
                   onClick={onClose}
                   disabled={saving}
-                  className="min-h-[44px] border border-white/20 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-white/70 hover:bg-white/5 disabled:opacity-50"
+                  className={`${dash.btn} ${dash.btnText}`}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex min-h-[44px] items-center gap-2 border border-emerald-400/40 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-emerald-300 hover:bg-emerald-500/10 disabled:opacity-50"
+                  className={`${dash.btn} ${dash.btnSuccess}`}
                 >
                   {saving ? (
                     <>

@@ -174,7 +174,7 @@ export function LeadsManager() {
       cell: (r) => (
         <div>
           <p className="font-semibold text-white">{r.name}</p>
-          <p className="text-xs text-white/50">{r.email ?? r.phone ?? "—"}</p>
+          <p className="text-xs text-[color:var(--dash-text-muted)]">{r.email ?? r.phone ?? "—"}</p>
         </div>
       ),
     },
@@ -192,7 +192,7 @@ export function LeadsManager() {
             ))}
           </div>
         ) : (
-          <span className="text-xs text-white/35">Open lead to view details</span>
+          <span className="text-xs text-[color:var(--dash-text-muted)]">Open lead to view details</span>
         );
       },
     },

@@ -12,6 +12,7 @@ import { DataTable, type DataTableColumn } from "./DataTable";
 import { EmptyState } from "./EmptyState";
 import { DashboardListToolbar } from "./ui/DashboardListToolbar";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
+import { DashboardIconButton } from "./ui/DashboardIconButton";
 import {
   BlockFormModal,
   type BlockFormValues,
@@ -142,7 +143,7 @@ export function BlocksManager() {
       cell: (row) => (
         <div>
           <p className="font-bold text-white">{row.villaName}</p>
-          <p className="text-[length:var(--fs-desc)] text-white/40">
+          <p className="text-[length:var(--fs-desc)] text-[color:var(--dash-text-muted)]">
             {row.villaSlug}
           </p>
         </div>
@@ -183,18 +184,19 @@ export function BlocksManager() {
         if (!canWrite) return null;
         const busy = busyId === row.id;
         return (
-          <button
+          <DashboardIconButton
+            label="Release block"
+            variant="ghost"
             onClick={() => removeBlock(row)}
             disabled={busy}
-            className="inline-flex h-9 w-9 items-center justify-center text-white/55 hover:text-red-400 disabled:opacity-50"
-            title="Release block"
+            className="text-[color:var(--dash-text-secondary)] hover:text-red-400 disabled:opacity-50"
           >
             {busy ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <Trash2 className="h-4 w-4" />
             )}
-          </button>
+          </DashboardIconButton>
         );
       },
     },

@@ -31,7 +31,7 @@ export function DashboardActionMenu({
         onClick={() => onOpenChange(!open)}
         className={
           triggerClassName ||
-          "inline-flex min-h-[var(--dash-control-h)] min-w-[var(--dash-control-h)] items-center justify-center rounded text-white/40 transition-colors hover:bg-white/5 hover:text-white"
+          "inline-flex min-h-[var(--dash-control-h)] min-w-[var(--dash-control-h)] items-center justify-center rounded text-[color:var(--dash-text-secondary)] transition-colors hover:bg-white/5 hover:text-white"
         }
         aria-label={label}
         aria-expanded={open}

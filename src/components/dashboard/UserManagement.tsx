@@ -20,6 +20,7 @@ import { DashStatusChip } from "./form";
 import { DashboardPanel } from "./DashboardPanel";
 import { DashboardListToolbar } from "./ui/DashboardListToolbar";
 import { DashboardModuleFrame } from "./ui/DashboardModuleFrame";
+import { DashboardIconButton } from "./ui/DashboardIconButton";
 import {
   UserFormModal,
   type ManagedUser,
@@ -273,8 +274,13 @@ export function UserManagement() {
       header: "User",
       cell: (u) => (
         <div className="min-w-0">
-          <p className="truncate font-bold text-white">{u.name}</p>
-          <p className="truncate text-[length:var(--fs-desc)] text-white/45">
+          <p className="truncate font-bold text-white" title={u.name}>
+            {u.name}
+          </p>
+          <p
+            className="truncate text-[length:var(--fs-desc)] text-[color:var(--dash-text-secondary)]"
+            title={u.email}
+          >
             {u.email}
           </p>
         </div>
@@ -302,7 +308,7 @@ export function UserManagement() {
       key: "lastLogin",
       header: "Last login",
       cell: (u) => (
-        <span className="text-[length:var(--fs-desc)] text-white/55">
+        <span className="text-[length:var(--fs-desc)] text-[color:var(--dash-text-muted)]">
           {fmtDate(meta[u.id]?.lastLoginAt ?? null)}
         </span>
       ),
@@ -313,36 +319,36 @@ export function UserManagement() {
       className: "text-right",
       cell: (u) => {
         if (!canWrite) {
-          return <span className="text-white/30">Read-only</span>;
+          return <span className="text-[color:var(--dash-text-muted)]">Read-only</span>;
         }
         const isSelf = u.id === myId;
         const busy = busyId === u.id;
         return (
           <div className="flex items-center justify-end gap-1">
-            {busy && <Loader2 className="h-4 w-4 animate-spin text-white/50" />}
-            <button
-              type="button"
+            {busy && <Loader2 className="h-4 w-4 animate-spin text-[color:var(--dash-text-muted)]" />}
+            <DashboardIconButton
+              label="Edit"
+              variant="ghost"
               onClick={() => setModal({ mode: "edit", user: u })}
-              className="inline-flex h-9 w-9 items-center justify-center text-white/55 hover:text-[var(--dash-accent)]"
-              title="Edit"
+              className="text-[color:var(--dash-text-secondary)] hover:text-[var(--dash-accent)]"
               disabled={busy}
             >
               <Pencil className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
+            </DashboardIconButton>
+            <DashboardIconButton
+              label="Reset password"
+              variant="ghost"
               onClick={() => setResetTarget(u)}
-              className="inline-flex h-9 w-9 items-center justify-center text-white/55 hover:text-sky-300"
-              title="Reset password"
+              className="text-[color:var(--dash-text-secondary)] hover:text-sky-300"
               disabled={busy}
             >
               <KeyRound className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
+            </DashboardIconButton>
+            <DashboardIconButton
+              label={u.status === "active" ? "Suspend" : "Activate"}
+              variant="ghost"
               onClick={() => toggleStatus(u)}
-              className="inline-flex h-9 w-9 items-center justify-center text-white/55 hover:text-amber-300 disabled:opacity-30"
-              title={u.status === "active" ? "Suspend" : "Activate"}
+              className="text-[color:var(--dash-text-secondary)] hover:text-amber-300 disabled:opacity-30"
               disabled={busy || isSelf}
             >
               {u.status === "active" ? (
@@ -350,16 +356,16 @@ export function UserManagement() {
               ) : (
                 <UserCheck className="h-4 w-4" />
               )}
-            </button>
-            <button
-              type="button"
+            </DashboardIconButton>
+            <DashboardIconButton
+              label="Delete permanently"
+              variant="ghost"
               onClick={() => removeUser(u)}
-              className="inline-flex h-9 w-9 items-center justify-center text-white/55 hover:text-red-400 disabled:opacity-30"
-              title="Delete permanently"
+              className="text-[color:var(--dash-text-secondary)] hover:text-red-400 disabled:opacity-30"
               disabled={busy || isSelf}
             >
               <Trash2 className="h-4 w-4" />
-            </button>
+            </DashboardIconButton>
           </div>
         );
       },

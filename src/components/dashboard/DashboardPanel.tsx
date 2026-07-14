@@ -9,6 +9,8 @@ type DashboardPanelProps = {
   contentClassName?: string;
   fill?: boolean;
   pad?: boolean;
+  /** Allow action menus / popovers to escape the glass overflow clip */
+  menuHost?: boolean;
   header?: string;
 };
 
@@ -18,12 +20,14 @@ export function DashboardPanel({
   contentClassName = "",
   fill = false,
   pad = false,
+  menuHost = false,
   header,
 }: DashboardPanelProps) {
   const panelClass = [
     dash.panel,
     pad ? "dashboard-panel--pad" : "",
     fill ? "dashboard-panel--fill" : "",
+    menuHost ? dash.panelMenuHost : "",
     className,
   ]
     .filter(Boolean)

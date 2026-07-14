@@ -35,7 +35,7 @@ export function BlogSeoPreviews({
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       <div className="border border-white/10 bg-black/30 p-4">
-        <p className="mb-3 font-manrope text-[10px] font-bold uppercase tracking-widest text-white/45">
+        <p className="mb-3 font-manrope text-xs font-bold uppercase tracking-widest text-[color:var(--dash-text-muted)]">
           Google search preview
         </p>
         <div className="space-y-1 font-arial text-left">
@@ -47,7 +47,7 @@ export function BlogSeoPreviews({
         </div>
       </div>
       <div className="border border-white/10 bg-black/30 p-4">
-        <p className="mb-3 font-manrope text-[10px] font-bold uppercase tracking-widest text-white/45">
+        <p className="mb-3 font-manrope text-xs font-bold uppercase tracking-widest text-[color:var(--dash-text-muted)]">
           Social preview
         </p>
         <div className="overflow-hidden border border-white/10 bg-[#1a1a1a]">
@@ -62,17 +62,17 @@ export function BlogSeoPreviews({
                 unoptimized={isUnoptimizedMediaUrl(socialImage)}
               />
             ) : (
-              <div className="flex h-full items-center justify-center text-xs text-white/30">
+              <div className="flex h-full items-center justify-center text-xs text-[color:var(--dash-text-muted)]">
                 OG image
               </div>
             )}
           </div>
           <div className="space-y-1 p-3">
-            <p className="truncate text-[10px] uppercase text-white/40">
+            <p className="truncate text-xs uppercase text-[color:var(--dash-text-muted)]">
               jadehospitainment.com
             </p>
             <p className="line-clamp-2 font-semibold text-white">{socialTitle}</p>
-            <p className="line-clamp-2 text-xs text-white/55">
+            <p className="line-clamp-2 text-xs text-[color:var(--dash-text-secondary)]">
               {socialDescription}
             </p>
           </div>

@@ -800,9 +800,9 @@ export function PropertyWizard({
   };
 
   return (
-    <div className="property-wizard fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto overscroll-behavior-contain bg-black/80 p-4">
+    <div className={`${dash.modalOverlay} z-[var(--dash-z-modal)]`}>
       <div
-        className={`property-wizard__shell ${GLASS_CHROME_FRAME_CLASS} relative flex max-h-[95dvh] w-full max-w-4xl flex-col border border-white/10 shadow-2xl`}
+        className={`property-wizard__shell ${GLASS_CHROME_FRAME_CLASS} relative flex max-h-[min(95dvh,calc(100dvh-2*var(--dash-gutter,1rem)))] w-full max-w-4xl min-h-0 flex-col border border-white/10 shadow-2xl`}
         onClick={(e) => e.stopPropagation()}
       >
         <span
@@ -827,10 +827,10 @@ export function PropertyWizard({
             <button
               type="button"
               onClick={onClose}
-              className="text-white/55 hover:text-white"
+              className={`${dash.btn} ${dash.btnGhost} ${dash.btnIcon}`}
               aria-label="Close"
             >
-              <X className="h-6 w-6" />
+              <X className="h-5 w-5" />
             </button>
           </div>
 

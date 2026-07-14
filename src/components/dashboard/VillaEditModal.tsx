@@ -292,7 +292,7 @@ export function VillaEditModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex justify-end overflow-y-auto overscroll-behavior-contain bg-black/75">
+    <div className={`${dash.modalOverlay} justify-end overflow-hidden p-0`}>
       <button
         type="button"
         className="absolute inset-0 cursor-default"
@@ -301,7 +301,7 @@ export function VillaEditModal({
       />
 
       <div
-        className={`${GLASS_CHROME_FRAME_CLASS} relative z-10 flex h-[100dvh] w-full max-w-3xl flex-col border-l border-white/10 shadow-2xl`}
+        className={`${GLASS_CHROME_FRAME_CLASS} relative z-10 flex h-[100dvh] max-h-[100dvh] w-full max-w-3xl min-h-0 flex-col border-l border-white/10 shadow-2xl`}
         onClick={(e) => e.stopPropagation()}
       >
         <span
@@ -588,18 +588,14 @@ export function VillaEditModal({
                   <button
                     type="button"
                     onClick={onClose}
-                    className="min-h-[48px] flex-1 border border-white/20 font-manrope text-sm font-bold uppercase tracking-widest text-white/60 hover:border-white/40 hover:text-white"
+                    className={`${dash.btn} ${dash.btnText} flex-1`}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={saving}
-                    className={`min-h-[48px] flex-[2] font-manrope text-sm font-bold uppercase tracking-widest ${
-                      saving
-                        ? "cursor-not-allowed bg-white/10 text-white/30"
-                        : `${dash.btn} ${dash.btnAccent}`
-                    }`}
+                    className={`${dash.btn} ${dash.btnAccent} flex-[2] disabled:cursor-not-allowed disabled:opacity-45`}
                   >
                     {saving ? (
                       <Loader2 className="mx-auto h-5 w-5 animate-spin" />

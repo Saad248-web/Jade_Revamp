@@ -8,8 +8,8 @@ import { MediaPickerModal } from "@/components/dashboard/MediaPickerModal";
 const labelClass =
   "mb-1.5 block font-manrope text-[length:var(--fs-label)] font-bold uppercase tracking-widest text-[var(--dash-accent)]";
 const inputClass =
-  "min-h-[44px] w-full border-0 bg-transparent px-3 py-2.5 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/30 focus:outline-none";
-const hintClass = "mt-1.5 font-manrope text-xs text-white/35";
+  "min-h-[44px] w-full border-0 bg-transparent px-3 py-2.5 font-manrope text-[length:var(--fs-body)] text-white placeholder:text-white/55 focus:outline-none";
+const hintClass = "mt-1.5 font-manrope text-xs text-[color:var(--dash-text-muted)]";
 
 type ImageUploadFieldProps = {
   label: string;
@@ -145,7 +145,7 @@ export function ImageUploadField({
                 type="button"
                 disabled={disabled}
                 onClick={() => onChange("")}
-                className="font-manrope text-xs text-white/40 underline-offset-2 hover:text-white/70 hover:underline"
+                className="font-manrope text-xs text-[color:var(--dash-text-muted)] underline-offset-2 hover:text-white/70 hover:underline"
               >
                 Clear
               </button>

@@ -612,7 +612,7 @@ export function CalendarGrid({
           )}
 
           {meta?.role === "team" && (
-            <p className="font-manrope text-[length:var(--fs-desc)] text-white/40">
+            <p className="font-manrope text-[length:var(--fs-desc)] text-[color:var(--dash-text-muted)]">
               Team view — guest names and folio links are hidden. Assigned villas
               only when configured on your account.
             </p>

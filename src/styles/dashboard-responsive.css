@@ -265,7 +265,7 @@
   }
 
   .dashboard-data-table th {
-    font-size: 0.625rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -484,8 +484,9 @@
 
 /* ── Sidebar section labels ── */
 .dashboard-sidebar__section-label {
-  color: var(--dash-text-secondary);
+  color: var(--dash-text-muted);
   letter-spacing: 0.12em;
+  font-size: 0.6875rem;
 }
 
 /* ── Toolbar meta — hide on narrow viewports ── */

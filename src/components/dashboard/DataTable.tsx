@@ -51,7 +51,7 @@ export function DataTable<T>({
     .join(" ");
 
   return (
-    <DashboardPanel pad className="w-full min-w-0">
+    <DashboardPanel pad menuHost className="w-full min-w-0">
 
       <p className="dashboard-data-table-scroll-hint" aria-hidden>
         <ChevronRight className="h-4 w-4" />

@@ -60,6 +60,13 @@ export const dash = {
   btnCompact: "dashboard-btn dashboard-btn--icon dashboard-btn--compact",
 
   btnGhost: "dashboard-btn dashboard-btn--icon dashboard-btn--ghost",
+  btnDanger: "dashboard-btn dashboard-btn--text dashboard-btn--danger",
+  btnSuccess: "dashboard-btn dashboard-btn--text dashboard-btn--success",
+  btnWarning: "dashboard-btn dashboard-btn--text dashboard-btn--warning",
+
+  panelMenuHost: "dashboard-panel--menu-host",
+  modalFooter: "dashboard-modal__footer",
+  modalOverlayElevated: "dashboard-modal-overlay dashboard-modal-overlay--elevated",
 
   inputWrap: "dashboard-input-wrap",
   inputIcon: "dashboard-input-wrap__icon",

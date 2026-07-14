@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { AlertTriangle, ExternalLink, Loader2 } from "lucide-react";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
+import { dash } from "@/lib/dashboard/dashboardClasses";
 import { formatPaise } from "@/lib/money";
 import { roleCanWrite, type Role } from "@/lib/auth/permissions";
 import { DataTable, type DataTableColumn } from "./DataTable";
@@ -195,7 +196,7 @@ export function ConflictsManager() {
                   type="button"
                   disabled={busy}
                   onClick={() => resolve(row, "confirm_manual")}
-                  className="border border-emerald-500/40 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-300 hover:bg-emerald-500/10 disabled:opacity-50"
+                  className={`${dash.btn} ${dash.btnSuccess} ${dash.btnDense}`}
                 >
                   Confirm
                 </button>
@@ -203,7 +204,7 @@ export function ConflictsManager() {
                   type="button"
                   disabled={busy}
                   onClick={() => resolve(row, "refund")}
-                  className="border border-amber-500/40 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-300 hover:bg-amber-500/10 disabled:opacity-50"
+                  className={`${dash.btn} ${dash.btnWarning} ${dash.btnDense}`}
                 >
                   Refund
                 </button>
@@ -211,7 +212,7 @@ export function ConflictsManager() {
                   type="button"
                   disabled={busy}
                   onClick={() => resolve(row, "cancel")}
-                  className="border border-white/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white/50 hover:bg-white/5 disabled:opacity-50"
+                  className={`${dash.btn} ${dash.btnText} ${dash.btnDense}`}
                 >
                   Cancel
                 </button>

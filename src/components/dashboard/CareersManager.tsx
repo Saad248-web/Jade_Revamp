@@ -219,7 +219,7 @@ export function CareersManager() {
       )}
 
       {selected ? (
-        <div className="fixed inset-0 z-[var(--dash-z-modal)] flex items-end justify-center bg-black/70 p-4 sm:items-center">
+        <div className={`${dash.modalOverlay} items-end sm:items-center`}>
           <DashboardPanel pad className="w-full max-w-md">
             <div className="flex items-start justify-between gap-3">
               <div>

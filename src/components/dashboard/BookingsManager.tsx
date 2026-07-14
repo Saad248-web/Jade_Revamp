@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { formatBookingSource } from "@/lib/bookings/sourceLabels";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
+import { dash } from "@/lib/dashboard/dashboardClasses";
 import { formatPaise } from "@/lib/money";
 import { DataTable, type DataTableColumn } from "./DataTable";
 import { DashStatusChip } from "./form";
@@ -113,8 +114,15 @@ export function BookingsManager() {
         header: "Guest / Villa",
         cell: (r) => (
           <div className="min-w-0">
-            <p className="truncate font-bold text-white">{r.guestName}</p>
-            <p className="truncate text-sm text-white/45">{r.villaName}</p>
+            <p className="truncate font-bold text-white" title={r.guestName}>
+              {r.guestName}
+            </p>
+            <p
+              className="truncate text-sm text-[color:var(--dash-text-secondary)]"
+              title={r.villaName}
+            >
+              {r.villaName}
+            </p>
           </div>
         ),
       },
@@ -131,7 +139,7 @@ export function BookingsManager() {
         key: "channel",
         header: "Channel",
         cell: (r) => (
-          <span className="font-manrope text-xs font-bold uppercase tracking-widest text-white/55">
+          <span className="font-manrope text-xs font-bold uppercase tracking-widest text-[color:var(--dash-text-muted)]">
             {formatBookingSource(r.source).shortLabel}
           </span>
         ),
@@ -160,7 +168,7 @@ export function BookingsManager() {
         cell: (r) => (
           <Link
             href={`/dashboard/bookings/${r.id}`}
-            className="inline-flex min-h-[44px] items-center gap-1.5 font-manrope text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)] hover:underline"
+            className={`${dash.btn} ${dash.btnText} ${dash.btnDense}`}
           >
             Open folio
             <ExternalLink className="h-3.5 w-3.5" aria-hidden />
@@ -218,7 +226,7 @@ export function BookingsManager() {
         dense
       />
       {!loading && rows.length > 0 && (
-        <p className="mt-3 font-manrope text-xs text-white/40">
+        <p className="mt-3 font-manrope text-xs text-[color:var(--dash-text-muted)]">
           Last updated {fmtWhen(rows[0]?.updatedAt ?? null)} on most recent row.
           Open any row for full folio and activity history.
         </p>

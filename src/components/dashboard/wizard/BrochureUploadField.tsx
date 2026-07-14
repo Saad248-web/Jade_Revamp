@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { FileText, Loader2, Download } from "lucide-react";
 import { dashboardFetch } from "@/lib/dashboard/dashboardFetch";
+import { dash } from "@/lib/dashboard/dashboardClasses";
 import {
   wizardHintClass,
   wizardInputClass,
@@ -93,7 +94,7 @@ export function BrochureUploadField({
             type="button"
             disabled={disabled || uploading}
             onClick={() => inputRef.current?.click()}
-            className="inline-flex min-h-[40px] items-center gap-2 border border-[var(--dash-accent-border)] bg-[var(--dash-accent-muted)] px-4 font-manrope text-xs font-bold uppercase tracking-wider text-[var(--dash-accent)] hover:bg-[var(--dash-accent-muted)] disabled:opacity-50"
+            className={`${dash.btn} ${dash.btnAccent} ${dash.btnDense}`}
           >
             {uploading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -107,7 +108,7 @@ export function BrochureUploadField({
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-[40px] items-center gap-2 border border-white/20 px-4 font-manrope text-xs font-bold uppercase tracking-wider text-white/80 hover:bg-white/10"
+              className={`${dash.btn} ${dash.btnText} ${dash.btnDense}`}
             >
               <Download className="h-4 w-4" />
               Preview

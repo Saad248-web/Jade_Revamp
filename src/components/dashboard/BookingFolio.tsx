@@ -94,7 +94,7 @@ function FolioSection({
 function DetailRow({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="grid gap-1 border-b border-white/5 py-3 last:border-0">
-      <dt className="font-manrope text-[length:var(--fs-label)] uppercase tracking-widest text-white/40">
+      <dt className="font-manrope text-[length:var(--fs-label)] uppercase tracking-widest text-[color:var(--dash-text-muted)]">
         {label}
       </dt>
       <dd className="font-manrope text-[length:var(--fs-body)] text-white/85 break-words">
@@ -186,7 +186,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
         action={
           <Link
             href="/dashboard"
-            className="inline-flex min-h-[44px] items-center gap-2 border border-[var(--dash-accent-border)] px-5 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)] transition-colors hover:bg-[var(--dash-accent-muted)]"
+            className={`${dash.btn} ${dash.btnAccent}`}
           >
             <ArrowLeft className="h-4 w-4" />
             Back to calendar
@@ -213,7 +213,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/dashboard"
-          className="inline-flex min-h-[44px] items-center gap-2 font-manrope text-sm text-white/55 transition-colors hover:text-white"
+          className={`${dash.btn} ${dash.btnText} ${dash.btnGhost}`}
         >
           <ArrowLeft className="h-4 w-4" />
           Calendar
@@ -249,7 +249,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
                   "Confirm this booking? External payment should be settled.",
                 )
               }
-              className="min-h-[44px] border border-emerald-400/40 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-emerald-300 hover:bg-emerald-500/10 disabled:opacity-50"
+              className={`${dash.btn} ${dash.btnSuccess}`}
             >
               Confirm booking
             </button>
@@ -262,7 +262,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
                   "Confirm as comp / waived payment?",
                 )
               }
-              className="min-h-[44px] border border-white/20 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-white/70 hover:bg-white/5 disabled:opacity-50"
+              className={`${dash.btn} ${dash.btnText}`}
             >
               Confirm (waive payment)
             </button>
@@ -275,7 +275,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
                   "Cancel this hold? OTAs will be reopened for these dates.",
                 )
               }
-              className="min-h-[44px] border border-red-400/40 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-red-300 hover:bg-red-500/10 disabled:opacity-50"
+              className={`${dash.btn} ${dash.btnDanger}`}
             >
               Cancel hold
             </button>
@@ -295,7 +295,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
             type="button"
             disabled={busy}
             onClick={() => setConfirmPaymentOpen(true)}
-            className="min-h-[44px] border border-emerald-400/40 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-emerald-300 hover:bg-emerald-500/10 disabled:opacity-50"
+            className={`${dash.btn} ${dash.btnSuccess}`}
           >
             Confirm payment received
           </button>
@@ -308,7 +308,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
             type="button"
             disabled={busy}
             onClick={() => setRescheduleOpen(true)}
-            className="min-h-[44px] border border-[var(--dash-accent-border)] px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)] hover:bg-[var(--dash-accent-muted)] disabled:opacity-50"
+            className={`${dash.btn} ${dash.btnAccent}`}
           >
             Change dates
           </button>
@@ -323,7 +323,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
                 "Cancel this booking? OTAs will be reopened if inventory was synced.",
               )
             }
-            className="min-h-[44px] border border-red-400/40 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-red-300 hover:bg-red-500/10 disabled:opacity-50"
+            className={`${dash.btn} ${dash.btnDanger}`}
           >
             Cancel
           </button>
@@ -339,7 +339,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
                   "Issue full Razorpay refund?",
                 )
               }
-              className="min-h-[44px] border border-amber-400/40 px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-amber-200 hover:bg-amber-500/10 disabled:opacity-50"
+              className={`${dash.btn} ${dash.btnWarning}`}
             >
               Refund
             </button>
@@ -377,7 +377,7 @@ export function BookingFolio({ bookingId }: BookingFolioProps) {
             type="button"
             disabled={busy}
             onClick={() => runAction({ action: "notes", notes: notesDraft }, "Save notes?")}
-            className="mt-3 min-h-[44px] border border-[var(--dash-accent-border)] px-4 py-2 font-manrope text-xs font-bold uppercase tracking-widest text-[var(--dash-accent)] hover:bg-[var(--dash-accent-muted)] disabled:opacity-50"
+            className={`${dash.btn} ${dash.btnAccent} mt-3`}
           >
             Save notes
           </button>

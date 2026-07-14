@@ -136,7 +136,7 @@ export function HousekeepingBoard() {
                       <p className="font-manrope text-[length:var(--fs-desc)] text-white/50">
                         {fmt(b.checkIn)} → {fmt(b.checkOut)}
                       </p>
-                      <p className="mt-1 font-manrope text-[0.65rem] font-bold uppercase tracking-widest text-white/40">
+                      <p className="mt-1 font-manrope text-xs font-bold uppercase tracking-widest text-[color:var(--dash-text-muted)]">
                         {formatBookingSource(b.source).shortLabel}
                       </p>
                     </div>

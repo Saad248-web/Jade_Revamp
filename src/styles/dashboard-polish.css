@@ -158,7 +158,7 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  color: var(--dash-text-subtle);
+  color: var(--dash-text-muted);
 }
 
 .dash-filter-bar__search .dashboard-input {
@@ -389,6 +389,7 @@
 
 /* Portaled dropdown menus */
 .dash-dropdown-menu {
+  z-index: var(--dash-z-menu, var(--dash-popover-z, 80));
   min-width: 11rem;
   max-width: min(16rem, calc(100vw - 1rem));
   padding: 4px;
@@ -431,12 +432,30 @@
   overflow: visible;
 }
 
+/* Escape hatch: panels that host action menus / toolbars must not clip popovers */
+.dashboard-panel--menu-host,
+.dashboard-panel--menu-host.dashboard-panel {
+  overflow: visible;
+}
+
 .dashboard-panel--menu-host .dashboard-panel__body {
+  overflow: visible;
+}
+
+.dashboard-panel--menu-host.dashboard-panel--fill .dashboard-panel__body {
   overflow: visible;
 }
 
 .dashboard-data-table-wrap--menus {
   overflow: auto;
+}
+
+/* Toolbar rows that open menus — keep overflow-y visible for focus rings */
+.dashboard-toolbar,
+.dash-filter-bar,
+.dash-module__toolbar {
+  overflow-x: auto;
+  overflow-y: visible;
 }
 
 /* ── Split filter bar (controls | actions) ── */

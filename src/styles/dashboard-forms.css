@@ -80,13 +80,33 @@
 }
 
 .dashboard-input--unified::placeholder {
-  color: var(--dash-text-subtle);
+  color: var(--dash-text-muted);
 }
 
 .dashboard-input--unified.dashboard-input--compact {
   min-height: 2.25rem;
   padding: 0 0.625rem;
   font-size: 0.75rem;
+}
+
+/* Native select popup — force readable dark options (Windows OS lists) */
+.dashboard-root select.dashboard-input option,
+.dashboard-root select.dashboard-input optgroup,
+.dashboard-modal-overlay select.dashboard-input option,
+.dashboard-modal-overlay select.dashboard-input optgroup,
+.dashboard-root .dash-filter-bar select option,
+.dashboard-root .dash-filter-bar select optgroup,
+.dashboard-root .dashboard-toolbar select option,
+.dashboard-root .dashboard-toolbar select optgroup,
+.jade-dashboard select option,
+.jade-dashboard select optgroup {
+  background-color: var(--dash-bg-elevated);
+  color: var(--dash-text);
+}
+
+.jade-dashboard select optgroup {
+  font-weight: 700;
+  color: var(--dash-text-secondary);
 }
 
 /* ── Form shell (scrollable modal body) ── */
@@ -518,7 +538,7 @@
   border: 1px solid var(--dash-status-neutral-border);
   border-radius: var(--dash-radius-md);
   background: var(--dash-status-neutral-bg);
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;

@@ -71,8 +71,15 @@ export function PaymentsManager() {
       header: "Guest / Villa",
       cell: (r) => (
         <div className="min-w-0">
-          <p className="truncate font-bold text-white">{r.guestName}</p>
-          <p className="truncate text-sm text-white/45">{r.villaName}</p>
+          <p className="truncate font-bold text-white" title={r.guestName}>
+            {r.guestName}
+          </p>
+          <p
+            className="truncate text-sm text-[color:var(--dash-text-secondary)]"
+            title={r.villaName}
+          >
+            {r.villaName}
+          </p>
         </div>
       ),
     },
@@ -98,9 +105,9 @@ export function PaymentsManager() {
       key: "razorpay",
       header: "Razorpay",
       cell: (r) => (
-        <div className="font-mono text-xs text-white/50">
+        <div className="font-mono text-xs text-[color:var(--dash-text-secondary)]">
           {r.paymentId ? (
-            <p className="max-w-[140px] truncate" title={r.paymentId}>
+            <p className="max-w-[12rem] truncate sm:max-w-[16rem]" title={r.paymentId}>
               {r.paymentId}
             </p>
           ) : (
@@ -118,7 +125,7 @@ export function PaymentsManager() {
       key: "when",
       header: "Updated",
       cell: (r) => (
-        <span className="text-sm text-white/50">{fmtWhen(r.updatedAt)}</span>
+        <span className="text-sm text-[color:var(--dash-text-muted)]">{fmtWhen(r.updatedAt)}</span>
       ),
     },
     {
