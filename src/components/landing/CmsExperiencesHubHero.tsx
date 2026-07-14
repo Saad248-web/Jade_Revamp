@@ -12,6 +12,11 @@ import {
 import GoldAccentLine from "@/components/ui/GoldAccentLine";
 import { heroHeadingLines } from "@/lib/cms/landingCms";
 import type { ExperienceHeroCms } from "@/components/landing/CmsExperienceHero";
+import {
+  EXPERIENCE_HERO_COPY_SHADOW_CLASS,
+  EXPERIENCE_HERO_DESCRIPTION_CLASS,
+  EXPERIENCE_HERO_HEADING_CLASS,
+} from "@/lib/experienceHeroLayout";
 
 const DEFAULT_HEADING = "Moments\nThoughtfully Hosted";
 const DEFAULT_DESCRIPTION =
@@ -39,7 +44,7 @@ export function CmsExperiencesHubHero({ cms }: { cms?: ExperienceHeroCms }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase"
+          className={`text-[#EFCD62] text-gh-label font-manrope font-bold tracking-[0.25em] uppercase ${EXPERIENCE_HERO_COPY_SHADOW_CLASS}`}
           style={{ marginBottom: "clamp(4px, 0.96vw, 8px)" }}
         >
           EXPERIENCES
@@ -48,7 +53,7 @@ export function CmsExperiencesHubHero({ cms }: { cms?: ExperienceHeroCms }) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="font-philosopher text-gh-h1 text-white leading-tight tracking-tight"
+          className={`${EXPERIENCE_HERO_HEADING_CLASS} tracking-tight`}
           style={{ marginBottom: "clamp(8px, 1.28vw, 10.2px)" }}
         >
           {headingLines.map((line, i) => (
@@ -67,7 +72,7 @@ export function CmsExperiencesHubHero({ cms }: { cms?: ExperienceHeroCms }) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="font-manrope text-white/70 text-gh-body max-w-xl leading-relaxed"
+          className={`${EXPERIENCE_HERO_DESCRIPTION_CLASS} max-w-xl`}
         >
           {description}
         </motion.p>

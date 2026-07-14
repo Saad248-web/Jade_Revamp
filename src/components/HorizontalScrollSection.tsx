@@ -4,10 +4,11 @@ import ScrollLinkedHorizontalSection from "@/components/scroll-linked/ScrollLink
 import ScrollLinkedPanelCard, {
   type ScrollLinkedPanelData,
 } from "@/components/scroll-linked/ScrollLinkedPanelCard";
-import ScrollLinkedSectionEndButton from "@/components/scroll-linked/ScrollLinkedSectionEndButton";
+import ScrollLinkedWaysOverviewPanel from "@/components/scroll-linked/ScrollLinkedWaysOverviewPanel";
 import { experiencesListingPath, experiencePanelHref } from "@/lib/appRoutes";
 import { useScrollLinkedSectionHeight } from "@/lib/useScrollLinkedSectionHeight";
 import { scrollLinkedMobileSnapHookStepCount } from "@/lib/scrollLinkedMobileSnap";
+import { WAYS_JADE_HOME_OVERVIEW_TILES } from "@/lib/waysJadeOverviewTiles";
 
 const PANELS: ScrollLinkedPanelData[] = [
   {
@@ -38,48 +39,13 @@ const PANELS: ScrollLinkedPanelData[] = [
     href: experiencePanelHref("Weddings"),
     image: "/Home Page/2-Experiences/Weddings.webp",
   },
-  {
-    id: "corporate",
-    title: "Corporate Retreats",
-    subtext:
-      "Unwinding and ice-breaking sessions with colleagues, away from cubicles and glass walls, in private farmhouses ideal for offsites or workations.",
-    cta: "SEE HOW TEAMS GATHER",
-    href: experiencePanelHref("Corporate Retreats"),
-    image: "/Experiences/Corporate Retreats/1-Hero/xhero.webp",
-  },
-  {
-    id: "wellness",
-    title: "Wellness Retreats",
-    subtext:
-      "Element-led wellness restoration through mud baths, massages, spa and aroma therapies, designed for deep rejuvenation.",
-    cta: "SEE HOW RETREAT TAKES SHAPE",
-    href: experiencePanelHref("Wellness Retreats"),
-    image: "/Home Page/2-Experiences/Wellness.webp",
-  },
-  {
-    id: "caravans",
-    title: "Caravan Journeys",
-    subtext:
-      "Luxury motor caravans carry the idea of private retreat onto the road, offering comfort and privacy for glamping, pilgrimages or any evolving journeys.",
-    cta: "SEE HOW THE JOURNEY UNFOLDS",
-    href: experiencePanelHref("caravans"),
-    image: "/Experiences/Caravan/1-Hero/14.webp",
-  },
-  {
-    id: "private-getaways",
-    title: "Private Getaways",
-    subtext:
-      "Exclusive-use VILLAS for intimate escapes—curated privacy, refined comfort, and the freedom to unwind on your own terms.",
-    cta: "SEE PRIVATE GETAWAYS",
-    href: experiencePanelHref("villas"),
-    image: "/Home Page/2-Experiences/casual stays.webp",
-    mobileImage: "/Website Ratio Changes/Weekend_GetAways.webp",
-  },
 ];
 
+const OVERVIEW_INDEX = PANELS.length;
+const panelCount = PANELS.length + 1;
+const totalSteps = panelCount;
+
 export default function HorizontalScrollSection() {
-  const totalSteps = PANELS.length + 1;
-  const panelCount = PANELS.length;
   const sectionHeightVh = useScrollLinkedSectionHeight(
     "home",
     "mobileSnapOnly",
@@ -90,32 +56,37 @@ export default function HorizontalScrollSection() {
     <ScrollLinkedHorizontalSection
       sectionHeightVh={sectionHeightVh}
       stepCount={totalSteps}
+      hasEndCta={false}
       bgClassName="bg-[#25282C]"
       headerLabel="WAYS JADE IS EXPERIENCED"
       scrollMode="mobileSnapOnly"
-      endButton={(panelProgress) => (
-        <ScrollLinkedSectionEndButton
-          panelProgress={panelProgress}
-          panelCount={panelCount}
-          cardStepCount={totalSteps}
-          href={experiencesListingPath()}
-          label="View All Experiences"
-        />
-      )}
     >
-      {(panelProgress) =>
-        PANELS.map((panel, i) => (
-          <ScrollLinkedPanelCard
-            key={panel.id}
-            data={panel}
-            index={i}
+      {(panelProgress) => (
+        <>
+          {PANELS.map((panel, i) => (
+            <ScrollLinkedPanelCard
+              key={panel.id}
+              data={panel}
+              index={i}
+              panelProgress={panelProgress}
+              totalSteps={totalSteps}
+              panelCount={panelCount}
+              snapCentered
+            />
+          ))}
+          <ScrollLinkedWaysOverviewPanel
+            tiles={WAYS_JADE_HOME_OVERVIEW_TILES}
+            index={OVERVIEW_INDEX}
             panelProgress={panelProgress}
             totalSteps={totalSteps}
             panelCount={panelCount}
+            ctaHref={experiencesListingPath()}
+            ctaLabel="SEE ALL EXPERIENCES"
+            gapBgClassName="bg-[#25282C]"
             snapCentered
           />
-        ))
-      }
+        </>
+      )}
     </ScrollLinkedHorizontalSection>
   );
 }

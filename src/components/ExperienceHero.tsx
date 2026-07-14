@@ -15,6 +15,8 @@ import {
 } from "@/lib/heroSplitCarouselVariants";
 import {
   EXPERIENCE_HERO_CHROME_WIDTH_CLASS,
+  EXPERIENCE_HERO_DESCRIPTION_CLASS,
+  EXPERIENCE_HERO_HEADING_CLASS,
   EXPERIENCE_HERO_SAFE_BOTTOM_CLASS,
 } from "@/lib/experienceHeroLayout";
 import {
@@ -229,7 +231,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
 
             {/* Heading */}
             <h1
-              className="font-philosopher text-white text-gh-h1 leading-tight"
+              className={EXPERIENCE_HERO_HEADING_CLASS}
               style={{ marginBottom: "clamp(4px, 0.96vw, 8px)" }}
             >
               {heading}
@@ -237,7 +239,7 @@ const ExperienceHero = React.forwardRef<HTMLElement, ExperienceHeroProps>(
 
             {/* Description */}
             <p
-              className="font-manrope text-white/90 text-gh-body max-w-2xl leading-relaxed"
+              className={EXPERIENCE_HERO_DESCRIPTION_CLASS}
               style={{ marginBottom: "clamp(8px, 1.6vw, 12.8px)" }}
             >
               {description}

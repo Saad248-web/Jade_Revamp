@@ -52,6 +52,14 @@ export const SCROLL_LINE_INDICATOR_BOTTOM_CLASS =
 export const SCROLL_LINKED_HORIZONTAL_HINT_BOTTOM_CLASS =
   "bottom-[clamp(0.625rem,2vh,0.875rem)] lg:bottom-10";
 
+/**
+ * End-of-section vertical cue — same stage-bottom band as the horizontal hint.
+ * Do not use {@link SCROLL_LINE_INDICATOR_BOTTOM_CLASS} here: the sticky stage
+ * already clears the mobile nav, so double-counting lifts the badge onto CTAs.
+ */
+export const SCROLL_LINKED_VERTICAL_HINT_BOTTOM_CLASS =
+  "bottom-[clamp(0.35rem,1.5vh,0.65rem)] lg:bottom-8";
+
 /** In-flow hero CTA (margin above mobile nav) */
 export const SCROLL_LINE_INDICATOR_MB_CLASS =
   "max-lg:mb-[calc(0.5rem+2.75rem+max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.875rem))+clamp(1.25rem,3.5vw,1.5rem))] lg:mb-8";

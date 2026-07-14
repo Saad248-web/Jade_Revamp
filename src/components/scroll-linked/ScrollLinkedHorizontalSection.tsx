@@ -40,6 +40,11 @@ export type ScrollLinkedHorizontalSectionProps = {
   panelAreaVariant?: "default" | "featured";
   /** Progress at which the end-of-section vertical scroll cue appears (default 0.82). */
   endZoneProgress?: number;
+  /**
+   * When false, `stepCount` is content cards only (no trailing CTA-only snap).
+   * Default true — last step reserved for `endButton`.
+   */
+  hasEndCta?: boolean;
 };
 
 export function ScrollLinkedStickyStage({
@@ -102,6 +107,7 @@ export default function ScrollLinkedHorizontalSection({
   stageNavigation: externalStageNavigation,
   panelAreaVariant = "default",
   endZoneProgress,
+  hasEndCta = true,
 }: ScrollLinkedHorizontalSectionProps) {
   const panelAreaClassName =
     panelAreaVariant === "featured"
@@ -114,7 +120,11 @@ export default function ScrollLinkedHorizontalSection({
       ? cardStepCount + 1
       : cardStepCount;
   const panelCount =
-    cardStepCount != null ? Math.max(1, cardStepCount - 1) : undefined;
+    cardStepCount != null
+      ? hasEndCta
+        ? Math.max(1, cardStepCount - 1)
+        : cardStepCount
+      : undefined;
   const mobileSnapProgressOptions =
     scrollMode === "mobileSnapOnly" &&
     cardStepCount != null &&
@@ -122,10 +132,9 @@ export default function ScrollLinkedHorizontalSection({
     panelCount != null
       ? {
           mobileSnapZoneRatio: scrollLinkedMobileSnapPortion(hookStepCount),
-          mobileSnapMaxProgress: scrollLinkedMobileSnapMaxProgress(
-            panelCount,
-            cardStepCount,
-          ),
+          mobileSnapMaxProgress: hasEndCta
+            ? scrollLinkedMobileSnapMaxProgress(panelCount, cardStepCount)
+            : Math.max(0, (panelCount - 1) / Math.max(1, cardStepCount)),
           showHorizontalHint: false,
         }
       : {};
@@ -149,7 +158,9 @@ export default function ScrollLinkedHorizontalSection({
     (scrollMode === "mobileSnapOnly" &&
     cardStepCount != null &&
     panelCount != null
-      ? scrollLinkedMobileSnapEndZone(panelCount, cardStepCount)
+      ? hasEndCta
+        ? scrollLinkedMobileSnapEndZone(panelCount, cardStepCount)
+        : Math.max(0, (panelCount - 1) / Math.max(1, cardStepCount) - 0.02)
       : undefined);
 
   const stage = (
