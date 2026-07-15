@@ -20,7 +20,7 @@ Please find Jade Host PMS sandbox registration details below.
 | PMS Name | Jade Host PMS |
 | Sandbox Base URL | https://sandbox2.axisrooms.com |
 | channelId / pmsId | 227 |
-| accessKey | 227As8u5RA3v1CH8o6uBE6YdhassenaVayyy |
+| accessKey | 227ssaTsivanoS34DasseNav |
 
 ## 2. API 9 Webhook
 
@@ -78,7 +78,7 @@ Invalid `hotelId`, `roomId`, or `ratePlanId` in API 9 payloads return **HTTP 422
 | # | Action |
 |---|--------|
 | 1 | Register attached property CSV and webhook URL on sandbox |
-| 2 | Activate accessKey `227As8u5RA3v1CH8o6uBE6YdhassenaVayyy` for outbound APIs (API 1/2/5) |
+| 2 | Activate accessKey `227ssaTsivanoS34DasseNav` for outbound APIs (API 1/2/6/7) |
 | 3 | Confirm API 2 inventory ack appears in logs after API 9 push |
 
 Once the key is active, we can run joint UAT with **hotelId 1303**, **roomId 1**, **ratePlanId 1**.

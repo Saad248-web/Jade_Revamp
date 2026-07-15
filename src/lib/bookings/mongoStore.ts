@@ -327,10 +327,17 @@ export class MongoBookingStore implements BookingStore {
         source: doc.source,
       };
 
-      void queueBookingInventorySync(params.bookingId, "close");
-
       return { ok: true };
     });
+
+    // Await outside the Mongo txn — Vercel kills fire-and-forget after response
+    if (result.ok && !result.alreadyConfirmed) {
+      try {
+        await queueBookingInventorySync(params.bookingId, "close");
+      } catch (err) {
+        console.error("[axisrooms inventory close after payment]", err);
+      }
+    }
 
     if (result.ok && !result.alreadyConfirmed && emailPayload) {
       try {
@@ -582,6 +589,12 @@ export class MongoBookingStore implements BookingStore {
         fullAmountReceived: options?.fullAmountReceived,
       },
     });
+
+    try {
+      await queueBookingInventorySync(id, "close");
+    } catch (err) {
+      console.error("[axisrooms inventory close after external payment]", err);
+    }
 
     return toRecord(doc);
   }

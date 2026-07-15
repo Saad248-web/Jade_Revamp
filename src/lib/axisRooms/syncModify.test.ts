@@ -6,6 +6,7 @@ vi.mock("@/models/Booking", () => ({
 }));
 vi.mock("./inventory", () => ({
   pushInventoryForRange: vi.fn(),
+  pushBulkInventoryForRange: vi.fn(),
 }));
 vi.mock("./mapBooking", () => ({
   isAxisRoomsMapped: vi.fn(() => true),
@@ -21,7 +22,10 @@ vi.mock("@/models/Villa", () => ({
 
 import { BookingModel } from "@/models/Booking";
 import { VillaModel } from "@/models/Villa";
-import { pushInventoryForRange } from "./inventory";
+import {
+  pushInventoryForRange,
+  pushBulkInventoryForRange,
+} from "./inventory";
 import {
   syncBookingInventoryModify,
   queueBookingInventoryModify,
@@ -44,30 +48,33 @@ describe("syncBookingInventoryModify", () => {
       lean: vi.fn().mockResolvedValue({ _id: "villa1", axisRooms: {} }),
     } as never);
     vi.mocked(pushInventoryForRange).mockResolvedValue({ ok: true });
+    vi.mocked(pushBulkInventoryForRange).mockResolvedValue({ ok: true });
   });
 
-  it("opens old range then closes new range", async () => {
+  it("opens old range then closes new range via API 2 + API 1", async () => {
     const result = await syncBookingInventoryModify(
       bookingBase,
       "2026-10-21",
       "2026-10-22",
     );
     expect(result.ok).toBe(true);
+    // open + close → 2 bulk (API 2) + 2 daywise (API 1)
+    expect(pushBulkInventoryForRange).toHaveBeenCalledTimes(2);
     expect(pushInventoryForRange).toHaveBeenCalledTimes(2);
-    expect(pushInventoryForRange).toHaveBeenNthCalledWith(
+    expect(pushBulkInventoryForRange).toHaveBeenNthCalledWith(
       1,
       expect.objectContaining({
-        checkIn: "2026-10-21",
-        checkOut: "2026-10-22",
-        free: 1,
+        startDate: "2026-10-21",
+        endDate: "2026-10-21",
+        availability: 1,
       }),
     );
-    expect(pushInventoryForRange).toHaveBeenNthCalledWith(
+    expect(pushBulkInventoryForRange).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
-        checkIn: "2026-10-24",
-        checkOut: "2026-10-26",
-        free: 0,
+        startDate: "2026-10-24",
+        endDate: "2026-10-25",
+        availability: 0,
       }),
     );
   });
@@ -79,6 +86,7 @@ describe("syncBookingInventoryModify", () => {
       "2026-10-22",
     );
     expect(result.ok).toBe(true);
+    expect(pushBulkInventoryForRange).not.toHaveBeenCalled();
     expect(pushInventoryForRange).not.toHaveBeenCalled();
   });
 
@@ -89,6 +97,7 @@ describe("syncBookingInventoryModify", () => {
       "2026-10-22",
     );
     expect(result.ok).toBe(true);
+    expect(pushBulkInventoryForRange).not.toHaveBeenCalled();
     expect(pushInventoryForRange).not.toHaveBeenCalled();
   });
 });
@@ -104,6 +113,7 @@ describe("queueBookingInventoryModify", () => {
       lean: vi.fn().mockResolvedValue({ _id: "villa1", axisRooms: {} }),
     } as never);
     vi.mocked(pushInventoryForRange).mockResolvedValue({ ok: true });
+    vi.mocked(pushBulkInventoryForRange).mockResolvedValue({ ok: true });
   });
 
   it("loads booking and runs modify sync", async () => {

@@ -54,3 +54,7 @@ Claude.md
 # Postman local workspace
 .postman/
 postman/
+.env*
+
+.env.vercel.production
+.env.vercel*

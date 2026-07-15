@@ -6,6 +6,11 @@ import { pushInventoryForRange } from "./inventory";
 import { pushDaywisePrice, pushBulkPriceForRange } from "./pricing";
 import { pushBulkInventoryForRange } from "./inventory";
 import { pushCmRestrictions } from "./restrictions";
+import {
+  hasStayNights,
+  pushInboundInventoryModify,
+  pushStayInventoryToAxis,
+} from "./inboundInventoryPush";
 import type { AxisRoomsPushResult } from "./types";
 import { addDays, todayIST } from "@/lib/bookingDates";
 
@@ -16,6 +21,7 @@ type BookingDoc = {
   checkOut?: string;
   status?: string;
   axisRoomsSynced?: boolean;
+  axisRoomsReservationId?: string;
   source?: string;
 };
 
@@ -26,7 +32,11 @@ async function loadVillaForBooking(booking: BookingDoc) {
   return { villa, mapping: villaAxisRoomsMapping(villa) };
 }
 
-/** Close inventory on OTAs for a booking (free: 0). */
+/**
+ * Close inventory on OTAs after a validated booking save.
+ * Always hits API 2 (bulk) then API 1 (daywise) — website/staff/direct.
+ * OTA (API 9) path pushes itself in upsert; skip here only when already synced.
+ */
 export async function syncBookingInventoryClose(
   booking: BookingDoc,
 ): Promise<AxisRoomsPushResult> {
@@ -39,39 +49,51 @@ export async function syncBookingInventoryClose(
   if (!booking.checkIn || !booking.checkOut) {
     return { ok: false, error: "Missing dates" };
   }
+  if (!hasStayNights(booking.checkIn, booking.checkOut)) {
+    return { ok: true };
+  }
 
   const ctx = await loadVillaForBooking(booking);
-  if (!ctx) return { ok: false, error: "Villa not mapped to Axis Rooms" };
+  if (!ctx?.mapping.propertyId || !ctx.mapping.roomTypeId) {
+    return { ok: false, error: "Villa not mapped to Axis Rooms" };
+  }
 
-  return pushInventoryForRange({
-    hotelId: ctx.mapping.propertyId!,
-    roomId: ctx.mapping.roomTypeId!,
+  return pushStayInventoryToAxis({
+    hotelId: ctx.mapping.propertyId,
+    roomId: ctx.mapping.roomTypeId,
     checkIn: booking.checkIn,
     checkOut: booking.checkOut,
-    free: 0,
-    auditTargetId: String(booking._id),
+    bookingNo: booking.axisRoomsReservationId ?? String(booking._id),
+    bookingId: String(booking._id),
+    mode: "close",
     auditTargetType: "booking",
   });
 }
 
-/** Open inventory on OTAs (free: 1) — cancel / release hold. */
+/** Open inventory on OTAs (free/availability 1) — cancel / release hold. */
 export async function syncBookingInventoryOpen(
   booking: BookingDoc,
 ): Promise<AxisRoomsPushResult> {
   if (!booking.checkIn || !booking.checkOut) {
     return { ok: false, error: "Missing dates" };
   }
+  if (!hasStayNights(booking.checkIn, booking.checkOut)) {
+    return { ok: true };
+  }
 
   const ctx = await loadVillaForBooking(booking);
-  if (!ctx) return { ok: false, error: "Villa not mapped to Axis Rooms" };
+  if (!ctx?.mapping.propertyId || !ctx.mapping.roomTypeId) {
+    return { ok: false, error: "Villa not mapped to Axis Rooms" };
+  }
 
-  return pushInventoryForRange({
-    hotelId: ctx.mapping.propertyId!,
-    roomId: ctx.mapping.roomTypeId!,
+  return pushStayInventoryToAxis({
+    hotelId: ctx.mapping.propertyId,
+    roomId: ctx.mapping.roomTypeId,
     checkIn: booking.checkIn,
     checkOut: booking.checkOut,
-    free: 1,
-    auditTargetId: String(booking._id),
+    bookingNo: booking.axisRoomsReservationId ?? String(booking._id),
+    bookingId: String(booking._id),
+    mode: "open",
     auditTargetType: "booking",
   });
 }
@@ -261,29 +283,17 @@ export async function syncBookingInventoryModify(
     return { ok: false, error: "Incomplete Axis mapping" };
   }
 
-  const openResult = await pushInventoryForRange({
+  return pushInboundInventoryModify({
     hotelId: propertyId,
     roomId: roomTypeId,
-    checkIn: oldCheckIn,
-    checkOut: oldCheckOut,
-    free: 1,
-    auditTargetId,
+    bookingNo: booking.axisRoomsReservationId ?? auditTargetId,
+    bookingId: auditTargetId,
+    oldCheckIn,
+    oldCheckOut,
+    newCheckIn: booking.checkIn,
+    newCheckOut: booking.checkOut,
     auditTargetType: "booking",
   });
-  if (!openResult.ok) return openResult;
-
-  const closeResult = await pushInventoryForRange({
-    hotelId: propertyId,
-    roomId: roomTypeId,
-    checkIn: booking.checkIn,
-    checkOut: booking.checkOut,
-    free: 0,
-    auditTargetId,
-    auditTargetType: "booking",
-  });
-  if (!closeResult.ok) return closeResult;
-
-  return { ok: true };
 }
 
 export async function queueBookingInventoryModify(

@@ -8,7 +8,7 @@
 param([switch]$Redeploy)
 
 $vars = @{
-  AXIS_ROOMS_API_KEY       = "227As8u5RA3v1CH8o6uBE6YdhassenaVayyy"
+  AXIS_ROOMS_API_KEY       = "227ssaTsivanoS34DasseNav"
   AXIS_ROOMS_CHANNEL_ID    = "227"
   AXIS_ROOMS_API_BASE_URL  = "https://sandbox2.axisrooms.com"
   AXIS_ROOMS_PMS_NAME      = "Jade Host PMS"

@@ -93,6 +93,44 @@ export async function upsertAxisRoomsInbound(
     source: "axisrooms",
   }).lean();
   if (existingEvent?.status === "processed") {
+    // Idempotent API 9 ack — still re-push inventory so Axis/CM always sees close
+    const existingBooking = await BookingModel.findOne({
+      axisRoomsReservationId: bookingNo,
+      isDeleted: false,
+    });
+    if (
+      existingBooking &&
+      parsed.eventType !== "cancel" &&
+      parsed.bookingStatus !== "cancelled" &&
+      existingBooking.checkIn &&
+      existingBooking.checkOut
+    ) {
+      const axisInventorySync = await ackInboundInventory({
+        parsed,
+        validated,
+        bookingNo,
+        bookingId: String(existingBooking._id),
+        mode: "close",
+        checkIn: existingBooking.checkIn,
+        checkOut: existingBooking.checkOut,
+      });
+      if (axisInventorySync?.ok) {
+        existingBooking.axisRoomsSynced = true;
+        existingBooking.axisRoomsLastError = undefined;
+        await existingBooking.save();
+      } else if (axisInventorySync && !axisInventorySync.ok) {
+        existingBooking.axisRoomsLastError = axisInventorySync.error;
+        existingBooking.axisRoomsSyncAttempts =
+          (existingBooking.axisRoomsSyncAttempts ?? 0) + 1;
+        await existingBooking.save();
+      }
+      return {
+        ok: true,
+        duplicate: true,
+        bookingId: String(existingBooking._id),
+        axisInventorySync,
+      };
+    }
     return { ok: true, duplicate: true };
   }
   await WebhookEventModel.updateOne(
@@ -167,8 +205,8 @@ export async function upsertAxisRoomsInbound(
     }
     const previousStatus = existing.status;
     existing.status = "cancelled";
-    existing.axisRoomsCancelSynced = true;
-    existing.axisRoomsSynced = true;
+    // Mark cancel synced only after outbound inventory open succeeds
+    existing.axisRoomsCancelSynced = false;
     await existing.save();
     await releaseNightLocks(existing._id);
     await auditLog({
@@ -192,8 +230,14 @@ export async function upsertAxisRoomsInbound(
       checkIn: existing.checkIn,
       checkOut: existing.checkOut,
     });
-    if (axisInventorySync && !axisInventorySync.ok) {
+    if (axisInventorySync?.ok) {
+      existing.axisRoomsCancelSynced = true;
+      existing.axisRoomsLastError = undefined;
+      await existing.save();
+    } else if (axisInventorySync && !axisInventorySync.ok) {
       existing.axisRoomsLastError = axisInventorySync.error;
+      existing.axisRoomsSyncAttempts =
+        (existing.axisRoomsSyncAttempts ?? 0) + 1;
       await existing.save();
     }
     await WebhookEventModel.updateOne(
@@ -316,8 +360,14 @@ export async function upsertAxisRoomsInbound(
         newCheckIn: parsed.checkIn,
         newCheckOut: parsed.checkOut,
       });
-      if (!axisInventorySync.ok) {
+      if (axisInventorySync.ok) {
+        existing.axisRoomsSynced = true;
+        existing.axisRoomsLastError = undefined;
+        await existing.save();
+      } else {
         existing.axisRoomsLastError = axisInventorySync.error;
+        existing.axisRoomsSyncAttempts =
+          (existing.axisRoomsSyncAttempts ?? 0) + 1;
         await existing.save();
       }
     }
@@ -326,11 +376,36 @@ export async function upsertAxisRoomsInbound(
   }
 
   if (existing) {
+    // Same bookingNo, different eventId (e.g. redelivery) — re-push close
+    const axisInventorySync = await ackInboundInventory({
+      parsed,
+      validated,
+      bookingNo,
+      bookingId: String(existing._id),
+      mode: "close",
+      checkIn: existing.checkIn,
+      checkOut: existing.checkOut,
+    });
+    if (axisInventorySync?.ok) {
+      existing.axisRoomsSynced = true;
+      existing.axisRoomsLastError = undefined;
+      await existing.save();
+    } else if (axisInventorySync && !axisInventorySync.ok) {
+      existing.axisRoomsLastError = axisInventorySync.error;
+      existing.axisRoomsSyncAttempts =
+        (existing.axisRoomsSyncAttempts ?? 0) + 1;
+      await existing.save();
+    }
     await WebhookEventModel.updateOne(
       { eventId, source: "axisrooms" },
       { $set: { status: "processed" } },
     );
-    return { ok: true, bookingId: String(existing._id), duplicate: true };
+    return {
+      ok: true,
+      bookingId: String(existing._id),
+      duplicate: true,
+      axisInventorySync,
+    };
   }
 
   const lockDates = lockDatesForBooking({
@@ -399,7 +474,8 @@ export async function upsertAxisRoomsInbound(
         status: hasDirectConflict ? ("conflict" as const) : ("confirmed" as const),
         source: sourceFromChannel(parsed.channel),
         axisRoomsReservationId: bookingNo,
-        axisRoomsSynced: true,
+        // Only mark synced after outbound API 2/1 succeeds
+        axisRoomsSynced: false,
         axisRoomsCancelSynced: true,
       };
       const created = session
@@ -481,11 +557,20 @@ export async function upsertAxisRoomsInbound(
       checkOut: parsed.checkOut,
     });
 
-    if (result.bookingId && axisInventorySync && !axisInventorySync.ok) {
-      await BookingModel.findByIdAndUpdate(result.bookingId, {
-        $set: { axisRoomsLastError: axisInventorySync.error },
-        $inc: { axisRoomsSyncAttempts: 1 },
-      });
+    if (result.bookingId) {
+      if (axisInventorySync?.ok) {
+        await BookingModel.findByIdAndUpdate(result.bookingId, {
+          $set: {
+            axisRoomsSynced: true,
+            axisRoomsLastError: undefined,
+          },
+        });
+      } else if (axisInventorySync && !axisInventorySync.ok) {
+        await BookingModel.findByIdAndUpdate(result.bookingId, {
+          $set: { axisRoomsLastError: axisInventorySync.error },
+          $inc: { axisRoomsSyncAttempts: 1 },
+        });
+      }
     }
 
     return { ...result, axisInventorySync };

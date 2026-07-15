@@ -10,6 +10,13 @@ export type AxisRoomsPushResult = {
   reservationId?: string;
   error?: string;
   stub?: boolean;
+  details?: {
+    api2?: { ok: boolean; message?: string };
+    api1?: { ok: boolean; message?: string };
+    startDate?: string;
+    endDate?: string;
+    availability?: number;
+  };
 };
 
 export type AxisRoomsInboundEvent = {

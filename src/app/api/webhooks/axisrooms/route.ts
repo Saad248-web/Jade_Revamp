@@ -8,6 +8,8 @@ import { validateAxisRoomsInbound } from "@/lib/axisRooms/validateInbound";
 import { logAxisRoomsInbound } from "@/lib/axisRooms/inboundLogger";
 
 export const dynamic = "force-dynamic";
+/** Allow time for Mongo save + outbound API 2 then API 1 */
+export const maxDuration = 60;
 
 const SUCCESS_BODY = {
   status: "success",
@@ -107,17 +109,6 @@ export async function POST(req: NextRequest) {
     // Allowed stack: API 9 inbound → local validation → save → API 2 inventory ack.
     const result = await upsertAxisRoomsInbound(parsed, validation);
 
-    if (result.duplicate) {
-      await logAxisRoomsInbound({
-        phase: "duplicate",
-        bookingNo: parsed.bookingNo,
-        eventType: parsed.eventType,
-        ok: true,
-        metadata: { bookingId: result.bookingId },
-      });
-      return NextResponse.json(SUCCESS_BODY);
-    }
-
     if (!result.ok) {
       await logAxisRoomsInbound({
         phase: "rejected",
@@ -135,15 +126,25 @@ export async function POST(req: NextRequest) {
     }
 
     if (result.axisInventorySync) {
+      const inv = result.axisInventorySync;
+      console.info("[axisrooms webhook] inventory push", {
+        bookingNo: parsed.bookingNo,
+        duplicate: Boolean(result.duplicate),
+        ok: inv.ok,
+        error: inv.error,
+        details: inv.details,
+      });
       await logAxisRoomsInbound({
-        phase: result.axisInventorySync.ok ? "api2_pushed" : "api2_failed",
+        phase: inv.ok ? "api2_pushed" : "api2_failed",
         bookingNo: parsed.bookingNo,
         eventType: parsed.eventType,
-        ok: result.axisInventorySync.ok,
-        error: result.axisInventorySync.error,
+        ok: inv.ok,
+        error: inv.error,
         metadata: {
           api: 2,
           bookingId: result.bookingId,
+          duplicate: Boolean(result.duplicate),
+          details: inv.details,
           mode:
             parsed.eventType === "cancel"
               ? "open"
@@ -152,6 +153,27 @@ export async function POST(req: NextRequest) {
                 : "close",
         },
       });
+    } else {
+      console.warn("[axisrooms webhook] no inventory push attempted", {
+        bookingNo: parsed.bookingNo,
+        eventType: parsed.eventType,
+        duplicate: Boolean(result.duplicate),
+        bookingId: result.bookingId,
+      });
+    }
+
+    if (result.duplicate) {
+      await logAxisRoomsInbound({
+        phase: "duplicate",
+        bookingNo: parsed.bookingNo,
+        eventType: parsed.eventType,
+        ok: true,
+        metadata: {
+          bookingId: result.bookingId,
+          api2Ok: result.axisInventorySync?.ok,
+        },
+      });
+      return NextResponse.json(SUCCESS_BODY);
     }
 
     await logAxisRoomsInbound({
@@ -163,6 +185,7 @@ export async function POST(req: NextRequest) {
         bookingId: result.bookingId,
         conflict: result.conflict,
         api2Ok: result.axisInventorySync?.ok,
+        details: result.axisInventorySync?.details,
       },
     });
 

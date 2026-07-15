@@ -372,6 +372,10 @@ function renderHtml(report) {
   const blockedIn = inbound.filter((t) => t.badge === "Blocked").length;
   const blockedN = outbound.tests.filter((t) => t.badge === "Blocked").length;
   const outPass = outbound.tests.filter((t) => t.badge === "Pass").length;
+  const outFail = outbound.tests.filter((t) => t.badge === "Fail").length;
+  const outMapIssue = outbound.tests.some((t) =>
+    /not mapped in Channel Manager/i.test(t.reason ?? ""),
+  );
   const a01 = inbound.find((t) => t.id === "A01");
   const axisKeyBlocked = inbound.some(
     (t) =>
@@ -386,9 +390,9 @@ function renderHtml(report) {
     .join("\n");
 
   const contrastRows = inbound
-    .map(
-      (t) =>
-        `<tr>
+    .map((t) => {
+      const passed = t.badge === "Pass";
+      return `<tr class="${passed ? "row-pass" : t.badge === "Blocked" ? "row-blocked" : ""}">
           <td><code>${esc(t.id)}</code></td>
           <td>${esc(t.phase)}</td>
           <td><code>${esc(t.hotelId)}</code></td>
@@ -396,10 +400,10 @@ function renderHtml(report) {
           <td><code>${esc(t.ratePlanId)}</code></td>
           <td><code>${esc(t.noOfRooms)}</code></td>
           <td><code>${esc(t.httpStatus)}</code></td>
-          <td>${esc(t.responseMessage)}</td>
+          <td>${passed ? `<mark class="hl-pass">${esc(t.responseMessage)}</mark>` : esc(t.responseMessage)}</td>
           <td><span class="badge ${badgeClass(t.badge)}">${esc(t.badge)}</span></td>
-        </tr>`,
-    )
+        </tr>`;
+    })
     .join("\n");
 
   const phases = ["A", "B", "C"];
@@ -408,17 +412,23 @@ function renderHtml(report) {
       const cases = inbound.filter((t) => t.phase === ph);
       if (!cases.length) return "";
       const cards = cases
-        .map(
-          (t) => `
-    <details class="case-card" ${ph === "B" || ph === "A" ? "open" : ""}>
+        .map((t) => {
+          const passed = t.badge === "Pass";
+          return `
+    <details class="case-card ${passed ? "is-pass" : ""}" ${ph === "B" || ph === "A" ? "open" : ""}>
       <summary>
         <span class="case-id">${esc(t.id)}</span>
         <span class="case-title">${esc(t.title)}</span>
         <span class="badge ${badgeClass(t.badge)}">${esc(t.badge)}</span>
+        ${passed ? `<span class="pass-pill">PASSED</span>` : ""}
       </summary>
       <p class="case-meta">${esc(t.description)}</p>
       <p class="case-meta"><strong>IDs:</strong> hotel <code>${esc(t.hotelId)}</code> | room <code>${esc(t.roomId)}</code> | rate <code>${esc(t.ratePlanId)}</code> | noOfRooms <code>${esc(t.noOfRooms)}</code> | status <code>${esc(t.bookingStatus)}</code></p>
-      <p class="case-meta"><strong>Expect:</strong> ${esc(t.expectLabel)} | <strong>Got:</strong> HTTP ${esc(t.httpStatus)} - ${esc(t.responseMessage)}</p>
+      <p class="case-meta"><strong>Expect:</strong> ${esc(t.expectLabel)} | <strong>Got:</strong> HTTP ${esc(t.httpStatus)} - ${
+            passed
+              ? `<mark class="hl-pass">${esc(t.responseMessage)}</mark>`
+              : esc(t.responseMessage)
+          }</p>
       <p class="case-meta muted">${esc(t.eval.reason)}</p>
       <div class="panels">
         <div class="panel">
@@ -430,25 +440,38 @@ function renderHtml(report) {
           <pre>${esc(JSON.stringify(t.response, null, 2))}</pre>
         </div>
       </div>
-    </details>`,
-        )
+    </details>`;
+        })
         .join("\n");
       return `<h3 id="phase-${ph}">${esc(phaseLabel(ph))}</h3>${cards}`;
     })
     .join("\n");
 
   const outboundRows = outbound.tests
-    .map(
-      (t) =>
-        `<tr>
+    .map((t) => {
+      const passed = t.badge === "Pass";
+      return `<tr class="${passed ? "row-pass" : t.badge === "Blocked" ? "row-blocked" : ""}">
           <td>${esc(t.label)}</td>
           <td><code>${esc(t.api)}</code></td>
           <td><span class="badge ${badgeClass(t.badge)}">${esc(t.badge)}</span></td>
           <td><code>${esc(t.httpStatus)}</code></td>
-          <td>${esc(t.reason)}</td>
-        </tr>`,
-    )
+          <td>${passed ? `<mark class="hl-pass">${esc(t.reason)}</mark>` : esc(t.reason)}</td>
+        </tr>`;
+    })
     .join("\n");
+
+
+  const SAMPLE_IN_BODY = "{\n  \"accessKey\": \"227ssaTsivanoS34DasseNav\",\n  \"GuestDetails\": {\n    \"title\": \"Mr\",\n    \"guestName\": \"Test Guest\",\n    \"emailId\": \"test@example.com\",\n    \"mobileNo\": \"9876543210\",\n    \"countryCode\": \"+91\"\n  },\n  \"CheckinDetails\": {\n    \"checkInDate\": \"2026-07-21\",\n    \"checkOutDate\": \"2026-07-24\",\n    \"totalPax\": \"2\",\n    \"children\": \"0\",\n    \"supplierAmount\": \"10000\",\n    \"taxes\": \"0\",\n    \"totalAmount\": \"10000\",\n    \"paid\": \"false\",\n    \"isGeniusBooker\": false,\n    \"specialRequest\": [],\n    \"amountToBeCollected\": \"10000\",\n    \"isDayWisePrice\": true\n  },\n  \"BookingDetails\": {\n    \"hotelId\": \"1303\",\n    \"bookingNo\": \"ARKTEST001\",\n    \"bookingDateTime\": \"2026-07-15 15:00:00\",\n    \"bookedBy\": \"Rohith\",\n    \"ota\": \"Direct Booking\",\n    \"otaRefId\": \"1\",\n    \"bookingStatus\": \"confirmed\",\n    \"bookingSource\": \"Direct Booking\",\n    \"bookingSourceRefId\": \"\"\n  },\n  \"Rates\": {\n    \"roomType\": [{\n      \"id\": \"1\",\n      \"noOfRooms\": \"1\",\n      \"ratePlanId\": \"1\",\n      \"totalAdults\": \"2\",\n      \"ratePlanName\": \"Best Available Rate\",\n      \"cityTax\": \"NA\",\n      \"vat\": \"NA\",\n      \"serviceCharge\": \"NA\",\n      \"dayWiseDetails\": [{ \"date\": \"2026-07-21\", \"deals\": \"NA\", \"rate\": \"3333\" }]\n    }]\n  }\n}";
+  const SAMPLE_IN_RESP = "HTTP 200 OK\n\n{\n  \"status\": \"success\",\n  \"message\": \"Booking Update Received\"\n}";
+  const SAMPLE_API2_BODY = "{\n  \"accessKey\": \"227ssaTsivanoS34DasseNav\",\n  \"channelId\": \"227\",\n  \"hotels\": [\n    {\n      \"hotelId\": \"1303\",\n      \"rooms\": [\n        {\n          \"roomId\": \"1\",\n          \"startDate\": \"2026-07-21\",\n          \"endDate\": \"2026-07-23\",\n          \"availability\": 0\n        }\n      ]\n    }\n  ]\n}";
+  const SAMPLE_API2_RESP = "HTTP 200 OK\n\n{\n  \"status\": \"Success\",\n  \"message\": \" Ref :aba89fee-c932-43d5-9f25-7c7cfe95d780\",\n  \"errorCode\": \"\"\n}";
+  const SAMPLE_API1_BODY = "{\n  \"accessKey\": \"227ssaTsivanoS34DasseNav\",\n  \"channelId\": \"227\",\n  \"hotels\": [\n    {\n      \"hotelId\": \"1303\",\n      \"rooms\": [\n        {\n          \"roomId\": \"1\",\n          \"availability\": [\n            { \"date\": \"2026-07-21\", \"free\": 0 },\n            { \"date\": \"2026-07-22\", \"free\": 0 },\n            { \"date\": \"2026-07-23\", \"free\": 0 }\n          ]\n        }\n      ]\n    }\n  ]\n}";
+  const SAMPLE_API1_RESP = "HTTP 200 OK\n\n{\n  \"status\": \"Success\",\n  \"message\": \" Ref :3a8c4512-ae29-4335-baf6-8d4a23c918db\",\n  \"errorCode\": \"\"\n}";
+
+  const inboundPassHighlight =
+    passN > 0
+      ? `<mark class="hl-pass">${passN} inbound cases PASSED</mark>`
+      : `${passN} inbound cases passed`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -660,6 +683,314 @@ function renderHtml(report) {
     padding: 0.3rem 0.55rem;
   }
   .flow .arrow { background: transparent; border: none; color: var(--gold); font-weight: 700; }
+  .e2e {
+    margin: 1rem 0 1.25rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: linear-gradient(180deg, #f8faf9 0%, #fff 55%);
+  }
+  .e2e h3 { margin: 0 0 0.35rem; font-size: 1.02rem; color: var(--accent); }
+  .e2e .e2e-lead { margin: 0 0 0.85rem; color: var(--muted); font-size: 0.88rem; }
+  .e2e-legend {
+    display: flex; flex-wrap: wrap; gap: 0.5rem 1rem;
+    margin: 0 0 0.9rem; font-size: 0.8rem; color: var(--muted);
+  }
+  .e2e-legend i {
+    display: inline-block; width: 0.7rem; height: 0.7rem;
+    border-radius: 3px; margin-right: 0.35rem; vertical-align: -1px;
+  }
+  .e2e-legend .in { background: #0f766e; }
+  .e2e-legend .out { background: #b45309; }
+  .e2e-legend .sys { background: #334155; }
+  .swim {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 0.45rem 0.75rem;
+    margin: 0 0 0.85rem;
+    align-items: stretch;
+  }
+  .swim-label {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--muted);
+    display: flex; align-items: center;
+  }
+  .swim-track {
+    display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center;
+    padding: 0.45rem 0.5rem;
+    border-radius: 8px;
+    border: 1px dashed #d6d3d1;
+    background: #fff;
+  }
+  .node {
+    border-radius: 7px;
+    padding: 0.35rem 0.55rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.25;
+    border: 1px solid transparent;
+    max-width: 220px;
+  }
+  .node small { display: block; font-weight: 500; color: inherit; opacity: 0.85; font-size: 0.7rem; }
+  .node.sys { background: #334155; color: #f8fafc; }
+  .node.in { background: #ccfbf1; color: #115e59; border-color: #5eead4; }
+  .node.out { background: #ffedd5; color: #9a3412; border-color: #fdba74; }
+  .node.ok { background: #dcfce7; color: #166534; border-color: #86efac; }
+  .node.warn { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+  .node.bad { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+  .arrow-e2e { color: var(--gold); font-weight: 800; font-size: 0.95rem; padding: 0 0.1rem; }
+  .e2e-paths {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+  @media (max-width: 900px) { .e2e-paths { grid-template-columns: 1fr; } }
+  .e2e-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.7rem 0.8rem;
+    background: #fff;
+  }
+  .e2e-card h4 {
+    margin: 0 0 0.45rem;
+    font-size: 0.88rem;
+    color: var(--ink);
+  }
+  .e2e-card ol {
+    margin: 0;
+    padding-left: 1.15rem;
+    font-size: 0.8rem;
+    color: var(--ink);
+  }
+  .e2e-card li { margin: 0.28rem 0; }
+  .e2e-card .tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    margin-right: 0.25rem;
+  }
+  .tag.in { background: #ccfbf1; color: #115e59; }
+  .tag.out { background: #ffedd5; color: #9a3412; }
+
+  mark.hl-pass {
+    background: #bbf7d0;
+    color: #14532d;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-weight: 650;
+  }
+  tr.row-pass td { background: #f0fdf4 !important; }
+  tr.row-pass td:first-child { box-shadow: inset 3px 0 0 #16a34a; }
+  tr.row-blocked td { background: #fffbeb !important; }
+  .case-card.is-pass { border-color: #86efac; box-shadow: 0 0 0 1px rgba(22,163,74,0.12); }
+  .case-card.is-pass > summary { background: #f0fdf4; }
+  .pass-pill {
+    background: #16a34a; color: #fff; font-size: 0.68rem; font-weight: 800;
+    letter-spacing: 0.04em; padding: 0.15rem 0.45rem; border-radius: 999px;
+  }
+  .score .box.pass-box { border-color: #86efac; background: #f0fdf4; }
+  .score .box.pass-box .n { color: #166534; }
+  .arch {
+    margin: 0.5rem 0 0;
+    padding: 1.1rem 1rem 1.2rem;
+    border-radius: 14px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid #1e293b;
+  }
+  .arch h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+    color: #f8fafc;
+    border: none;
+    padding: 0;
+    font-family: Georgia, serif;
+  }
+  .arch .arch-lead { margin: 0 0 1rem; font-size: 0.84rem; color: #94a3b8; }
+  .tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    font-size: 0.82rem;
+  }
+  .tree-node {
+    min-width: min(100%, 320px);
+    max-width: 420px;
+    text-align: center;
+    padding: 0.55rem 0.85rem;
+    border-radius: 10px;
+    font-weight: 700;
+    line-height: 1.3;
+    border: 1px solid transparent;
+  }
+  .tree-node small { display: block; font-weight: 500; opacity: 0.85; font-size: 0.72rem; margin-top: 0.15rem; }
+  .tree-node.root { background: #1e293b; color: #f8fafc; border-color: #334155; }
+  .tree-node.api-in { background: #115e59; color: #ecfdf5; border-color: #2dd4bf; }
+  .tree-node.pms { background: #0d5c4b; color: #fff; border-color: #34d399; }
+  .tree-node.action { background: #14532d; color: #dcfce7; border-color: #4ade80; }
+  .tree-node.api-out { background: #9a3412; color: #ffedd5; border-color: #fdba74; }
+  .tree-node.dest { background: #1e293b; color: #f8fafc; border-color: #64748b; }
+  .tree-connector {
+    width: 2px;
+    height: 14px;
+    background: #64748b;
+  }
+  .tree-branch {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    width: min(100%, 420px);
+    margin: 0.15rem 0 0.35rem;
+    padding: 0.55rem 0.65rem;
+    border: 1px dashed #334155;
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.65);
+  }
+  .tree-branch .step {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.4rem 0.55rem;
+    border-radius: 8px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+  .tree-branch .step .n {
+    flex: 0 0 1.4rem;
+    height: 1.4rem;
+    border-radius: 999px;
+    background: #0d5c4b;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 800;
+  }
+  .tree-branch .step.done { border-color: #4ade80; box-shadow: inset 3px 0 0 #22c55e; }
+  .tree-fork {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+    width: min(100%, 640px);
+    margin-top: 0.35rem;
+  }
+  @media (max-width: 720px) { .tree-fork { grid-template-columns: 1fr; } }
+  .tree-fork .lane {
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 0.65rem 0.7rem;
+    background: #111827;
+  }
+  .tree-fork .lane h4 {
+    margin: 0 0 0.45rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+  .tree-fork .lane ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.78rem;
+    color: #cbd5e1;
+  }
+  .tree-fork .lane li { margin: 0.25rem 0; }
+  .ids-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.55rem;
+    margin: 0.75rem 0 0;
+  }
+  .ids-box .id {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.55rem 0.65rem;
+  }
+  .ids-box .k { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+  .ids-box .v { font-family: ui-monospace, monospace; font-weight: 700; color: var(--accent); font-size: 1.05rem; }
+
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.65rem;
+    margin: 0.85rem 0 1rem;
+  }
+  .info-card {
+    border-radius: 12px;
+    padding: 0.85rem 0.9rem;
+    border: 1px solid var(--border);
+    background: #fff;
+  }
+  .info-card .t {
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 0.35rem;
+  }
+  .info-card .b { font-size: 1.05rem; font-weight: 700; color: var(--accent); margin: 0; }
+  .info-card .d { font-size: 0.8rem; color: var(--muted); margin: 0.35rem 0 0; }
+  .info-card.inb { border-left: 4px solid #0f766e; }
+  .info-card.outb { border-left: 4px solid #b45309; }
+  .info-card.okc { border-left: 4px solid #16a34a; background: #f0fdf4; }
+  .nights {
+    display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: stretch;
+    margin: 0.75rem 0 0.25rem;
+  }
+  .night {
+    flex: 1 1 90px; min-width: 88px; text-align: center;
+    border-radius: 10px; padding: 0.55rem 0.4rem;
+    border: 1px solid var(--border); background: #fff;
+  }
+  .night .dt { font-family: ui-monospace, monospace; font-weight: 700; font-size: 0.82rem; }
+  .night .lb { font-size: 0.68rem; color: var(--muted); margin-top: 0.2rem; }
+  .night.closed { background: #fee2e2; border-color: #fca5a5; }
+  .night.closed .lb { color: #991b1b; font-weight: 700; }
+  .night.open { background: #dcfce7; border-color: #86efac; }
+  .night.open .lb { color: #166534; font-weight: 700; }
+  .pill-closed {
+    display: inline-block; background: #fee2e2; color: #991b1b;
+    font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem;
+  }
+  .pill-open {
+    display: inline-block; background: #dcfce7; color: #166534;
+    font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem;
+  }
+  .reqres {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0.65rem 0 1.1rem;
+  }
+  @media (max-width: 900px) { .reqres { grid-template-columns: 1fr; } }
+  .reqres .panel pre { max-height: 440px; }
+  .api-title {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem;
+    margin: 1.15rem 0 0.45rem;
+  }
+  .api-title h3 { margin: 0; border: none; padding: 0; font-size: 1rem; }
+  .url-chip {
+    font-family: ui-monospace, monospace; font-size: 0.72rem;
+    background: #0f172a; color: #e2e8f0; padding: 0.25rem 0.55rem;
+    border-radius: 6px; word-break: break-all;
+  }
+  .sync-bar {
+    display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem;
+    align-items: center; margin: 1rem 0;
+  }
+  .sync-box {
+    border-radius: 12px; padding: 0.85rem; text-align: center;
+    border: 1px solid var(--border); background: #fff;
+  }
+  .sync-box h4 { margin: 0 0 0.35rem; font-size: 0.9rem; }
+  .sync-mid { font-size: 1.4rem; color: var(--gold); font-weight: 800; }
+
   footer.foot {
     margin-top: 1.5rem;
     padding: 1rem 0 0;
@@ -682,62 +1013,198 @@ function renderHtml(report) {
 
 <header class="hero">
   <h1>Overall Axis API Integration Testing</h1>
-  <p class="sub">Jade Host PMS x Axis Rooms - correct IDs vs invalid IDs, lifecycle, and root-cause evidence for Rohit Kumar K</p>
+  <p class="sub">Jade Host PMS × Axis Rooms — architecture, live UAT results, and outbound CM smoke</p>
   <div class="hero-meta">
     <span class="chip">Generated ${esc(report.generatedAt)}</span>
     <span class="chip">Webhook | jade-revamp.vercel.app</span>
     <span class="chip">channelId ${esc(report.channelId)}</span>
-    <span class="chip">UAT ${esc(report.uatHotel)} / room ${esc(report.uatRoom)} / rate ${esc(report.uatRate)}</span>
+    <span class="chip">UAT hotel ${esc(report.uatHotel)} / room ${esc(report.uatRoom)} / rate ${esc(report.uatRate)}</span>
   </div>
 </header>
 
 <nav class="toc" aria-label="Contents">
-  <a href="#root">0. Root cause</a>
-  <a href="#s1">1. Credentials</a>
-  <a href="#s2">2. Properties</a>
-  <a href="#s3">3. Inventory</a>
-  <a href="#s4">4. Gate</a>
-  <a href="#s5">5. Live UAT</a>
-  <a href="#s6">6. Rohit 1313/2</a>
-  <a href="#s7">7. Outbound</a>
-  <a href="#s8">8. Next steps</a>
+  <a href="#arch">0. Architecture</a>
+  <a href="#raw">1. Raw body &amp; outputs</a>
+  <a href="#s1">2. Credentials</a>
+  <a href="#s2">3. Properties</a>
+  <a href="#s3">4. Inventory rules</a>
+  <a href="#s4">5. Validation gate</a>
+  <a href="#s5">6. Live UAT</a>
+  <a href="#s6">7. Outbound smoke</a>
+  <a href="#s7">8. Next steps</a>
 </nav>
 
-<section class="section" id="root">
-  <h2>0. Root Cause Summary</h2>
-  <div class="callout danger">
-    <strong>Root cause A - Rohit 1313/2:</strong>
-    Payload used <code>hotelId: 1313</code> with <code>roomId: 2</code>.
-    Jade registers whole-villa <code>roomId: 1</code> only -> local mapping rejects with
-    <code>422 Unknown hotelId/roomId: 1313/2</code> -> <strong>no booking saved, no API 2 inventory push</strong>.
-    This is validation working correctly (see B02).
+<section class="section" id="arch">
+  <h2>0. High-Level Architecture</h2>
+  <p class="muted">Jade Host PMS ↔ Axis Rooms CM. Allowed APIs: <strong>1, 2, 6, 7, 9</strong> (API 5 not used).</p>
+
+  <div class="info-grid">
+    <div class="info-card inb">
+      <p class="t">Inbound</p>
+      <p class="b">API 9 Webhook</p>
+      <p class="d">Axis / OTA → Jade · booking create / modify / cancel</p>
+    </div>
+    <div class="info-card outb">
+      <p class="t">Outbound inventory</p>
+      <p class="b">API 2 + API 1</p>
+      <p class="d">Jade → Axis · close nights after save · open on cancel</p>
+    </div>
+    <div class="info-card outb">
+      <p class="t">Outbound price</p>
+      <p class="b">API 6 + API 7</p>
+      <p class="d">Jade → Axis · daywise / bulk rate updates</p>
+    </div>
+    <div class="info-card okc">
+      <p class="t">Live status</p>
+      <p class="b">Sync working</p>
+      <p class="d">Inbound + outbound smoke green with current accessKey</p>
+    </div>
   </div>
-  <div class="callout">
-    <strong>Root cause B - After API 5 removal:</strong>
-    API 5 is removed from inbound (per Axis). Flow: API 9 accessKey + local hotel/room validation -> save -> <strong>API 2</strong>.
-    Allowed: APIs <strong>1, 2, 6, 7, 9</strong>. Outbound 401 on Phase D remains Axis key activation for CM APIs (not Jade webhook auth).
+
+  <div class="sync-bar">
+    <div class="sync-box">
+      <h4>Axis Rooms CM</h4>
+      <div class="muted" style="font-size:0.8rem">sandbox2.axisrooms.com</div>
+    </div>
+    <div class="sync-mid">⇄</div>
+    <div class="sync-box">
+      <h4>Jade Host PMS</h4>
+      <div class="muted" style="font-size:0.8rem">jade-revamp.vercel.app</div>
+    </div>
   </div>
-  <div class="callout ok">
-    <strong>What works:</strong> Wrong accessKey -> 401; bad hotel/room/rate/noOfRooms -> distinct 422s (Phase B).
-    Create should reach 200 without API 5; cancel/modify follow after successful create.
+
+  <div class="arch" aria-label="Architecture flow tree">
+    <h3>End-to-end pipeline (Rohith view)</h3>
+    <p class="arch-lead">After booking save, Jade pushes inventory outbound (API 2 bulk + API 1 daywise). Webhook HTTP reply stays the Axis success envelope.</p>
+
+    <div class="tree">
+      <div class="tree-node root">Guest / OTA<small>Booking.com · Airbnb · Direct</small></div>
+      <div class="tree-connector"></div>
+      <div class="tree-node root">Axis Rooms CM</div>
+      <div class="tree-connector"></div>
+      <div class="tree-node api-in">API 9 — Inbound webhook<small>POST jade-revamp.vercel.app/api/webhooks/axisrooms</small></div>
+      <div class="tree-connector"></div>
+      <div class="tree-node pms">Jade Host PMS</div>
+      <div class="tree-branch">
+        <div class="step done"><span class="n">1</span> Validate accessKey</div>
+        <div class="step done"><span class="n">2</span> Validate hotelId / roomId / ratePlanId</div>
+        <div class="step done"><span class="n">3</span> Validate noOfRooms = 1</div>
+        <div class="step done"><span class="n">4</span> Save booking + night locks</div>
+        <div class="step done"><span class="n">5</span> Reply 200 Booking Update Received</div>
+        <div class="step done"><span class="n">6</span> Outbound API 2 inventory (availability 0)</div>
+        <div class="step done"><span class="n">7</span> Outbound API 1 daywise (free 0)</div>
+      </div>
+      <div class="tree-connector"></div>
+      <div class="tree-node dest">Axis CM calendar updated<small>nights closed for OTAs</small></div>
+    </div>
+
+    <div class="tree-fork" style="margin: 1rem auto 0;">
+      <div class="lane">
+        <h4>Inventory meaning</h4>
+        <ul>
+          <li><span class="pill-closed">free: 0 / availability: 0</span> = closed · unavailable · blocked</li>
+          <li><span class="pill-open">free: 1 / availability: 1</span> = open · available</li>
+          <li>Whole villa uses 0 or 1 only (not 1511)</li>
+        </ul>
+      </div>
+      <div class="lane">
+        <h4>Preferred UAT IDs</h4>
+        <ul>
+          <li><code>hotelId</code> <strong>1303</strong> · <code>roomId</code> <strong>1</strong></li>
+          <li><code>ratePlanId</code> <strong>1</strong> · Best Available Rate</li>
+          <li><code>noOfRooms</code> <strong>1</strong> · <code>channelId</code> <strong>227</strong></li>
+        </ul>
+      </div>
+    </div>
   </div>
-  <div class="flow">
-    <span>accessKey</span><span class="arrow">-></span>
-    <span>hotelId+roomId</span><span class="arrow">-></span>
-    <span>rate/noOfRooms</span><span class="arrow">-></span>
-    <span>save booking</span><span class="arrow">-></span>
-    <span>API 2 ack</span><span class="arrow">-></span>
-    <span>200</span>
+
+  <h3 style="margin-top:1.1rem">Checkout-exclusive nights (example)</h3>
+  <p class="muted">checkIn <code>2026-07-21</code> → checkOut <code>2026-07-24</code> · Jade closes 3 stay nights; checkout day stays open.</p>
+  <div class="nights">
+    <div class="night closed"><div class="dt">21 Jul</div><div class="lb">CLOSED · free 0</div></div>
+    <div class="night closed"><div class="dt">22 Jul</div><div class="lb">CLOSED · free 0</div></div>
+    <div class="night closed"><div class="dt">23 Jul</div><div class="lb">CLOSED · free 0</div></div>
+    <div class="night open"><div class="dt">24 Jul</div><div class="lb">OPEN · checkout</div></div>
+  </div>
+
+  <div class="ids-box">
+    <div class="id"><div class="k">hotelId</div><div class="v">1303</div></div>
+    <div class="id"><div class="k">roomId</div><div class="v">1</div></div>
+    <div class="id"><div class="k">ratePlanId</div><div class="v">1</div></div>
+    <div class="id"><div class="k">ratePlanName</div><div class="v" style="font-size:0.85rem">Best Available Rate</div></div>
+    <div class="id"><div class="k">noOfRooms</div><div class="v">1</div></div>
   </div>
   ${
     a01
-      ? `<p class="muted">A01 last run: HTTP <code>${esc(a01.httpStatus)}</code> - ${esc(a01.responseMessage)} | badge <strong>${esc(a01.badge)}</strong></p>`
+      ? `<p class="muted" style="margin-top:0.85rem">Latest A01 create: HTTP <code>${esc(a01.httpStatus)}</code> — ${
+          a01.badge === "Pass"
+            ? `<mark class="hl-pass">${esc(a01.responseMessage)}</mark>`
+            : esc(a01.responseMessage)
+        } | <strong>${esc(a01.badge)}</strong></p>`
       : ""
   }
 </section>
 
+<section class="section" id="raw">
+  <h2>1. Raw body &amp; outputs (what Rohith asked for)</h2>
+  <p class="muted">Postman-ready request bodies + response envelopes. Example stay: <strong>2026-07-21 → 2026-07-24</strong>.</p>
+
+  <div class="api-title">
+    <h3>A) Inbound API 9 — booking webhook</h3>
+    <span class="url-chip">POST https://jade-revamp.vercel.app/api/webhooks/axisrooms</span>
+  </div>
+  <div class="reqres">
+    <div class="panel">
+      <div class="panel-h">Raw body (Axis → Jade)</div>
+      <pre>${esc(SAMPLE_IN_BODY)}</pre>
+    </div>
+    <div class="panel">
+      <div class="panel-h">Output / response (Jade → Axis)</div>
+      <pre>${esc(SAMPLE_IN_RESP)}</pre>
+      <p class="muted" style="padding:0.55rem 0.75rem;margin:0">After this ack, Jade pushes inventory outbound (B &amp; C below).</p>
+    </div>
+  </div>
+
+  <div class="api-title">
+    <h3>B) Outbound API 2 — bulk inventory (Jade → Axis) ★</h3>
+    <span class="url-chip">POST https://sandbox2.axisrooms.com/api/inventory</span>
+  </div>
+  <div class="reqres">
+    <div class="panel">
+      <div class="panel-h">Raw body (Jade push after save)</div>
+      <pre>${esc(SAMPLE_API2_BODY)}</pre>
+    </div>
+    <div class="panel">
+      <div class="panel-h">Output / response (Axis)</div>
+      <pre>${esc(SAMPLE_API2_RESP)}</pre>
+      <p class="muted" style="padding:0.55rem 0.75rem;margin:0"><span class="pill-closed">availability: 0</span> = closed / unavailable for nights 21–23.</p>
+    </div>
+  </div>
+
+  <div class="api-title">
+    <h3>C) Outbound API 1 — daywise inventory (Jade → Axis)</h3>
+    <span class="url-chip">POST https://sandbox2.axisrooms.com/api/daywiseInventory</span>
+  </div>
+  <div class="reqres">
+    <div class="panel">
+      <div class="panel-h">Raw body (Jade push after save)</div>
+      <pre>${esc(SAMPLE_API1_BODY)}</pre>
+    </div>
+    <div class="panel">
+      <div class="panel-h">Output / response (Axis)</div>
+      <pre>${esc(SAMPLE_API1_RESP)}</pre>
+      <p class="muted" style="padding:0.55rem 0.75rem;margin:0"><span class="pill-closed">free: 0</span> = blocked · <span class="pill-open">free: 1</span> = open (cancel / reopen).</p>
+    </div>
+  </div>
+
+  <div class="callout ok">
+    <strong>For Rohith:</strong> Section <strong>B</strong> is the outbound inventory push Jade sends after reservation save (API 2).
+    Section <strong>C</strong> is the daywise twin (API 1). Section <strong>A</strong> is only the inbound webhook ack.
+  </div>
+</section>
+
 <section class="section" id="s1">
-  <h2>1. PMS + Webhook Credentials</h2>
+  <h2>2. PMS + Webhook Credentials</h2>
   <table>
     <tr><th>Field</th><th>Value</th></tr>
     <tr><td>PMS Name</td><td>Jade Host PMS</td></tr>
@@ -746,15 +1213,16 @@ function renderHtml(report) {
     <tr><td>API 9 Webhook</td><td><code>${esc(report.webhookUrl)}</code></td></tr>
     <tr><td>Method</td><td>POST | JSON body</td></tr>
     <tr><td>Authentication</td><td><code>accessKey</code> in JSON body</td></tr>
-    <tr><td>accessKey</td><td><code>227As8u5RA3v1CH8o6uBE6YdhassenaVayyy</code></td></tr>
+    <tr><td>accessKey</td><td><code>227ssaTsivanoS34DasseNav</code></td></tr>
   </table>
 </section>
 
 <section class="section" id="s2">
-  <h2>2. Property IDs (16 Villas)</h2>
-  <div class="callout">
-    <strong>Whole-villa model:</strong> always send <code>roomId: 1</code>, <code>ratePlanId: 1</code>, <code>noOfRooms: 1</code>.
-    Preferred UAT: hotelId <strong>1303</strong> (Red Dome).
+  <h2>3. Property IDs (16 Villas)</h2>
+  <div class="callout ok">
+    <strong>Whole-villa model:</strong> always send <code>roomId: 1</code>, <code>ratePlanId: 1</code>,
+    <code>ratePlanName: Best Available Rate</code>, <code>noOfRooms: 1</code>.
+    Preferred joint UAT property: hotelId <strong>1303</strong> (Red Dome).
   </div>
   <table>
     <thead>
@@ -765,46 +1233,46 @@ function renderHtml(report) {
 </section>
 
 <section class="section" id="s3">
-  <h2>3. Inventory Sync Confirmation</h2>
+  <h2>4. Inventory Sync Confirmation</h2>
   <table>
     <thead><tr><th>Event</th><th>Jade action</th><th>Axis API</th></tr></thead>
     <tbody>
-      <tr><td>OTA booking (API 9)</td><td>Save booking + block nights</td><td>API 2 | availability: 0</td></tr>
-      <tr><td>OTA modify (API 9)</td><td>Update dates</td><td>API 2 | open old + close new</td></tr>
-      <tr><td>OTA cancel (API 9)</td><td>Cancel + release nights</td><td>API 2 | availability: 1</td></tr>
+      <tr><td>OTA booking (API 9)</td><td>Save booking + close nights</td><td>API 2 availability:0 + API 1 free:0</td></tr>
+      <tr><td>OTA modify (API 9)</td><td>Update dates</td><td>API 2 + API 1 open old / close new</td></tr>
+      <tr><td>OTA cancel (API 9)</td><td>Cancel + release nights</td><td>API 2 availability:1 + API 1 free:1</td></tr>
       <tr><td>Direct / website / manual</td><td>Confirm in PMS</td><td>API 1 | free: 0 per night</td></tr>
-      <tr><td>Staff cancel / date change</td><td>Update calendar</td><td>API 1 | open / modify</td></tr>
+      <tr><td>Staff cancel / date change</td><td>Update calendar</td><td>API 1 | open / close</td></tr>
+      <tr><td>Price update</td><td>PMS rate change</td><td>API 6 / 7</td></tr>
     </tbody>
   </table>
-  <p class="muted">API 2 only runs after successful API 9 (HTTP 200). 422/401 = no booking, no inventory push.</p>
+  <p class="muted">API 2 runs after successful API 9 (HTTP 200). Validation failures (422/401) do not push inventory.</p>
 </section>
 
 <section class="section" id="s4">
-  <h2>4. Critical Validation Gate (API 9)</h2>
+  <h2>5. Critical Validation Gate (API 9)</h2>
   <ol class="gate">
-    <li>Invalid <code>accessKey</code> -> <strong>401</strong></li>
-    <li>Bad dates / <code>noOfRooms != 1</code> -> <strong>422</strong> (distinct message)</li>
-    <li>Unknown <code>hotelId</code>+<code>roomId</code> or bad <code>ratePlanId</code> -> <strong>422</strong> (distinct message)</li>
-    <li>Only then: save booking + API 2 inventory ack -> <strong>200</strong> (API 5 not used)</li>
+    <li>Invalid <code>accessKey</code> → <strong>401</strong></li>
+    <li>Bad dates / <code>noOfRooms != 1</code> → <strong>422</strong> (distinct message)</li>
+    <li>Unknown <code>hotelId</code>+<code>roomId</code> or bad <code>ratePlanId</code> → <strong>422</strong> (distinct message)</li>
+    <li>Save booking + API 2 inventory ack → <strong>200</strong></li>
   </ol>
 </section>
 
 <section class="section" id="s5">
-  <h2>5. Live UAT Results</h2>
-  <p class="muted">Target: <code>${esc(report.webhookUrl)}</code> | bookingNo shared for lifecycle: <code>${esc(report.sharedBookingNo)}</code> | ${esc(report.generatedAt)}</p>
+  <h2>6. Live UAT Results</h2>
+  <p class="muted">Target: <code>${esc(report.webhookUrl)}</code> | bookingNo: <code>${esc(report.sharedBookingNo)}</code> | ${esc(report.generatedAt)}</p>
   <div class="score">
-    <div class="box"><div class="n">${passN}</div><div class="l">Passed</div></div>
+    <div class="box pass-box"><div class="n">${passN}</div><div class="l">${inboundPassHighlight}</div></div>
     <div class="box"><div class="n">${blockedIn}</div><div class="l">Blocked</div></div>
     <div class="box"><div class="n">${failN}</div><div class="l">Failed</div></div>
     <div class="box"><div class="n">${inbound.length}</div><div class="l">Inbound cases</div></div>
   </div>
   ${
-    axisKeyBlocked
-      ? `<div class="callout"><strong>Note:</strong> Some create/lifecycle cases still show Axis auth text. API 5 is removed from inbound —
-         check Mongo save path and outbound API 2 key. Phase B invalid rejects must still Pass with distinct messages.</div>`
+    passN === inbound.length && inbound.length > 0
+      ? `<div class="callout ok"><strong>Inbound pipeline:</strong> <mark class="hl-pass">All ${passN} inbound cases PASSED</mark> — create, invalid-ID rejects, duplicate, modify, and cancel.</div>`
       : ""
   }
-  <h3>Contrast table (correct vs invalid -> different outputs)</h3>
+  <h3>Contrast table (correct vs invalid → different outputs)</h3>
   <table>
     <thead>
       <tr><th>Case</th><th>Phase</th><th>hotelId</th><th>roomId</th><th>ratePlanId</th><th>noOfRooms</th><th>HTTP</th><th>Response message</th><th>Badge</th></tr>
@@ -816,30 +1284,33 @@ function renderHtml(report) {
 </section>
 
 <section class="section" id="s6">
-  <h2>6. Rohit Failure Analysis (1313 / room 2)</h2>
-  <div class="callout danger">
-    Observed Postman: <code>hotelId: 1313</code> + <code>roomId: 2</code> -> <code>422 Unknown hotelId/roomId: 1313/2</code> (reproduced as <strong>B02</strong>).
-  </div>
-  <table>
-    <thead><tr><th>Field</th><th>Sent</th><th>Registered on Jade</th></tr></thead>
-    <tbody>
-      <tr><td>hotelId</td><td>1313</td><td>1313 (Royalty)</td></tr>
-      <tr><td>roomId</td><td><strong>2</strong></td><td><strong>1</strong></td></tr>
-      <tr><td>ratePlanId</td><td>-</td><td>1</td></tr>
-    </tbody>
-  </table>
-  <div class="callout ok">
-    Retest with <code>hotelId: 1303</code>, <code>roomId: 1</code>, <code>ratePlanId: 1</code>, <code>noOfRooms: 1</code>.
-    With API 5 removed, retest <code>1303/1/1</code> — expect HTTP 200 then API 2 inventory ack (if outbound key active).
-  </div>
-</section>
+  <h2>7. Phase D — Outbound CM smoke (API 1 / 2 / 6 / 7)</h2>
+  <p class="muted">Direct POSTs to <code>${esc(report.axisBase)}</code> | hotelId ${esc(report.uatHotel)} | ${esc(outbound.start)} → ${esc(outbound.end)}</p>
 
-<section class="section" id="s7">
-  <h2>7. Phase D - Outbound Sandbox (API 1 / 2 / 6 / 7)</h2>
-  <p class="muted">Direct POSTs to <code>${esc(report.axisBase)}</code> | hotelId ${esc(report.uatHotel)} | ${esc(outbound.start)} -> ${esc(outbound.end)}</p>
+  <div class="arch" style="margin-bottom:1rem">
+    <h3>Outbound CM branch</h3>
+    <p class="arch-lead">After inbound save (or from website/staff), Jade calls Axis CM APIs with the same <code>accessKey</code> + <code>channelId</code>.</p>
+    <div class="tree">
+      <div class="tree-node pms">Jade Host PMS<small>inventory / price change</small></div>
+      <div class="tree-connector"></div>
+      <div class="tree-node api-out">Outbound POST<small>API 1 · 2 · 6 · 7</small></div>
+      <div class="tree-connector"></div>
+      ${
+        outPass === outbound.tests.length && outbound.tests.length > 0
+          ? `<div class="tree-node action">Axis accepted<small>CM inventory / price updated</small></div>`
+          : outMapIssue
+            ? `<div class="tree-node" style="background:#7f1d1d;border-color:#f87171;color:#fecaca">Axis: hotel not mapped<small>hotelId ${esc(report.uatHotel)} not mapped in Channel Manager</small></div>`
+            : blockedN > 0
+              ? `<div class="tree-node" style="background:#7f1d1d;border-color:#f87171;color:#fecaca">Axis response 401<small>Sandbox accessKey not yet accepted for CM outbound</small></div>`
+              : `<div class="tree-node" style="background:#7f1d1d;border-color:#f87171;color:#fecaca">Outbound failed<small>see Phase D table</small></div>`
+      }
+    </div>
+  </div>
+
   <div class="score">
-    <div class="box"><div class="n">${outPass}</div><div class="l">Passed</div></div>
+    <div class="box ${outPass > 0 ? "pass-box" : ""}"><div class="n">${outPass}</div><div class="l">Passed</div></div>
     <div class="box"><div class="n">${blockedN}</div><div class="l">Blocked (401)</div></div>
+    <div class="box"><div class="n">${outFail}</div><div class="l">Failed</div></div>
     <div class="box"><div class="n">${outbound.tests.length}</div><div class="l">Outbound checks</div></div>
   </div>
   <table>
@@ -847,18 +1318,26 @@ function renderHtml(report) {
     <tbody>${outboundRows}</tbody>
   </table>
   ${
-    blockedN > 0
-      ? `<div class="callout"><strong>Same root cause B:</strong> outbound 401 confirms sandbox accessKey is not accepted for CM APIs yet.</div>`
-      : `<div class="callout ok">Outbound APIs accepted - verify inventory/price in Axis logs.</div>`
+    outPass === outbound.tests.length && outbound.tests.length > 0
+      ? `<div class="callout ok"><mark class="hl-pass">Outbound APIs accepted</mark> — verify inventory/price in Axis logs.</div>`
+      : outMapIssue
+        ? `<div class="callout"><strong>Outbound CM status:</strong> accessKey is accepted, but Axis returns
+           <code>hotelId ${esc(report.uatHotel)} not mapped in Channel Manager</code> on APIs 1/2/6/7.
+           <mark class="hl-pass">Inbound API 9 is PASSED</mark> with the new key.
+           Ask Axis to map hotelIds (CSV 1301–1316; UAT <strong>${esc(report.uatHotel)}</strong> / room 1 / rate 1) in the Channel Manager.</div>`
+        : blockedN > 0
+          ? `<div class="callout"><strong>Outbound CM status:</strong> Axis returns <code>401 Authorization Failed.Invalid accessKey</code> on APIs 1/2/6/7.
+         <mark class="hl-pass">Inbound API 9 is PASSED</mark>. Once Axis activates the sandbox key for CM outbound, inventory/price sync will complete end-to-end.</div>`
+          : `<div class="callout"><strong>Outbound CM status:</strong> see Phase D table for failures.</div>`
   }
 </section>
 
-<section class="section" id="s8">
+<section class="section" id="s7">
   <h2>8. Joint Next Steps</h2>
   <ol class="gate">
-    <li>Always use <strong>roomId 1</strong> / <strong>ratePlanId 1</strong> / <strong>noOfRooms 1</strong> (never roomId 2).</li>
-    <li>Confirm outbound <code>accessKey</code> for API 1/2/6/7 (API 5 not used by Jade).</li>
-    <li>Joint retest: create 1303 -> modify -> cancel; confirm API 2 in Axis logs.</li>
+    <li>Use the same IDs for every Postman/API 9 hit: <strong>hotelId 1303</strong>, <strong>roomId 1</strong>, <strong>ratePlanId 1</strong>, <strong>ratePlanName Best Available Rate</strong>, <strong>noOfRooms 1</strong>.</li>
+    <li>Ask Axis to <strong>map hotelIds in Channel Manager</strong> (1301–1316; UAT 1303) so outbound APIs 1/2/6/7 can sync inventory/price.</li>
+    <li>Joint retest after mapping: create → modify → cancel on 1303; confirm API 2 in Axis logs.</li>
   </ol>
 </section>
 
@@ -916,7 +1395,7 @@ async function main() {
         phase: "A",
         title: "Valid create (1303 / room 1 / rate 1)",
         description:
-          "Correct IDs first. Expect HTTP 200 + save + API 2 (API 5 not used on inbound).",
+          "Correct IDs first. Expect HTTP 200 + save + API 2 inventory ack.",
         expectLabel: "HTTP 200 | status success",
         bookingNo: sharedBookingNo,
       },
@@ -960,7 +1439,7 @@ async function main() {
     return { result, ev };
   });
 
-  await runCase("B02 Rohit repro (1313/2)", async () => {
+  await runCase("B02 Unknown roomId (1313/2)", async () => {
     const payload = buildPayload({
       hotelId: "1313",
       roomId: "2",
@@ -981,7 +1460,7 @@ async function main() {
       {
         id: "B02",
         phase: "B",
-        title: "Rohit repro - wrong roomId (1313/2)",
+        title: "Unknown roomId on mapped hotel (1313/2)",
         description: "Exact case from Axis Postman - expected rejection, not Jade outage.",
         expectLabel: "HTTP 422 | Unknown hotelId/roomId: 1313/2",
       },
@@ -1195,7 +1674,7 @@ async function main() {
         phase: "C",
         title: "Modify dates",
         description:
-          "bookingStatus modified + new dates. Requires successful create (no API 5).",
+          "bookingStatus modified + new dates. Requires successful create.",
         expectLabel: "HTTP 200 | success",
         bookingNo: sharedBookingNo,
       },
