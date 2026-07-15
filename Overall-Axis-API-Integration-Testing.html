@@ -232,7 +232,7 @@
   <h1>Overall Axis API Integration Testing</h1>
   <p class="sub">Jade Host PMS x Axis Rooms - correct IDs vs invalid IDs, lifecycle, and root-cause evidence for Rohit Kumar K</p>
   <div class="hero-meta">
-    <span class="chip">Generated 2026-07-15T06:27:23.384Z</span>
+    <span class="chip">Generated 2026-07-15T06:37:03.290Z</span>
     <span class="chip">Webhook | jade-revamp.vercel.app</span>
     <span class="chip">channelId 227</span>
     <span class="chip">UAT 1303 / room 1 / rate 1</span>
@@ -277,7 +277,7 @@
     <span>API 2 ack</span><span class="arrow">-></span>
     <span>200</span>
   </div>
-  <p class="muted">A01 last run: HTTP <code>422</code> - Authorization Failed.Invalid accessKey | badge <strong>Blocked</strong></p>
+  <p class="muted">A01 last run: HTTP <code>200</code> - Booking Update Received | badge <strong>Pass</strong></p>
 </section>
 
 <section class="section" id="s1">
@@ -350,15 +350,14 @@
 
 <section class="section" id="s5">
   <h2>5. Live UAT Results</h2>
-  <p class="muted">Target: <code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code> | bookingNo shared for lifecycle: <code>ARKSAADLP6LFV</code> | 2026-07-15T06:27:23.384Z</p>
+  <p class="muted">Target: <code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code> | bookingNo shared for lifecycle: <code>ARKSAADLPIV62</code> | 2026-07-15T06:37:03.290Z</p>
   <div class="score">
-    <div class="box"><div class="n">7</div><div class="l">Passed</div></div>
-    <div class="box"><div class="n">3</div><div class="l">Blocked</div></div>
+    <div class="box"><div class="n">10</div><div class="l">Passed</div></div>
+    <div class="box"><div class="n">0</div><div class="l">Blocked</div></div>
     <div class="box"><div class="n">0</div><div class="l">Failed</div></div>
     <div class="box"><div class="n">10</div><div class="l">Inbound cases</div></div>
   </div>
-  <div class="callout"><strong>Note:</strong> Some create/lifecycle cases still show Axis auth text. API 5 is removed from inbound —
-         check Mongo save path and outbound API 2 key. Phase B invalid rejects must still Pass with distinct messages.</div>
+  
   <h3>Contrast table (correct vs invalid -> different outputs)</h3>
   <table>
     <thead>
@@ -371,9 +370,9 @@
           <td><code>1</code></td>
           <td><code>1</code></td>
           <td><code>1</code></td>
-          <td><code>422</code></td>
-          <td>Authorization Failed.Invalid accessKey</td>
-          <td><span class="badge b-blocked">Blocked</span></td>
+          <td><code>200</code></td>
+          <td>Booking Update Received</td>
+          <td><span class="badge b-pass">Pass</span></td>
         </tr>
 <tr>
           <td><code>B01</code></td>
@@ -448,9 +447,9 @@
           <td><code>1</code></td>
           <td><code>1</code></td>
           <td><code>1</code></td>
-          <td><code>422</code></td>
-          <td>Authorization Failed.Invalid accessKey</td>
-          <td><span class="badge b-blocked">Blocked</span></td>
+          <td><code>200</code></td>
+          <td>Booking Update Received</td>
+          <td><span class="badge b-pass">Pass</span></td>
         </tr>
 <tr>
           <td><code>C02</code></td>
@@ -459,9 +458,9 @@
           <td><code>1</code></td>
           <td><code>1</code></td>
           <td><code>1</code></td>
-          <td><code>422</code></td>
-          <td>Authorization Failed.Invalid accessKey</td>
-          <td><span class="badge b-blocked">Blocked</span></td>
+          <td><code>200</code></td>
+          <td>Booking Update Received</td>
+          <td><span class="badge b-pass">Pass</span></td>
         </tr>
 <tr>
           <td><code>C03</code></td>
@@ -481,12 +480,12 @@
       <summary>
         <span class="case-id">A01</span>
         <span class="case-title">Valid create (1303 / room 1 / rate 1)</span>
-        <span class="badge b-blocked">Blocked</span>
+        <span class="badge b-pass">Pass</span>
       </summary>
       <p class="case-meta">Correct IDs first. Expect HTTP 200 + save + API 2 (API 5 not used on inbound).</p>
       <p class="case-meta"><strong>IDs:</strong> hotel <code>1303</code> | room <code>1</code> | rate <code>1</code> | noOfRooms <code>1</code> | status <code>confirmed</code></p>
-      <p class="case-meta"><strong>Expect:</strong> HTTP 200 | status success | <strong>Got:</strong> HTTP 422 - Authorization Failed.Invalid accessKey</p>
-      <p class="case-meta muted">Request reached Jade but failed with Axis-looking auth error: Authorization Failed.Invalid accessKey. API 5 is not used on inbound; check booking save/Mongo and outbound API 2 key activation.</p>
+      <p class="case-meta"><strong>Expect:</strong> HTTP 200 | status success | <strong>Got:</strong> HTTP 200 - Booking Update Received</p>
+      <p class="case-meta muted">Matched expected HTTP + body</p>
       <div class="panels">
         <div class="panel">
           <div class="panel-h">Request sent</div>
@@ -515,8 +514,8 @@
   },
   &quot;BookingDetails&quot;: {
     &quot;hotelId&quot;: &quot;1303&quot;,
-    &quot;bookingNo&quot;: &quot;ARKSAADLP6LFV&quot;,
-    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:27:01&quot;,
+    &quot;bookingNo&quot;: &quot;ARKSAADLPIV62&quot;,
+    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:36:33&quot;,
     &quot;bookedBy&quot;: &quot;Mohammed Saad&quot;,
     &quot;ota&quot;: &quot;Direct Booking&quot;,
     &quot;otaRefId&quot;: &quot;1&quot;,
@@ -550,8 +549,8 @@
         <div class="panel">
           <div class="panel-h">Response received</div>
           <pre>{
-  &quot;status&quot;: &quot;failure&quot;,
-  &quot;message&quot;: &quot;Authorization Failed.Invalid accessKey&quot;
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;message&quot;: &quot;Booking Update Received&quot;
 }</pre>
         </div>
       </div>
@@ -595,8 +594,8 @@
   },
   &quot;BookingDetails&quot;: {
     &quot;hotelId&quot;: &quot;1303&quot;,
-    &quot;bookingNo&quot;: &quot;ARKSAADLP6R6U&quot;,
-    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:27:08&quot;,
+    &quot;bookingNo&quot;: &quot;ARKSAADLPIZQV&quot;,
+    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:36:39&quot;,
     &quot;bookedBy&quot;: &quot;Mohammed Saad&quot;,
     &quot;ota&quot;: &quot;Direct Booking&quot;,
     &quot;otaRefId&quot;: &quot;1&quot;,
@@ -675,8 +674,8 @@
   },
   &quot;BookingDetails&quot;: {
     &quot;hotelId&quot;: &quot;1313&quot;,
-    &quot;bookingNo&quot;: &quot;ARKSAADLP6S7F&quot;,
-    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:27:09&quot;,
+    &quot;bookingNo&quot;: &quot;ARKSAADLPJ3B6&quot;,
+    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:36:44&quot;,
     &quot;bookedBy&quot;: &quot;Mohammed Saad&quot;,
     &quot;ota&quot;: &quot;Direct Booking&quot;,
     &quot;otaRefId&quot;: &quot;1&quot;,
@@ -755,8 +754,8 @@
   },
   &quot;BookingDetails&quot;: {
     &quot;hotelId&quot;: &quot;9999&quot;,
-    &quot;bookingNo&quot;: &quot;ARKSAADLP6T82&quot;,
-    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:27:11&quot;,
+    &quot;bookingNo&quot;: &quot;ARKSAADLPJ4AX&quot;,
+    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:36:45&quot;,
     &quot;bookedBy&quot;: &quot;Mohammed Saad&quot;,
     &quot;ota&quot;: &quot;Direct Booking&quot;,
     &quot;otaRefId&quot;: &quot;1&quot;,
@@ -835,8 +834,8 @@
   },
   &quot;BookingDetails&quot;: {
     &quot;hotelId&quot;: &quot;1303&quot;,
-    &quot;bookingNo&quot;: &quot;ARKSAADLP6U3G&quot;,
-    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:27:12&quot;,
+    &quot;bookingNo&quot;: &quot;ARKSAADLPJ59Z&quot;,
+    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:36:46&quot;,
     &quot;bookedBy&quot;: &quot;Mohammed Saad&quot;,
     &quot;ota&quot;: &quot;Direct Booking&quot;,
     &quot;otaRefId&quot;: &quot;1&quot;,
@@ -915,8 +914,8 @@
   },
   &quot;BookingDetails&quot;: {
     &quot;hotelId&quot;: &quot;1303&quot;,
-    &quot;bookingNo&quot;: &quot;ARKSAADLP6V5X&quot;,
-    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:27:13&quot;,
+    &quot;bookingNo&quot;: &quot;ARKSAADLPJ67J&quot;,
+    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:36:47&quot;,
     &quot;bookedBy&quot;: &quot;Mohammed Saad&quot;,
     &quot;ota&quot;: &quot;Direct Booking&quot;,
     &quot;otaRefId&quot;: &quot;1&quot;,
@@ -995,8 +994,8 @@
   },
   &quot;BookingDetails&quot;: {
     &quot;hotelId&quot;: &quot;1303&quot;,
-    &quot;bookingNo&quot;: &quot;ARKSAADLP6VUC&quot;,
-    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:27:14&quot;,
+    &quot;bookingNo&quot;: &quot;ARKSAADLPJ74Y&quot;,
+    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:36:48&quot;,
     &quot;bookedBy&quot;: &quot;Mohammed Saad&quot;,
     &quot;ota&quot;: &quot;Direct Booking&quot;,
     &quot;otaRefId&quot;: &quot;1&quot;,
@@ -1041,12 +1040,12 @@
       <summary>
         <span class="case-id">C01</span>
         <span class="case-title">Duplicate create (idempotent)</span>
-        <span class="badge b-blocked">Blocked</span>
+        <span class="badge b-pass">Pass</span>
       </summary>
-      <p class="case-meta">Same bookingNo ARKSAADLP6LFV again - expect 200 idempotent when create succeeded.</p>
+      <p class="case-meta">Same bookingNo ARKSAADLPIV62 again - expect 200 idempotent when create succeeded.</p>
       <p class="case-meta"><strong>IDs:</strong> hotel <code>1303</code> | room <code>1</code> | rate <code>1</code> | noOfRooms <code>1</code> | status <code>confirmed</code></p>
-      <p class="case-meta"><strong>Expect:</strong> HTTP 200 | success (idempotent) | <strong>Got:</strong> HTTP 422 - Authorization Failed.Invalid accessKey</p>
-      <p class="case-meta muted">A01 did not Pass - duplicate replay HTTP 422: Authorization Failed.Invalid accessKey</p>
+      <p class="case-meta"><strong>Expect:</strong> HTTP 200 | success (idempotent) | <strong>Got:</strong> HTTP 200 - Booking Update Received</p>
+      <p class="case-meta muted">Matched expected HTTP + body</p>
       <div class="panels">
         <div class="panel">
           <div class="panel-h">Request sent</div>
@@ -1075,8 +1074,8 @@
   },
   &quot;BookingDetails&quot;: {
     &quot;hotelId&quot;: &quot;1303&quot;,
-    &quot;bookingNo&quot;: &quot;ARKSAADLP6LFV&quot;,
-    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:27:15&quot;,
+    &quot;bookingNo&quot;: &quot;ARKSAADLPIV62&quot;,
+    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:36:49&quot;,
     &quot;bookedBy&quot;: &quot;Mohammed Saad&quot;,
     &quot;ota&quot;: &quot;Direct Booking&quot;,
     &quot;otaRefId&quot;: &quot;1&quot;,
@@ -1110,8 +1109,8 @@
         <div class="panel">
           <div class="panel-h">Response received</div>
           <pre>{
-  &quot;status&quot;: &quot;failure&quot;,
-  &quot;message&quot;: &quot;Authorization Failed.Invalid accessKey&quot;
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;message&quot;: &quot;Booking Update Received&quot;
 }</pre>
         </div>
       </div>
@@ -1121,12 +1120,12 @@
       <summary>
         <span class="case-id">C02</span>
         <span class="case-title">Modify dates</span>
-        <span class="badge b-blocked">Blocked</span>
+        <span class="badge b-pass">Pass</span>
       </summary>
       <p class="case-meta">bookingStatus modified + new dates. Requires successful create (no API 5).</p>
       <p class="case-meta"><strong>IDs:</strong> hotel <code>1303</code> | room <code>1</code> | rate <code>1</code> | noOfRooms <code>1</code> | status <code>modified</code></p>
-      <p class="case-meta"><strong>Expect:</strong> HTTP 200 | success | <strong>Got:</strong> HTTP 422 - Authorization Failed.Invalid accessKey</p>
-      <p class="case-meta muted">Modify failed (HTTP 422): Authorization Failed.Invalid accessKey</p>
+      <p class="case-meta"><strong>Expect:</strong> HTTP 200 | success | <strong>Got:</strong> HTTP 200 - Booking Update Received</p>
+      <p class="case-meta muted">Matched expected HTTP + body</p>
       <div class="panels">
         <div class="panel">
           <div class="panel-h">Request sent</div>
@@ -1155,8 +1154,8 @@
   },
   &quot;BookingDetails&quot;: {
     &quot;hotelId&quot;: &quot;1303&quot;,
-    &quot;bookingNo&quot;: &quot;ARKSAADLP6LFV&quot;,
-    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:27:16&quot;,
+    &quot;bookingNo&quot;: &quot;ARKSAADLPIV62&quot;,
+    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:36:51&quot;,
     &quot;bookedBy&quot;: &quot;Mohammed Saad&quot;,
     &quot;ota&quot;: &quot;Direct Booking&quot;,
     &quot;otaRefId&quot;: &quot;1&quot;,
@@ -1190,8 +1189,8 @@
         <div class="panel">
           <div class="panel-h">Response received</div>
           <pre>{
-  &quot;status&quot;: &quot;failure&quot;,
-  &quot;message&quot;: &quot;Authorization Failed.Invalid accessKey&quot;
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;message&quot;: &quot;Booking Update Received&quot;
 }</pre>
         </div>
       </div>
@@ -1206,7 +1205,7 @@
       <p class="case-meta">bookingStatus cancelled - expect release locks + API 2 open.</p>
       <p class="case-meta"><strong>IDs:</strong> hotel <code>1303</code> | room <code>1</code> | rate <code>1</code> | noOfRooms <code>1</code> | status <code>cancelled</code></p>
       <p class="case-meta"><strong>Expect:</strong> HTTP 200 | success | <strong>Got:</strong> HTTP 200 - Booking Update Received</p>
-      <p class="case-meta muted">HTTP 200 on cancel. Note: A01 create did not Pass - not full create-&gt;cancel lifecycle proof.</p>
+      <p class="case-meta muted">Matched expected HTTP + body</p>
       <div class="panels">
         <div class="panel">
           <div class="panel-h">Request sent</div>
@@ -1235,8 +1234,8 @@
   },
   &quot;BookingDetails&quot;: {
     &quot;hotelId&quot;: &quot;1303&quot;,
-    &quot;bookingNo&quot;: &quot;ARKSAADLP6LFV&quot;,
-    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:27:18&quot;,
+    &quot;bookingNo&quot;: &quot;ARKSAADLPIV62&quot;,
+    &quot;bookingDateTime&quot;: &quot;2026-07-15 06:36:56&quot;,
     &quot;bookedBy&quot;: &quot;Mohammed Saad&quot;,
     &quot;ota&quot;: &quot;Direct Booking&quot;,
     &quot;otaRefId&quot;: &quot;1&quot;,
