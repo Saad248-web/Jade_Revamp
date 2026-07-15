@@ -12,7 +12,7 @@ export async function acquireNightLocks(params: {
   villaId: Types.ObjectId;
   bookingId: Types.ObjectId;
   dates: string[];
-  session?: ClientSession;
+  session?: ClientSession | null;
 }): Promise<{ ok: true } | { ok: false; conflictDate: string }> {
   const { VillaNightlockModel } = await import("@/models/VillaNightlock");
 
@@ -26,7 +26,7 @@ export async function acquireNightLocks(params: {
             bookingId: params.bookingId,
           },
         ],
-        params.session ? { session: params.session } : undefined,
+        params.session != null ? { session: params.session } : undefined,
       );
     } catch (e: unknown) {
       const err = e as { code?: number };
@@ -41,12 +41,12 @@ export async function acquireNightLocks(params: {
 
 export async function releaseNightLocks(
   bookingId: Types.ObjectId,
-  session?: ClientSession,
+  session?: ClientSession | null,
 ): Promise<void> {
   const { VillaNightlockModel } = await import("@/models/VillaNightlock");
   await VillaNightlockModel.deleteMany(
     { bookingId },
-    session ? { session } : undefined,
+    session != null ? { session } : undefined,
   );
 }
 
@@ -55,7 +55,7 @@ export async function releaseNightLocks(
  * Standalone Mongo (typical VPS) falls back to no session so API 9 can still save.
  */
 export async function withTransaction<T>(
-  fn: (session: ClientSession | undefined) => Promise<T>,
+  fn: (session: ClientSession | null) => Promise<T>,
 ): Promise<T> {
   await connectDB();
   const session = await mongoose.startSession();
@@ -74,7 +74,8 @@ export async function withTransaction<T>(
 
   if (!useTxn) {
     try {
-      return await fn(undefined);
+      // null is valid for Query.session(); undefined is not
+      return await fn(null);
     } finally {
       session.endSession();
     }
@@ -92,7 +93,7 @@ export async function withTransaction<T>(
     }
     // Race: startTransaction accepted but later op rejects standalone
     if (isTxnUnsupportedError(e)) {
-      return fn(undefined);
+      return fn(null);
     }
     throw e;
   } finally {
