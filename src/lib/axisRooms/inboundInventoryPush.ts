@@ -1,5 +1,8 @@
-import { addDays, expandNightDates } from "@/lib/bookingDates";
-import { pushBulkInventoryForRange } from "./inventory";
+import { expandNightDates } from "@/lib/bookingDates";
+import {
+  pushBulkInventoryForRange,
+  pushInventoryForRange,
+} from "./inventory";
 import type { AxisRoomsPushResult } from "./types";
 
 export type InboundInventoryPushParams = {
@@ -20,22 +23,44 @@ export function stayEndDate(checkIn: string, checkOut: string): string {
   return nights[nights.length - 1]!;
 }
 
-/** API 2 — push bulk inventory ack back to Axis after API 9 inbound (per Axis CM request). */
+/**
+ * After API 9 save: push inventory back to Axis.
+ * - API 2 bulk range (primary CM ack)
+ * - API 1 daywise for the same nights (calendar-visible free:0/1)
+ *
+ * Example create checkIn 2026-07-21 / checkOut 2026-07-24
+ * → closes nights 2026-07-21, 2026-07-22, 2026-07-23 (checkout day free).
+ */
 export async function pushInboundInventoryAck(
   params: InboundInventoryPushParams,
 ): Promise<AxisRoomsPushResult> {
   const endDate = stayEndDate(params.checkIn, params.checkOut);
   const availability = params.mode === "close" ? 0 : 1;
+  const free: 0 | 1 = availability === 0 ? 0 : 1;
+  const audit = {
+    auditTargetId: params.bookingId ?? params.bookingNo,
+    auditTargetType: "axisrooms_inbound",
+  };
 
-  return pushBulkInventoryForRange({
+  const bulk = await pushBulkInventoryForRange({
     hotelId: params.hotelId,
     roomId: params.roomId,
     startDate: params.checkIn,
     endDate,
     availability,
-    auditTargetId: params.bookingId ?? params.bookingNo,
-    auditTargetType: "axisrooms_inbound",
+    ...audit,
   });
+  if (!bulk.ok) return bulk;
+
+  const daywise = await pushInventoryForRange({
+    hotelId: params.hotelId,
+    roomId: params.roomId,
+    checkIn: params.checkIn,
+    checkOut: params.checkOut,
+    free,
+    ...audit,
+  });
+  return daywise;
 }
 
 /** Modify: API 2 open old stay range, then close new stay range. */
@@ -97,4 +122,4 @@ export function formatApi2Range(checkIn: string, checkOut: string): string {
   return end === checkIn ? checkIn : `${checkIn} → ${end}`;
 }
 
-export { addDays };
+export { addDays } from "@/lib/bookingDates";

@@ -2,9 +2,10 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 
 vi.mock("./inventory", () => ({
   pushBulkInventoryForRange: vi.fn(),
+  pushInventoryForRange: vi.fn(),
 }));
 
-import { pushBulkInventoryForRange } from "./inventory";
+import { pushBulkInventoryForRange, pushInventoryForRange } from "./inventory";
 import {
   pushInboundInventoryAck,
   pushInboundInventoryModify,
@@ -16,31 +17,43 @@ describe("inboundInventoryPush", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(pushBulkInventoryForRange).mockResolvedValue({ ok: true });
+    vi.mocked(pushInventoryForRange).mockResolvedValue({ ok: true });
   });
 
   it("stayEndDate uses check-out exclusive nights", () => {
     expect(stayEndDate("2026-08-15", "2026-08-17")).toBe("2026-08-16");
     expect(stayEndDate("2026-08-15", "2026-08-16")).toBe("2026-08-15");
+    // checkIn 21, checkOut 24 → last night 23
+    expect(stayEndDate("2026-07-21", "2026-07-24")).toBe("2026-07-23");
   });
 
-  it("pushInboundInventoryAck closes with availability 0", async () => {
+  it("pushInboundInventoryAck closes via API 2 then API 1", async () => {
     await pushInboundInventoryAck({
-      hotelId: "12123",
-      roomId: "2",
-      checkIn: "2026-08-15",
-      checkOut: "2026-08-17",
+      hotelId: "1303",
+      roomId: "1",
+      checkIn: "2026-07-21",
+      checkOut: "2026-07-24",
       bookingNo: "ARK001",
       mode: "close",
     });
 
     expect(pushBulkInventoryForRange).toHaveBeenCalledWith(
       expect.objectContaining({
-        hotelId: "12123",
-        roomId: "2",
-        startDate: "2026-08-15",
-        endDate: "2026-08-16",
+        hotelId: "1303",
+        roomId: "1",
+        startDate: "2026-07-21",
+        endDate: "2026-07-23",
         availability: 0,
         auditTargetType: "axisrooms_inbound",
+      }),
+    );
+    expect(pushInventoryForRange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        hotelId: "1303",
+        roomId: "1",
+        checkIn: "2026-07-21",
+        checkOut: "2026-07-24",
+        free: 0,
       }),
     );
   });
@@ -58,6 +71,9 @@ describe("inboundInventoryPush", () => {
     expect(pushBulkInventoryForRange).toHaveBeenCalledWith(
       expect.objectContaining({ availability: 1 }),
     );
+    expect(pushInventoryForRange).toHaveBeenCalledWith(
+      expect.objectContaining({ free: 1 }),
+    );
   });
 
   it("pushInboundInventoryModify opens old then closes new", async () => {
@@ -71,7 +87,9 @@ describe("inboundInventoryPush", () => {
       newCheckOut: "2026-08-22",
     });
 
+    // open = API2+API1, close = API2+API1 → 2 bulk + 2 daywise
     expect(pushBulkInventoryForRange).toHaveBeenCalledTimes(2);
+    expect(pushInventoryForRange).toHaveBeenCalledTimes(2);
     expect(pushBulkInventoryForRange).toHaveBeenNthCalledWith(
       1,
       expect.objectContaining({
