@@ -1,8 +1,6 @@
 import { connectDB } from "@/lib/db";
 import { VillaModel } from "@/models/Villa";
 import { villaAxisRoomsMapping } from "./mapBooking";
-import { fetchOtaAvailability } from "./verify";
-import { isAxisRoomsConfigured } from "./config";
 import type { AxisRoomsInboundEvent } from "./types";
 import type { Types } from "mongoose";
 
@@ -152,54 +150,4 @@ export async function validateAxisRoomsInbound(
       ratePlanId: effectiveRatePlanId,
     },
   };
-}
-
-function inboundAxisVerifyEnabled(): boolean {
-  if (process.env.AXIS_ROOMS_INBOUND_VERIFY_AXIS === "false") return false;
-  return isAxisRoomsConfigured();
-}
-
-function parseOtaId(parsed: AxisRoomsInboundEvent): number {
-  const raw = parsed.otaRefId?.trim();
-  const n = Number(raw);
-  if (Number.isFinite(n) && n > 0) return n;
-  return 1;
-}
-
-/** API 5 — confirm hotel/room exist on Axis before accepting create/modify. */
-export async function verifyInboundWithAxis(
-  parsed: AxisRoomsInboundEvent,
-  mapping: InboundValidationSuccess["mapping"],
-): Promise<{ ok: boolean; error?: string }> {
-  if (!inboundAxisVerifyEnabled()) return { ok: true };
-  if (!parsed.checkIn || !parsed.checkOut) {
-    return { ok: false, error: "Missing dates for Axis verify" };
-  }
-
-  const otaId = parseOtaId(parsed);
-  const endDate = parsed.checkOut;
-
-  const avail = await fetchOtaAvailability({
-    otaId,
-    hotelId: mapping.propertyId,
-    roomId: mapping.roomTypeId,
-    startDate: parsed.checkIn,
-    endDate,
-  });
-
-  if (!avail.ok) {
-    return {
-      ok: false,
-      error: avail.error ?? "Axis Rooms rejected hotelId/roomId",
-    };
-  }
-
-  if (parsed.eventType === "create" && avail.days.length === 0) {
-    return {
-      ok: false,
-      error: "Axis Rooms returned no availability for hotelId/roomId/date range",
-    };
-  }
-
-  return { ok: true };
 }

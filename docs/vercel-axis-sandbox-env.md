@@ -8,7 +8,10 @@ Set these on **Vercel → Project → Settings → Environment Variables → Pro
 | `AXIS_ROOMS_CHANNEL_ID` | `227` |
 | `AXIS_ROOMS_API_BASE_URL` | `https://sandbox2.axisrooms.com` |
 | `AXIS_ROOMS_PMS_NAME` | `Jade Host PMS` |
-| `AXIS_ROOMS_INBOUND_VERIFY_AXIS` | `true` | API 5 verify on inbound API 9 (set `false` only if sandbox key not active) |
+
+**Do not use API 5 on inbound.** Jade webhook path: API 9 auth + local hotel/room validation → save → API 2 inventory ack. Allowed CM APIs: **1, 2, 6, 7, 9**.
+
+Remove obsolete `AXIS_ROOMS_INBOUND_VERIFY_AXIS` from Vercel if present (no longer read).
 
 ## CLI (after `npx vercel login`)
 
@@ -32,7 +35,7 @@ Property CSV: `docs/jade-axisrooms-properties.csv`
 ## Smoke tests
 
 ```bash
-npm run axis:test                    # outbound API 1/2/6/7 (401 until Axis activates key)
-npm run axis:inbound-test            # API 9 valid payload (local dev)
+npm run axis:test                    # outbound API 1/2/6/7
+npm run axis:uat-report              # full API 9 matrix + HTML report
 WEBHOOK_BASE_URL=https://jade-revamp.vercel.app npm run axis:inbound-test -- --hotel=1303
 ```

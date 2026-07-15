@@ -124,9 +124,9 @@ Assigned alphabetically by villa name. Full CSV: `docs/jade-axisrooms-properties
 | 8 | hotelId + roomId match registered villa | 422 |
 | 9 | ratePlanId matches villa mapping | 422 |
 | 10 | Villa `channel_managed` | 422 |
-| 11 | API 5 verify *(optional; disabled via `AXIS_ROOMS_INBOUND_VERIFY_AXIS=false` until key active)* | 422 |
-| 12 | Duplicate event | 200 idempotent |
-| 13 | Save booking + API 2 | 200 |
+| 11 | Duplicate event | 200 idempotent |
+| 12 | Save booking + API 2 inventory ack | 200 |
+| — | API 5 not used on inbound (Axis sandbox inactive; Rohit: use 1/2/6/7/9 only) | — |
 
 ---
 
@@ -150,7 +150,7 @@ Assigned alphabetically by villa name. Full CSV: `docs/jade-axisrooms-properties
 |---|------|--------|
 | 1 | `npm run axis:seed-all` on VPS MongoDB (`200.97.161.24`) | 16 villas mapped 1301–1316 |
 | 2 | `npm run axis:export-csv` | `docs/jade-axisrooms-properties.csv` |
-| 3 | API 9 valid `hotelId 1303` on Vercel | 422 — API 5 verify fails (`Invalid accessKey`) until `AXIS_ROOMS_INBOUND_VERIFY_AXIS=false` on Vercel |
+| 3 | API 9 valid `hotelId 1303` on Vercel | Was 422 via API 5 verify; **API 5 removed** — redeploy then expect 200 |
 | 4 | API 9 `hotelId 9999` on Vercel | 422 — `Unknown hotelId/roomId` ✓ |
 | 5 | API 9 invalid `noOfRooms: 5` on Vercel | 422 ✓ |
 | 6 | `npm run axis:test` (hotelId 1303) | 401 on API 1/2/6/7 — Axis must activate sandbox key |
@@ -194,6 +194,9 @@ Assigned alphabetically by villa name. Full CSV: `docs/jade-axisrooms-properties
 ## Commands
 
 ```bash
+# Full UAT matrix → Overall-Axis-API-Integration-Testing.html (send to Rohit)
+WEBHOOK_BASE_URL=https://jade-revamp.vercel.app npm run axis:uat-report
+
 # Seed all villas (use VPS MONGODB_URI for production — see docs/vercel-axis-sandbox-env.md)
 npm run axis:seed-all
 npm run axis:export-csv
@@ -201,6 +204,8 @@ npm run axis:inbound-test -- --hotel=1303 --room=1 --rate=1
 npm run axis:inbound-test -- --bad-hotel=9999
 npm run axis:test
 ```
+
+**Overall report (Rohit-ready):** [`Overall-Axis-API-Integration-Testing.html`](../Overall-Axis-API-Integration-Testing.html) — Root Cause Summary (Rohit 1313/2 vs API 5 removed from inbound), Phase A correct IDs → Phase B invalid IDs (distinct 422/401) → Phase C lifecycle → Phase D outbound 1/2/6/7. Regenerate: `WEBHOOK_BASE_URL=https://jade-revamp.vercel.app npm run axis:uat-report`.
 
 ---
 

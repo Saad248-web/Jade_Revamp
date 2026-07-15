@@ -15,8 +15,10 @@ $vars = @{
   AXIS_TEST_HOTEL_ID       = "1303"
   AXIS_TEST_ROOM_ID        = "1"
   AXIS_TEST_RATE_PLAN_ID   = "1"
-  AXIS_ROOMS_INBOUND_VERIFY_AXIS = "true"
 }
+
+# Obsolete: AXIS_ROOMS_INBOUND_VERIFY_AXIS — API 5 no longer used on inbound webhook
+
 
 foreach ($key in $vars.Keys) {
   $val = $vars[$key]

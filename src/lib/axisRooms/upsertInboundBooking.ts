@@ -225,7 +225,7 @@ export async function upsertAxisRoomsInbound(
     try {
       await withTransaction(async (session) => {
         const now = new Date();
-        const overlaps = await BookingModel.find({
+        const overlapQ = BookingModel.find({
           villaId: villa._id,
           _id: { $ne: existing._id },
           isDeleted: false,
@@ -237,7 +237,10 @@ export async function upsertAxisRoomsInbound(
           ],
           checkIn: { $lt: parsed.checkOut },
           checkOut: { $gt: parsed.checkIn },
-        }).session(session);
+        });
+        const overlaps = session
+          ? await overlapQ.session(session)
+          : await overlapQ;
 
         for (const b of overlaps) {
           if (
@@ -269,7 +272,7 @@ export async function upsertAxisRoomsInbound(
           email: parsed.guestEmail ?? existing.guestDetails?.email ?? "",
           phone: parsed.guestPhone ?? existing.guestDetails?.phone ?? "",
         };
-        await existing.save({ session });
+        await existing.save(session ? { session } : undefined);
 
         await auditLog({
           action: "booking.update",
@@ -339,7 +342,7 @@ export async function upsertAxisRoomsInbound(
   try {
     const result = await withTransaction(async (session) => {
       const now = new Date();
-      const overlaps = await BookingModel.find({
+      const overlapQ = BookingModel.find({
         villaId: villa._id,
         isDeleted: false,
         $or: [
@@ -350,7 +353,8 @@ export async function upsertAxisRoomsInbound(
         ],
         checkIn: { $lt: parsed.checkOut },
         checkOut: { $gt: parsed.checkIn },
-      }).session(session);
+      });
+      const overlaps = session ? await overlapQ.session(session) : await overlapQ;
 
       const hasDirectConflict = overlaps.some(
         (b) =>
@@ -361,48 +365,47 @@ export async function upsertAxisRoomsInbound(
       const taxPaise = parsed.taxPaise ?? 0;
       const basePaise = Math.max(0, totalPaise - taxPaise);
 
-      const [doc] = await BookingModel.create(
-        [
-          {
-            villaId: villa._id,
-            bookingType: "stay",
-            guestDetails: {
-              name: parsed.guestName ?? "OTA Guest",
-              email: parsed.guestEmail ?? "",
-              phone: parsed.guestPhone ?? "",
-            },
-            checkIn: parsed.checkIn,
-            checkOut: parsed.checkOut,
-            guests: parsed.totalPax ?? 1,
-            adults: parsed.totalPax ?? 1,
-            children: parsed.children ?? 0,
-            pricing: {
-              basePaise,
-              extraPaxPaise: 0,
-              eventPaise: 0,
-              addOnPaise: 0,
-              taxPaise,
-              totalPaise: totalPaise || basePaise + taxPaise,
-            },
-            payment: {
-              gateway: "external",
-              paymentPlan: "full",
-              amountDuePaise: totalPaise,
-              depositPaise: 0,
-              depositPaidPaise: 0,
-              balancePaise: 0,
-              status: "external",
-            },
-            bookingToken: `axis_${bookingNo.replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 40)}_${Date.now().toString(36)}`,
-            status: hasDirectConflict ? "conflict" : "confirmed",
-            source: sourceFromChannel(parsed.channel),
-            axisRoomsReservationId: bookingNo,
-            axisRoomsSynced: true,
-            axisRoomsCancelSynced: true,
-          },
-        ],
-        { session },
-      );
+      const bookingDoc = {
+        villaId: villa._id,
+        bookingType: "stay" as const,
+        guestDetails: {
+          name: parsed.guestName ?? "OTA Guest",
+          email: parsed.guestEmail ?? "",
+          phone: parsed.guestPhone ?? "",
+        },
+        checkIn: parsed.checkIn,
+        checkOut: parsed.checkOut,
+        guests: parsed.totalPax ?? 1,
+        adults: parsed.totalPax ?? 1,
+        children: parsed.children ?? 0,
+        pricing: {
+          basePaise,
+          extraPaxPaise: 0,
+          eventPaise: 0,
+          addOnPaise: 0,
+          taxPaise,
+          totalPaise: totalPaise || basePaise + taxPaise,
+        },
+        payment: {
+          gateway: "external" as const,
+          paymentPlan: "full" as const,
+          amountDuePaise: totalPaise,
+          depositPaise: 0,
+          depositPaidPaise: 0,
+          balancePaise: 0,
+          status: "external" as const,
+        },
+        bookingToken: `axis_${bookingNo.replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 40)}_${Date.now().toString(36)}`,
+        status: hasDirectConflict ? ("conflict" as const) : ("confirmed" as const),
+        source: sourceFromChannel(parsed.channel),
+        axisRoomsReservationId: bookingNo,
+        axisRoomsSynced: true,
+        axisRoomsCancelSynced: true,
+      };
+      const created = session
+        ? await BookingModel.create([bookingDoc], { session })
+        : await BookingModel.create([bookingDoc]);
+      const doc = created[0]!;
 
       if (!hasDirectConflict) {
         const lock = await acquireNightLocks({
@@ -413,7 +416,7 @@ export async function upsertAxisRoomsInbound(
         });
         if (!lock.ok) {
           doc.status = "conflict";
-          await doc.save({ session });
+          await doc.save(session ? { session } : undefined);
           return { ok: true, bookingId: String(doc._id), conflict: true };
         }
       }

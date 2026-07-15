@@ -4,10 +4,7 @@ import {
   validateAxisRoomsAccessKey,
 } from "@/lib/axisRooms/parseInbound";
 import { upsertAxisRoomsInbound } from "@/lib/axisRooms/upsertInboundBooking";
-import {
-  validateAxisRoomsInbound,
-  verifyInboundWithAxis,
-} from "@/lib/axisRooms/validateInbound";
+import { validateAxisRoomsInbound } from "@/lib/axisRooms/validateInbound";
 import { logAxisRoomsInbound } from "@/lib/axisRooms/inboundLogger";
 
 export const dynamic = "force-dynamic";
@@ -106,32 +103,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (parsed.eventType !== "cancel") {
-      const axisVerify = await verifyInboundWithAxis(parsed, validation.mapping);
-      if (!axisVerify.ok) {
-        await logAxisRoomsInbound({
-          phase: "rejected",
-          bookingNo: parsed.bookingNo,
-          eventType: parsed.eventType,
-          ok: false,
-          error: axisVerify.error,
-          httpStatus: 422,
-          metadata: { code: "AXIS_VERIFY_FAILED" },
-        });
-        return NextResponse.json(
-          failureBody(axisVerify.error ?? "Axis Rooms verification failed"),
-          { status: 422 },
-        );
-      }
-
-      await logAxisRoomsInbound({
-        phase: "axis_verified",
-        bookingNo: parsed.bookingNo,
-        eventType: parsed.eventType,
-        ok: true,
-      });
-    }
-
+    // API 5 (otaAvailability) is not used — Axis sandbox does not activate it.
+    // Allowed stack: API 9 inbound → local validation → save → API 2 inventory ack.
     const result = await upsertAxisRoomsInbound(parsed, validation);
 
     if (result.duplicate) {

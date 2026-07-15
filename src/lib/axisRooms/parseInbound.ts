@@ -1,7 +1,15 @@
 import type { AxisRoomsInboundEvent } from "./types";
 
+/** Coerce Axis JSON string|number IDs to trimmed strings (reject "NA"/empty). */
 function asString(v: unknown): string | undefined {
-  if (typeof v === "string" && v.trim() && v !== "NA") return v.trim();
+  if (typeof v === "string") {
+    const t = v.trim();
+    if (!t || t === "NA") return undefined;
+    return t;
+  }
+  if (typeof v === "number" && Number.isFinite(v)) {
+    return String(v);
+  }
   return undefined;
 }
 
