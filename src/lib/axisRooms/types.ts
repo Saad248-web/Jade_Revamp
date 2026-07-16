@@ -16,6 +16,8 @@ export type AxisRoomsPushResult = {
     startDate?: string;
     endDate?: string;
     availability?: number;
+    /** Occupied nights pushed (check-out exclusive) */
+    nights?: string[];
   };
 };
 

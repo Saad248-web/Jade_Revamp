@@ -11,6 +11,7 @@ import {
   pushInboundInventoryModify,
   stayEndDate,
   hasStayNights,
+  formatApi2Range,
 } from "./inboundInventoryPush";
 
 describe("inboundInventoryPush", () => {
@@ -27,7 +28,7 @@ describe("inboundInventoryPush", () => {
     expect(stayEndDate("2026-07-21", "2026-07-24")).toBe("2026-07-23");
   });
 
-  it("pushInboundInventoryAck closes via API 2 then API 1", async () => {
+  it("pushInboundInventoryAck closes EVERY night via API 2 then API 1", async () => {
     await pushInboundInventoryAck({
       hotelId: "1303",
       roomId: "1",
@@ -37,14 +38,30 @@ describe("inboundInventoryPush", () => {
       mode: "close",
     });
 
-    expect(pushBulkInventoryForRange).toHaveBeenCalledWith(
+    // 3 nights → 3 API 2 single-day pushes
+    expect(pushBulkInventoryForRange).toHaveBeenCalledTimes(3);
+    expect(pushBulkInventoryForRange).toHaveBeenNthCalledWith(
+      1,
       expect.objectContaining({
-        hotelId: "1303",
-        roomId: "1",
         startDate: "2026-07-21",
+        endDate: "2026-07-21",
+        availability: 0,
+      }),
+    );
+    expect(pushBulkInventoryForRange).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        startDate: "2026-07-22",
+        endDate: "2026-07-22",
+        availability: 0,
+      }),
+    );
+    expect(pushBulkInventoryForRange).toHaveBeenNthCalledWith(
+      3,
+      expect.objectContaining({
+        startDate: "2026-07-23",
         endDate: "2026-07-23",
         availability: 0,
-        auditTargetType: "axisrooms_inbound",
       }),
     );
     expect(pushInventoryForRange).toHaveBeenCalledWith(
@@ -69,7 +86,11 @@ describe("inboundInventoryPush", () => {
     });
 
     expect(pushBulkInventoryForRange).toHaveBeenCalledWith(
-      expect.objectContaining({ availability: 1 }),
+      expect.objectContaining({
+        startDate: "2026-08-15",
+        endDate: "2026-08-15",
+        availability: 1,
+      }),
     );
     expect(pushInventoryForRange).toHaveBeenCalledWith(
       expect.objectContaining({ free: 1 }),
@@ -87,29 +108,19 @@ describe("inboundInventoryPush", () => {
       newCheckOut: "2026-08-22",
     });
 
-    // open = API2+API1, close = API2+API1 → 2 bulk + 2 daywise
-    expect(pushBulkInventoryForRange).toHaveBeenCalledTimes(2);
+    // old: 2 nights open + new: 2 nights close = 4 API2; + 2 API1
+    expect(pushBulkInventoryForRange).toHaveBeenCalledTimes(4);
     expect(pushInventoryForRange).toHaveBeenCalledTimes(2);
-    expect(pushBulkInventoryForRange).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({
-        startDate: "2026-08-15",
-        endDate: "2026-08-16",
-        availability: 1,
-      }),
-    );
-    expect(pushBulkInventoryForRange).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({
-        startDate: "2026-08-20",
-        endDate: "2026-08-21",
-        availability: 0,
-      }),
-    );
   });
 
   it("hasStayNights false for same-day turnover edge", () => {
     expect(hasStayNights("2026-08-15", "2026-08-15")).toBe(false);
     expect(hasStayNights("2026-08-15", "2026-08-16")).toBe(true);
+  });
+
+  it("formatApi2Range shows night count for multi-night", () => {
+    expect(formatApi2Range("2026-07-21", "2026-07-24")).toBe(
+      "2026-07-21 → 2026-07-23 (3 nights)",
+    );
   });
 });

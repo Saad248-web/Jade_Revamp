@@ -19,7 +19,7 @@ export type StayInventoryPushParams = {
   auditTargetType?: string;
 };
 
-/** Last stay night for API 2 bulk range (check-out exclusive). */
+/** Last occupied night (check-out exclusive). */
 export function stayEndDate(checkIn: string, checkOut: string): string {
   const nights = expandNightDates(checkIn, checkOut);
   if (nights.length === 0) return checkIn;
@@ -27,15 +27,21 @@ export function stayEndDate(checkIn: string, checkOut: string): string {
 }
 
 /**
- * Canonical inventory push used after any validated booking save
+ * Canonical inventory push after any validated booking save
  * (API 9 OTA, website, or staff). Always:
- * 1) API 2 bulk `/api/inventory`
- * 2) API 1 daywise `/api/daywiseInventory`
+ * 1) API 2 bulk `/api/inventory` — one call per stay night (startDate=endDate)
+ *    so multi-night stays close/open every night (not just check-in day)
+ * 2) API 1 daywise `/api/daywiseInventory` — full night list again for precision
  */
 export async function pushStayInventoryToAxis(
   params: StayInventoryPushParams,
 ): Promise<AxisRoomsPushResult> {
-  const endDate = stayEndDate(params.checkIn, params.checkOut);
+  const nights = expandNightDates(params.checkIn, params.checkOut);
+  if (nights.length === 0) {
+    return { ok: true };
+  }
+
+  const endDate = nights[nights.length - 1]!;
   const availability = params.mode === "close" ? 0 : 1;
   const free: 0 | 1 = availability === 0 ? 0 : 1;
   const auditTargetId = params.bookingId ?? params.bookingNo;
@@ -47,41 +53,47 @@ export async function pushStayInventoryToAxis(
     roomId: params.roomId,
     checkIn: params.checkIn,
     checkOut: params.checkOut,
-    endDate,
+    nights,
+    nightCount: nights.length,
     bookingNo: params.bookingNo,
     bookingId: params.bookingId,
   });
 
-  const bulk = await pushBulkInventoryForRange({
-    hotelId: params.hotelId,
-    roomId: params.roomId,
-    startDate: params.checkIn,
-    endDate,
-    availability,
-    auditTargetId,
-    auditTargetType,
-  });
+  // API 2: per-night inclusive ranges (startDate === endDate).
+  // Bulk multi-day ranges were observed as single-day on Axis CM;
+  // night-by-night guarantees every occupied date is updated.
+  for (const night of nights) {
+    const bulk = await pushBulkInventoryForRange({
+      hotelId: params.hotelId,
+      roomId: params.roomId,
+      startDate: night,
+      endDate: night,
+      availability,
+      auditTargetId,
+      auditTargetType,
+    });
 
-  console.info("[axisrooms.inventory] API2 bulk result", {
-    ok: bulk.ok,
-    error: bulk.error,
-    hotelId: params.hotelId,
-    startDate: params.checkIn,
-    endDate,
-    availability,
-  });
+    console.info("[axisrooms.inventory] API2 night result", {
+      ok: bulk.ok,
+      error: bulk.error,
+      hotelId: params.hotelId,
+      date: night,
+      availability,
+    });
 
-  if (!bulk.ok) {
-    return {
-      ok: false,
-      error: bulk.error ?? "API 2 inventory push failed",
-      details: {
-        api2: { ok: false, message: bulk.error },
-        startDate: params.checkIn,
-        endDate,
-        availability,
-      },
-    };
+    if (!bulk.ok) {
+      return {
+        ok: false,
+        error: bulk.error ?? `API 2 inventory push failed for ${night}`,
+        details: {
+          api2: { ok: false, message: bulk.error },
+          startDate: params.checkIn,
+          endDate,
+          availability,
+          nights,
+        },
+      };
+    }
   }
 
   const daywise = await pushInventoryForRange({
@@ -100,6 +112,8 @@ export async function pushStayInventoryToAxis(
     hotelId: params.hotelId,
     checkIn: params.checkIn,
     checkOut: params.checkOut,
+    nights,
+    nightCount: nights.length,
     free,
   });
 
@@ -113,6 +127,7 @@ export async function pushStayInventoryToAxis(
         startDate: params.checkIn,
         endDate,
         availability,
+        nights,
       },
     };
   }
@@ -125,6 +140,7 @@ export async function pushStayInventoryToAxis(
       startDate: params.checkIn,
       endDate,
       availability,
+      nights,
     },
   };
 }
@@ -191,8 +207,10 @@ export function hasStayNights(checkIn: string, checkOut: string): boolean {
 }
 
 export function formatApi2Range(checkIn: string, checkOut: string): string {
-  const end = stayEndDate(checkIn, checkOut);
-  return end === checkIn ? checkIn : `${checkIn} → ${end}`;
+  const nights = expandNightDates(checkIn, checkOut);
+  if (nights.length === 0) return checkIn;
+  if (nights.length === 1) return nights[0]!;
+  return `${nights[0]} → ${nights[nights.length - 1]} (${nights.length} nights)`;
 }
 
 export { addDays } from "@/lib/bookingDates";

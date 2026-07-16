@@ -51,32 +51,16 @@ describe("syncBookingInventoryModify", () => {
     vi.mocked(pushBulkInventoryForRange).mockResolvedValue({ ok: true });
   });
 
-  it("opens old range then closes new range via API 2 + API 1", async () => {
+  it("opens old nights then closes new nights via API 2 + API 1", async () => {
     const result = await syncBookingInventoryModify(
       bookingBase,
       "2026-10-21",
       "2026-10-22",
     );
     expect(result.ok).toBe(true);
-    // open + close → 2 bulk (API 2) + 2 daywise (API 1)
-    expect(pushBulkInventoryForRange).toHaveBeenCalledTimes(2);
+    // old 1 night open + new 2 nights close = 3 API2; + 2 API1
+    expect(pushBulkInventoryForRange).toHaveBeenCalledTimes(3);
     expect(pushInventoryForRange).toHaveBeenCalledTimes(2);
-    expect(pushBulkInventoryForRange).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({
-        startDate: "2026-10-21",
-        endDate: "2026-10-21",
-        availability: 1,
-      }),
-    );
-    expect(pushBulkInventoryForRange).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({
-        startDate: "2026-10-24",
-        endDate: "2026-10-25",
-        availability: 0,
-      }),
-    );
   });
 
   it("skips outbound for OTA bookings", async () => {

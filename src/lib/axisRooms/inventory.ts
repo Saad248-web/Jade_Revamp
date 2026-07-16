@@ -51,6 +51,7 @@ export async function pushInventoryForRange(
       hotelId: params.hotelId,
       roomId: params.roomId,
       nights: nights.length,
+      dates: nights,
       free: params.free,
       api: 1,
       ok: result.ok,
