@@ -29,9 +29,9 @@ export function stayEndDate(checkIn: string, checkOut: string): string {
 /**
  * Canonical inventory push after any validated booking save
  * (API 9 OTA, website, or staff). Always:
- * 1) API 2 bulk `/api/inventory` — one call per stay night (startDate=endDate)
- *    so multi-night stays close/open every night (not just check-in day)
- * 2) API 1 daywise `/api/daywiseInventory` — full night list again for precision
+ * 1) API 2 bulk `/api/inventory` — one date-range request per stay
+ *    (startDate = check-in, endDate = last occupied night, inclusive)
+ * 2) API 1 daywise `/api/daywiseInventory` — all nights in one request
  */
 export async function pushStayInventoryToAxis(
   params: StayInventoryPushParams,
@@ -53,47 +53,46 @@ export async function pushStayInventoryToAxis(
     roomId: params.roomId,
     checkIn: params.checkIn,
     checkOut: params.checkOut,
+    startDate: params.checkIn,
+    endDate,
     nights,
     nightCount: nights.length,
     bookingNo: params.bookingNo,
     bookingId: params.bookingId,
   });
 
-  // API 2: per-night inclusive ranges (startDate === endDate).
-  // Bulk multi-day ranges were observed as single-day on Axis CM;
-  // night-by-night guarantees every occupied date is updated.
-  for (const night of nights) {
-    const bulk = await pushBulkInventoryForRange({
-      hotelId: params.hotelId,
-      roomId: params.roomId,
-      startDate: night,
-      endDate: night,
-      availability,
-      auditTargetId,
-      auditTargetType,
-    });
+  const bulk = await pushBulkInventoryForRange({
+    hotelId: params.hotelId,
+    roomId: params.roomId,
+    startDate: params.checkIn,
+    endDate,
+    availability,
+    auditTargetId,
+    auditTargetType,
+  });
 
-    console.info("[axisrooms.inventory] API2 night result", {
-      ok: bulk.ok,
-      error: bulk.error,
-      hotelId: params.hotelId,
-      date: night,
-      availability,
-    });
+  console.info("[axisrooms.inventory] API2 bulk result", {
+    ok: bulk.ok,
+    error: bulk.error,
+    hotelId: params.hotelId,
+    startDate: params.checkIn,
+    endDate,
+    availability,
+    nightCount: nights.length,
+  });
 
-    if (!bulk.ok) {
-      return {
-        ok: false,
-        error: bulk.error ?? `API 2 inventory push failed for ${night}`,
-        details: {
-          api2: { ok: false, message: bulk.error },
-          startDate: params.checkIn,
-          endDate,
-          availability,
-          nights,
-        },
-      };
-    }
+  if (!bulk.ok) {
+    return {
+      ok: false,
+      error: bulk.error ?? "API 2 inventory push failed",
+      details: {
+        api2: { ok: false, message: bulk.error },
+        startDate: params.checkIn,
+        endDate,
+        availability,
+        nights,
+      },
+    };
   }
 
   const daywise = await pushInventoryForRange({

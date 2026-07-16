@@ -58,8 +58,8 @@ describe("syncBookingInventoryModify", () => {
       "2026-10-22",
     );
     expect(result.ok).toBe(true);
-    // old 1 night open + new 2 nights close = 3 API2; + 2 API1
-    expect(pushBulkInventoryForRange).toHaveBeenCalledTimes(3);
+    // old 1 night open + new 2 nights close = 2 API2; + 2 API1
+    expect(pushBulkInventoryForRange).toHaveBeenCalledTimes(2);
     expect(pushInventoryForRange).toHaveBeenCalledTimes(2);
   });
 
