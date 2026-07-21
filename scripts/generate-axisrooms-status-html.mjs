@@ -137,9 +137,12 @@ const html = `<!DOCTYPE html>
 <p class="meta">Generated ${generated} · Jade_ReVamp · Simplified overview (not a code audit)</p>
 
 <div class="callout">
-  <strong>Bottom line:</strong> Jade PMS is <strong>ready for daily operations</strong> without Axis Rooms (direct bookings, staff holds, calendar, folio, booking records).
-  Axis Rooms integration is <strong>built in code</strong> but <strong>not live</strong> until Axis provides credentials, property CSV onboarding, and registers your inbound webhook URL.
-  <strong>Dashboard villa saves</strong> (Quick Edit or Full Editor) already update the <strong>public website</strong> immediately; when Axis keys are configured, the same save also triggers <strong>API 6 daywise price push</strong> and <strong>API 15 restrictions</strong> for mapped properties.
+  <strong>Bottom line (as of ${generated}):</strong> Axis sandbox core path is <strong>live</strong>:
+  API 9 inbound → validate → save → <strong>API 2 (one date range)</strong> → <strong>API 1 (daywise)</strong>.
+  APIs 1/2/6/7 smoke-tested. <strong>API 5 is not used</strong> (not activated in sandbox).
+  UAT: hotel <code>1303</code> · room <code>1</code> · rate <code>1</code> · channelId <code>227</code> ·
+  webhook <code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code>.
+  Prefer the hand-maintained <code>jade-axisrooms-status.html</code> for the full Jul 2026 audit.
 </div>
 
 <div class="legend">

@@ -114,12 +114,14 @@
 
 <h1>Jade Host × Axis Rooms — Dashboard Integration Blueprint</h1>
 <p class="meta">
-  Prepared for Jade Hospitainment · 2026-07-01 · Analysis only (no code changed) ·
-  Sources: <code>pms.api.axisrooms.com</code>, <code>docs/axisrooms-api-reference.md</code>, live Jade codebase
+  Prepared for Jade Hospitainment · Updated 2026-07-17 ·
+  Sources: live codebase · sandbox UAT · <code>docs/axisrooms-api-reference.md</code>
 </p>
 
 <div class="callout callout-green">
-  <strong>Purpose:</strong> A single clear picture of what the Jade dashboard can do with Axis Rooms — which of the 15 APIs we use and for what, how bookings block dates two-ways, what Axis <em>cannot</em> do, the fate of the Housekeeping page, how custom properties behave, and exactly how we prevent the "two people book the same dates at once" problem. Use this to approve a phased plan.
+  <strong>Purpose:</strong> Clear picture of Jade × Axis Rooms — which APIs we use, how bookings block dates two ways,
+  and what Axis cannot do. <strong>Live sandbox stack:</strong> API 9 → save → <strong>API 2 (one date range)</strong> → <strong>API 1 (daywise)</strong>.
+  API 5 is not used. UAT hotel <code>1303</code> / room <code>1</code> / rate <code>1</code>.
 </div>
 
 <h2>Contents</h2>
@@ -150,10 +152,10 @@
   Axis Rooms is a <strong>channel manager</strong> that sits between Jade and the OTAs (Airbnb, Booking.com). Jade never talks to OTAs directly. There are two directions that matter:
 </p>
 <ul>
-  <li><strong>OUTBOUND (Jade → Axis):</strong> whenever a date becomes unavailable in Jade (a booking or a manual block), Jade calls Axis to <strong>close inventory</strong> so OTAs stop selling that night. Whenever a villa price/visibility changes, Jade pushes price and open/close restrictions.</li>
-  <li><strong>INBOUND (Axis → Jade):</strong> when a guest books on an OTA, Axis POSTs that booking to the one endpoint Jade hosts (<code>/api/webhooks/axisrooms</code>), and Jade writes it into the same calendar as direct bookings.</li>
+  <li><strong>OUTBOUND (Jade → Axis):</strong> whenever a date becomes unavailable in Jade (OTA API 9 save, website pay, staff booking/block), Jade calls <strong>API 2</strong> (one date range) then <strong>API 1</strong> (daywise nights) so OTAs stop selling those nights. Price / restrictions use APIs 6, 7, 15.</li>
+  <li><strong>INBOUND (Axis → Jade):</strong> when a guest books on an OTA, Axis POSTs to <code>/api/webhooks/axisrooms</code> (API 9); Jade validates, saves, then pushes inventory back.</li>
 </ul>
-<p>Both directions already exist in the code. The only missing pieces for go-live are Axis <strong>credentials + per-villa mapping</strong> (sandbox keys just arrived) and a few <em>optional</em> read APIs we can add for a richer dashboard.</p>
+<p>Both directions are <strong>live in sandbox</strong> for hotel <code>1303</code>. Remaining: CM confirmation of multi-night ranges, <code>channel_managed</code> flip per villa, production cutover (Sr. Waseem lead).</p>
 
 <h2 id="s2">2. Flow diagram — how a date gets blocked (both ways)</h2>
 <figure class="diagram">
@@ -173,14 +175,16 @@ flowchart TD
   NL -->|locked OK| Q["queueBookingInventorySync / syncBlockInventory"]
   NL -->|already locked| CF["Mark CONFLICT<br/>(staff resolve)"]
 
-  Q --> API1["API 1 daywiseInventory<br/>free: 0 (close)"]
+  Q --> API2["API 2 /api/inventory<br/>ONE range startDate→endDate<br/>availability: 0"]
+  API2 --> API1["API 1 daywiseInventory<br/>free: 0 all nights"]
   API1 --> AXIS["Axis Rooms CM"]
   AXIS --> OTA["Airbnb / Booking.com<br/>dates closed"]
 
-  API1 -->|push failed| RETRY["axisrooms-retry cron<br/>(every 15m)"]
-  RETRY --> API1
+  API2 -->|push failed| RETRY["axisrooms-retry cron"]
+  API1 -->|push failed| RETRY
+  RETRY --> API2
 </pre>
-<figcaption>Outbound: any Jade-side reservation or block closes the same nights on the OTAs (API 1). Failed pushes are retried by cron.</figcaption>
+<figcaption>Outbound: any Jade-side reservation or block closes nights via API 2 (single range) then API 1. Failed pushes retry when unsynced.</figcaption>
 </figure>
 
 <figure class="diagram">
@@ -191,31 +195,32 @@ flowchart TD
   WH --> KEY{"accessKey valid?"}
   KEY -->|no| R401["401 (Axis retries)"]
   KEY -->|yes| DUP{"WebhookEvent<br/>already seen?"}
-  DUP -->|yes| OK1["Return success<br/>(idempotent, do nothing)"]
+  DUP -->|yes| OK1["Return success<br/>+ re-push inventory if needed"]
   DUP -->|no| TX["withTransaction()"]
   TX --> OVL{"Overlaps a direct<br/>booking?"}
   OVL -->|yes| CON["status = CONFLICT<br/>→ Conflicts page"]
   OVL -->|no| LK{"Night locks free?"}
   LK -->|no| CON
-  LK -->|yes| CONF["status = CONFIRMED<br/>shows in Calendar + Housekeeping"]
-  CON --> RESP["Reply: Booking Update Received"]
-  CONF --> RESP
+  LK -->|yes| CONF["status = CONFIRMED"]
+  CON --> PUSH["API 2 one range + API 1 nights"]
+  CONF --> PUSH
+  PUSH --> RESP["Reply: Booking Update Received"]
 </pre>
-<figcaption>Inbound: an OTA booking lands in the same calendar as direct bookings, with idempotency and conflict protection.</figcaption>
+<figcaption>Inbound: OTA booking lands in the same calendar, then Jade pushes inventory ack (API 2 range + API 1). No API 5.</figcaption>
 </figure>
 
 <h2 id="s3">3. All 15 Axis APIs — status &amp; how the dashboard uses each</h2>
 <table>
 <tr><th>#</th><th>API</th><th>Dir</th><th>Status</th><th>Dashboard use / where</th></tr>
-<tr><td>1</td><td>Daywise Inventory</td><td>OUT</td><td><span class="badge b-partial">Ready</span></td><td>Close/open nights on booking confirm, cancel, manual block/release. <code>axisRooms/inventory.ts</code></td></tr>
-<tr><td>2</td><td>Bulk Inventory</td><td>OUT</td><td><span class="badge b-partial">Ready</span></td><td>Open a 90-day availability window when a mapped villa is saved/published. <code>inventory.ts</code></td></tr>
-<tr><td>3</td><td>Block Channel (per OTA)</td><td>OUT</td><td><span class="badge b-blocked">Dormant</span></td><td>Close a specific OTA only (e.g. pause Airbnb, keep Booking.com). <code>channels.ts</code> — needs OTA id list</td></tr>
-<tr><td>4</td><td>Unblock Channel</td><td>OUT</td><td><span class="badge b-blocked">Dormant</span></td><td>Re-open a specific OTA. <code>channels.ts</code></td></tr>
-<tr><td>5</td><td>Fetch OTA Availability</td><td>READ</td><td><span class="badge b-todo">Proposed</span></td><td>"Verify on OTA" button — confirm Axis holds the same free/blocked state we pushed</td></tr>
-<tr><td>6</td><td>Daywise Price</td><td>OUT</td><td><span class="badge b-partial">Ready</span></td><td>Fallback price push per date. <code>pricing.ts</code></td></tr>
-<tr><td>7</td><td>Bulk Price Update</td><td>OUT</td><td><span class="badge b-partial">Ready</span></td><td>Primary price push (90-day) on villa save. <code>pricing.ts</code></td></tr>
-<tr><td>8</td><td>Fetch OTA Rates</td><td>READ</td><td><span class="badge b-todo">Proposed</span></td><td>"Verify price" — show what OTAs currently display vs Jade rate</td></tr>
-<tr><td>9</td><td>Bookings → Client</td><td>IN</td><td><span class="badge b-ready">Live</span></td><td><strong>The endpoint Jade hosts.</strong> OTA bookings → calendar. <code>webhooks/axisrooms</code></td></tr>
+<tr><td>1</td><td>Daywise Inventory</td><td>OUT</td><td><span class="badge b-ready">Live</span></td><td>Full night list after API 2 on confirm/cancel/modify/block. <code>inventory.ts</code></td></tr>
+<tr><td>2</td><td>Bulk Inventory</td><td>OUT</td><td><span class="badge b-ready">Live</span></td><td><strong>One date range per stay</strong> (check-in → last night). Also 90-day open on publish. Vanessa: not per-night calls.</td></tr>
+<tr><td>3</td><td>Block Channel (per OTA)</td><td>OUT</td><td><span class="badge b-blocked">Dormant</span></td><td>Close a specific OTA only. Needs OTA id list</td></tr>
+<tr><td>4</td><td>Unblock Channel</td><td>OUT</td><td><span class="badge b-blocked">Dormant</span></td><td>Re-open a specific OTA</td></tr>
+<tr><td>5</td><td>Fetch OTA Availability</td><td>READ</td><td><span class="badge b-na">No API</span></td><td><strong>Not activated in sandbox — not used on inbound</strong></td></tr>
+<tr><td>6</td><td>Daywise Price</td><td>OUT</td><td><span class="badge b-ready">Live</span></td><td>Fallback price push. Sandbox smoke OK</td></tr>
+<tr><td>7</td><td>Bulk Price Update</td><td>OUT</td><td><span class="badge b-ready">Live</span></td><td>Primary 90-day price. Sandbox smoke OK</td></tr>
+<tr><td>8</td><td>Fetch OTA Rates</td><td>READ</td><td><span class="badge b-partial">Ready</span></td><td>Optional verify panel</td></tr>
+<tr><td>9</td><td>Bookings → Client</td><td>IN</td><td><span class="badge b-ready">Live</span></td><td>Webhook Jade hosts → save → API 2+1 ack</td></tr>
 <tr><td>10</td><td>No-Show Enable</td><td>OUT</td><td><span class="badge b-todo">Optional</span></td><td>Mark a Booking.com no-show from the folio. Low priority</td></tr>
 <tr><td>11</td><td>Update MLOS</td><td>OUT</td><td><span class="badge b-todo">Optional</span></td><td>Min-length-of-stay rules per OTA. Add if Jade uses MLOS</td></tr>
 <tr><td>12</td><td>Pull Booking</td><td>READ</td><td><span class="badge b-todo">Proposed</span></td><td><strong>Safety net</strong> — nightly reconcile to catch any webhook Jade missed (10-day windows)</td></tr>
@@ -223,20 +228,21 @@ flowchart TD
 <tr><td>14</td><td>Update OTA Credentials</td><td>OUT</td><td><span class="badge b-na">Skip</span></td><td>Push OTA logins via API — rarely needed; manage in Axis portal</td></tr>
 <tr><td>15</td><td>CM Restrictions (open/close)</td><td>OUT</td><td><span class="badge b-partial">Ready</span></td><td>Stop-sale when villa is Hidden / Not bookable. <strong>Testable in production only</strong> (per Axis)</td></tr>
 </table>
-<p><strong>Today:</strong> APIs 1, 2, 6, 7, 9, 15 wired · 3, 4 dormant (need OTA ids) · <strong>proposed for a richer dashboard:</strong> 5, 8, 12, 13.</p>
+<p><strong>Today:</strong> APIs <strong>1, 2, 6, 7, 9</strong> live in sandbox · 15 wired · 3/4 dormant · <strong>API 5 not used</strong>.</p>
 
 <h2 id="s4">4. Blocking dates (manual + public) → OTA — confirmed</h2>
 <p>Your understanding is exactly right. Every path that consumes a date in Jade also closes it on the OTAs:</p>
 <table>
 <tr><th>Trigger in Jade</th><th>Code path</th><th>Axis call</th></tr>
-<tr><td>Staff <strong>manual booking</strong></td><td><code>POST /api/dashboard/bookings</code> → <code>queueBookingInventorySync("close")</code></td><td>API 1 <code>free:0</code></td></tr>
-<tr><td>Guest <strong>direct booking</strong> (Razorpay confirmed)</td><td>Razorpay webhook → <code>confirmPayment()</code> → <code>queueBookingInventorySync("close")</code></td><td>API 1 <code>free:0</code></td></tr>
-<tr><td>Staff <strong>manual block</strong> (owner hold)</td><td><code>POST /api/dashboard/blocks</code> → <code>syncBlockInventory(0)</code></td><td>API 1 <code>free:0</code></td></tr>
-<tr><td>Booking <strong>cancelled</strong></td><td><code>PATCH /api/dashboard/bookings/[id]</code> → <code>queueBookingInventorySync("open")</code></td><td>API 1 <code>free:1</code></td></tr>
-<tr><td>Block <strong>removed</strong></td><td><code>DELETE /api/dashboard/blocks/[id]</code> → <code>syncBlockInventory(1)</code></td><td>API 1 <code>free:1</code></td></tr>
+<tr><td>Staff <strong>manual booking</strong></td><td><code>POST /api/dashboard/bookings</code> → <code>queueBookingInventorySync("close")</code></td><td>API 2 range + API 1 <code>free:0</code></td></tr>
+<tr><td>Guest <strong>direct booking</strong> (Razorpay confirmed)</td><td>Razorpay webhook → <code>confirmPayment()</code> → await inventory sync</td><td>API 2 range + API 1 <code>free:0</code></td></tr>
+<tr><td>Staff <strong>manual block</strong> (owner hold)</td><td><code>POST /api/dashboard/blocks</code> → <code>syncBlockInventory(0)</code></td><td>API 1 <code>free:0</code> (daywise)</td></tr>
+<tr><td>Booking <strong>cancelled</strong></td><td><code>PATCH …</code> → <code>queueBookingInventorySync("open")</code></td><td>API 2 range + API 1 <code>free:1</code></td></tr>
+<tr><td>OTA <strong>API 9</strong> create</td><td>Webhook → validate → save → <code>pushStayInventoryToAxis</code></td><td>API 2 one range + API 1 nights</td></tr>
 </table>
 <div class="callout">
-  <strong>So yes:</strong> manual reserve, public booking, <em>and</em> date-blocking all push a close to the OTAs — for any villa that is mapped to Axis. If a villa isn't mapped (or Axis keys aren't set), Jade skips the push cleanly (no error, website still works).
+  <strong>So yes:</strong> manual reserve, public booking, OTA API 9, <em>and</em> blocks push inventory to Axis for mapped villas.
+  Multi-night stays use <strong>one API 2 request</strong> covering check-in → last occupied night (Vanessa, 16 Jul).
 </div>
 
 <h2 id="s5">5. Editing a registered property → push changes to OTA</h2>
@@ -271,11 +277,11 @@ flowchart TD
     </ul>
   </div>
   <div class="card">
-    <h3><span class="badge b-todo">Proposed</span> API 5 / 8 — Verify state</h3>
+    <h3><span class="badge b-na">No API</span> API 5 — OTA Availability</h3>
     <ul>
-      <li>"Verify on OTA" button per villa/date</li>
-      <li>Compares Jade's pushed inventory/price vs what Axis holds</li>
-      <li>Great for debugging "why is this date still showing?"</li>
+      <li><strong>Not activated</strong> in Axis sandbox for this channel</li>
+      <li>Removed from API 9 inbound path (caused UAT delays)</li>
+      <li>Do not require API 5 for booking ack</li>
     </ul>
   </div>
   <div class="card">

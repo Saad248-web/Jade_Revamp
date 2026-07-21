@@ -58,3 +58,6 @@ postman/
 
 .env.vercel.production
 .env.vercel*
+
+# Handover (private) — real secrets + email draft; NEVER commit, NEVER ship in source ZIP
+/_handover_private/

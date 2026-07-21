@@ -162,13 +162,16 @@
 
 <h1>Jade Host PMS — Client Dashboard Audit &amp; Status Report</h1>
 <p class="meta">
-  Prepared for Jade Hospitainment · Generated 2026-07-01 · Project: <strong>Jade_ReVamp</strong> ·
+  Prepared for Jade Hospitainment · Updated 2026-07-17 · Project: <strong>Jade_ReVamp</strong> ·
   Stack: Next.js 14 · MongoDB Atlas · Razorpay · Resend · Axis Rooms ·
-  Latest commit: <code>f91b8bf</code>
+  Latest Axis commit: <code>bd92bb1</code>
 </p>
 
 <div class="callout callout-green">
-  <strong>Executive summary:</strong> The <strong>Jade Host staff dashboard</strong> is built and feature-complete for daily villa operations — calendar, bookings, folio, housekeeping, manual blocks, conflict resolution, payments view, villa portfolio management, SEO CMS, media library, <strong>leads &amp; careers CMS</strong>, and role-based staff access. The public website supports villa browsing, page-tagged enquiry forms, careers applications, and a full <code>/book</code> flow with Razorpay. <strong>Staff email alerts</strong> (Resend) fire on bookings, enquiries, careers applications, and OTA conflicts when configured. <strong>Dashboard edits (Quick Edit or Full Property Editor) sync to the live public site</strong> — pricing, descriptions, images, and content for portfolio and custom villas. Axis Rooms integration is <strong>12 of 15 APIs in code</strong> with per-villa <strong>channel mode</strong> (<code>website_only</code> vs <code>channel_managed</code>). <strong>187 automated unit tests pass.</strong> Production go-live depends on environment credentials (MongoDB, NextAuth, Razorpay, Resend, Axis sandbox UAT) — not missing application code.
+  <strong>Executive summary:</strong> The <strong>Jade Host staff dashboard</strong> is feature-complete for daily villa operations — calendar, bookings, folio, housekeeping, blocks, conflicts, payments, villas, SEO, media, leads &amp; careers, RBAC.
+  Public site supports villas, enquiries, careers, and <code>/book</code> with Razorpay.
+  <strong>Axis Rooms sandbox UAT is live:</strong> API 9 inbound → save → API 2 (one date range) → API 1 (daywise). APIs 1/2/6/7 smoke-tested. <strong>API 5 not used</strong>.
+  Remaining: production cutover credentials, Razorpay E2E on prod URL, and Sr. Waseem-led Axis coordination.
 </div>
 
 <div class="score-row">
@@ -330,7 +333,7 @@
 <tr><td>Careers</td><td><code>/dashboard/careers</code></td><td><span class="badge b-ready">Done</span></td><td>Applications, résumé download, status workflow</td></tr>
 <tr><td>Payments</td><td><code>/dashboard/payments</code></td><td><span class="badge b-ready">Done</span></td><td>Read-only Razorpay activity</td></tr>
 <tr><td>Villa Settings</td><td><code>/dashboard/settings/villas</code></td><td><span class="badge b-ready">Done</span></td><td>Quick edit + wizard + delete</td></tr>
-<tr><td>Axis Rooms</td><td><code>/dashboard/settings/axis-rooms</code></td><td><span class="badge b-partial">Partial</span></td><td>12/15 APIs integrated; sandbox keys + channel_managed UAT + API 9 registration</td></tr>
+<tr><td>Axis Rooms</td><td><code>/dashboard/settings/axis-rooms</code></td><td><span class="badge b-ready">Live (sandbox)</span></td><td>API 9 + API 2 range + API 1 live; APIs 1/2/6/7 smoke OK; hotel 1303 UAT; API 5 not used</td></tr>
 <tr><td>Staff / RBAC</td><td><code>/dashboard/staff</code></td><td><span class="badge b-ready">Done</span></td><td>5 roles, bcrypt passwords, audit on mutations</td></tr>
 <tr><td>Media Library</td><td><code>/dashboard/media</code></td><td><span class="badge b-ready">Done</span></td><td>GridFS uploads + static catalog</td></tr>
 <tr><td>SEO suite</td><td><code>/dashboard/seo/*</code></td><td><span class="badge b-ready">Done</span></td><td>Manager, redirects, blogs, sitemap, analytics</td></tr>
@@ -367,9 +370,9 @@
 </tr>
 <tr>
   <td><strong>Axis Rooms</strong></td>
-  <td><span class="badge b-partial">Partial</span></td>
-  <td>12/15 APIs: inventory, price, restrictions, inbound webhook, pull cron, connected OTAs, verify, per-OTA pause/resume; <strong>channel_managed</strong> gates outbound sync</td>
-  <td>API key, channel ID, sandbox URL, property CSV, webhook registration — see <code>jade-axisrooms-status.html</code></td>
+  <td><span class="badge b-ready">Live (sandbox)</span></td>
+  <td>API 9 webhook → save → API 2 one date range → API 1 daywise; direct/staff confirm also pushes; APIs 6/7 price smoke OK; <strong>API 5 not used</strong></td>
+  <td>CM confirm multi-night ranges; flip villas to <code>channel_managed</code> after UAT; production keys — see <code>jade-axisrooms-status.html</code></td>
 </tr>
 <tr>
   <td><strong>NextAuth (staff)</strong></td>
@@ -402,7 +405,7 @@
       <li><strong>Cron jobs</strong> — <code>CRON_SECRET</code> + scheduler; sub-daily expire/retry need Vercel Pro or external cron; daily pull/blogs in <code>vercel.json</code></li>
       <li><strong>Resend</strong> — verify sending domain; set notify emails for bookings, leads, careers, conflicts</li>
       <li><strong>Full booking E2E</strong> — book → pay → webhook → confirmed not yet run on production URL</li>
-      <li><strong>Axis certification</strong> — sandbox UAT, API 9 registration, real inbound JSON samples from Axis</li>
+      <li><strong>Axis certification</strong> — sandbox core path live (API 9→2→1); CM confirm multi-night ranges; production cutover under Sr. Waseem</li>
       <li><strong>Channel mode</strong> — flip portfolio villas to <code>channel_managed</code> only after mapping UAT</li>
     </ul>
   </div>
@@ -429,8 +432,8 @@
 <tr><td>4</td><td>Complete test booking: <code>/book</code> → pay → confirmed in dashboard</td><td><span class="badge b-blocked">Blocker</span></td><td>Jade + dev UAT</td></tr>
 <tr><td>5</td><td>Set <code>CRON_SECRET</code>; schedule expire-pending + axis-retry (Pro/external) + daily pull/blogs (<code>vercel.json</code>)</td><td><span class="badge b-partial">High</span></td><td>Dev</td></tr>
 <tr><td>6</td><td>Resend: verify domain, <code>RESEND_API_KEY</code>, booking/leads/careers/conflict notify emails</td><td><span class="badge b-partial">High</span></td><td>Jade marketing</td></tr>
-<tr><td>7</td><td>Axis sandbox keys → <code>npm run axis:test</code>; map villas; flip to <code>channel_managed</code></td><td><span class="badge b-partial">High</span></td><td>Jade + Axis</td></tr>
-<tr><td>8</td><td>Register Axis inbound webhook → <code>/api/webhooks/axisrooms</code></td><td><span class="badge b-partial">High</span></td><td>Axis</td></tr>
+<tr><td>7</td><td>Axis sandbox — confirm multi-night API 2 ranges on CM; flip tested villas to <code>channel_managed</code></td><td><span class="badge b-partial">High</span></td><td>Jade + Axis / Sr. Waseem</td></tr>
+<tr><td>8</td><td>API 9 webhook live at <code>/api/webhooks/axisrooms</code> — continue modify/cancel UAT with Axis</td><td><span class="badge b-ready">Ready</span></td><td>Jade + Axis</td></tr>
 <tr><td>9</td><td>UAT enquiry forms → <code>/dashboard/leads</code>; careers → <code>/dashboard/careers</code></td><td><span class="badge b-ready">Ready</span></td><td>Jade ops</td></tr>
 <tr><td>10</td><td>Production Razorpay keys at cutover; <code>INDEXNOW_KEY</code> for SEO pings</td><td><span class="badge b-todo">Cutover</span></td><td>Jade</td></tr>
 <tr><td>11</td><td>UAT portfolio + custom villas — Quick Edit pricing, Full Editor content, delete flow</td><td><span class="badge b-ready">Ready</span></td><td>Jade ops</td></tr>
@@ -465,15 +468,18 @@
 
 <h2>11. Related documents</h2>
 <ul>
-  <li><code>jade-axisrooms-status.html</code> — Axis Rooms integration summary (12 of 15 APIs integrated; channel mode, pull cron, verify)</li>
+  <li><code>jade-axisrooms-status.html</code> — Axis status (API 9→2→1 live; API 5 not used; hotel 1303 UAT)</li>
+  <li><code>jade-axisrooms-testing-handoff.html</code> — integration reference + July 2026 UAT log</li>
+  <li><code>jade-axisrooms-dashboard-blueprint.html</code> — two-way sync blueprint</li>
+  <li><code>Overall-Axis-API-Integration-Testing.html</code> — UAT matrix HTML</li>
   <li><code>NEEDS_FROM_USER.md</code> — environment variables and credentials checklist</li>
-  <li><code>SECURITY-AUDIT.md</code> — technical security review (June 2026)</li>
   <li><code>docs/axisrooms-api-reference.md</code> — Axis Rooms API contract</li>
-  <li><code>docs/local-dev-setup-guide.html</code> — developer setup guide</li>
 </ul>
 
 <div class="callout">
-  <strong>Bottom line for Jade:</strong> The dashboard and booking platform are <strong>ready for internal operations and UAT</strong> once MongoDB and staff login are configured on Vercel. Staff can manage enquiries and careers in-dashboard, receive email alerts when Resend is configured, and edit villas that sync to the public site without redeploying code. Guest payments need Razorpay test verification. OTA channel sync needs Axis sandbox UAT, <code>channel_managed</code> flip per villa, and API 9 webhook registration. Remaining work is <strong>credentials, UAT, and cutover</strong>.
+  <strong>Bottom line for Jade:</strong> Dashboard and booking platform are ready for operations.
+  Axis Rooms core sync is <strong>live in sandbox</strong> (API 9 → API 2 one range → API 1). Guest payments still need Razorpay E2E on production URL.
+  Further Axis coordination and production cutover will be led with <strong>Sr. Waseem</strong>.
 </div>
 
 <p class="meta" style="margin-top:2.5rem;">

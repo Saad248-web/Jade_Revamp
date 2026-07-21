@@ -119,16 +119,17 @@
 <p class="meta">
   PMS: <strong>Jade Host PMS</strong> ·
   UAT environment: <code>https://jade-revamp.vercel.app</code> ·
-  Document date: 9 July 2026 (UAT session — inbound validation &amp; inventory flows verified locally)
+  Document date: 17 July 2026 (sandbox UAT live — API 9 → API 2 range → API 1)
 </p>
 
 <div class="summary">
   <strong>Integration scope:</strong>
   Jade Host PMS is a whole-villa booking system. Each bookable villa is <strong>one inventory unit</strong>
   (availability <code>0</code> or <code>1</code> per night — not multiple rooms inside a property).
-  Outbound inventory, price, and restriction sync uses Axis APIs 1, 2, 6, 7, and 15.
-  Inbound OTA bookings are received on API 9. Confirm, cancel, and staff date-modification flows
-  are implemented; live sandbox UAT is pending mapped-property activation.
+  <strong>Allowed sandbox APIs:</strong> 1, 2, 6, 7, 9 (API 5 is <em>not</em> activated — not used on inbound).
+  Flow: <strong>API 9 receive → validate → save → API 2 (one date range) → API 1 (daywise nights)</strong>.
+  Same outbound close runs after website / staff / external confirm. Live UAT property:
+  hotel <code>1303</code> · room <code>1</code> · rate <code>1</code> · channelId <code>227</code>.
 </div>
 
 <div class="legend">
@@ -145,31 +146,34 @@
   <strong>one</strong> such ID with per-night availability of <code>0</code> (booked) or <code>1</code> (available).
 </p>
 <table>
-<tr><th>Business event</th><th>Jade calendar</th><th>API 1 value sent</th></tr>
+<tr><th>Business event</th><th>Jade calendar</th><th>Outbound to Axis</th></tr>
 <tr>
-  <td>Villa booked (confirm / hold)</td>
+  <td>Villa booked (confirm / hold / website)</td>
   <td>Night locks acquired on stay nights</td>
-  <td><code>free: 0</code> per night</td>
+  <td><strong>API 2</strong> one range <code>availability: 0</code> + <strong>API 1</strong> <code>free: 0</code> per night</td>
 </tr>
 <tr>
   <td>Booking cancelled</td>
   <td>Night locks released</td>
-  <td><code>free: 1</code> on current date range</td>
+  <td><strong>API 2</strong> open range + <strong>API 1</strong> <code>free: 1</code></td>
 </tr>
 <tr>
   <td>Booking dates changed (staff)</td>
   <td>Old locks released, new locks acquired</td>
-  <td><code>free: 1</code> on old range, then <code>free: 0</code> on new range</td>
+  <td>API 2+1 open old range, then API 2+1 close new range</td>
 </tr>
 <tr>
-  <td>OTA booking modify (API 9 inbound)</td>
-  <td>Local night-lock swap only</td>
-  <td>No outbound push (CM owns OTA inventory)</td>
+  <td>OTA booking create / modify / cancel (API 9)</td>
+  <td>Save / swap / release locks</td>
+  <td>Same: API 2 date range + API 1 daywise (ack after save)</td>
 </tr>
 </table>
 <div class="flow">
   <strong>Night model:</strong> check-out is <em>exclusive</em> (same-day turnover allowed).<br/>
-  Example: stay <code>21 Oct → 22 Oct</code> blocks the night of <strong>21 Oct</strong> only; 22 Oct is checkout day.
+  Example: stay <code>20 Jul → 23 Jul</code> closes nights <strong>20, 21, 22</strong>.<br/>
+  <strong>API 2 shape (Vanessa, 16 Jul):</strong> one request —
+  <code>startDate: 2026-07-20</code>, <code>endDate: 2026-07-22</code>, <code>availability: 0</code>
+  — <em>not</em> separate requests per date.
 </div>
 
 <h2>2. Environment &amp; credentials (stored in Jade)</h2>
@@ -178,9 +182,9 @@
 <tr><td>PMS name</td><td><code>Jade Host PMS</code></td></tr>
 <tr><td>API base URL (sandbox)</td><td><code>https://sandbox2.axisrooms.com</code></td></tr>
 <tr><td><code>channelId</code> / <code>pmsId</code></td><td><code>227</code> (same value; field name varies by API)</td></tr>
-<tr><td><code>accessKey</code></td><td>Stored server-side; sent in JSON body of every outbound call and validated on inbound API 9</td></tr>
-<tr><td>Test <code>hotelId</code></td><td><code>1303</code> (Red Dome — Rohit curl)</td></tr>
-<tr><td>Test <code>roomId</code> / <code>ratePlanId</code></td><td><code>1 / 1</code> — whole-villa model; full list in <code>docs/jade-axisrooms-properties.csv</code> (1301–1316)</td></tr>
+<tr><td><code>accessKey</code></td><td>Stored server-side (Vercel + <code>.env.local</code>); JSON body on outbound + inbound API 9. Active key rotated during UAT — avoid mid-test changes.</td></tr>
+<tr><td>Test <code>hotelId</code></td><td><code>1303</code> (preferred UAT property — Rohith / Vanessa)</td></tr>
+<tr><td>Test <code>roomId</code> / <code>ratePlanId</code></td><td><code>1 / 1</code> · ratePlanName <code>Best Available Rate</code> · CSV <code>docs/jade-axisrooms-properties.csv</code> (1301–1316)</td></tr>
 <tr><td>UAT site</td><td><code>https://jade-revamp.vercel.app</code></td></tr>
 </table>
 
@@ -215,16 +219,16 @@
   <td>Daywise Inventory</td>
   <td><code>POST /api/daywiseInventory</code></td>
   <td>Outbound</td>
-  <td><span class="badge b-partial">UAT pending</span></td>
-  <td>Booking confirm, hold, cancel, staff date change, calendar blocks. Payload: <code>free: 0|1</code> per night.</td>
+  <td><span class="badge b-ready">Live</span></td>
+  <td>After API 2 on booking confirm/cancel/modify. Payload: all occupied nights <code>free: 0|1</code>.</td>
 </tr>
 <tr>
   <td>2</td>
   <td>Bulk Inventory</td>
   <td><code>POST /api/inventory</code></td>
   <td>Outbound</td>
-  <td><span class="badge b-partial">UAT pending</span></td>
-  <td>Opens 90-day availability window when villa becomes channel-managed.</td>
+  <td><span class="badge b-ready">Live</span></td>
+  <td><strong>One date-range request per stay</strong> after API 9 / direct confirm. Also used for 90-day open on villa publish.</td>
 </tr>
 <tr>
   <td>3</td>
@@ -247,24 +251,24 @@
   <td>Fetch OTA Availability</td>
   <td><code>POST /api/otaAvailability</code></td>
   <td>Read</td>
-  <td><span class="badge b-ready">Implemented</span></td>
-  <td>Dashboard verify panel — compare OTA inventory vs Jade.</td>
+  <td><span class="badge b-na">Not used</span></td>
+  <td><strong>Not activated in sandbox.</strong> Removed from inbound webhook — do not call on API 9 path.</td>
 </tr>
 <tr>
   <td>6</td>
   <td>Daywise Price</td>
   <td><code>POST /api/daywisePrice</code></td>
   <td>Outbound</td>
-  <td><span class="badge b-partial">UAT pending</span></td>
-  <td>Fallback price push when bulk price update fails.</td>
+  <td><span class="badge b-ready">Live</span></td>
+  <td>Fallback price push; sandbox smoke OK.</td>
 </tr>
 <tr>
   <td>7</td>
   <td>Bulk Price Update</td>
   <td><code>POST /api/bulkPriceUpdate</code></td>
   <td>Outbound</td>
-  <td><span class="badge b-partial">UAT pending</span></td>
-  <td>Primary 90-day price sync on villa save / channel activation.</td>
+  <td><span class="badge b-ready">Live</span></td>
+  <td>Primary 90-day price sync; sandbox smoke OK.</td>
 </tr>
 <tr>
   <td>8</td>
@@ -279,8 +283,8 @@
   <td>Bookings to Client (Webhook)</td>
   <td><code>POST</code> (Jade-hosted — see §5)</td>
   <td>Inbound</td>
-  <td><span class="badge b-partial">UAT partial</span></td>
-  <td>OTA create · modify · cancel events. Strict <code>Rates</code> validation; invalid payloads return HTTP 422. Local UAT passed 9 Jul 2026.</td>
+  <td><span class="badge b-ready">Live</span></td>
+  <td>OTA create · modify · cancel. Strict <code>Rates</code> validation (422 on bad IDs). After save: auto API 2 range + API 1. Live UAT Jul 2026.</td>
 </tr>
 <tr>
   <td>10</td>
@@ -344,18 +348,18 @@
 <tr><td>Authentication</td><td><code>accessKey</code> in JSON body, validated server-side</td></tr>
 <tr><td>Events handled</td><td><code>create</code> · <code>modify</code> · <code>cancel</code></td></tr>
 <tr><td>Idempotency</td><td>Duplicate events deduplicated before processing</td></tr>
-<tr><td>Modify handling</td><td>Updates booking dates and swaps local night locks; no outbound inventory push (CM owns OTA inventory)</td></tr>
-<tr><td>Cancel handling</td><td>Booking status → <code>cancelled</code>; local night locks released</td></tr>
+<tr><td>Modify handling</td><td>Updates booking dates; swaps night locks; outbound API 2+1 open old + close new</td></tr>
+<tr><td>Cancel handling</td><td>Booking status → <code>cancelled</code>; night locks released; API 2+1 open inventory</td></tr>
 <tr><td>Validation (before processing)</td><td>
   <code>hotelId</code> + <code>Rates.roomType[0].id</code> must match a mapped villa;
   <code>ratePlanId</code> must match villa mapping;
-  <code>noOfRooms</code> must be <code>1</code> (whole-unit villa);
-  optional API 5 verify when outbound <code>accessKey</code> is valid
+  <code>noOfRooms</code> must be <code>1</code> (whole-unit villa).
+  <strong>No API 5</strong> (not activated in sandbox).
 </td></tr>
 <tr><td>Success response</td><td><code>{"status":"success","message":"Booking Update Received"}</code></td></tr>
 <tr><td>Failure response</td><td><code>{"status":"failure","message":"…"}</code> with HTTP 401 / 422 / 500 as appropriate</td></tr>
-<tr><td>Logging</td><td>Audit log in dashboard; local dev: <code>logs/axisrooms-inbound.jsonl</code>; phases include <code>api2_pushed</code> / <code>api2_failed</code></td></tr>
-<tr><td>API 2 ack after API 9</td><td>Per Axis request — bulk inventory pushed back after create/modify/cancel</td></tr>
+<tr><td>Logging</td><td>Audit log in dashboard; phases include <code>api2_pushed</code> / <code>api2_failed</code>; Vercel runtime logs <code>[axisrooms.inventory]</code></td></tr>
+<tr><td>API 2 + API 1 after API 9</td><td><strong>Required:</strong> one bulk inventory range (API 2), then daywise nights (API 1)</td></tr>
 </table>
 
 <h2>6. Inventory scenarios — CM expectations vs Jade</h2>
@@ -369,44 +373,45 @@
 <tr>
   <td><strong>3. OTA booking (API 9 inbound)</strong><br/>confirmed / modified / cancelled</td>
   <td>CM pushes booking to PMS</td>
-  <td><span class="badge b-partial">UAT partial</span></td>
+  <td><span class="badge b-ready">Live</span></td>
   <td>
-    <strong>Create:</strong> booking saved in PMS; night locks acquired; <strong>API 2</strong> <code>availability: 0</code> pushed back to CM.<br/>
-    <strong>Modify:</strong> dates updated; night locks swapped; <strong>API 2</strong> open old + close new.<br/>
-    <strong>Cancel:</strong> status cancelled; night locks released; <strong>API 2</strong> <code>availability: 1</code> pushed back.
+    <strong>Create:</strong> booking saved; night locks; <strong>API 2</strong> one range <code>availability: 0</code> + <strong>API 1</strong> nights.<br/>
+    <strong>Modify:</strong> dates updated; locks swapped; API 2+1 open old + close new.<br/>
+    <strong>Cancel:</strong> cancelled; locks released; API 2+1 open.
   </td>
 </tr>
 <tr>
-  <td><strong>1. Booking confirmed</strong><br/>e.g. Villa A · 21/10 → 22/10</td>
+  <td><strong>1. Booking confirmed</strong><br/>e.g. Villa · 20/07 → 23/07</td>
   <td>Reduce inventory on stay nights</td>
-  <td><span class="badge b-partial">UAT pending</span></td>
-  <td>API 1 <code>free: 0</code> on each stay night when status becomes <code>confirmed</code> or <code>on_hold</code> on a <code>channel_managed</code> villa.</td>
+  <td><span class="badge b-ready">Live</span></td>
+  <td>API 2 range <code>20→22</code> + API 1 <code>free: 0</code> on each stay night when status becomes <code>confirmed</code> or <code>on_hold</code>.</td>
 </tr>
 <tr>
   <td><strong>1b. Booking cancelled</strong><br/>same dates</td>
   <td>Restore inventory</td>
-  <td><span class="badge b-partial">UAT pending</span></td>
-  <td>API 1 <code>free: 1</code> on booking’s current <code>checkIn</code> / <code>checkOut</code> range. Failed pushes retried automatically.</td>
+  <td><span class="badge b-ready">Live</span></td>
+  <td>API 2+1 open on booking’s current checkIn / checkOut. Failed pushes retried via cron when unsynced.</td>
 </tr>
 <tr>
   <td><strong>2. Booking modified</strong><br/>21/10–22/10 → 24/10–26/10</td>
   <td>Open old dates, close new dates</td>
-  <td><span class="badge b-partial">UAT pending</span></td>
-  <td>Staff <strong>Change dates</strong> on booking folio: API 1 <code>free: 1</code> on old range, then <code>free: 0</code> on new range. Pricing recomputed with staff preview.</td>
+  <td><span class="badge b-ready">Live</span></td>
+  <td>Staff <strong>Change dates</strong>: API 2+1 open old range, then API 2+1 close new. Pricing preview in folio.</td>
 </tr>
 <tr>
   <td><strong>2b. Modified booking cancelled</strong><br/>24/10–26/10</td>
   <td>Restore inventory on current dates</td>
-  <td><span class="badge b-partial">UAT pending</span></td>
-  <td>Cancel opens inventory on the booking’s <strong>current</strong> (post-modify) date range.</td>
+  <td><span class="badge b-ready">Live</span></td>
+  <td>Cancel opens inventory on the booking’s <strong>current</strong> (post-modify) date range via API 2+1.</td>
 </tr>
 </table>
 
-<h3>API 1 triggers summary</h3>
+<h3>API 2 + API 1 triggers summary</h3>
 <ul>
-  <li><strong>Close (<code>free: 0</code>):</strong> payment confirmed, staff hold placed, staff date change (new range), calendar block created</li>
-  <li><strong>Open (<code>free: 1</code>):</strong> staff cancel, calendar block released, staff date change (old range)</li>
-  <li><strong>Modify sequence:</strong> open old nights → close new nights (direct / staff / website bookings only)</li>
+  <li><strong>Close:</strong> API 9 create, payment confirmed, staff hold, staff date change (new range), calendar block</li>
+  <li><strong>Open:</strong> API 9 cancel, staff cancel, calendar block released, staff date change (old range)</li>
+  <li><strong>API 2 format:</strong> one <code>startDate</code>/<code>endDate</code> range covering occupied nights (not one request per date)</li>
+  <li><strong>API 1 format:</strong> all occupied nights in one daywise payload</li>
 </ul>
 
 <h2>7. Jade dashboard — Axis Rooms settings screen</h2>
@@ -416,11 +421,11 @@
 <tr><td>Villa property mapping table (<code>hotelId</code>, <code>roomId</code>, <code>ratePlanId</code>)</td><td>—</td></tr>
 <tr><td>CSV export for property onboarding</td><td>—</td></tr>
 <tr><td>Connected OTAs list</td><td>13</td></tr>
-<tr><td>Verify OTA availability and rates (date range + OTA id)</td><td>5, 8</td></tr>
+<tr><td>Verify OTA availability and rates (optional)</td><td>8 (API 5 not used in sandbox)</td></tr>
 <tr><td>Per-OTA pause / resume by villa and date range</td><td>3, 4</td></tr>
 <tr><td>Inbound webhook URL (API 9) with copy action</td><td>9</td></tr>
-<tr><td>Sync audit log (<code>inventory.close</code>, <code>inventory.open</code>, price, restrictions, <code>inbound</code>)</td><td>1–9, 15</td></tr>
-<tr><td>Booking folio — staff date modification with pricing preview</td><td>1 (on save)</td></tr>
+<tr><td>Sync audit log (<code>inventory.close</code>, <code>inventory.open</code>, <code>inventory.bulk</code>, price, inbound)</td><td>1, 2, 6, 7, 9, 15</td></tr>
+<tr><td>Booking folio — staff date modification with pricing preview</td><td>2 + 1 (on save)</td></tr>
 </table>
 
 <h2>8. UAT test plan</h2>
@@ -433,23 +438,23 @@
 </tr>
 <tr>
   <td>2</td>
-  <td>Confirm direct booking on mapped test villa (21/10 → 22/10)</td>
-  <td>API 1 <code>free: 0</code> for stay night(s); OTA inventory reduced</td>
+  <td>Confirm direct booking on mapped test villa (20/07 → 23/07)</td>
+  <td>API 2 one range <code>20→22</code> + API 1 <code>free: 0</code> for nights; OTA inventory reduced</td>
 </tr>
 <tr>
   <td>3</td>
   <td>Cancel same booking in PMS</td>
-  <td>API 1 <code>free: 1</code>; OTA inventory restored</td>
+  <td>API 2+1 open; OTA inventory restored</td>
 </tr>
 <tr>
   <td>4</td>
-  <td>Staff reschedule booking (e.g. 21/10–22/10 → 24/10–26/10)</td>
-  <td>API 1 open old nights, close new nights; local calendar updated</td>
+  <td>Staff reschedule booking</td>
+  <td>API 2+1 open old nights, close new nights; local calendar updated</td>
 </tr>
 <tr>
   <td>5</td>
-  <td>Register API 9 webhook URL; send confirmed OTA payload</td>
-  <td>Booking appears in PMS; conflict flagged if dates overlap direct booking</td>
+  <td>API 9 confirmed OTA payload (multi-night)</td>
+  <td>Booking in PMS + <strong>one</strong> API 2 range + API 1 nights; phases <code>api2_pushed</code></td>
 </tr>
 <tr>
   <td>6</td>
@@ -480,42 +485,43 @@
 
 <h2>9. Prerequisites for UAT</h2>
 <ul>
-  <li>Activate sandbox mapping for hotelIds <code>1301–1316</code> (CSV attached) — UAT sample <code>hotelId 1303</code>, <code>roomId 1</code>, <code>ratePlanId 1</code></li>
-  <li>Register API 9 webhook URL: <code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code></li>
-  <li><strong>Action required from Axis:</strong> refresh sandbox <code>accessKey</code> — current key returns <code>Authorization Failed.Invalid accessKey</code> on outbound APIs 1, 2, 5, 6, 7</li>
-  <li>Provide sample confirmed, modified, and cancelled API 9 payloads for parser validation</li>
-  <li>Confirm OTA id list (<code>otaId</code>) for verify and channel-control features</li>
+  <li>Sandbox mapping for hotelIds <code>1301–1316</code> — UAT sample <code>hotelId 1303</code>, <code>roomId 1</code>, <code>ratePlanId 1</code> (active)</li>
+  <li>API 9 webhook: <code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code> (registered / under test)</li>
+  <li>Active sandbox <code>accessKey</code> for outbound APIs <strong>1, 2, 6, 7</strong> (do not rotate mid-UAT without notice)</li>
+  <li><strong>Do not use API 5</strong> — not activated in this sandbox</li>
+  <li>Axis CM confirm multi-night API 2 ranges close all occupied nights</li>
 </ul>
 
-<h2>10. UAT session log — 9 July 2026</h2>
+<h2>10. UAT session log — July 2026</h2>
 <table>
 <tr><th>Test</th><th>Result</th><th>Notes</th></tr>
 <tr>
-  <td>API 9 — valid booking (<code>ARKSAADD8CGSE</code>)</td>
+  <td>API 9 valid create + auto inventory</td>
   <td><span class="badge b-ready">Pass</span></td>
-  <td>
-    <code>hotelId 1303</code>, <code>roomId 1</code>, <code>ratePlanId 1</code>, <code>noOfRooms 1</code>;
-    guest <code>saad@helloerrors.in</code>; dates 15–17 Aug 2026;
-    saved as confirmed booking in PMS
-  </td>
+  <td>e.g. <code>ARKRNGN8TYMW</code> · hotel 1303 · stay 20→23 Jul · API 2 one range 20→22 · API 1 nights · HTTP 200</td>
 </tr>
 <tr>
-  <td>API 9 — invalid <code>noOfRooms: 5</code> + bad room/rate ids</td>
+  <td>API 9 invalid room / noOfRooms</td>
   <td><span class="badge b-ready">Pass</span></td>
-  <td>HTTP 422 — <code>noOfRooms must be 1 for whole-unit villa</code></td>
+  <td>HTTP 422 · no booking · no inventory push</td>
 </tr>
 <tr>
-  <td>Outbound APIs 1, 2, 6, 7 (<code>npm run axis:test</code>)</td>
-  <td><span class="badge b-blocked">Blocked</span></td>
-  <td>All return HTTP 401 — sandbox <code>accessKey</code> rejected by Axis</td>
+  <td>Outbound smoke <code>npm run axis:test</code></td>
+  <td><span class="badge b-ready">Pass</span></td>
+  <td>APIs 1, 2, 6, 7 OK on sandbox2 with channel 227 / hotel 1303</td>
 </tr>
 <tr>
-  <td>Inbound log file</td>
+  <td>API 2 format (Vanessa 16 Jul)</td>
   <td><span class="badge b-ready">Pass</span></td>
-  <td><code>logs/axisrooms-inbound.jsonl</code> — full request lifecycle recorded</td>
+  <td>Single date-range request per stay (not one request per night)</td>
+</tr>
+<tr>
+  <td>API 5 on inbound</td>
+  <td><span class="badge b-na">Removed</span></td>
+  <td>Not activated in sandbox — removed from webhook path</td>
 </tr>
 </table>
-<p>Smoke test command: <code>npm run axis:inbound-test</code> (valid + invalid payloads).</p>
+<p>Smoke test: <code>npm run axis:inbound-test</code> · <code>npm run axis:test</code> · UAT HTML: <code>Overall-Axis-API-Integration-Testing.html</code></p>
 
 </body>
 </html>

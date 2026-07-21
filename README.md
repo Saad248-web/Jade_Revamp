@@ -64,6 +64,7 @@ Jade_ReVamp/
 ├── e2e/                        # Playwright smoke + lead-surface specs
 ├── next.config.mjs             # Security headers, images, Sentry wrapper
 ├── src/middleware.ts           # Edge guard for /api/*
+├── HANDOVER.md                 # New-team handover guide (start here)
 ├── NEEDS_FROM_USER.md          # Credentials + UAT checklist
 ├── SECURITY-AUDIT.md           # Security review
 └── jade-dashboard-client-audit.html  # Client dashboard status report
@@ -219,7 +220,7 @@ Metadata routes: `robots.ts`, `sitemap.ts`, `manifest.ts`.
 | `GET` | `/api/villas/[id]/media` | Villa media JSON |
 | `GET` | `/api/experiences/[slug]/media` | Experience media JSON |
 
-Edge middleware on **`/api/*`**: verb allowlist, **600 req / 60 s / IP**, `Cross-Origin-Resource-Policy: same-site`. Per-route limits are documented in [`WEBDEV-Audit.md`](./WEBDEV-Audit.md).
+Edge middleware on **`/api/*`**: verb allowlist, **600 req / 60 s / IP**, `Cross-Origin-Resource-Policy: same-site`. Per-route limits are enforced in `src/middleware.ts` and reviewed in [`SECURITY-AUDIT.md`](./SECURITY-AUDIT.md).
 
 ---
 
@@ -262,14 +263,17 @@ Production env vars on Vercel: `MONGODB_URI`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`,
 
 | File | Audience |
 |------|----------|
-| [`audit-report.md`](./audit-report.md) | Stakeholders — shipped vs backlog, SEO story, risks |
-| [`WEBDEV-Audit.md`](./WEBDEV-Audit.md) | Engineers — API truth, rate limits, evidence paths |
+| [`HANDOVER.md`](./HANDOVER.md) | New dev team — onboarding, architecture, accounts, pending work (**start here**) |
+| [`NEEDS_FROM_USER.md`](./NEEDS_FROM_USER.md) | Ops / lead — credentials, payment modes, Axis + Resend setup, UAT checklist |
+| [`SECURITY-AUDIT.md`](./SECURITY-AUDIT.md) | Engineers — security review, API/rate-limit notes, remediation roadmap |
 
 ---
 
 ## AI-assisted development
 
-This repo uses **NEXUS APEX v4.0** (`NEXUS_v4_APEX/`, [`AGENTS.md`](./AGENTS.md)):
+> Note: the NEXUS tooling (`NEXUS_v4_APEX/`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) is an internal AI-assistant aid. It is **git-ignored and not included in the handover package**, and is optional/unrelated to running the product.
+
+This repo was developed with **NEXUS APEX v4.0** (`NEXUS_v4_APEX/`, `AGENTS.md`):
 
 1. Run the engine loop in `AGENTS.md` before non-trivial changes.
 2. Read the relevant `NEXUS_v4_APEX/<ENGINE>/SKILL.md` (UI → `07_COMPONENTS`, API → `10_API`, SEO → `21_SEO`, etc.).
