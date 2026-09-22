@@ -100,6 +100,8 @@ export const AxisRoomsSchema = new Schema(
     roomTypeId: String,
     ratePlanId: String,
     ratePlanName: String,
+    /** Sellable units on Axis (default 1 = whole villa). Preprod hotel 1234 uses 10. */
+    inventoryUnits: { type: Number, min: 1, default: 1 },
     apiKeyConfigured: { type: Boolean, default: false },
   },
   { _id: false },

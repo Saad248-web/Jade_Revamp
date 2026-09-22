@@ -24,66 +24,65 @@ describe("inboundInventoryPush", () => {
   it("stayEndDate uses check-out exclusive nights", () => {
     expect(stayEndDate("2026-08-15", "2026-08-17")).toBe("2026-08-16");
     expect(stayEndDate("2026-08-15", "2026-08-16")).toBe("2026-08-15");
-    // checkIn 20, checkOut 23 → last night 22 (Vanessa example)
     expect(stayEndDate("2026-07-20", "2026-07-23")).toBe("2026-07-22");
     expect(stayEndDate("2026-07-21", "2026-07-24")).toBe("2026-07-23");
   });
 
-  it("pushInboundInventoryAck closes via one API 2 range then API 1", async () => {
+  it("pushInboundInventoryAck pushes remaining count (e.g. 9 after booking)", async () => {
     await pushInboundInventoryAck({
-      hotelId: "1303",
-      roomId: "1",
-      checkIn: "2026-07-20",
-      checkOut: "2026-07-23",
-      bookingNo: "ARK001",
-      mode: "close",
+      hotelId: "1234",
+      roomId: "2",
+      checkIn: "2026-09-23",
+      checkOut: "2026-09-24",
+      bookingNo: "ARK0062LQC64",
+      availability: 9,
     });
 
     expect(pushBulkInventoryForRange).toHaveBeenCalledTimes(1);
     expect(pushBulkInventoryForRange).toHaveBeenCalledWith(
       expect.objectContaining({
-        hotelId: "1303",
-        roomId: "1",
-        startDate: "2026-07-20",
-        endDate: "2026-07-22",
-        availability: 0,
+        hotelId: "1234",
+        roomId: "2",
+        startDate: "2026-09-23",
+        endDate: "2026-09-23",
+        availability: 9,
         auditTargetType: "axisrooms_inbound",
       }),
     );
     expect(pushInventoryForRange).toHaveBeenCalledWith(
       expect.objectContaining({
-        hotelId: "1303",
-        roomId: "1",
-        checkIn: "2026-07-20",
-        checkOut: "2026-07-23",
-        free: 0,
+        hotelId: "1234",
+        roomId: "2",
+        checkIn: "2026-09-23",
+        checkOut: "2026-09-24",
+        free: 9,
       }),
     );
   });
 
-  it("pushInboundInventoryAck opens with availability 1", async () => {
+  it("pushInboundInventoryAck opens with availability units (e.g. 10)", async () => {
     await pushInboundInventoryAck({
       hotelId: "12123",
       roomId: "2",
       checkIn: "2026-08-15",
       checkOut: "2026-08-16",
       bookingNo: "ARK001",
-      mode: "open",
+      availability: 10,
     });
 
     expect(pushBulkInventoryForRange).toHaveBeenCalledWith(
       expect.objectContaining({
         startDate: "2026-08-15",
         endDate: "2026-08-15",
-        availability: 1,
+        availability: 10,
       }),
     );
     expect(pushInventoryForRange).toHaveBeenCalledWith(
-      expect.objectContaining({ free: 1 }),
+      expect.objectContaining({ free: 10 }),
     );
   });
 
-  it("pushInboundInventoryModify opens old then closes new", async () => {
+  it("pushInboundInventoryModify restores old then sets new remaining", async () => {
     await pushInboundInventoryModify({
       hotelId: "12123",
       roomId: "2",
@@ -92,9 +91,10 @@ describe("inboundInventoryPush", () => {
       oldCheckOut: "2026-08-17",
       newCheckIn: "2026-08-20",
       newCheckOut: "2026-08-22",
+      oldAvailability: 10,
+      newAvailability: 9,
     });
 
-    // open range + close range = 2 API2; + 2 API1
     expect(pushBulkInventoryForRange).toHaveBeenCalledTimes(2);
     expect(pushInventoryForRange).toHaveBeenCalledTimes(2);
     expect(pushBulkInventoryForRange).toHaveBeenNthCalledWith(
@@ -102,7 +102,7 @@ describe("inboundInventoryPush", () => {
       expect.objectContaining({
         startDate: "2026-08-15",
         endDate: "2026-08-16",
-        availability: 1,
+        availability: 10,
       }),
     );
     expect(pushBulkInventoryForRange).toHaveBeenNthCalledWith(
@@ -110,7 +110,7 @@ describe("inboundInventoryPush", () => {
       expect.objectContaining({
         startDate: "2026-08-20",
         endDate: "2026-08-21",
-        availability: 0,
+        availability: 9,
       }),
     );
   });

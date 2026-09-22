@@ -19,6 +19,8 @@ import {
   pushInboundInventoryModify,
   hasStayNights,
 } from "./inboundInventoryPush";
+import { computeRemainingInventory } from "./computeRemainingInventory";
+import { villaAxisRoomsMapping } from "./mapBooking";
 import type { Types } from "mongoose";
 
 export type InboundUpsertResult = {
@@ -48,18 +50,78 @@ function axisIdsFromInbound(
   return { hotelId, roomId };
 }
 
+async function resolveInboundVillaId(
+  parsed: AxisRoomsInboundEvent,
+  validated?: InboundValidationSuccess,
+  bookingVillaId?: unknown,
+): Promise<{ villaId: string; inventoryUnits: number } | null> {
+  if (bookingVillaId) {
+    const villa = await VillaModel.findById(bookingVillaId).lean();
+    if (villa) {
+      const mapping = villaAxisRoomsMapping(villa);
+      return {
+        villaId: String(villa._id),
+        inventoryUnits: mapping.inventoryUnits ?? 1,
+      };
+    }
+  }
+  if (validated?.villa?._id) {
+    const v = await VillaModel.findById(validated.villa._id).lean();
+    if (v) {
+      const mapping = villaAxisRoomsMapping(v);
+      return {
+        villaId: String(v._id),
+        inventoryUnits: mapping.inventoryUnits ?? 1,
+      };
+    }
+  }
+  const hotelId = parsed.propertyId?.trim();
+  const roomId = parsed.roomTypeId?.trim();
+  if (!hotelId || !roomId) return null;
+  const villa = await VillaModel.findOne({
+    isDeleted: false,
+    "axisRooms.propertyId": hotelId,
+    "axisRooms.roomTypeId": roomId,
+  }).lean();
+  if (!villa) return null;
+  const mapping = villaAxisRoomsMapping(villa);
+  return {
+    villaId: String(villa._id),
+    inventoryUnits: mapping.inventoryUnits ?? 1,
+  };
+}
+
 async function ackInboundInventory(params: {
   parsed: AxisRoomsInboundEvent;
   validated?: InboundValidationSuccess;
   bookingNo: string;
   bookingId?: string;
-  mode: "close" | "open";
+  villaId?: string;
   checkIn: string;
   checkOut: string;
+  /** When opening after cancel, exclude this booking from occupancy. */
+  excludeBookingId?: string;
 }): Promise<AxisRoomsPushResult | undefined> {
   if (!hasStayNights(params.checkIn, params.checkOut)) return undefined;
   const ids = axisIdsFromInbound(params.parsed, params.validated);
   if (!ids) return { ok: false, error: "Missing hotelId/roomId for API 2" };
+
+  const villaCtx = await resolveInboundVillaId(
+    params.parsed,
+    params.validated,
+    params.villaId,
+  );
+  if (!villaCtx) {
+    return { ok: false, error: "Villa not found for inventory units" };
+  }
+
+  const availability = await computeRemainingInventory({
+    villaId: villaCtx.villaId,
+    checkIn: params.checkIn,
+    checkOut: params.checkOut,
+    inventoryUnits: villaCtx.inventoryUnits,
+    excludeBookingId: params.excludeBookingId,
+  });
 
   return pushInboundInventoryAck({
     hotelId: ids.hotelId,
@@ -68,7 +130,7 @@ async function ackInboundInventory(params: {
     checkOut: params.checkOut,
     bookingNo: params.bookingNo,
     bookingId: params.bookingId,
-    mode: params.mode,
+    availability,
   });
 }
 
@@ -110,7 +172,7 @@ export async function upsertAxisRoomsInbound(
         validated,
         bookingNo,
         bookingId: String(existingBooking._id),
-        mode: "close",
+        villaId: String(existingBooking.villaId),
         checkIn: existingBooking.checkIn,
         checkOut: existingBooking.checkOut,
       });
@@ -188,7 +250,6 @@ export async function upsertAxisRoomsInbound(
         parsed,
         validated,
         bookingNo,
-        mode: "open",
         checkIn: parsed.checkIn,
         checkOut: parsed.checkOut,
       });
@@ -226,7 +287,8 @@ export async function upsertAxisRoomsInbound(
       validated,
       bookingNo,
       bookingId: String(existing._id),
-      mode: "open",
+      villaId: String(existing.villaId),
+      excludeBookingId: String(existing._id),
       checkIn: existing.checkIn,
       checkOut: existing.checkOut,
     });
@@ -350,6 +412,22 @@ export async function upsertAxisRoomsInbound(
     let axisInventorySync: AxisRoomsPushResult | undefined;
     const ids = axisIdsFromInbound(parsed, validated);
     if (ids && hasStayNights(parsed.checkIn, parsed.checkOut)) {
+      const mapping = villaAxisRoomsMapping(
+        (await VillaModel.findById(existing.villaId).lean()) ?? {},
+      );
+      const units = mapping.inventoryUnits ?? 1;
+      const oldAvailability = await computeRemainingInventory({
+        villaId: String(existing.villaId),
+        checkIn: oldCheckIn,
+        checkOut: oldCheckOut,
+        inventoryUnits: units,
+      });
+      const newAvailability = await computeRemainingInventory({
+        villaId: String(existing.villaId),
+        checkIn: parsed.checkIn,
+        checkOut: parsed.checkOut,
+        inventoryUnits: units,
+      });
       axisInventorySync = await pushInboundInventoryModify({
         hotelId: ids.hotelId,
         roomId: ids.roomId,
@@ -359,6 +437,8 @@ export async function upsertAxisRoomsInbound(
         oldCheckOut,
         newCheckIn: parsed.checkIn,
         newCheckOut: parsed.checkOut,
+        oldAvailability,
+        newAvailability,
       });
       if (axisInventorySync.ok) {
         existing.axisRoomsSynced = true;
@@ -382,7 +462,7 @@ export async function upsertAxisRoomsInbound(
       validated,
       bookingNo,
       bookingId: String(existing._id),
-      mode: "close",
+      villaId: String(existing.villaId),
       checkIn: existing.checkIn,
       checkOut: existing.checkOut,
     });
@@ -552,7 +632,9 @@ export async function upsertAxisRoomsInbound(
       validated,
       bookingNo,
       bookingId: result.bookingId,
-      mode: "close",
+      villaId: validated?.villa?._id
+        ? String(validated.villa._id)
+        : undefined,
       checkIn: parsed.checkIn,
       checkOut: parsed.checkOut,
     });

@@ -14,7 +14,13 @@ vi.mock("./mapBooking", () => ({
     propertyId: "hotel1",
     roomTypeId: "room1",
     ratePlanId: "rate1",
+    inventoryUnits: 1,
   })),
+}));
+vi.mock("./computeRemainingInventory", () => ({
+  computeRemainingInventory: vi.fn(async ({ inventoryUnits = 1, excludeBookingId }) =>
+    excludeBookingId ? inventoryUnits : 0,
+  ),
 }));
 vi.mock("@/models/Villa", () => ({
   VillaModel: { findById: vi.fn() },

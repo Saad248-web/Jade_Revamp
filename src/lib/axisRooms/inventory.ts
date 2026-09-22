@@ -8,8 +8,8 @@ type InventoryPushParams = {
   roomId: string;
   checkIn: string;
   checkOut: string;
-  /** 0 = booked/closed, 1 = open */
-  free: 0 | 1;
+  /** Remaining free units for each night (0 = sold out). */
+  free: number;
   auditTargetId?: string;
   auditTargetType?: string;
 };

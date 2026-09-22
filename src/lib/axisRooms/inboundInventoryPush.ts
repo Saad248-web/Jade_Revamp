@@ -13,8 +13,12 @@ export type StayInventoryPushParams = {
   /** Used as audit / correlation id */
   bookingNo: string;
   bookingId?: string;
-  /** close = booked (0), open = free (1) */
-  mode: "close" | "open";
+  /**
+   * Remaining free units to push to Axis for the stay nights.
+   * Whole villa: 0 (booked) or 1 (open).
+   * Multi-unit CM: e.g. 9 after one booking when capacity is 10.
+   */
+  availability: number;
   /** Optional audit type for staff vs OTA */
   auditTargetType?: string;
 };
@@ -30,7 +34,6 @@ export function stayEndDate(checkIn: string, checkOut: string): string {
  * Canonical inventory push after any validated booking save
  * (API 9 OTA, website, or staff). Always:
  * 1) API 2 bulk `/api/inventory` — one date-range request per stay
- *    (startDate = check-in, endDate = last occupied night, inclusive)
  * 2) API 1 daywise `/api/daywiseInventory` — all nights in one request
  */
 export async function pushStayInventoryToAxis(
@@ -42,13 +45,13 @@ export async function pushStayInventoryToAxis(
   }
 
   const endDate = nights[nights.length - 1]!;
-  const availability = params.mode === "close" ? 0 : 1;
-  const free: 0 | 1 = availability === 0 ? 0 : 1;
+  const availability = Math.max(0, Math.floor(params.availability));
+  const free = availability;
   const auditTargetId = params.bookingId ?? params.bookingNo;
   const auditTargetType = params.auditTargetType ?? "axisrooms_inbound";
 
   console.info("[axisrooms.inventory] outbound start", {
-    mode: params.mode,
+    availability,
     hotelId: params.hotelId,
     roomId: params.roomId,
     checkIn: params.checkIn,
@@ -151,7 +154,7 @@ export async function pushInboundInventoryAck(
   return pushStayInventoryToAxis(params);
 }
 
-/** Modify: open old stay range, then close new stay range (API 2 + API 1 each). */
+/** Modify: restore old stay remaining, then push new stay remaining. */
 export async function pushInboundInventoryModify(params: {
   hotelId: string;
   roomId: string;
@@ -161,6 +164,10 @@ export async function pushInboundInventoryModify(params: {
   oldCheckOut: string;
   newCheckIn: string;
   newCheckOut: string;
+  /** Remaining free units for the OLD range after modify */
+  oldAvailability: number;
+  /** Remaining free units for the NEW range after modify */
+  newAvailability: number;
   auditTargetType?: string;
 }): Promise<AxisRoomsPushResult> {
   if (
@@ -177,7 +184,7 @@ export async function pushInboundInventoryModify(params: {
     checkOut: params.oldCheckOut,
     bookingNo: params.bookingNo,
     bookingId: params.bookingId,
-    mode: "open",
+    availability: params.oldAvailability,
     auditTargetType: params.auditTargetType,
   });
   if (!openResult.ok) return openResult;
@@ -189,7 +196,7 @@ export async function pushInboundInventoryModify(params: {
     checkOut: params.newCheckOut,
     bookingNo: params.bookingNo,
     bookingId: params.bookingId,
-    mode: "close",
+    availability: params.newAvailability,
     auditTargetType: params.auditTargetType,
   });
 }

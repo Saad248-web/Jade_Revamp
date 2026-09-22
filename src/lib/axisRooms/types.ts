@@ -3,6 +3,12 @@ export type AxisRoomsMapping = {
   roomTypeId?: string;
   ratePlanId?: string;
   ratePlanName?: string;
+  /**
+   * Sellable units for this room type on Axis.
+   * Whole-villa Jade properties: 1 (default) → close pushes 0, open pushes 1.
+   * Multi-unit CM test hotels (e.g. preprod 1234): 10 → one booking pushes 9.
+   */
+  inventoryUnits?: number;
 };
 
 export type AxisRoomsPushResult = {

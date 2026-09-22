@@ -26,6 +26,7 @@ const MAPS = [
     roomId: "1",
     ratePlanId: "1",
     ratePlanName: "BAR",
+    inventoryUnits: 10,
   },
   {
     slug: "jade-735",
@@ -33,6 +34,7 @@ const MAPS = [
     roomId: "2",
     ratePlanId: "2",
     ratePlanName: "CP",
+    inventoryUnits: 10,
   },
 ];
 
@@ -72,6 +74,7 @@ async function main() {
             roomTypeId: m.roomId,
             ratePlanId: m.ratePlanId,
             ratePlanName: m.ratePlanName,
+            inventoryUnits: m.inventoryUnits,
           },
         },
       },
@@ -83,7 +86,7 @@ async function main() {
       process.exit(1);
     }
     console.log(
-      `  ${m.slug} → hotel ${m.hotelId} · room ${m.roomId} · rate ${m.ratePlanId} · channel_managed`,
+      `  ${m.slug} → hotel ${m.hotelId} · room ${m.roomId} · rate ${m.ratePlanId} · units ${m.inventoryUnits} · channel_managed`,
     );
   }
 

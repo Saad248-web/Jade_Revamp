@@ -11,6 +11,7 @@ import {
   pushInboundInventoryModify,
   pushStayInventoryToAxis,
 } from "./inboundInventoryPush";
+import { computeRemainingInventory } from "./computeRemainingInventory";
 import type { AxisRoomsPushResult } from "./types";
 import { addDays, todayIST } from "@/lib/bookingDates";
 
@@ -65,12 +66,17 @@ export async function syncBookingInventoryClose(
     checkOut: booking.checkOut,
     bookingNo: booking.axisRoomsReservationId ?? String(booking._id),
     bookingId: String(booking._id),
-    mode: "close",
+    availability: await computeRemainingInventory({
+      villaId: String(booking.villaId),
+      checkIn: booking.checkIn,
+      checkOut: booking.checkOut,
+      inventoryUnits: ctx.mapping.inventoryUnits ?? 1,
+    }),
     auditTargetType: "booking",
   });
 }
 
-/** Open inventory on OTAs (free/availability 1) — cancel / release hold. */
+/** Open inventory on OTAs — cancel / release hold (push remaining free units). */
 export async function syncBookingInventoryOpen(
   booking: BookingDoc,
 ): Promise<AxisRoomsPushResult> {
@@ -93,7 +99,13 @@ export async function syncBookingInventoryOpen(
     checkOut: booking.checkOut,
     bookingNo: booking.axisRoomsReservationId ?? String(booking._id),
     bookingId: String(booking._id),
-    mode: "open",
+    availability: await computeRemainingInventory({
+      villaId: String(booking.villaId),
+      checkIn: booking.checkIn,
+      checkOut: booking.checkOut,
+      inventoryUnits: ctx.mapping.inventoryUnits ?? 1,
+      excludeBookingId: String(booking._id),
+    }),
     auditTargetType: "booking",
   });
 }
@@ -105,7 +117,7 @@ export async function syncBlockInventory(
     checkIn: string;
     checkOut: string;
   },
-  free: 0 | 1,
+  free: number,
 ): Promise<AxisRoomsPushResult> {
   await connectDB();
   const villa = await VillaModel.findById(block.villaId).lean();
@@ -283,6 +295,20 @@ export async function syncBookingInventoryModify(
     return { ok: false, error: "Incomplete Axis mapping" };
   }
 
+  const units = ctx.mapping.inventoryUnits ?? 1;
+  const oldAvailability = await computeRemainingInventory({
+    villaId: String(booking.villaId),
+    checkIn: oldCheckIn,
+    checkOut: oldCheckOut,
+    inventoryUnits: units,
+  });
+  const newAvailability = await computeRemainingInventory({
+    villaId: String(booking.villaId),
+    checkIn: booking.checkIn,
+    checkOut: booking.checkOut,
+    inventoryUnits: units,
+  });
+
   return pushInboundInventoryModify({
     hotelId: propertyId,
     roomId: roomTypeId,
@@ -292,6 +318,8 @@ export async function syncBookingInventoryModify(
     oldCheckOut,
     newCheckIn: booking.checkIn,
     newCheckOut: booking.checkOut,
+    oldAvailability,
+    newAvailability,
     auditTargetType: "booking",
   });
 }
