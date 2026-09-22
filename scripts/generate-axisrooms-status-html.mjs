@@ -137,12 +137,13 @@ const html = `<!DOCTYPE html>
 <p class="meta">Generated ${generated} · Jade_ReVamp · Simplified overview (not a code audit)</p>
 
 <div class="callout">
-  <strong>Bottom line (as of ${generated}):</strong> Axis sandbox core path is <strong>live</strong>:
-  API 9 inbound → validate → save → <strong>API 2 (one date range)</strong> → <strong>API 1 (daywise)</strong>.
-  APIs 1/2/6/7 smoke-tested. <strong>API 5 is not used</strong> (not activated in sandbox).
-  UAT: hotel <code>1303</code> · room <code>1</code> · rate <code>1</code> · channelId <code>227</code> ·
-  webhook <code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code>.
-  Prefer the hand-maintained <code>jade-axisrooms-status.html</code> for the full Jul 2026 audit.
+  <strong>Bottom line (as of ${generated}):</strong>
+  Jade switched to Axis <strong>preprod1</strong> (Rohith 22 Sep 2026):
+  Base <code>https://preprod1.axisrooms.com</code> · Channel <code>229</code> · hotel <code>1234</code> · rooms/rates <code>1|2</code>.
+  Local + <strong>Vercel Production</strong> env updated.
+  Smoke still <strong>0/4</strong> (“channel not mapped”) until Axis deploys their preprod branch.
+  See <code>jade-axisrooms-channel229-uat-2026-09-16.html</code> for the full pack.
+  Webhook: <code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code>.
 </div>
 
 <div class="legend">

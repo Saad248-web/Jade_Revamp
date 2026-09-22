@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Jade Host PMS × AxisRooms — Preprod Channel 229 · 22 Sep 2026</title>
+<style>
+  :root {
+    --ink:#1a1c1e; --muted:#5a5f66; --border:#e4e6ea; --bg:#f5f3ef; --card:#fff;
+    --accent:#0d5c4b; --accent-soft:#e8f3ef; --gold:#b8860b;
+    --pass:#166534; --pass-bg:#dcfce7; --fail:#991b1b; --fail-bg:#fee2e2;
+    --warn:#92400e; --warn-bg:#fef3c7; --info:#1e3a5f; --info-bg:#e8eef6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,sans-serif;color:var(--ink);
+    background:radial-gradient(1100px 480px at 8% -8%,#dfece7 0%,transparent 55%),
+      radial-gradient(800px 380px at 100% 0%,#f3e9d0 0%,transparent 50%),var(--bg);
+    line-height:1.55;font-size:15px}
+  .wrap{max-width:980px;margin:0 auto;padding:2rem 1.25rem 4rem}
+  header{background:var(--card);border:1px solid var(--border);border-radius:14px;
+    padding:1.55rem 1.65rem;box-shadow:0 8px 24px rgba(26,28,30,.05)}
+  .eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--accent);background:var(--accent-soft);
+    padding:.25rem .65rem;border-radius:999px;margin-bottom:.7rem}
+  h1{font-family:Georgia,serif;font-size:clamp(1.45rem,3vw,1.9rem);color:var(--accent);
+    margin:0 0 .45rem;line-height:1.25}
+  .meta{color:var(--muted);font-size:.9rem;margin:0}
+  .banner{margin-top:1rem;padding:.95rem 1.1rem;border-radius:10px;border-left:4px solid var(--warn);
+    background:var(--warn-bg);color:var(--warn)}
+  .banner strong{color:var(--ink)}
+  .ok-banner{border-left-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+  .score{display:flex;gap:.75rem;flex-wrap:wrap;margin:1.15rem 0}
+  .pill{flex:1;min-width:180px;background:var(--card);border:1px solid var(--border);
+    border-radius:12px;padding:1rem}
+  .pill .n{font-size:2rem;font-weight:750;font-family:Georgia,serif;line-height:1}
+  .pill .l{color:var(--muted);font-size:.85rem;margin-top:.35rem}
+  .fail-n{color:var(--fail)}.pass-n{color:var(--pass)}.info-n{color:var(--info)}
+  section{margin-top:1.55rem}
+  section>h2{font-size:1.12rem;color:var(--accent);margin:0 0 .7rem;padding-bottom:.3rem;
+    border-bottom:2px solid #e5d5a8}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media(max-width:720px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.05rem 1.15rem}
+  .card h3{margin:0 0 .75rem;font-size:.98rem;color:var(--accent)}
+  .kv{display:grid;grid-template-columns:138px 1fr;gap:.3rem .7rem;font-size:.9rem}
+  .kv .k{color:var(--muted)}
+  code{font-family:ui-monospace,Consolas,monospace;font-size:.84em;background:#f0f1f3;
+    padding:.08em .35em;border-radius:4px}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);
+    border-radius:12px;overflow:hidden;font-size:.88rem}
+  th,td{padding:.68rem .78rem;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+  th{background:#f3f4f6;font-weight:650}
+  tr:last-child td{border-bottom:none}
+  .badge{display:inline-block;padding:.16rem .5rem;border-radius:999px;font-size:.7rem;
+    font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  .pass{background:var(--pass-bg);color:var(--pass)}
+  .fail{background:var(--fail-bg);color:var(--fail)}
+  .warn{background:var(--warn-bg);color:var(--warn)}
+  .info{background:var(--info-bg);color:var(--info)}
+  .ready{background:var(--pass-bg);color:var(--pass)}
+  .ask{background:var(--card);border:1px dashed #c9a227;border-radius:12px;padding:1rem 1.15rem}
+  ol,ul{margin:.35rem 0 0;padding-left:1.2rem}
+  li{margin:.35rem 0}
+  .ref{font-size:.76rem;color:var(--muted);word-break:break-all}
+  .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:.55rem;margin:.75rem 0}
+  @media(max-width:800px){.flow{grid-template-columns:1fr 1fr}}
+  .step{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.75rem .8rem;font-size:.84rem}
+  .step .num{font-weight:750;color:var(--accent);font-size:.75rem;letter-spacing:.04em;text-transform:uppercase}
+  footer{margin-top:2rem;color:var(--muted);font-size:.82rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">For AxisRooms + Jade review · Updated 22 Sep 2026</div>
+  <h1>Jade Host PMS × AxisRooms — Preprod Channel 229</h1>
+  <p class="meta">
+    Jade owner: <strong>Saad</strong> (reassigned) ·
+    Axis: <strong>Rohith Kumar K</strong> ·
+    Client: <strong>enquiry@jaderetreats.com</strong>
+  </p>
+  <div class="banner ok-banner">
+    <strong>Jade side updated (as requested):</strong>
+    Base URL switched to <code>https://preprod1.axisrooms.com</code>,
+    Channel <code>229</code>, Access Key set, UAT hotel <code>1234</code> / rooms <code>1|2</code> / rates <code>1|2</code>.
+    Values applied in <strong>local .env</strong> and <strong>Vercel Production</strong> env vars + redeploy.
+  </div>
+  <div class="banner">
+    <strong>Current smoke result:</strong> Outbound §3.1 / §3.2 still return
+    <em>“This channel is not mapped to axisrooms”</em> (0/4).
+    Per Rohith’s email: once Jade confirms the hardcoded/preprod values, Axis will
+    <strong>deploy the preprod branch</strong>. Please deploy now so we can re-test immediately —
+    preprod is high-demand and we are ready on our side.
+  </div>
+</header>
+
+<div class="score">
+  <div class="pill"><div class="n fail-n">0/4</div><div class="l">preprod1 · Channel 229 · hotel 1234 (today)</div></div>
+  <div class="pill"><div class="n info-n">READY</div><div class="l">Jade config + Vercel env updated</div></div>
+  <div class="pill"><div class="n warn-n" style="color:var(--warn)">NEXT</div><div class="l">Axis deploy preprod branch → re-smoke</div></div>
+</div>
+
+<section>
+  <h2>1. Credentials now live on Jade (Rohith email)</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Preprod target</h3>
+      <div class="kv">
+        <div class="k">Base URL</div><div><code>https://preprod1.axisrooms.com</code></div>
+        <div class="k">Channel ID</div><div><code>229</code></div>
+        <div class="k">Access Key</div><div><code>229pms202…jhvad</code> (masked)</div>
+        <div class="k">Hotel ID</div><div><code>1234</code></div>
+        <div class="k">Room IDs</div><div><code>1</code> and <code>2</code></div>
+        <div class="k">Rate Plan IDs</div><div><code>1</code> and <code>2</code></div>
+        <div class="k">PMS name</div><div>Jade Host PMS</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Where applied</h3>
+      <ul>
+        <li>Local <code>.env.local</code></li>
+        <li>Repo template <code>.env.example</code></li>
+        <li>Vercel Production env (all <code>AXIS_ROOMS_*</code> + test IDs)</li>
+        <li>Smoke defaults + seed script defaults</li>
+        <li>Push Booking URL ready:<br/><code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>2. End-to-end flow we are closing</h2>
+  <div class="flow">
+    <div class="step"><div class="num">§3.1</div>Inventory<br/>API 2 + API 1</div>
+    <div class="step"><div class="num">§3.2</div>Rates<br/>API 7 + API 6</div>
+    <div class="step"><div class="num">§3.9</div>Push Booking URL<br/>Axis → Jade webhook</div>
+    <div class="step"><div class="num">Ack</div>Inbound → inventory push back</div>
+  </div>
+</section>
+
+<section>
+  <h2>3. Smoke results — 22 Sep 2026 (before Axis deploy)</h2>
+  <p class="meta">Command: <code>npm run axis:test</code> · Base: preprod1 · hotel 1234 · room 1 · rate 1 · dates 2026-09-29 → 2026-10-13</p>
+  <table>
+    <thead>
+      <tr><th>API</th><th>Path</th><th>Doc</th><th>HTTP</th><th>Result</th><th>Axis message</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>API 2</strong> Bulk inventory</td>
+        <td><code>POST /api/inventory</code></td><td>§3.1</td><td>401</td>
+        <td><span class="badge fail">FAIL</span></td>
+        <td>This channel is not mapped to axisrooms<br/><span class="ref">Ref :e3dca744-4d58-4742-8724-59f91a7f54be</span></td>
+      </tr>
+      <tr>
+        <td><strong>API 1</strong> Daywise inventory</td>
+        <td><code>POST /api/daywiseInventory</code></td><td>§3.1</td><td>401</td>
+        <td><span class="badge fail">FAIL</span></td>
+        <td>This channel is not mapped to axisrooms<br/><span class="ref">Ref :2eb6e727-6217-4754-8735-39e3f3887138 · errorCode 3</span></td>
+      </tr>
+      <tr>
+        <td><strong>API 7</strong> Bulk price</td>
+        <td><code>POST /api/bulkPriceUpdate</code></td><td>§3.2</td><td>401</td>
+        <td><span class="badge fail">FAIL</span></td>
+        <td>This channel is not mapped to axisrooms<br/><span class="ref">Ref :00f0b5de-ef58-4159-b0a5-b284c6b379b3 · errorCode 3</span></td>
+      </tr>
+      <tr>
+        <td><strong>API 6</strong> Daywise price</td>
+        <td><code>POST /api/daywisePrice</code></td><td>§3.2</td><td>401</td>
+        <td><span class="badge fail">FAIL</span></td>
+        <td>This channel is not mapped to axisrooms<br/><span class="ref">Ref :af4bb4d3-4768-4e38-9047-e70b0d28cd0d</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>4. Checklist</h2>
+  <table>
+    <thead><tr><th>Item</th><th>Jade</th><th>Axis / joint</th></tr></thead>
+    <tbody>
+      <tr><td>Switch to preprod1 + Channel 229 + hotel 1234</td><td><span class="badge ready">Done</span></td><td><span class="badge info">Received</span></td></tr>
+      <tr><td>Vercel Production env updated + redeploy</td><td><span class="badge ready">Done</span></td><td>—</td></tr>
+      <tr><td>§3.1 / §3.2 outbound Success</td><td><span class="badge ready">Client ready</span></td><td><span class="badge warn">Awaiting Axis preprod deploy</span></td></tr>
+      <tr><td>§3.9 Push Booking URL</td><td><span class="badge ready">Live on Vercel</span></td><td><span class="badge info">Register after 3.1/3.2 pass</span></td></tr>
+      <tr><td>Inbound confirmed + cancelled samples</td><td><span class="badge info">Ready to receive</span></td><td><span class="badge info">Pending</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>5. Ask AxisRooms (Rohith) — now</h2>
+  <div class="ask">
+    <ol>
+      <li><strong>Please deploy your preprod branch now</strong> so Channel <code>229</code> is mapped on <code>preprod1.axisrooms.com</code> (Jade config is already updated).</li>
+      <li>Reply when deployed — we will re-run <code>npm run axis:test</code> immediately and share PASS/FAIL.</li>
+      <li>After 3.1/3.2 Success, register Push Booking URL:<br/>
+        <code>https://jade-revamp.vercel.app/api/webhooks/axisrooms</code></li>
+      <li>Send one <strong>confirmed</strong> + one <strong>cancelled</strong> test booking for joint UAT.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  File: <code>jade-axisrooms-channel229-uat-2026-09-16.html</code> (updated 22 Sep 2026) ·
+  Open in browser / PDF · Access keys masked.
+</footer>
+</div>
+</body>
+</html>

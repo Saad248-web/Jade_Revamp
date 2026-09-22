@@ -1,12 +1,13 @@
 /**
  * Map Axis Rooms sandbox test hotel to a Jade portfolio villa for UAT.
  *
- * Sandbox (from Axis Rooms email 2026-07-01):
- *   hotelId 12123 · roomId 1 or 2 · ratePlanId 1 or 2
+ * Preprod UAT (Rohith 2026-09-22):
+ *   hotelId 1234 · roomId 1 or 2 · ratePlanId 1 or 2
+ *   base https://preprod1.axisrooms.com · channel 229
  *
  * Usage:
  *   node scripts/seed-axis-sandbox.mjs
- *   node scripts/seed-axis-sandbox.mjs --slug=jade-735 --room=2 --rate=2
+ *   node scripts/seed-axis-sandbox.mjs --slug=jade-735 --hotel=1234 --room=2 --rate=2
  */
 
 import mongoose from "mongoose";
@@ -31,7 +32,7 @@ async function main() {
   const slug = arg("slug", "diamond");
   const roomId = arg("room", "1");
   const ratePlanId = arg("rate", "1");
-  const hotelId = arg("hotel", "12123");
+  const hotelId = arg("hotel", "1234");
 
   usePublicDnsForMongo();
   await mongoose.connect(MONGODB_URI);
@@ -68,10 +69,11 @@ async function main() {
   console.log(`  roomId         : ${roomId}`);
   console.log(`  ratePlanId     : ${ratePlanId}`);
   console.log("\nEnsure .env.local has:");
-  console.log("  AXIS_ROOMS_API_BASE_URL=https://sandbox2.axisrooms.com");
-  console.log("  AXIS_ROOMS_CHANNEL_ID=227");
+  console.log("  AXIS_ROOMS_API_BASE_URL=https://preprod1.axisrooms.com");
+  console.log("  AXIS_ROOMS_CHANNEL_ID=229");
   console.log("  AXIS_ROOMS_API_KEY=<accessKey from Axis email>");
   console.log("  AXIS_ROOMS_PMS_NAME=Jade Host PMS");
+  console.log("  AXIS_TEST_HOTEL_ID=1234");
   console.log("\nThen run: npm run axis:test");
   console.log(
     "\nInbound webhook URL to share with Axis (API 9):\n  https://<your-domain>/api/webhooks/axisrooms\n",
