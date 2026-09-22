@@ -32,6 +32,40 @@ export type InboundUpsertResult = {
   axisInventorySync?: AxisRoomsPushResult;
 };
 
+function inventoryUnitsForVilla(villa: {
+  axisRooms?: { inventoryUnits?: number } | null;
+}): number {
+  const units = villaAxisRoomsMapping(villa).inventoryUnits ?? 1;
+  return Math.max(1, Math.floor(units));
+}
+
+async function findOccupyingOverlaps(params: {
+  villaId: Types.ObjectId;
+  checkIn: string;
+  checkOut: string;
+  excludeBookingId?: Types.ObjectId;
+  session?: import("mongoose").ClientSession | null;
+}) {
+  const now = new Date();
+  const query: Record<string, unknown> = {
+    villaId: params.villaId,
+    isDeleted: false,
+    $or: [
+      { status: "confirmed" },
+      { status: "on_hold" },
+      { status: "conflict" },
+      { status: "pending", expiresAt: { $gt: now } },
+    ],
+    checkIn: { $lt: params.checkOut },
+    checkOut: { $gt: params.checkIn },
+  };
+  if (params.excludeBookingId) {
+    query._id = { $ne: params.excludeBookingId };
+  }
+  const q = BookingModel.find(query);
+  return params.session ? await q.session(params.session) : await q;
+}
+
 function sourceFromChannel(
   channel: AxisRoomsInboundEvent["channel"],
 ): "axisrooms_airbnb" | "axisrooms_booking_com" {
@@ -355,49 +389,50 @@ export async function upsertAxisRoomsInbound(
 
     try {
       await withTransaction(async (session) => {
-        const now = new Date();
-        const overlapQ = BookingModel.find({
-          villaId: villa._id,
-          _id: { $ne: existing._id },
-          isDeleted: false,
-          $or: [
-            { status: "confirmed" },
-            { status: "on_hold" },
-            { status: "conflict" },
-            { status: "pending", expiresAt: { $gt: now } },
-          ],
-          checkIn: { $lt: parsed.checkOut },
-          checkOut: { $gt: parsed.checkIn },
+        const units = inventoryUnitsForVilla(villa);
+        const overlaps = await findOccupyingOverlaps({
+          villaId: villa._id as Types.ObjectId,
+          checkIn: parsed.checkIn!,
+          checkOut: parsed.checkOut!,
+          excludeBookingId: existing._id as Types.ObjectId,
+          session,
         });
-        const overlaps = session
-          ? await overlapQ.session(session)
-          : await overlapQ;
 
-        for (const b of overlaps) {
-          if (
-            rangesOverlap(
-              parsed.checkIn!,
-              parsed.checkOut!,
-              b.checkIn,
-              b.checkOut,
-            )
-          ) {
-            throw new Error("DATE_CONFLICT");
+        // Whole-villa (units=1): any other booking on those nights is a hard conflict.
+        // Multi-unit CM (units>1): allow until capacity is full.
+        if (units <= 1) {
+          for (const b of overlaps) {
+            if (
+              rangesOverlap(
+                parsed.checkIn!,
+                parsed.checkOut!,
+                b.checkIn,
+                b.checkOut,
+              )
+            ) {
+              throw new Error("DATE_CONFLICT");
+            }
           }
+        } else if (overlaps.length >= units) {
+          throw new Error("DATE_CONFLICT");
         }
 
         await releaseNightLocks(existing._id, session);
 
-        const lock = await acquireNightLocks({
-          villaId: villa._id as Types.ObjectId,
-          bookingId: existing._id,
-          dates: lockDates,
-          session,
-        });
-        if (!lock.ok) throw new Error("LOCK_CONFLICT");
+        if (units <= 1) {
+          const lock = await acquireNightLocks({
+            villaId: villa._id as Types.ObjectId,
+            bookingId: existing._id,
+            dates: lockDates,
+            session,
+          });
+          if (!lock.ok) throw new Error("LOCK_CONFLICT");
+        }
 
         existing.checkIn = parsed.checkIn;
         existing.checkOut = parsed.checkOut;
+        existing.status =
+          existing.status === "conflict" ? "confirmed" : existing.status;
         existing.guestDetails = {
           name: parsed.guestName ?? existing.guestDetails?.name ?? "",
           email: parsed.guestEmail ?? existing.guestDetails?.email ?? "",
@@ -417,6 +452,8 @@ export async function upsertAxisRoomsInbound(
             oldCheckOut,
             checkIn: parsed.checkIn,
             checkOut: parsed.checkOut,
+            inventoryUnits: units,
+            overlappingPeers: overlaps.length,
           },
         });
       });
@@ -529,25 +566,19 @@ export async function upsertAxisRoomsInbound(
 
   try {
     const result = await withTransaction(async (session) => {
-      const now = new Date();
-      const overlapQ = BookingModel.find({
-        villaId: villa._id,
-        isDeleted: false,
-        $or: [
-          { status: "confirmed" },
-          { status: "on_hold" },
-          { status: "conflict" },
-          { status: "pending", expiresAt: { $gt: now } },
-        ],
-        checkIn: { $lt: parsed.checkOut },
-        checkOut: { $gt: parsed.checkIn },
+      const units = inventoryUnitsForVilla(villa);
+      const overlaps = await findOccupyingOverlaps({
+        villaId: villa._id as Types.ObjectId,
+        checkIn: parsed.checkIn!,
+        checkOut: parsed.checkOut!,
+        session,
       });
-      const overlaps = session ? await overlapQ.session(session) : await overlapQ;
 
       const hasDirectConflict = overlaps.some(
-        (b) =>
-          b.source === "website" || b.source === "admin_manual",
+        (b) => b.source === "website" || b.source === "admin_manual",
       );
+      // Multi-unit CM: capacity full; whole-villa: any peer is handled via locks below
+      const capacityFull = units > 1 && overlaps.length >= units;
 
       const totalPaise = parsed.totalAmountPaise ?? 0;
       const taxPaise = parsed.taxPaise ?? 0;
@@ -584,10 +615,12 @@ export async function upsertAxisRoomsInbound(
           status: "external" as const,
         },
         bookingToken: `axis_${bookingNo.replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 40)}_${Date.now().toString(36)}`,
-        status: hasDirectConflict ? ("conflict" as const) : ("confirmed" as const),
+        status:
+          hasDirectConflict || capacityFull
+            ? ("conflict" as const)
+            : ("confirmed" as const),
         source: sourceFromChannel(parsed.channel),
         axisRoomsReservationId: bookingNo,
-        // Only mark synced after outbound API 2/1 succeeds
         axisRoomsSynced: false,
         axisRoomsCancelSynced: true,
       };
@@ -596,7 +629,8 @@ export async function upsertAxisRoomsInbound(
         : await BookingModel.create([bookingDoc]);
       const doc = created[0]!;
 
-      if (!hasDirectConflict) {
+      // Exclusive night locks only for whole-villa (units=1)
+      if (!hasDirectConflict && !capacityFull && units <= 1) {
         const lock = await acquireNightLocks({
           villaId: villa._id as Types.ObjectId,
           bookingId: doc._id,
@@ -617,11 +651,13 @@ export async function upsertAxisRoomsInbound(
         metadata: {
           source: "axisrooms_inbound",
           bookingNo,
-          conflict: hasDirectConflict,
+          conflict: hasDirectConflict || capacityFull,
+          inventoryUnits: units,
+          overlappingPeers: overlaps.length,
         },
       });
 
-      if (hasDirectConflict || doc.status === "conflict") {
+      if (hasDirectConflict || capacityFull || doc.status === "conflict") {
         await notifyBookingConflict({
           bookingId: String(doc._id),
           villaName: villa.name ?? villa.slug ?? "Villa",
@@ -631,7 +667,9 @@ export async function upsertAxisRoomsInbound(
           source: sourceFromChannel(parsed.channel),
           reason: hasDirectConflict
             ? "Overlaps with existing direct/staff booking"
-            : "Night lock could not be acquired",
+            : capacityFull
+              ? "Multi-unit capacity full for these dates"
+              : "Night lock could not be acquired",
         });
       } else {
         void notifyBookingConfirmed({
@@ -652,7 +690,7 @@ export async function upsertAxisRoomsInbound(
       return {
         ok: true,
         bookingId: String(doc._id),
-        conflict: hasDirectConflict,
+        conflict: hasDirectConflict || capacityFull,
       };
     });
     await WebhookEventModel.updateOne(
