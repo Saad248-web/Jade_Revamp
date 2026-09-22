@@ -26,7 +26,7 @@ const MAPS = [
     roomId: "1",
     ratePlanId: "1",
     ratePlanName: "BAR",
-    inventoryUnits: 10,
+    inventoryUnits: 20,
   },
   {
     slug: "jade-735",
@@ -34,7 +34,7 @@ const MAPS = [
     roomId: "2",
     ratePlanId: "2",
     ratePlanName: "CP",
-    inventoryUnits: 10,
+    inventoryUnits: 20,
   },
 ];
 
