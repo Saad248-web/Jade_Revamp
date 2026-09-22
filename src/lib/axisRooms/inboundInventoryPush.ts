@@ -1,29 +1,30 @@
 import { expandNightDates } from "@/lib/bookingDates";
+import { auditLog } from "@/lib/audit/auditLog";
+import { postAxisRoomsApi } from "./http";
 import {
   pushBulkInventoryForRange,
   pushInventoryForRange,
 } from "./inventory";
 import type { AxisRoomsPushResult } from "./types";
+import type { NightFree } from "./inventoryLedger";
 
 export type StayInventoryPushParams = {
   hotelId: string;
   roomId: string;
   checkIn: string;
   checkOut: string;
-  /** Used as audit / correlation id */
   bookingNo: string;
   bookingId?: string;
   /**
-   * Remaining free units to push to Axis for the stay nights.
-   * Whole villa: 0 (booked) or 1 (open).
-   * Multi-unit CM: e.g. 9 after one booking when capacity is 10.
+   * Remaining free units for the stay (min across nights).
+   * Prefer `nights` when per-night values differ.
    */
   availability: number;
-  /** Optional audit type for staff vs OTA */
+  /** Optional per-night free values (API 1). */
+  nights?: NightFree[];
   auditTargetType?: string;
 };
 
-/** Last occupied night (check-out exclusive). */
 export function stayEndDate(checkIn: string, checkOut: string): string {
   const nights = expandNightDates(checkIn, checkOut);
   if (nights.length === 0) return checkIn;
@@ -31,20 +32,19 @@ export function stayEndDate(checkIn: string, checkOut: string): string {
 }
 
 /**
- * Canonical inventory push after any validated booking save
- * (API 9 OTA, website, or staff). Always:
- * 1) API 2 bulk `/api/inventory` — one date-range request per stay
- * 2) API 1 daywise `/api/daywiseInventory` — all nights in one request
+ * Canonical inventory push after booking save:
+ * 1) API 2 bulk — one range using min remaining
+ * 2) API 1 daywise — per-night free (Rohith CM contract)
  */
 export async function pushStayInventoryToAxis(
   params: StayInventoryPushParams,
 ): Promise<AxisRoomsPushResult> {
-  const nights = expandNightDates(params.checkIn, params.checkOut);
-  if (nights.length === 0) {
+  const nightDates = expandNightDates(params.checkIn, params.checkOut);
+  if (nightDates.length === 0) {
     return { ok: true };
   }
 
-  const endDate = nights[nights.length - 1]!;
+  const endDate = nightDates[nightDates.length - 1]!;
   const availability = Math.max(0, Math.floor(params.availability));
   const free = availability;
   const auditTargetId = params.bookingId ?? params.bookingNo;
@@ -58,8 +58,8 @@ export async function pushStayInventoryToAxis(
     checkOut: params.checkOut,
     startDate: params.checkIn,
     endDate,
-    nights,
-    nightCount: nights.length,
+    nights: params.nights ?? nightDates,
+    nightCount: nightDates.length,
     bookingNo: params.bookingNo,
     bookingId: params.bookingId,
   });
@@ -81,7 +81,7 @@ export async function pushStayInventoryToAxis(
     startDate: params.checkIn,
     endDate,
     availability,
-    nightCount: nights.length,
+    nightCount: nightDates.length,
   });
 
   if (!bulk.ok) {
@@ -93,45 +93,97 @@ export async function pushStayInventoryToAxis(
         startDate: params.checkIn,
         endDate,
         availability,
-        nights,
+        nights: nightDates,
       },
     };
   }
 
-  const daywise = await pushInventoryForRange({
-    hotelId: params.hotelId,
-    roomId: params.roomId,
-    checkIn: params.checkIn,
-    checkOut: params.checkOut,
-    free,
-    auditTargetId,
-    auditTargetType,
-  });
-
-  console.info("[axisrooms.inventory] API1 daywise result", {
-    ok: daywise.ok,
-    error: daywise.error,
-    hotelId: params.hotelId,
-    checkIn: params.checkIn,
-    checkOut: params.checkOut,
-    nights,
-    nightCount: nights.length,
-    free,
-  });
-
-  if (!daywise.ok) {
-    return {
-      ok: false,
-      error: daywise.error ?? "API 1 daywise inventory push failed",
-      details: {
-        api2: { ok: true },
-        api1: { ok: false, message: daywise.error },
-        startDate: params.checkIn,
-        endDate,
-        availability,
-        nights,
+  if (params.nights && params.nights.length > 0) {
+    const daywiseResult = await postAxisRoomsApi("/api/daywiseInventory", {
+      hotels: [
+        {
+          hotelId: params.hotelId,
+          rooms: [
+            {
+              roomId: params.roomId,
+              availability: params.nights.map((n) => ({
+                date: n.date,
+                free: n.free,
+              })),
+            },
+          ],
+        },
+      ],
+    });
+    await auditLog({
+      action: "axisrooms.inventory.daywise",
+      targetType: auditTargetType,
+      targetId: auditTargetId,
+      metadata: {
+        hotelId: params.hotelId,
+        roomId: params.roomId,
+        nights: params.nights,
+        api: 1,
+        ok: daywiseResult.ok,
+        error: daywiseResult.error,
       },
-    };
+    });
+
+    console.info("[axisrooms.inventory] API1 daywise result", {
+      ok: daywiseResult.ok,
+      error: daywiseResult.error,
+      hotelId: params.hotelId,
+      nights: params.nights,
+    });
+
+    if (!daywiseResult.ok) {
+      return {
+        ok: false,
+        error: daywiseResult.error ?? "API 1 daywise inventory push failed",
+        details: {
+          api2: { ok: true },
+          api1: { ok: false, message: daywiseResult.error },
+          startDate: params.checkIn,
+          endDate,
+          availability,
+          nights: nightDates,
+        },
+      };
+    }
+  } else {
+    const daywise = await pushInventoryForRange({
+      hotelId: params.hotelId,
+      roomId: params.roomId,
+      checkIn: params.checkIn,
+      checkOut: params.checkOut,
+      free,
+      auditTargetId,
+      auditTargetType,
+    });
+
+    console.info("[axisrooms.inventory] API1 daywise result", {
+      ok: daywise.ok,
+      error: daywise.error,
+      hotelId: params.hotelId,
+      checkIn: params.checkIn,
+      checkOut: params.checkOut,
+      free,
+    });
+
+    if (!daywise.ok) {
+      return {
+        ok: false,
+        error: daywise.error ?? "API 1 daywise inventory push failed",
+        details: {
+          api2: { ok: true },
+          api1: { ok: false, message: daywise.error },
+          startDate: params.checkIn,
+          endDate,
+          availability,
+          nights: nightDates,
+        },
+      };
+    }
   }
 
   return {
@@ -142,19 +194,17 @@ export async function pushStayInventoryToAxis(
       startDate: params.checkIn,
       endDate,
       availability,
-      nights,
+      nights: nightDates,
     },
   };
 }
 
-/** @deprecated Prefer pushStayInventoryToAxis — kept for inbound call sites. */
 export async function pushInboundInventoryAck(
   params: StayInventoryPushParams,
 ): Promise<AxisRoomsPushResult> {
   return pushStayInventoryToAxis(params);
 }
 
-/** Modify: restore old stay remaining, then push new stay remaining. */
 export async function pushInboundInventoryModify(params: {
   hotelId: string;
   roomId: string;
@@ -164,10 +214,10 @@ export async function pushInboundInventoryModify(params: {
   oldCheckOut: string;
   newCheckIn: string;
   newCheckOut: string;
-  /** Remaining free units for the OLD range after modify */
   oldAvailability: number;
-  /** Remaining free units for the NEW range after modify */
   newAvailability: number;
+  oldNights?: NightFree[];
+  newNights?: NightFree[];
   auditTargetType?: string;
 }): Promise<AxisRoomsPushResult> {
   if (
@@ -185,6 +235,7 @@ export async function pushInboundInventoryModify(params: {
     bookingNo: params.bookingNo,
     bookingId: params.bookingId,
     availability: params.oldAvailability,
+    nights: params.oldNights,
     auditTargetType: params.auditTargetType,
   });
   if (!openResult.ok) return openResult;
@@ -197,6 +248,7 @@ export async function pushInboundInventoryModify(params: {
     bookingNo: params.bookingNo,
     bookingId: params.bookingId,
     availability: params.newAvailability,
+    nights: params.newNights,
     auditTargetType: params.auditTargetType,
   });
 }

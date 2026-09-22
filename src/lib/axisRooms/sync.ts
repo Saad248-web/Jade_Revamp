@@ -11,7 +11,7 @@ import {
   pushInboundInventoryModify,
   pushStayInventoryToAxis,
 } from "./inboundInventoryPush";
-import { computeRemainingInventory } from "./computeRemainingInventory";
+import { applyInventoryDelta } from "./inventoryLedger";
 import type { AxisRoomsPushResult } from "./types";
 import { addDays, todayIST } from "@/lib/bookingDates";
 
@@ -59,6 +59,16 @@ export async function syncBookingInventoryClose(
     return { ok: false, error: "Villa not mapped to Axis Rooms" };
   }
 
+  const units = ctx.mapping.inventoryUnits ?? 1;
+  const applied = await applyInventoryDelta({
+    hotelId: ctx.mapping.propertyId,
+    roomId: ctx.mapping.roomTypeId,
+    checkIn: booking.checkIn,
+    checkOut: booking.checkOut,
+    delta: -1,
+    inventoryUnits: units,
+  });
+
   return pushStayInventoryToAxis({
     hotelId: ctx.mapping.propertyId,
     roomId: ctx.mapping.roomTypeId,
@@ -66,17 +76,13 @@ export async function syncBookingInventoryClose(
     checkOut: booking.checkOut,
     bookingNo: booking.axisRoomsReservationId ?? String(booking._id),
     bookingId: String(booking._id),
-    availability: await computeRemainingInventory({
-      villaId: String(booking.villaId),
-      checkIn: booking.checkIn,
-      checkOut: booking.checkOut,
-      inventoryUnits: ctx.mapping.inventoryUnits ?? 1,
-    }),
+    availability: applied.availability,
+    nights: applied.nights,
     auditTargetType: "booking",
   });
 }
 
-/** Open inventory on OTAs — cancel / release hold (push remaining free units). */
+/** Open inventory on OTAs — cancel / release hold (restore units). */
 export async function syncBookingInventoryOpen(
   booking: BookingDoc,
 ): Promise<AxisRoomsPushResult> {
@@ -92,6 +98,16 @@ export async function syncBookingInventoryOpen(
     return { ok: false, error: "Villa not mapped to Axis Rooms" };
   }
 
+  const units = ctx.mapping.inventoryUnits ?? 1;
+  const applied = await applyInventoryDelta({
+    hotelId: ctx.mapping.propertyId,
+    roomId: ctx.mapping.roomTypeId,
+    checkIn: booking.checkIn,
+    checkOut: booking.checkOut,
+    delta: 1,
+    inventoryUnits: units,
+  });
+
   return pushStayInventoryToAxis({
     hotelId: ctx.mapping.propertyId,
     roomId: ctx.mapping.roomTypeId,
@@ -99,13 +115,8 @@ export async function syncBookingInventoryOpen(
     checkOut: booking.checkOut,
     bookingNo: booking.axisRoomsReservationId ?? String(booking._id),
     bookingId: String(booking._id),
-    availability: await computeRemainingInventory({
-      villaId: String(booking.villaId),
-      checkIn: booking.checkIn,
-      checkOut: booking.checkOut,
-      inventoryUnits: ctx.mapping.inventoryUnits ?? 1,
-      excludeBookingId: String(booking._id),
-    }),
+    availability: applied.availability,
+    nights: applied.nights,
     auditTargetType: "booking",
   });
 }
@@ -296,16 +307,20 @@ export async function syncBookingInventoryModify(
   }
 
   const units = ctx.mapping.inventoryUnits ?? 1;
-  const oldAvailability = await computeRemainingInventory({
-    villaId: String(booking.villaId),
+  const oldDelta = await applyInventoryDelta({
+    hotelId: propertyId,
+    roomId: roomTypeId,
     checkIn: oldCheckIn,
     checkOut: oldCheckOut,
+    delta: 1,
     inventoryUnits: units,
   });
-  const newAvailability = await computeRemainingInventory({
-    villaId: String(booking.villaId),
+  const newDelta = await applyInventoryDelta({
+    hotelId: propertyId,
+    roomId: roomTypeId,
     checkIn: booking.checkIn,
     checkOut: booking.checkOut,
+    delta: -1,
     inventoryUnits: units,
   });
 
@@ -318,8 +333,10 @@ export async function syncBookingInventoryModify(
     oldCheckOut,
     newCheckIn: booking.checkIn,
     newCheckOut: booking.checkOut,
-    oldAvailability,
-    newAvailability,
+    oldAvailability: oldDelta.availability,
+    newAvailability: newDelta.availability,
+    oldNights: oldDelta.nights,
+    newNights: newDelta.nights,
     auditTargetType: "booking",
   });
 }

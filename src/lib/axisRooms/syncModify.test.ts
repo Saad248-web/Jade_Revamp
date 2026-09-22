@@ -8,6 +8,12 @@ vi.mock("./inventory", () => ({
   pushInventoryForRange: vi.fn(),
   pushBulkInventoryForRange: vi.fn(),
 }));
+vi.mock("./http", () => ({
+  postAxisRoomsApi: vi.fn().mockResolvedValue({ ok: true }),
+}));
+vi.mock("@/lib/audit/auditLog", () => ({
+  auditLog: vi.fn(),
+}));
 vi.mock("./mapBooking", () => ({
   isAxisRoomsMapped: vi.fn(() => true),
   villaAxisRoomsMapping: vi.fn(() => ({
@@ -17,10 +23,15 @@ vi.mock("./mapBooking", () => ({
     inventoryUnits: 1,
   })),
 }));
-vi.mock("./computeRemainingInventory", () => ({
-  computeRemainingInventory: vi.fn(async ({ inventoryUnits = 1, excludeBookingId }) =>
-    excludeBookingId ? inventoryUnits : 0,
-  ),
+vi.mock("./inventoryLedger", () => ({
+  applyInventoryDelta: vi.fn().mockResolvedValue({
+    availability: 0,
+    nights: [
+      { date: "2026-10-21", free: 1 },
+      { date: "2026-10-24", free: 0 },
+      { date: "2026-10-25", free: 0 },
+    ],
+  }),
 }));
 vi.mock("@/models/Villa", () => ({
   VillaModel: { findById: vi.fn() },
@@ -32,6 +43,7 @@ import {
   pushInventoryForRange,
   pushBulkInventoryForRange,
 } from "./inventory";
+import { postAxisRoomsApi } from "./http";
 import {
   syncBookingInventoryModify,
   queueBookingInventoryModify,
@@ -64,9 +76,9 @@ describe("syncBookingInventoryModify", () => {
       "2026-10-22",
     );
     expect(result.ok).toBe(true);
-    // old 1 night open + new 2 nights close = 2 API2; + 2 API1
+    // old open + new close = 2 API2; daywise via postAxisRoomsApi when nights provided
     expect(pushBulkInventoryForRange).toHaveBeenCalledTimes(2);
-    expect(pushInventoryForRange).toHaveBeenCalledTimes(2);
+    expect(postAxisRoomsApi).toHaveBeenCalled();
   });
 
   it("skips outbound for OTA bookings", async () => {
